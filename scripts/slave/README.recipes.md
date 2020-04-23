@@ -5688,11 +5688,38 @@ Recipe for building and running tests for Libyuv stand-alone.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/ndk/tests/cover.py#14)(api):**
 ### *recipes* / [openscreen](/scripts/slave/recipes/openscreen.py)
 
-[DEPS](/scripts/slave/recipes/openscreen.py#7): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/openscreen.py#7): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
 
 Recipe for building and running tests for Open Screen stand-alone.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#35)(api):**
+&mdash; **def [FormatGnArg](/scripts/slave/recipes/openscreen.py#64)(properties, key):**
+
+Takes a specific keg, e.g. is_debug, and format the key and value pair as
+a valid gn argument.
+
+&mdash; **def [FormatGnArgs](/scripts/slave/recipes/openscreen.py#74)(properties):**
+
+Takes a list of properties and maps them to string gn arguments.
+
+&mdash; **def [GetHostToolLabel](/scripts/slave/recipes/openscreen.py#55)(platform):**
+
+Determines what the platform label is, e.g. 'mac' or 'linux64'.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#142)(api):**
+
+Main function body for execution on the current bot.
+
+&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#130)(api, output_path):**
+
+Runs all types of enabled tests on the current bot.
+
+&mdash; **def [SwarmTests](/scripts/slave/recipes/openscreen.py#99)(api, output_path, checkout_path, dimensions):**
+
+Runs specific types of tests on a separate swarming bot.
+
+&mdash; **def [UploadFilesToIsolateStorage](/scripts/slave/recipes/openscreen.py#80)(api, files):**
+
+Pushes files up to the isolate server storage.
 ### *recipes* / [pdfium](/scripts/slave/recipes/pdfium.py)
 
 [DEPS](/scripts/slave/recipes/pdfium.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
