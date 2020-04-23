@@ -1589,7 +1589,7 @@ class SwarmingTest(Test):
           data during the task.
       isolate_pgo_data: Bool indicating whether to isolate pgo profraw files
           during the task. This differs from isolate_coverage_data by not
-          converting the profraw files into profdata on the Swarming task.
+          running the merge script to convert the profraw files into profdata.
       merge: 'merge' dict as set in //testing/buildbot/ pyl files for the test.
       ignore_task_failure: If False, the test will be reported as StepFailure on
           failure.
@@ -2230,20 +2230,31 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                set_up=None,
                tear_down=None,
                isolate_coverage_data=False,
+               isolate_pgo_data=False,
                optional_dimensions=None,
                service_account=None,
                **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
-        name, dimensions, target_name, full_test_target, extra_suffix,
-        expiration, hard_timeout, io_timeout,
+        name,
+        dimensions,
+        target_name,
+        full_test_target,
+        extra_suffix,
+        expiration,
+        hard_timeout,
+        io_timeout,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
-        set_up=set_up, tear_down=tear_down,
+        set_up=set_up,
+        tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
-        merge=merge, shards=shards,
+        isolate_pgo_data=isolate_pgo_data,
+        merge=merge,
+        shards=shards,
         ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions,
-        service_account=service_account, **kw)
+        service_account=service_account,
+        **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
     self._perf_id=perf_id
