@@ -79,14 +79,15 @@ def _configure_build(api):
   api.chromium.c = build_cfg
 
 
-def run_script(api, step_name, script):
+def run_script(api, step_name, script, args=None):
   with api.step.defer_results():
     sc_path = api.path['checkout'].join('scripts', 'test', script)
-    api.python(step_name, sc_path)
+    args = args or []
+    api.python(step_name, sc_path, args=args)
 
 
 def run_unit_tests(api):
-  run_script(api, 'Unit Tests', 'run_unittests.py')
+  run_script(api, 'Unit Tests', 'run_unittests.py', ['--target=Release'])
 
 
 def run_type_check(api):

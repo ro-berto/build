@@ -499,7 +499,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_unittests.py"
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_unittests.py",
+      "--target=Release"
     ],
     "env_prefixes": {
       "PATH": [
