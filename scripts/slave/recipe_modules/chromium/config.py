@@ -28,9 +28,11 @@ def check(val, potentials):
 
 
 # Schema for config items in this module.
+# Note: The default values for these parameters are defined via recipe_magic in
+# chromium/api.py:get_config_defaults().
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
                TARGET_ARCH, TARGET_BITS, BUILD_CONFIG, TARGET_CROS_BOARD,
-               CHECKOUT_PATH, **_kwargs):
+               TARGET_CROS_BOARD_INTERNAL, CHECKOUT_PATH, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
       compile_py=ConfigGroup(
@@ -127,6 +129,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       TARGET_ARCH=Static(check(TARGET_ARCH, TARGET_ARCHS)),
       TARGET_BITS=Static(check(TARGET_BITS, HOST_TARGET_BITS)),
       TARGET_CROS_BOARD=Static(TARGET_CROS_BOARD),
+      TARGET_CROS_BOARD_INTERNAL=Static(TARGET_CROS_BOARD_INTERNAL),
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
       gn_args=List(basestring),
       clobber_before_runhooks=Single(

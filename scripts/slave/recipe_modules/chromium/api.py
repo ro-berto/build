@@ -102,29 +102,35 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_config_defaults(self):
     defaults = {
-      'HOST_PLATFORM': self.m.platform.name,
-      'HOST_ARCH': self.m.platform.arch,
-      'HOST_BITS': self.m.platform.bits,
+        'HOST_PLATFORM':
+            self.m.platform.name,
+        'HOST_ARCH':
+            self.m.platform.arch,
+        'HOST_BITS':
+            self.m.platform.bits,
+        'TARGET_PLATFORM':
+            self.m.platform.name,
+        'TARGET_ARCH':
+            self.m.platform.arch,
+        'TARGET_CROS_BOARD':
+            None,
+        'TARGET_CROS_BOARD_INTERNAL':
+            False,
 
-      'TARGET_PLATFORM': self.m.platform.name,
-      'TARGET_ARCH': self.m.platform.arch,
-      'TARGET_CROS_BOARD': None,
-
-      # NOTE: This is replicating logic which lives in
-      # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
-      # end-state is that all the configuration logic lives in one place
-      # (in chromium/config.py), and the buildside gypfiles are as dumb as
-      # possible. However, since the recipes need to accurately contain
-      # {TARGET,HOST}_{BITS,ARCH,PLATFORM}, for use across many tools (of which
-      # gyp is one tool), we're taking a small risk and replicating the logic
-      # here.
-      'TARGET_BITS': (
-        32 if self.m.platform.name == 'win'
-        else self.m.platform.bits),
-
-      'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
-
-      'CHECKOUT_PATH': self.m.path['checkout'],
+        # NOTE: This is replicating logic which lives in
+        # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
+        # end-state is that all the configuration logic lives in one place (in
+        # chromium/config.py), and the buildside gypfiles are as dumb as
+        # possible. However, since the recipes need to accurately contain
+        # {TARGET,HOST}_{BITS,ARCH,PLATFORM}, for use across many tools (of
+        # which gyp is one tool), we're taking a small risk and replicating the
+        # logic here.
+        'TARGET_BITS': (
+            32 if self.m.platform.name == 'win' else self.m.platform.bits),
+        'BUILD_CONFIG':
+            self.m.properties.get('build_config', 'Release'),
+        'CHECKOUT_PATH':
+            self.m.path['checkout'],
     }
 
     return defaults
@@ -964,7 +970,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # fallback to internal configs if none are available. Avoid that fallback
     # behavior on the bots by explicitly using either external or internal
     # configs.
-    if self.c.cros_sdk.external:
+    if self.c.cros_sdk.external and not self.c.TARGET_CROS_BOARD_INTERNAL:
       wrapper += ['--use-external-config']
     else:
       wrapper += ['--internal']
