@@ -237,9 +237,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -537,9 +534,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -634,9 +628,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.lookup GN args",
@@ -666,9 +657,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.generate_build_files",
@@ -764,9 +752,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.lookup GN args (2)",
@@ -796,9 +781,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.generate_build_files (2)",
@@ -918,9 +900,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.compile",
@@ -945,9 +924,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.compile confirm no-op",
@@ -974,10 +950,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r4.postprocess_for_goma.goma_jsonstatus",
@@ -1007,10 +986,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r4.postprocess_for_goma.goma_stat",
@@ -1029,10 +1011,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r4.postprocess_for_goma.stop_goma",
@@ -1377,9 +1362,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -1449,9 +1431,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.lookup GN args",
@@ -1481,9 +1460,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.generate_build_files",
@@ -1579,9 +1555,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.lookup GN args (2)",
@@ -1611,9 +1584,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.generate_build_files (2)",
@@ -1733,9 +1703,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.compile",
@@ -1760,9 +1727,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.compile confirm no-op",
@@ -1789,10 +1753,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r5.postprocess_for_goma.goma_jsonstatus",
@@ -1822,10 +1789,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r5.postprocess_for_goma.goma_stat",
@@ -1844,10 +1814,13 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r5.postprocess_for_goma.stop_goma",

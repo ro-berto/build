@@ -242,6 +242,7 @@
   * [gn:tests/refs](#recipes-gn_tests_refs)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
+  * [goma:tests/client_flags](#recipes-goma_tests_client_flags)
   * [goma:tests/ensure](#recipes-goma_tests_ensure)
   * [goma:tests/jobs](#recipes-goma_tests_jobs)
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
@@ -2393,7 +2394,7 @@ property when running the recipe with the full path. e.g.
 Note that the goma client directory must exist inside the recipe workdir.
 A symlink (on mac/linux) is enough, though.
 
-&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#221)(self, platform):**
+&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#237)(self, platform):**
 
 Return the Goma client dir for the platform.
 
@@ -2405,7 +2406,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#83)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#569)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#585)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2447,7 +2448,7 @@ Uses value from property "$build/goma:{"debug":true}" if configured
 
 &emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#126)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#172)(self, client_type=None, additional_platforms=None, ephemeral=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#188)(self, client_type=None, additional_platforms=None, ephemeral=False):**
 
 ensure goma is installed.
 
@@ -2461,9 +2462,9 @@ Args:
              This is for mitigating crbug.com/997733 to avoid sharing
              Goma client among builders.
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#233)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#249)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#237)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#253)(self):**
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#66)(self):**
 
@@ -2489,14 +2490,22 @@ This function caches the _recommended_jobs.
 
 &emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#70)(self):**
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#310)(self, env=None, \*\*kwargs):**
+&mdash; **def [set\_client\_flags](/scripts/slave/recipe_modules/goma/api.py#172)(self, server_host, rpc_extra_params):**
+
+Sets flags for connecting to Goma server host.
+
+Args:
+  server_host: Goma server host address
+  rpc_extra_params: Params to pass to the server when making RPC calls
+
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#326)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#393)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#409)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -4764,9 +4773,9 @@ A generic recipe that runs a given docker container and exits.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/suppress_analyze.py#12)(api):**
 ### *recipes* / [findit/chromium/compile](/scripts/slave/recipes/findit/chromium/compile.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/compile.py#16): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/compile.py#16): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#124)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#125)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
 ### *recipes* / [findit/chromium/compile\_isolate](/scripts/slave/recipes/findit/chromium/compile_isolate.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/compile_isolate.py#23): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5528,6 +5537,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#5): [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#14)(api):**
+### *recipes* / [goma:tests/client\_flags](/scripts/slave/recipe_modules/goma/tests/client_flags.py)
+
+[DEPS](/scripts/slave/recipe_modules/goma/tests/client_flags.py#5): [goma](#recipe_modules-goma)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/client_flags.py#10)(api):**
 ### *recipes* / [goma:tests/ensure](/scripts/slave/recipe_modules/goma/tests/ensure.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/tests/ensure.py#5): [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

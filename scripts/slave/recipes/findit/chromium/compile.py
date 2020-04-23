@@ -18,6 +18,7 @@ DEPS = [
     'chromium_tests',
     'filter',
     'findit',
+    'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -135,9 +136,8 @@ def RunSteps(api, target_mastername, target_buildername,
 
   # Since these builders run on different platforms, and require different Goma
   # settings depending on the platform, set the Goma flags using recipe configs.
-  api.chromium.apply_config('goma_rbe_prod')
-  if api.platform.is_linux or api.platform.is_win:
-    api.chromium.apply_config('goma_ats')
+  # TODO(crbug.com/1069318): Remove goma_rbe_prod and goma_ats configs.
+  api.goma.set_client_flags('goma.chromium.org', '?prod')
 
   checked_out_revision, cached_revision = api.findit.record_previous_revision(
       bot_config)
