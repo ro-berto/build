@@ -85,6 +85,11 @@
               "chromium_tree_closer"
             ]
           },
+          "android-lollipop-arm-rel": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
           "android-marshmallow-arm64-rel": {
             "categories": [
               "chromium_tree_closer"
