@@ -114,8 +114,6 @@ class ChromiumApi(recipe_api.RecipeApi):
             self.m.platform.arch,
         'TARGET_CROS_BOARD':
             None,
-        'TARGET_CROS_BOARD_INTERNAL':
-            False,
 
         # NOTE: This is replicating logic which lives in
         # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
@@ -970,7 +968,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # fallback to internal configs if none are available. Avoid that fallback
     # behavior on the bots by explicitly using either external or internal
     # configs.
-    if self.c.cros_sdk.external and not self.c.TARGET_CROS_BOARD_INTERNAL:
+    if self.c.cros_sdk.external:
       wrapper += ['--use-external-config']
     else:
       wrapper += ['--internal']

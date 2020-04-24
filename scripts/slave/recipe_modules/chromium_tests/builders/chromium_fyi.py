@@ -449,7 +449,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='win',
         ),
-    'chromeos-amd64-generic-rel-vm-tests':
+    'chromeos-amd64-generic-lacros-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=[
@@ -468,7 +468,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
-    'chromeos-eve-lacros-rel':
+    'chromeos-amd64-generic-rel-vm-tests':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=[
@@ -481,8 +481,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARD': 'eve-lacros',
-                'TARGET_CROS_BOARD_INTERNAL': True,
+                'TARGET_CROS_BOARD': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
             bot_type=bot_spec.BUILDER_TESTER,
