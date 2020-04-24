@@ -2,7 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Set of common operations/utilities for build archiving."""
+"""Set of common operations/utilities for build archiving.
+
+Note: These utilities are also used by the official builders. Their code is
+internal-only, unindexed, and can be found here: http://shortn/_4BbqNNVTgX
+"""
 
 import glob
 import os
