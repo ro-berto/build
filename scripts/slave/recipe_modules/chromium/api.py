@@ -962,9 +962,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     assert self.c.TARGET_CROS_BOARD
     wrapper = [
         self.m.depot_tools.cros_path, 'chrome-sdk', '--nogn-gen',
-        '--board=%s' % (self.c.TARGET_CROS_BOARD,),
-        '--nocolor', '--log-level=debug',
-        '--cache-dir', self.m.path['checkout'].join('build', 'cros_cache')]
+        '--boards=%s' % (self.c.TARGET_CROS_BOARD,), '--nocolor',
+        '--log-level=debug', '--cache-dir', self.m.path['checkout'].join(
+            'build', 'cros_cache')
+    ]
     wrapper += self.c.cros_sdk.args
     # With neither arg, the cros chrome-sdk will try external configs but
     # fallback to internal configs if none are available. Avoid that fallback

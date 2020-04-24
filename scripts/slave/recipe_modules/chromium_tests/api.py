@@ -167,7 +167,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gclient.apply_config(c)
 
     if self.m.chromium.c.TARGET_CROS_BOARD:
+      # TODO(crbug.com/937821): Remove the 'cros_board' var once all DEPS hooks
+      # have been updated.
       self.m.gclient.c.solutions[0].custom_vars['cros_board'] = (
+          self.m.chromium.c.TARGET_CROS_BOARD)
+      self.m.gclient.c.solutions[0].custom_vars['cros_boards'] = (
           self.m.chromium.c.TARGET_CROS_BOARD)
 
     for c in bot_config.android_apply_config:
