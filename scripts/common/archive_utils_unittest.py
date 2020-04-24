@@ -305,28 +305,6 @@ class ArchiveUtilsTest(unittest.TestCase):
 
     zip_file.close()
 
-  def testParseFilesList(self):
-    files_cfg = CreateTestFilesCfg(self.temp_dir)
-    arch = '64bit'
-    buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(files_cfg, buildtype, arch)
-    # Verify FILES.cfg was parsed correctly.
-    for i in TEST_FILES_CFG:
-      if buildtype not in i['buildtype']:
-        continue
-      if i.get('arch') and arch not in i['arch']:
-        continue
-      # 'archive' flagged files shouldn't be included in the default parse.
-      if i.get('archive'):
-        self.assertNotIn(i['filename'], files_list)
-      else:
-        self.assertIn(i['filename'], files_list)
-        files_list.remove(i['filename'])
-        # No duplicate files.
-        self.assertEqual(files_list.count(i['filename']), 0)
-    # No unexpected files.
-    self.assertEqual(len(files_list), 0)
-
   def testParseLegacyList(self):
     files_cfg = CreateTestFilesCfg(self.temp_dir)
     arch = '64bit'
