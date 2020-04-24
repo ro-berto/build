@@ -112,7 +112,7 @@ def GenTests(api):
   yield api.test(
       'android',
       api.properties(
-          buildername='android-kitkat-arm-rel-swarming',
+          buildername='android-lollipop-arm-rel-swarming',
           mastername='chromium.dev',
           bot_id='TestSlave',
           buildnumber=123,

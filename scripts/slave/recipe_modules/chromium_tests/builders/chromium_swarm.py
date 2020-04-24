@@ -5,7 +5,7 @@
 from .. import bot_spec
 
 SPEC = {
-    'android-kitkat-arm-rel-swarming':
+    'android-lollipop-arm-rel-swarming':
         bot_spec.BotSpec.create(
             chromium_config='android',
             gclient_config='chromium',
