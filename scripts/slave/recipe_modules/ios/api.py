@@ -12,14 +12,14 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 
 TEST_NAMES_DEBUG_APP_PATTERN = re.compile(
-    'imp (?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
+    'imp +(?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
     '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
 
 TEST_CLASS_RELEASE_APP_PATTERN = re.compile(
-    r'name 0[xX]\w+ '
+    r'name +0[xX]\w+ '
     '(?P<testSuite>[A-Za-z_][A-Za-z0-9_]*Test(?:Case|))\n')
 TEST_NAME_RELEASE_APP_PATTERN = re.compile(
-    r'name 0[xX]\w+ (?P<testCase>test[A-Za-z0-9_]+)\n')
+    r'name +0[xX]\w+ (?P<testCase>test[A-Za-z0-9_]+)\n')
 
 
 class iOSApi(recipe_api.RecipeApi):
@@ -714,26 +714,25 @@ class iOSApi(recipe_api.RecipeApi):
       Returns:
         A dictionary {"test_class": number_of_test_case_methods}
     """
+    # Indention patterns of both Xcode version < 11.4 and == 11.4 are mimicked
+    # in test data.
     debug_app_test_output = '\n'.join([
-        'Meta Class',
-        'name 0x1064b8438 CacheTestCase',
+        'Meta Class', 'name 0x1064b8438 CacheTestCase',
         'baseMethods 0x1068586d8 (struct method_list_t *)',
-        'imp 0x1075e6887 -[CacheTestCase testA]',
-        'types 0x1064cc3e1',
+        'imp 0x1075e6887 -[CacheTestCase testA]', 'types 0x1064cc3e1',
         'imp 0x1075e6887 -[CacheTestCase testB]',
         'imp 0x1075e6887 -[CacheTestCase testc]',
         'name 0x1064b8438 TabUITestCase',
         'baseMethods 0x1068586d8 (struct method_list_t *)',
-        'imp 0x1075e6887 -[TabUITestCase testD]',
-        'types 0x1064cc3e1 v16@0:8',
-        'imp 0x1075e6887 -[TabUITestCase testE]',
-        'name 0x1064b8438 KeyboardTestCase',
-        'imp 0x1075e6887 -[KeyboardTestCase testF]',
-        'name 0x1064b8438 PasswordsTestCase',
-        'imp 0x1075e6887 -[PasswordsTestCase testG]',
-        'name 0x1064b8438 ToolBarTestCase',
-        'imp 0x1075e6887 -[ToolBarTestCase testH]',
-        'version 0'])
+        'imp 0x1075e6887 -[TabUITestCase testD]', 'types 0x1064cc3e1 v16@0:8',
+        '    imp    0x1075e6887 -[TabUITestCase testE]',
+        '    name   0x1064b8438 KeyboardTestCase',
+        '    imp    0x1075e6887 -[KeyboardTestCase testF]',
+        '    name   0x1064b8438 PasswordsTestCase',
+        '    imp    0x1075e6887 -[PasswordsTestCase testG]',
+        '    name   0x1064b8438 ToolBarTestCase',
+        '    imp    0x1075e6887 -[ToolBarTestCase testH]', 'version 0'
+    ])
     cmd = ['otool', '-ov', test_app]
     step_result = self.m.step(
         'shard EarlGrey test',
@@ -758,32 +757,24 @@ class iOSApi(recipe_api.RecipeApi):
     Returns:
       A dictionary {"test_class": number_of_test_case_methods}
     """
+    # Indention patterns of both Xcode version < 11.4 and == 11.4 are mimicked
+    # in test data.
     release_app_test_output = '\n'.join([
-        'Meta Class',
-        'name 0x1064b8438 CacheTestCase',
+        'Meta Class', 'name 0x1064b8438 CacheTestCase',
         'baseMethods 0x1068586d8 (struct method_list_t *)',
-        'name 0x1075e6887 testA',
-        'types 0x1064cc3e1',
-        'name 0x1075e6887 testB',
-        'name 0x1075e6887 testc',
-        'baseProtocols 0x0',
-        'Meta Class',
+        'name 0x1075e6887 testA', 'types 0x1064cc3e1', 'name 0x1075e6887 testB',
+        'name 0x1075e6887 testc', 'baseProtocols 0x0', 'Meta Class',
         'name 0x1064b8438 TabUITestCase',
         'baseMethods 0x1068586d8 (struct method_list_t *)',
-        'name 0x1064b8438 KeyboardTest',
-        'name 0x1075e6887 testD',
-        'types 0x1064cc3e1 v16@0:8',
-        'name 0x1075e6887 testE',
-        'name 0x1075e6887 testF',
-        'baseProtocols 0x0',
-        'name 0x1064b8438 ChromeTestCase',
-        'name 0x1064b8438 setUp',
-        'baseProtocols 0x0',
-        'name 0x1064b8438 ToolBarTestCase',
-        'name 0x1075e6887 testG',
-        'name 0x1075e6887 testH',
-        'baseProtocols 0x0',
-        'version 0'])
+        '    name    0x1064b8438 KeyboardTest', '    name    0x1075e6887 testD',
+        '    types   0x1064cc3e1 v16@0:8', '    name    0x1075e6887 testE',
+        '    name    0x1075e6887 testF', 'baseProtocols 0x0',
+        '    name    0x1064b8438 ChromeTestCase',
+        '    name    0x1064b8438 setUp', 'baseProtocols 0x0',
+        '    name    0x1064b8438 ToolBarTestCase',
+        '    name    0x1075e6887 testG', '    name    0x1075e6887 testH',
+        'baseProtocols 0x0', 'version 0'
+    ])
     cmd = ['otool', '-ov', test_app]
     step_result = self.m.step(
         'shard EarlGrey test',
