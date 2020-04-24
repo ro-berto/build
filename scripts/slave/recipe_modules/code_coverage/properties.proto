@@ -16,4 +16,6 @@ message InputProperties {
   bool use_java_coverage = 3;
   // List of test types to process in builder.
   repeated string coverage_test_types = 4;
+  // The key to get corresponding excluded file pattern.
+  string coverage_exclude_sources = 5;
 }

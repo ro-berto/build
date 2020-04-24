@@ -12,7 +12,9 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
   def __call__(self,
                gs_bucket=None,
                use_clang_coverage=False,
-               use_java_coverage=False):
+               use_java_coverage=False,
+               coverage_test_types=None,
+               coverage_exclude_sources=None):
     return self.m.properties(
         **{
             '$build/code_coverage':
@@ -20,5 +22,7 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
                     gs_bucket=gs_bucket,
                     use_clang_coverage=use_clang_coverage,
                     use_java_coverage=use_java_coverage,
+                    coverage_test_types=coverage_test_types,
+                    coverage_exclude_sources=coverage_exclude_sources,
                 ),
         })

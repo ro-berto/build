@@ -8,45 +8,7 @@ import sys
 
 from recipe_engine import recipe_api
 
-_DEFAULT_BUCKET_NAME = 'code-coverage-data'
-
-# Name of the file to store the component map.
-_COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
-
-# Name of the file to store the line number mapping from bot to Gerrit.
-_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME = (
-    'bot_to_gerrit_line_num_mapping.json')
-
-# Valid extensions of source files that supported per coverage tool.
-_TOOLS_TO_EXTENSIONS_MAP = {
-    'clang': [
-        '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h',
-        '.m', '.hxx'
-    ],
-    'jacoco': ['.java']
-}
-
-# Map exclude_sources property value to files that are to be excluded from
-# coverage aggregates.
-_EXCLUDE_SOURCES = {
-    'all_test_files': r'.*test.*',
-}
-
-# Only generate coverage data for CLs in these gerrit projects.
-# This is a list of (host, project) pairs
-_SUPPORTED_PATCH_PROJECTS = [('chromium-review.googlesource.com',
-                              'chromium/src')]
-
-# A list of test types supported by code coverage api. The test types are
-# defined as str literals and used across multiple places.
-_SUPPORTED_TEST_TYPES = ['overall', 'unit']
-
-# A mapping of test type str literal to regex of test target names.
-# TODO(crbug.com/1071251): This map is correct for iOS tests only currently.
-_TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP = {
-    'unit': '.+_unittests',
-    'overall': '.+'
-}
+from . import constants
 
 
 class CodeCoverageApi(recipe_api.RecipeApi):
@@ -77,10 +39,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The list of mimic builder names to be uploaded.
     self._mimic_builder_names = []
     # The bucket to which code coverage data should be uploaded.
-    self._gs_bucket = properties.gs_bucket or _DEFAULT_BUCKET_NAME
+    self._gs_bucket = properties.gs_bucket or constants.DEFAULT_BUCKET_NAME
     # List of test types to run in a builder. By default, it runs overall
     # coverage. This is only used in Clang coverage at present.
     self._test_types = properties.coverage_test_types or ['overall']
+    # The key in constants.EXCLUDE_SOURCES to get corresponding excluded file
+    # pattern.
+    self._exclude_sources_key = properties.coverage_exclude_sources
     # Current test type that's being processed.
     self._current_processing_test_type = 'overall'
     # When set True, Clang coverage is enabled.
@@ -182,8 +147,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return self.m.buildbucket.build.builder.builder + suffix
 
   def _get_source_exclusion_pattern(self):
-    if 'exclude_sources' in self.m.properties:
-      return _EXCLUDE_SOURCES.get(self.m.properties['exclude_sources'])
+    # TODO(crbug.com/1071461): Move current iOS builder property to code
+    # coverage module property.
+    if self._exclude_sources_key:
+      return constants.EXCLUDE_SOURCES.get(self._exclude_sources_key)
+    if 'coverage_exclude_sources' in self.m.properties:
+      return constants.EXCLUDE_SOURCES.get(
+          self.m.properties['coverage_exclude_sources'])
     return []
 
   def profdata_dir(self, step_name=None):
@@ -250,7 +220,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       target = t.isolate_target
 
       if not re.search(
-          _TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[
+          constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[
               self._current_processing_test_type], target):
         continue
 
@@ -336,7 +306,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self._test_types = self.m.properties['coverage_test_types']
 
     for test_type in self._test_types:
-      if test_type not in _SUPPORTED_TEST_TYPES:
+      if test_type not in constants.SUPPORTED_TEST_TYPES:
         raise Exception('Unsupported test type %s.' % test_type)
 
     if self._is_per_cl_coverage and len(self._test_types) > 1:
@@ -378,10 +348,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     if self.use_clang_coverage:
       self._affected_source_files = self._filter_source_file(
-          affected_files, _TOOLS_TO_EXTENSIONS_MAP['clang'])
+          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['clang'])
     elif self.use_java_coverage:
       self._affected_source_files = self._filter_source_file(
-          affected_files, _TOOLS_TO_EXTENSIONS_MAP['jacoco'])
+          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
 
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
@@ -450,7 +420,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """If the build input has changes in unsupported projects, return them."""
     result = []
     for change in self.m.buildbucket.build.input.gerrit_changes:
-      if (change.host, change.project) not in _SUPPORTED_PATCH_PROJECTS:
+      if (change.host,
+          change.project) not in constants.SUPPORTED_PATCH_PROJECTS:
         result.append((change.host, change.project))
     return ', '.join('/'.join(p) for p in result)
 
@@ -540,7 +511,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               self._affected_source_files, coverage_dir)
           args.extend([
               '--diff-mapping-path',
-              coverage_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
+              coverage_dir.join(
+                  constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
           ])
         else:
           component_mapping_path = self._generate_component_mapping()
@@ -618,7 +590,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Input profdata in this step was named as {target_name}.profdata. This is
     # used for filtering profdata file of current test type.
     input_profdata_pattern = (
-        "%s\.profdata" % _TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
+        "%s\.profdata" %
+        constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
     self.m.python(
         'merge profile data for %s test coverage in %d tests' %
         (test_type, len(self._profdata_dirs)),
@@ -828,7 +801,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _generate_component_mapping(self):
     """Generates the mapping from crbug components to directories."""
-    component_mapping = self.m.path.mkdtemp().join(_COMPONENT_MAPPING_FILE_NAME)
+    component_mapping = self.m.path.mkdtemp().join(
+        constants.COMPONENT_MAPPING_FILE_NAME)
     script = self.m.path['checkout'].join('tools', 'checkteamtags',
                                                 'extract_components.py')
     self.m.python(
@@ -864,7 +838,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self._affected_source_files, self.metadata_dir)
       args.extend([
           '--diff-mapping-path',
-          self.metadata_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
+          self.metadata_dir.join(
+              constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
       ])
     else:
       pattern = self._get_source_exclusion_pattern()
@@ -910,11 +885,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       source_files: List of source files to generate line number mapping for,
                     the paths are relative to the checkout path.
       output_dir: The output directory to store
-                  _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME.
+                  constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME.
     """
     gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
     local_to_gerrit_diff_mapping_file = output_dir.join(
-        _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
+        constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
     self.m.python(
         'generate line number mapping from bot to Gerrit',
         self.resource('rebase_line_number_from_bot_to_gerrit.py'),

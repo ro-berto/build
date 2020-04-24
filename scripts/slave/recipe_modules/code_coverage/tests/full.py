@@ -141,16 +141,32 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
-  yield api.test('with_exclusions',
-       api.properties.generic(
+  yield api.test(
+      'with_exclusions_module_property',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
           buildnumber=54,
-          exclude_sources='all_test_files',
       ),
-       api.code_coverage(use_clang_coverage=True),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      api.code_coverage(
+          use_clang_coverage=True,
+          coverage_exclude_sources='ios_test_files_and_test_utils'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'with_exclusions',
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-chromeos-code-coverage',
+          buildnumber=54,
+          coverage_exclude_sources='all_test_files',
+      ),
+      api.code_coverage(use_clang_coverage=True),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'tryserver',
