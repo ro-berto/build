@@ -231,7 +231,7 @@
     "infra_step": true,
     "name": "Read steps from JSON",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@bots.json@{\"linux\": {\"test_steps\": [{\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-build\", \"--test-include=emtest\"], \"name\": \"Emscripten testsuite (upstream)\"}, {\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-build\", \"--test-include=emtest-asm\"], \"name\": \"Emscripten testsuite (asm2wasm)\"}], \"build_steps\": [{\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-test\", \"--build-include=wabt\"], \"name\": \"Build Wabt\"}]}}@@@",
+      "@@@STEP_LOG_LINE@bots.json@{\"linux\": {\"build_steps\": [{\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-test\", \"--build-include=wabt\"], \"name\": \"Build Wabt\"}], \"test_steps\": [{\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-build\", \"--test-include=emtest\"], \"name\": \"Emscripten testsuite (upstream)\"}, {\"command\": [\"waterfall/src/build.py\", \"--no-sync\", \"--no-build\", \"--test-include=emtest-asm\"], \"name\": \"Emscripten testsuite (asm2wasm)\"}]}}@@@",
       "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
