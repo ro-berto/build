@@ -233,8 +233,6 @@ class BotSpec(object):
   disable_tests = attrib(bool, default=False)
   # Specs for tests to be run for this builder
   test_specs = sequence_attrib(TestSpec, default=())
-  # Tests to be run for this builder
-  tests = sequence_attrib(steps.Test, default=())
   # A bool controlling whether swarming tests should be run serially
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity

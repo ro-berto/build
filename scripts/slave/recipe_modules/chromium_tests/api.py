@@ -243,7 +243,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self, source_side_spec, bot_spec, buildername, mastername,
       swarming_dimensions, scripts_compile_targets, bot_update_step):
     tests = [s.get_test() for s in bot_spec.test_specs]
-    tests.extend(bot_spec.tests)
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
       tests.extend(
