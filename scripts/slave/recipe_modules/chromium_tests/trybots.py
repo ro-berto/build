@@ -229,7 +229,7 @@ TRYBOTS = try_spec.TryDatabase.create({
         'linux_android_dbg_ng':
             simple_bot({
                 'mastername': 'chromium.android',
-                'buildername': 'KitKat Phone Tester (dbg)',
+                'buildername': 'Lollipop Phone Tester',
             }),
         'android_unswarmed_pixel_aosp':
             simple_bot({

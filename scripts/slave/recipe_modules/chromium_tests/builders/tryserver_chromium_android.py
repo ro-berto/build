@@ -5,7 +5,7 @@
 from .. import bot_spec
 
 SPEC = {
-    'android-opus-kitkat-arm-rel':
+    'android-opus-arm-rel':
         bot_spec.BotSpec.create(
             chromium_config='android',
             chromium_apply_config=['mb', 'mb_luci_auth'],

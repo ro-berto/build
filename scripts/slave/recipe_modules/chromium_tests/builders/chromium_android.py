@@ -109,60 +109,6 @@ SPEC = {
             android_config='cast_builder',
             simulation_platform='linux',
         ),
-    'KitKat Phone Tester (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            bot_type=bot_spec.TESTER,
-            parent_buildername='Android arm Builder (dbg)',
-            simulation_platform='linux',
-        ),
-    'KitKat Phone Tester (rel)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks', 'mb', 'mb_luci_auth'
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
-            simulation_platform='linux',
-        ),
-    'KitKat Tablet Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm Builder (dbg)',
-            bot_type=bot_spec.TESTER,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
     'Marshmallow 64 bit Tester':
         _chromium_android_spec(
             chromium_config='android',
