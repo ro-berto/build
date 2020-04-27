@@ -139,7 +139,7 @@ SPEC = {
             gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
+                'TARGET_BITS': 32,
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder_mb',
