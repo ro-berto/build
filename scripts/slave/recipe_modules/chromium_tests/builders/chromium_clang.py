@@ -51,7 +51,6 @@ def config(name,
 
   if official:
     cfg['gclient_apply_config'].append('chrome_internal')
-    cfg['gclient_apply_config'].append('checkout_pgo_profiles')
     cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
     cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
     cfg['swarming_dimensions'] = {
@@ -210,9 +209,7 @@ SPEC = {
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
-            ],
+            gclient_apply_config=['clang_tot', 'chrome_internal'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -397,9 +394,7 @@ SPEC = {
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
-            ],
+            gclient_apply_config=['clang_tot', 'chrome_internal'],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             # Run with lower priority; see https://crbug.com/937297#c26
