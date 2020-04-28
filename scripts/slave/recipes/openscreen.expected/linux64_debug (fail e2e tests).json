@@ -147,9 +147,12 @@
       "[START_DIR]/openscreen/buildtools/linux64/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",
-      "--args=is_debug=true target_cpu=\"arm64\""
+      "--args=is_debug=true is_asan=true"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "gn gen"
   },
   {
@@ -169,6 +172,9 @@
       "[CACHE]/goma/data/builder"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -184,6 +190,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -218,6 +225,9 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -236,6 +246,9 @@
       "e2e_tests"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "compile"
   },
   {
@@ -252,6 +265,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -285,6 +299,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -307,6 +322,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -362,6 +378,9 @@
       "builder"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -389,6 +408,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -396,227 +418,26 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "Upload isolates"
+    "cmd": [
+      "[START_DIR]/openscreen/out/Default/openscreen_unittests"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Run unit tests"
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]/isolate-directory_tmp_1/out/Default"
+      "[START_DIR]/openscreen/out/Default/e2e_tests"
     ],
     "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "Upload isolates.Ensuring directory: [CLEANUP]/isolate-directory_tmp_1/out/Default",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Run e2e tests",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/openscreen/out/Default/openscreen_unittests",
-      "[CLEANUP]/isolate-directory_tmp_1/out/Default"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "Upload isolates.Copying file: [START_DIR]/openscreen/out/Default/openscreen_unittests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copytree",
-      "[START_DIR]/openscreen/test/data",
-      "[CLEANUP]/isolate-directory_tmp_1/test/data"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "Upload isolates.Copying tree: [START_DIR]/openscreen/test/data",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "ensure isolated"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/isolated_client",
-      "-ensure-file",
-      "infra/tools/luci/isolated/${platform} git_revision:305e79001db1846906c7136d90a863bee5bd3bfc",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "ensure isolated.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:305\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolated/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/isolated_client/isolated",
-      "archive",
-      "-verbose",
-      "-isolate-server",
-      "https://example.isolateserver.appspot.com",
-      "-namespace",
-      "default-gzip",
-      "-dump-hash",
-      "/path/to/tmp/",
-      "-dirs",
-      "[CLEANUP]/isolate-directory_tmp_1:."
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "Archive build outputs",
-    "~followup_annotations": [
-      "@@@STEP_LINK@isolated UI@https://example.isolateserver.appspot.com/browse?namespace=default-gzip&hash=%5Bdummy+hash%5D@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "ensure swarming"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/swarming_client",
-      "-ensure-file",
-      "infra/tools/luci/swarming/${platform} git_revision:2d3d6714d3e768108a1be7bfdd17c54a3693bdeb",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "ensure swarming.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:2d3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/swarming_client/swarming",
-      "spawn-tasks",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-json-input",
-      "{\"requests\": [{\"name\": \"openscreen_unittests\", \"priority\": \"200\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"300\", \"properties\": {\"command\": [\"./out/Default/openscreen_unittests\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"arm64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"luci.flex.try\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"1200\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"60\", \"outputs\": []}}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "Trigger Open Screen Unit Tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"openscreen_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: openscreen_unittests@https://example.swarmingserver.appspot.com/task?id=0@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/swarming_client/swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
-      "-task-output-stdout",
-      "json",
-      "-output-dir",
-      "[CLEANUP]/swarming-output_tmp_2",
-      "-timeout",
-      "30m",
-      "0"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "infra_step": true,
-    "name": "collect",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"openscreen_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: openscreen_unittests@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: openscreen_unittests@@@",
-      "@@@STEP_LINK@task isolated outputs: openscreen_unittests@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

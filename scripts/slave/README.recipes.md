@@ -5046,32 +5046,32 @@ Recipe for building and running tests for Libyuv stand-alone.
 
 Recipe for building and running tests for Open Screen stand-alone.
 
-&mdash; **def [FormatGnArg](/scripts/slave/recipes/openscreen.py#65)(properties, key):**
+&mdash; **def [FormatGnArg](/scripts/slave/recipes/openscreen.py#64)(properties, key):**
 
 Takes a specific keg, e.g. is_debug, and format the key and value pair as
 a valid gn argument.
 
-&mdash; **def [FormatGnArgs](/scripts/slave/recipes/openscreen.py#75)(properties):**
+&mdash; **def [FormatGnArgs](/scripts/slave/recipes/openscreen.py#74)(properties):**
 
 Takes a list of properties and maps them to string gn arguments.
 
-&mdash; **def [GetHostToolLabel](/scripts/slave/recipes/openscreen.py#56)(platform):**
+&mdash; **def [GetHostToolLabel](/scripts/slave/recipes/openscreen.py#55)(platform):**
 
 Determines what the platform label is, e.g. 'mac' or 'linux64'.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#160)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#142)(api):**
 
 Main function body for execution on the current bot.
 
-&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#153)(api, output_path):**
+&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#130)(api, output_path):**
 
 Runs all types of enabled tests on the current bot.
 
-&mdash; **def [SwarmTests](/scripts/slave/recipes/openscreen.py#100)(api, output_path, checkout_path, dimensions):**
+&mdash; **def [SwarmTests](/scripts/slave/recipes/openscreen.py#99)(api, output_path, checkout_path, dimensions):**
 
 Runs specific types of tests on a separate swarming bot.
 
-&mdash; **def [UploadFilesToIsolateStorage](/scripts/slave/recipes/openscreen.py#81)(api, files):**
+&mdash; **def [UploadFilesToIsolateStorage](/scripts/slave/recipes/openscreen.py#80)(api, files):**
 
 Pushes files up to the isolate server storage.
 ### *recipes* / [pdfium](/scripts/slave/recipes/pdfium.py)
