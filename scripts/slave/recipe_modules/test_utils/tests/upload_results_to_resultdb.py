@@ -85,6 +85,8 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        'include derived test results (with patch)',
                        ['invid,invid2']),
+      api.post_process(post_process.DoesNotRun,
+                       'include derived test results (without patch)'),
       api.post_process(post_process.DropExpectation))
 
   yield api.test(
@@ -122,7 +124,7 @@ def GenTests(api):
                        'derive test results (with patch)'),
       api.post_process(post_process.MustRun,
                        'derive test results (retry shards with patch)'),
-      api.post_process(post_process.DoesNotRun,
+      api.post_process(post_process.MustRun,
                        'derive test results (without patch)'),
       api.post_process(post_process.DropExpectation))
 

@@ -1766,6 +1766,14 @@
   },
   {
     "cmd": [],
+    "name": "[skipped] derive test results (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "TRYJOB FAILURE",
     "~followup_annotations": [
       "@@@STEP_TEXT@INVALID_TEST_RESULTS@@@",

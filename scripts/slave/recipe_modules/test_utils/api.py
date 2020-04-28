@@ -276,10 +276,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # gets test results from.
       return invalid_results, failed_test_suites
 
-    if suffix == 'without patch':
-      # Don't derive test results for without patch steps.
-      return invalid_results, failed_test_suites
-
     # Derives swarming test results to ResultDB.
     # The returned results are not being used yet.
     swarming_task_ids = []
@@ -301,23 +297,25 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if parsed.scheme:
       swarming_host = parsed.netloc
 
+    # Failure of these steps should not fail the build.
+    # TODO(crbug.com/1021849): raise the failures instead of swallowing them.
     try:
-      # Failure of this step should not fail the build.
-      # TODO(crbug.com/1021849): include derived invocations into the build's
-      # invocation.
       invocations = self.m.resultdb.chromium_derive(
           step_name=derive_step_name,
           swarming_host=swarming_host,
           task_ids=swarming_task_ids,
           variants_with_unexpected_results=True,
       )
-      # Include the derived invocations in the build's invocation.
-      include_step_name = (
-          'include derived test results (%s)' % suffix
-          if suffix else 'include derived test results'
-      )
-      self.m.resultdb.include_invocations(
-          invocations.keys(), step_name=include_step_name)
+
+      if suffix != 'without patch':
+        # Include the derived invocations in the build's invocation.
+        # Note that 'without patch' results are derived but not included in
+        # the builds' invocation, since the results are not related to the
+        # patch under test.
+        include_step_name = ('include derived test results (%s)' % suffix
+                             if suffix else 'include derived test results')
+        self.m.resultdb.include_invocations(
+            invocations.keys(), step_name=include_step_name)
     except (self.m.step.InfraFailure,
             self.m.step.StepFailure):  # pragma: no cover
       pass
