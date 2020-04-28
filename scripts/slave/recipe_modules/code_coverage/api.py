@@ -246,6 +246,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['content_shell_crash_test', 'content_shell'],
           ['.*blink_web_tests', 'content_shell'],
           ['.*_ozone', target[:-len('_ozone')]],
+          ['.*_eg2tests_module', 'ios_chrome_eg2tests'],
           ['.*', target],
       ]
       for pattern, binary in patterns:
@@ -262,15 +263,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               binaries.add(android_path)
               break
         elif self.m.chromium.c.TARGET_PLATFORM == 'ios':
-          binary_name = binary
-          if target.endswith("eg2tests_module"):
-            # iOS EG2 tests coverage data is generated from the host app named
-            # "ios_chrome_eg2tests".
-            binary_name = "ios_chrome_eg2tests"
-          # Actual binary file is at {binary_name}.app/{binary_name} for iOS.
-          binaries.add(
-              self.m.chromium.output_dir.join(binary_name + ".app",
-                                              binary_name))
+          if binary == 'ios_web_view_inttests':
+            binaries.add(
+                self.m.chromium.output_dir.join('ChromeWebView.framework',
+                                                'ChromeWebView'))
+            break
+          # Actual binary file is at {binary}.app/{binary} for iOS.
+          binaries.add(self.m.chromium.output_dir.join(binary + '.app', binary))
         else:
           binaries.add(
               self.m.chromium.output_dir.join(

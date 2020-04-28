@@ -21,7 +21,7 @@ DEPS = [
 ]
 
 # Number of tests. Needed by the tests.
-_NUM_TESTS = 6
+_NUM_TESTS = 7
 
 # For trybot test data. If not given, buildbucket module will make the gerrit
 # project the same as the buildbucket project, but since
@@ -70,7 +70,8 @@ def RunSteps(api):
                                              'merge_blink_web_tests.py'),
               'args': ['random', 'args'],
           }),
-      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests_module')
+      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests_module'),
+      steps.SwarmingIsolatedScriptTest('ios_web_view_inttests')
   ]
   assert _NUM_TESTS == len(tests)
 
