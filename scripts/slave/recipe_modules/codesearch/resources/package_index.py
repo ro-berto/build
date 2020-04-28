@@ -208,16 +208,18 @@ class ProtoTarget():
         for source in self.sources
     ]
 
+    # args are for protoc_wrapper.py and not protoc. Extract only
+    # --proto-in-dir.
+    for i in range(len(self.args) - 1):
+      if self.args[i] == '--proto-in-dir' or self.args[i] == '--import-dir':
+        unit_proto.argument.extend(['--proto_path', self.args[i + 1]])
+
     # use sort to make it deterministic, used for unit tests
     for source_file in sorted(source_files):
       unit_proto.source_file.append(source_file)
       # Append to arguments since original source argument needs to be modified.
       unit_proto.argument.append(source_file)
 
-    for arg in self.args:
-      # .proto files can be ignored since they are already added.
-      if not arg.endswith('.proto'):
-        unit_proto.argument.append(arg)
 
     unit_proto.v_name.corpus = corpus
     unit_proto.v_name.language = 'protobuf'

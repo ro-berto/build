@@ -63,15 +63,9 @@ unit {
       digest: "9875ac9edbdaf998e2e5d81f265428e3f2a6f4c5d9b5527cf2450d3705f0415b"
     }
   }
-  argument: "../../main.proto"
-  argument: "--protoc"
-  argument: "./clang_x64/protoc"
-  argument: "--proto-in-dir"
+  argument: "--proto_path"
   argument: "../../"
-  argument: "--cc-out-dir"
-  argument: "gen/"
-  argument: "--py-out-dir"
-  argument: "pyproto/"
+  argument: "../../main.proto"
   source_file: "../../main.proto"
   details {
     [kythe.io/proto/kythe.proto.BuildDetails] {
