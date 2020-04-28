@@ -54,6 +54,11 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'pgo_profiles',
+      api.properties(apply_gclient_config='checkout_pgo_profiles'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'clang_tidy',
       api.properties(apply_gclient_config='use_clang_tidy'),
       api.post_process(post_process.DropExpectation),

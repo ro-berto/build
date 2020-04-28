@@ -334,10 +334,15 @@ def use_clang_coverage(c):
   c.solutions[0].custom_vars['checkout_clang_coverage_tools'] = 'True'
 
 
+# Official builders are required to checkout pgo profiles.
+@CONFIG_CTX()
+def checkout_pgo_profiles(c):
+  c.solutions[0].custom_vars['checkout_pgo_profiles'] = 'True'
+
+
 @CONFIG_CTX()
 def use_clang_tidy(c):
   c.solutions[0].custom_vars['checkout_clang_tidy'] = 'True'
-
 
 @CONFIG_CTX()
 def clang_tot(c):
@@ -347,18 +352,15 @@ def clang_tot(c):
 def openscreen_tot(c):
   c.revisions['src/third_party/openscreen/src'] = 'HEAD'
 
-
 @CONFIG_CTX()
 def ios_webkit_tot(c):
   c.solutions[0].custom_vars['checkout_ios_webkit'] = 'True'
   c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/master'
 
-
 @CONFIG_CTX()
 def no_checkout_flash(c):
   # internal perf tester does not need to checkout flash related repositories.
   c.solutions[0].custom_vars['checkout_flash'] = 'False'
-
 
 @CONFIG_CTX()
 def no_kaleidoscope(c):
