@@ -6,11 +6,15 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/python',
 ]
 NO_SUFFIX = ''
 
 from recipe_engine import post_process
+from PB.recipes.build.chromium_speed_tester import InputProperties
+
+PROPERTIES = InputProperties
 
 
 def _debug_lines(bot, tests, task_groups):
@@ -34,7 +38,7 @@ def _debug_lines(bot, tests, task_groups):
   return debug_lines
 
 
-def RunSteps(api):
+def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     bot = api.chromium_tests.lookup_bot_metadata(builders=None)
     bot_type = bot.settings.bot_type
@@ -55,7 +59,12 @@ def RunSteps(api):
             'task_output_dir': t.get_task(NO_SUFFIX).task_output_dir
         } for t in tests
     }
-    additional_trigger_properties = {'tasks_groups': task_groups}
+    additional_trigger_properties = {
+        'tasks_groups': task_groups,
+        'builder_name': api.buildbucket.builder_name,
+        'build_number': api.buildbucket.build.number,
+        'perf_dashboard_machine_group': properties.perf_dashboard_machine_group
+    }
     api.python.succeeding_step(
         'Debug info', '<br/>'.join(_debug_lines(bot, tests, task_groups)))
     api.chromium_tests.trigger_child_builds(

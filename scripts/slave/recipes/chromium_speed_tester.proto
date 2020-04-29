@@ -1,0 +1,12 @@
+// Copyright 2020 The LUCI Authors. All rights reserved.
+// Use of this source code is governed under the Apache License, Version 2.0
+// that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.chromium_speed_tester;
+
+message InputProperties {
+  // The group name when uploading the perf result to the perf dashboard.
+  string perf_dashboard_machine_group = 1;
+}

@@ -4247,9 +4247,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_speed_processor.py#16)(api):**
 ### *recipes* / [chromium\_speed\_tester](/scripts/slave/recipes/chromium_speed_tester.py)
 
-[DEPS](/scripts/slave/recipes/chromium_speed_tester.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipes/chromium_speed_tester.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_speed_tester.py#37)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_speed_tester.py#41)(api, properties):**
 ### *recipes* / [chromium\_swarming:examples/full](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
