@@ -267,34 +267,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
-    'Win Builder (ANGLE)':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            gclient_apply_config=['angle_top_of_tree'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            bot_type=bot_spec.BUILDER,
-            test_results_config='staging_server',
-            simulation_platform='win',
-            patch_root='src/third_party/angle',
-        ),
-    'Win7 Tests (ANGLE)':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            gclient_apply_config=['angle_top_of_tree'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            bot_type=bot_spec.TESTER,
-            parent_buildername='Win Builder (ANGLE)',
-            test_results_config='staging_server',
-            simulation_platform='win',
-        ),
     'win32-arm64-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
