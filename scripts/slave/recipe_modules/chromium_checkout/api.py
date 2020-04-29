@@ -81,7 +81,6 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # Bot Update re-uses the gclient configs.
     with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
-          patch_root=bot_config.patch_root,
           clobber=bot_config.clobber,
           **kwargs)
 

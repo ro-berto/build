@@ -61,7 +61,7 @@ def RunSteps(api):
 
 
 def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
-  api.bot_update.ensure_checkout(patch_root=bot_config.patch_root)
+  api.bot_update.ensure_checkout()
 
   api.chromium.ensure_toolchains()
   api.chromium.ensure_goma()

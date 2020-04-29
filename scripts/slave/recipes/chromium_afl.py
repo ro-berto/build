@@ -74,8 +74,7 @@ def gn_refs(api, step_name, args):
 def RunSteps(api):
   builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
-  checkout_results = api.bot_update.ensure_checkout(
-      patch_root=bot_config.patch_root)
+  checkout_results = api.bot_update.ensure_checkout()
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()

@@ -60,9 +60,6 @@ class BuilderSpec(FieldMapping):
   # A bool controlling whether have bot_update perform a clobber of any
   # pre-existing build outputs
   clobber = attrib(bool, default=False)
-  # A path relative to the checkout to the root where the patch should be
-  # applied in bot_update
-  patch_root = attrib(str, default=None)
 
   @classmethod
   def create(cls, **kwargs):
