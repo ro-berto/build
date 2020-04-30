@@ -17,7 +17,7 @@ import constants
 class ConstantsTest(unittest.TestCase):
 
   def test_ios_excluded_sources_regex_matches_test_file(self):
-    """Tests test files are matched by ios exclude pattern"""
+    """Tests test files are matched by ios exclude pattern."""
     ios_pattern = constants.EXCLUDE_SOURCES['ios_test_files_and_test_utils']
     files = [
         '/b/s/w/ir/cache/builder/src/ios/web/web_view/'
@@ -41,7 +41,7 @@ class ConstantsTest(unittest.TestCase):
     self.assertEqual(len(files), len(filtered_files))
 
   def test_ios_excluded_sources_regex_matches_test_util(self):
-    """Tests test util files are matched by ios exclude pattern"""
+    """Tests test util files are matched by ios exclude pattern."""
     ios_pattern = constants.EXCLUDE_SOURCES['ios_test_files_and_test_utils']
     files = [
         '/b/s/w/ir/cache/builder/src/net/test/url_request/'
@@ -60,7 +60,7 @@ class ConstantsTest(unittest.TestCase):
     self.assertEqual(len(files), len(filtered_files))
 
   def test_ios_excluded_sources_regex_not_match_unexluded_files(self):
-    """Tests non test related files are not matched by ios exclude pattern"""
+    """Tests non test related files are not matched by ios exclude pattern."""
     ios_pattern = constants.EXCLUDE_SOURCES['ios_test_files_and_test_utils']
     files = [
         '/b/s/w/ir/cache/builder/src/ios/chrome/browser/signin/'
@@ -74,6 +74,55 @@ class ConstantsTest(unittest.TestCase):
     ]
     filtered_files = filter(lambda s: re.match(ios_pattern, s), files)
     self.assertEqual(0, len(filtered_files))
+
+  def test_ios_unit_tests_pattern(self):
+    """Tests correct targets are matched by ios unit test pattern."""
+    ios_unit_test_target_pattern = (
+        constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP['unit'])
+
+    unit_test_targets = [
+        'boringssl_crypto_tests',
+        'boringssl_ssl_tests',
+        'crypto_unittests',
+        'google_apis_unittests',
+        'ios_components_unittests',
+        'ios_net_unittests',
+        'ios_remoting_unittests',
+        'ios_testing_unittests',
+        'net_unittests',
+        'services_unittests',
+        'sql_unittests',
+        'url_unittests',
+        'base_unittests',
+        'components_unittests',
+        'gfx_unittests',
+        'ios_chrome_unittests',
+        'ios_web_unittests',
+        'ios_web_view_unittests',
+        'skia_unittests',
+        'ui_base_unittests',
+    ]
+    filtered_unit_tests = filter(
+        lambda s: re.match(ios_unit_test_target_pattern, s), unit_test_targets)
+    self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
+
+    non_unit_test_targets = [
+        'ios_web_inttests',
+        'ios_web_view_inttests',
+        'ios_chrome_bookmarks_eg2tests_module',
+        'ios_chrome_integration_eg2tests_module',
+        'ios_chrome_settings_eg2tests_module',
+        'ios_chrome_signin_eg2tests_module',
+        'ios_chrome_smoke_eg2tests_module',
+        'ios_chrome_ui_eg2tests_module',
+        'ios_chrome_web_eg2tests_module',
+        'ios_showcase_eg2tests_module',
+        'ios_web_shell_eg2tests_module',
+    ]
+    filtered_non_unit_tests = filter(
+        lambda s: re.match(ios_unit_test_target_pattern, s),
+        non_unit_test_targets)
+    self.assertEqual(0, len(filtered_non_unit_tests))
 
 
 if __name__ == '__main__':

@@ -41,4 +41,7 @@ SUPPORTED_TEST_TYPES = ['overall', 'unit']
 
 # A mapping of test type str literal to regex of test target names.
 # TODO(crbug.com/1071251): This map is correct for iOS tests only currently.
-TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP = {'unit': '.+_unittests', 'overall': '.+'}
+TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP = {
+    'unit': '(boringssl_crypto_|boringssl_ssl_|.+_unit)tests',
+    'overall': '.+'
+}
