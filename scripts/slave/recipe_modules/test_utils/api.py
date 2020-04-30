@@ -12,6 +12,9 @@ from recipe_engine import util as recipe_util
 from . import canonical
 from .util import GTestResults, TestResults
 
+from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (test_result as
+                                                           test_result_pb2)
+
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
@@ -316,11 +319,89 @@ class TestUtilsApi(recipe_api.RecipeApi):
                              if suffix else 'include derived test results')
         self.m.resultdb.include_invocations(
             invocations.keys(), step_name=include_step_name)
+      else:
+        # Test variants that still fail unexpectedly in (without patch) steps
+        # are exonerated.
+        # This is to be consistent with the current recipe logic at
+        # http://shortn/_KibEsLgpJK
+        exonerations = self._test_exonerations_from_results(invocations)
+        self.m.resultdb.exonerate(
+            test_exonerations=exonerations,
+            step_name='exonerate without patch failures',
+        )
     except (self.m.step.InfraFailure,
             self.m.step.StepFailure):  # pragma: no cover
       pass
 
     return invalid_results, failed_test_suites
+
+  def _test_exonerations_from_results(self, invocations):
+    """Gets test exonerations from ResultDB results.
+
+    This is a helper function to get test variants to exonerate.
+
+    To be consistent with the current recipe logic at http://shortn/_KibEsLgpJK,
+    test variants with unexpected failures in (without patch) steps will be
+    exonerated.
+
+    This is subject to change if all unexpected results should be exonerated,
+    instead of just unexpected failures.
+
+    Args:
+      invocations (dict): A dict {invocation_id: api.resultdb.Invocation}.
+        Please refer to go/resultdb-concepts for more details.
+        An example below:
+        {
+          'invocation_id': api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED
+              ),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/Test',
+                      variant={'def': {
+                          'key1': 'value1',
+                          'key2': 'value2'
+                      }},
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                  ),
+              ],
+          ),
+        }
+
+    Returns:
+      A list of test_result_pb2.TestExoneration.
+    """
+    res = {}
+    for inv in invocations.values():
+      for tr in inv.test_results:
+        if tr.expected or tr.status == test_result_pb2.PASS:
+          continue
+
+        res.setdefault(tr.test_id, [])
+        found = False
+        for r in res[tr.test_id]:
+          # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
+          if r.variant == tr.variant:
+            found = True
+            break
+
+        if not found:
+          res[tr.test_id].append(
+              test_result_pb2.TestExoneration(
+                  test_id=tr.test_id,
+                  variant=tr.variant,
+                  # TODO(crbug.com/1076096): add deep link to the Milo UI to
+                  #  display the without patch test results.
+                  explanation_html='Unexpected failure without patch',
+              ))
+
+    ret = []
+    for exonerations in res.values():
+      ret.extend(exonerations)
+    return ret
+
 
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.

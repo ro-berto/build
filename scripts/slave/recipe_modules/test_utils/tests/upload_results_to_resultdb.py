@@ -16,8 +16,11 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
+from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (invocation as
                                                            invocation_pb2)
+from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (test_result as
+                                                           test_result_pb2)
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
@@ -65,7 +68,15 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
-      ), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
+      ),
+      api.buildbucket.build(
+          build_pb2.Build(
+              builder=build_pb2.BuilderID(
+                  project='chromium',
+                  bucket='try',
+                  builder='linux-rel',
+              ),
+              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -97,7 +108,15 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
-      ), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
+      ),
+      api.buildbucket.build(
+          build_pb2.Build(
+              builder=build_pb2.BuilderID(
+                  project='chromium',
+                  bucket='try',
+                  builder='linux-rel',
+              ),
+              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -135,7 +154,15 @@ def GenTests(api):
           is_swarming_test=False,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
+          }),
+      api.buildbucket.build(
+          build_pb2.Build(
+              builder=build_pb2.BuilderID(
+                  project='chromium',
+                  bucket='try',
+                  builder='linux-rel',
+              ),
+              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.post_process(post_process.DoesNotRun,
                        'derive test results (with patch)'),
       api.post_process(post_process.MustRun,
@@ -159,4 +186,93 @@ def GenTests(api):
               failure=False)),
       api.post_process(post_process.DoesNotRun,
                        'derive test results (with patch)'),
+      api.post_process(post_process.DropExpectation))
+
+  inv_bundle_with_failures = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t1',
+                      expected=True,
+                      status=test_result_pb2.PASS,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t2',
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                      variant={'def': {
+                          'key2': 'value2',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t2',
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                      variant={'def': {
+                          'key2': 'value2',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t3',
+                      expected=False,
+                      status=test_result_pb2.PASS,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+              ],
+          ),
+  }
+
+  yield api.test(
+      'exonerate_without_patch_failures',
+      api.properties(
+          mastername='m',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ),
+      api.buildbucket.build(
+          build_pb2.Build(
+              builder=build_pb2.BuilderID(
+                  project='chromium',
+                  bucket='try',
+                  builder='linux-rel',
+              ),
+              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True),
+              shards=2,
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True),
+              shards=2,
+              failure=True)),
+      api.resultdb.chromium_derive(
+          step_name='derive test results (with patch)',
+          results=inv_bundle_with_failures,
+      ),
+      api.resultdb.chromium_derive(
+          step_name='derive test results (retry shards with patch)',
+          results=inv_bundle_with_failures,
+      ),
+      api.resultdb.chromium_derive(
+          step_name='derive test results (without patch)',
+          results=inv_bundle_with_failures,
+      ),
+      api.post_process(post_process.MustRun,
+                       'exonerate without patch failures'),
       api.post_process(post_process.DropExpectation))
