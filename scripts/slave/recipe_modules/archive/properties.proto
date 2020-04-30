@@ -1,0 +1,38 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipe_modules.build.archive;
+
+message ArchiveData {
+  // A list of relative paths to files that should be archived. All files are
+  // relative to the build directory, which is passed alongside this proto to
+  // the archiving code.
+  repeated string files = 1;
+  // A list of relative paths to directories that should be archived. All
+  // directories are relative to the build directory, which is passed alongside
+  // this proto to the archiving code.
+  // Note: The |files| and |dirs| fields don't interact. Both are relative to
+  // the build directory.
+  repeated string dirs = 2;
+  // The name of the google cloud storage bucket to upload to.
+  string gcs_bucket = 3;
+  // The destination path in the bucket to upload to. The string '{%position%}'
+  // will be replaced by the commit position extracted from got_revision_cp.
+  string gcs_path = 4;
+
+  enum ArchiveType {
+    ARCHIVE_TYPE_UNSPECIFIED = 0;
+
+    // All input files and directories are zipped. gcs_path should be a path
+    // whose final component is the name of the file.
+    // This is the default if nothing is set.
+    ARCHIVE_TYPE_ZIP = 1;
+  }
+  ArchiveType archive_type = 5;
+}
+
+message InputProperties {
+  repeated ArchiveData archive_datas = 1;
+}

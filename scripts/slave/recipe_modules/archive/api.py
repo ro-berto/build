@@ -28,6 +28,13 @@ class ArchiveApi(recipe_api.RecipeApi):
   something other than Chromium flavor, consider using 'zip' + 'gsutil' or
   'isolate' modules instead.
   """
+
+  def __init__(self, props, **kwargs):
+    super(ArchiveApi, self).__init__(**kwargs)
+
+    # This input property is populated by the global property $build/archive.
+    self._default_config = props
+
   def zip_and_upload_build(
       self, step_name, target, build_url=None, src_dir=None,
       build_revision=None, cros_board=None, package_dsym_files=False,
@@ -433,3 +440,59 @@ class ArchiveApi(recipe_api.RecipeApi):
     The builder_name, or parent_buildername, is always automatically
     inserted into the URL."""
     return self._legacy_url(True, gs_bucket_name, extra_url_components)
+
+  def generic_archive(self, build_dir, got_revision_cp, config):
+    """Archives one or multiple packages to google cloud storage.
+
+    The exact configuration of the archive is specified by InputProperties. See
+    archive/properties.proto.
+
+    Args:
+      build_dir: The absolute path to the build output directory, e.g.
+                 [slave-build]/src/out/Release
+      got_revision_cp: This property from chromium.build_properties specifies
+                       the commit position of the checked out commit of the
+                       chromium tree.
+      config: An instance of archive/properties.proto:InputProperties.
+              DEPRECATED: If None, this will default to the global property
+              $build/archive.
+    """
+    if config is None:
+      config = self._default_config
+
+    if not config.archive_datas:
+      return
+
+    with self.m.step.nest('Generic Archiving Steps'):
+      for archive_data in config.archive_datas:
+        # There is only one archive type, and that is ARCHIVE_TYPE_ZIP, so we
+        # don't bother performing any checks.
+
+        # Perform dynamic configuration from placeholders, if necessary.
+        position_placeholder = '{%position%}'
+        gcs_path = archive_data.gcs_path
+        if position_placeholder in gcs_path:
+          if not got_revision_cp:
+            self.m.python.failing_step(
+                'Missing got_revision_cp',
+                'got_revision_cp is needed to populate the {%position%} '
+                'placeholder')
+          _, position = self.m.commit_position.parse(got_revision_cp)
+          gcs_path.replace(position_placeholder, str(position))
+
+        # Create a temporary directory to hold the zipped archive.
+        temp_dir = self.m.path.mkdtemp()
+        output_path = temp_dir.join('artifact.zip')
+
+        package = self.m.zip.make_package(build_dir, output_path)
+        for f in archive_data.files:
+          package.add_file(build_dir.join(f))
+        for directory in archive_data.dirs:
+          package.add_directory(build_dir.join(directory))
+
+        # An exception will be raised if there's an error, so we can assume that
+        # this step succeeds.
+        package.zip('Create generic archive')
+
+        self.m.gsutil.upload(
+            output_path, bucket=archive_data.gcs_bucket, dest=gcs_path)

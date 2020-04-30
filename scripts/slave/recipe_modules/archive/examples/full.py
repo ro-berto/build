@@ -4,6 +4,10 @@
 
 import datetime
 
+from PB.recipe_modules.build.archive import properties
+from recipe_engine import post_process
+
+
 DEPS = [
   'archive',
   'recipe_engine/json',
@@ -25,6 +29,13 @@ def RunSteps(api):
     api.archive.zip_and_upload_build(
         step_name='zip build',
         target=api.path['checkout'].join('/Release/out'))
+    return
+
+  if 'generic_archive' in api.properties:
+    api.archive.generic_archive(
+        build_dir=api.m.path.mkdtemp(),
+        got_revision_cp=api.properties.get('got_revision_cp'),
+        config=None)
     return
 
   if 'no_llvm' not in api.properties:
@@ -147,4 +158,44 @@ def GenTests(api):
       ),
       api.override_step_data('filter build_dir',
                              api.json.output(['chrome', 'resources'])),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.files.extend([
+      'chrome',
+      'snapshot_blob.bin',
+  ])
+  archive_data.dirs.extend(['locales', 'swiftshader'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = '{%position%}/any-path.zip'
+  archive_data.archive_type = 1  # ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive',
+      api.properties(
+          generic_archive=True,
+          got_revision_cp='refs/heads/master@{#762565}',
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'generic_archive_missing_got_revision_cp',
+      api.properties(
+          generic_archive=True,
+          got_revision_cp='',
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'generic_archive_nothing_to_archive',
+      api.properties(
+          generic_archive=True, got_revision_cp='', **{'$build/archive': {}}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

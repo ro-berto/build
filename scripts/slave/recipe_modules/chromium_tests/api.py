@@ -538,6 +538,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def archive_build(self, builder_id, update_step, bot_config):
     """Archive the build if the bot is configured to do so.
 
+    There are three types of builds that get archived: regular builds,
+    clustefuzz builds, and generic archives.
+
     See api.archive.clusterfuzz_archive and archive_build.py for more
     information.
 
@@ -564,6 +567,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           archive_prefix=bot_spec.cf_archive_name,
           archive_subdir_suffix=bot_spec.cf_archive_subdir_suffix,
       )
+
+    # The goal of generic archive is to eventually replace most of the custom
+    # archive logic with InputProperties driven archiving.
+    # https://crbug.com/1076679.
+    self.m.archive.generic_archive(
+        build_dir=self.m.chromium.c.build_dir,
+        got_revision_cp=self.m.chromium.build_properties.get('got_revision_cp'),
+        config=None)
 
   def _get_scheduler_jobs_to_trigger(self, builder_id, bot_config):
     """Get the LUCI scheduler jobs to trigger.
