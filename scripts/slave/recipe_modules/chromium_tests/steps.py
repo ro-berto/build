@@ -44,6 +44,7 @@ IOS_PRODUCT_TYPES = {
     'iPad 4 GSM CDMA': 'iPad3,6',
     'iPad 5th Gen': 'iPad6,11',
     'iPad 6th Gen': 'iPad7,5',
+    'iPad 7th Gen': 'iPad7,11',
     'iPad Air': 'iPad4,1',
     'iPad Air 2': 'iPad5,3',
     'iPhone 5': 'iPhone5,1',
