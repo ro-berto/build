@@ -206,9 +206,13 @@ class Test(object):
   those modules; the state should already be stored in the configuration.
   """
 
-  def __init__(self, name,
-      target_name=None, full_test_target=None, waterfall_mastername=None,
-      waterfall_buildername=None):
+  def __init__(self,
+               name,
+               target_name=None,
+               full_test_target=None,
+               test_id_prefix=None,
+               waterfall_mastername=None,
+               waterfall_buildername=None):
     """
     Args:
       name: Displayed name of the test.
@@ -217,6 +221,8 @@ class Test(object):
           e.g. "browser_tests".
       full_test_target: a fully qualified Ninja target, e.g.
         "//chrome/test:browser_tests".
+      test_id_prefix: Test_id prefix used by ResultDB, e.g.
+          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
       waterfall_mastername (str): Matching waterfall buildbot master name.
         This value would be different from trybot master name.
       waterfall_buildername (str): Matching waterfall buildbot builder name.
@@ -262,6 +268,7 @@ class Test(object):
     self._name = name
     self._target_name = target_name
     self._full_test_target = full_test_target
+    self._test_id_prefix = test_id_prefix
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -304,6 +311,14 @@ class Test(object):
   def full_test_target(self):
     """A fully qualified Ninja target, e.g. "//chrome/test:browser_tests"."""
     return self._full_test_target
+
+  @property
+  def test_id_prefix(self):
+    """Prefix of test_id in ResultDB. e.g.
+
+    "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/"
+    """
+    return self._test_id_prefix
 
   @property
   def canonical_name(self):
@@ -1002,6 +1017,7 @@ class LocalGTestTest(Test):
                args=None,
                target_name=None,
                full_test_target=None,
+               test_id_prefix=None,
                revision=None,
                webkit_revision=None,
                android_shard_timeout=None,
@@ -1021,6 +1037,8 @@ class LocalGTestTest(Test):
       target_name: Actual name of the test. Defaults to name.
       full_test_target: a fully qualified Ninja target, e.g.
         "//chrome/test:browser_tests".
+      test_id_prefix: Test_id prefix used by ResultDB, e.g.
+          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
       override_compile_targets: List of compile targets for this test
@@ -1040,6 +1058,7 @@ class LocalGTestTest(Test):
         name,
         target_name=target_name,
         full_test_target=full_test_target,
+        test_id_prefix=test_id_prefix,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
     self._args = args or []
@@ -1544,6 +1563,7 @@ class SwarmingTest(Test):
                dimensions=None,
                target_name=None,
                full_test_target=None,
+               test_id_prefix=None,
                extra_suffix=None,
                expiration=None,
                hard_timeout=None,
@@ -1573,6 +1593,8 @@ class SwarmingTest(Test):
           //testing/buildbot/gn_isolate_map.pyl for more info.
       full_test_target: a fully qualified Ninja target, e.g.
         "//chrome/test:browser_tests".
+      test_id_prefix: test_id_prefix: Test_id prefix used by ResultDB, e.g.
+          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
       extra_suffix: Suffix applied to the test's step name in the build page.
       expiration: Expiration of the test in Swarming, in seconds.
       hard_timeout: Timeout of the test in Swarming, in seconds.
@@ -1604,7 +1626,10 @@ class SwarmingTest(Test):
           path.
     """
     super(SwarmingTest, self).__init__(
-        name, target_name=target_name, full_test_target=full_test_target,
+        name,
+        target_name=target_name,
+        full_test_target=full_test_target,
+        test_id_prefix=test_id_prefix,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         **kwargs)
@@ -1879,8 +1904,9 @@ class SwarmingTest(Test):
 
     # Add tags.
     tags = {
-      'ninja_target': [self.full_test_target or ''],
-      'test_suite': [self.canonical_name],
+        'ninja_target': [self.full_test_target or ''],
+        'test_id_prefix': [self.test_id_prefix or ''],
+        'test_suite': [self.canonical_name],
     }
 
     task.request = (task_request.with_slice(0, task_slice).
@@ -1985,6 +2011,7 @@ class SwarmingGTestTest(SwarmingTest):
                args=None,
                target_name=None,
                full_test_target=None,
+               test_id_prefix=None,
                shards=1,
                dimensions=None,
                extra_suffix=None,
@@ -2005,16 +2032,26 @@ class SwarmingGTestTest(SwarmingTest):
                ignore_task_failure=False,
                **kw):
     super(SwarmingGTestTest, self).__init__(
-        name, dimensions, target_name, full_test_target,
-        extra_suffix, expiration, hard_timeout, io_timeout,
+        name,
+        dimensions,
+        target_name,
+        full_test_target,
+        test_id_prefix,
+        extra_suffix,
+        expiration,
+        hard_timeout,
+        io_timeout,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
-        set_up=set_up, tear_down=tear_down,
+        set_up=set_up,
+        tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
-        merge=merge, shards=shards,
+        merge=merge,
+        shards=shards,
         ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions,
-        service_account=service_account, containment_type=containment_type,
+        service_account=service_account,
+        containment_type=containment_type,
         **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
@@ -2211,6 +2248,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                args=None,
                target_name=None,
                full_test_target=None,
+               test_id_prefix=None,
                shards=1,
                dimensions=None,
                extra_suffix=None,
@@ -2239,6 +2277,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         dimensions,
         target_name,
         full_test_target,
+        test_id_prefix,
         extra_suffix,
         expiration,
         hard_timeout,
@@ -2736,14 +2775,24 @@ class MockTest(Test):
     FAILURE = 1
     INFRA_FAILURE = 2
 
-  def __init__(self, name='MockTest', target_name=None, full_test_target=None,
-               waterfall_mastername=None, waterfall_buildername=None,
-               abort_on_failure=False, has_valid_results=True, failures=None,
-               runs_on_swarming=False, per_suffix_failures=None,
-               per_suffix_valid=None, api=None):
+  def __init__(self,
+               name='MockTest',
+               target_name=None,
+               full_test_target=None,
+               test_id_prefix=None,
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               abort_on_failure=False,
+               has_valid_results=True,
+               failures=None,
+               runs_on_swarming=False,
+               per_suffix_failures=None,
+               per_suffix_valid=None,
+               api=None):
     super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
     self._target_name = target_name
     self._full_test_target = full_test_target
+    self._test_id_prefix = test_id_prefix
     self._abort_on_failure = abort_on_failure
     self._failures = failures or []
     self._has_valid_results = has_valid_results

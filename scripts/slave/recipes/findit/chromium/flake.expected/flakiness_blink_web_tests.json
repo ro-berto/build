@@ -1276,6 +1276,8 @@
       "--tag",
       "stepname:blink_web_tests (r0)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:blink_web_tests",
       "--idempotent",
       "--isolated",

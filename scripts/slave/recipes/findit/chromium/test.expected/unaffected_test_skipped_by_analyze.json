@@ -1307,6 +1307,8 @@
       "--tag",
       "stepname:affected_tests (r1)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:affected_tests",
       "--idempotent",
       "--isolated",

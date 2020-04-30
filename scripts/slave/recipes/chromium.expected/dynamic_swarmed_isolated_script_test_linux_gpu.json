@@ -494,6 +494,8 @@
       "--tag",
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:telemetry_gpu_unittests",
       "--idempotent",
       "--isolated",

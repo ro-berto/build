@@ -1292,6 +1292,8 @@
       "--tag",
       "stepname:gl_tests (gfedcba)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:gl_tests",
       "--idempotent",
       "--isolated",

@@ -57,6 +57,8 @@
       "--tag",
       "stepname:base_unittests",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:base_unittests",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",

@@ -450,6 +450,8 @@
       "--tag",
       "stepname:base_unittests (with patch)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:base_unittests",
       "--idempotent",
       "--isolated",

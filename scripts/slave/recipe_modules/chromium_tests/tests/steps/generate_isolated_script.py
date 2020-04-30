@@ -117,6 +117,8 @@ def GenTests(api):
                   'base_unittests',
               'isolate_name':
                   'base_unittests_run',
+              'test_id_prefix':
+                  'ninja://chrome/test:base_unittests/',
               'merge': {
                   'script': '//path/to/script.py',
               },

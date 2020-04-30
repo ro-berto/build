@@ -1090,6 +1090,8 @@
       "--tag",
       "stepname:gl_tests (with patch)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:gl_tests",
       "--idempotent",
       "--isolated",

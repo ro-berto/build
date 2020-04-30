@@ -1116,6 +1116,8 @@
       "--tag",
       "test:webrtc_perf_tests",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)",
       "--idempotent",
       "--cipd-package",

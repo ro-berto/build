@@ -1100,6 +1100,8 @@
       "--tag",
       "stepname:telemetry_gpu_unittests (with patch)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:telemetry_gpu_unittests",
       "--idempotent",
       "--isolated",

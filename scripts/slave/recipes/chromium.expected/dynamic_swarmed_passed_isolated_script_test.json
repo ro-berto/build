@@ -485,6 +485,8 @@
       "--tag",
       "stepname:telemetry_gpu_unittests",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:telemetry_gpu_unittests",
       "--idempotent",
       "--isolated",

@@ -1157,6 +1157,8 @@
       "--tag",
       "stepname:services_unittests (r1)",
       "--tag",
+      "test_id_prefix:",
+      "--tag",
       "test_suite:services_unittests",
       "--idempotent",
       "--isolated",
