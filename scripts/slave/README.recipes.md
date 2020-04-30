@@ -1164,7 +1164,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1718)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1743)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1219,11 +1219,21 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#371)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1669)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1694)(self, requests_json):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1481)(self, prefix, task):**
+&mdash; **def [get\_collect\_task\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1196)(self, merge_script, merge_arguments, build_properties, requests_json, output_json=None, task_output_dir=None, allow_missing_json=False):**
+
+Generate the arguments needed to run collect_task.py.
+
+Args:
+  requests_json: the swarming task IDs for the collect task to collect. IDs
+                  are in JSON format.
+  For the other arguments, please refer to collect_task.collect_task() for
+  details.
+
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1506)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1281,7 +1291,7 @@ dimension.
 
 Report statistics on all tasks ran so far.
 
-&mdash; **def [run\_collect\_task\_script](/scripts/slave/recipe_modules/chromium_swarming/api.py#1344)(self, name, task_args, gen_step_test_data, \*\*kwargs):**
+&mdash; **def [run\_collect\_task\_script](/scripts/slave/recipe_modules/chromium_swarming/api.py#1369)(self, name, task_args, gen_step_test_data, \*\*kwargs):**
 
 &emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/chromium_swarming/api.py#261)(self, value):**
 
@@ -1432,7 +1442,7 @@ Returns:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1401)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1426)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 

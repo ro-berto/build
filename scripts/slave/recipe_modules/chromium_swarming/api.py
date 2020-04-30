@@ -1193,6 +1193,58 @@ class SwarmingApi(recipe_api.RecipeApi):
           % (fmt_time(runtime_sum), fmt_time(overhead_sum),
              fmt_time(duration_sum)))
 
+  def get_collect_task_args(self,
+                            merge_script,
+                            merge_arguments,
+                            build_properties,
+                            requests_json,
+                            output_json=None,
+                            task_output_dir=None,
+                            allow_missing_json=False):
+    """Generate the arguments needed to run collect_task.py.
+
+    Args:
+      requests_json: the swarming task IDs for the collect task to collect. IDs
+                      are in JSON format.
+      For the other arguments, please refer to collect_task.collect_task() for
+      details.
+    """
+    task_output_dir = task_output_dir or self.m.raw_io.output_dir()
+
+    # If we don't already have a Placeholder, wrap the task_output_dir in one
+    # so we can read out of it later w/ step_result.raw_io.output_dir.
+    if not isinstance(task_output_dir, recipe_util.Placeholder):
+      task_output_dir = self.m.raw_io.output_dir(leak_to=task_output_dir)
+
+    task_args = [
+        '--verbose',
+        '-o',
+        output_json or self.m.json.output(),
+        '--task-output-dir',
+        task_output_dir,
+    ]
+    merge_script_args = [
+        '--merge-script',
+        merge_script,
+        '--merge-script-stdout-file',
+        self.m.raw_io.output('merge_script_log'),
+        '--merge-additional-args',
+        self.m.json.dumps(merge_arguments),
+    ]
+    task_args.extend(merge_script_args)
+    if build_properties:
+      task_args.extend(
+          ['--build-properties',
+           self.m.json.dumps(build_properties)])
+    task_args.extend(['--summary-json-file', self.summary()])
+    if allow_missing_json:
+      task_args.append('--allow-missing-json')
+    collect_cmd = ['swarming']
+    collect_cmd.extend(self.get_collect_cmd_args(requests_json))
+    task_args.append('--')
+    task_args.extend(collect_cmd)
+    return task_args
+
   def _default_collect_step(
       self, task, failure_as_exception, output_placeholder=None, name=None,
       gen_step_test_data=None, **kwargs):
@@ -1238,60 +1290,33 @@ class SwarmingApi(recipe_api.RecipeApi):
              expected; for example, if the task timed out or an internal
              swarming failure occured.
     """
-    task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
-
-    # If we don't already have a Placeholder, wrap the task_output_dir in one
-    # so we can read out of it later w/ step_result.raw_io.output_dir.
-    if not isinstance(task_output_dir, recipe_util.Placeholder):
-      task_output_dir = self.m.raw_io.output_dir(leak_to=task_output_dir)
-
-    task_args = [
-      '--verbose',
-      '-o', output_placeholder or self.m.json.output(),
-      '--task-output-dir', task_output_dir,
-    ]
-
-    merge_script = (task.merge.get('script')
-                    # This script still exists here, since there are many
-                    # clients which depend on this module which don't
-                    # necessarily have a chromium checkout (it's hard to verify
-                    # they do via expectations). Leave this here for now, since
-                    # this is a sane default to ship with the module.
-                    or self.resource('noop_merge.py'))
-
-    merge_args = (task.merge.get('args') or [])
-    task_args.extend([
-      '--merge-script', merge_script,
-      '--merge-script-stdout-file',
-      self.m.raw_io.output('merge_script_log'),
-      '--merge-additional-args', self.m.json.dumps(merge_args),
-    ])
+    build_properties = None
     if task.build_properties:
-      properties = dict(task.build_properties)
+      build_properties = dict(task.build_properties)
       # exclude any recipe-engine-controlling properties (starting with $)
-      properties.update((k, v) for k, v in self.m.properties.thaw().iteritems()
-                        if not k.startswith('$'))
-      task_args.extend([
-          '--build-properties', self.m.json.dumps(properties),
-      ])
+      build_properties.update((k, v)
+                              for k, v in self.m.properties.thaw().iteritems()
+                              if not k.startswith('$'))
 
-    # Arguments for the actual 'collect' command.
-    collect_cmd = [
-      'swarming',
-    ]
-    # go's client does not generate summary file under output dir.
-    # Need to tell the location of summary file to collect_task.py.
-    task_args.extend(['--summary-json-file', self.summary()])
-
+    allow_missing_json = False
     if kwargs.get('allow_missing_json', False):
-      task_args.append('--allow-missing-json')
+      allow_missing_json = True
       kwargs.pop('allow_missing_json')
 
-    collect_cmd.extend(self.get_collect_cmd_args(task))
-
-    task_args.append('--')
-
-    task_args.extend(collect_cmd)
+    collect_task_args = self.get_collect_task_args(
+        merge_script=task.merge.get('script')
+        # This script still exists here, since there are many
+        # clients which depend on this module which don't
+        # necessarily have a chromium checkout (it's hard to verify
+        # they do via expectations). Leave this here for now, since
+        # this is a sane default to ship with the module.
+        or self.resource('noop_merge.py'),
+        merge_arguments=task.merge.get('args') or [],
+        build_properties=build_properties,
+        requests_json=task.collect_cmd_input(),
+        output_json=output_placeholder,
+        task_output_dir=task.task_output_dir,
+        allow_missing_json=allow_missing_json)
 
     # The call to collect_task emits two JSON files and one text file:
     #  1) a task summary JSON emitted by swarming
@@ -1310,7 +1335,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     step_result = self.run_collect_task_script(
         name=name or self.get_step_name('', task),
-        task_args=task_args,
+        task_args=collect_task_args,
         gen_step_test_data=gen_step_test_data,
         **kwargs)
     step_result.presentation.step_text = text_for_task(task)
@@ -1666,7 +1691,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return None, has_valid_results
 
-  def get_collect_cmd_args(self, task):
+  def get_collect_cmd_args(self, requests_json):
     """
     SwarmingTask -> argument list for go swarming command.
     """
@@ -1684,7 +1709,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       '-verbose',
     ]
 
-    args.extend(('-requests-json', self.m.json.input(task.collect_cmd_input())))
+    args.extend(('-requests-json', self.m.json.input(requests_json)))
     if self.service_account_json:
       args.extend(['-service-account-json', self.service_account_json])
     return args

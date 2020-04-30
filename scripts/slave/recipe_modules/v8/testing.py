@@ -561,7 +561,9 @@ class V8SwarmingTest(V8Test):
 
     # Arguments for actual 'collect' command.
     args.append('--')
-    args.extend(self.api.chromium_swarming.get_collect_cmd_args(task))
+    args.extend(
+        self.api.chromium_swarming.get_collect_cmd_args(
+            task.collect_cmd_input()))
 
     with self.api.swarming.on_path():
       return self.api.build.python(
