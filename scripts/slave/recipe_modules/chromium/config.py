@@ -101,6 +101,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           # support command prefixes.
           use_luci_auth=Single(bool, empty_val=False, required=False),
       ),
+      # build_dir is the full path to the "out" directory. Actual
+      # gn/ninja/compile artifacts are located in
+      # build_dir.join(build_config_fs).
       build_dir=Single(Path),
       cros_sdk=ConfigGroup(
           external=Single(bool, empty_val=True, required=False),

@@ -572,7 +572,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # archive logic with InputProperties driven archiving.
     # https://crbug.com/1076679.
     self.m.archive.generic_archive(
-        build_dir=self.m.chromium.c.build_dir,
+        build_dir=self.m.chromium.output_dir,
         got_revision_cp=self.m.chromium.build_properties.get('got_revision_cp'),
         config=None)
 
