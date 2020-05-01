@@ -478,7 +478,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'got_revision_cp is needed to populate the {%position%} '
                 'placeholder')
           _, position = self.m.commit_position.parse(got_revision_cp)
-          gcs_path.replace(position_placeholder, str(position))
+          gcs_path = gcs_path.replace(position_placeholder, str(position))
 
         # Create a temporary directory to hold the zipped archive.
         temp_dir = self.m.path.mkdtemp()
