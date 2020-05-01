@@ -1797,7 +1797,8 @@ class SwarmingTest(Test):
     task_request = task.request
     task_slice = task_request[0]
 
-    if self._isolate_coverage_data or api.chromium_tests.m.pgo.using_pgo:
+    using_pgo = api.chromium_tests.m.pgo.using_pgo
+    if self._isolate_coverage_data or using_pgo:
       # Targets built with 'use_clang_coverage' or 'use_clang_profiling' (also
       # set by chrome_pgo_phase=1) will look at this environment variable to
       # determine where to write the profile dumps. The %Nm syntax is understood
@@ -1808,6 +1809,11 @@ class SwarmingTest(Test):
               '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       })
 
+      # TODO(crbug.com/1077304) - Migrate this to sparse once the merge
+      # scripts have migrated to supporting --sparse.
+      no_sparse = False
+      if using_pgo:
+        no_sparse = True
       # TODO(crbug.com/1076055) - Refactor this to the profiles recipe_module
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
       # script tests) in a wrapper that knows how to merge coverage/pgo profile
@@ -1817,6 +1823,7 @@ class SwarmingTest(Test):
       self._merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix),
           self.target_name,
+          no_sparse=no_sparse,
           additional_merge=self._merge or task.merge)
 
     if suffix.startswith('retry shards'):

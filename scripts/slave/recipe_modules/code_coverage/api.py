@@ -625,7 +625,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'https://storage.cloud.google.com/%s/%s/index.html' %
         (self._gs_bucket, html_report_gs_path))
 
-  def shard_merge(self, step_name, target_name, additional_merge=None):
+  def shard_merge(
+      self,
+      step_name,
+      target_name,
+      additional_merge=None,
+      # TODO(crbug.com/1077304) - migrate this to 'sparse' once the
+      # merge scripts have migrated
+      no_sparse=False):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.chromium_swarming.task.
@@ -633,17 +640,21 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     |additional_merge| is an additional merge script. This will be invoked from
     the clang coverage merge script.
     """
+    args = [
+        '--profdata-dir',
+        self.m.profiles.profile_dir(step_name),
+        '--llvm-profdata',
+        self.m.profiles.llvm_profdata_exec,
+        '--test-target-name',
+        target_name,
+    ]
+    if no_sparse:
+      args += [
+          '--no-sparse',
+      ]
     new_merge = {
-        'script':
-            self.m.profiles.merge_results_script,
-        'args': [
-            '--profdata-dir',
-            self.m.profiles.profile_dir(step_name),
-            '--llvm-profdata',
-            self.m.profiles.llvm_profdata_exec,
-            '--test-target-name',
-            target_name,
-        ],
+        'script': self.m.profiles.merge_results_script,
+        'args': args,
     }
     if self.use_java_coverage:
       new_merge['args'].extend([

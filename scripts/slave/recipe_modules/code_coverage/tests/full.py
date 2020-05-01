@@ -82,7 +82,10 @@ def RunSteps(api):
     # Protected access ok here, as this is normally done by the test object
     # itself.
     api.code_coverage.shard_merge(
-        step, test.target_name, additional_merge=getattr(test, '_merge', None))
+        step,
+        test.target_name,
+        additional_merge=getattr(test, '_merge', None),
+        no_sparse=True)
 
   api.code_coverage.process_coverage_data(tests)
 
