@@ -6,9 +6,9 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
-    'code_coverage',
     'depot_tools/tryserver',
     'filter',
+    'profiles',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -22,8 +22,7 @@ DEPS = [
 
 def RunSteps(api):
   assert api.tryserver.is_tryserver
-  api.path.mock_add_paths(
-      api.code_coverage.profdata_dir().join('merged.profdata'))
+  api.path.mock_add_paths(api.profiles.profile_dir().join('merged.profdata'))
   raw_result = api.chromium_tests.trybot_steps_for_tests(
       tests=api.properties.get('tests'))
   return raw_result

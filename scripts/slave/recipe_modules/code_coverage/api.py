@@ -23,15 +23,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._report_dir = None
     # Temp dir for metadata
     self._metadata_dir = None
-    # Maps step names to subdirectories of the above.
-    self._profdata_dirs = {}
     # When set, subset of source files to include in the coverage report.
     self._affected_source_files = None
     # When set, indicates that current context is per-cl coverage for try jobs.
     self._is_per_cl_coverage = False
-    # The location of the scripts used to merge code coverage data (as opposed
-    # to test results).
-    self._merge_scripts_location = None
     # The list of profdata gs paths to be uploaded.
     self._merged_profdata_gs_paths = []
     # The list of coverage metadata gs paths to be uploaded.
@@ -53,21 +48,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # When set True, Java coverage is enabled.
     self._use_java_coverage = properties.use_java_coverage
 
-  @staticmethod
-  def _dir_name_for_step(step_name):
-    """Normalizes string, converts to lowercase, removes non-alpha characters,
-    and converts spaces to underscores.
-
-    Adapted from:
-    https://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
-
-    Args:
-      step_name (str): the name of the step to use.
-    """
-    value = re.sub('[^\w\s]', '', step_name).strip().lower()
-    value = re.sub('[-\s]+', '_', value)
-    return value
-
   @property
   def use_clang_coverage(self):
     return self._use_clang_coverage
@@ -77,40 +57,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return self._use_java_coverage
 
   @property
-  def merge_scripts_location(self):
-    if not self._merge_scripts_location:  # pragma: no cover
-      self._merge_scripts_location = self.m.chromium_checkout.working_dir.join(
-          'src', 'testing', 'merge_scripts', 'code_coverage')
-    return self._merge_scripts_location
-
-  @property
-  def step_merge_script(self):
-    """Returns the script that merges indexed profiles from multiple targets."""
-    return self.merge_scripts_location.join('merge_steps.py')
-
-  @property
-  def raw_profile_merge_script(self):
-    """Returns the location of a script that merges raw profiles from shards.
-
-    This is intended to be passed to the swarming recipe module to be called
-    upon completion of the shards.
-    """
-    return self.merge_scripts_location.join('merge_results.py')
-
-  def _llvm_exec(self, name):
-    name += '.exe' if self.m.platform.is_win else ''
-    return self.m.path['checkout'].join('third_party', 'llvm-build',
-                                        'Release+Asserts', 'bin', name)
-
-  @property
-  def profdata_executable(self):
-    """Returns the path to the llvm-profdata executable."""
-    return self._llvm_exec('llvm-profdata')
-
-  @property
   def cov_executable(self):
     """Returns the path to the llvm-cov executable."""
-    return self._llvm_exec('llvm-cov')
+    return self.m.profiles.llvm_exec_path('llvm-cov')
 
   @property
   def report_dir(self):
@@ -122,7 +71,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def metadata_dir(self):
     """A temporary directory for the metadata.
-    
+
     It's a temporary directory with a sub directory named in current test type.
     Temp dir is created on first access to this property. Subdirs are created
     on first access when processing each test type.
@@ -155,30 +104,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return constants.EXCLUDE_SOURCES.get(
           self.m.properties['coverage_exclude_sources'])
     return []
-
-  def profdata_dir(self, step_name=None):
-    """Ensures a directory exists for writing the step-level merged profdata.
-
-    Args:
-      step_name (str): The name of the step for the target whose profile we'll
-          save in in this dir. None for getting the parent directory to contain
-          the dirs for all steps.
-    """
-    # Create the parent directory when first needed.
-    if not self._base_profdata_dir:
-      self._base_profdata_dir = self.m.path.mkdtemp()
-
-    if not step_name:
-      return self._base_profdata_dir
-
-    if step_name in self._profdata_dirs:
-      return self._profdata_dirs[step_name]
-
-    new_dir = self._base_profdata_dir.join(self._dir_name_for_step(step_name))
-    self.m.file.ensure_directory('ensure profdata dir for %s' % step_name,
-                                 new_dir)
-    self._profdata_dirs[step_name] = new_dir
-    return new_dir
 
   @property
   def using_coverage(self):
@@ -436,7 +361,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           'skip processing coverage data because no source file changed', '')
       return
 
-    if not self._profdata_dirs:  # pragma: no cover.
+    if not self.m.profiles.profile_subdirs:  # pragma: no cover.
       return
 
     with self.m.step.nest(
@@ -449,7 +374,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               'skip processing because no profdata was generated', '')
           return
 
-        self._surface_merging_errors()
+        self.m.profiles.surface_merge_errors()
         binaries = self._get_binaries(tests)
         binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
             binaries, merged_profdata)
@@ -584,27 +509,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       be no .profraw files to merge at all.
     """
     test_type = self._current_processing_test_type
-    merged_profdata = self.profdata_dir().join('%s-merged.profdata' % test_type)
+    merged_profdata = self.m.profiles.profile_dir().join(
+        '%s-merged.profdata' % test_type)
 
     # Input profdata in this step was named as {target_name}.profdata. This is
     # used for filtering profdata file of current test type.
     input_profdata_pattern = (
         "%s\.profdata" %
         constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
-    self.m.python(
-        'merge profile data for %s test coverage in %d tests' %
-        (test_type, len(self._profdata_dirs)),
-        self.step_merge_script,
-        args=[
-            '--input-dir',
-            self.profdata_dir(),
-            '--output-file',
-            merged_profdata,
-            '--llvm-profdata',
-            self.profdata_executable,
-            '--profdata-filename-pattern',
-            input_profdata_pattern,
-        ])
+    self.m.profiles.merge_profdata(
+        merged_profdata, profdata_filename_pattern=input_profdata_pattern)
 
     if not self.m.path.exists(merged_profdata):
       return None
@@ -613,12 +527,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # type, since test types are already distinguished in builder part of gs
     # path.
     gs_path = self._compose_gs_path_for_coverage_data('merged.profdata')
-    upload_step = self.m.gsutil.upload(
-        merged_profdata,
-        self._gs_bucket,
-        gs_path,
-        link_name=None,
-        name='upload merged.profdata')
+    upload_step = self.m.profiles.upload(
+        self._gs_bucket, gs_path, merged_profdata, link_name=None)
     upload_step.presentation.links['merged.profdata'] = (
         'https://storage.cloud.google.com/%s/%s' % (self._gs_bucket, gs_path))
     self._merged_profdata_gs_paths.append(gs_path)
@@ -696,8 +606,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args.extend(['--arch', 'x86_64'])
 
     self.m.python(
-        'generate html report for %s test coverage in %d tests' %
-        (self._current_processing_test_type, len(self._profdata_dirs)),
+        'generate html report for %s test coverage in %d tests'
+        % (self._current_processing_test_type,
+           len(self.m.profiles.profile_subdirs)),
         self.resource('make_report.py'),
         args=args)
 
@@ -724,12 +635,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     new_merge = {
         'script':
-            self.raw_profile_merge_script,
+            self.m.profiles.merge_results_script,
         'args': [
             '--profdata-dir',
-            self.profdata_dir(step_name),
+            self.m.profiles.profile_dir(step_name),
             '--llvm-profdata',
-            self.profdata_executable,
+            self.m.profiles.llvm_profdata_exec,
             '--test-target-name',
             target_name,
         ],
@@ -742,7 +653,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.m.path['checkout'].join('third_party', 'jacoco', 'lib',
                                        'jacococli.jar'),
           '--merged-jacoco-filename',
-          self._dir_name_for_step(step_name),
+          self.m.profiles.normalize(step_name),
       ])
     # TODO(crbug.com/1050858) Remove the check against refs/heads/master once
     # the corresponding change in the merge script has been propagated to beta
@@ -855,7 +766,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     try:
       self.m.python(
           'generate metadata for %s test coverage in %d tests' %
-          (self._current_processing_test_type, len(self._profdata_dirs)),
+          (self._current_processing_test_type,
+           len(self.m.profiles.profile_subdirs)),
           self.resource('generate_coverage_metadata.py'),
           args=args,
           venv=True)
@@ -899,22 +811,3 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             '--output-file', local_to_gerrit_diff_mapping_file
         ] + source_files,
         stdout=self.m.json.output())
-
-  def _surface_merging_errors(self):
-    test_data = {
-        "failed profiles": {
-            "browser_tests": ["/tmp/1/default-123.profraw"]
-        },
-        "total": 1
-    }
-    step_result = self.m.python(
-        'Finding merging errors',
-        self.resource('load_merge_errors.py'),
-        args=['--root-dir', self.profdata_dir()],
-        step_test_data=lambda: self.m.json.test_api.output_stream(test_data),
-        stdout=self.m.json.output())
-
-    if step_result.stdout:
-      step_result.presentation.text = 'Found invalid profraw files'
-      step_result.presentation.properties[
-          'bad_coverage_profiles'] = step_result.stdout

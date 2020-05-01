@@ -12,6 +12,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'code_coverage',
+    'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -41,15 +42,15 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   api.chromium_tests.configure_build(bot_config)
   # Fake path.
-  api.code_coverage._merge_scripts_location = api.path['start_dir']
+  api.profiles._merge_scripts_dir = api.path['start_dir']
 
   if 'tryserver' in builder_id.master:
     api.code_coverage.instrument(api.properties['files_to_instrument'])
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
-        api.code_coverage.profdata_dir().join('unit-merged.profdata'))
+        api.profiles.profile_dir().join('unit-merged.profdata'))
     api.path.mock_add_paths(
-        api.code_coverage.profdata_dir().join('overall-merged.profdata'))
+        api.profiles.profile_dir().join('overall-merged.profdata'))
   if api.properties.get('mock_java_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
@@ -77,7 +78,7 @@ def RunSteps(api):
 
   for test in tests:
     step = test.name
-    api.code_coverage.profdata_dir(step)
+    api.profiles.profile_dir(step)
     # Protected access ok here, as this is normally done by the test object
     # itself.
     api.code_coverage.shard_merge(
@@ -87,7 +88,6 @@ def RunSteps(api):
 
   # Exercise these properties to provide coverage only.
   _ = api.code_coverage.using_coverage
-  _ = api.code_coverage.raw_profile_merge_script
 
 
 def GenTests(api):
@@ -98,16 +98,16 @@ def GenTests(api):
           buildername='linux-chromeos-code-coverage',
           buildnumber=54),
       api.code_coverage(use_clang_coverage=True),
-      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data for overall test coverage.merge '
-           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
-          'upload merged.profdata'),
+          'upload artifact to GS'),
       api.post_process(
           post_process.DoesNotRun,
           'process clang code coverage data for overall test coverage.generate '
@@ -134,7 +134,7 @@ def GenTests(api):
       api.post_process(
           post_process.StepCommandContains,
           'process clang code coverage data for overall test coverage.Finding '
-          'merging errors', ['--root-dir']),
+          'profile merge errors', ['--root-dir']),
       api.post_process(post_process.StepCommandContains, (
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS),
@@ -183,16 +183,16 @@ def GenTests(api):
       api.buildbucket.try_build(
           project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
-      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data for overall test coverage.merge '
-           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
-          'upload merged.profdata'),
+          'upload artifact to GS'),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
           'html report for overall test coverage in %s tests' % _NUM_TESTS)),
@@ -266,12 +266,12 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.override_step_data(
           'process clang code coverage data for overall test coverage.Finding '
-          'merging errors',
+          'profile merge errors',
           stdout=api.json.output(['some_step'])),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.Finding '
-          'merging errors'),
+          'profile merge errors'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -555,20 +555,20 @@ def GenTests(api):
               '/chromium/output_dir/'
               'lib.unstrippedlibbase_unittests__library.so'
           ])),
-      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data for overall test coverage.merge '
-           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
-          'upload merged.profdata'),
+          'upload artifact to GS'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.Finding '
-          'merging errors'),
+          'profile merge errors'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.'
@@ -603,16 +603,16 @@ def GenTests(api):
           buildername='ios-simulator-code-coverage',
           buildnumber=54),
       api.code_coverage(use_clang_coverage=True),
-      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data for overall test coverage.merge '
-           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
-          'upload merged.profdata'),
+          'upload artifact to GS'),
       api.post_process(
           post_process.DoesNotRun,
           'process clang code coverage data for overall test coverage.generate '
@@ -639,7 +639,7 @@ def GenTests(api):
       api.post_process(
           post_process.StepCommandContains,
           'process clang code coverage data for overall test coverage.Finding '
-          'merging errors', ['--root-dir']),
+          'profile merge errors', ['--root-dir']),
       api.post_process(post_process.StepCommandContains, (
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS),
@@ -671,20 +671,20 @@ def GenTests(api):
           builder='ios-simulator-code-coverage',
           git_repo=_DEFAULT_GIT_REPO),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
-      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data for unit test coverage.merge '
-           'profile data for unit test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for unit test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.DoesNotRun,
-          ('process clang code coverage data for overall test coverage.merge '
-           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for unit test coverage.gsutil '
-          'upload merged.profdata'),
+          'upload artifact to GS'),
       api.post_process(
           post_process.MustRun,
           ('process clang code coverage data for unit test coverage.generate '

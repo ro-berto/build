@@ -6,9 +6,9 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
-    'code_coverage',
     'depot_tools/bot_update',
     'isolate',
+    'profiles',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -33,7 +33,7 @@ def RunSteps(api):
   })
   api.chromium.set_config('chromium')
   # Fake path, as the real one depends on having done a chromium checkout.
-  api.code_coverage._merge_scripts_location = api.path['start_dir']
+  api.profiles._merge_scripts_dir = api.path['start_dir']
 
   bot_config_object = api.chromium_tests.create_bot_config_object(
       [api.chromium.get_builder_id()])

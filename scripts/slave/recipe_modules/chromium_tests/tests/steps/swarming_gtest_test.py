@@ -6,9 +6,9 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
-    'code_coverage',
     'depot_tools/bot_update',
     'isolate',
+    'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
@@ -32,7 +32,7 @@ def RunSteps(api):
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
   # Fake path, as the real one depends on having done a chromium checkout.
-  api.code_coverage._merge_scripts_location = api.path['start_dir']
+  api.profiles._merge_scripts_dir = api.path['start_dir']
 
   test = steps.SwarmingGTestTest(
       'base_unittests',

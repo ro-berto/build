@@ -18,6 +18,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
+    'profiles',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -211,7 +212,7 @@ def NotIdempotent(check, step_odict, step):
 
 def RunSteps(api, fail_compile):
   api.path.mock_add_paths(
-      api.code_coverage.profdata_dir().join('overall-merged.profdata'))
+      api.profiles.profile_dir().join('overall-merged.profdata'))
 
   # override compile_specific_targets to control compile step failure state
   def compile_override(*args, **kwargs):

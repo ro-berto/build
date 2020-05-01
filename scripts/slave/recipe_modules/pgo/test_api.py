@@ -1,0 +1,15 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+from recipe_engine import recipe_test_api
+
+from PB.recipe_modules.build.pgo import properties
+
+
+class PgoTestApi(recipe_test_api.RecipeTestApi):
+
+  def __call__(self, use_pgo=False):
+    return self.m.properties(**{
+        '$build/pgo': properties.InputProperties(use_pgo=use_pgo),
+    })

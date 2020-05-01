@@ -15,6 +15,7 @@ DEPS = [
     'code_coverage',
     'depot_tools/tryserver',
     'filter',
+    'profiles',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -86,7 +87,7 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
 def RunSteps(api):
   assert api.tryserver.is_tryserver
   api.path.mock_add_paths(
-      api.code_coverage.profdata_dir().join('overall-merged.profdata'))
+      api.profiles.profile_dir().join('overall-merged.profdata'))
 
   raw_result = api.chromium_tests.trybot_steps()
   return raw_result
