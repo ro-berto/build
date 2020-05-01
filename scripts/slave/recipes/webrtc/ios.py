@@ -9,15 +9,16 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
-  'depot_tools/bot_update',
-  'chromium',
-  'chromium_swarming',
-  'ios',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'webrtc',
+    'depot_tools/bot_update',
+    'chromium',
+    'chromium_swarming',
+    'chromium_tests',
+    'ios',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'webrtc',
 ]
 
 PUBLIC_TEST_SERVICE_ACCOUNT = (

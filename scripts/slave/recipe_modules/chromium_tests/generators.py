@@ -355,12 +355,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         'override_compile_targets', None)
     common_kwargs['isolate_coverage_data'] = test.get('isolate_coverage_data')
 
-    # PGO requires the same LLVM_PROFILE_FILE env variable set on the swarming
-    # task as isolate_coverage_data, but we don't want to run the conversion
-    # from profraw->profdata on the Swarming task, but rather run an aggregate
-    # merge of all .profraw files generated from all benchmarking tasks.
-    common_kwargs['isolate_pgo_data'] = test.get('isolate_pgo_data')
-
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
     results_handler_name = test.get('results_handler', 'default')

@@ -43,7 +43,6 @@ def RunSteps(api):
   test_repeat_count = api.properties.get('repeat_count')
   test_name = 'blink_web_tests' if test_repeat_count else 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
-  isolate_pgo_data = api.properties.get('isolate_pgo_data', False)
   test = steps.SwarmingIsolatedScriptTest(
       name=test_name,
       perf_id=api.properties.get('perf_id'),
@@ -56,8 +55,7 @@ def RunSteps(api):
       expiration=7200,
       shards=int(api.properties.get('shards', '1')) or 1,
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}),
-      isolate_coverage_data=isolate_coverage_data,
-      isolate_pgo_data=isolate_pgo_data)
+      isolate_coverage_data=isolate_coverage_data)
   assert test.runs_on_swarming and not test.is_gtest
   assert test.shards > 0
 
@@ -117,11 +115,6 @@ def GenTests(api):
     # Make sure swarming collect know how to merge coverage profile data.
     check('[START_DIR]/merge_results.py' in step.cmd)
 
-  def verify_pgo_flag(check, step_odict):
-    step = step_odict[
-        '[trigger] base_unittests on Intel GPU on Linux (with patch)']
-    check('LLVM_PROFILE_FILE' in step.cmd)
-
   yield api.test(
       'basic',
       api.chromium.ci_build(
@@ -147,22 +140,6 @@ def GenTests(api):
           isolate_coverage_data=True,
       ),
       api.post_process(verify_isolate_flag),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'isolate_pgo_data',
-      api.chromium.ci_build(
-          mastername='chromium.linux',
-          builder='Linux Tests',
-      ),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          isolate_pgo_data=True,
-      ),
-      api.post_process(verify_pgo_flag),
       api.post_process(post_process.DropExpectation),
   )
 

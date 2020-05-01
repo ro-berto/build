@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_swarming',
+    'chromium_tests',
     'depot_tools/bot_update',
     'isolate',
     'profiles',

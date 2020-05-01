@@ -1576,7 +1576,6 @@ class SwarmingTest(Test):
                optional_dimensions=None,
                service_account=None,
                isolate_coverage_data=None,
-               isolate_pgo_data=None,
                merge=None,
                ignore_task_failure=None,
                containment_type=None,
@@ -1610,9 +1609,6 @@ class SwarmingTest(Test):
       service_account: Service account to run the test as.
       isolate_coverage_data: Bool indicating wether to isolate coverage profile
           data during the task.
-      isolate_pgo_data: Bool indicating whether to isolate pgo profraw files
-          during the task. This differs from isolate_coverage_data by not
-          running the merge script to convert the profraw files into profdata.
       merge: 'merge' dict as set in //testing/buildbot/ pyl files for the test.
       ignore_task_failure: If False, the test will be reported as StepFailure on
           failure.
@@ -1647,7 +1643,6 @@ class SwarmingTest(Test):
     self._merge = merge
     self._tear_down = tear_down
     self._isolate_coverage_data = isolate_coverage_data
-    self._isolate_pgo_data = isolate_pgo_data
     self._ignore_task_failure = ignore_task_failure
     self._named_caches = named_caches or {}
     self._shards = shards
@@ -1754,10 +1749,6 @@ class SwarmingTest(Test):
     return bool(self._isolate_coverage_data)
 
   @property
-  def isolate_pgo_data(self):
-    return bool(self._isolate_pgo_data)
-
-  @property
   def shards(self):
     return self._shards
 
@@ -1806,7 +1797,7 @@ class SwarmingTest(Test):
     task_request = task.request
     task_slice = task_request[0]
 
-    if self._isolate_coverage_data or self.isolate_pgo_data:
+    if self._isolate_coverage_data or api.chromium_tests.m.pgo.using_pgo:
       # Targets built with 'use_clang_coverage' or 'use_clang_profiling' (also
       # set by chrome_pgo_phase=1) will look at this environment variable to
       # determine where to write the profile dumps. The %Nm syntax is understood
@@ -1817,12 +1808,12 @@ class SwarmingTest(Test):
               '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       })
 
-    if self._isolate_coverage_data:
+      # TODO(crbug.com/1076055) - Refactor this to the profiles recipe_module
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
-      # script tests) in a wrapper that knows how to merge coverage data. If the
-      # test object does not specify a merge script, use the one defined by the
-      # swarming task in the chromium_swarm module. (The default behavior for
-      # non-coverage tests).
+      # script tests) in a wrapper that knows how to merge coverage/pgo profile
+      # data. If the test object does not specify a merge script, use the one
+      # defined by the swarming task in the chromium_swarm module. (The default
+      # behavior for non-coverage/non-profile tests).
       self._merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix),
           self.target_name,
@@ -2269,7 +2260,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                set_up=None,
                tear_down=None,
                isolate_coverage_data=False,
-               isolate_pgo_data=False,
                optional_dimensions=None,
                service_account=None,
                **kw):
@@ -2288,7 +2278,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         set_up=set_up,
         tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
-        isolate_pgo_data=isolate_pgo_data,
         merge=merge,
         shards=shards,
         ignore_task_failure=ignore_task_failure,

@@ -18,9 +18,11 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
+    'pgo',
     'profiles',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
@@ -214,6 +216,9 @@ def RunSteps(api, fail_compile):
   api.path.mock_add_paths(
       api.profiles.profile_dir().join('overall-merged.profdata'))
 
+  api.path.mock_add_paths(api.profiles.profile_dir().join(
+      api.pgo.TEMP_PROFDATA_FILENAME))
+
   # override compile_specific_targets to control compile step failure state
   def compile_override(*args, **kwargs):
     return result_pb2.RawResult(
@@ -306,6 +311,35 @@ def GenTests(api):
           NotIdempotent,
           'test_pre_run (retry shards).[trigger] base_unittests (retry shards)'
       ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'pgo_ci_bots',
+      api.chromium.ci_build(
+          mastername='chromium.perf', builder='win64-builder-perf'),
+      api.properties(swarm_hashes={
+          'performance_test_suite': '[dummy hash for performance_test_suite]'
+      }),
+      api.pgo(use_pgo=True),
+      api.platform('win', 64),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.perf', {
+              'win64-builder-perf': {
+                  'isolated_scripts': [{
+                      'isolate_coverage_data': True,
+                      'test': 'performance_test_suite',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.post_process(
+          post_process.MustRun,
+          'Processing PGO .profraw data.merge all profile files into a single '
+          '.profdata'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -34,7 +34,6 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   api.chromium_tests.configure_build(bot_config)
   # Fake path.
-  api.code_coverage._merge_scripts_location = api.path['start_dir']
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
   if api.properties.get('mock_merged_profdata', True):

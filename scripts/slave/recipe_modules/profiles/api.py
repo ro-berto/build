@@ -39,10 +39,14 @@ class ProfilesApi(recipe_api.RecipeApi):
   def profile_subdirs(self):
     return self._profile_subdirs
 
+  @property
+  def _llvm_base_path(self):
+    return self.m.path['checkout'].join('third_party', 'llvm-build',
+                                        'Release+Asserts', 'bin')
+
   def llvm_exec_path(self, name):
     name += '.exe' if self.m.platform.is_win else ''
-    return self.m.path['checkout'].join('third_party', 'llvm-build',
-                                        'Release+Asserts', 'bin', name)
+    return self._llvm_base_path.join(name)
 
   @property
   def llvm_profdata_exec(self):
