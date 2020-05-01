@@ -1,0 +1,22 @@
+// Copyright 2020 The LUCI Authors. All rights reserved.
+// Use of this source code is governed under the Apache License, Version 2.0
+// that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.chromium_speed_processor;
+
+message InputProperties {
+  // A JSON string dumpped from a mapping from test group name to the swarming
+  // task info.
+  string tasks_groups = 1;
+
+  // the builder name from the tester
+  string tester_builder_name = 2;
+
+  // the build number of the tester build
+  int32 tester_build_number = 3;
+
+  // the perf dashboard machine group used when uploading data to dashboard.
+  string tester_perf_dashboard_machine_group = 4;
+}

@@ -7,6 +7,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'recipe_engine/buildbucket',
+    'recipe_engine/json',
     'recipe_engine/python',
 ]
 NO_SUFFIX = ''
@@ -60,10 +61,14 @@ def RunSteps(api, properties):
         } for t in tests
     }
     additional_trigger_properties = {
-        'tasks_groups': task_groups,
-        'builder_name': api.buildbucket.builder_name,
-        'build_number': api.buildbucket.build.number,
-        'perf_dashboard_machine_group': properties.perf_dashboard_machine_group
+        'tasks_groups':
+            api.json.dumps(task_groups),
+        'tester_builder_name':
+            api.buildbucket.builder_name,
+        'tester_build_number':
+            api.buildbucket.build.number,
+        'tester_perf_dashboard_machine_group':
+            properties.perf_dashboard_machine_group
     }
     api.python.succeeding_step(
         'Debug info', '<br/>'.join(_debug_lines(bot, tests, task_groups)))
