@@ -443,6 +443,43 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/isolate-directory_tmp_1/out/Default"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "infra_step": true,
+    "name": "Upload isolates.Ensuring directory: [CLEANUP]/isolate-directory_tmp_1/out/Default (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/openscreen/out/Default/e2e_tests",
+      "[CLEANUP]/isolate-directory_tmp_1/out/Default"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "infra_step": true,
+    "name": "Upload isolates.Copying file: [START_DIR]/openscreen/out/Default/e2e_tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "copytree",
       "[START_DIR]/openscreen/test/data",
       "[CLEANUP]/isolate-directory_tmp_1/test/data"
@@ -577,6 +614,35 @@
   {
     "cmd": [
       "[CACHE]/swarming_client/swarming",
+      "spawn-tasks",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-json-input",
+      "{\"requests\": [{\"name\": \"e2e_tests\", \"priority\": \"200\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"300\", \"properties\": {\"command\": [\"./out/Default/e2e_tests\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"arm64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"luci.flex.try\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"1200\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"60\", \"outputs\": []}}]}]}",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "infra_step": true,
+    "name": "Trigger E2E tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"e2e_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@task UI: e2e_tests@https://example.swarmingserver.appspot.com/task?id=0@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/swarming_client/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -592,7 +658,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "infra_step": true,
-    "name": "collect",
+    "name": "collect unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"0\": {@@@",
@@ -617,6 +683,51 @@
       "@@@STEP_LOG_LINE@task stdout+stderr: openscreen_unittests@hello world!@@@",
       "@@@STEP_LOG_END@task stdout+stderr: openscreen_unittests@@@",
       "@@@STEP_LINK@task isolated outputs: openscreen_unittests@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/swarming_client/swarming",
+      "collect",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-task-summary-json",
+      "/path/to/tmp/json",
+      "-task-output-stdout",
+      "json",
+      "-output-dir",
+      "[CLEANUP]/e2e-swarming-output_tmp_3",
+      "-timeout",
+      "30m",
+      "0"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "infra_step": true,
+    "name": "collect E2E tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"e2e_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@task stdout+stderr: e2e_tests@hello world!@@@",
+      "@@@STEP_LOG_END@task stdout+stderr: e2e_tests@@@",
+      "@@@STEP_LINK@task isolated outputs: e2e_tests@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
   },
   {

@@ -25,7 +25,8 @@ DEPS = [
 
 BUILD_CONFIG = 'Default'
 UNIT_TEST_BINARY_NAME = 'openscreen_unittests'
-BUILD_TARGETS = ['gn_all', UNIT_TEST_BINARY_NAME, 'e2e_tests']
+E2E_TEST_BINARY_NAME = 'e2e_tests'
+BUILD_TARGETS = ['gn_all', UNIT_TEST_BINARY_NAME, E2E_TEST_BINARY_NAME]
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 # Due to the oddities of how the recipe properties JSON string works, we need
@@ -100,9 +101,10 @@ def SwarmTests(api, output_path, checkout_path, dimensions):
   """Runs specific types of tests on a separate swarming bot."""
 
   TEST_DATA_DIR = "test/data"
-  # Format: output folder, file name, is directory?
+  # Format: file name, output folder, is directory?
   isolated_files = [
       FileInfo(output_path.join(UNIT_TEST_BINARY_NAME), "out/Default", False),
+      FileInfo(output_path.join(E2E_TEST_BINARY_NAME), "out/Default", False),
       FileInfo(checkout_path.join(TEST_DATA_DIR), TEST_DATA_DIR, True)
   ]
   isolated_hash = UploadFilesToIsolateStorage(api, isolated_files)
@@ -114,16 +116,37 @@ def SwarmTests(api, output_path, checkout_path, dimensions):
           0, request[0].with_command([
               './out/Default/{}'.format(UNIT_TEST_BINARY_NAME)
           ]).with_dimensions(**dimensions).with_isolated(isolated_hash)))
+  e2e_request = api.swarming.task_request().with_name(E2E_TEST_BINARY_NAME)
+  e2e_request = (
+      e2e_request.with_slice(
+          0, e2e_request[0].with_command([
+              './out/Default/{}'.format(E2E_TEST_BINARY_NAME)
+          ]).with_dimensions(**dimensions).with_isolated(isolated_hash)))
 
   # Run the actual tests
   metadata = api.swarming.trigger(
       'Trigger Open Screen Unit Tests', requests=[request])
 
+  e2e_metadata = api.swarming.trigger(
+      'Trigger E2E tests', requests=[e2e_request])
+
   # Collect the result of the task by metadata.
   output_directory = api.path.mkdtemp('swarming-output')
   results = api.swarming.collect(
-      'collect', metadata, output_dir=output_directory, timeout='30m')
+      'collect unit tests',
+      metadata,
+      output_dir=output_directory,
+      timeout='30m')
   for result in results:
+    result.analyze()
+
+  e2e_output_directory = api.path.mkdtemp('e2e-swarming-output')
+  e2e_results = api.swarming.collect(
+      'collect E2E tests',
+      e2e_metadata,
+      output_dir=e2e_output_directory,
+      timeout='30m')
+  for result in e2e_results:
     result.analyze()
 
 
@@ -131,12 +154,7 @@ def RunTestsLocally(api, output_path):
   """Runs all types of enabled tests on the current bot."""
   api.step('Run unit tests', [output_path.join(UNIT_TEST_BINARY_NAME)])
 
-  # TODO(btolsch): Make these required when they appear stable on the bots.
-  # TODO(jophba): Add to swarming when they are stable.
-  try:
-    api.step('Run e2e tests', [output_path.join('e2e_tests')])
-  except api.step.StepFailure:
-    pass
+  api.step('Run e2e tests', [output_path.join(E2E_TEST_BINARY_NAME)])
 
 
 def RunSteps(api):
@@ -220,7 +238,3 @@ def GenTests(api):
   yield api.test('linux_arm64_debug', api.platform('linux', 64),
                  api.buildbucket.try_build('openscreen', 'try'),
                  api.properties(is_debug=True, target_cpu='arm64'))
-  yield api.test('linux64_debug (fail e2e tests)', api.platform('linux', 64),
-                 api.buildbucket.try_build('openscreen', 'try'),
-                 api.properties(is_debug=True, is_asan=True),
-                 api.step_data('Run e2e tests', retcode=1))
