@@ -1,9 +1,0 @@
-[
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "Builder unsupported by recipe."
-    },
-    "name": "$result"
-  }
-]

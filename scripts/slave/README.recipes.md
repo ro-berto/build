@@ -184,7 +184,6 @@
   * [chromium_trybot](#recipes-chromium_trybot)
   * [chromium_trybot_experimental](#recipes-chromium_trybot_experimental) &mdash; This is essentially a copy of the chromium_trybot recipe.
   * [chromium_upload_clang](#recipes-chromium_upload_clang)
-  * [client.nacl.sdk.recipe_autogen](#recipes-client.nacl.sdk.recipe_autogen)
   * [closure_compilation](#recipes-closure_compilation)
   * [code_coverage:tests/full](#recipes-code_coverage_tests_full)
   * [codesearch:examples/full](#recipes-codesearch_examples_full)
@@ -261,7 +260,6 @@
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
   * [math_utils:tests/mean_error](#recipes-math_utils_tests_mean_error)
   * [nacl](#recipes-nacl)
-  * [nacl_ports](#recipes-nacl_ports)
   * [ndk/ndk_buildbot](#recipes-ndk_ndk_buildbot)
   * [ndk:tests/cover](#recipes-ndk_tests_cover)
   * [openscreen](#recipes-openscreen) &mdash; Recipe for building and running tests for Open Screen stand-alone.
@@ -4684,15 +4682,6 @@ debug changes. Do not use without talking to martiniss@.
 [DEPS](/scripts/slave/recipes/chromium_upload_clang.py#10): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#70)(api):**
-### *recipes* / [client.nacl.sdk.recipe\_autogen](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py)
-
-[DEPS](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#9): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#132)(api):**
-
-&mdash; **def [sdk\_multi\_steps](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#22)(api):**
-
-&mdash; **def [sdk\_multirel\_steps](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#70)(api):**
 ### *recipes* / [closure\_compilation](/scripts/slave/recipes/closure_compilation.py)
 
 [DEPS](/scripts/slave/recipes/closure_compilation.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5132,11 +5121,6 @@ Recipe for building and running tests for Libyuv stand-alone.
 [DEPS](/scripts/slave/recipes/nacl.py#7): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/nacl.py#133)(api):**
-### *recipes* / [nacl\_ports](/scripts/slave/recipes/nacl_ports.py)
-
-[DEPS](/scripts/slave/recipes/nacl_ports.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/nacl_ports.py#43)(api):**
 ### *recipes* / [ndk/ndk\_buildbot](/scripts/slave/recipes/ndk/ndk_buildbot.py)
 
 [DEPS](/scripts/slave/recipes/ndk/ndk_buildbot.py#5): [chromite](#recipe_modules-chromite), [ndk](#recipe_modules-ndk), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
