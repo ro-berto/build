@@ -133,10 +133,11 @@ SPEC = {
         ),
     'ToTiOS':
         _chromium_clang_spec(
-            chromium_config='clang_tot_mac',
+            chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
                 'mb_luci_auth',
+                'mac_toolchain',
             ],
             chromium_tests_apply_config=[],
             gclient_config='ios',
@@ -150,10 +151,11 @@ SPEC = {
         ),
     'ToTiOSDevice':
         _chromium_clang_spec(
-            chromium_config='clang_tot_mac',
+            chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
                 'mb_luci_auth',
+                'mac_toolchain',
             ],
             chromium_tests_apply_config=[],
             gclient_config='ios',
