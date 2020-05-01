@@ -70,7 +70,7 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)':
+    'WebRTC Chromium FYI Android Tests (dbg) (L Nexus5)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
             bot_type=bot_spec.TESTER,
