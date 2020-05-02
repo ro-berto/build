@@ -15,6 +15,8 @@ class ProfilesApi(recipe_api.RecipeApi):
     self._merge_scripts_dir = None
     # Single temporary directory to contain all profile data for all targets
     self._root_profile_dir = None
+    # Path to llvm binaries
+    self._llvm_base_path = None
     # Dictionary to map subdirectories
     self._profile_subdirs = {}
 
@@ -39,12 +41,10 @@ class ProfilesApi(recipe_api.RecipeApi):
   def profile_subdirs(self):
     return self._profile_subdirs
 
-  @property
-  def _llvm_base_path(self):
-    return self.m.path['checkout'].join('third_party', 'llvm-build',
-                                        'Release+Asserts', 'bin')
-
   def llvm_exec_path(self, name):
+    if not self._llvm_base_path:
+      self._llvm_base_path = self.m.path['checkout'].join(
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin')
     name += '.exe' if self.m.platform.is_win else ''
     return self._llvm_base_path.join(name)
 

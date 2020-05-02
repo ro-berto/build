@@ -1722,11 +1722,11 @@ use this.
 
 This module contains apis to generate code coverage data.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#59)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#67)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#253)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#261)(self, affected_files, output_dir=None):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1734,7 +1734,7 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#71)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#79)(self):**
 
 A temporary directory for the metadata.
 
@@ -1742,7 +1742,9 @@ It's a temporary directory with a sub directory named in current test type.
 Temp dir is created on first access to this property. Subdirs are created
 on first access when processing each test type.
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#352)(self, tests):**
+&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/code_coverage/api.py#61)(self):**
+
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#421)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1750,7 +1752,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#296)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#307)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1758,7 +1760,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#403)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#430)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1768,11 +1770,11 @@ uploads them to the code-coverage-data storage bucket.
 Args:
   **kwargs: Kwargs for python and gsutil steps.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#64)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#72)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#628)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#655)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1781,11 +1783,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [use\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#51)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#53)(self):**
 
-&emsp; **@property**<br>&mdash; **def [use\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#55)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#57)(self):**
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#108)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#116)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
@@ -2958,7 +2960,7 @@ Used by chromium_tests.run_tests() to process profile data when True.
 
 #### **class [ProfilesApi](/scripts/slave/recipe_modules/profiles/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [llvm\_exec\_path](/scripts/slave/recipe_modules/profiles/api.py#47)(self, name):**
+&mdash; **def [llvm\_exec\_path](/scripts/slave/recipe_modules/profiles/api.py#44)(self, name):**
 
 &emsp; **@property**<br>&mdash; **def [llvm\_profdata\_exec](/scripts/slave/recipe_modules/profiles/api.py#51)(self):**
 
@@ -2973,11 +2975,11 @@ Args:
   no_sparse (bool): (optional) flag to invoke the merge script without
     sparse. Defaults to False.
 
-&emsp; **@property**<br>&mdash; **def [merge\_results\_script](/scripts/slave/recipe_modules/profiles/api.py#34)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_results\_script](/scripts/slave/recipe_modules/profiles/api.py#36)(self):**
 
-&emsp; **@property**<br>&mdash; **def [merge\_scripts\_dir](/scripts/slave/recipe_modules/profiles/api.py#21)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_dir](/scripts/slave/recipe_modules/profiles/api.py#23)(self):**
 
-&emsp; **@property**<br>&mdash; **def [merge\_steps\_script](/scripts/slave/recipe_modules/profiles/api.py#30)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_steps\_script](/scripts/slave/recipe_modules/profiles/api.py#32)(self):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [normalize](/scripts/slave/recipe_modules/profiles/api.py#55)(key):**
 
@@ -3006,7 +3008,7 @@ Args:
 Returns:
   Path object to the dir
 
-&emsp; **@property**<br>&mdash; **def [profile\_subdirs](/scripts/slave/recipe_modules/profiles/api.py#38)(self):**
+&emsp; **@property**<br>&mdash; **def [profile\_subdirs](/scripts/slave/recipe_modules/profiles/api.py#40)(self):**
 
 &mdash; **def [surface\_merge\_errors](/scripts/slave/recipe_modules/profiles/api.py#167)(self):**
 

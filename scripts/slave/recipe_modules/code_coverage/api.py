@@ -47,6 +47,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._use_clang_coverage = properties.use_clang_coverage
     # When set True, Java coverage is enabled.
     self._use_java_coverage = properties.use_java_coverage
+    # Platform for which this build is running.
+    self._platform = None
 
   @property
   def use_clang_coverage(self):
@@ -55,6 +57,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def use_java_coverage(self):
     return self._use_java_coverage
+
+  @property
+  def platform(self):
+    if not self._platform:
+      self._platform = self.m.chromium.c.TARGET_PLATFORM
+    return self._platform
 
   @property
   def cov_executable(self):
@@ -122,7 +130,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Android platform needs to use unstripped files for llvm-cov.
     # The unstripped artifacts will be generated under lib.unstripped/ or
     # exe.unstripped/.
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+    if self.platform == 'android':
       step_result = self.m.python(
           'Get all Android unstripped artifacts paths',
           self.resource('get_android_unstripped_paths.py'),
@@ -180,14 +188,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         if binary is None:
           break
 
-        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+        if self.platform == 'android':
           so_library_name = 'lib' + binary + '__library.so'
           for android_path in android_paths:
             if android_path.endswith(binary) or android_path.endswith(
                 so_library_name):
               binaries.add(android_path)
               break
-        elif self.m.chromium.c.TARGET_PLATFORM == 'ios':
+        elif self.platform == 'ios':
           if binary == 'ios_web_view_inttests':
             binaries.add(
                 self.m.chromium.output_dir.join('ChromeWebView.framework',
@@ -250,7 +258,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     result.presentation.properties['coverage_is_presubmit'] = (
         self._is_per_cl_coverage)
 
-  def instrument(self, affected_files):
+  def instrument(self, affected_files, output_dir=None):
     """Saves source paths to generate coverage instrumentation for to a file.
 
     Args:
@@ -267,6 +275,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self.m.python.succeeding_step(
           'skip instrumenting code coverage because >200 files are modified',
           '')
+
+    if not output_dir:
+      output_dir = self.m.chromium.output_dir
 
     self._is_per_cl_coverage = True
 
@@ -289,7 +300,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             '--src-path',
             self.m.path['checkout'],
             '--build-path',
-            self.m.chromium.output_dir,
+            output_dir,
         ] + self._affected_source_files,
         stdout=self.m.raw_io.output_text(add_output_log=True))
 
@@ -349,13 +360,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         result.append((change.host, change.project))
     return ', '.join('/'.join(p) for p in result)
 
-  def process_clang_coverage_data(self, tests):
+  def _process_clang_coverage_data(self, tests=None, binaries=None):
     """Processes the clang coverage data for html report or metadata.
 
     Args:
       tests (list of steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
+      binaries: A list of binaries for which coverage reports should be
+          created.
+
+      NOTE: Only one of the two above should be present.
     """
+    assert (tests and not binaries) or (not tests and binaries), \
+        'One of tests or binaries must be provided'
     if self._is_per_cl_coverage and not self._affected_source_files:
       self.m.python.succeeding_step(
           'skip processing coverage data because no source file changed', '')
@@ -375,14 +392,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           return
 
         self.m.profiles.surface_merge_errors()
-        binaries = self._get_binaries(tests)
-        binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
-            binaries, merged_profdata)
 
         if not binaries:
-          self.m.python.succeeding_step(
-              'skip processing because no data is found', '')
-          return
+          binaries = self._get_binaries(tests)
+          binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
+              binaries, merged_profdata)
+
+          if not binaries:
+            self.m.python.succeeding_step(
+                'skip processing because no data is found', '')
+            return
         self._generate_and_upload_metadata(binaries, merged_profdata)
         self._generate_and_upload_html_report_on_trybot(binaries,
                                                         merged_profdata)
@@ -399,6 +418,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         else:
           raise
 
+  def process_clang_coverage_data(self, tests):
+    """Processes the clang coverage data for html report or metadata.
+
+    Args:
+      tests (list of steps.Test): A list of test objects
+          whose binaries we are to create a coverage report for.
+    """
+    self._process_clang_coverage_data(tests)
 
   def process_java_coverage_data(self, **kwargs):
     """Generates metadata and JaCoCo HTML report to upload to storage bucket.
@@ -570,7 +597,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     args.extend(binaries)
 
-    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+    if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])
 
     step_result = self.m.python(
@@ -602,7 +629,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     args.extend(
         [self.m.path['checkout'].join(s) for s in self._affected_source_files])
 
-    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+    if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])
 
     self.m.python(
@@ -771,7 +798,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['--component-mapping-path',
            self._generate_component_mapping()])
 
-    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+    if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])
 
     try:
