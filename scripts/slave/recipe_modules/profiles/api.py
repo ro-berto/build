@@ -164,21 +164,12 @@ class ProfilesApi(recipe_api.RecipeApi):
 
     return upload_step
 
-  def surface_merge_errors(self):
-    """Display any profiles that failed to merge to the LUCI console"""
-    test_data = {
-        "failed profiles": {
-            "browser_tests": ["/tmp/1/default-123.profraw"]
-        },
-        "total": 1
-    }
+  def find_merge_errors(self):
+    """Search for any profiles that failed to merge"""
     step_result = self.m.python(
         'Finding profile merge errors',
         self.resource('load_merge_errors.py'),
         args=['--root-dir', self.profile_dir()],
-        step_test_data=lambda: self.m.json.test_api.output_stream(test_data),
         stdout=self.m.json.output())
 
-    if step_result.stdout:
-      step_result.presentation.text = 'Found invalid profraw files'
-      step_result.presentation.properties['bad_profiles'] = step_result.stdout
+    return step_result

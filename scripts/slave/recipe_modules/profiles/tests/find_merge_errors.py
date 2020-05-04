@@ -14,7 +14,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.profiles.surface_merge_errors()
+  api.profiles.find_merge_errors()
 
 
 def GenTests(api):

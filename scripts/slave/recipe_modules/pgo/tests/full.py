@@ -101,3 +101,28 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'merge errors',
+      api.properties.generic(
+          mastername='chromium.perf',
+          buildername='mac-builder-perf',
+          buildnumber=54),
+      api.pgo(use_pgo=True),
+      api.platform('mac', 64),
+      api.properties(mock_merged_profdata=True),
+      api.override_step_data(
+          'Processing PGO .profraw data.Finding profile merge errors',
+          stdout=api.json.output({
+              "failed profiles": {
+                  "browser_tests": ["/tmp/1/default-123.profraw"]
+              },
+              "total": 1
+          })),
+      api.post_process(
+          post_process.MustRun,
+          'Processing PGO .profraw data.Failing due to merge errors found '
+          'alongside invalid profile data.'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )

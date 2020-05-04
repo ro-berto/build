@@ -268,10 +268,10 @@
   * [pgo:tests/full](#recipes-pgo_tests_full)
   * [pinpoint/builder](#recipes-pinpoint_builder)
   * [presubmit](#recipes-presubmit)
+  * [profiles:tests/find_merge_errors](#recipes-profiles_tests_find_merge_errors)
   * [profiles:tests/merge_profdata](#recipes-profiles_tests_merge_profdata)
   * [profiles:tests/profile_dir](#recipes-profiles_tests_profile_dir)
   * [profiles:tests/properties](#recipes-profiles_tests_properties)
-  * [profiles:tests/surface_merge_errors](#recipes-profiles_tests_surface_merge_errors)
   * [profiles:tests/upload](#recipes-profiles_tests_upload)
   * [puppet_service_account:examples/full](#recipes-puppet_service_account_examples_full) &mdash; Small example of using the puppet_service_account api.
   * [repo:examples/full](#recipes-repo_examples_full)
@@ -1744,7 +1744,7 @@ on first access when processing each test type.
 
 &emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/code_coverage/api.py#61)(self):**
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#421)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#425)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1760,7 +1760,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#430)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#434)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1774,7 +1774,7 @@ Args:
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#655)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#659)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
 
 Returns a merge object understood by the swarming module.
 
@@ -2960,6 +2960,10 @@ Used by chromium_tests.run_tests() to process profile data when True.
 
 #### **class [ProfilesApi](/scripts/slave/recipe_modules/profiles/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
+&mdash; **def [find\_merge\_errors](/scripts/slave/recipe_modules/profiles/api.py#167)(self):**
+
+Search for any profiles that failed to merge
+
 &mdash; **def [llvm\_exec\_path](/scripts/slave/recipe_modules/profiles/api.py#44)(self, name):**
 
 &emsp; **@property**<br>&mdash; **def [llvm\_profdata\_exec](/scripts/slave/recipe_modules/profiles/api.py#51)(self):**
@@ -3009,10 +3013,6 @@ Returns:
   Path object to the dir
 
 &emsp; **@property**<br>&mdash; **def [profile\_subdirs](/scripts/slave/recipe_modules/profiles/api.py#40)(self):**
-
-&mdash; **def [surface\_merge\_errors](/scripts/slave/recipe_modules/profiles/api.py#167)(self):**
-
-Display any profiles that failed to merge to the LUCI console
 
 &mdash; **def [upload](/scripts/slave/recipe_modules/profiles/api.py#142)(self, bucket, path, local_artifact, args=None, link_name=None):**
 
@@ -5194,6 +5194,11 @@ Pushes files up to the isolate server storage.
 [DEPS](/scripts/slave/recipes/presubmit.py#11): [v8](#recipe_modules-v8), [webrtc](#recipe_modules-webrtc), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/presubmit][depot_tools/recipe_modules/presubmit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/presubmit.py#30)(api):**
+### *recipes* / [profiles:tests/find\_merge\_errors](/scripts/slave/recipe_modules/profiles/tests/find_merge_errors.py)
+
+[DEPS](/scripts/slave/recipe_modules/profiles/tests/find_merge_errors.py#11): [profiles](#recipe_modules-profiles)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/profiles/tests/find_merge_errors.py#16)(api):**
 ### *recipes* / [profiles:tests/merge\_profdata](/scripts/slave/recipe_modules/profiles/tests/merge_profdata.py)
 
 [DEPS](/scripts/slave/recipe_modules/profiles/tests/merge_profdata.py#11): [chromium\_checkout](#recipe_modules-chromium_checkout), [profiles](#recipe_modules-profiles), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/path][recipe_engine/recipe_modules/path]
@@ -5209,11 +5214,6 @@ Pushes files up to the isolate server storage.
 [DEPS](/scripts/slave/recipe_modules/profiles/tests/properties.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [profiles](#recipe_modules-profiles), [recipe\_engine/path][recipe_engine/recipe_modules/path]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/profiles/tests/properties.py#14)(api):**
-### *recipes* / [profiles:tests/surface\_merge\_errors](/scripts/slave/recipe_modules/profiles/tests/surface_merge_errors.py)
-
-[DEPS](/scripts/slave/recipe_modules/profiles/tests/surface_merge_errors.py#11): [profiles](#recipe_modules-profiles)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/profiles/tests/surface_merge_errors.py#16)(api):**
 ### *recipes* / [profiles:tests/upload](/scripts/slave/recipe_modules/profiles/tests/upload.py)
 
 [DEPS](/scripts/slave/recipe_modules/profiles/tests/upload.py#11): [chromium\_checkout](#recipe_modules-chromium_checkout), [profiles](#recipe_modules-profiles), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/path][recipe_engine/recipe_modules/path]
