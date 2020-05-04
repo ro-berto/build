@@ -81,7 +81,8 @@ def _run_ninja(out_dir,
                phony_targets,
                object_targets,
                jobs=None,
-               max_targets_per_invocation=500):
+               max_targets_per_invocation=500,
+               force_clean=True):
   """Runs ninja, returning the object_targets that failed to build.
 
   Args:
@@ -92,6 +93,8 @@ def _run_ninja(out_dir,
       reported to the caller.
     jobs: How many jobs to use. If None, lets `ninja` pick a value.
     max_targets_per_invocation: How many targets to build per ninja invocation.
+    force_clean: If true, we'll remove all existing `object_targets` before
+      building.
 
   Returns:
     A list of elements in `object_targets` that failed to build.
@@ -102,14 +105,15 @@ def _run_ninja(out_dir,
   #
   # FIXME(gbiv): We may be able to do better than this (interrogate ninja to
   # see which objects are _actually_ out-of-date?)
-  for target in object_targets:
-    target = os.path.join(out_dir, target)
-    try:
-      os.unlink(target)
-    except OSError as e:
-      if e.errno != errno.ENOENT:
-        raise
-      logging.info('Removed existing target at %s', target)
+  if force_clean:
+    for target in object_targets:
+      target = os.path.join(out_dir, target)
+      try:
+        os.unlink(target)
+      except OSError as e:
+        if e.errno != errno.ENOENT:
+          raise
+        logging.info('Removed existing target at %s', target)
 
   # 500 targets per invocation is arbitrary, but we start hitting OS argv size
   # limits around 1K in my experience.
@@ -1198,6 +1202,16 @@ def main():
       help='Run across all C/C++ files known to ninja.')
   parser.add_argument(
       '--clang_tidy_binary', required=True, help='Path to clang-tidy')
+  # We rely on `os.path.exists(object_file)` to determine if the object file
+  # successfully built at times. This option should only be used if we're 100%
+  # sure that everything in the out dir was built perfectly from the precise
+  # source tree we're looking at.
+  parser.add_argument(
+      '--no_clean',
+      dest='clean',
+      action='store_false',
+      help='Keep existing object files around. Handle with care: this might '
+      'cause the production of invalid diagnostics.')
   args = parser.parse_args()
 
   base_path = os.path.realpath(args.base_path)
@@ -1235,7 +1249,11 @@ def main():
 
   def run_ninja(out_dir, phony_targets, object_targets):
     return _run_ninja(
-        out_dir, phony_targets, object_targets, jobs=args.ninja_jobs)
+        out_dir,
+        phony_targets,
+        object_targets,
+        jobs=args.ninja_jobs,
+        force_clean=args.clean)
 
   with open(compile_commands_location) as f:
     tidy_actions, failed_actions = _generate_tidy_actions(
