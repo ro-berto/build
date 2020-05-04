@@ -82,9 +82,8 @@ def GenTests(api):
                        'derive test results (with patch)'),
       api.post_process(post_process.MustRun,
                        'include derived test results (with patch)'),
-      api.post_process(post_process.StepCommandContains,
-                       'include derived test results (with patch)',
-                       ['invid,invid2']),
+      api.post_process(post_process.StepSuccess,
+                       'include derived test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'include derived test results (without patch)'),
       api.post_process(post_process.DropExpectation))
