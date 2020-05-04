@@ -97,6 +97,21 @@ def UploadFilesToIsolateStorage(api, files):
   return isolated.archive('Archive build outputs')
 
 
+def CheckSwarmingResults(api, name, results):
+  """Called after swarming.collect() to produce a proper step result."""
+  for result in results:
+    if (result.state == api.swarming.TaskState.COMPLETED or
+        result.state == api.swarming.TaskState.TIMED_OUT):
+      if not result.success:
+        fail_text = '{} failure'.format(name)
+        step = api.step(fail_text, None)
+        step.presentation.status = 'FAILURE'
+        raise api.step.StepFailure(fail_text)
+    else:
+      api.step.active_result.presentation.status = 'EXCEPTION'
+      result.analyze()
+
+
 def SwarmTests(api, output_path, checkout_path, dimensions):
   """Runs specific types of tests on a separate swarming bot."""
 
@@ -137,8 +152,7 @@ def SwarmTests(api, output_path, checkout_path, dimensions):
       metadata,
       output_dir=output_directory,
       timeout='30m')
-  for result in results:
-    result.analyze()
+  CheckSwarmingResults(api, 'unit tests', results)
 
   e2e_output_directory = api.path.mkdtemp('e2e-swarming-output')
   e2e_results = api.swarming.collect(
@@ -146,8 +160,7 @@ def SwarmTests(api, output_path, checkout_path, dimensions):
       e2e_metadata,
       output_dir=e2e_output_directory,
       timeout='30m')
-  for result in e2e_results:
-    result.analyze()
+  CheckSwarmingResults(api, 'e2e tests', e2e_results)
 
 
 def RunTestsLocally(api, output_path):
@@ -238,3 +251,32 @@ def GenTests(api):
   yield api.test('linux_arm64_debug', api.platform('linux', 64),
                  api.buildbucket.try_build('openscreen', 'try'),
                  api.properties(is_debug=True, target_cpu='arm64'))
+  failed_result = api.swarming.task_result(
+      id='0',
+      name=UNIT_TEST_BINARY_NAME,
+      state=api.swarming.TaskState.COMPLETED,
+      failure=True)
+  yield api.test(
+      'linux_arm64_debug_with_collect_COMPLETED_and_failed',
+      api.platform('linux', 64), api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(is_debug=True, target_cpu='arm64'),
+      api.override_step_data('collect unit tests',
+                             api.swarming.collect([failed_result])))
+  timeout_result = api.swarming.task_result(
+      id='0',
+      name=UNIT_TEST_BINARY_NAME,
+      state=api.swarming.TaskState.TIMED_OUT)
+  yield api.test(
+      'linux_arm64_debug_with_collect_TIMED_OUT', api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(is_debug=True, target_cpu='arm64'),
+      api.override_step_data('collect unit tests',
+                             api.swarming.collect([timeout_result])))
+  died_result = api.swarming.task_result(
+      id='0', name=UNIT_TEST_BINARY_NAME, state=api.swarming.TaskState.BOT_DIED)
+  yield api.test(
+      'linux_arm64_debug_with_collect_BOT_DIED', api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(is_debug=True, target_cpu='arm64'),
+      api.override_step_data('collect unit tests',
+                             api.swarming.collect([died_result])))
