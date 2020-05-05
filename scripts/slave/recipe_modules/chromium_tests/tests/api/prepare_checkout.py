@@ -50,8 +50,17 @@ def GenTests(api):
 
   yield api.test(
       'disable_tests',
-      api.chromium.ci_build(
-          mastername='chromium.lkgr', builder='Win ASan Release'),
+      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-master': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          gclient_config='chromium',
+                          disable_tests=True,
+                      ),
+              },
+          })),
   )
 
   yield api.test(

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -19,7 +21,21 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'cf_archive_build',
-      api.chromium.ci_build(mastername='chromium.lkgr', builder='ASAN Release'),
+      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-master': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          cf_archive_build=True,
+                          cf_archive_name='cf_archive_build_test',
+                          cf_gs_bucket='clusterfuzz-gs-bucket',
+                          cf_gs_acl='public-read',
+                      ),
+              },
+          })),
   )
 
   yield api.test(

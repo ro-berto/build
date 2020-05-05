@@ -4386,9 +4386,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/tests/trigger_output.py#24)(api, task_to_retry, expected_value):**
 ### *recipes* / [chromium\_tests:tests/api/archive\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#11)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/api/compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

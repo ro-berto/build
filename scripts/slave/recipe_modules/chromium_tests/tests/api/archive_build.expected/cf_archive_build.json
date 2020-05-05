@@ -229,22 +229,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CACHE]/builder/src/out/Release"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "clobber"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
@@ -253,7 +237,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -275,7 +259,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"ASAN Release\", \"buildnumber\": 571, \"mastername\": \"chromium.lkgr\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"fake-builder\", \"buildnumber\": 571, \"mastername\": \"fake-master\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -288,12 +272,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.lkgr.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-master.json",
       "/path/to/tmp/json"
     ],
-    "name": "read test spec (chromium.lkgr.json)",
+    "name": "read test spec (fake-master.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.lkgr.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-master.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -346,7 +330,7 @@
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
-      "asan-linux-release-170242",
+      "cf_archive_build_test-linux-release-170242",
       "[\"file1\", \"file2\"]",
       "[CACHE]/builder/src/out/Release"
     ],
@@ -368,13 +352,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]/chrome_staging/asan-linux-release-170242.zip",
-      "gs://chromium-browser-asan/linux-release/asan-linux-release-170242.zip"
+      "[CLEANUP]/chrome_staging/cf_archive_build_test-linux-release-170242.zip",
+      "gs://clusterfuzz-gs-bucket/linux-release/cf_archive_build_test-linux-release-170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-asan/linux-release/asan-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/clusterfuzz-gs-bucket/linux-release/cf_archive_build_test-linux-release-170242.zip@@@"
     ]
   },
   {
@@ -385,10 +369,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CLEANUP]/chrome_staging/asan-linux-release-170242.zip"
+      "[CLEANUP]/chrome_staging/cf_archive_build_test-linux-release-170242.zip"
     ],
     "infra_step": true,
-    "name": "asan-linux-release-170242.zip"
+    "name": "cf_archive_build_test-linux-release-170242.zip"
   },
   {
     "name": "$result"

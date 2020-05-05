@@ -17,7 +17,6 @@ from . import chromium_goma_fyi
 from . import chromium_gpu
 from . import chromium_gpu_fyi
 from . import chromium_linux
-from . import chromium_lkgr
 from . import chromium_mac
 from . import chromium_memory
 from . import chromium_perf
@@ -64,8 +63,6 @@ BUILDERS = bot_db.BotDatabase.create({
         chromium_gpu_fyi.SPEC,
     'chromium.linux':
         chromium_linux.SPEC,
-    'chromium.lkgr':
-        chromium_lkgr.SPEC,
     'chromium.mac':
         chromium_mac.SPEC,
     'chromium.memory':
