@@ -31,21 +31,9 @@ _chromium_tidy_path = ('third_party', 'llvm-build', 'Release+Asserts', 'bin',
                        'clang-tidy')
 
 
-def _canonicalize_check_name(name):
-  """Fixes `name` up for the user, and returns whether it's a clang diag."""
-  if not name.startswith('clang-diagnostic-'):
-    return name, False
-
-  # Either we get:
-  # - clang-diagnostic-warning
-  # - clang-diagnostic-error
-  # - clang-diagnostic-`${foo}`
-  #
-  # where `${foo}` is a -W flag; -Woverflow == clang-diagnostic-overflow, etc.
-  # so anything that isn't "error" is a warning.
-  if name == 'clang-diagnostic-error':
-    return 'compile-time error', True
-  return 'compile-time warning', True
+def _is_clang_diagnostic(check_name):
+  """Returns if `check_name` is a clang diagnostic instead of a tidy nit."""
+  return check_name.startswith('clang-diagnostic-')
 
 
 _TidyDiagnosticID = collections.namedtuple(
@@ -63,15 +51,6 @@ class _SourceFileComments(object):
     self._build_failed = False
     self._tidy_failed = False
     self._tidy_timed_out = False
-
-  def is_emission_useful(self):
-    # Always tell the user if clang-tidy timed out.
-    if self._tidy_timed_out:
-      return True
-
-    is_tidy_nit = lambda check_name: not _canonicalize_check_name(check_name)[1]
-    return (any(is_tidy_nit(x.check_name) for x in self._macro_comments) or
-            any(is_tidy_nit(x.check_name) for x, _ in self._source_comments))
 
   def note_tidy_timed_out(self):
     self._tidy_timed_out = True
@@ -91,6 +70,10 @@ class _SourceFileComments(object):
     self._macro_comments[key].add((file_of_expansion, line_of_expansion))
 
   def add_tidy_diagnostic(self, message, line_number, check_name, suggestions):
+    # Clang diagnostics should be reported through presubmits, rather than
+    # Tricium. One diagnostic can cause a cascade of others, and that's a bad
+    # UX.
+    assert not _is_clang_diagnostic(check_name), check_name
     self._source_comments.append((_TidyDiagnosticID(message, line_number,
                                                     check_name), suggestions))
 
@@ -104,12 +87,8 @@ class _SourceFileComments(object):
       yield category, message, 0, ()
 
     def fix_message(message, check_name):
-      name, is_diagnostic = _canonicalize_check_name(check_name)
-      # FIXME(crbug.com/1059096): Simplify this code if we want to no longer
-      # handle diags here.
-      assert not is_diagnostic, check_name
-      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % name
-      return message + ' (' + suffix + ')'
+      return (message + ' (https://clang.llvm.org/extra/clang-tidy/checks/'
+              '%s.html)' % check_name)
 
     if self._build_failed:
       failure_suffix = ('\n\n(Note: building this file or its dependencies '
@@ -205,11 +184,8 @@ def _generate_clang_tidy_comments(api, file_paths):
     assert file_path, ("Empty paths should've been filtered "
                        "by tricium_clang_tidy: %s" % diagnostic)
 
-    # FIXME(crbug.com/1059096): Reporting this has caused more confusion than
-    # not. Let's disable it for a bit and see if anyone complains.
     diag_name = diagnostic['diag_name']
-    _, is_diagnostic = _canonicalize_check_name(diag_name)
-    if is_diagnostic:
+    if _is_clang_diagnostic(diag_name):
       continue
 
     tidy_replacements = diagnostic['replacements']
@@ -306,16 +282,15 @@ def RunSteps(api):
             per_file_comments = _generate_clang_tidy_comments(api, affected)
 
           for file_path, comments in per_file_comments.items():
-            if comments.is_emission_useful():
-              for category, message, line_number, suggestions in comments:
-                # Clang-tidy only gives us one file offset, so we use line
-                # comments.
-                api.tricium.add_comment(
-                    category,
-                    message,
-                    file_path,
-                    start_line=line_number,
-                    suggestions=suggestions)
+            for category, message, line_number, suggestions in comments:
+              # Clang-tidy only gives us one file offset, so we use line
+              # comments.
+              api.tricium.add_comment(
+                  category,
+                  message,
+                  file_path,
+                  start_line=line_number,
+                  suggestions=suggestions)
 
       api.tricium.write_comments()
 
