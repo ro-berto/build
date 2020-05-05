@@ -116,7 +116,6 @@ def setup_host_x86(api,
           'TARGET_BUILD_TYPE': 'release',
           'LANG': 'en_US.UTF-8',
           'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
-          'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
           'ANDROID_BUILD_TOP': build_top_dir,
           'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
                   api.path.pathsep +
@@ -267,7 +266,6 @@ def setup_target(api,
          'TARGET_BUILD_TYPE': 'release',
          'LANG': 'en_US.UTF-8',
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
-         'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
          'ANDROID_BUILD_TOP': build_top_dir,
          'ADB': str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
          'PATH': str(build_top_dir.join(

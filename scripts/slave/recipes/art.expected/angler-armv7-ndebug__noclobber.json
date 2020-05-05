@@ -57,7 +57,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "build target"
@@ -84,7 +83,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "device pre-run cleanup"
@@ -112,7 +110,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "setup device"
@@ -138,7 +135,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "sync target"
@@ -166,7 +162,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest"
@@ -197,7 +192,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: adb logcat"
@@ -224,7 +218,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: crashes"
@@ -253,7 +246,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test gtest: adb clear log"
@@ -285,7 +277,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing"
@@ -316,7 +307,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb logcat"
@@ -343,7 +333,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: crashes"
@@ -372,7 +361,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test optimizing: adb clear log"
@@ -405,7 +393,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test debuggable"
@@ -436,7 +423,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test debuggable: adb logcat"
@@ -463,7 +449,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test debuggable: crashes"
@@ -492,7 +477,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test debuggable: adb clear log"
@@ -525,7 +509,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit debuggable"
@@ -556,7 +539,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit debuggable: adb logcat"
@@ -583,7 +565,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit debuggable: crashes"
@@ -612,7 +593,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit debuggable: adb clear log"
@@ -644,7 +624,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter"
@@ -675,7 +654,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: adb logcat"
@@ -702,7 +680,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: crashes"
@@ -731,7 +708,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test interpreter: adb clear log"
@@ -763,7 +739,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test baseline"
@@ -794,7 +769,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test baseline: adb logcat"
@@ -821,7 +795,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test baseline: crashes"
@@ -850,7 +823,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test baseline: adb clear log"
@@ -882,7 +854,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit"
@@ -913,7 +884,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb logcat"
@@ -940,7 +910,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: crashes"
@@ -969,7 +938,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jit: adb clear log"
@@ -1001,7 +969,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile"
@@ -1032,7 +999,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile: adb logcat"
@@ -1059,7 +1025,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile: crashes"
@@ -1088,7 +1053,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test speed-profile: adb clear log"
@@ -1117,7 +1081,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore"
@@ -1148,7 +1111,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: adb logcat"
@@ -1175,7 +1137,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: crashes"
@@ -1204,7 +1165,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libcore: adb clear log"
@@ -1233,7 +1193,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp jit"
@@ -1264,7 +1223,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp jit: adb logcat"
@@ -1291,7 +1249,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp jit: crashes"
@@ -1320,7 +1277,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp jit: adb clear log"
@@ -1350,7 +1306,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp interpreter"
@@ -1381,7 +1336,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp interpreter: adb logcat"
@@ -1408,7 +1362,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp interpreter: crashes"
@@ -1437,7 +1390,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp interpreter: adb clear log"
@@ -1464,7 +1416,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "tear down device"
@@ -1491,7 +1442,6 @@
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "arm_krait",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "device post-run cleanup"
