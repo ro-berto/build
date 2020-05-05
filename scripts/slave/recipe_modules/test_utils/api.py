@@ -12,6 +12,9 @@ from recipe_engine import util as recipe_util
 from . import canonical
 from .util import GTestResults, TestResults
 
+from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (test_result as
+                                                           test_result_pb2)
+
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
@@ -307,7 +310,26 @@ class TestUtilsApi(recipe_api.RecipeApi):
           variants_with_unexpected_results=True,
       )
 
-      if suffix != 'without patch':
+      if not self.m.resultdb.enabled:
+        # Checks if resultdb integration is enabled.
+        # Temporary workaround to make sure led builds don't fail because of
+        # this.
+        # Should be removed when led v2 starts to create invocations.
+        return invalid_results, failed_test_suites
+
+      if suffix == 'without patch':
+        # Test variants that still fail unexpectedly in (without patch) steps
+        # are exonerated.
+        # This is to be consistent with the current recipe logic at
+        # http://shortn/_KibEsLgpJK
+        test_variants = self._test_variants_with_unexpected_failures(
+            invocations)
+        exonerations = self._test_exonerations_for_test_variants(test_variants)
+        self.m.resultdb.exonerate(
+            test_exonerations=exonerations,
+            step_name='exonerate without patch failures',
+        )
+      else:
         # Include the derived invocations in the build's invocation.
         # Note that 'without patch' results are derived but not included in
         # the builds' invocation, since the results are not related to the
@@ -321,6 +343,103 @@ class TestUtilsApi(recipe_api.RecipeApi):
       pass
 
     return invalid_results, failed_test_suites
+
+  def _test_variants_with_unexpected_failures(self, invocations):
+    """Gets test variants with unexpected failures.
+
+    This is a helper function to get test variants to exonerate.
+
+    To be consistent with the current recipe logic at http://shortn/_KibEsLgpJK,
+    test variants with unexpected failures in (without patch) steps will be
+    exonerated.
+
+    This is subject to change if all unexpected results should be exonerated,
+    instead of just unexpected failures.
+
+    Args:
+      invocations (dict): A dict {invocation_id: api.resultdb.Invocation}.
+        Please refer to go/resultdb-concepts for more details.
+        An example below:
+        {
+          'invocation_id': api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED
+              ),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/Test',
+                      variant={'def': {
+                          'key1': 'value1',
+                          'key2': 'value2'
+                      }},
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                  ),
+              ],
+          ),
+        }
+
+    Returns:
+      A dict of test variants in the format:
+       {
+         'test_id1': [
+           {
+             'def': {
+               'key1': 'value1',
+               'key2': 'value2',
+             }
+           }
+         ],
+         'test_id2': [
+           {
+             'def': {
+               'key3': 'value3',
+             }
+           }
+         ]
+       }
+    """
+    res = {}
+    for inv in invocations.values():
+      for tr in inv.test_results:
+        if tr.expected or tr.status == test_result_pb2.PASS:
+          continue
+
+        res.setdefault(tr.test_id, [])
+        found = False
+        for v in res[tr.test_id]:
+          # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
+          if v == tr.variant:
+            found = True
+            break
+
+        if not found:
+          res[tr.test_id].append(tr.variant)
+
+    return res
+
+  def _test_exonerations_for_test_variants(self, test_variants):
+    """Gets test exonerations for ResultDB test variants.
+
+    Args:
+      test_variants (dict): A dict of test variants in the format.
+        See returned value of _test_variants_with_unexpected_failures.
+
+    Returns:
+      A list of test_result_pb2.TestExoneration.
+    """
+    ret = []
+    for test_id, variants in test_variants.iteritems():
+      for v in variants:
+        ret.append(
+            test_result_pb2.TestExoneration(
+                test_id=test_id,
+                variant=v,
+                # TODO(crbug.com/1076096): add deep link to the Milo UI to
+                #  display the without patch test results.
+                explanation_html='Unexpected failure without patch',
+            ))
+    return ret
 
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.
