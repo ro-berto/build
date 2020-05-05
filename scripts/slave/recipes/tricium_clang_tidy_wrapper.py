@@ -406,88 +406,86 @@ def GenTests(api):
 
     return test
 
-  yield (test_with_patch('no_files', affected_files=[]) + api.post_process(
-      post_process.DoesNotRun, 'clang-tidy') + api.post_process(
-          post_process.StatusSuccess) + api.post_process(
-              post_process.DropExpectation))
+  yield (test_with_patch('no_files', affected_files=[]) +
+         api.post_process(post_process.DoesNotRun, 'clang-tidy') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'no_analysis_non_cpp', affected_files=['some/cc/file.txt']) +
          api.post_process(post_process.DoesNotRun, 'clang-tidy') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'removed_file',
       affected_files=['path/to/some/cc/file.cpp'],
-      auto_exist_files=False) + api.post_process(post_process.DoesNotRun,
-                                                 'clang-tidy') +
-         api.post_process(tricium_has_no_messages) + api.post_process(
-             post_process.StatusSuccess) + api.post_process(
-                 post_process.DropExpectation))
+      auto_exist_files=False) +
+         api.post_process(post_process.DoesNotRun, 'clang-tidy') +
+         api.post_process(tricium_has_no_messages) +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'analyze_cpp_timed_out_files',
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'timed_out_src_files': ['oh/no.cpp']
-          })) + api.post_process(post_process.StepWarning,
-                                 'clang-tidy.generate-warnings') +
+          api.file.read_json({'timed_out_src_files': ['oh/no.cpp']})) +
+         api.post_process(post_process.StepWarning,
+                          'clang-tidy.generate-warnings') +
          api.post_process(
              tricium_has_message, 'warning: clang-tidy timed out on this '
-             'file; issuing diagnostics is impossible.') + api.post_process(
-                 post_process.StatusSuccess) + api.post_process(
-                     post_process.DropExpectation))
+             'file; issuing diagnostics is impossible.') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
-      'analyze_cpp_failed_files',
-      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
-          'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'failed_src_files': ['path/to/some/cc/file.cpp']
-          })) + api.post_process(post_process.StepWarning,
-                                 'clang-tidy.generate-warnings') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
-
+      'analyze_cpp_failed_files', affected_files=['path/to/some/cc/file.cpp']) +
+         api.step_data(
+             'clang-tidy.generate-warnings.read tidy output',
+             api.file.read_json(
+                 {'failed_src_files': ['path/to/some/cc/file.cpp']})) +
+         api.post_process(post_process.StepWarning,
+                          'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'analyze_cpp_failed_tidy_files',
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'failed_tidy_files': ['path/to/some/cc/file.cpp']
-          })) + api.post_process(post_process.StepWarning,
-                                 'clang-tidy.generate-warnings') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
+          api.file.read_json(
+              {'failed_tidy_files': ['path/to/some/cc/file.cpp']})) +
+         api.post_process(post_process.StepWarning,
+                          'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
-      'analyze_cpp',
-      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
-          'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'diagnostics': [
-                  {
-                      'file_path': 'path/to/some/cc/file.cpp',
-                      'line_number': 2,
-                      'diag_name': 'super-cool-diag',
-                      'message': 'hello, world 1',
-                      'replacements': [],
-                      'expansion_locs': [],
-                  },
-                  {
-                      'file_path': 'path/to/some/cc/file.cpp',
-                      'line_number': 50,
-                      'diag_name': 'moderately-cool-diag',
-                      'message': 'hello, world',
-                      'replacements': [],
-                      'expansion_locs': [],
-                  },
-              ]
-          })) + api.post_process(post_process.StepSuccess,
-                                 'clang-tidy.generate-warnings') +
+      'analyze_cpp', affected_files=['path/to/some/cc/file.cpp']) +
+         api.step_data(
+             'clang-tidy.generate-warnings.read tidy output',
+             api.file.read_json({
+                 'diagnostics': [
+                     {
+                         'file_path': 'path/to/some/cc/file.cpp',
+                         'line_number': 2,
+                         'diag_name': 'super-cool-diag',
+                         'message': 'hello, world 1',
+                         'replacements': [],
+                         'expansion_locs': [],
+                     },
+                     {
+                         'file_path': 'path/to/some/cc/file.cpp',
+                         'line_number': 50,
+                         'diag_name': 'moderately-cool-diag',
+                         'message': 'hello, world',
+                         'replacements': [],
+                         'expansion_locs': [],
+                     },
+                 ]
+             })) + api.post_process(post_process.StepSuccess,
+                                    'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              tricium_has_message, 'hello, world 1 (https://clang.llvm.org/'
              'extra/clang-tidy/checks/super-cool-diag.html)') +
@@ -520,8 +518,8 @@ def GenTests(api):
           })) + api.post_process(post_process.StepWarning,
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) +
-         api.post_process(tricium_has_no_messages) + api.post_process(
-             post_process.DropExpectation))
+         api.post_process(tricium_has_no_messages) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'append_complaint_on_failure',
@@ -543,8 +541,8 @@ def GenTests(api):
              tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: building this file or its dependencies failed; this '
-             'diagnostic might be incorrect as a result.)') + api.post_process(
-                 post_process.DropExpectation))
+             'diagnostic might be incorrect as a result.)') +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'prefer_complaints_about_build_failures_over_tidy_ones',
@@ -567,8 +565,8 @@ def GenTests(api):
              tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: building this file or its dependencies failed; this '
-             'diagnostic might be incorrect as a result.)') + api.post_process(
-                 post_process.DropExpectation))
+             'diagnostic might be incorrect as a result.)') +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'append_complaint_on_tidy_failure',
@@ -590,46 +588,42 @@ def GenTests(api):
              tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: running clang-tidy on this file failed; this '
-             'diagnostic might be incorrect as a result.)') + api.post_process(
-                 post_process.DropExpectation))
+             'diagnostic might be incorrect as a result.)') +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
-      'diagnostic_suggestions',
-      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
-          'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'diagnostics': [{
-                  'file_path':
-                      'path/to/some/cc/file.cpp',
-                  'line_number':
-                      2,
-                  'diag_name':
-                      'tidy-is-angry',
-                  'message':
-                      'hello, world',
-                  'replacements': [
-                      {
-                          'new_text': 'foo',
-                          'start_line': 1,
-                          'end_line': 2,
-                          'start_char': 0,
-                          'end_char': 1,
-                      },
-                      {
-                          'new_text': 'bar',
-                          'start_line': 3,
-                          'end_line': 4,
-                          'start_char': 5,
-                          'end_char': 5,
-                      },
-                  ],
-                  'expansion_locs': [],
-              },]
-          })) + api.post_process(post_process.StepSuccess,
-                                 'clang-tidy.generate-warnings') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             tricium_has_replacements, 'foo', 'bar') + api.post_process(
-                 post_process.DropExpectation))
+      'diagnostic_suggestions', affected_files=['path/to/some/cc/file.cpp']) +
+         api.step_data(
+             'clang-tidy.generate-warnings.read tidy output',
+             api.file.read_json({
+                 'diagnostics': [{
+                     'file_path': 'path/to/some/cc/file.cpp',
+                     'line_number': 2,
+                     'diag_name': 'tidy-is-angry',
+                     'message': 'hello, world',
+                     'replacements': [
+                         {
+                             'new_text': 'foo',
+                             'start_line': 1,
+                             'end_line': 2,
+                             'start_char': 0,
+                             'end_char': 1,
+                         },
+                         {
+                             'new_text': 'bar',
+                             'start_line': 3,
+                             'end_line': 4,
+                             'start_char': 5,
+                             'end_char': 5,
+                         },
+                     ],
+                     'expansion_locs': [],
+                 },]
+             })) + api.post_process(post_process.StepSuccess,
+                                    'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(tricium_has_replacements, 'foo', 'bar') +
+         api.post_process(post_process.DropExpectation))
 
   expansions_tests = [
       (1, 1, '.'),
@@ -667,12 +661,11 @@ def GenTests(api):
     yield (
         test_with_patch(
             'expansion_%d' % num_expansions,
-            affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
-                'clang-tidy.generate-warnings.read tidy output',
-                api.file.read_json({
-                    'diagnostics': diags
-                })) + api.post_process(post_process.StepSuccess,
-                                       'clang-tidy.generate-warnings') +
+            affected_files=['path/to/some/cc/file.cpp']) +
+        api.step_data('clang-tidy.generate-warnings.read tidy output',
+                      api.file.read_json({'diagnostics': diags})) +
+        api.post_process(post_process.StepSuccess,
+                         'clang-tidy.generate-warnings') +
         api.post_process(post_process.StatusSuccess) +
         api.post_process(tricium_outputs_json, [{
             'category': 'ClangTidy/tidy-is-angry',
@@ -690,14 +683,14 @@ def GenTests(api):
       affected_files=['path/to/some/cc/file.cpp'],
       clang_tidy_exists=False,
   ) + api.post_process(post_process.StepWarning, 'clang-tidy') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'skip_reverted_cl',
       affected_files=['path/to/some/cc/file.cpp'],
       is_revert=True,
-      include_diff=False) + api.post_process(
-          post_process.DoesNotRun, 'bot_update') + api.post_process(
-              post_process.StatusSuccess) + api.post_process(
-                  post_process.DropExpectation))
+      include_diff=False) +
+         api.post_process(post_process.DoesNotRun, 'bot_update') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(post_process.DropExpectation))
