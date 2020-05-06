@@ -111,20 +111,30 @@ def setup_host_x86(api,
 
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
-  env = { 'TARGET_PRODUCT': 'sdk',
-          'TARGET_BUILD_VARIANT': 'eng',
-          'TARGET_BUILD_TYPE': 'release',
-          'LANG': 'en_US.UTF-8',
-          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
-          'ANDROID_BUILD_TOP': build_top_dir,
-          'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                  api.path.pathsep +
-                  str(build_top_dir.join(
-                      'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
-                  api.path.pathsep +
-                  '%(PATH)s',
-          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-          'ART_TEST_KEEP_GOING': 'true' }
+  # For host, the TARGET_PRODUCT isn't relevant.
+  env = {
+      'TARGET_PRODUCT':
+          'armv8',
+      'TARGET_BUILD_VARIANT':
+          'eng',
+      'TARGET_BUILD_TYPE':
+          'release',
+      'LANG':
+          'en_US.UTF-8',
+      'SOONG_ALLOW_MISSING_DEPENDENCIES':
+          'true',
+      'ANDROID_BUILD_TOP':
+          build_top_dir,
+      'PATH':
+          str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+          api.path.pathsep + str(
+              build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86',
+                                 'bin')) + api.path.pathsep + '%(PATH)s',
+      'ART_TEST_RUN_TEST_2ND_ARCH':
+          'false',
+      'ART_TEST_KEEP_GOING':
+          'true'
+  }
 
   if bitness == 32:
     env.update({ 'HOST_PREFER_32_BIT' : 'true' })
@@ -165,7 +175,7 @@ def setup_host_x86(api,
     common_options += ['--cdex-' + cdex_level]
 
   with api.context(env=env):
-    api.step('build sdk-eng', [
+    api.step('build', [
         art_tools.join('buildbot-build.sh'),
         '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--host'
     ])

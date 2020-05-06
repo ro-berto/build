@@ -67,9 +67,9 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
-    "name": "build sdk-eng"
+    "name": "build"
   },
   {
     "cmd": [
@@ -92,7 +92,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test gtest"
   },
@@ -120,7 +120,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test optimizing"
   },
@@ -149,7 +149,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test debuggable"
   },
@@ -177,7 +177,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test interpreter"
   },
@@ -205,7 +205,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test baseline"
   },
@@ -233,7 +233,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test jit"
   },
@@ -261,7 +261,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test speed-profile"
   },
@@ -288,7 +288,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test libcore"
   },
@@ -315,7 +315,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test libjdwp jit"
   },
@@ -337,7 +337,7 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "armv8"
     },
     "name": "test dx"
   },
