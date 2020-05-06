@@ -1576,6 +1576,7 @@ class SwarmingTest(Test):
                optional_dimensions=None,
                service_account=None,
                isolate_coverage_data=None,
+               isolate_profile_data=None,
                merge=None,
                ignore_task_failure=None,
                containment_type=None,
@@ -1609,6 +1610,8 @@ class SwarmingTest(Test):
       service_account: Service account to run the test as.
       isolate_coverage_data: Bool indicating wether to isolate coverage profile
           data during the task.
+      isolate_profile_data: Bool indicating whether to isolate profile data
+          during the task.
       merge: 'merge' dict as set in //testing/buildbot/ pyl files for the test.
       ignore_task_failure: If False, the test will be reported as StepFailure on
           failure.
@@ -1643,6 +1646,7 @@ class SwarmingTest(Test):
     self._merge = merge
     self._tear_down = tear_down
     self._isolate_coverage_data = isolate_coverage_data
+    self._isolate_profile_data = isolate_profile_data
     self._ignore_task_failure = ignore_task_failure
     self._named_caches = named_caches or {}
     self._shards = shards
@@ -1749,6 +1753,13 @@ class SwarmingTest(Test):
     return bool(self._isolate_coverage_data)
 
   @property
+  def isolate_profile_data(self):
+    # TODO(crbug.com/1075823) - delete isolate_coverage_data once deprecated.
+    # Release branches will still be setting isolate_coverage_data under
+    # src/testing. Deprecation expected after M83.
+    return bool(self._isolate_profile_data) or self.isolate_coverage_data
+
+  @property
   def shards(self):
     return self._shards
 
@@ -1798,7 +1809,7 @@ class SwarmingTest(Test):
     task_slice = task_request[0]
 
     using_pgo = api.chromium_tests.m.pgo.using_pgo
-    if self._isolate_coverage_data or using_pgo:
+    if self.isolate_profile_data or using_pgo:
       # Targets built with 'use_clang_coverage' or 'use_clang_profiling' (also
       # set by chrome_pgo_phase=1) will look at this environment variable to
       # determine where to write the profile dumps. The %Nm syntax is understood
@@ -2025,6 +2036,7 @@ class SwarmingGTestTest(SwarmingTest):
                set_up=None,
                tear_down=None,
                isolate_coverage_data=False,
+               isolate_profile_data=False,
                optional_dimensions=None,
                service_account=None,
                containment_type=None,
@@ -2045,6 +2057,7 @@ class SwarmingGTestTest(SwarmingTest):
         set_up=set_up,
         tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
+        isolate_profile_data=isolate_profile_data,
         merge=merge,
         shards=shards,
         ignore_task_failure=ignore_task_failure,
@@ -2104,9 +2117,17 @@ class SwarmingGTestTest(SwarmingTest):
 
 
 class LocalIsolatedScriptTest(Test):
-  def __init__(self, name, args=None, target_name=None,
-               override_compile_targets=None, results_handler=None,
-               set_up=None, tear_down=None, isolate_coverage_data=None,
+
+  def __init__(self,
+               name,
+               args=None,
+               target_name=None,
+               override_compile_targets=None,
+               results_handler=None,
+               set_up=None,
+               tear_down=None,
+               isolate_coverage_data=None,
+               isolate_profile_data=None,
                **runtest_kwargs):
     """Constructs an instance of LocalIsolatedScriptTest.
 
@@ -2143,6 +2164,7 @@ class LocalIsolatedScriptTest(Test):
     self._tear_down = tear_down
     self.results_handler = results_handler or JSONResultsHandler()
     self._isolate_coverage_data = isolate_coverage_data
+    self._isolate_profile_data = isolate_profile_data
 
   @property
   def set_up(self):
@@ -2163,6 +2185,13 @@ class LocalIsolatedScriptTest(Test):
   @property
   def uses_isolate(self):
     return True
+
+  @property
+  def isolate_profile_data(self):
+    # TODO(crbug.com/1075823) - delete isolate_coverage_data once deprecated
+    # Release branches will still be setting isolate_coverage_data under
+    # src/testing. Deprecation expected after M83.
+    return self._isolate_profile_data or self._isolate_coverage_data
 
   def compile_targets(self):
     if self._override_compile_targets:
@@ -2193,7 +2222,7 @@ class LocalIsolatedScriptTest(Test):
         {'valid': True, 'failures': []})
 
     kwargs = {}
-    if self._isolate_coverage_data:
+    if self.isolate_profile_data:
       kwargs.update({
           # Targets built with 'use_clang_coverage' will look at this
           # environment variable to determine where to write the profile dumps.
@@ -2267,6 +2296,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                set_up=None,
                tear_down=None,
                isolate_coverage_data=False,
+               isolate_profile_data=False,
                optional_dimensions=None,
                service_account=None,
                **kw):
@@ -2285,6 +2315,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         set_up=set_up,
         tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
+        isolate_profile_data=isolate_profile_data,
         merge=merge,
         shards=shards,
         ignore_task_failure=ignore_task_failure,

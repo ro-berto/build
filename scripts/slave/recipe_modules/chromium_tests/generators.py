@@ -281,7 +281,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
   def gtest_swarming_delegate(spec, **kwargs):
     kwargs.update(gtest_delegate_common(spec, **kwargs))
-    kwargs['isolate_coverage_data'] = spec.get('isolate_coverage_data')
+    kwargs['isolate_profile_data'] = (
+        spec.get('isolate_coverage_data') or spec.get('isolate_profile_data'))
     kwargs['ignore_task_failure'] = spec.get(
         'ignore_task_failure', False)
     return steps.SwarmingGTestTest(**kwargs)
@@ -353,7 +354,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # to GN.
     common_kwargs['override_compile_targets'] = test.get(
         'override_compile_targets', None)
-    common_kwargs['isolate_coverage_data'] = test.get('isolate_coverage_data')
+    common_kwargs['isolate_profile_data'] = (
+        test.get('isolate_coverage_data') or test.get('isolate_profile_data'))
 
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
