@@ -707,7 +707,7 @@
     "cwd": "[CACHE]/builder",
     "name": "without patch steps are skipped",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>because this CL changed following recipe config paths:<br/>testing/buildbot/.*json$<br/>testing/buildbot/.*pyl$@@@"
+      "@@@STEP_TEXT@<br/>because this CL changed following recipe config paths:<br/>testing[/\\\\]buildbot[/\\\\].*json$<br/>testing[/\\\\]buildbot[/\\\\].*pyl$@@@"
     ]
   },
   {
