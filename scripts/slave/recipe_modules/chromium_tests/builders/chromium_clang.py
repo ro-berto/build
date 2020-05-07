@@ -244,7 +244,9 @@ SPEC = {
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'chrome_internal'],
+            gclient_apply_config=[
+                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -477,7 +479,9 @@ SPEC = {
             chromium_config='chromium_win_clang_official_tot',
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'chrome_internal'],
+            gclient_apply_config=[
+                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -555,7 +559,9 @@ SPEC = {
             chromium_config='chromium_win_clang_official_tot',
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'chrome_internal'],
+            gclient_apply_config=[
+                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
