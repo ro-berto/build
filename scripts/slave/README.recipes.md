@@ -341,7 +341,7 @@ Run an ADB command.
 
 [DEPS](/scripts/slave/recipe_modules/archive/__init__.py#7): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#23)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#24)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Chromium specific module for zipping, uploading and downloading build
 artifacts implemented as a wrapper around zip_build.py script.
@@ -350,7 +350,7 @@ If you need to upload or download build artifacts (or any other files) for
 something other than Chromium flavor, consider using 'zip' + 'gsutil' or
 'isolate' modules instead.
 
-&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#146)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
+&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#147)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
 
 Archives and uploads a build to google storage.
 
@@ -393,12 +393,12 @@ Args:
                     it from the commit information.  This will be formatted
                     as YYYYMMDDHHMM.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#323)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#324)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#444)(self, build_dir, got_revision_cp, config):**
+&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#473)(self, build_dir, got_revision_cp, config):**
 
 Archives one or multiple packages to google cloud storage.
 
@@ -415,7 +415,7 @@ Args:
           DEPRECATED: If None, this will default to the global property
           $build/archive.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#433)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#434)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -426,11 +426,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#372)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#373)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#422)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#423)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.
@@ -441,7 +441,7 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#38)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
+&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#39)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.

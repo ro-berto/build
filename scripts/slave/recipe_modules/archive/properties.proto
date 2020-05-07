@@ -26,9 +26,13 @@ message ArchiveData {
     ARCHIVE_TYPE_UNSPECIFIED = 0;
 
     // All input files and directories are zipped. gcs_path should be a path
-    // whose final component is the name of the file.
+    // whose final component is the name of the archive file.
     // This is the default if nothing is set.
     ARCHIVE_TYPE_ZIP = 1;
+
+    // Upload files unchanged. Directories are not supported. gcs_path should
+    // be a path to a directory where the uploaded files will be placed.
+    ARCHIVE_TYPE_FILES = 2;
   }
   ArchiveType archive_type = 5;
 }

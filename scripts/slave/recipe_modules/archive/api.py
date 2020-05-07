@@ -7,6 +7,7 @@ import sys
 
 # pylint: disable=relative-import
 import manual_bisect_files
+from PB.recipe_modules.build.archive.properties import ArchiveData
 from recipe_engine import recipe_api
 
 
@@ -441,6 +442,34 @@ class ArchiveApi(recipe_api.RecipeApi):
     inserted into the URL."""
     return self._legacy_url(True, gs_bucket_name, extra_url_components)
 
+  def _create_zip_archive_for_upload(self, build_dir, files, directories):
+    """Adds files and directories to a zip file to be uploaded.
+
+    Args:
+      build_dir: The absolute path to the build output directory.
+      files: List of files to include. Paths are relative to |build_dir|.
+      directories: List of directories to include. Paths are relative to
+                   |build_dir|.
+
+    Returns:
+      Absolute path to the archive file.
+    """
+    # Create a temporary directory to hold the zipped archive.
+    temp_dir = self.m.path.mkdtemp()
+    output_path = temp_dir.join('artifact.zip')
+    package = self.m.zip.make_package(build_dir, output_path)
+
+    for f in files:
+      package.add_file(build_dir.join(f))
+    for directory in directories:
+      package.add_directory(build_dir.join(directory))
+
+    # An exception will be raised if there's an error, so we can assume that
+    # this step succeeds.
+    package.zip('Create generic archive')
+
+    return output_path
+
   def generic_archive(self, build_dir, got_revision_cp, config):
     """Archives one or multiple packages to google cloud storage.
 
@@ -465,8 +494,6 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in config.archive_datas:
-        # There is only one archive type, and that is ARCHIVE_TYPE_ZIP, so we
-        # don't bother performing any checks.
 
         # Perform dynamic configuration from placeholders, if necessary.
         position_placeholder = '{%position%}'
@@ -480,19 +507,25 @@ class ArchiveApi(recipe_api.RecipeApi):
           _, position = self.m.commit_position.parse(got_revision_cp)
           gcs_path = gcs_path.replace(position_placeholder, str(position))
 
-        # Create a temporary directory to hold the zipped archive.
-        temp_dir = self.m.path.mkdtemp()
-        output_path = temp_dir.join('artifact.zip')
+        # Get map of local file path to upload -> destination file path in GCS
+        # bucket.
+        if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
+          if archive_data.dirs:
+            self.m.python.failing_step(
+                'ARCHIVE_TYPE_FILES does not support dirs',
+                'archive_data properties with |archive_type| '
+                'ARCHIVE_TYPE_FILES must have empty |dirs|')
+          uploads = {
+              build_dir.join(f): '/'.join([gcs_path, f])
+              for f in archive_data.files
+          }
+        else:
+          archive_file = self._create_zip_archive_for_upload(
+              build_dir, archive_data.files, archive_data.dirs)
+          uploads = {archive_file: gcs_path}
 
-        package = self.m.zip.make_package(build_dir, output_path)
-        for f in archive_data.files:
-          package.add_file(build_dir.join(f))
-        for directory in archive_data.dirs:
-          package.add_directory(build_dir.join(directory))
-
-        # An exception will be raised if there's an error, so we can assume that
-        # this step succeeds.
-        package.zip('Create generic archive')
-
-        self.m.gsutil.upload(
-            output_path, bucket=archive_data.gcs_bucket, dest=gcs_path)
+        for file_path in uploads:
+          self.m.gsutil.upload(
+              file_path,
+              bucket=archive_data.gcs_bucket,
+              dest=uploads[file_path])
