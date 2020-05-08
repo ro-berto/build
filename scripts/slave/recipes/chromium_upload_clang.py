@@ -79,8 +79,6 @@ def RunSteps(api):
 
   with api.osx_sdk('ios'):
     with api.depot_tools.on_path():
-      api.python('download binutils',
-          api.path['checkout'].join('third_party', 'binutils', 'download.py'))
       api.python(
           'package clang',
           api.path['checkout'].join(

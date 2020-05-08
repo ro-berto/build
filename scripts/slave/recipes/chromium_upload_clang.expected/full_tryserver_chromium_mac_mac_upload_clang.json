@@ -298,19 +298,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/third_party/binutils/download.py"
-    ],
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download binutils"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools/clang/scripts/package.py",
       "--upload"
     ],
