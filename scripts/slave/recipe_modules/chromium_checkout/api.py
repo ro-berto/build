@@ -51,6 +51,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     """Returns list of POSIX paths of files affected by patch for "analyze".
 
     Paths are relative to `relative_to` which for analyze should be 'src/'.
+    Paths always use '/' as a path delimiter, no matter the OS.
     """
     if not self.m.tryserver.gerrit_change:
       # There is no patch to begin with.
@@ -66,6 +67,10 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     for i, path in enumerate(files):
       path = str(path)
       files[i] = self.m.path.relpath(path, relative_to)
+      # self.m.path.relpath uses '\' if the machine running the recipe is a
+      # windows machine. The results of this function are expected to have a '/'
+      # delimiter no matter the OS. Fix this here.
+      files[i] = files[i].replace('\\', '/')
     return files
 
   def ensure_checkout(self, bot_config=None, **kwargs):

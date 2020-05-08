@@ -31,11 +31,8 @@ from . import steps
 # Paths which affect recipe config and behavior in a way that survives
 # deapplying user's patch.
 RECIPE_CONFIG_PATHS = [
-    # Paths on windows use \, not /. This used to not be true, but changed
-    # somehow, probably due to git changing something. See
-    # https://crbug.com/1078931
-    r'testing[/\\]buildbot[/\\].*json$',
-    r'testing[/\\]buildbot[/\\].*pyl$',
+    r'testing/buildbot/.*json$',
+    r'testing/buildbot/.*pyl$',
 ]
 
 class BotMetadata(object):
