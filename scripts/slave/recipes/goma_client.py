@@ -7,6 +7,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/osx_sdk',
+    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/path',
@@ -34,12 +35,12 @@ def RunSteps(api):
 
   with api.osx_sdk('mac'):
     # 2-1. gn
-    gn_args = [
-        'is_debug=false',
-        'cpu_arch="x64"',
-        'dcheck_always_on=true',
-        'use_link_time_optimization=false'
-    ]
+    gn_args = ['is_debug=false', 'cpu_arch="x64"', 'enable_revision_check=true']
+    if api.tryserver.is_tryserver:
+      gn_args.append('dcheck_always_on=true')
+      gn_args.append('use_link_time_optimization=false')
+    else:
+      gn_args.append('use_link_time_optimization=true')
     api.python(
         name='gn',
         script=api.depot_tools.gn_py_path,
@@ -84,6 +85,15 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ['linux', 'mac', 'win']:
+    yield api.test(
+        'goma_client_try_%s_rel' % platform,
+        api.platform(platform, 64),
+        api.buildbucket.try_build(
+            builder='%s_rel' % platform,
+            git_repo='chromium.googlesource.com/infra/goma/client',
+            change_number=456789,
+            patch_set=12),
+    )
     for bucket in ['prod', 'luci.goma-client.ci']:
       yield api.test(
           'goma_client_%s_%s_rel' % (platform, bucket),

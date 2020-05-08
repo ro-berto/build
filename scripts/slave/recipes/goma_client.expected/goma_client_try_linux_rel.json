@@ -1,11 +1,53 @@
 [
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit fetch current CL info",
+    "timeout": 600,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'client', 'url': 'https://chromium.googlesource.com/infra/goma/client'}]",
+      "--patch_root",
+      "client",
       "--revision_mapping_file",
       "{\"got_revision\": \"client\"}",
       "--git-cache-dir",
@@ -14,10 +56,10 @@
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
+      "--patch_ref",
+      "https://chromium.googlesource.com/infra/goma/client@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
-      "--refs",
-      "refs/heads/master",
+      "client@HEAD",
       "--gerrit_no_reset"
     ],
     "env": {
@@ -36,7 +78,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"client\": \"8b3cd40a25a512033cc8c0797e41de9ecfc2432c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"client\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"client\": {@@@",
@@ -92,7 +134,7 @@
       "--root=[START_DIR]/client",
       "gen",
       "[START_DIR]/client/out/Release",
-      "--args=is_debug=false cpu_arch=\"x64\" enable_revision_check=true use_link_time_optimization=true"
+      "--args=is_debug=false cpu_arch=\"x64\" enable_revision_check=true dcheck_always_on=true use_link_time_optimization=false"
     ],
     "name": "gn"
   },
@@ -159,30 +201,6 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "pkg-register",
-      "[TMP_BASE]/package.cipd",
-      "-ref",
-      "latest",
-      "-tag",
-      "git_revision:8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "register infra/goma/client/${platform}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@infra/goma/client/resolved-platform@https://chrome-infra-packages.appspot.com/p/infra/goma/client/resolved-platform/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {
