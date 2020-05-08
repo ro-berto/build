@@ -9,4 +9,9 @@ package recipes.build.chromium_speed_tester;
 message InputProperties {
   // The group name when uploading the perf result to the perf dashboard.
   string perf_dashboard_machine_group = 1;
+
+  // Hash values and commit number used as metadata to upload perf data.
+  string got_revision_cp = 2;
+  string got_v8_revision = 3;
+  string got_webrtc_revision = 4;
 }

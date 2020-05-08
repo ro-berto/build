@@ -11,12 +11,6 @@ message InputProperties {
   // task info.
   string tasks_groups = 1;
 
-  // the builder name from the tester
-  string tester_builder_name = 2;
-
-  // the build number of the tester build
-  int32 tester_build_number = 3;
-
-  // the perf dashboard machine group used when uploading data to dashboard.
-  string tester_perf_dashboard_machine_group = 4;
+  // The build properties of the tester which triggers the current processor.
+  string tester_properties = 2;
 }

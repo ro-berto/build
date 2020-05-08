@@ -17,28 +17,6 @@ from PB.recipes.build.chromium_speed_tester import InputProperties
 
 PROPERTIES = InputProperties
 
-
-def _debug_lines(bot, tests, task_groups):
-  debug_lines = []
-  debug_lines.append('bot.builder_id: %s' % bot.builder_id)
-  debug_lines += ['test name: %s' % t.name for t in tests]
-  debug_lines += [' == task IDs ==']
-  debug_lines += [
-      'group: %s <br/> tasks: %s' % (k, v) for k, v in task_groups.iteritems()
-  ]
-  debug_lines += [' == building prop ==']
-  debug_lines += [
-      'test: %s <br/> prop: %s' %
-      (t.name, t.get_task(NO_SUFFIX).build_properties) for t in tests
-  ]
-  debug_lines += [' == task output dir ==']
-  debug_lines += [
-      'test: %s <br/> dir: %s' % (t.name, t.get_task(NO_SUFFIX).task_output_dir)
-      for t in tests
-  ]
-  return debug_lines
-
-
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     bot = api.chromium_tests.lookup_bot_metadata(builders=None)
@@ -53,25 +31,30 @@ def RunSteps(api, properties):
     api.chromium_tests.lookup_builder_gn_args(bot)
     tests = build_config.tests_on(bot.builder_id)
     test_failure_summary = api.chromium_tests.run_tests(bot, tests)
+
     task_groups = {
-        t.get_task(NO_SUFFIX).request.name: {
-            'task_ids': t.get_task(NO_SUFFIX).collect_cmd_input(),
-            'building_prop': t.get_task(NO_SUFFIX).build_properties,
-            'task_output_dir': t.get_task(NO_SUFFIX).task_output_dir
-        } for t in tests
+        t.get_task(NO_SUFFIX).request.name:
+        t.get_task(NO_SUFFIX).collect_cmd_input() for t in tests
+    }
+    tester_properties = {
+        'builder_name':
+            api.buildbucket.builder_name,
+        'build_number':
+            api.buildbucket.build.number,
+        'perf_dashboard_machine_group':
+            properties.perf_dashboard_machine_group,
+        'got_revision_cp':
+            properties.got_revision_cp,
+        'got_v8_revision':
+            properties.got_v8_revision,
+        'got_webrtc_revision':
+            properties.got_webrtc_revision
     }
     additional_trigger_properties = {
-        'tasks_groups':
-            api.json.dumps(task_groups),
-        'tester_builder_name':
-            api.buildbucket.builder_name,
-        'tester_build_number':
-            api.buildbucket.build.number,
-        'tester_perf_dashboard_machine_group':
-            properties.perf_dashboard_machine_group
+        'tasks_groups': api.json.dumps(task_groups),
+        'tester_properties': api.json.dumps(tester_properties)
     }
-    api.python.succeeding_step(
-        'Debug info', '<br/>'.join(_debug_lines(bot, tests, task_groups)))
+
     api.chromium_tests.trigger_child_builds(
         bot.builder_id,
         update_step,
