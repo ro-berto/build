@@ -37,18 +37,18 @@ def RunSteps(api, properties):
         t.get_task(NO_SUFFIX).collect_cmd_input() for t in tests
     }
     tester_properties = {
-        'builder_name':
+        'buildername':
             api.buildbucket.builder_name,
-        'build_number':
+        'buildnumber':
             api.buildbucket.build.number,
         'perf_dashboard_machine_group':
             properties.perf_dashboard_machine_group,
         'got_revision_cp':
-            properties.got_revision_cp,
+            properties.parent_got_revision_cp,
         'got_v8_revision':
-            properties.got_v8_revision,
+            properties.parent_got_v8_revision,
         'got_webrtc_revision':
-            properties.got_webrtc_revision
+            properties.parent_got_webrtc_revision
     }
     additional_trigger_properties = {
         'tasks_groups': api.json.dumps(task_groups),
