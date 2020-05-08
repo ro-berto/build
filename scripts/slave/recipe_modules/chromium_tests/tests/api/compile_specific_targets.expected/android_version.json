@@ -397,7 +397,7 @@
       "[GOMA_CACHE]/client",
       "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2",
-      "--quiet"
+      "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

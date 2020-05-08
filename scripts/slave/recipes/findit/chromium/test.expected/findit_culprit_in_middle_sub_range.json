@@ -793,7 +793,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--quiet"
+      "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1920,7 +1920,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--quiet"
+      "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -3005,7 +3005,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--quiet"
+      "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -4093,7 +4093,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--quiet"
+      "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -364,7 +364,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                builder_id=None,
                                mb_phase=None,
                                mb_config_path=None,
-                               mb_recursive_lookup=False,
+                               mb_recursive_lookup=True,
                                override_bot_type=None):
     """Runs compile and related steps for given builder.
 

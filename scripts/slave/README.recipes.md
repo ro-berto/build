@@ -1504,7 +1504,7 @@ to clusterfuzz.
 
 &emsp; **@property**<br>&mdash; **def [builders](/scripts/slave/recipe_modules/chromium_tests/api.py#109)(self):**
 
-&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#358)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, override_bot_type=None):**
+&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#358)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=True, override_bot_type=None):**
 
 Runs compile and related steps for given builder.
 
