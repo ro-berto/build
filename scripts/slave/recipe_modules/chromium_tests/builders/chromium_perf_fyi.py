@@ -154,3 +154,9 @@ _AddIsolatedTestSpec(
     'linux',
     parent_buildername='linux-perf-fyi',
     parent_mastername='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
+    'android-pixel2-processor-perf-fyi',
+    'linux',
+    parent_buildername='android-pixel2-perf-fyi',
+    parent_mastername='chromium.perf.fyi')
