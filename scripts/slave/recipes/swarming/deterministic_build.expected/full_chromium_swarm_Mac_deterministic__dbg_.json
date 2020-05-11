@@ -515,8 +515,7 @@
       "-C",
       "[CACHE]/builder/src/out/Release",
       "-j",
-      "80",
-      "all"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -535,7 +534,6 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "all",
       "-d",
       "explain",
       "-n"
@@ -652,7 +650,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -943,8 +941,7 @@
       "-C",
       "[CACHE]/builder/src/out/Release",
       "-j",
-      "80",
-      "all"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -963,7 +960,6 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "all",
       "-d",
       "explain",
       "-n"
@@ -1080,7 +1076,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

@@ -536,7 +536,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return a compile.py invocation.
 
     Args:
-      targets: List of build targets to compile.
+      targets: List of build targets to compile. If empty, compile targets will
+        be taken from chromium.c.compile_py.default_targets. If 'all' is one of
+        the targets, no targets will appear on the ninja command line, which
+        invokes ninja's behavior to build all targets that do not appear as an
+        input to another target.
       name: Name of compile step.
       out_dir: Output directory for the compile.
       target: Custom config name to use in the output directory (defaults to
@@ -641,8 +645,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.m.goma.debug:
         ninja_env['GOMA_DUMP'] = '1'
 
-    if targets is not None:
-      # Add build targets to command ('All', 'chrome' etc).
+    if targets is not None and 'all' not in targets:
       command += targets
 
     assert 'env' not in kwargs

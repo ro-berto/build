@@ -163,8 +163,7 @@
       "-d",
       "stats",
       "-j",
-      "80",
-      "all"
+      "80"
     ],
     "cwd": "None",
     "env": {
@@ -184,7 +183,6 @@
       "stats",
       "-j",
       "80",
-      "all",
       "-d",
       "explain",
       "-n"
@@ -300,7 +298,7 @@
       "--ninja-log-outdir",
       "None/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"-d\", \"stats\", \"-j\", 80, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"-d\", \"stats\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

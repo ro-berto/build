@@ -40,7 +40,9 @@ def RunSteps(api, use_goma):
 
   api.chromium.c.compile_py.goma_max_active_fail_fallback_tasks = 1
   api.chromium.ensure_goma()
-  return api.chromium.compile(use_goma_module=use_goma)
+  return api.chromium.compile(
+      targets=api.properties.get('targets'), use_goma_module=use_goma)
+
 
 def GenTests(api):
   yield api.test(
@@ -50,6 +52,18 @@ def GenTests(api):
       api.properties(mastername='test_mastername'),
       api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
                                                 'process_crashreports.py')),
+  )
+
+  yield api.test(
+      'targets_include_all',
+      api.properties(targets=['foo', 'all', 'bar']),
+      api.post_check(lambda check, steps: \
+                     check('foo' not in steps['compile'].cmd)),
+      api.post_check(lambda check, steps: \
+                     check('all' not in steps['compile'].cmd)),
+      api.post_check(lambda check, steps: \
+                     check('bar' not in steps['compile'].cmd)),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

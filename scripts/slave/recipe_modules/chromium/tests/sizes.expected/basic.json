@@ -40,8 +40,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "None/out/Release",
-      "all"
+      "None/out/Release"
     ],
     "cwd": "None",
     "env": {
@@ -56,7 +55,6 @@
       "dupbuild=err",
       "-C",
       "None/out/Release",
-      "all",
       "-d",
       "explain",
       "-n"
@@ -82,7 +80,7 @@
       "--ninja-log-outdir",
       "None/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
