@@ -9,27 +9,28 @@ from recipe_engine import post_process
 import textwrap
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/git',
-  'depot_tools/presubmit',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/cq',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'depot_tools/tryserver',
-  # The following two recipe modules are not used here,
-  # but apparently set spooky gclient configs,
-  # which get used by this recipe through "api.gclient.set_config".
-  'v8',
-  'webrtc',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/git',
+    'depot_tools/presubmit',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/cq',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'depot_tools/tryserver',
+    # The following two recipe modules are not used here,
+    # but apparently set spooky gclient configs,
+    # which get used by this recipe through "api.gclient.set_config".
+    'v8',
+    'webrtc',
 ]
+
 
 def _limitSize(message_list, char_limit=450):
   """Returns a list of strings within a certain character length.
@@ -45,17 +46,13 @@ def _limitSize(message_list, char_limit=450):
     char_count += len(message)
     if char_count > char_limit:
       total_errors = len(message_list)
-      oversized_msg = ('**Error size > %d chars, '
-      'there are %d more error(s) (%d total)**') % (
-        char_limit, total_errors - index, total_errors
-      )
+      oversized_msg = (
+          '**Error size > %d chars, there are %d more error(s) (%d total)**'
+      ) % (char_limit, total_errors - index, total_errors)
       if index == 0:
         # Show at minimum part of the first error message
         first_message = message_list[index].replace('\n\n', '\n')
-        return ['\n\n'.join(
-          _limitSize(first_message.splitlines())
-          )
-        ]
+        return ['\n\n'.join(_limitSize(first_message.splitlines()))]
       return message_list[:index] + [oversized_msg, hint]
   return message_list
 
@@ -100,31 +97,26 @@ def _createSummaryMarkdown(step_json):
   warning_count = len(step_json['warnings'])
   notif_count = len(step_json['notifications'])
   description = (
-    'There are %d error(s), %d warning(s),'
-    ' and %d notifications(s). Here are the errors:') % (
-      len(errors), warning_count, notif_count
-  )
+      'There are %d error(s), %d warning(s), and %d notifications(s).'
+      ' Here are the errors:') % (len(errors), warning_count, notif_count)
   error_messages = []
 
   for error in errors:
     # markdown represents new lines with 2 spaces
     # replacing the \n with \n\n because \n gets replaced with an empty space.
     # This way it will work on both markdown and plain text.
-    error_messages.append(
-      '**ERROR**\n\n%s\n\n%s' % (
-      error['message'].replace('\n', '\n\n'),
-      error['long_text'].replace('\n', '\n\n'))
-    )
+    error_messages.append('**ERROR**\n\n%s\n\n%s' % (
+        error['message'].replace('\n', '\n\n'),
+        error['long_text'].replace('\n', '\n\n'),
+    ))
 
   error_messages = _limitSize(error_messages)
   # Description is not counted in the total message size.
   # It is inserted afterward to ensure it is the first message seen.
   error_messages.insert(0, description)
   if warning_count or notif_count:
-    error_messages.append(
-      ('To see notifications and warnings,'
-      ' look at the stdout of the presubmit step.')
-    )
+    error_messages.append('To see notifications and warnings,'
+                          ' look at the stdout of the presubmit step.')
   return '\n\n'.join(error_messages)
 
 
@@ -139,8 +131,8 @@ def _RunStepsInternal(api):
   else:
     gclient_config = api.gclient.make_config()
     solution = gclient_config.solutions.add()
-    solution.url = api.properties.get(
-        'repository_url', api.tryserver.gerrit_change_repo_url)
+    solution.url = api.properties.get('repository_url',
+                                      api.tryserver.gerrit_change_repo_url)
     # Solution name shouldn't matter for most users, particularly if there is no
     # DEPS file, but if someone wants to override it, fine.
     solution.name = api.properties.get('solution_name', 's')
@@ -153,40 +145,55 @@ def _RunStepsInternal(api):
   got_revision_properties = api.bot_update.get_project_revision_properties(
       # Replace path.sep with '/', since most recipes are written assuming '/'
       # as the delimiter. This breaks on windows otherwise.
-      relative_root.replace(api.path.sep, '/'), gclient_config or api.gclient.c)
+      relative_root.replace(api.path.sep, '/'),
+      gclient_config or api.gclient.c)
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_properties[0])
 
   abs_root = api.context.cwd.join(relative_root)
   with api.context(cwd=abs_root):
     # TODO(hinoka): Extract email/name from issue?
-    api.git('-c', 'user.email=commit-bot@chromium.org',
-            '-c', 'user.name=The Commit Bot',
-            'commit', '-a', '-m', 'Committed patch',
-            name='commit-git-patch', infra_step=False)
+    api.git(
+        '-c',
+        'user.email=commit-bot@chromium.org',
+        '-c',
+        'user.name=The Commit Bot',
+        'commit',
+        '-a',
+        '-m',
+        'Committed patch',
+        name='commit-git-patch',
+        infra_step=False)
 
   if api.properties.get('runhooks'):
     with api.context(cwd=api.path['checkout']):
       api.gclient.runhooks()
 
   presubmit_args = [
-    '--issue', api.tryserver.gerrit_change.change,
-    '--patchset', api.tryserver.gerrit_change.patchset,
-    '--gerrit_url', 'https://%s' % api.tryserver.gerrit_change.host,
-    '--gerrit_fetch',
+      '--issue',
+      api.tryserver.gerrit_change.change,
+      '--patchset',
+      api.tryserver.gerrit_change.patchset,
+      '--gerrit_url',
+      'https://%s' % api.tryserver.gerrit_change.host,
+      '--gerrit_fetch',
   ]
   if api.cq.state == api.cq.DRY:
     presubmit_args.append('--dry_run')
 
   presubmit_args.extend([
-    '--root', abs_root,
-    '--commit',
-    '--verbose', '--verbose',
-    '--skip_canned', 'CheckTreeIsOpen',
-    '--skip_canned', 'CheckBuildbotPendingBuilds',
-    '--upstream', upstream,  # '' if not in bot_update mode.
+      '--root',
+      abs_root,
+      '--commit',
+      '--verbose',
+      '--verbose',
+      '--skip_canned',
+      'CheckTreeIsOpen',
+      '--skip_canned',
+      'CheckBuildbotPendingBuilds',
+      '--upstream',
+      upstream,  # '' if not in bot_update mode.
   ])
-
 
   env = {}
   if repo_name in ['build', 'build_internal', 'build_internal_scripts_slave']:
@@ -205,8 +212,8 @@ def _RunStepsInternal(api):
     # minutes.
     timeout = 900 if repo_name == 'luci_py' else 480
     # ok_ret='any' causes all exceptions to be ignored in this step
-    step_json = api.presubmit(*presubmit_args,
-      venv=True, timeout=timeout, ok_ret='any')
+    step_json = api.presubmit(
+        *presubmit_args, venv=True, timeout=timeout, ok_ret='any')
     # Set recipe result values
     if step_json:
       raw_result.summary_markdown = _createSummaryMarkdown(step_json)
@@ -220,8 +227,8 @@ def _RunStepsInternal(api):
     if api.step.active_result.exc_result.had_timeout:
       # TODO(iannucci): Shouldn't we also mark failure on timeouts?
       raw_result.status = common_pb2.FAILURE
-      raw_result.summary_markdown += ('\n\nTimeout occurred '
-        'during presubmit step.')
+      raw_result.summary_markdown += (
+          '\n\nTimeout occurred during presubmit step.')
     elif retcode == 1:
       raw_result.status = common_pb2.FAILURE
       api.tryserver.set_test_failure_tryjob_result()
@@ -232,13 +239,13 @@ def _RunStepsInternal(api):
     if raw_result.summary_markdown == '':
       raw_result.status = common_pb2.INFRA_FAILURE
       raw_result.summary_markdown = (
-        'Something unexpected occurred'
-        ' while running presubmit checks.'
-        ' Please [file a bug](https://bugs.chromium.org'
-        '/p/chromium/issues/entry?components='
-        'Infra%3EClient%3EChrome&status=Untriaged)'
-      )
+          'Something unexpected occurred while running presubmit checks.'
+          ' Please [file a bug]('
+          'https://bugs.chromium.org/p/chromium/issues/entry'
+          '?components=Infra%3EClient%3EChrome'
+          '&status=Untriaged)')
   return raw_result
+
 
 def RunSteps(api):
   try:
@@ -431,18 +438,20 @@ def GenTests(api):
       api.step_data(
           'presubmit',
           api.json.output({
-              'errors': [{
-                  'message': 'Missing LGTM',
-                  'long_text': 'Here are some suggested OWNERS: fake@',
-                  'items': [],
-                  'fatal': True
-              },
-                         {
-                             'message': 'Syntax error in fake.py',
-                             'long_text': 'Expected "," after item in list',
-                             'items': [],
-                             'fatal': True
-                         }],
+              'errors': [
+                  {
+                      'message': 'Missing LGTM',
+                      'long_text': 'Here are some suggested OWNERS: fake@',
+                      'items': [],
+                      'fatal': True
+                  },
+                  {
+                      'message': 'Syntax error in fake.py',
+                      'long_text': 'Expected "," after item in list',
+                      'items': [],
+                      'fatal': True
+                  },
+              ],
               'notifications': [{
                   'message': 'If there is a bug associated please add it.',
                   'long_text': '',
@@ -455,33 +464,33 @@ def GenTests(api):
                   'items': [],
                   'fatal': False
               }]
-          },
-                          retcode=1)),
+          }),
+          retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(
           post_process.ResultReason,
           textwrap.dedent('''
-        There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
+              There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
 
-        **ERROR**
+              **ERROR**
 
-        Missing LGTM
+              Missing LGTM
 
-        Here are some suggested OWNERS: fake@
+              Here are some suggested OWNERS: fake@
 
-        **ERROR**
+              **ERROR**
 
-        Syntax error in fake.py
+              Syntax error in fake.py
 
-        Expected "," after item in list
+              Expected "," after item in list
 
-        To see notifications and warnings, look at the stdout of the presubmit step.
-      ''').strip()),
+              To see notifications and warnings, look at the stdout of the presubmit step.
+              ''').strip()),
       api.post_process(post_process.DropExpectation),
   )
 
   long_message = ('Here are some suggested OWNERS:' +
-    '\nreallyLongFakeAccountNameEmail@chromium.org' * 10)
+                  '\nreallyLongFakeAccountNameEmail@chromium.org' * 10)
   yield api.test(
       'presubmit-failure-long-message',
       api.properties.tryserver(
@@ -500,42 +509,42 @@ def GenTests(api):
               }],
               'notifications': [],
               'warnings': []
-          },
-                          retcode=1)),
+          }),
+          retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(
           post_process.ResultReason,
           textwrap.dedent('''
-        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+              There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
-        **ERROR**
+              **ERROR**
 
-        Missing LGTM
+              Missing LGTM
 
-        Here are some suggested OWNERS:
+              Here are some suggested OWNERS:
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium.org
 
-        **Error size > 450 chars, there are 1 more error(s) (13 total)**
+              **Error size > 450 chars, there are 1 more error(s) (13 total)**
 
-        **The complete output can be found at the bottom of the presubmit stdout.**
-      ''').strip()),
+              **The complete output can be found at the bottom of the presubmit stdout.**
+              ''').strip()),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -557,29 +566,27 @@ def GenTests(api):
               }],
               'notifications': [],
               'warnings': []
-          },
-                          retcode=2)),
+          }),
+          retcode=2),
       api.post_process(post_process.StatusException),
       api.post_process(
           post_process.ResultReason,
           textwrap.dedent('''
-        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+              There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
-        **ERROR**
+              **ERROR**
 
-        Infra Failure
+              Infra Failure
 
-      ''').lstrip()),
+              ''').lstrip()),
       api.post_process(post_process.DropExpectation),
   )
 
-  bug_msg = (
-    'Something unexpected occurred'
-    ' while running presubmit checks.'
-    ' Please [file a bug](https://bugs.chromium.org'
-    '/p/chromium/issues/entry?components='
-    'Infra%3EClient%3EChrome&status=Untriaged)'
-  )
+  bug_msg = ('Something unexpected occurred while running presubmit checks.'
+             ' Please [file a bug]('
+             'https://bugs.chromium.org/p/chromium/issues/entry'
+             '?components=Infra%3EClient%3EChrome'
+             '&status=Untriaged)')
   yield api.test(
       'presubmit-failure-no-json',
       api.properties.tryserver(
