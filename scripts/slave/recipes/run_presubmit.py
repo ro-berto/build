@@ -6,6 +6,7 @@ from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from recipe_engine import post_process
+import collections
 import textwrap
 
 DEPS = [
@@ -57,6 +58,26 @@ def _limitSize(message_list, char_limit=450):
   return message_list
 
 
+# Escape characters that markdown inteprets as some kind of formatting
+# Make sure backslash is escaped first so that backslashes added to escape other
+# characters are not themselves escaped
+_MARK_DOWN_TRANSLATION_TABLE = collections.OrderedDict([
+    (c, '\\' + c) for c in '\\`*_{}[]()#+-.!'
+])
+# markdown represents line breaks 2 spaces
+# replacing the \n with \n\n because \n gets replaced with an empty space.
+# This way it will work on both markdown and plain text.
+_MARK_DOWN_TRANSLATION_TABLE['\n'] = '\n\n'
+
+
+def _translateTextToMarkdown(s):
+  # TODO(gbeaty) When we're fully on python3, use s.translate to do all the
+  # replacements in one pass
+  for old, new in _MARK_DOWN_TRANSLATION_TABLE.items():
+    s = s.replace(old, new)
+  return s
+
+
 def _createSummaryMarkdown(step_json):
   """Returns a string with data on errors, warnings, and notifications.
 
@@ -94,27 +115,33 @@ def _createSummaryMarkdown(step_json):
       }
   """
   errors = step_json['errors']
-  warning_count = len(step_json['warnings'])
-  notif_count = len(step_json['notifications'])
-  description = (
-      'There are %d error(s), %d warning(s), and %d notifications(s).'
-      ' Here are the errors:') % (len(errors), warning_count, notif_count)
+  warnings = step_json['warnings']
+  notifications = step_json['notifications']
+
+  if not (errors or warnings or notifications):
+    return ''
+
+  def maybePlural(count, noun):
+    return ('1 %s' % noun) if count == 1 else ('%d %ss' % (count, noun))
+
+  description = 'There are %s, %s, and %s.\n\nHere are the errors:' % (
+      maybePlural(len(errors), 'error'),
+      maybePlural(len(warnings), 'warning'),
+      maybePlural(len(notifications), 'notification'),
+  )
   error_messages = []
 
   for error in errors:
-    # markdown represents new lines with 2 spaces
-    # replacing the \n with \n\n because \n gets replaced with an empty space.
-    # This way it will work on both markdown and plain text.
     error_messages.append('**ERROR**\n\n%s\n\n%s' % (
-        error['message'].replace('\n', '\n\n'),
-        error['long_text'].replace('\n', '\n\n'),
+        _translateTextToMarkdown(error['message']),
+        _translateTextToMarkdown(error['long_text']),
     ))
 
   error_messages = _limitSize(error_messages)
   # Description is not counted in the total message size.
   # It is inserted afterward to ensure it is the first message seen.
   error_messages.insert(0, description)
-  if warning_count or notif_count:
+  if warnings or notifications:
     error_messages.append('To see notifications and warnings,'
                           ' look at the stdout of the presubmit step.')
   return '\n\n'.join(error_messages)
@@ -227,8 +254,11 @@ def _RunStepsInternal(api):
     if api.step.active_result.exc_result.had_timeout:
       # TODO(iannucci): Shouldn't we also mark failure on timeouts?
       raw_result.status = common_pb2.FAILURE
-      raw_result.summary_markdown += (
-          '\n\nTimeout occurred during presubmit step.')
+      summary = []
+      if raw_result.summary_markdown:
+        summary.append(raw_result.summary_markdown)
+      summary.append('Timeout occurred during presubmit step.')
+      raw_result.summary_markdown = '\n\n'.join(summary)
     elif retcode == 1:
       raw_result.status = common_pb2.FAILURE
       api.tryserver.set_test_failure_tryjob_result()
@@ -334,11 +364,47 @@ def GenTests(api):
           }),
           times_out_after=60 * 20),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.ResultReason,
+                       'Timeout occurred during presubmit step.'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'chromium_timeout_with_error',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [{
+                  'message': 'Missing LGTM',
+                  'long_text': 'Here are some suggested OWNERS: fake@',
+                  'items': [],
+                  'fatal': True
+              }],
+              'notifications': [],
+              'warnings': []
+          }),
+          times_out_after=60 * 20),
+      api.post_process(post_process.StatusFailure),
       api.post_process(
           post_process.ResultReason,
-          ('There are 0 error(s), 0 warning(s), and 0 notifications(s).'
-           ' Here are the errors:'
-           '\n\nTimeout occurred during presubmit step.')),
+          textwrap.dedent('''
+              There are 1 error, 0 warnings, and 0 notifications.
+
+              Here are the errors:
+
+              **ERROR**
+
+              Missing LGTM
+
+              Here are some suggested OWNERS: fake@
+
+              Timeout occurred during presubmit step.
+              ''').strip()),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -469,8 +535,10 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(
           post_process.ResultReason,
-          textwrap.dedent('''
-              There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
+          textwrap.dedent(r'''
+              There are 2 errors, 1 warning, and 1 notification.
+
+              Here are the errors:
 
               **ERROR**
 
@@ -480,7 +548,7 @@ def GenTests(api):
 
               **ERROR**
 
-              Syntax error in fake.py
+              Syntax error in fake\.py
 
               Expected "," after item in list
 
@@ -514,8 +582,10 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(
           post_process.ResultReason,
-          textwrap.dedent('''
-              There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+          textwrap.dedent(r'''
+              There are 1 error, 0 warnings, and 0 notifications.
+
+              Here are the errors:
 
               **ERROR**
 
@@ -523,23 +593,23 @@ def GenTests(api):
 
               Here are some suggested OWNERS:
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
-              reallyLongFakeAccountNameEmail@chromium.org
+              reallyLongFakeAccountNameEmail@chromium\.org
 
               **Error size > 450 chars, there are 1 more error(s) (13 total)**
 
@@ -572,7 +642,9 @@ def GenTests(api):
       api.post_process(
           post_process.ResultReason,
           textwrap.dedent('''
-              There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+              There are 1 error, 0 warnings, and 0 notifications.
+
+              Here are the errors:
 
               **ERROR**
 
@@ -610,6 +682,44 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output(None, retcode=2)),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.ResultReason, bug_msg),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'presubmit-failure-message-with-underscores',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [{
+                  'message': 'message_with_underscores',
+                  'long_text': 'long_text_with_underscores',
+                  'items': [],
+                  'fatal': False,
+              },],
+              'notifications': [],
+              'warnings': [],
+          }),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent(r'''
+              There are 1 error, 0 warnings, and 0 notifications.
+
+              Here are the errors:
+
+              **ERROR**
+
+              message\_with\_underscores
+
+              long\_text\_with\_underscores
+
+              ''').strip()),
       api.post_process(post_process.DropExpectation),
   )
 
