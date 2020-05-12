@@ -637,6 +637,25 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'ios-simulator-multi-window':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+                'mac_toolchain',
+            ],
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            bot_type=bot_spec.BUILDER_TESTER,
+            simulation_platform='mac',
+        ),
     'ios-simulator-cr-recipe':
         bot_spec.BotSpec.create(
             chromium_config='chromium',

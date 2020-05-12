@@ -972,6 +972,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'mastername': 'chromium.mac',
                 'buildername': 'ios-simulator-full-configs',
             }),
+        'ios-simulator-multi-window':
+            simple_bot({
+                'mastername': 'chromium.fyi',
+                'buildername': 'ios-simulator-multi-window',
+            }),
         'ios-simulator-noncq':
             simple_bot({
                 'mastername': 'chromium.mac',
