@@ -24,10 +24,6 @@ SPEC = {
             },
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Android Builder (dbg)':
@@ -44,10 +40,6 @@ SPEC = {
             },
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Android Builder ARM64 (dbg)':
@@ -64,10 +56,6 @@ SPEC = {
             },
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Android Tests (dbg) (L Nexus5)':
@@ -85,10 +73,6 @@ SPEC = {
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Android Builder (dbg)',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='linux',
         ),
@@ -107,10 +91,6 @@ SPEC = {
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Android Builder ARM64 (dbg)',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='linux',
         ),
@@ -162,10 +142,6 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Linux Builder (dbg)':
@@ -179,10 +155,6 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Linux Tester':
@@ -197,10 +169,6 @@ SPEC = {
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Linux Builder',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='linux',
         ),
@@ -220,10 +188,6 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='mac',
         ),
     'WebRTC Chromium FYI Mac Builder (dbg)':
@@ -242,10 +206,6 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='mac',
         ),
     'WebRTC Chromium FYI Mac Tester':
@@ -265,10 +225,6 @@ SPEC = {
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Mac Builder',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='mac',
         ),
@@ -283,10 +239,6 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='win',
         ),
     'WebRTC Chromium FYI Win Builder (dbg)':
@@ -300,10 +252,6 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             simulation_platform='win',
         ),
     'WebRTC Chromium FYI Win10 Tester':
@@ -318,10 +266,6 @@ SPEC = {
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Win Builder',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='win',
         ),
@@ -337,10 +281,6 @@ SPEC = {
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Win Builder',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='win',
         ),
@@ -356,10 +296,6 @@ SPEC = {
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Win Builder',
-            set_component_rev={
-                'name': 'src/third_party/webrtc',
-                'rev_str': '%s'
-            },
             test_results_config='public_server',
             simulation_platform='win',
         ),
