@@ -1372,7 +1372,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -2460,7 +2459,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",

@@ -747,7 +747,6 @@
     ]
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
@@ -878,7 +877,6 @@
     "name": "Upload to test-results [gl_tests on NVIDIA GPU on Mac Retina]"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",

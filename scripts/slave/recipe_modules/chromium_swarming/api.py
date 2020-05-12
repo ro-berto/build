@@ -1412,7 +1412,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         task,
         output_placeholder=output_placeholder,
         gen_step_test_data=gen_default_step_test_data,
-        allow_subannotations=True,
         failure_as_exception=False,
         **kwargs)
 
