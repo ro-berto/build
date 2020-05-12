@@ -198,8 +198,7 @@ class BuildConfig(object):
       compile_targets.update(
           source_side_spec.get('additional_compile_targets', []))
 
-    if self.bot_config.add_tests_as_compile_targets:
-      for t in tests:
-        compile_targets.update(t.compile_targets())
+    for t in tests:
+      compile_targets.update(t.compile_targets())
 
     return sorted(compile_targets)

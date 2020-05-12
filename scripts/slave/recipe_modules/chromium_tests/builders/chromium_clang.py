@@ -35,13 +35,6 @@ def config(name,
           bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, name)
       },
       'simulation_platform': 'linux',
-
-      # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
-      # added to allow the bots to run `ninja` instead of `ninja all`
-      # or `ninja all base_unittests net_unittests...`, but really the
-      # compile() call in the recipe should be smart enough to do this
-      # automatically. This shouldn't be configurable per bot.
-      'add_tests_as_compile_targets': False,
   }
 
   if android_config:
@@ -127,9 +120,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTiOS':
         _chromium_clang_spec(
@@ -183,9 +173,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWinCFI64':
         _chromium_clang_spec(
@@ -203,9 +190,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWinOfficial':
         _chromium_clang_spec(
@@ -235,9 +219,6 @@ SPEC = {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWinThinLTO64':
         _chromium_clang_spec(
@@ -267,9 +248,6 @@ SPEC = {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'CrWinAsan':
         _chromium_clang_spec(
@@ -285,8 +263,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
-            # add_tests_as_compile_targets not needed for the asan bot, it
-            # doesn't build everything.
         ),
     'CrWinAsan(dll)':
         _chromium_clang_spec(
@@ -302,8 +278,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
-            # add_tests_as_compile_targets not needed for the asan bot, it
-            # doesn't build everything.
         ),
     'ToTAndroidASan':
         _chromium_clang_spec(
@@ -324,9 +298,6 @@ SPEC = {
             android_config='clang_asan_tot_release_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTAndroid (dbg)':
         _chromium_clang_spec(
@@ -347,9 +318,6 @@ SPEC = {
             android_config='clang_tot_debug_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTAndroid x64':
         _chromium_clang_spec(
@@ -369,9 +337,6 @@ SPEC = {
             android_config='clang_builder_mb_x64',
             test_results_config='staging_server',
             simulation_platform='linux',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTMac':
         _chromium_clang_spec(
@@ -392,9 +357,6 @@ SPEC = {
             test_specs={
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, 'ToTMac')
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTMacOfficial':
         _chromium_clang_spec(
@@ -426,9 +388,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTMacOfficial')
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTMac (dbg)':
         _chromium_clang_spec(
@@ -450,9 +409,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTMac (dbg)')
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTMacASan':
         _chromium_clang_spec(
@@ -470,9 +426,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin':
         _chromium_clang_spec(
@@ -502,9 +455,6 @@ SPEC = {
                 'pool': 'chrome.tests.template',
                 'os': 'Windows-10',
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin(dbg)':
         _chromium_clang_spec(
@@ -526,9 +476,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTWin(dbg)'),
             ],
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin(dll)':
         _chromium_clang_spec(
@@ -550,9 +497,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTWin(dll)'),
             ],
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin64':
         _chromium_clang_spec(
@@ -582,9 +526,6 @@ SPEC = {
                 'pool': 'chrome.tests.template',
                 'os': 'Windows-10',
             },
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWinASanLibfuzzer':
         _chromium_clang_spec(
@@ -602,9 +543,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
             simulation_platform='win',
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin64(dbg)':
         _chromium_clang_spec(
@@ -626,9 +564,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTWin64(dbg)'),
             ],
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
     'ToTWin64(dll)':
         _chromium_clang_spec(
@@ -650,9 +585,6 @@ SPEC = {
                 bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
                                          'ToTWin64(dll)'),
             ],
-            # Workaround so that recipes doesn't add random build targets to
-            # our compile line. We want to build everything.
-            add_tests_as_compile_targets=False,
         ),
 }
 

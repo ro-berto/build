@@ -64,14 +64,12 @@ def RunSteps(api):
   # Invalid fields for non-builder bot_type
   message = (
       "The following fields are ignored unless 'bot_type' is one of {}: {}"
-      .format(bot_spec.BUILDER_TYPES,
-              ['compile_targets', 'add_tests_as_compile_targets']))
+      .format(bot_spec.BUILDER_TYPES, ['compile_targets']))
   with api.assertions.assertRaises(AssertionError) as caught:
     bot_spec.BotSpec.create(
         bot_type=bot_spec.TESTER,
         parent_buildername='fake-builder',
         compile_targets=['foo', 'bar'],
-        add_tests_as_compile_targets=False,
     )
   api.assertions.assertEqual(caught.exception.message, message)
 

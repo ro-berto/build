@@ -94,8 +94,7 @@ class BotSpec(object):
               DUMMY_TESTER, invalid_attrs))
 
     elif bot_type not in BUILDER_TYPES:
-      invalid_attrs = get_filtered_attrs('compile_targets',
-                                         'add_tests_as_compile_targets')
+      invalid_attrs = get_filtered_attrs('compile_targets')
       assert not invalid_attrs, (
           "The following fields are ignored unless 'bot_type' is one of {}: {}"
           .format(BUILDER_TYPES, invalid_attrs))
@@ -210,9 +209,6 @@ class BotSpec(object):
 
   # The names of targets to compile
   compile_targets = sequence_attrib(str, default=())
-  # A bool controlling whether tests listed in the specification will be added
-  # to the compile targets to build
-  add_tests_as_compile_targets = attrib(bool, default=True)
 
   # Name of a Google Storage bucket to use when using the legacy package
   # transfer where build outputs are uploaded to Google Storage and then
