@@ -302,6 +302,30 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "get version",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@VERSION@MAJOR=51@@@",
+      "@@@STEP_LOG_LINE@VERSION@MINOR=0@@@",
+      "@@@STEP_LOG_LINE@VERSION@BUILD=2704@@@",
+      "@@@STEP_LOG_LINE@VERSION@PATCH=0@@@",
+      "@@@STEP_LOG_END@VERSION@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
@@ -669,27 +693,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@VERSION@MAJOR=51@@@",
-      "@@@STEP_LOG_LINE@VERSION@MINOR=0@@@",
-      "@@@STEP_LOG_LINE@VERSION@BUILD=2704@@@",
-      "@@@STEP_LOG_LINE@VERSION@PATCH=0@@@",
-      "@@@STEP_LOG_END@VERSION@@@"
     ]
   },
   {
