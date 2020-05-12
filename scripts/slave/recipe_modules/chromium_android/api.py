@@ -183,12 +183,9 @@ class AndroidApi(recipe_api.RecipeApi):
       repos.extend(additional_repos)
     if self.c.REPO_NAME not in repos and self.c.REPO_NAME:
       repos.append(self.c.REPO_NAME)
-    # TODO(sivachandra): Disable subannottations after cleaning up
-    # tree_truth.sh.
     self.m.step('tree truth steps',
                 [self.m.path['checkout'].join('build', 'tree_truth.sh'),
-                self.m.path['checkout']] + repos,
-                allow_subannotations=False)
+                self.m.path['checkout']] + repos)
 
   def git_number(self, commitrefs=None, step_test_data=None, **kwargs):
     if not step_test_data:
