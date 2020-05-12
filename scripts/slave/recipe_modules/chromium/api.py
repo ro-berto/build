@@ -932,7 +932,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return self.m.build.python(
         'sizes', self.repo_resource('scripts', 'slave', 'runtest.py'),
-        full_args, allow_subannotations=True, **kwargs)
+        full_args, **kwargs)
 
   @_with_chromium_layout
   def get_clang_version(self, **kwargs):
