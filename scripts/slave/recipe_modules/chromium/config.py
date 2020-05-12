@@ -242,12 +242,11 @@ def gn(c):
 @config_ctx()
 def mb(c):
   c.project_generator.tool = 'mb'
-  c.project_generator.use_luci_auth = True
 
 
 @config_ctx()
 def mb_luci_auth(c):
-  pass  # TODO(crbug.com/1060280): Delete this.
+  c.project_generator.use_luci_auth = True
 
 
 @config_ctx()
