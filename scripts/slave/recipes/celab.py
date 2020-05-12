@@ -209,7 +209,6 @@ def _CheckoutChromiumRepo(api):
     bot_config = {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
-        'gclient_apply_config': ['checkout_pgo_profiles'],
         'chromium_apply_config': ['mb'],
         'chromium_config_kwargs': {
             'BUILD_CONFIG': 'Release',
@@ -218,7 +217,10 @@ def _CheckoutChromiumRepo(api):
     }
 
     if project == 'chrome':
-      bot_config['gclient_apply_config'] += ['chrome_internal']
+      bot_config['gclient_apply_config'] = [
+          'chrome_internal',
+          'checkout_pgo_profiles',
+      ]
 
     bot_config = bot_spec.BotSpec.create(**bot_config)
 
