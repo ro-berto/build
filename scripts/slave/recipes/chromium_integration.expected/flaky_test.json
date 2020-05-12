@@ -292,7 +292,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Builder\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"Linux Builder\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -889,7 +889,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:test_bot",
+      "slavename:fake-bot-id",
       "--tag",
       "spec_name:project.ci:Linux Builder",
       "--tag",
@@ -1205,7 +1205,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:test_bot",
+      "slavename:fake-bot-id",
       "--tag",
       "spec_name:project.ci:Linux Builder",
       "--tag",

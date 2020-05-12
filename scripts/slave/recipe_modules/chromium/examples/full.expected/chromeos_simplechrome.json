@@ -373,7 +373,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"chromeos-amd64-generic-rel\", \"buildnumber\": 77457, \"mastername\": \"chromium.chromiumos\", \"slavename\": \"build1-a1\", \"target_platform\": \"chromeos\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"chromeos-amd64-generic-rel\", \"buildnumber\": 77457, \"mastername\": \"chromium.chromiumos\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"chromeos\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

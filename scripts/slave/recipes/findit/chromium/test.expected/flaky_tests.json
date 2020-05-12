@@ -273,7 +273,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -591,7 +591,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"win\"}"
     ],
     "name": "test r1.get compile targets for scripts",
     "~followup_annotations": [
@@ -1186,7 +1186,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:build1-a1",
+      "slavename:fake-bot-id",
       "--tag",
       "spec_name:project.ci:findit_variable",
       "--tag",
@@ -1708,7 +1708,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"win\"}"
     ],
     "name": "test r0.get compile targets for scripts",
     "~followup_annotations": [
@@ -2278,7 +2278,7 @@
       "--tag",
       "purpose:post-commit",
       "--tag",
-      "slavename:build1-a1",
+      "slavename:fake-bot-id",
       "--tag",
       "spec_name:project.ci:findit_variable",
       "--tag",

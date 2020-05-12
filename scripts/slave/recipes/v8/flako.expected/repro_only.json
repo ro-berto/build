@@ -44,6 +44,8 @@
       "--tag",
       "purpose:v8-flake-bisect",
       "--tag",
+      "slavename:fake-bot-id",
+      "--tag",
       "stepname:check mjsunit/foobar at #0 - shard 0",
       "--user",
       "v8-flake-bisect",

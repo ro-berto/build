@@ -207,7 +207,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"TestSlave\", \"buildername\": \"linux-rel-swarming\", \"buildnumber\": 123, \"mastername\": \"chromium.dev\", \"slavename\": \"TestSlave\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"linux-rel-swarming\", \"buildnumber\": 123, \"mastername\": \"chromium.dev\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -851,7 +851,7 @@
       "--tag",
       "purpose:staging",
       "--tag",
-      "slavename:TestSlave",
+      "slavename:fake-bot-id",
       "--tag",
       "stepname:browser_tests on Ubuntu",
       "--tag",
@@ -970,7 +970,7 @@
       "--tag",
       "purpose:staging",
       "--tag",
-      "slavename:TestSlave",
+      "slavename:fake-bot-id",
       "--tag",
       "stepname:browser_tests on Ubuntu",
       "--tag",

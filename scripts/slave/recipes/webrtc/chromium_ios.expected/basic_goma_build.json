@@ -959,7 +959,7 @@
       "--tag",
       "platform:device",
       "--tag",
-      "slavename:fake-vm",
+      "slavename:fake-bot-id",
       "--tag",
       "stepname:fake test (iPhone X iOS 8.0) (with patch) on iOS-8.0",
       "--tag",

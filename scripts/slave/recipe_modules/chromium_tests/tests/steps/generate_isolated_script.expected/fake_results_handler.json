@@ -220,6 +220,8 @@
       "--tag",
       "ninja_target:",
       "--tag",
+      "slavename:fake-bot-id",
+      "--tag",
       "stepname:base_unittests",
       "--tag",
       "test_id_prefix:",

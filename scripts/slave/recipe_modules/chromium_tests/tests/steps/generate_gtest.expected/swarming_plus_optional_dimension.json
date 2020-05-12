@@ -234,7 +234,7 @@
       "--tag",
       "ninja_target:",
       "--tag",
-      "slavename:test_bot",
+      "slavename:fake-bot-id",
       "--tag",
       "spec_name:chromium.ci:test_buildername",
       "--tag",

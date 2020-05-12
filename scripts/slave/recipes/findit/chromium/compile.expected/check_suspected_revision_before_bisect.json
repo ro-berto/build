@@ -259,7 +259,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -562,7 +562,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
     ],
     "name": "test r4.get compile targets for scripts",
     "~followup_annotations": [
@@ -1393,7 +1393,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
     ],
     "name": "test r5.get compile targets for scripts",
     "~followup_annotations": [

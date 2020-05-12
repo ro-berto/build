@@ -56,6 +56,8 @@
       "--tag",
       "os:win",
       "--tag",
+      "slavename:fake-bot-id",
+      "--tag",
       "stepname:hello_world on Windows-7-SP1",
       "--verbose",
       "--idempotent",

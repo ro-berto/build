@@ -938,8 +938,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       if not task.builder_info[1] == -1:
         tags.add('buildnumber:%s' % task.builder_info[1])
 
-    if self.m.properties.get('bot_id'):
-      tags.add('slavename:%s' % self.m.properties['bot_id'])
+    tags.add('slavename:%s' % self.m.swarming.bot_id)
 
     tags.add('stepname:%s' % self.get_step_name('', task))
     for cl in self.m.buildbucket.build.input.gerrit_changes:

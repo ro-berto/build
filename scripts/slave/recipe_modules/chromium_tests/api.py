@@ -975,17 +975,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties = {}
     # TODO(phajdan.jr): Remove buildnumber when no longer used.
 
+    mastername = self.m.properties.get('mastername')
     if not bot_config:
-      mastername = self.m.properties.get('mastername')
       buildername = self.m.buildbucket.builder_name
       master_dict = self.builders.get(mastername, {})
       bot_config = master_dict.get('builders', {}).get(buildername, {})
 
     properties['buildername'] = self.m.buildbucket.builder_name
     properties['buildnumber'] = self.m.buildbucket.build.number
-    for name in ('bot_id', 'mastername'):
-      properties[name] = self.m.properties[name]
-    properties['slavename'] = properties['bot_id']
+    properties['bot_id'] = self.m.swarming.bot_id
+    properties['slavename'] = self.m.swarming.bot_id
+    properties['mastername'] = mastername
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
 
