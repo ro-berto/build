@@ -24,6 +24,7 @@ DEPS = [
     'chromium_tests',
     'depot_tools/gclient',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -37,12 +38,11 @@ DEPS = [
 
 
 PROPERTIES = {
-    'buildername': Property(default=''),
     'mastername': Property(default=''),
 }
 
 
-def RunSteps(api, buildername, mastername):
+def RunSteps(api, mastername):
   # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.chromium_swarming.verbose = True
@@ -68,7 +68,8 @@ def RunSteps(api, buildername, mastername):
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_master(mastername, buildername)])
+      [chromium.BuilderId.create_for_master(
+          mastername, api.buildbucket.builder_name)])
   api.chromium_swarming.swarming_server = (
       bot_config.swarming_server or 'https://chromium-swarm-dev.appspot.com')
 
@@ -109,36 +110,37 @@ def RunSteps(api, buildername, mastername):
 
 
 def GenTests(api):
+  def builder_with_config(buildername, config=None):
+    build = api.buildbucket.ci_build_message(
+        project='chromium',
+        bucket='dev',
+        builder=buildername,
+        build_number=123,
+        git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    ret = api.buildbucket.build(build)
+    ret += api.properties(mastername='chromium.dev')
+    if config:
+      ret += api.chromium_tests.read_source_side_spec(
+          'chromium.dev', {buildername: config})
+    return ret
+
   yield api.test(
       'android',
-      api.properties(
-          buildername='android-lollipop-arm-rel-swarming',
-          mastername='chromium.dev',
-          bot_id='TestSlave',
-          buildnumber=123,
-          path_config='generic'),
+      builder_with_config('android-lollipop-arm-rel-swarming'),
   )
 
   yield api.test(
       'linux-rel-swarming-staging',
-      api.properties(
-          buildername='linux-rel-swarming-staging',
-          mastername='chromium.dev',
-          bot_id='TestSlave',
-          buildnumber=123,
-          path_config='generic'),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.dev', {
-              'linux-rel-swarming-staging': {
-                  'gtest_tests': [{
-                      'test': 'browser_tests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                          'shards': 2,
-                      }
-                  },],
-              },
-          }),
+      builder_with_config('linux-rel-swarming-staging', {
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'swarming': {
+            'can_use_on_swarming_builders': True,
+            'shards': 2,
+          }
+        },],
+      }),
       api.override_step_data('find isolated tests',
                              api.json.output({
                                  'browser_tests': 'deadbeef',
@@ -149,24 +151,15 @@ def GenTests(api):
   # prevent the second 'collect' from running.
   yield api.test(
       'one_fails',
-      api.properties(
-          buildername='linux-rel-swarming',
-          mastername='chromium.dev',
-          bot_id='TestSlave',
-          buildnumber=123,
-          path_config='generic'),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.dev', {
-              'linux-rel-swarming': {
-                  'gtest_tests': [{
-                      'test': 'browser_tests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                          'shards': 2,
-                      }
-                  },],
-              },
-          }),
+      builder_with_config('linux-rel-swarming', {
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'swarming': {
+            'can_use_on_swarming_builders': True,
+            'shards': 2,
+          }
+        },],
+      }),
       api.override_step_data('find isolated tests',
                              api.json.output({
                                  'browser_tests': 'deadbeef',
@@ -183,25 +176,16 @@ def GenTests(api):
 
   yield api.test(
       'windows',
-      api.properties(
-          buildername='win-rel-swarming',
-          mastername='chromium.dev',
-          bot_id='TestSlave',
-          buildnumber=123,
-          path_config='generic'),
+      builder_with_config('win-rel-swarming', {
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'swarming': {
+            'can_use_on_swarming_builders': True,
+            'shards': 2,
+          }
+        },],
+      }),
       api.platform('win', 64),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.dev', {
-              'win-rel-swarming': {
-                  'gtest_tests': [{
-                      'test': 'browser_tests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                          'shards': 2,
-                      }
-                  },],
-              },
-          }),
       api.override_step_data('find isolated tests',
                              api.json.output({
                                  'browser_tests': 'deadbeef',
@@ -210,24 +194,15 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.properties(
-          buildername='linux-rel-swarming',
-          mastername='chromium.dev',
-          bot_id='TestSlave',
-          buildnumber=123,
-          path_config='generic'),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.dev', {
-              'linux-rel-swarming': {
-                  'gtest_tests': [{
-                      'test': 'browser_tests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                          'shards': 2,
-                      }
-                  },],
-              },
-          }),
+      builder_with_config('linux-rel-swarming', {
+        'gtest_tests': [{
+          'test': 'browser_tests',
+          'swarming': {
+            'can_use_on_swarming_builders': True,
+            'shards': 2,
+          }
+        },],
+      }),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
