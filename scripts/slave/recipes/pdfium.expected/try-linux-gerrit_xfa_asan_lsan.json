@@ -392,7 +392,9 @@
       "--buildbot-buildername",
       "linux_xfa_asan_lsan",
       "--buildbot-mastername",
-      "tryserver.client.pdfium"
+      "tryserver.client.pdfium",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

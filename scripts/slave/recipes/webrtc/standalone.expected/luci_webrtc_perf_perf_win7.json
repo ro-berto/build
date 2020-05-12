@@ -494,7 +494,7 @@
       "--buildbot-mastername",
       "client.webrtc.perf",
       "--buildbot-slavename",
-      "bot_id"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

@@ -587,7 +587,7 @@
       "--buildbot-mastername",
       "chromium.testing.master",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1108,7 +1108,7 @@
       "--buildbot-mastername",
       "chromium.testing.master",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

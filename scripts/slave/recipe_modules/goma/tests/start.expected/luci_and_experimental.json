@@ -219,7 +219,9 @@
       "--is-luci",
       "--is-experimental",
       "--buildbot-buildername",
-      "test_buildername"
+      "test_buildername",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

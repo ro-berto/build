@@ -346,7 +346,7 @@
       "--buildbot-mastername",
       "client.angle",
       "--buildbot-slavename",
-      "test_slave"
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

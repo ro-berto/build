@@ -560,15 +560,12 @@ class GomaApi(recipe_api.RecipeApi):
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     if self.m.buildbucket.builder_name:
       args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
-    keys = [
-      ('mastername', 'mastername'),
-      ('bot_id', 'slavename'),
-    ]
-    for prop_name, flag_suffix in keys:
-      if prop_name in self.m.properties:
-        args.extend([
-            '--buildbot-%s' % flag_suffix, self.m.properties[prop_name]
-        ])
+    if 'mastername' in self.m.properties:
+      args.extend([
+          '--buildbot-mastername', self.m.properties['mastername']
+      ])
+    if self.m.swarming.bot_id:
+      args.extend(['--buildbot-slavename', self.m.swarming.bot_id])
 
     result = self.m.build.python(
       name=name or 'upload_log',

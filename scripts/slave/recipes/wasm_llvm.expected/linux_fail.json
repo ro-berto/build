@@ -323,7 +323,9 @@
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"wasm\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux"
+      "linux",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

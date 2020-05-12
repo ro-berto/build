@@ -359,7 +359,9 @@
       "{\"bucket\": \"try\", \"builder\": \"builder\", \"project\": \"openscreen\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "builder"
+      "builder",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "postprocess_for_goma.upload_log",

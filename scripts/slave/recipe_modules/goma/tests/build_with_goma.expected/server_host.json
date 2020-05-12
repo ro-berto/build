@@ -232,7 +232,9 @@
       "{\"bucket\": \"ci\", \"builder\": \"builder\", \"project\": \"project\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "builder"
+      "builder",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

@@ -630,7 +630,7 @@
       "--buildbot-mastername",
       "chromium.fuzz",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

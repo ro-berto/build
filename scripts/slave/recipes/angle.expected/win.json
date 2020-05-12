@@ -372,7 +372,7 @@
       "--buildbot-mastername",
       "client.angle",
       "--buildbot-slavename",
-      "test_slave"
+      "fake-bot-id"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"

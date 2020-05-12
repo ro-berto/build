@@ -482,7 +482,7 @@
       "--buildbot-mastername",
       "client.nacl",
       "--buildbot-slavename",
-      "TestSlave"
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

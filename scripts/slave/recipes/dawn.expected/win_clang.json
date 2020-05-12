@@ -371,7 +371,9 @@
       "{\"bucket\": \"ci\", \"builder\": \"win\", \"project\": \"dawn\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "win"
+      "win",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"

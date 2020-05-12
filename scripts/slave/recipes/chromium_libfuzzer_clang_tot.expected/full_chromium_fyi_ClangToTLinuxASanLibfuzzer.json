@@ -570,7 +570,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

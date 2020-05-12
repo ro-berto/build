@@ -32,7 +32,9 @@
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"emscripten-releases\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux"
+      "linux",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "env": {
       "BUILDBOT_BUCKET": "ci",

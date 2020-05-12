@@ -327,7 +327,9 @@
       "--buildbot-buildername",
       "test_buildername",
       "--buildbot-mastername",
-      "test_mastername"
+      "test_mastername",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "cwd": "None",
     "env": {

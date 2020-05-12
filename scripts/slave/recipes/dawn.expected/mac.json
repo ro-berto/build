@@ -398,7 +398,9 @@
       "{\"bucket\": \"ci\", \"builder\": \"mac\", \"project\": \"dawn\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "mac"
+      "mac",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

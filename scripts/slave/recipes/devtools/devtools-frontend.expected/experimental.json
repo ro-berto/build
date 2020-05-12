@@ -490,7 +490,9 @@
       "{\"bucket\": \"try\", \"builder\": \"builder\", \"project\": \"project\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "builder"
+      "builder",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {

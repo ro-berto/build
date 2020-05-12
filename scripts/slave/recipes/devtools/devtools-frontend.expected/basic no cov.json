@@ -443,7 +443,9 @@
       "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-mastername",
-      "tryserver.devtools-frontend"
+      "tryserver.devtools-frontend",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {

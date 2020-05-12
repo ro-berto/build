@@ -477,7 +477,7 @@
       "--buildbot-mastername",
       "client.v8.official",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {

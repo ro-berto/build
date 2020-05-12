@@ -539,7 +539,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "bot_id"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -955,7 +955,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "bot_id"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1391,7 +1391,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "bot_id"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

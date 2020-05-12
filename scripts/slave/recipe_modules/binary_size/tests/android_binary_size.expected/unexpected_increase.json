@@ -827,7 +827,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.android",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1546,7 +1546,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.android",
       "--buildbot-slavename",
-      "test_bot"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

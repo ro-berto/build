@@ -1075,7 +1075,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "build1-a1"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1878,7 +1878,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "build1-a1"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2681,7 +2681,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "build1-a1"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -3484,7 +3484,7 @@
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
-      "build1-a1"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

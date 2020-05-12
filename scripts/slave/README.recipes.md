@@ -2363,7 +2363,7 @@ Returns:
   The set of dependencies found.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
-[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 #### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2396,7 +2396,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#83)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#585)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#582)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 

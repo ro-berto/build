@@ -467,7 +467,9 @@
       "{\"bucket\": \"\", \"builder\": \"test_buildername\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "test_buildername"
+      "test_buildername",
+      "--buildbot-slavename",
+      "fake-bot-id"
     ],
     "cwd": "None",
     "env": {

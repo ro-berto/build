@@ -680,7 +680,7 @@
       "--buildbot-mastername",
       "chromium.dev",
       "--buildbot-slavename",
-      "TestSlave"
+      "fake-bot-id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
