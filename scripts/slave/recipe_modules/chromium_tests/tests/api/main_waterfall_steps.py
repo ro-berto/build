@@ -20,6 +20,7 @@ DEPS = [
     'code_coverage',
     'pgo',
     'profiles',
+    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -213,9 +214,9 @@ def NotIdempotent(check, step_odict, step):
 
 
 def RunSteps(api, fail_compile):
+  api.profiles._root_profile_dir = api.path.get('/')
   api.path.mock_add_paths(
       api.profiles.profile_dir().join('overall-merged.profdata'))
-
   api.path.mock_add_paths(api.profiles.profile_dir().join(
       api.pgo.TEMP_PROFDATA_FILENAME))
 
@@ -318,16 +319,21 @@ def GenTests(api):
   yield api.test(
       'pgo_ci_bots',
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='win64-builder-perf'),
-      api.properties(swarm_hashes={
-          'performance_test_suite': '[dummy hash for performance_test_suite]'
-      }),
+          mastername='chromium.fyi', builder='mac-code-coverage'),
+      api.properties(
+          swarm_hashes={
+              'performance_test_suite':
+                  '[dummy hash for performance_test_suite]'
+          },
+          xcode_build_version='11c29',
+      ),
       api.pgo(use_pgo=True),
-      api.platform('win', 64),
+      api.platform('mac', 64),
       api.chromium_tests.read_source_side_spec(
-          'chromium.perf', {
-              'win64-builder-perf': {
+          'chromium.fyi', {
+              'mac-code-coverage': {
                   'isolated_scripts': [{
+                      'name': 'performance_test_suite',
                       'isolate_coverage_data': True,
                       'test': 'performance_test_suite',
                       'swarming': {
@@ -336,6 +342,10 @@ def GenTests(api):
                   }],
               },
           }),
+      api.override_step_data(
+          'Ensure .profdata for each test.searching for profdata files',
+          api.file.listdir(
+              ['/performance_test_suite/performance_test_suite.profdata'])),
       api.post_process(
           post_process.MustRun,
           'Processing PGO .profraw data.merge all profile files into a single '

@@ -1678,7 +1678,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.code_coverage.process_coverage_data(tests)
 
       if self.m.pgo.using_pgo:
-        self.m.pgo.process_pgo_data()
+        self.m.pgo.process_pgo_data(tests)
 
       if test_failure_summary:
         return test_failure_summary
