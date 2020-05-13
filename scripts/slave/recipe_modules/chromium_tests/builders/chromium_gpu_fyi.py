@@ -1552,6 +1552,59 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
+    'ChromeOS FYI Release (amd64-generic)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'angle_internal',
+                'angle_top_of_tree',
+                'chrome_internal',
+                'chromeos',
+                'no_kaleidoscope',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            bot_type=bot_spec.BUILDER_TESTER,
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
+    'ChromeOS FYI Release (kevin)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'angle_internal',
+                'angle_top_of_tree',
+                'arm',
+                'chrome_internal',
+                'chromeos',
+                'no_kaleidoscope',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_CROS_BOARD': 'kevin',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            bot_type=bot_spec.BUILDER_TESTER,
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
     'GPU Fake Linux Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',

@@ -136,46 +136,52 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'buildername': 'android-archive-rel',
             }),
         'android_arm64_dbg_recipe':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'Android arm64 Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm64 Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'android_cfi_rel_ng':
             simple_bot({
                 'mastername': 'chromium.memory',
                 'buildername': 'Android CFI',
             }),
         'android_clang_dbg_recipe':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'Android ASAN (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android ASAN (dbg)',
+                },
+                analyze_mode='compile'),
         'android_compile_dbg':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'Android arm Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'android_compile_x64_dbg':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'Android x64 Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android x64 Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'android_compile_x86_dbg':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'Android x86 Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android x86 Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'android_cronet':
-            simple_bot({
-                'mastername': 'chromium.android',
-                'buildername': 'android-cronet-arm-rel'
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.android',
+                    'buildername': 'android-cronet-arm-rel'
+                },
+                analyze_mode='compile'),
         'android_cronet_tester':
             simple_bot({
                 'mastername': 'chromium.android',
@@ -418,11 +424,12 @@ TRYBOTS = try_spec.TryDatabase.create({
         },
         # TODO(fjhenigman): Add Ozone testers when possible.
         'linux_angle_ozone_rel_ng':
-            simple_bot({
-                'mastername': 'chromium.gpu.fyi',
-                'buildername': 'GPU FYI Linux Ozone Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.gpu.fyi',
+                    'buildername': 'GPU FYI Linux Ozone Builder',
+                },
+                analyze_mode='compile'),
         'linux_angle_deqp_rel_ng': {
             'retry_failed_shards':
                 False,
@@ -511,11 +518,12 @@ TRYBOTS = try_spec.TryDatabase.create({
             ],
         },
         'fuchsia-angle-rel':
-            simple_bot({
-                'mastername': 'chromium.gpu.fyi',
-                'buildername': 'GPU FYI Fuchsia Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.gpu.fyi',
+                    'buildername': 'GPU FYI Fuchsia Builder',
+                },
+                analyze_mode='compile'),
     },
     'tryserver.chromium.linux': {
         'cast_shell_linux':
@@ -529,11 +537,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'buildername': 'Cast Audio Linux',
             }),
         'fuchsia_arm64':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Fuchsia ARM64',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Fuchsia ARM64',
+                },
+                analyze_mode='compile'),
         'fuchsia-arm64-cast':
             simple_bot({
                 'mastername': 'chromium.linux',
@@ -545,11 +554,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'buildername': 'Fuchsia ARM64 Cast Audio',
             }),
         'fuchsia-compile-x64-dbg':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'fuchsia-x64-dbg',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'fuchsia-x64-dbg',
+                },
+                analyze_mode='compile'),
         'fuchsia-fyi-arm64-rel':
             simple_bot({
                 'mastername': 'chromium.fyi',
@@ -651,17 +661,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'tester': 'Linux Tests (dbg)(1)',
             }),
         'linux-clang-tidy-dbg':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Linux Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'linux-clang-tidy-rel':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Linux Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder',
+                },
+                analyze_mode='compile'),
         'linux-rel': {
             'bot_ids': [
                 {
@@ -683,28 +695,31 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'tester': 'Linux ASan LSan Tests (1)',
             }),
         'linux_chromium_compile_dbg_ng':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Linux Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'linux_chromium_compile_rel_ng':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Linux Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder',
+                },
+                analyze_mode='compile'),
         'linux_chromium_archive_rel_ng':
             simple_bot({
                 'mastername': 'chromium',
                 'buildername': 'linux-archive-rel',
             }),
         'linux_chromium_clobber_rel_ng':
-            simple_bot({
-                'mastername': 'chromium',
-                'buildername': 'linux-archive-rel',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium',
+                    'buildername': 'linux-archive-rel',
+                },
+                analyze_mode='compile'),
         'linux_chromium_chromeos_asan_rel_ng':
             simple_bot({
                 'mastername': 'chromium.memory',
@@ -718,11 +733,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'tester': 'Linux ChromiumOS MSan Tests',
             }),
         'linux_chromium_compile_dbg_32_ng':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'Linux Builder (dbg)(32)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder (dbg)(32)',
+                },
+                analyze_mode='compile'),
         'linux_chromium_msan_rel_ng':
             simple_bot({
                 'mastername': 'chromium.memory',
@@ -924,22 +940,24 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'buildername': 'chromeos-arm-generic-rel',
             }),
         'chromeos-kevin-compile-rel':
-            simple_bot({
-                'mastername': 'chromium.fyi',
-                'buildername': 'chromeos-kevin-rel-hw-tests',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'chromeos-kevin-rel-hw-tests',
+                },
+                analyze_mode='compile'),
         'chromeos-kevin-rel':
             simple_bot({
                 'mastername': 'chromium.chromiumos',
                 'buildername': 'chromeos-kevin-rel',
             }),
         'linux-chromeos-compile-dbg':
-            simple_bot({
-                'mastername': 'chromium.chromiumos',
-                'buildername': 'linux-chromeos-dbg',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.chromiumos',
+                    'buildername': 'linux-chromeos-dbg',
+                },
+                analyze_mode='compile'),
         'linux-chromeos-dbg':
             simple_bot({
                 'mastername': 'chromium.chromiumos',
@@ -949,6 +967,17 @@ TRYBOTS = try_spec.TryDatabase.create({
             simple_bot({
                 'mastername': 'chromium.chromiumos',
                 'buildername': 'linux-chromeos-rel',
+            }),
+        # Manually triggered GPU trybots.
+        'gpu-fyi-try-chromeos-amd64-generic':
+            simple_bot({
+                'mastername': 'chromium.gpu.fyi',
+                'buildername': 'ChromeOS FYI Release (amd64-generic)',
+            }),
+        'gpu-fyi-try-chromeos-kevin':
+            simple_bot({
+                'mastername': 'chromium.gpu.fyi',
+                'buildername': 'ChromeOS FYI Release (kevin)',
             }),
     },
     'tryserver.chromium.mac': {
@@ -1084,17 +1113,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'tester': 'Mac10.15 Tests',
             }),
         'mac_chromium_compile_dbg_ng':
-            simple_bot({
-                'mastername': 'chromium.mac',
-                'buildername': 'Mac Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.mac',
+                    'buildername': 'Mac Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'mac_chromium_compile_rel_ng':
-            simple_bot({
-                'mastername': 'chromium.mac',
-                'buildername': 'Mac Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.mac',
+                    'buildername': 'Mac Builder',
+                },
+                analyze_mode='compile'),
         'mac_chromium_asan_rel_ng':
             simple_bot({
                 'mastername': 'chromium.memory',
@@ -1316,17 +1347,19 @@ TRYBOTS = try_spec.TryDatabase.create({
             ],
         },
         'win_chromium_compile_dbg_ng':
-            simple_bot({
-                'mastername': 'chromium.win',
-                'buildername': 'Win Builder (dbg)',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.win',
+                    'buildername': 'Win Builder (dbg)',
+                },
+                analyze_mode='compile'),
         'win_chromium_compile_rel_ng':
-            simple_bot({
-                'mastername': 'chromium.win',
-                'buildername': 'Win Builder',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'chromium.win',
+                    'buildername': 'Win Builder',
+                },
+                analyze_mode='compile'),
         'win_chromium_x64_rel_ng':
             simple_bot({
                 'mastername': 'chromium.win',
@@ -1659,40 +1692,46 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     'tryserver.webrtc': {
         'win_chromium_compile':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'win_chromium_compile',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'win_chromium_compile',
+                },
+                analyze_mode='compile'),
         'win_chromium_compile_dbg':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'win_chromium_compile_dbg',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'win_chromium_compile_dbg',
+                },
+                analyze_mode='compile'),
         'mac_chromium_compile':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'mac_chromium_compile',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'mac_chromium_compile',
+                },
+                analyze_mode='compile'),
         'linux_chromium_compile':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'linux_chromium_compile',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'linux_chromium_compile',
+                },
+                analyze_mode='compile'),
         'linux_chromium_compile_dbg':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'linux_chromium_compile_dbg',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'linux_chromium_compile_dbg',
+                },
+                analyze_mode='compile'),
         'android_chromium_compile':
-            simple_bot({
-                'mastername': 'tryserver.webrtc',
-                'buildername': 'android_chromium_compile',
-            },
-                       analyze_mode='compile'),
+            simple_bot(
+                {
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'android_chromium_compile',
+                },
+                analyze_mode='compile'),
     },
 })
