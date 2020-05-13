@@ -96,15 +96,26 @@ class ArchiveApi(recipe_api.RecipeApi):
     properties_json = self.m.json.dumps(self.m.properties.legacy())
     args.extend(['--factory-properties', properties_json,
                  '--build-properties', properties_json])
+    args.extend(['--json-urls', self.m.json.output()])
 
-    kwargs['allow_subannotations'] = True
-    return self.m.build.python(
+    kwargs['step_test_data'] = lambda: self.test_api.m.json.output({
+      'storage_url': 'gs://zip_build.example.com/output.zip',
+      'zip_url':
+        'https://storage.cloud.google.com/zip_build.example.com/output.zip',
+    })
+    result = self.m.build.python(
       step_name,
       self.repo_resource('scripts', 'slave', 'zip_build.py'),
       args,
       infra_step=True,
       **kwargs
     )
+    urls = result.json.output
+    if 'storage_url' in urls:
+      result.presentation.links['download'] = urls['storage_url']
+    if 'zip_url' in urls:
+      result.presentation.properties['build_archive_url'] = urls['zip_url']
+    return result
 
   def _get_commit_position(self, update_properties, primary_project):
     """Returns the commit position of the project (or the specified primary

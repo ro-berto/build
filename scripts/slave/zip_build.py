@@ -558,11 +558,6 @@ def main(argv):
   if options.json_urls:  # we need to dump json
     with open(options.json_urls, 'w') as json_file:
       json.dump(urls, json_file)
-  else:  # we need to print buildbot annotations
-    if 'storage_url' in urls:
-      print '@@@STEP_LINK@download@%s@@@' % urls['storage_url']
-    if 'zip_url' in urls:
-      print '@@@SET_BUILD_PROPERTY@build_archive_url@"%s"@@@' %  urls['zip_url']
   return 0
 
 if '__main__' == __name__:

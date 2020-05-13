@@ -6,6 +6,7 @@ from recipe_engine.post_process import Filter
 
 DEPS = [
   'archive',
+  'chromium',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'recipe_engine/path',
