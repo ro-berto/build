@@ -239,9 +239,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, build_config
 
-  def generate_tests_from_source_side_spec(
-      self, source_side_spec, bot_spec, buildername, mastername,
-      swarming_dimensions, scripts_compile_targets, bot_update_step):
+  def generate_tests_from_source_side_spec(self, source_side_spec, bot_spec,
+                                           buildername, mastername,
+                                           swarming_dimensions,
+                                           scripts_compile_targets_fn,
+                                           bot_update_step):
     tests = [s.get_test() for s in bot_spec.test_specs]
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
@@ -254,7 +256,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               source_side_spec,
               bot_update_step,
               swarming_dimensions=swarming_dimensions,
-              scripts_compile_targets=scripts_compile_targets))
+              scripts_compile_targets_fn=scripts_compile_targets_fn))
     return tuple(tests)
 
   def read_source_side_spec(self, source_side_spec_file):

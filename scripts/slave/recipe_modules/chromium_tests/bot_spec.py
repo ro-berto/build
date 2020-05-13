@@ -222,8 +222,6 @@ class BotSpec(object):
   # use this for new builders
   enable_package_transfer = attrib(bool, default=False)
 
-  # A bool controlling whether tests should be disabled
-  disable_tests = attrib(bool, default=False)
   # Specs for tests to be run for this builder
   test_specs = sequence_attrib(TestSpec, default=())
   # A bool controlling whether swarming tests should be run serially

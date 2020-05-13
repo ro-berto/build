@@ -241,11 +241,15 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
       yield t
 
 
-def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
+def generate_gtest(api,
+                   chromium_tests_api,
+                   mastername,
+                   buildername,
+                   test_spec,
                    bot_update_step,
-                   swarming_dimensions=None, scripts_compile_targets=None,
-                   bot_config=None):
-  del scripts_compile_targets, bot_config
+                   swarming_dimensions=None,
+                   scripts_compile_targets_fn=None):
+  del scripts_compile_targets_fn
 
   def canonicalize_test(test):
     if isinstance(test, basestring):
@@ -299,13 +303,16 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
       yield t
 
 
-def generate_junit_test(api, chromium_tests_api, mastername, buildername,
-                        test_spec, bot_update_step,
+def generate_junit_test(api,
+                        chromium_tests_api,
+                        mastername,
+                        buildername,
+                        test_spec,
+                        bot_update_step,
                         swarming_dimensions=None,
-                        scripts_compile_targets=None,
-                        bot_config=None):
+                        scripts_compile_targets_fn=None):
   del api, chromium_tests_api, bot_update_step
-  del swarming_dimensions, scripts_compile_targets, bot_config
+  del swarming_dimensions, scripts_compile_targets_fn
   for test in test_spec.get(buildername, {}).get('junit_tests', []):
     yield steps.AndroidJunitTest(
         test.get('name', test['test']),
@@ -315,29 +322,38 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
         waterfall_buildername=buildername)
 
 
-def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
+def generate_script(api,
+                    chromium_tests_api,
+                    mastername,
+                    buildername,
+                    test_spec,
                     bot_update_step,
-                    swarming_dimensions=None, scripts_compile_targets=None,
-                    bot_config=None):
+                    swarming_dimensions=None,
+                    scripts_compile_targets_fn=None):
   # Unused arguments
   del api, chromium_tests_api, bot_update_step, swarming_dimensions
-  del bot_config
 
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
     yield steps.ScriptTest(
         str(script_spec['name']),
         script_spec['script'],
-        scripts_compile_targets,
+        scripts_compile_targets_fn(),
         script_spec.get('args', []),
         script_spec.get('override_compile_targets', []),
-        waterfall_mastername=mastername, waterfall_buildername=buildername)
+        waterfall_mastername=mastername,
+        waterfall_buildername=buildername)
 
 
-def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
-                             test_spec, bot_update_step,
+def generate_isolated_script(api,
+                             chromium_tests_api,
+                             mastername,
+                             buildername,
+                             test_spec,
+                             bot_update_step,
                              swarming_dimensions=None,
-                             scripts_compile_targets=None):
-  del scripts_compile_targets
+                             scripts_compile_targets_fn=None):
+  del scripts_compile_targets_fn
+
   def isolated_script_delegate_common(test, name=None, **kwargs):
     del kwargs
 

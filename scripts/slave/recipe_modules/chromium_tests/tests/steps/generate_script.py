@@ -40,7 +40,7 @@ def RunSteps(api):
       'test_buildername',
       test_spec,
       update_step,
-      scripts_compile_targets={'gtest_test.py': ['$name']}):
+      scripts_compile_targets_fn=lambda: {'gtest_test.py': ['$name']}):
     try:
       test.pre_run(api, '')
       test.run(api, '')

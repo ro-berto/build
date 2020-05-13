@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import functools
+
 from recipe_engine.types import FrozenDict, freeze
 
 from . import bot_db as bot_db_module
@@ -100,10 +102,6 @@ class BotConfig(object):
       elif bot_spec.downstream_spec is not None:  # pragma: no cover
         return bot_spec.downstream_spec
 
-    # TODO(phajdan.jr): Get rid of disable_tests.
-    if self.disable_tests:
-      return {}
-
     source_side_spec_file = self.source_side_spec_file or '%s.json' % mastername
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
@@ -117,12 +115,17 @@ class BotConfig(object):
     return specs
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
-    # TODO(phajdan.jr): Get rid of disable_tests.
-    if self.disable_tests:
-      scripts_compile_targets = {}
-    else:
-      scripts_compile_targets = \
-          chromium_tests_api.get_compile_targets_for_scripts(self)
+    # The scripts_compile_targets is indirected through a function so that we
+    # don't execute unnecessary steps if there are no scripts that need to be
+    # run
+    # Memoize the call to get_compile_targets_for_scripts so that we only
+    # execute the step once
+    memo = []
+
+    def scripts_compile_targets_fn():
+      if not memo:
+        memo.append(chromium_tests_api.get_compile_targets_for_scripts(self))
+      return memo[0]
 
     source_side_specs = self._get_source_side_specs(chromium_tests_api)
     tests = {}
@@ -138,7 +141,7 @@ class BotConfig(object):
             builder_name,
             master_name,
             builder_spec.swarming_dimensions,
-            scripts_compile_targets,
+            scripts_compile_targets_fn,
             bot_update_step,
         )
         tests[builder_id] = builder_tests

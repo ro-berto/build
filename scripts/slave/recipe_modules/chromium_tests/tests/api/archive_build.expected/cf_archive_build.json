@@ -250,27 +250,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "--build-config-fs",
-      "Release",
-      "--paths",
-      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
-      "--properties",
-      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"fake-builder\", \"buildnumber\": 571, \"mastername\": \"fake-master\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
-    ],
-    "name": "get compile targets for scripts",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[CACHE]/builder/src/testing/buildbot/fake-master.json",
       "/path/to/tmp/json"
