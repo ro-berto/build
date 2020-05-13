@@ -182,7 +182,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     bot_type = override_bot_type or bot_config.bot_type
 
-    if bot_config.set_component_rev:
+    if bot_config.set_component_rev:  # pragma: no cover
       # If this is a component build and the main revision is e.g. blink,
       # webrtc, or v8, the custom deps revision of this component must be
       # dynamically set to either:

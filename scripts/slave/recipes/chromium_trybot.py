@@ -452,15 +452,19 @@ def GenTests(api):
   # both on the initial checkout and after deapplying the patch.
   yield api.test(
       'compile_failure_with_component_rev',
+      api.chromium.try_build(
+          project='v8',
+          mastername='tryserver.v8',
+          builder='v8_linux_chromium_gn_rel',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+      ),
       api.platform('linux', 64),
-      props(mastername='tryserver.v8', builder='v8_linux_chromium_gn_rel'),
-      api.properties(revision='a' * 40),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'V8 Linux GN': {
               'additional_compile_targets': ['base_unittests'],
           },
       }),
-      suppress_analyze(),
+      suppress_analyze(['v8/f.*']),
       api.step_data('compile (with patch)', retcode=1),
   )
 

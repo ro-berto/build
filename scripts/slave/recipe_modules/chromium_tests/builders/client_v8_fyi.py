@@ -16,7 +16,6 @@ SPEC = {
             chromium_config='chromium',
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -26,10 +25,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
@@ -38,7 +33,6 @@ SPEC = {
             chromium_config='chromium',
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -57,10 +51,6 @@ SPEC = {
                 'net_unittests',
                 'unit_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
@@ -71,7 +61,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -87,10 +76,6 @@ SPEC = {
                 'gin_unittests',
                 'net_unittests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
@@ -110,10 +95,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'V8 Blink Linux Debug':
@@ -132,10 +113,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'V8 Blink Mac':
@@ -154,10 +131,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='mac',
         ),
     'V8 Blink Win':
@@ -176,10 +149,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='win',
         ),
     'V8 Blink Linux Future':
@@ -198,10 +167,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     'V8 Blink Linux Layout NG':
@@ -220,10 +185,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             simulation_platform='linux',
         ),
     # Bot names should be in sync with chromium.linux's names to retrieve
@@ -233,7 +194,6 @@ SPEC = {
             chromium_config='chromium',
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -243,10 +203,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.TESTER,
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             parent_buildername='Linux Debug Builder',
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
@@ -257,7 +213,6 @@ SPEC = {
             chromium_apply_config=['mb', 'mb_luci_auth'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -271,10 +226,6 @@ SPEC = {
                 'net_unittests',
                 'unit_tests',
             ],
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             source_side_spec_file='chromium.memory.json',
             simulation_platform='linux',
         ),
@@ -288,7 +239,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -299,10 +249,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='win',
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             serialize_tests=True,
         ),
     'Mac V8 FYI Release (Intel)':
@@ -314,7 +260,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -325,10 +270,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='mac',
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             serialize_tests=True,
         ),
     'Linux V8 FYI Release (NVIDIA)':
@@ -340,7 +281,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -351,10 +291,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             serialize_tests=True,
         ),
     'Linux V8 FYI Release - pointer compression (NVIDIA)':
@@ -366,7 +302,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -377,10 +312,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
             serialize_tests=True,
         ),
     'Android V8 FYI Release (Nexus 5X)':
@@ -390,7 +321,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'v8_tot',
                 'chromium_lkgr',
                 'show_v8_revision',
             ],
@@ -401,9 +331,5 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
-            set_component_rev={
-                'name': 'src/v8',
-                'rev_str': '%s'
-            },
         ),
 }

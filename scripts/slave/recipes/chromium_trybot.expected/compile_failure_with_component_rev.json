@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/chromium/builders/ci/V8 Linux GN@@@"
+      "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/v8/builders/ci/V8 Linux GN@@@"
     ]
   },
   {
@@ -35,7 +35,7 @@
       "--limit",
       "1",
       "-p",
-      "change=123456",
+      "change=456789",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -55,8 +55,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -72,7 +72,7 @@
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
-      "src",
+      "src/v8",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_cr_revision\": \"src\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src/v8\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -82,7 +82,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium@refs/heads/master:refs/changes/56/123456/7",
+      "https://chromium.googlesource.com/v8/v8@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
       "src@origin/lkgr",
       "--revision",
@@ -150,7 +150,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
@@ -358,14 +358,14 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder/src/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "git diff to analyze patch",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_LINE@files@v8/foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"
     ]
   },
@@ -386,7 +386,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8/f.*\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
@@ -437,7 +438,7 @@
       "[GOMA_CACHE]/client",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"], \"files\": [\"v8/foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -471,7 +472,7 @@
     "name": "analyze_matched_exclusion",
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
-      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_LINE@excluded_files@v8/foo.cc (regex = 'v8/f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
@@ -864,7 +865,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"v8_linux_chromium_gn_rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"v8_linux_chromium_gn_rel\", \"project\": \"v8\"}",
       "--is-luci",
       "--buildbot-buildername",
       "v8_linux_chromium_gn_rel",
