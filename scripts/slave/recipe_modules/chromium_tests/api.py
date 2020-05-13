@@ -180,24 +180,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.chromium_tests_apply_config:
       self.apply_config(c)
 
-    bot_type = override_bot_type or bot_config.bot_type
-
-    if bot_config.set_component_rev:  # pragma: no cover
-      # If this is a component build and the main revision is e.g. blink,
-      # webrtc, or v8, the custom deps revision of this component must be
-      # dynamically set to either:
-      # (1) the revision of the builder if this is a tester,
-      # (2) gitiles commit id from the waterfall, or
-      # (3) 'HEAD' for forced builds with unspecified gitiles commit.
-      component_rev = self.m.buildbucket.gitiles_commit.id or 'HEAD'
-
-      if bot_type == bot_spec_module.TESTER:
-        component_rev = self.m.properties.get(
-            'parent_got_revision', component_rev)
-      dep = bot_config.set_component_rev
-      self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
-
-
   def set_up_swarming(self, bot_config):
     self.m.chromium_swarming.check_client_version()
 

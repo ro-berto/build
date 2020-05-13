@@ -199,8 +199,6 @@ def chromium_webrtc_tot(c):
       'src/third_party/libvpx/source')
 
   # Have the WebRTC revision appear in the web UI instead of Chromium's.
-  # This is also important for set_component_rev to work, since got_revision
-  # will become a WebRTC revision instead of Chromium.
   c.got_revision_reverse_mapping['got_cr_revision'] = 'src'
   c.got_revision_reverse_mapping['got_revision'] = 'src/third_party/webrtc'
   # TODO(machenbach): Retain old behavior for now and switch in separate CL.

@@ -31,9 +31,6 @@ BUILDERS = {
           'staging',
         ],
       }),
-      'Component Rev Builder': dict(BASIC_CONFIG, **{
-        'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      }),
   },
 }
 
@@ -45,13 +42,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test(
-      'set_component_rev',
-      api.chromium.ci_build(
-          mastername='fake.master', builder='Component Rev Builder'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   yield api.test(
       'android_apply_config',
       api.chromium.ci_build(

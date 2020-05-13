@@ -197,15 +197,6 @@ class BotSpec(object):
   # A bool controlling whether have bot_update perform a clobber of any
   # pre-existing build outputs
   clobber = attrib(bool, default=False)
-  # A dictionary used for component builds: builds where Chromium should should
-  # be built and tested with a patch for one of Chromium's dependency projects
-  # e.g. v8
-  # The dictionary should contain 2 keys:
-  #  name - The name of the dependency in the gclient solution that the patch
-  #    should be applied to
-  #  rev_str - A %-format string that the component revision will be applied to
-  #    compute the revision
-  set_component_rev = mapping_attrib(str, str, default={})
 
   # The names of targets to compile
   compile_targets = sequence_attrib(str, default=())
