@@ -947,9 +947,10 @@ class ChromiumApi(recipe_api.RecipeApi):
           args=args,
           step_test_data=lambda:
               self.m.json.test_api.output({'clang_revision': '123456-7'}),
-          allow_subannotations=True,
           **kwargs)
-    return step_result.json.output['clang_revision']
+      clang_revision = step_result.json.output['clang_revision']
+      step_result.presentation.properties['clang_revision'] = clang_revision
+    return clang_revision
 
   def get_cros_chrome_sdk_wrapper(self):
     """Returns: a wrapper command for 'cros chrome-sdk'

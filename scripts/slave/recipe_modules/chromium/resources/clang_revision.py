@@ -29,7 +29,7 @@ def main(argv):
     args.append('--llvm-force-head-revision')
 
   revision = subprocess.check_output(args).rstrip()
-  print '@@@SET_BUILD_PROPERTY@got_clang_revision@"%s"@@@' % revision
+  print 'Got revision: %s' % revision
 
   if options.output_json:
     with open(options.output_json, 'w') as f:
