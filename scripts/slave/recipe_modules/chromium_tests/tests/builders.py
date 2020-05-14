@@ -52,13 +52,6 @@ def validate_tester_config(api, mastername, buildername, bot_config):
                                            parent_buildername)
   ])
 
-  # In the case that the data processor is triggered by tester, we don't
-  # need to check the matching because we will always use Linux for data
-  # processor.
-  # TODO(crbug.com/1078939): add new bot type for processor.
-  if parent_bot_config.bot_type == bot_spec.TESTER:
-    return
-
   for a in ('chromium_config', 'chromium_apply_config',
             'chromium_config_kwargs', 'android_config'):
     tester_value = _normalize(getattr(bot_config, a))
