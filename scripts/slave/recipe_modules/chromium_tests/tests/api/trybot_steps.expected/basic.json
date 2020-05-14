@@ -331,6 +331,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.gpu.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.gpu.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.gpu.json@@@",
@@ -346,6 +347,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",

@@ -247,6 +247,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     spec_result = self.m.json.read(
         'read test spec (%s)' % self.m.path.basename(source_side_spec_path),
         source_side_spec_path,
+        infra_step=True,
         step_test_data=lambda: self.m.json.test_api.output({}))
     spec_result.presentation.step_text = 'path: %s' % source_side_spec_path
     source_side_spec = spec_result.json.output

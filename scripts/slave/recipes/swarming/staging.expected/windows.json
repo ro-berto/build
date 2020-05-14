@@ -218,6 +218,7 @@
       "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.dev.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.dev.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.dev.json@@@",

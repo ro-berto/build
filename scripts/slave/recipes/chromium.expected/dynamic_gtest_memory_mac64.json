@@ -321,6 +321,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "infra_step": true,
     "name": "read test spec (chromium.memory.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.memory.json@@@",

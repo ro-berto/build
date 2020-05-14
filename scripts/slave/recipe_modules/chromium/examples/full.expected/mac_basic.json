@@ -297,6 +297,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "infra_step": true,
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
@@ -315,6 +316,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "infra_step": true,
     "name": "read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",

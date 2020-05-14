@@ -254,6 +254,7 @@
       "[CACHE]/builder/src/testing/buildbot/fake-master.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (fake-master.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-master.json@@@",

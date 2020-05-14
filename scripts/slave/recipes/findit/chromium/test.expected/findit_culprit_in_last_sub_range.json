@@ -287,6 +287,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
@@ -302,6 +303,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
@@ -618,6 +620,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r2.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -634,6 +637,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r2.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1749,6 +1753,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r3.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1765,6 +1770,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r3.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

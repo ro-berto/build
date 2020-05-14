@@ -254,6 +254,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
@@ -538,6 +539,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r6.read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1344,6 +1346,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r7.read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2125,6 +2128,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r9.read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2906,6 +2910,7 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "test r10.read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
