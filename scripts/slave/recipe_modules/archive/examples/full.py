@@ -171,6 +171,7 @@ def GenTests(api):
         'chrome',
         'snapshot_blob.bin',
     ])
+    archive_data.file_globs.append('glob*.txt')
     if include_dirs:
       archive_data.dirs.extend(['locales', 'swiftshader'])
     archive_data.gcs_bucket = 'any-bucket'

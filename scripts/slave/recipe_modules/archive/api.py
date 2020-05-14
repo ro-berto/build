@@ -518,6 +518,20 @@ class ArchiveApi(recipe_api.RecipeApi):
           _, position = self.m.commit_position.parse(got_revision_cp)
           gcs_path = gcs_path.replace(position_placeholder, str(position))
 
+        expanded_files = set(archive_data.files)
+        for filename in archive_data.file_globs:
+          for f in self.m.file.glob_paths(
+              'expand file globs',
+              build_dir,
+              filename,
+              test_data=('glob1.txt', 'glob2.txt')):
+            # Turn the returned Path object back into a string relative to
+            # build_dir.
+            assert build_dir.base == f.base
+            assert build_dir.is_parent_of(f)
+            common_pieces = f.pieces[len(build_dir.pieces):]
+            expanded_files.add('/'.join(common_pieces))
+
         # Get map of local file path to upload -> destination file path in GCS
         # bucket.
         if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
@@ -527,12 +541,11 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'archive_data properties with |archive_type| '
                 'ARCHIVE_TYPE_FILES must have empty |dirs|')
           uploads = {
-              build_dir.join(f): '/'.join([gcs_path, f])
-              for f in archive_data.files
+              build_dir.join(f): '/'.join([gcs_path, f]) for f in expanded_files
           }
         else:
           archive_file = self._create_zip_archive_for_upload(
-              build_dir, archive_data.files, archive_data.dirs)
+              build_dir, expanded_files, archive_data.dirs)
           uploads = {archive_file: gcs_path}
 
         for file_path in uploads:

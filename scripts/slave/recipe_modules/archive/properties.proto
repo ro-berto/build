@@ -5,11 +5,16 @@
 syntax = "proto3";
 package recipe_modules.build.archive;
 
+// Next id: 7
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
   // the archiving code.
   repeated string files = 1;
+  // A list of globs that will be expanded to files that should be archived. All
+  // globs are expanded relative to the build directory, which is passed
+  // alongside this proto to the archiving code.
+  repeated string file_globs = 6;
   // A list of relative paths to directories that should be archived. All
   // directories are relative to the build directory, which is passed alongside
   // this proto to the archiving code.
@@ -37,6 +42,7 @@ message ArchiveData {
   ArchiveType archive_type = 5;
 }
 
+// Next id: 2
 message InputProperties {
   repeated ArchiveData archive_datas = 1;
 }
