@@ -102,7 +102,7 @@ class TrySpec(object):
              execution_mode=None,
              analyze_mode=None,
              **kwargs):
-    """Create a TryMirror.
+    """Create a TrySpec.
 
     Args:
       mirrors - A sequence of values that can be normalized to a TryMirror. It
@@ -111,10 +111,10 @@ class TrySpec(object):
       execution_mode - The execution mode of the try builder. It is an error to
         provide both execution_mode and analyze_mode.
       analyze_mode - Deprecated, use execution_mode instead.
-      kwargs - Values to apply to additional fields of the TryMirror.
+      kwargs - Values to apply to additional fields of the TrySpec.
 
     Returns:
-      A TryMirror where:
+      A TrySpec where:
       * The mirrors field is initialized with TryMirror instances normalized
         from mirrors or bot_ids if either was provided.
       * The execution_mode field is initialized with execution_mode or
@@ -132,6 +132,38 @@ class TrySpec(object):
     if execution_mode is not None:
       kwargs['execution_mode'] = execution_mode
     return cls(**kwargs)
+
+  @classmethod
+  def create_for_single_mirror(cls,
+                               mastername,
+                               buildername,
+                               tester=None,
+                               tester_mastername=None,
+                               **kwargs):
+    """Create a TrySpec with a single mirror.
+
+    Args:
+      mastername - The name of the mirrored builder's master.
+      buildername - The name of the mirrored builder.
+      tester - The name of the mirrored tester. If not provided, the
+        TrySpec's mirror's tester_id field will be None.
+      tester_mastername - The name of the mirrored tester's master. If
+       not provided and tester is provided, then mastername will be
+       used. Has no effect if tester is not provided.
+      kwargs - Values to apply to additional fields of the TrySpec.
+
+    Returns:
+      A TrySpec where:
+      * The mirrors field has a single TryMirror instance create by
+        calling TryMirror.create with mastername, buildername, tester
+        and tester_mastername.
+      * The remaining fields are initialized with the values passed in kwargs.
+    """
+    return cls.create(
+        mirrors=[
+            TryMirror.create(mastername, buildername, tester, tester_mastername)
+        ],
+        **kwargs)
 
   @classmethod
   def normalize(cls, spec):
