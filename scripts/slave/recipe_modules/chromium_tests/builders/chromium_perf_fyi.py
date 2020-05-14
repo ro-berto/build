@@ -160,3 +160,9 @@ _AddIsolatedTestSpec(
     'android',
     parent_buildername='android-pixel2-perf-fyi',
     parent_mastername='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
+    'win-10_laptop_low_end-perf_HP-Candidate-processor',
+    'win',
+    parent_buildername='win-10_laptop_low_end-perf_HP-Candidate',
+    parent_mastername='chromium.perf.fyi')
