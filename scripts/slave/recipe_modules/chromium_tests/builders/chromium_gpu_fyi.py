@@ -1561,11 +1561,8 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'angle_internal',
                 'angle_top_of_tree',
-                'chrome_internal',
                 'chromeos',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1587,12 +1584,9 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'angle_internal',
                 'angle_top_of_tree',
                 'arm',
-                'chrome_internal',
                 'chromeos',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
