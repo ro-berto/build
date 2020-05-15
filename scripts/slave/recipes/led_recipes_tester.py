@@ -45,6 +45,8 @@ DEFAULT_BUILDERS = (
     'luci.chromium.try-m81:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m83:linux-rel',
     'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-m84:linux-rel',
+    'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
 )
 
 
@@ -60,6 +62,7 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
         'luci.chromium.try:ios-simulator',
         'luci.chromium.try-m81:ios-simulator',
         'luci.chromium.try-m83:ios-simulator',
+        'luci.chromium.try-m84:ios-simulator',
     ],
     files=[
         'scripts/slave/recipes/ios/try.py',
@@ -76,6 +79,7 @@ FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m81:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
 )
 
 # CL to use when testing a recipe which touches chromium source.
@@ -108,6 +112,12 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/2145971',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2145684',
+    },
+    'luci.chromium.try-m84': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2204441',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2204425',
     },
 }
 
@@ -690,6 +700,8 @@ def GenTests(api):
       led_launch('luci.chromium.try-m81:arbitrary-builder'),
       led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
       led_launch('luci.chromium.try-m83:arbitrary-builder'),
+      led_get_builder('luci.chromium.try-m84:arbitrary-builder'),
+      led_launch('luci.chromium.try-m84:arbitrary-builder'),
       api.post_check(post_process.DoesNotRun,
                      *[led_get_builder_name(b) for b in DEFAULT_BUILDERS]),
       api.post_process(post_process.DropExpectation),
@@ -707,6 +719,8 @@ def GenTests(api):
       led_launch('luci.chromium.try:arbitrary-builder'),
       led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
       led_launch('luci.chromium.try-m83:arbitrary-builder'),
+      led_get_builder('luci.chromium.try-m84:arbitrary-builder'),
+      led_launch('luci.chromium.try-m84:arbitrary-builder'),
       non_existent_builder('luci.chromium.try-m81:arbitrary-builder'),
       api.post_check(
           post_process.StepWarning,
@@ -753,6 +767,8 @@ def GenTests(api):
       led_launch('luci.chromium.try-m81:ios-simulator', task_id='task2'),
       led_get_builder('luci.chromium.try-m83:ios-simulator', recipe='ios/try'),
       led_launch('luci.chromium.try-m83:ios-simulator', task_id='task3'),
+      led_get_builder('luci.chromium.try-m84:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-m84:ios-simulator', task_id='task2'),
   )
 
   yield api.test(
@@ -768,4 +784,6 @@ def GenTests(api):
       led_launch('luci.chromium.try-m81:ios-simulator', task_id='task2'),
       led_get_builder('luci.chromium.try-m83:ios-simulator', recipe='ios/try'),
       led_launch('luci.chromium.try-m83:ios-simulator', task_id='task3'),
+      led_get_builder('luci.chromium.try-m84:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-m84:ios-simulator', task_id='task2'),
   )
