@@ -248,3 +248,6 @@ _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'mac-builder-perf')
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
+
+# Perf result processors
+_AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
