@@ -398,18 +398,40 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "run tests"
+  },
+  {
     "cmd": [
       "[START_DIR]/openscreen/out/Default/openscreen_unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
-    "name": "Run unit tests"
+    "name": "run tests.run unit tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "name": "run tests.code coverage calculations skipped",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
       "[START_DIR]/openscreen/out/Default/e2e_tests"
     ],
     "cwd": "[START_DIR]/openscreen",
-    "name": "Run e2e tests"
+    "name": "run tests.run e2e tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "name": "$result"

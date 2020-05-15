@@ -507,7 +507,10 @@
   },
   {
     "cmd": [],
-    "name": "run tests"
+    "name": "run tests",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -526,7 +529,8 @@
     "cmd": [],
     "name": "run tests.calculate code coverage",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -577,81 +581,16 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "run tests.calculate code coverage.coverage data successfully processed",
+    "name": "run tests.calculate code coverage.failed to process coverage data",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/openscreen/out/Default/default.profdata",
-      "[CLEANUP]/tmp_tmp_1/profdata/default.profdata"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "infra_step": true,
-    "name": "run tests.calculate code coverage.copy processed coverage data",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "run tests.calculate code coverage.process clang code coverage data for overall test coverage",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/openscreen/build/code_coverage/merge_steps.py",
-      "--input-dir",
-      "[CLEANUP]/tmp_tmp_1",
-      "--output-file",
-      "[CLEANUP]/tmp_tmp_1/overall-merged.profdata",
-      "--llvm-profdata",
-      "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-profdata",
-      "--profdata-filename-pattern",
-      ".+\\.profdata"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "name": "run tests.calculate code coverage.process clang code coverage data for overall test coverage.merge all profile files into a single .profdata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "name": "run tests.calculate code coverage.process clang code coverage data for overall test coverage.skip processing because no profdata was generated",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
