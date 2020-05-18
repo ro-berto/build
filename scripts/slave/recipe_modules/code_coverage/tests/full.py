@@ -165,9 +165,9 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
           buildnumber=54,
-          coverage_exclude_sources='all_test_files',
       ),
-      api.code_coverage(use_clang_coverage=True),
+      api.code_coverage(
+          use_clang_coverage=True, coverage_exclude_sources='all_test_files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -662,13 +662,12 @@ def GenTests(api):
           mastername='tryserver.chromium.mac',
           buildername='ios-simulator-code-coverage',
           buildnumber=54),
-      api.code_coverage(use_clang_coverage=True),
+      api.code_coverage(use_clang_coverage=True, coverage_test_types=['unit']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
       api.properties(xcode_build_version='11c29'),
-      api.properties(coverage_test_types=['unit']),
       api.buildbucket.try_build(
           project='chromium',
           builder='ios-simulator-code-coverage',
@@ -725,8 +724,9 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54),
-      api.code_coverage(use_clang_coverage=True),
-      api.properties(coverage_test_types=['unsupportedtest', 'overall']),
+      api.code_coverage(
+          use_clang_coverage=True,
+          coverage_test_types=['unsupportedtest', 'overall']),
       api.post_process(
           post_process.MustRun,
           'Exception when validating test types to process: Unsupported test '
@@ -741,12 +741,12 @@ def GenTests(api):
           mastername='tryserver.chromium.mac',
           buildername='ios-simulator-code-coverage',
           buildnumber=54),
-      api.code_coverage(use_clang_coverage=True),
+      api.code_coverage(
+          use_clang_coverage=True, coverage_test_types=['unit', 'overall']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
-      api.properties(coverage_test_types=['unit', 'overall']),
       api.buildbucket.try_build(
           project='chromium',
           builder='ios-simulator-code-coverage',

@@ -1731,7 +1731,7 @@ This module contains apis to generate code coverage data.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#261)(self, affected_files, output_dir=None):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#246)(self, affected_files, output_dir=None):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1749,7 +1749,7 @@ on first access when processing each test type.
 
 &emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/code_coverage/api.py#61)(self):**
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#425)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#410)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1757,7 +1757,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#307)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#292)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1765,7 +1765,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#434)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#419)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1779,7 +1779,7 @@ Args:
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#659)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#644)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1792,7 +1792,7 @@ the clang coverage merge script.
 
 &emsp; **@property**<br>&mdash; **def [use\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#57)(self):**
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#116)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#106)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)

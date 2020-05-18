@@ -103,16 +103,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         '_' + self._current_processing_test_type)
     return self.m.buildbucket.build.builder.builder + suffix
 
-  def _get_source_exclusion_pattern(self):
-    # TODO(crbug.com/1071461): Move current iOS builder property to code
-    # coverage module property.
-    if self._exclude_sources_key:
-      return constants.EXCLUDE_SOURCES.get(self._exclude_sources_key)
-    if 'coverage_exclude_sources' in self.m.properties:
-      return constants.EXCLUDE_SOURCES.get(
-          self.m.properties['coverage_exclude_sources'])
-    return []
-
   @property
   def using_coverage(self):
     """Checks if the current build is running coverage-instrumented targets."""
@@ -232,11 +222,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _validate_test_types(self):
     """Validates that test type to process in build is supported."""
-    # TODO(crbug.com/1071461): Move current iOS builder property to code
-    # coverage module property.
-    if 'coverage_test_types' in self.m.properties:
-      self._test_types = self.m.properties['coverage_test_types']
-
     for test_type in self._test_types:
       if test_type not in constants.SUPPORTED_TEST_TYPES:
         raise Exception('Unsupported test type %s.' % test_type)
@@ -794,7 +779,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
       ])
     else:
-      pattern = self._get_source_exclusion_pattern()
+      pattern = (
+          constants.EXCLUDE_SOURCES.get(self._exclude_sources_key)
+          if self._exclude_sources_key else [])
       if pattern:
         args.extend(['--exclusion-pattern', pattern])
 
