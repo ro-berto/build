@@ -5,38 +5,45 @@
 from .. import bot_spec
 
 
-def _chromium_dawn_spec(**kwargs):
+def _chromium_dawn_spec(os, bits, **kwargs):
   return bot_spec.BotSpec.create(
-      build_gs_bucket='chromium-dawn-archive', **kwargs)
-
-
-def CreateBuilderConfig(os, bits, top_of_tree):
-  return _chromium_dawn_spec(
       chromium_config='chromium',
       chromium_apply_config=['mb', 'mb_luci_auth'],
       gclient_config='chromium',
-      gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': bits,
       },
-      bot_type=bot_spec.BUILDER,
       simulation_platform=os,
+      build_gs_bucket='chromium-dawn-archive',
+      **kwargs)
+
+
+def CreateBuilderConfig(os, bits, top_of_tree):
+  return _chromium_dawn_spec(
+      os,
+      bits,
+      bot_type=bot_spec.BUILDER,
+      gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
   )
 
 
 def CreateTesterConfig(os, bits, builder):
   return _chromium_dawn_spec(
-      chromium_config='chromium',
-      chromium_apply_config=['mb', 'mb_luci_auth'],
-      gclient_config='chromium',
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': bits,
-      },
+      os,
+      bits,
       bot_type=bot_spec.TESTER,
       parent_buildername=builder,
-      simulation_platform=os,
+      serialize_tests=True,
+  )
+
+
+def CreateBuilderTesterConfig(os, bits, top_of_tree):
+  return _chromium_dawn_spec(
+      os,
+      bits,
+      bot_type=bot_spec.BUILDER_TESTER,
+      gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
       serialize_tests=True,
   )
 
@@ -56,7 +63,6 @@ SPEC = {
         CreateTesterConfig('linux', 64, 'Dawn Linux x64 DEPS Builder'),
     'Dawn Mac x64 Builder':
         CreateBuilderConfig('mac', 64, top_of_tree=True),
-
     # The Dawn Mac testers are actually running on thin Linux VMs.
     'Dawn Mac x64 Release (AMD)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
@@ -64,7 +70,6 @@ SPEC = {
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
     'Dawn Mac x64 DEPS Builder':
         CreateBuilderConfig('mac', 64, top_of_tree=False),
-
     # The Dawn Mac testers are actually running on thin Linux VMs.
     'Dawn Mac x64 DEPS Release (AMD)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 DEPS Builder'),
@@ -94,4 +99,6 @@ SPEC = {
         CreateTesterConfig('win', 32, 'Dawn Win10 x86 DEPS Builder'),
     'Dawn Win10 x64 DEPS Release (NVIDIA)':
         CreateTesterConfig('win', 64, 'Dawn Win10 x64 DEPS Builder'),
+    'Dawn Win10 x64 ASAN Release':
+        CreateBuilderTesterConfig('win', 64, top_of_tree=True),
 }

@@ -1527,6 +1527,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Dawn Win10 x64 Release (NVIDIA)',
                 ),
             ]),
+
+        # Manually triggered Dawn trybots.
+        'dawn-try-win10-x64-asan-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.dawn',
+                buildername='Dawn Win10 x64 ASAN Release',
+            ),
     },
     # SWANGLE bots
     'tryserver.chromium.swangle': {
