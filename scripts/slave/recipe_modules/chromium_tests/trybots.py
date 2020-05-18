@@ -1273,19 +1273,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Win10 x64 Release (NVIDIA) Code Coverage',
                 ),
             ]),
-        'win10_chromium_x64_coverage_rel_ng':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    mastername='chromium.win',
-                    buildername='Win x64 Builder Code Coverage',
-                    tester='Win10 Tests x64 Code Coverage',
-                ),
-                try_spec.TryMirror.create(
-                    mastername='chromium.gpu',
-                    buildername='GPU Win x64 Builder Code Coverage',
-                    tester='Win10 x64 Release (NVIDIA) Code Coverage',
-                ),
-            ]),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.win',
