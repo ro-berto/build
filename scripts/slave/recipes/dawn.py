@@ -49,15 +49,21 @@ def _checkout_steps(api):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
-def _out_path(target_cpu, debug, clang):
+
+def _out_path(target_cpu, debug, clang, static):
   out_dir = 'debug' if debug else 'release'
   if clang:
     out_dir += '_clang'
   if target_cpu:
     out_dir += '_' + target_cpu
+  if static:
+    out_dir += '_static'
+  else:
+    out_dir += '_component'
   return out_dir
 
-def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
+
+def _gn_gen_builds(api, target_cpu, debug, clang, out_dir, static, swiftshader):
   """calls 'gn gen'"""
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
@@ -68,10 +74,18 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
   # Prepare the arguments to pass in.
   args = [
       'is_debug=%s' % gn_bool[debug],
-      'is_component_build=false',
+      'is_component_build=%s' % gn_bool[not static],
       'use_goma=true',
+      'dawn_use_swiftshader=%s' % gn_bool[swiftshader],
       'goma_dir="%s"' % api.goma.goma_dir,
   ]
+
+  # We run the end2end tests with SwiftShader, but the D3D12 backend,
+  # though it would run zero tests, crashes on Windows 7.
+  # Disable it for now.
+  if swiftshader:
+    args.append('dawn_enable_d3d12=false')
+
   if clang is not None:
     args.append('is_clang=%s' % gn_bool[clang])
 
@@ -92,10 +106,13 @@ def _get_compiler_name(api, clang):
     return 'msvc'
   return 'gcc'
 
-def _build_steps(api, out_dir, clang):
+
+def _build_steps(api, out_dir, clang, *targets):
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
                '-j', api.goma.recommended_goma_jobs]
+  ninja_cmd.extend(targets)
+
   api.goma.build_with_goma(
       name='compile with ninja',
       ninja_command=ninja_cmd,
@@ -106,6 +123,13 @@ def _run_unittests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
   api.step('Run the Dawn unittests', [test_path])
 
+
+def _run_swiftshader_end2end_tests(api, out_dir):
+  test_path = api.path['checkout'].join('out', out_dir, 'dawn_end2end_tests')
+  api.step('Run the Dawn end2end tests with SwiftShader',
+           [test_path, '--adapter-vendor-id=0x1AE0'])
+
+
 def RunSteps(api, target_cpu, debug, clang):
   env = {}
   if api.platform.is_win:
@@ -114,11 +138,35 @@ def RunSteps(api, target_cpu, debug, clang):
 
   with api.context(env=env):
     _checkout_steps(api)
-    out_dir = _out_path(target_cpu, debug, clang)
+    out_dir_static = _out_path(target_cpu, debug, clang, static=True)
+    out_dir_component = _out_path(target_cpu, debug, clang, static=False)
     with api.osx_sdk('mac'):
-      _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
-      _build_steps(api, out_dir, clang)
-      _run_unittests(api, out_dir)
+      # Static build all targets and run unittests
+      _gn_gen_builds(
+          api,
+          target_cpu,
+          debug,
+          clang,
+          out_dir_static,
+          static=True,
+          swiftshader=False)
+      _build_steps(api, out_dir_static, clang)
+      _run_unittests(api, out_dir_static)
+
+      # Component build and run dawn_end2end_tests with SwiftShader
+      # When using SwiftShader a component build should be used.
+      # See anglebug.com/4396.
+      _gn_gen_builds(
+          api,
+          target_cpu,
+          debug,
+          clang,
+          out_dir_component,
+          static=False,
+          swiftshader=True)
+      _build_steps(api, out_dir_component, clang, 'dawn_end2end_tests')
+      _run_swiftshader_end2end_tests(api, out_dir_component)
+
 
 def GenTests(api):
   yield api.test(
