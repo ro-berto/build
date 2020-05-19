@@ -1516,6 +1516,19 @@ TRYBOTS = try_spec.TryDatabase.create({
             ]),
 
         # Manually triggered Dawn trybots.
+        'dawn-try-win10-x86-rel':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    mastername='chromium.dawn',
+                    buildername='Dawn Win10 x86 Builder',
+                    tester='Dawn Win10 x86 Release (Intel HD 630)',
+                ),
+                try_spec.TryMirror.create(
+                    mastername='chromium.dawn',
+                    buildername='Dawn Win10 x86 Builder',
+                    tester='Dawn Win10 x86 Release (NVIDIA)',
+                ),
+            ]),
         'dawn-try-win10-x64-asan-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.dawn',
