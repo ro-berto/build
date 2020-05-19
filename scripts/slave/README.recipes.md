@@ -5425,11 +5425,11 @@ Recipe for archiving officially tagged v8 builds.
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#9): [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#136)(api, name, project_name):**
+&mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#137)(api, name, project_name):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#247)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#248)(api):**
 
-&mdash; **def [commit\_messages\_log\_entries](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#177)(api, repo, from_commit, to_commit):**
+&mdash; **def [commit\_messages\_log\_entries](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#178)(api, repo, from_commit, to_commit):**
 
 Returns list of log entries to be added to commit message.
 
@@ -5439,9 +5439,9 @@ Args:
   from_commit: Parent of first rolled commit.
   to_commit: Newest rolled commit.
 
-&mdash; **def [create\_gclient\_config](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#238)(api, target_config):**
+&mdash; **def [create\_gclient\_config](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#239)(api, target_config):**
 
-&mdash; **def [roll\_chromium\_pin](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#216)(api):**
+&mdash; **def [roll\_chromium\_pin](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#217)(api):**
 
 Updates the values of gclient variables chromium_(win|mac|linux) with the
 latest prebuilt versions.

@@ -52,75 +52,76 @@ TARGET_CONFIG_V8 = {
 }
 
 BOT_CONFIGS = {
-  'Auto-roll - devtools chromium': {
-    'target_config': TARGET_CONFIG_DEVTOOLS,
-    'subject': 'Update DevTools Chromium DEPS.',
-    # Don't roll any of the other dependencies.
-    'whitelist': [],
-    'reviewers': [
-      'machenbach@chromium.org',
-      'liviurau@chromium.org',
-    ],
-    'show_commit_log': False,
-    'roll_chromium_pin': True,
-  },
-  'Auto-roll - devtools deps': {
-    'target_config': TARGET_CONFIG_DEVTOOLS,
-    'subject': 'Update DevTools DEPS.',
-    'reviewers': [
-      'machenbach@chromium.org',
-      'liviurau@chromium.org',
-    ],
-    'show_commit_log': False,
-  },
-  'Auto-roll - test262': {
-    'target_config': TARGET_CONFIG_V8,
-    'subject': 'Update Test262.',
-    'whitelist': [
-      # Only roll these dependencies (list without solution name prefix).
-      'test/test262/data',
-    ],
-    'reviewers': [
-      'adamk@chromium.org',
-      'gsathya@chromium.org',
-    ],
-    'show_commit_log': True,
-  },
-  'Auto-roll - v8 deps': {
-    'target_config': TARGET_CONFIG_V8,
-    'subject': 'Update V8 DEPS.',
-    'blacklist': [
-      # https://crrev.com/c/1547863
-      'third_party/perfetto',
-      'third_party/protobuf',
-      # Skip these dependencies (list without solution name prefix).
-      'test/mozilla/data',
-      'test/simdjs/data',
-      'test/test262/data',
-      'test/wasm-js/data',
-      'testing/gtest',
-      'third_party/WebKit/Source/platform/inspector_protocol',
-      'third_party/blink/renderer/platform/inspector_protocol',
-    ],
-    'reviewers': [
-      'machenbach@chromium.org',
-      'tmrts@chromium.org',
-    ],
-    'show_commit_log': False,
-  },
-  'Auto-roll - wasm-spec': {
-    'target_config': TARGET_CONFIG_V8,
-    'subject': 'Update wasm-spec.',
-    'whitelist': [
-      # Only roll these dependencies (list without solution name prefix).
-      'test/wasm-js/data',
-    ],
-    'reviewers': [
-      'ahaas@chromium.org',
-      'clemensh@chromium.org',
-    ],
-    'show_commit_log': True,
-  },
+    'Auto-roll - devtools chromium': {
+        'target_config': TARGET_CONFIG_DEVTOOLS,
+        'subject': 'Update DevTools Chromium DEPS.',
+        # Don't roll any of the other dependencies.
+        'whitelist': [],
+        'reviewers': [
+            'machenbach@chromium.org',
+            'liviurau@chromium.org',
+        ],
+        'show_commit_log': False,
+        'roll_chromium_pin': True,
+    },
+    'Auto-roll - devtools deps': {
+        'target_config': TARGET_CONFIG_DEVTOOLS,
+        'subject': 'Update DevTools DEPS.',
+        'reviewers': [
+            'machenbach@chromium.org',
+            'liviurau@chromium.org',
+        ],
+        'show_commit_log': False,
+    },
+    'Auto-roll - test262': {
+        'target_config': TARGET_CONFIG_V8,
+        'subject': 'Update Test262.',
+        'whitelist': [
+            # Only roll these dependencies (list without solution name prefix).
+            'test/test262/data',
+        ],
+        'reviewers': [
+            'adamk@chromium.org',
+            'gsathya@chromium.org',
+        ],
+        'show_commit_log': True,
+    },
+    'Auto-roll - v8 deps': {
+        'target_config': TARGET_CONFIG_V8,
+        'subject': 'Update V8 DEPS.',
+        'blacklist': [
+            # https://crrev.com/c/1547863
+            'third_party/perfetto',
+            'third_party/protobuf',
+            # Skip these dependencies (list without solution name prefix).
+            'test/mozilla/data',
+            'test/simdjs/data',
+            'test/test262/data',
+            'test/wasm-js/data',
+            'testing/gtest',
+            'third_party/WebKit/Source/platform/inspector_protocol',
+            'third_party/blink/renderer/platform/inspector_protocol',
+        ],
+        'reviewers': [
+            'machenbach@chromium.org',
+            'tmrts@chromium.org',
+            'v8-waterfall-sheriff@grotations.appspotmail.com',
+        ],
+        'show_commit_log': False,
+    },
+    'Auto-roll - wasm-spec': {
+        'target_config': TARGET_CONFIG_V8,
+        'subject': 'Update wasm-spec.',
+        'whitelist': [
+            # Only roll these dependencies (list without solution name prefix).
+            'test/wasm-js/data',
+        ],
+        'reviewers': [
+            'ahaas@chromium.org',
+            'clemensh@chromium.org',
+        ],
+        'show_commit_log': True,
+    },
 }
 
 # DEPS configuration of pinned Devtools-Frontend Chromium versions.
