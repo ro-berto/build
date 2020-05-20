@@ -85,18 +85,18 @@ def GenerateCoverageTestConstants(api, checkout_dir, output_dir):
     api.path.mock_add_paths(output_dir.join('default.profdata'))
 
 
-def GetChangedFiles(api, cwd):
+def GetChangedFiles(api, checkout_path):
   """Returns list of POSIX paths of files affected by patch."""
   files = []
   if api.tryserver.gerrit_change:
     patch_root = api.gclient.get_gerrit_patch_root()
     assert patch_root, ('local path is not configured for {}'.format(
         api.tryserver.gerrit_change_repo_url))
-    with api.context(cwd=cwd):
+    with api.context(cwd=checkout_path):
       files = api.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(files):
       path = str(path)
-      files[i] = api.path.relpath(path)
+      files[i] = api.path.relpath(path, checkout_path)
   return files
 
 

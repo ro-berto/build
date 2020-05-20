@@ -5182,7 +5182,7 @@ Takes a list of properties and maps them to string gn arguments.
 
 Generates fake file paths used for validation in code coverage tests.
 
-&mdash; **def [GetChangedFiles](/scripts/slave/recipes/openscreen.py#88)(api, cwd):**
+&mdash; **def [GetChangedFiles](/scripts/slave/recipes/openscreen.py#88)(api, checkout_path):**
 
 Returns list of POSIX paths of files affected by patch.
 
