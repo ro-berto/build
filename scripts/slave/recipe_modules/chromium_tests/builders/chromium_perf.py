@@ -251,3 +251,8 @@ _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
+
+_AddIsolatedTestSpec('android-pixel2-processor-perf', 'android',
+                     'android-pixel2-perf')
+_AddIsolatedTestSpec('android-pixel2_webview-processor-perf', 'android',
+                     'android-pixel2_webview-perf')
