@@ -22,10 +22,7 @@ def RunSteps(api):
           'TARGET_PLATFORM': 'chromeos',
           'TARGET_CROS_BOARD': 'x86-generic',
       }))
-  if api.properties.get('gn', False):
-    api.chromium.apply_config('gn')
-  else:
-    api.chromium.apply_config('mb')
+  api.chromium.apply_config('mb')
 
   api.filter.analyze(
       api.properties.get('affected_files', ['file1', 'file2']),
@@ -42,14 +39,6 @@ def GenTests(api):
       api.properties(config='cros'),
       api.post_process(post_process.StepCommandContains, 'analyze',
                        ['--config-file', 'path/to/custom_mb_config.pyl']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'cros_no_mb',
-      api.properties(config='cros', gn=True),
-      api.post_process(post_process.MustRun, 'system_python'),
-      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

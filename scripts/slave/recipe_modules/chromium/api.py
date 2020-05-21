@@ -610,14 +610,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
-    # TODO(crbug.com/810460): Remove the system python wrapping.
-    optional_system_python = contextlib.contextmanager(
-        lambda: (x for x in [None]))()
-    if self.c.TARGET_CROS_BOARD:
-      # Wrap 'compile' through 'cros chrome-sdk'
-      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
-      optional_system_python = self.m.chromite.with_system_python()
-
     if out_dir is None:
       out_dir = 'out'
 
@@ -655,15 +647,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not use_goma_module:
       compile_exit_status = 1
       try:
-        with optional_system_python:
-          with self.m.context(
-              cwd=self.m.context.cwd or self.m.path['checkout']):
-            ninja_result = self._run_ninja(
-                ninja_command=command,
-                name=name or 'compile',
-                ninja_env=ninja_env,
-                **kwargs)
-            compile_exit_status = ninja_result.retcode
+        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+          ninja_result = self._run_ninja(
+              ninja_command=command,
+              name=name or 'compile',
+              ninja_env=ninja_env,
+              **kwargs)
+          compile_exit_status = ninja_result.retcode
       except self.m.step.StepFailure as e:
         compile_exit_status = e.retcode
         raise e
@@ -694,16 +684,15 @@ class ChromiumApi(recipe_api.RecipeApi):
         )
       return result_pb2.RawResult(status=common_pb.SUCCESS)
     try:
-      with optional_system_python:
-        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          ninja_result = self._run_ninja_with_goma(
-              ninja_command=command,
-              ninja_env=ninja_env,
-              name=name or 'compile',
-              goma_env=goma_env,
-              ninja_log_outdir=target_output_dir,
-              ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-              **kwargs)
+      with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+        ninja_result = self._run_ninja_with_goma(
+            ninja_command=command,
+            ninja_env=ninja_env,
+            name=name or 'compile',
+            goma_env=goma_env,
+            ninja_log_outdir=target_output_dir,
+            ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+            **kwargs)
     except self.m.step.StepFailure as ex:
       # If there is an infra failure raised at this point that means
       # goma did not get to start, so no need to handle it
@@ -951,41 +940,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       clang_revision = step_result.json.output['clang_revision']
       step_result.presentation.properties['clang_revision'] = clang_revision
     return clang_revision
-
-  def get_cros_chrome_sdk_wrapper(self):
-    """Returns: a wrapper command for 'cros chrome-sdk'
-
-    Args:
-      external: (bool) If True, force the wrapper to prefer external board
-          configurations over internal ones, even if the latter is available.
-      clean: (bool) If True, instruct the wrapper to clean any previous
-          state data.
-    """
-    assert self.c.TARGET_CROS_BOARD
-    wrapper = [
-        self.m.depot_tools.cros_path, 'chrome-sdk', '--nogn-gen',
-        '--board=%s' % (self.c.TARGET_CROS_BOARD,),
-        '--nocolor', '--log-level=debug',
-        '--cache-dir', self.m.path['checkout'].join('build', 'cros_cache')]
-    wrapper += self.c.cros_sdk.args
-    # With neither arg, the cros chrome-sdk will try external configs but
-    # fallback to internal configs if none are available. Avoid that fallback
-    # behavior on the bots by explicitly using either external or internal
-    # configs.
-    if self.c.cros_sdk.external:
-      wrapper += ['--use-external-config']
-    else:
-      wrapper += ['--internal']
-    if self.c.compile_py.goma_dir:
-      wrapper += ['--gomadir', self.c.compile_py.goma_dir]
-      # Since we are very sure api.chromium.compile starts compiler_proxy,
-      # and starting compiler_proxy here make it difficult for us to
-      # investigate the compiler_proxy start-up failure reason,
-      # let me stop starting compiler_proxy. (crbug.com/639432)
-      wrapper += ['--nostart-goma']
-    # NOTE: --fastbuild is no longer supported in 'cros chrome-sdk'.
-    wrapper += ['--']
-    return wrapper
 
   def ensure_goma(self, client_type='release'):
     no_goma_compiler = self.c.compile_py.compiler or ''
@@ -1285,14 +1239,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         'args': args + (additional_args or []),
     }
 
-    # TODO(crbug.com/810460): Remove the system python wrapping.
-    optional_system_python = contextlib.contextmanager(
-        lambda: (x for x in [None]))()
-    if chromium_config.TARGET_CROS_BOARD:
-      # Wrap 'mb' through 'cros chrome-sdk'
-      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
-      optional_system_python = self.m.chromite.with_system_python()
-
     step_kwargs.update(kwargs)
 
     # If an environment was provided, copy it so that we don't modify the
@@ -1311,12 +1257,11 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     env.update(self.m.context.env)
 
-    with optional_system_python:
-      with self.m.context(
-          # TODO(phajdan.jr): get cwd from context, not kwargs.
-          cwd=kwargs.get('cwd', self.m.path['checkout']),
-          env=env):
-        return self.m.python(**step_kwargs)
+    with self.m.context(
+        # TODO(phajdan.jr): get cwd from context, not kwargs.
+        cwd=kwargs.get('cwd', self.m.path['checkout']),
+        env=env):
+      return self.m.python(**step_kwargs)
 
   @_with_chromium_layout
   def mb_analyze(self,

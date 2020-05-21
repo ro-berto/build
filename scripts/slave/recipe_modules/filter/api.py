@@ -124,7 +124,6 @@ class FilterApi(recipe_api.RecipeApi):
                                  builder_id=None,
                                  mb_config_path=None,
                                  build_output_dir=None,
-                                 cros_board=None,
                                  **kwargs):
     """Check to see if the affected files require a compile or tests.
 
@@ -238,39 +237,30 @@ class FilterApi(recipe_api.RecipeApi):
     # override GYP environment variables, so we'll refrain from defining them
     # to avoid confusing output.
     cwd = None
-    optional_system_python = contextlib.contextmanager(
-        lambda: (x for x in [None]))()
-    if cros_board:
-      kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
-      cwd = self.m.context.cwd or self.m.path['checkout']
-      # api.chromium's mb logic already sets up chromite's system python
-      # if necessary.
-      if not use_mb:
-        optional_system_python = self.m.chromite.with_system_python()
-    elif not use_mb:
+    if not use_mb:
       env.update(self.m.chromium.c.gyp_env.as_jsonish())
     env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
         self.m.goma.service_account_json_path
 
-    with optional_system_python:
-      with self.m.context(cwd=cwd, env=env):
-        if use_mb:
-          builder_id = builder_id or self.m.chromium.get_builder_id()
-          step_result = self.m.chromium.mb_analyze(
-              builder_id,
-              analyze_input,
-              mb_config_path=mb_config_path,
-              build_dir=build_output_dir)
-        else:
-          step_result = self.m.python(
-              'analyze',
-              self.m.path['checkout'].join('build', 'gyp_chromium'),
-              args=['--analyzer',
-                    self.m.json.input(analyze_input),
-                    self.m.json.output()],
-              step_test_data=lambda: self.m.json.test_api.output(
-                test_output),
-              **kwargs)
+    with self.m.context(cwd=cwd, env=env):
+      if use_mb:
+        builder_id = builder_id or self.m.chromium.get_builder_id()
+        step_result = self.m.chromium.mb_analyze(
+            builder_id,
+            analyze_input,
+            mb_config_path=mb_config_path,
+            build_dir=build_output_dir)
+      else:
+        step_result = self.m.python(
+            'analyze',
+            self.m.path['checkout'].join('build', 'gyp_chromium'),
+            args=[
+                '--analyzer',
+                self.m.json.input(analyze_input),
+                self.m.json.output()
+            ],
+            step_test_data=lambda: self.m.json.test_api.output(test_output),
+            **kwargs)
 
     if 'error' in step_result.json.output:
       step_result.presentation.step_text = (
@@ -338,8 +328,7 @@ class FilterApi(recipe_api.RecipeApi):
         use_mb=use_mb,
         builder_id=builder_id,
         mb_config_path=mb_config_path,
-        build_output_dir=build_output_dir,
-        cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
+        build_output_dir=build_output_dir)
 
     compile_targets = self.compile_targets[:]
 
