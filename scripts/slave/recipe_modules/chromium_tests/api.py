@@ -145,9 +145,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                **bot_config.chromium_config_kwargs)
     self.set_config(bot_config.chromium_tests_config)
 
-    self.m.gclient.set_config(
-        bot_config.gclient_config,
-        **bot_config.gclient_config_kwargs)
+    self.m.gclient.set_config(bot_config.gclient_config)
 
     default_test_results_config = (
         'staging_server'

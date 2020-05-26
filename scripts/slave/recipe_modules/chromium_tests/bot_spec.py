@@ -171,9 +171,6 @@ class BotSpec(object):
   gclient_config = attrib(str, default=None)
   # The names of additional configs to apply for the gclient recipe module
   gclient_apply_config = sequence_attrib(str, default=())
-  # The keyword arguments used when setting the config for the gclient recipe
-  # module
-  gclient_config_kwargs = mapping_attrib(str, default={})
   # The name of the config to use for the android recipe module
   android_config = attrib(str, default=None)
   # The names of additional configs to apply for the android recipe module
