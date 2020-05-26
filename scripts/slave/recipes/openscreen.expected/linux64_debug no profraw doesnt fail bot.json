@@ -506,13 +506,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "run tests",
-    "~followup_annotations": [
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
     "cmd": [
       "[START_DIR]/openscreen/out/Default/openscreen_unittests"
     ],
@@ -520,16 +513,12 @@
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "run tests.run unit tests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "run unit tests"
   },
   {
     "cmd": [],
-    "name": "run tests.calculate code coverage",
+    "name": "calculate code coverage",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -543,9 +532,9 @@
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "run tests.calculate code coverage.skip processing because no coverage data was generated",
+    "name": "calculate code coverage.skip processing because no coverage data was generated",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -557,10 +546,7 @@
     "env": {
       "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
-    "name": "run tests.run e2e tests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "run e2e tests"
   },
   {
     "name": "$result"

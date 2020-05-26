@@ -210,7 +210,7 @@ def SetCodeCoverageConstants(api, checkout_dir, host_tool_label):
 
   api.profiles._merge_scripts_dir = merge_libs_dir
   api.profiles._llvm_base_path = llvm_dir
-  api.code_coverage._architecture = host_tool_label
+  api.code_coverage._platform = host_tool_label
   api.code_coverage._use_clang_coverage = True
 
   paths_to_check = [
@@ -375,9 +375,8 @@ def RunSteps(api):
       SwarmTests(api, output_path, checkout_path, SWARMING_DIMENSIONS)
       return
 
-    with api.step.nest('run tests'):
-      RunTestsLocally(api, output_path, unit_test_binary, e2e_test_binary,
-                      use_coverage)
+    RunTestsLocally(api, output_path, unit_test_binary, e2e_test_binary,
+                    use_coverage)
 
 
 def GenTests(api):
@@ -394,8 +393,7 @@ def GenTests(api):
           generate_test_profraw=True,
           generate_test_profdata=True),
       api.step_data(
-          'run tests.calculate code coverage.process raw coverage data',
-          retcode=0),
+          'calculate code coverage.process raw coverage data', retcode=0),
   )
   yield api.test(
       'linux64_debug no profdata doesnt fail bot',
@@ -409,8 +407,7 @@ def GenTests(api):
           generate_test_profraw=True,
       ),
       api.step_data(
-          'run tests.calculate code coverage.process raw coverage data',
-          retcode=0),
+          'calculate code coverage.process raw coverage data', retcode=0),
   )
   yield api.test(
       'linux64_debug no profraw doesnt fail bot',
