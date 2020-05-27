@@ -41,6 +41,21 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/chromium_presubmit"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
@@ -61,6 +76,7 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[CACHE]/builder/chromium_presubmit",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -234,7 +250,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/chromium_presubmit/src",
     "name": "commit-git-patch"
   },
   {
@@ -250,7 +266,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[START_DIR]/src",
+      "[CACHE]/builder/chromium_presubmit/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -263,6 +279,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/chromium_presubmit",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

@@ -22,7 +22,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -67,7 +67,7 @@
       "--revision",
       "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -157,7 +157,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[CACHE]/builder/node-ci",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -180,19 +180,19 @@
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/node-ci",
+      "--root=[CACHE]/builder/node-ci",
       "gen",
       "//out/Release",
       "--args=is_clang=true use_sysroot=true use_custom_libcxx=true node_use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[CACHE]/builder/node-ci",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+        "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
     },
     "name": "build.gn",
@@ -215,18 +215,18 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/node-ci/out/Release",
+      "[CACHE]/builder/node-ci/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[CACHE]/builder/node-ci",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+        "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
     },
     "name": "build.compile",
@@ -240,21 +240,21 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/node-ci/out/Release",
+      "[CACHE]/builder/node-ci/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[CACHE]/builder/node-ci",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+        "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
     },
     "name": "build.compile confirm no-op",
@@ -264,9 +264,9 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/node-ci/out/Release/node_cctest"
+      "[CACHE]/builder/node-ci/out/Release/node_cctest"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "run cctest"
   },
   {
@@ -281,12 +281,12 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "--test-root",
-      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "[CACHE]/builder/node-ci/out/Release/gen/node/test",
       "addons"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test addons"
   },
   {
@@ -301,10 +301,10 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test default"
   },
   {
@@ -319,12 +319,12 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "--test-root",
-      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "[CACHE]/builder/node-ci/out/Release/gen/node/test",
       "js-native-api"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test js-native-api"
   },
   {
@@ -339,12 +339,12 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "--test-root",
-      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "[CACHE]/builder/node-ci/out/Release/gen/node/test",
       "node-api"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test node-api"
   },
   {

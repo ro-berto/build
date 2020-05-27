@@ -23,7 +23,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -95,7 +95,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -119,7 +119,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/v8/custom_deps"
+      "[CACHE]/builder/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -135,7 +135,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/v8/custom_deps"
+      "[CACHE]/builder/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -152,7 +152,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
+      "[CACHE]/builder/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -180,19 +180,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -210,25 +210,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -260,11 +260,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -280,14 +280,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -299,7 +299,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -314,8 +314,8 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
-      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [
@@ -357,7 +357,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -444,7 +444,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -785,7 +785,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -853,7 +853,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -871,19 +871,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -901,25 +901,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -951,11 +951,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -971,14 +971,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -990,7 +990,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1005,8 +1005,8 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
-      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a0.isolate tests",
     "~followup_annotations": [
@@ -1044,7 +1044,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1234,7 +1234,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -1302,7 +1302,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1320,19 +1320,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1350,25 +1350,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1400,11 +1400,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1420,14 +1420,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1439,7 +1439,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1454,8 +1454,8 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
-      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a2.isolate tests",
     "~followup_annotations": [
@@ -1493,7 +1493,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1721,7 +1721,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -1789,7 +1789,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1807,19 +1807,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1837,25 +1837,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1887,11 +1887,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1907,14 +1907,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1926,7 +1926,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1941,8 +1941,8 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
-      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "Bisect a1.isolate tests",
     "~followup_annotations": [
@@ -1980,7 +1980,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",

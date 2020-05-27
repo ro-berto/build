@@ -17,7 +17,7 @@
       "--revision",
       "src@origin/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -189,9 +189,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/src/src/build.py"
+      "[CACHE]/builder/src/src/build.py"
     ],
-    "cwd": "[BUILDER_CACHE]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_BUILDNUMBER": "123456",
@@ -203,7 +203,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "[BUILDER_CACHE]/depot_tools"
+        "[CACHE]/builder/depot_tools"
       ]
     },
     "name": "annotated steps",

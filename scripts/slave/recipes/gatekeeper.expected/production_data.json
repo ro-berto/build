@@ -223,7 +223,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]"
+      "[CACHE]/builder"
     ],
     "infra_step": true,
     "name": "ensure cache"
@@ -267,7 +267,7 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--verbose",
       "--build-db",
-      "[BUILDER_CACHE]/v8_mail_notifiers_build_db.json",
+      "[CACHE]/builder/v8_mail_notifiers_build_db.json",
       "https://build.chromium.org/p/client.v8.fyi",
       "https://build.chromium.org/p/client.v8",
       "https://build.chromium.org/p/client.v8.chromium"
@@ -306,7 +306,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[BUILDER_CACHE]/v8_tree_closers_build_db.json",
+      "[CACHE]/builder/v8_tree_closers_build_db.json",
       "--password-file",
       "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.v8.fyi",
@@ -354,7 +354,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[BUILDER_CACHE]/pdfium_build_db.json",
+      "[CACHE]/builder/pdfium_build_db.json",
       "--password-file",
       "/creds/gatekeeper/pdfium_status_password",
       "https://build.chromium.org/p/client.pdfium"
@@ -372,7 +372,7 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--verbose",
       "--build-db",
-      "[BUILDER_CACHE]/ios_db.json",
+      "[CACHE]/builder/ios_db.json",
       "https://build.chromium.org/p/chromium.mac:ios-device,ios-simulator,ios-simulator-full-configs,ios-simulator-noncq"
     ],
     "name": "gatekeeper: ios"
@@ -395,7 +395,7 @@
       "--revision-properties",
       "got_revision",
       "--build-db",
-      "[BUILDER_CACHE]/webrtc_build_db.json",
+      "[CACHE]/builder/webrtc_build_db.json",
       "--password-file",
       "/creds/gatekeeper/webrtc_status_password",
       "https://build.chromium.org/p/client.webrtc"
@@ -431,7 +431,7 @@
       "--set-status",
       "--open-tree",
       "--build-db",
-      "[BUILDER_CACHE]/infra_db.json",
+      "[CACHE]/builder/infra_db.json",
       "--password-file",
       "/creds/gatekeeper/infra_status_password",
       "https://build.chromium.org/p/chromium.infra"
@@ -467,7 +467,7 @@
       "--set-status",
       "--open-tree",
       "--build-db",
-      "[BUILDER_CACHE]/devtools_tree_closers_build_db.json",
+      "[CACHE]/builder/devtools_tree_closers_build_db.json",
       "--password-file",
       "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.devtools-frontend.integration"
@@ -492,7 +492,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[BUILDER_CACHE]/waterfall_build_db.json",
+      "[CACHE]/builder/waterfall_build_db.json",
       "--password-file",
       "/creds/gatekeeper/chromium_status_password",
       "https://build.chromium.org/p/chrome",

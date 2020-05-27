@@ -118,7 +118,7 @@ def _git_clean(api):
 
 @contextmanager
 def _in_builder_cache(api):
-  cache_dir = api.path['builder_cache']
+  cache_dir = api.path['cache'].join('builder')
   with api.context(cwd=cache_dir):
     yield
 

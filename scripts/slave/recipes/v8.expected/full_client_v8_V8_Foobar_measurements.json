@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/build-dep-stats.py",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-x",
       "/third_party/",
       "-o",
@@ -13,7 +13,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/v8/third_party/depot_tools"
+        "[CACHE]/builder/v8/third_party/depot_tools"
       ]
     },
     "name": "measurements.track build dependencies (fyi)",
@@ -66,13 +66,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "filesizes",
-      "[BUILDER_CACHE]/v8/out/Release/d8"
+      "[CACHE]/builder/v8/out/Release/d8"
     ],
     "infra_step": true,
     "name": "measurements.Check binary size",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/v8/out/Release/d8: \t111@@@",
+      "@@@STEP_LOG_LINE@filesizes@[CACHE]/builder/v8/out/Release/d8: \t111@@@",
       "@@@STEP_LOG_END@filesizes@@@"
     ]
   },

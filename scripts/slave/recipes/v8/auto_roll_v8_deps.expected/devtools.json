@@ -23,10 +23,10 @@
       "-m",
       "TBR=machenbach@chromium.org,liviurau@chromium.org"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[CACHE]/builder/devtools-frontend/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -42,10 +42,10 @@
       "--bypass-hooks",
       "--send-mail"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[CACHE]/builder/devtools-frontend/third_party/depot_tools"
       ]
     },
     "infra_step": true,

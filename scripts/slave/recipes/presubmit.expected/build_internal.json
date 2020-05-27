@@ -41,6 +41,21 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/build_internal_presubmit"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
@@ -62,6 +77,7 @@
       "build_internal@HEAD",
       "--no_fetch_tags"
     ],
+    "cwd": "[CACHE]/builder/build_internal_presubmit",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -138,7 +154,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/build_internal",
+    "cwd": "[CACHE]/builder/build_internal_presubmit/build_internal",
     "name": "commit-git-patch"
   },
   {
@@ -154,7 +170,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[START_DIR]/build_internal",
+      "[CACHE]/builder/build_internal_presubmit/build_internal",
       "--commit",
       "--verbose",
       "--verbose",
@@ -167,6 +183,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/build_internal_presubmit",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

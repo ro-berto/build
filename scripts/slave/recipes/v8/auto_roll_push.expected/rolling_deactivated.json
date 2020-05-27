@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]"
+      "[CACHE]/builder"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -32,7 +32,7 @@
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"

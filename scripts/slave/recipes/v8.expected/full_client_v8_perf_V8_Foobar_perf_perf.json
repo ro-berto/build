@@ -14,12 +14,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "d8"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"

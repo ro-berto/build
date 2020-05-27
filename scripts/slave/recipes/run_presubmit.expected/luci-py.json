@@ -41,6 +41,21 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/Luci_py_Presubmit"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
@@ -63,6 +78,7 @@
       "--revision",
       "infra/luci@origin/master"
     ],
+    "cwd": "[CACHE]/builder/Luci_py_Presubmit",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -125,7 +141,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]/infra/luci",
+    "cwd": "[CACHE]/builder/Luci_py_Presubmit/infra/luci",
     "name": "commit-git-patch"
   },
   {
@@ -141,7 +157,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[START_DIR]/infra/luci",
+      "[CACHE]/builder/Luci_py_Presubmit/infra/luci",
       "--commit",
       "--verbose",
       "--verbose",
@@ -154,6 +170,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/Luci_py_Presubmit",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

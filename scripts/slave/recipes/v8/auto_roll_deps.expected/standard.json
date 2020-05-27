@@ -69,7 +69,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]"
+      "[CACHE]/builder"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -94,7 +94,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -278,7 +278,7 @@
       "blob",
       "HEAD:DEPS"
     ],
-    "cwd": "[BUILDER_CACHE]/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git cat-file"
   },
@@ -286,9 +286,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/release/auto_roll.py",
+      "[CACHE]/builder/v8/tools/release/auto_roll.py",
       "--chromium",
-      "[BUILDER_CACHE]/src",
+      "[CACHE]/builder/src",
       "--author",
       "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "--reviewer",
@@ -299,7 +299,7 @@
       "--work-dir",
       "[CACHE]/TestBuilder/workdir"
     ],
-    "cwd": "[BUILDER_CACHE]/src/v8",
+    "cwd": "[CACHE]/builder/src/v8",
     "name": "roll deps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

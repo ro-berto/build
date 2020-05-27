@@ -23,7 +23,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -81,7 +81,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -105,7 +105,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/v8/custom_deps"
+      "[CACHE]/builder/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -121,7 +121,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/v8/custom_deps"
+      "[CACHE]/builder/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -138,7 +138,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
+      "[CACHE]/builder/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -166,19 +166,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -196,23 +196,23 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -241,11 +241,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -261,14 +261,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -282,7 +282,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/run-tests.py",
+      "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -299,7 +299,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -366,7 +366,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/run-tests.py",
+      "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -384,7 +384,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "name": "Test262",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

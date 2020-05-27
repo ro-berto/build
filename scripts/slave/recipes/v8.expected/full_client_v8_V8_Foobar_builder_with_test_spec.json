@@ -7,7 +7,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
+      "[CACHE]/builder/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -53,25 +53,25 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar builder",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "mjsunit\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -89,7 +89,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -104,7 +104,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/mjsunit.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [

@@ -49,7 +49,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/v8_presubmit"
+      "[CACHE]/builder/v8_presubmit"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -76,7 +76,7 @@
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit",
+    "cwd": "[CACHE]/builder/v8_presubmit",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -138,7 +138,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit/v8",
+    "cwd": "[CACHE]/builder/v8_presubmit/v8",
     "name": "commit-git-patch"
   },
   {
@@ -148,7 +148,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit/v8",
+    "cwd": "[CACHE]/builder/v8_presubmit/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -169,7 +169,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[BUILDER_CACHE]/v8_presubmit/v8",
+      "[CACHE]/builder/v8_presubmit/v8",
       "--commit",
       "--verbose",
       "--verbose",
@@ -182,7 +182,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit",
+    "cwd": "[CACHE]/builder/v8_presubmit",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

@@ -174,7 +174,7 @@ def RunSteps(api):
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
 
   api.gclient.set_config('v8')
-  with api.context(cwd=api.path['builder_cache']):
+  with api.context(cwd=api.path['cache'].join('builder')):
     api.gclient.checkout()
 
   # Enforce a clean state.

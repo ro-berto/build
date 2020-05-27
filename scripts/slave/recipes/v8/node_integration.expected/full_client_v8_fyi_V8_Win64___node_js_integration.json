@@ -25,7 +25,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]\\builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -112,7 +112,7 @@
       "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\v8",
+    "cwd": "[CACHE]\\builder\\v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -130,9 +130,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\v8\\tools\\node\\update_node.py",
-      "[BUILDER_CACHE]\\v8",
-      "[BUILDER_CACHE]\\node.js"
+      "[CACHE]\\builder\\v8\\tools\\node\\update_node.py",
+      "[CACHE]\\builder\\v8",
+      "[CACHE]\\builder\\node.js"
     ],
     "name": "update v8"
   },
@@ -144,7 +144,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\node.js\\configure",
+      "[CACHE]\\builder\\node.js\\configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=80",
       "--build-v8-with-gn-extra-gn-args",
@@ -152,7 +152,7 @@
       "--ninja",
       "--use-clang-cl"
     ],
-    "cwd": "[BUILDER_CACHE]\\node.js",
+    "cwd": "[CACHE]\\builder\\node.js",
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN": "1"
     },
@@ -167,7 +167,7 @@
       "-C",
       "out\\Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\node.js",
+    "cwd": "[CACHE]\\builder\\node.js",
     "name": "build.build node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -177,14 +177,14 @@
     "cmd": [
       "out\\Release\\cctest"
     ],
-    "cwd": "[BUILDER_CACHE]\\node.js",
+    "cwd": "[CACHE]\\builder\\node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\node.js\\tools\\test.py",
+      "[CACHE]\\builder\\node.js\\tools\\test.py",
       "-p",
       "tap",
       "-j8",
@@ -193,7 +193,7 @@
       "run",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]\\node.js",
+    "cwd": "[CACHE]\\builder\\node.js",
     "name": "run tests"
   },
   {

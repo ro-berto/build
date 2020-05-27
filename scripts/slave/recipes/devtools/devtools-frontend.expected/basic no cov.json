@@ -17,7 +17,7 @@
       "--revision",
       "devtools-frontend@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -75,7 +75,7 @@
       "--",
       "front_end"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "infra_step": true,
     "name": "git clean"
   },
@@ -86,7 +86,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -113,7 +113,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -138,19 +138,19 @@
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/devtools-frontend",
+      "--root=[CACHE]/builder/devtools-frontend",
       "gen",
       "//out/Release",
       "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "gn"
@@ -171,13 +171,13 @@
       "0777",
       "[GOMA_CACHE]/data"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -193,7 +193,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -208,7 +208,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -236,13 +236,13 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -266,18 +266,18 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "compile"
@@ -288,21 +288,21 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "compile confirm no-op"
@@ -319,7 +319,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -331,7 +331,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -357,7 +357,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -369,7 +369,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -384,7 +384,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -396,7 +396,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -424,9 +424,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/devtools-frontend/out/Release\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/devtools-frontend/out/Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -447,13 +447,13 @@
       "--buildbot-slavename",
       "fake-bot-id"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.upload_log",
@@ -482,13 +482,13 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -501,12 +501,12 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_unittests.py",
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
       "--target=Release"
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "Unit Tests"
@@ -515,11 +515,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_type_check.py"
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_type_check.py"
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "Type Check with Closure"
@@ -528,11 +528,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_lint_check.py"
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_lint_check.py"
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "Lint Check with ESLint"
@@ -541,11 +541,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_localization_check.py"
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_localization_check.py"
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "Localization Check"
@@ -554,11 +554,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_e2e.py"
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_e2e.py"
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party"
+        "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
     "name": "E2E tests"

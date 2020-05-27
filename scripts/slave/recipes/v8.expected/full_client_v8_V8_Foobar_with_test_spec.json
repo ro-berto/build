@@ -7,7 +7,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
+      "[CACHE]/builder/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -51,7 +51,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -66,7 +66,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/mjsunit.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [
@@ -82,7 +82,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -200,7 +200,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -318,7 +318,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",

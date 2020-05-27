@@ -380,7 +380,7 @@ class V8Api(recipe_api.RecipeApi):
       revision = '%s:%s' % (branch, revision)
     solution.revision = revision
 
-    self.checkout_root = self.m.path['builder_cache']
+    self.checkout_root = self.m.path['cache'].join('builder')
     self.m.file.ensure_directory(
         'ensure builder cache dir', self.checkout_root)
     with self.m.context(cwd=self.checkout_root):

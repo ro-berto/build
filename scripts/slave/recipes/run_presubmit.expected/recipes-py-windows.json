@@ -41,6 +41,21 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder\\infra_presubmit"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
@@ -63,6 +78,7 @@
       "--revision",
       "infra/recipes-py@origin/master"
     ],
+    "cwd": "[CACHE]\\builder\\infra_presubmit",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -125,7 +141,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[START_DIR]\\infra\\recipes-py",
+    "cwd": "[CACHE]\\builder\\infra_presubmit\\infra\\recipes-py",
     "name": "commit-git-patch"
   },
   {
@@ -135,7 +151,7 @@
       "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\infra",
+    "cwd": "[CACHE]\\builder\\infra_presubmit\\infra",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -156,7 +172,7 @@
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[START_DIR]\\infra\\recipes-py",
+      "[CACHE]\\builder\\infra_presubmit\\infra\\recipes-py",
       "--commit",
       "--verbose",
       "--verbose",
@@ -169,6 +185,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]\\builder\\infra_presubmit",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

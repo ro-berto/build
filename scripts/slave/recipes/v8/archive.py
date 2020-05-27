@@ -306,7 +306,7 @@ def GenTests(api):
       api.v8.check_param_equals(
           'make archive.filter build files',
           '--dir',
-          '[BUILDER_CACHE]\\v8\\out\\Release') +
+          '[CACHE]\\builder\\v8\\out\\Release') +
       # Show GN configs to be resiliant to changes of chromium configs.
       api.post_process(Filter('build.gn'))
   )

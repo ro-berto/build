@@ -88,7 +88,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]"
+      "[CACHE]/builder"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -113,7 +113,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -284,10 +284,10 @@
       "-i",
       "123"
     ],
-    "cwd": "[BUILDER_CACHE]/src",
+    "cwd": "[CACHE]/builder/src",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/src/third_party/depot_tools"
+        "[CACHE]/builder/src/third_party/depot_tools"
       ]
     },
     "infra_step": true,

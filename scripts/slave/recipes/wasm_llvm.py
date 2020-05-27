@@ -19,7 +19,7 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
   api.gclient.apply_config('depot_tools')
-  checkout_root = api.path['builder_cache']
+  checkout_root = api.path['cache'].join('builder')
   with api.context(cwd=checkout_root):
     # We trigger builds on WASM infrastructure based on commits in llvm
     # repository, which means that the repository and revision properties are

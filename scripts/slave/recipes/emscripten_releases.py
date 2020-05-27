@@ -60,7 +60,7 @@ def RunSteps(api, archive):
   }
   api.goma.start()
 
-  cache_dir = api.path['builder_cache']
+  cache_dir = api.path['cache'].join('builder')
   sync_dir = cache_dir.join('emscripten-releases')
   api.file.ensure_directory('Ensure sync dir', sync_dir)
   build_dir = cache_dir.join('emscripten-releases', 'build')

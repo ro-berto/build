@@ -112,7 +112,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/emscripten-releases"
+      "[CACHE]/builder/emscripten-releases"
     ],
     "infra_step": true,
     "name": "Ensure sync dir"
@@ -152,7 +152,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -209,7 +209,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -225,7 +225,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/emscripten-releases/bots.json",
+      "[CACHE]/builder/emscripten-releases/bots.json",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -239,11 +239,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--v8-dir=[BUILDER_CACHE]/v8",
+      "[CACHE]/builder/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[CACHE]/builder/emscripten-releases",
+      "--build-dir=[CACHE]/builder/emscripten-releases/build",
+      "--prebuilt-dir=[CACHE]/builder/emscripten-releases",
+      "--v8-dir=[CACHE]/builder/v8",
       "--install-dir=[START_DIR]/install",
       "--no-sync",
       "--no-test",
@@ -473,11 +473,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--v8-dir=[BUILDER_CACHE]/v8",
+      "[CACHE]/builder/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[CACHE]/builder/emscripten-releases",
+      "--build-dir=[CACHE]/builder/emscripten-releases/build",
+      "--prebuilt-dir=[CACHE]/builder/emscripten-releases",
+      "--v8-dir=[CACHE]/builder/v8",
       "--install-dir=[START_DIR]/install",
       "--no-sync",
       "--no-test",
@@ -502,11 +502,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--v8-dir=[BUILDER_CACHE]/v8",
+      "[CACHE]/builder/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[CACHE]/builder/emscripten-releases",
+      "--build-dir=[CACHE]/builder/emscripten-releases/build",
+      "--prebuilt-dir=[CACHE]/builder/emscripten-releases",
+      "--v8-dir=[CACHE]/builder/v8",
       "--install-dir=[START_DIR]/install",
       "--no-sync",
       "--no-build",
@@ -531,11 +531,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
-      "--v8-dir=[BUILDER_CACHE]/v8",
+      "[CACHE]/builder/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[CACHE]/builder/emscripten-releases",
+      "--build-dir=[CACHE]/builder/emscripten-releases/build",
+      "--prebuilt-dir=[CACHE]/builder/emscripten-releases",
+      "--v8-dir=[CACHE]/builder/v8",
       "--install-dir=[START_DIR]/install",
       "--no-sync",
       "--no-build",

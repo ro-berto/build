@@ -19,7 +19,7 @@
       "--refs",
       "refs/heads/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
@@ -87,17 +87,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -113,23 +113,23 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\nperf\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -158,9 +158,9 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release"
+      "[CACHE]/builder/v8/out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -172,12 +172,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -196,9 +196,9 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--skip-sendgomatsmon",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/v8/out/Release",
+      "[CACHE]/builder/v8/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/v8/out/Release\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/v8/out/Release\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -211,7 +211,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -226,7 +226,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/perf.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/perf.isolated.gen.json"
     ],
     "name": "isolate tests (perf)",
     "~followup_annotations": [
@@ -270,7 +270,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -285,7 +285,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

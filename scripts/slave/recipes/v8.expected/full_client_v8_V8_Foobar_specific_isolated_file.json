@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "[BUILDER_CACHE]/v8/tools/luci-go/isolate",
+      "[CACHE]/builder/v8/tools/luci-go/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -16,7 +16,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/v8/out/Release/run-num-fuzzer.isolated.gen.json"
+      "[CACHE]/builder/v8/out/Release/run-num-fuzzer.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [

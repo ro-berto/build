@@ -278,21 +278,15 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  try:
-    safe_buildername = ''.join(
-        c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
-    # HACK to avoid invalidating caches when PRESUBMIT running
-    # on special infra/config branch, which is typically orphan.
-    if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
-      safe_buildername += '_infra_config'
-    cwd = api.path['builder_cache'].join(safe_buildername)
-    api.file.ensure_directory('ensure builder cache dir', cwd)
-  except KeyError:
-    # No explicit builder cache directory defined. Use the "start_dir"
-    # directory.
-    # TODO(machenbach): Remove this case when all builders using this recipe
-    # migrated to LUCI.
-    cwd = api.path['start_dir']
+  safe_buildername = ''.join(
+      c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
+  # HACK to avoid invalidating caches when PRESUBMIT running
+  # on special infra/config branch, which is typically orphan.
+  if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
+    safe_buildername += '_infra_config'
+  cwd = api.path['cache'].join('builder', safe_buildername)
+  api.file.ensure_directory('ensure builder cache dir', cwd)
+
   with api.context(cwd=cwd):
     return _RunStepsInternal(api)
 

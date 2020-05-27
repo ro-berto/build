@@ -81,7 +81,7 @@ def RunSteps(api, triggers, v8_tot):
       api.gclient.c.revisions['node-ci'] = revision
 
     # Check out.
-    with api.context(cwd=api.path['builder_cache']):
+    with api.context(cwd=api.path['cache'].join('builder')):
       update_step = api.bot_update.ensure_checkout()
       assert update_step.json.output['did_run']
 

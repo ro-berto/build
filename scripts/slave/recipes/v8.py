@@ -867,11 +867,11 @@ def GenTests(api):
     ) +
     api.v8.example_test_roots('test_checkout') +
     api.path.exists(
-        api.path['builder_cache'].join(
-            'v8', 'custom_deps', 'test_checkout', 'infra',
+        api.path['cache'].join(
+            'builder', 'v8', 'custom_deps', 'test_checkout', 'infra',
             'testing', 'config.pyl'),
-        api.path['builder_cache'].join(
-            'v8', 'custom_deps', 'test_checkout', 'infra',
+        api.path['cache'].join(
+            'builder', 'v8', 'custom_deps', 'test_checkout', 'infra',
             'testing', 'builders.pyl'),
     ) +
     api.override_step_data(

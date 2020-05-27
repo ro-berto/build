@@ -24,7 +24,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CACHE]/builder/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
       "[CLEANUP]/coverage_output_tmp_1/data.json"
@@ -35,7 +35,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CACHE]/builder/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
       "[CLEANUP]/coverage_output_tmp_1/data.json",
@@ -50,7 +50,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
+      "[CACHE]/builder/v8/tools/sanitizers/sancov_formatter.py",
       "split",
       "--json-input",
       "[CLEANUP]/coverage_output_tmp_1/data.json",

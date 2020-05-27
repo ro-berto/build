@@ -3,13 +3,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/v8_presubmit.py",
+      "[CACHE]/builder/v8/tools/v8_presubmit.py",
       "--no-linter-cache"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/v8/third_party/depot_tools"
+        "[CACHE]/builder/v8/third_party/depot_tools"
       ]
     },
     "name": "Presubmit"

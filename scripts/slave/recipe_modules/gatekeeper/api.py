@@ -15,13 +15,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       gatekeeper_trees_json,
     ).json.output
 
-    if not self.m.properties['buildername'].startswith(
-        'Chromium Gatekeeper'):
-      # TODO(machenbach): Fallback for internal gatekeepers using annotated run.
-      # Please remove this when those switched to remote_run.
-      build_db_path = self.m.path['cache'].join('builder')
-    else:
-      build_db_path = self.m.path['builder_cache']
+    build_db_path = self.m.path['cache'].join('builder')
 
     self.m.file.ensure_directory('ensure cache', build_db_path)
 

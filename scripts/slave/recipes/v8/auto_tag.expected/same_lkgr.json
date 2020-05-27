@@ -8,7 +8,7 @@
       "--spec",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -36,7 +36,7 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -67,7 +67,7 @@
       "user.name",
       "local_bot"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -87,7 +87,7 @@
       "user.email",
       "local_bot@example.com"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -101,7 +101,7 @@
       "git",
       "fetch"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git fetch"
   },
@@ -112,7 +112,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git checkout"
   },
@@ -123,7 +123,7 @@
       "-D",
       "work"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git branch"
   },
@@ -133,7 +133,7 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git clean"
   },
@@ -143,7 +143,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "Check latest version file"
   },
@@ -153,7 +153,7 @@
       "show",
       "refs/remotes/branch-heads/3.4~1:include/v8-version.h"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "Check previous version file"
   },
@@ -165,7 +165,7 @@
       "--format=%H",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git log"
   },
@@ -175,7 +175,7 @@
       "show",
       "74882b7a8e55268d1658f83efefa1c2585cee723:include/v8-version.h"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "Check head version file"
   },
@@ -186,7 +186,7 @@
       "--tags",
       "74882b7a8e55268d1658f83efefa1c2585cee723"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git describe"
   },
@@ -197,7 +197,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/heads/3.4-lkgr"
     ],
-    "cwd": "[BUILDER_CACHE]/v8",
+    "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
     "name": "git ls-remote refs_heads_3.4-lkgr",
     "~followup_annotations": [

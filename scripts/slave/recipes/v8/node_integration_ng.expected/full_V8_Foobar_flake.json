@@ -11,10 +11,10 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test default"
   },
   {
@@ -29,10 +29,10 @@
       "--flaky-tests",
       "run",
       "--shell",
-      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "[CACHE]/builder/node-ci/out/Release/node",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "cwd": "[CACHE]/builder/node-ci/node",
     "name": "test default (retry)"
   },
   {
