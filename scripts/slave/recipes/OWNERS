@@ -1,5 +1,6 @@
-agable@chromium.org
+gbeaty@chromium.org
 iannucci@chromium.org
+martiniss@chromium.org
 per-file angle.py=file:angle.expected/OWNERS
 per-file art.py=file:art.expected/OWNERS
 per-file bisect*=dtu@chromium.org

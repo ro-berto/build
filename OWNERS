@@ -3,8 +3,6 @@
 # https://chromium.googlesource.com/chromium/src/+/master/build/OWNERS
 
 set noparent
-agable@chromium.org
-agable@google.com
 bpastene@chromium.org
 bpastene@google.com
 dpranke@chromium.org
