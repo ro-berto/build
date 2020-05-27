@@ -406,15 +406,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "name": "code coverage calculations skipped"
-  },
-  {
-    "cmd": [
       "[START_DIR]/openscreen/out/Default/e2e_tests"
     ],
     "cwd": "[START_DIR]/openscreen",
