@@ -18,6 +18,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -35,6 +36,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -114,6 +116,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -132,6 +135,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -150,6 +154,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -169,6 +174,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
 
                 # This is specified because 'android_n5x_swarming_rel'
                 # builder is one of the slowest builder in CQ
@@ -191,6 +197,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -210,6 +217,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -228,6 +236,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -246,6 +255,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -264,6 +274,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -282,6 +293,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -301,6 +313,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -320,6 +333,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -339,6 +353,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
+                'mb_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
