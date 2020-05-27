@@ -491,14 +491,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Do not allow goma to invoke local compiler.
       ninja_env['GOMA_USE_LOCAL'] = 'false'
 
-    ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
-    build_exit_status = ninja_result.retcode
+    build_exit_status = -1
+    try:
+      ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
+      build_exit_status = ninja_result.retcode
 
-    self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
-                     ninja_log_compiler=ninja_log_compiler,
-                     ninja_log_command=ninja_command,
-                     build_exit_status=build_exit_status,
-                     build_step_name=name)
+    finally:
+      self.m.goma.stop(
+          ninja_log_outdir=ninja_log_outdir,
+          ninja_log_compiler=ninja_log_compiler,
+          ninja_log_command=ninja_command,
+          build_exit_status=build_exit_status,
+          build_step_name=name)
     return ninja_result
 
   @contextlib.contextmanager
