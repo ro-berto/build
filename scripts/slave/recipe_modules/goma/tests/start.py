@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
   'goma',
   'recipe_engine/buildbucket',
@@ -26,4 +28,16 @@ def GenTests(api):
       'luci_and_experimental',
       api.runtime(is_luci=True, is_experimental=True),
       api.buildbucket.ci_build(builder='test_buildername'),
+  )
+
+  yield api.test(
+      'failure_during_start_failure_cleanup',
+      api.step_data('preprocess_for_goma.start_goma', retcode=1),
+      api.step_data(
+          'preprocess_for_goma.upload_goma_start_failed_logs', retcode=1),
+      api.post_check(post_process.StatusException),
+      api.post_check(
+          post_process.ResultReason,
+          "Infra Failure: Step('preprocess_for_goma.start_goma') (retcode: 1)"),
+      api.post_process(post_process.DropExpectation),
   )

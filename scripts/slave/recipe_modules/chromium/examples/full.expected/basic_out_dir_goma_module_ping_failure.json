@@ -434,6 +434,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -466,6 +467,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.stop_goma (start failure)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -512,6 +514,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "infra_step": true,
     "name": "preprocess_for_goma.upload_goma_start_failed_logs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

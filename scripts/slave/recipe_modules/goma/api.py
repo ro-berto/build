@@ -330,7 +330,7 @@ class GomaApi(recipe_api.RecipeApi):
     if env is None:
       env = {}
 
-    with self.m.step.nest('preprocess_for_goma') as nested_result:
+    with self.m.step.nest('preprocess_for_goma'):
       self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
           self.m.path['tmp_base'].join('goma_stats'))
       self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
@@ -388,18 +388,28 @@ class GomaApi(recipe_api.RecipeApi):
         if not self._local_dir:
           self._start_cloudtail()
 
-      except self.m.step.InfraFailure as e:
-        with self.m.step.defer_results():
-          self._run_jsonstatus()
+      except self.m.step.InfraFailure:
+        # Put cleanup in a function so that any exceptions that it handles don't
+        # change the exception state in this frame
+        def cleanup():
+          try:
+            with self.m.step.defer_results(), self.m.context(infra_steps=True):
+              self._run_jsonstatus()
 
-          with self.m.context(env=self._goma_ctl_env):
-            self.m.python(
-                name='stop_goma (start failure)',
-                script=self.goma_ctl,
-                args=['stop'], **kwargs)
-          self._upload_logs(name='upload_goma_start_failed_logs')
-        nested_result.presentation.status = self.m.step.EXCEPTION
-        raise e
+              with self.m.context(env=self._goma_ctl_env):
+                self.m.python(
+                    name='stop_goma (start failure)',
+                    script=self.goma_ctl,
+                    args=['stop'],
+                    **kwargs)
+              self._upload_logs(name='upload_goma_start_failed_logs')
+          except self.m.step.StepFailure:
+            # Don't allow the exception to propagate so that the outer frame can
+            # re-raise its exception
+            pass
+
+        cleanup()
+        raise
 
   def stop(self, build_exit_status, ninja_log_outdir=None,
            ninja_log_compiler=None, ninja_log_command=None,
