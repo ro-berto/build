@@ -51,13 +51,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'node-ci', 'url': 'https://chromium.googlesource.com/v8/node-ci'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'node-ci', 'url': 'https://chromium.googlesource.com/v8/node-ci'}]",
       "--patch_root",
       "node-ci",
       "--revision_mapping_file",
       "{\"got_node_ci_revision\": \"node-ci\", \"got_node_js_revision\": \"node-ci/node\", \"got_revision\": \"node-ci\", \"got_v8_revision\": \"node-ci/v8\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -183,7 +183,7 @@
       "--root=[CACHE]/builder/node-ci",
       "gen",
       "//out/Release",
-      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true node_use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true node_use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/node-ci",
     "env": {

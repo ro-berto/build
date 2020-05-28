@@ -148,8 +148,7 @@ def GenTests(api):
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',
-          runhooks=True,
-          path_config='generic'),
+          runhooks=True),
       api.properties(**{'$depot_tools/presubmit': {
           'timeout_s': 654
       }}),
@@ -162,8 +161,7 @@ def GenTests(api):
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',
-          runhooks=True,
-          path_config='generic'),
+          runhooks=True),
       api.properties(**{'$depot_tools/presubmit': {
           'timeout_s': 654
       }}),

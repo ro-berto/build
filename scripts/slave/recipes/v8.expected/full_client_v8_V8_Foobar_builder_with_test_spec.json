@@ -62,7 +62,7 @@
       "--config-file",
       "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client",
+      "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",

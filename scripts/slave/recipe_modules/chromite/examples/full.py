@@ -37,7 +37,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(path_config='generic', cbb_config='auron-paladin'),
+      api.properties(cbb_config='auron-paladin'),
       api.buildbucket.try_build(
           'basic',
           git_repo='https://chromium.googlesource.com/chromiumos/manifest',
@@ -47,7 +47,6 @@ def GenTests(api):
   yield api.test(
       'pass_repo_sync_args',
       api.properties(
-          path_config='generic',
           cbb_config='auron-paladin',
           repo_sync_args=['-j16']),
       api.buildbucket.try_build(
@@ -59,7 +58,6 @@ def GenTests(api):
   yield api.test(
       'chromiumos_coverage',
       api.properties(
-          path_config='generic',
           clobber=None,
           cbb_config='cros-x86-generic-tot-chrome-pfq-informational',
           cbb_master_build_id='24601',
@@ -77,9 +75,7 @@ def GenTests(api):
 
   yield api.test(
       'pass_branch',
-      api.properties(
-          path_config='generic', cbb_config='auron-paladin',
-          branch='foobarnch'),
+      api.properties(cbb_config='auron-paladin', branch='foobarnch'),
       api.post_process(post_process.DropExpectation),
       api.buildbucket.try_build(
           'basic',

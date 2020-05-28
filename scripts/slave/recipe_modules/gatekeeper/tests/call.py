@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/infra_paths',
   'gatekeeper',
   'recipe_engine/properties',
   'recipe_engine/runtime',
@@ -60,8 +59,7 @@ def GenTests(api):
 
   yield api.test(
       'json_infra_side',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data(
           'reading gatekeeper_trees.json',
           api.gatekeeper.infra_config_data(),
@@ -70,8 +68,7 @@ def GenTests(api):
 
   yield api.test(
       'json_by_url',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data(
           'reading gatekeeper_trees.json',
           api.gatekeeper.gitiles_config_data(),

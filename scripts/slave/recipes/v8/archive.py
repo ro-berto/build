@@ -231,7 +231,6 @@ def GenTests(api):
         api.v8.test_name('client.v8.official', 'V8 Foobar', name),
         api.properties.generic(
             mastername='client.v8.official',
-            path_config='generic',
             build_config=build_config,
             **kwargs),
         api.buildbucket.ci_build(
@@ -326,7 +325,6 @@ def GenTests(api):
       api.v8.test_name(mastername, buildername, 'no_branch'),
       api.properties.generic(
           mastername=mastername,
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -351,7 +349,6 @@ def GenTests(api):
       api.v8.test_name(mastername, buildername, 'no_tag'),
       api.properties.generic(
           mastername=mastername,
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -379,7 +376,6 @@ def GenTests(api):
       api.v8.test_name(mastername, buildername, 'update_beta'),
       api.properties.generic(
           mastername=mastername,
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -403,7 +399,6 @@ def GenTests(api):
       api.v8.test_name(mastername, buildername, 'canary'),
       api.properties.generic(
           mastername=mastername,
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -430,7 +425,6 @@ def GenTests(api):
                        'debug_compile_failure'),
       api.properties.generic(
           mastername='client.v8.official',
-          path_config='generic',
           build_config='Debug',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -457,7 +451,6 @@ def GenTests(api):
                        'release_compile_failure'),
       api.properties.generic(
           mastername='client.v8.official',
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -484,7 +477,6 @@ def GenTests(api):
                        'release_libs_compile_failure'),
       api.properties.generic(
           mastername='client.v8.official',
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(
@@ -511,7 +503,6 @@ def GenTests(api):
                        'milestone_compile_failure'),
       api.properties.generic(
           mastername=mastername,
-          path_config='generic',
           build_config='Release',
           target_bits=64),
       api.buildbucket.ci_build(

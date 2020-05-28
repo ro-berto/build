@@ -49,7 +49,6 @@ def GenTests(api):
           parent_buildername='ios-builder',
           parent_buildnumber='456',
           parent_got_revision='fake revision',
-          path_config='generic',
           expected_partial_tasks=[
               {
                   'buildername': 'ios-tester',

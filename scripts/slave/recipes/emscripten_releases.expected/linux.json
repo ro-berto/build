@@ -8,7 +8,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[GOMA_CACHE]/client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -47,7 +47,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux"
+      "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -59,12 +59,12 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -138,11 +138,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'emscripten-releases', 'url': 'https://chromium.googlesource.com/emscripten-releases.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'emscripten-releases', 'url': 'https://chromium.googlesource.com/emscripten-releases.git'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"emscripten-releases\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -255,7 +255,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [
@@ -272,7 +272,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -283,8 +283,8 @@
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
-      "GOMA_DIR": "[GOMA_CACHE]/client",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -316,7 +316,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "env": {
@@ -326,8 +326,8 @@
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
-      "GOMA_DIR": "[GOMA_CACHE]/client",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -348,7 +348,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "env": {
@@ -358,8 +358,8 @@
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
-      "GOMA_DIR": "[GOMA_CACHE]/client",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -419,7 +419,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [
@@ -456,7 +456,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [
@@ -489,7 +489,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [
@@ -518,7 +518,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [
@@ -547,7 +547,7 @@
       "BUILDBOT_BUILDNUMBER": "42",
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
       "PATH": [

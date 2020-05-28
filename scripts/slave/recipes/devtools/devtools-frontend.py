@@ -192,7 +192,6 @@ def _point(api, dimension, totals):
 
 def GenTests(api):
   yield api.test('basic try') + api.properties(
-      path_config='generic',
       mastername='tryserver.devtools-frontend',
   ) + api.buildbucket.try_build(
       'devtools',
@@ -201,24 +200,19 @@ def GenTests(api):
       change_number=91827,
       patch_set=1)
   yield api.test('basic no cov') + api.properties(
-      path_config='generic',
       mastername='tryserver.devtools-frontend',
   )
   yield api.test('basic with cov') + api.properties(
-      path_config='generic',
       mastername='tryserver.devtools-frontend') + api.path.exists(
           api.path['checkout'].join('karma-coverage', 'coverage-summary.json'))
   yield api.test(
       'experimental',
-      api.properties(path_config='generic'),
   ) + api.buildbucket.try_build(
       tags=api.buildbucket.tags(cq_experimental='true'))
   yield api.test('compile failure') + api.properties(
-      path_config='generic',
       mastername='tryserver.devtools-frontend',
   ) + api.step_data(
       'compile', retcode=1) + api.post_process(StatusFailure)
   yield api.test('basic win') + api.properties(
-      path_config='generic',
       mastername='tryserver.devtools-frontend',
   ) + api.platform('win', 64)

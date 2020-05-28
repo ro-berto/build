@@ -58,7 +58,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -100,8 +99,7 @@ def GenTests(api):
           issue='123456',
           mastername='tryserver.fake',
           patchset=1,
-          bot_id='fake-vm',
-          path_config='generic'),
+          bot_id='fake-vm'),
       api.buildbucket.try_build(
           project='chromium',
           builder='ios-simulator',
@@ -151,8 +149,7 @@ def GenTests(api):
           issue='123456',
           mastername='tryserver.fake',
           patchset=1,
-          bot_id='fake-vm',
-          path_config='generic'),
+          bot_id='fake-vm'),
       api.buildbucket.try_build(
           project='chromium',
           builder='ios-simulator',
@@ -202,7 +199,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -240,7 +236,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -275,7 +270,6 @@ def GenTests(api):
           patchset=1,
           patch_project='icu',
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -313,7 +307,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -354,7 +347,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -399,7 +391,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -441,7 +432,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -475,7 +465,6 @@ def GenTests(api):
           mastername='tryserver.fake',
           patchset=1,
           bot_id='fake-vm',
-          path_config='generic',
           fail_patch='apply',
       ),
       api.buildbucket.try_build(

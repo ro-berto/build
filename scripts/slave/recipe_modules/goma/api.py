@@ -109,12 +109,7 @@ class GomaApi(recipe_api.RecipeApi):
   def default_cache_path_per_slave(self):
     if self._ephemeral:
       return self.m.path['tmp_base'].join('goma')
-    try:
-      # Legacy Buildbot cache path:
-      return self.m.path['goma_cache']
-    except KeyError:
-      # New more generic cache path
-      return self.m.path['cache'].join('goma')
+    return self.m.path['cache'].join('goma')
 
   @property
   def default_cache_path(self):

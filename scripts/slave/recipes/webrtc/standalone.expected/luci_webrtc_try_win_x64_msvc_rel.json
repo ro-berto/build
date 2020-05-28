@@ -46,13 +46,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]\\git",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -135,7 +135,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -170,7 +170,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[CACHE]\\goma\\client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -221,7 +221,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "-v",
       "//out/Release_x64",
       "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"common_audio_unittests\", \"system_wrappers_unittests\", \"rtc_unittests\", \"low_bandwidth_audio_test\", \"voip_unittests\", \"test_support_unittests\", \"tools_unittests\", \"slow_tests\", \"rtc_pc_unittests\", \"modules_tests\", \"common_video_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"audio_decoder_unittests\", \"modules_unittests\", \"rtc_media_unittests\"]}",
@@ -309,7 +309,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--quiet"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -335,7 +335,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -386,7 +386,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\data\\win_x64_msvc_rel"
+      "[CACHE]\\goma\\data\\win_x64_msvc_rel"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -402,14 +402,14 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_x64_msvc_rel",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_x64_msvc_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -545,7 +545,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -579,7 +579,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -601,7 +601,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",

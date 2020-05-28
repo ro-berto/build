@@ -26,9 +26,6 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     """
     return line_limit
 
-  def test_defaults(self):
-    return self.m.properties(path_config='generic')
-
   def ci_build(self,
                project='chromium',
                bucket='ci',
@@ -50,7 +47,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
           parent_mastername=parent_mastername,
           parent_buildername=parent_buildername,
       )
-    return props + self.test_defaults() + self.m.buildbucket.ci_build(
+    return props + self.m.buildbucket.ci_build(
         project=project,
         bucket=bucket,
         builder=builder,
@@ -74,7 +71,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     props = self.m.properties(bot_id=bot_id)
     if mastername is not None:
       props += self.m.properties(mastername=mastername)
-    return props + self.test_defaults() + self.m.buildbucket.try_build(
+    return props + self.m.buildbucket.try_build(
         project=project,
         bucket=bucket,
         builder=builder,

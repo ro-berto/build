@@ -19,11 +19,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]\\git",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -204,7 +204,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -251,7 +251,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -322,11 +322,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]\\git",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -511,7 +511,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -546,7 +546,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -679,7 +679,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--recursive"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -706,7 +706,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -744,7 +744,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\data\\findit_variable"
+      "[CACHE]\\goma\\data\\findit_variable"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -760,14 +760,14 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\findit_variable",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -877,7 +877,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -911,7 +911,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -933,7 +933,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1244,7 +1244,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"generic\", \"recipe\": \"findit/chromium/test\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
+      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.win\", \"recipe\": \"findit/chromium/test\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1417,11 +1417,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]\\git",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -1606,7 +1606,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -1641,7 +1641,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -1749,7 +1749,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--recursive"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1776,7 +1776,7 @@
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client",
+      "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -1814,7 +1814,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\data\\findit_variable"
+      "[CACHE]\\goma\\data\\findit_variable"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1830,14 +1830,14 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\findit_variable",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1947,7 +1947,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1981,7 +1981,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -2003,7 +2003,7 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]\\client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -2276,7 +2276,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.win\", \"path_config\": \"generic\", \"recipe\": \"findit/chromium/test\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
+      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.win\", \"recipe\": \"findit/chromium/test\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",

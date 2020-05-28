@@ -71,17 +71,13 @@ def GenTests(api):
   yield api.test(
       'build_ok',
       api.properties.generic(
-          mastername='client.webrtc',
-          buildername='iOS API Framework Builder',
-          path_config='generic'),
+          mastername='client.webrtc', buildername='iOS API Framework Builder'),
   )
 
   yield api.test(
       'build_failure',
       api.properties.generic(
-          mastername='client.webrtc',
-          buildername='iOS API Framework Builder',
-          path_config='generic'),
+          mastername='client.webrtc', buildername='iOS API Framework Builder'),
       api.step_data('build', retcode=1),
   )
 
@@ -91,6 +87,5 @@ def GenTests(api):
           mastername='tryserver.webrtc',
           buildername='ios_api_framework',
           gerrit_url='https://webrtc-review.googlesource.com',
-          gerrit_project='src',
-          path_config='generic'),
+          gerrit_project='src'),
   )

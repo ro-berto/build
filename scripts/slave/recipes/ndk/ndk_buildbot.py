@@ -29,6 +29,5 @@ def GenTests(api):
           mastername='client.ndk',
           branch='master',
           cbb_config='ndk-linux-arm64-v8a',
-          path_config='generic',
       ),
   )

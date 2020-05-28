@@ -94,7 +94,6 @@ def GenTests(api):
       tests, platform_name, tester_name, use_analyze=False, revision=None,
       skip_tests=False):
     properties = {
-        'path_config': 'generic',
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'bot_id': 'build1-a1',
         'target_mastername': 'chromium.%s' % platform_name,

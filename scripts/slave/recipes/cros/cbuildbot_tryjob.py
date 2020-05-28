@@ -99,8 +99,6 @@ def RunSteps(api):
 def GenTests(api):
   common_properties = {
       'mastername': 'chromiumos.tryserver',
-      # chromite module uses path['root'] which exists only in Buildbot.
-      'path_config': 'generic',
       'repository': 'https://chromium.googlesource.com/chromiumos/tryjobs.git',
       'revision': api.gitiles.make_hash('test'),
       'slave_name': 'test',

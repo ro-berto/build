@@ -57,7 +57,6 @@ def GenTests(api):
       api.platform('mac', 64) + api.properties(
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='generic',
       ) + api.buildbucket.try_build(
           project='chromium',
           builder='ios',
@@ -128,7 +127,6 @@ def GenTests(api):
       api.properties(
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -158,7 +156,6 @@ def GenTests(api):
       api.properties(
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -224,7 +221,6 @@ def GenTests(api):
       api.properties(
           mastername='chromium.clang',
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',

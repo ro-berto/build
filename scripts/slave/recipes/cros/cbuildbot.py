@@ -45,8 +45,6 @@ def GenTests(api):
 
   common_properties = {
       'buildername': 'Test',
-      # chromite module uses path['root'] which exists only in Buildbot.
-      'path_config': 'generic',
       'bot_id': 'test',
   }
 
@@ -59,7 +57,6 @@ def GenTests(api):
       'swarming_builder',
       api.properties(
           bot_id='test',
-          path_config='generic',
           cbb_config='swarming-build-config',
       ),
   )
@@ -164,7 +161,6 @@ def GenTests(api):
                   'id': '1337',
               },
           }),
-          path_config='generic',
           bot_id='test',
       ),
   )

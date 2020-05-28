@@ -347,7 +347,6 @@ def GenTests(api):
             good_revision=None, bad_revision=None,
             suspected_revisions=None, use_bisect=False):
     properties = {
-        'path_config': 'generic',
         'mastername': 'tryserver.chromium.linux',
         'bot_id': 'build1-a1',
         'target_mastername': 'chromium.linux',

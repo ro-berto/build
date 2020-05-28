@@ -53,7 +53,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'clusterfuzz_no_issues',
-      api.properties.generic(mastername='client.v8.fyi', path_config='generic'),
+      api.properties.generic(mastername='client.v8.fyi'),
       api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(
           project='v8',
@@ -65,7 +65,7 @@ def GenTests(api):
 
   yield api.test(
       'clusterfuzz_issues',
-      api.properties.generic(mastername='client.v8.fyi', path_config='generic'),
+      api.properties.generic(mastername='client.v8.fyi'),
       api.override_step_data('check clusterfuzz', api.json.output([1, 2])),
       api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(

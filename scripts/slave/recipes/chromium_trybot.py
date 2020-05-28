@@ -54,7 +54,6 @@ def GenTests(api):
         'builder': builder,
     }
 
-    kwargs.setdefault('path_config', 'generic')
     kwargs.setdefault('revision', None)
     kwargs.setdefault('bot_id', 'test_bot')
     if swarm_hashes is None:

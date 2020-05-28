@@ -13,7 +13,6 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
     return self.m.properties(**{'$build/binary_size': kwargs})
 
   def build(self, commit_message='message', size_footer=False, **kwargs):
-    kwargs.setdefault('path_config', 'generic')
     kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     revision_info = {
         '_number': 1,

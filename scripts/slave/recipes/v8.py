@@ -13,7 +13,6 @@ DEPS = [
   'chromium',
   'chromium_swarming',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
@@ -713,7 +712,6 @@ def GenTests(api):
         'with_cache',
         blamelist=['dude@chromium.org'],
         build_config='Release',
-        path_config='generic',
         requester='commit-bot@chromium.org',
         triggers=['v8_foobar_rel_ng_triggered'],
     )

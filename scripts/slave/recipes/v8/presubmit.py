@@ -11,7 +11,6 @@ from recipe_engine.post_process import Filter
 DEPS = [
   'chromium',
   'depot_tools/gclient',
-  'depot_tools/infra_paths',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -38,7 +37,6 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(path_config='generic'),
       api.runtime(is_luci=True, is_experimental=False),
       api.post_process(Filter('Presubmit')),
   )

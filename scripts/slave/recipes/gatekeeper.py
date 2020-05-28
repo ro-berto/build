@@ -6,7 +6,6 @@
 
 
 DEPS = [
-  'depot_tools/infra_paths',
   'gatekeeper',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -26,8 +25,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data(
           'reading gatekeeper_trees.json',
           api.gatekeeper.fake_test_data(),
@@ -36,8 +34,7 @@ def GenTests(api):
 
   yield api.test(
       'keep_going',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data(
           'reading gatekeeper_trees.json',
           api.gatekeeper.fake_test_data(),
@@ -51,16 +48,14 @@ def GenTests(api):
 
   yield api.test(
       'whitelist_config',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data('reading gatekeeper_trees.json',
                     api.gatekeeper.fake_test_data(whitelist_data)),
   )
 
   yield api.test(
       'production_data',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='generic'),
+      api.properties.generic(buildername='Chromium Gatekeeper'),
       api.step_data(
           'reading gatekeeper_trees.json',
           api.gatekeeper.production_data(),

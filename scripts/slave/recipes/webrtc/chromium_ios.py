@@ -30,7 +30,6 @@ def GenTests(api):
           buildnumber='0',
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='generic',
       ),
       api.ios.make_test_build_config({
           'xcode version':

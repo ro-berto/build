@@ -741,8 +741,7 @@ def GenTests(api):
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',
-          runhooks=True,
-          path_config='generic'),
+          runhooks=True),
   )
 
   yield api.test(
@@ -752,7 +751,6 @@ def GenTests(api):
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',
-          runhooks=True,
-          path_config='generic'),
+          runhooks=True),
       api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
   )
