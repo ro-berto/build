@@ -797,7 +797,6 @@ SPEC = {
 }
 
 SPEC.update([
-    stock_config('linux-blink-cors-rel'),
     stock_config('linux-blink-rel-dummy', staging=False),
     stock_config('linux-blink-optional-highdpi-rel-dummy', staging=False),
     stock_config('mac10.10-blink-rel-dummy', staging=False),

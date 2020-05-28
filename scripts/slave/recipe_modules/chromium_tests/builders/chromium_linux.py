@@ -53,6 +53,20 @@ SPEC = {
             bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
+    'linux-blink-cors-rel':
+        _chromium_linux_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'linux-gcc-rel':
         _chromium_linux_spec(
             chromium_config='chromium_no_goma',
