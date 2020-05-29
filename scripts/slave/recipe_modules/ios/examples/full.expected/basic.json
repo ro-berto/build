@@ -248,6 +248,10 @@
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app.arm.breakpad\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"symupload\": \"https://clients2.google.com/cr/symbol\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"upload_path\": \"some_path/Webkit-{%revision%}.zip\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"9abc\"@@@",
@@ -812,6 +816,24 @@
       "https://clients2.google.com/cr/symbol"
     ],
     "name": "symupload Chrome.app.arm.breakpad"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/src/out/Debug-iphonesimulator/Chrome.app",
+      "gs://mock-gcs-bucket/some_path/Webkit-HEAD.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload Chrome.app (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/some_path/Webkit-HEAD.zip@@@"
+    ]
   },
   {
     "cmd": [],

@@ -538,6 +538,16 @@ class iOSApi(recipe_api.RecipeApi):
 
     for artifact in self.__config['upload']:
       name = str(artifact['artifact'])
+
+      # Allow overriding of the base path to a provided upload_path
+      upload_path = artifact.get('upload_path')
+
+      # Support dynamic replacements for pathing with current revision
+      revision_placeholder = '{%revision%}'
+      if upload_path and revision_placeholder in upload_path:
+        upload_path = upload_path.replace(revision_placeholder,
+                                          self.m.buildbucket.gitiles_commit.id)
+
       if artifact.get('symupload'):
         self.symupload(name, artifact['symupload'])
       elif artifact.get('compress'):
@@ -545,13 +555,14 @@ class iOSApi(recipe_api.RecipeApi):
           self.upload_tgz(
               name,
               artifact.get('bucket', self.bucket),
+              upload_path or
               '%s/%s' % (base_path, '%s.tar.gz' % (name.split('.', 1)[0])),
           )
       else:
         self.m.gsutil.upload(
             self.most_recent_app_path.join(name),
             artifact.get('bucket', self.bucket),
-            '%s/%s' % (base_path, name),
+            upload_path or '%s/%s' % (base_path, name),
             link_name=name,
             name='upload %s' % name,
         )

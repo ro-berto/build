@@ -60,10 +60,8 @@ def GenTests(api):
                 'target_cpu="x64"',
                 'use_goma=true',
             ],
-            'xcode build version':
-                '9abc',
-            'bucket':
-                'mock-gcs-bucket',
+            'xcode build version': '9abc',
+            'bucket': 'mock-gcs-bucket',
             'upload': [
                 {
                     'artifact': 'Chrome.app',
@@ -71,6 +69,10 @@ def GenTests(api):
                 {
                     'artifact': 'Chrome.app.arm.breakpad',
                     'symupload': 'https://clients2.google.com/cr/symbol',
+                },
+                {
+                    'artifact': 'Chrome.app',
+                    'upload_path': 'some_path/Webkit-{%revision%}.zip'
                 },
             ],
             'tests': [
