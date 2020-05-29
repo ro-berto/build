@@ -1167,12 +1167,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test gfedcba.isolate tests",

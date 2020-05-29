@@ -1003,12 +1003,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CLEANUP]/isolate_tmp_2/0.isolated.gen.json"
     ],
     "name": "isolate.isolate tests",

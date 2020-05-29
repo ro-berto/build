@@ -1180,12 +1180,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]\\builder\\src\\out\\Release\\affected_tests.isolated.gen.json"
     ],
     "name": "test r1.isolate tests",

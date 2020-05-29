@@ -141,19 +141,6 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.WARNING
 
 
-  def _blacklist_args_for_isolate(self):
-    # Files that match these regexes should never be included in the isolate.
-    # Note: The Python isolate implementation expects a regex for --blacklist,
-    # but the Go version wants a glob (which is matched both against a file's
-    # full path and its basename, and if either matches, the file is ignored).
-    # We use the Go version (through a Python wrapper), so use glob patterns.
-    blacklist = ['*.pyc', '*.swp', '.git']
-    args = []
-    for el in blacklist:
-      args.extend(('--blacklist', el))
-    return args
-
-
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
                     step_name=None,  suffix='', **kwargs):
@@ -217,7 +204,6 @@ class IsolateApi(recipe_api.RecipeApi):
           '--namespace',
           self._namespace,
       ] + (['--verbose'] if verbose else [])
-      args.extend(self._blacklist_args_for_isolate())
 
       if self.service_account_json:
         args.extend(['--service-account-json', self.service_account_json])

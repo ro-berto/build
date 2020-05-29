@@ -1220,12 +1220,6 @@
       "https://isolateserver.appspot.com",
       "--namespace",
       "default-gzip",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp\\peerconnection_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",

@@ -1019,12 +1019,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",

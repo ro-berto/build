@@ -98,12 +98,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]/builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",

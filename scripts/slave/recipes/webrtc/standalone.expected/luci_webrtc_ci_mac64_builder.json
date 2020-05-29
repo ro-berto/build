@@ -588,12 +588,6 @@
       "https://isolateserver.appspot.com",
       "--namespace",
       "default-gzip",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]/builder/src/out/Mac64_Builder/isac_fix_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac64_Builder/low_bandwidth_audio_perf_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac64_Builder/webrtc_perf_tests.isolated.gen.json"

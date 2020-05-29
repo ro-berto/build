@@ -775,12 +775,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CACHE]/builder/src/out/Release/tab_capture_end2end_tests.isolated.gen.json"
     ],
     "env": {

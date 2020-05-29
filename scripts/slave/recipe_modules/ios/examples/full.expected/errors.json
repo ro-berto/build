@@ -758,12 +758,6 @@
       "--namespace",
       "default-gzip",
       "--verbose",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/3.isolated.gen.json"
