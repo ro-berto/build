@@ -256,3 +256,7 @@ _AddIsolatedTestSpec('android-pixel2-processor-perf', 'android',
                      'android-pixel2-perf')
 _AddIsolatedTestSpec('android-pixel2_webview-processor-perf', 'android',
                      'android-pixel2_webview-perf')
+
+_AddIsolatedTestSpec('win-10-processor-perf', 'win', 'win-10-perf')
+_AddIsolatedTestSpec('win-10_laptop_low_end-processor-perf', 'win',
+                     'win-10_laptop_low_end-perf')
