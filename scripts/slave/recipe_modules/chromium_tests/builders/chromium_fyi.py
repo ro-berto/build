@@ -440,44 +440,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
-    'chromeos-amd64-generic-rel-vm-tests':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mb_luci_auth',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'intel',
-                'TARGET_BITS': 64,
-                'TARGET_CROS_BOARD': 'amd64-generic',
-                'TARGET_PLATFORM': 'chromeos',
-            },
-            bot_type=bot_spec.BUILDER_TESTER,
-            simulation_platform='linux',
-        ),
-    'chromeos-kevin-rel-hw-tests':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mb_luci_auth',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-                'TARGET_CROS_BOARD': 'kevin',
-                'TARGET_PLATFORM': 'chromeos',
-            },
-            bot_type=bot_spec.BUILDER_TESTER,
-            simulation_platform='linux',
-        ),
     'linux-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',

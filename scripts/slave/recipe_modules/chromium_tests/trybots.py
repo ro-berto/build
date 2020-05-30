@@ -899,8 +899,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'chromeos-kevin-compile-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.fyi',
-                buildername='chromeos-kevin-rel-hw-tests',
+                mastername='chromium.chromiumos',
+                buildername='chromeos-kevin-rel',
                 execution_mode=try_spec.COMPILE,
             ),
         'chromeos-kevin-rel':
