@@ -173,11 +173,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm-rel',
                 execution_mode=try_spec.COMPILE,
             ),
-        'android_cronet_tester':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.android',
-                buildername='android-cronet-arm-dbg',
-            ),
         'android_mojo':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',
