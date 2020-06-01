@@ -422,7 +422,7 @@ def RunSteps(api):
 def GenTests(api):
   """Generates tests used to verify there are no python usage errors."""
   yield api.test(
-      'linux64_debug',
+      'linux64_coverage_debug',
       api.platform('linux', 64),
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(
@@ -437,7 +437,7 @@ def GenTests(api):
           retcode=0),
   )
   yield api.test(
-      'linux64_debug no profdata does fail bot',
+      'linux64_coverage_debug_no_profdata_does_fail_bot',
       api.platform('linux', 64),
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(
@@ -452,7 +452,7 @@ def GenTests(api):
           retcode=0),
   )
   yield api.test(
-      'linux64_debug no profraw does fail bot',
+      'linux64_coverage_debug_no_profraw_does_fail_bot',
       api.platform('linux', 64),
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(
@@ -462,7 +462,7 @@ def GenTests(api):
           is_valid_coverage_test=True),
   )
   yield api.test(
-      'linux64_debug failed coverage init',
+      'linux64_coverage_debug_failed_coverage_init',
       api.platform('linux', 64),
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(is_debug=True, is_asan=True, use_coverage=True),
@@ -482,6 +482,12 @@ def GenTests(api):
       api.step_data(
           'run tests.calculate code coverage.process raw coverage data',
           retcode=0),
+  )
+  yield api.test(
+      'linux64_debug',
+      api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(is_debug=True, is_asan=True),
   )
   yield api.test(
       'linux64_tsan',
