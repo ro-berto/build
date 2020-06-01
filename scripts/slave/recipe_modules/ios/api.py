@@ -526,7 +526,7 @@ class iOSApi(recipe_api.RecipeApi):
         name='upload %s' % tgz,
     )
 
-  def upload(self, base_path=None):
+  def upload(self, base_path=None, revision=None):
     """Uploads built artifacts as instructed by this bot's build config."""
     assert self.__config
 
@@ -545,8 +545,11 @@ class iOSApi(recipe_api.RecipeApi):
       # Support dynamic replacements for pathing with current revision
       revision_placeholder = '{%revision%}'
       if upload_path and revision_placeholder in upload_path:
-        upload_path = upload_path.replace(revision_placeholder,
-                                          self.m.buildbucket.gitiles_commit.id)
+        # some builders get the current revision from the bot_update call
+        # so we'll let those builders pass it the revision, and default
+        # to buildbucket's gitiles commit id.
+        revision = revision or self.m.buildbucket.gitiles_commit.id
+        upload_path = upload_path.replace(revision_placeholder, revision)
 
       if artifact.get('symupload'):
         self.symupload(name, artifact['symupload'])
