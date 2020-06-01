@@ -718,6 +718,25 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "name": "Set builder output properties",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@coverage_gs_bucket@\"code-coverage-data\"@@@",
+      "@@@SET_BUILD_PROPERTY@coverage_is_presubmit@true@@@",
+      "@@@SET_BUILD_PROPERTY@coverage_metadata_gs_paths@[]@@@",
+      "@@@SET_BUILD_PROPERTY@merged_profdata_gs_paths@[]@@@",
+      "@@@SET_BUILD_PROPERTY@mimic_builder_names@[]@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

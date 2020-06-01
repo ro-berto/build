@@ -270,7 +270,8 @@ def CalculateCodeCoverage(api, output_path, unit_test_binary, e2e_test_binary):
 
   # Upload the coverage results to the code_coverage cloud storge
   # account, so that Gerrit can find it.
-  # For more information, see: https://goto.google.com/mwuls
+  # For more information, see:
+  # https://source.chromium.org/chromium/chromium/tools/build/+/master:scripts/slave/recipe_modules/code_coverage/api.py;l=363  #pylint: disable=line-too-long
   api.code_coverage._process_clang_coverage_data(None, {unit_test_binary})
 
 
@@ -317,6 +318,13 @@ def RunTestsAndCoverageLocally(api, output_path, unit_test_binary,
     # with unit test coverage.
     api.step('run e2e tests', [e2e_test_binary])
 
+  # Set output properties on the buildbot as required for code coverage
+  # to function.
+  # NOTE: This cannot be done in a nested step due to buildbot weirdness.
+  # If it is, the output properties will not be reflected correctly for
+  # the build.
+  api.code_coverage._set_builder_output_properties_for_uploads()
+
 
 def RunSteps(api):
   """Main function body for execution on the current bot."""
@@ -349,23 +357,35 @@ def RunSteps(api):
 
     # Populate Code coverage tool with the set of files that changed.
     use_coverage = api.properties.get('use_coverage', False)
+    full_repo_coverage = api.properties.get('is_ci', False)
     if use_coverage:
       with api.step.nest('initialize code coverage') as coverage_step:
         coverage_step.status = api.step.SUCCESS
         try:
           SetCodeCoverageConstants(api, checkout_path, host_tool_label)
-          changed_files = GetChangedFiles(api, checkout_path)
 
-          # Initialize code coverage.
-          # For more details, see: https://goto.google.com/dmbjf
-          api.code_coverage.instrument(changed_files, output_dir=output_path)
+          if full_repo_coverage:
+            # NOTE: By skipping the below instrument() call, the
+            # code_coverage  module is set to perform full-repo coverage
+            # calculations.
+            api.python.succeeding_step(
+                'instrumentation skipped for full repo coverage', '')
+          else:
+            changed_files = GetChangedFiles(api, checkout_path)
 
-          api.python.succeeding_step(
-              'coverage calculations will proceed for {} files'.format(
-                  len(changed_files)),
-              ''.join('\n{}'.format(str(path)) for path in changed_files))
+            # Initialize code coverage.
+            # For more details, see: https://goto.google.com/dmbjf
+            #
+            # NOTE: This step configures the code_coverage module to perform
+            # per-CL coverage calculations.
+            api.code_coverage.instrument(changed_files, output_dir=output_path)
+
+            api.python.succeeding_step(
+                'coverage calculations will proceed for {} files'.format(
+                    len(changed_files)),
+                ''.join('\n{}'.format(str(path)) for path in changed_files))
         except:  # pylint: disable=bare-except
-          coverage_step.status = api.step.WARNING
+          coverage_step.status = api.step.FAILURE
           use_coverage = False
 
     api.step('gn gen', [
@@ -446,6 +466,22 @@ def GenTests(api):
       api.platform('linux', 64),
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(is_debug=True, is_asan=True, use_coverage=True),
+  )
+  yield api.test(
+      'linux64_coverage_debug_full_repo_coverage',
+      api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'ci'),
+      api.properties(
+          is_debug=True,
+          is_asan=True,
+          is_ci=True,
+          use_coverage=True,
+          is_valid_coverage_test=True,
+          generate_test_profraw=True,
+          generate_test_profdata=True),
+      api.step_data(
+          'run tests.calculate code coverage.process raw coverage data',
+          retcode=0),
   )
   yield api.test(
       'linux64_tsan',

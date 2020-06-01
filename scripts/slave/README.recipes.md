@@ -5180,15 +5180,15 @@ Returns list of POSIX paths of files affected by patch.
 
 Determines what the platform label is, e.g. 'mac' or 'linux64'.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#321)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#329)(api):**
 
 Main function body for execution on the current bot.
 
-&mdash; **def [RunTestsAndCoverageLocally](/scripts/slave/recipes/openscreen.py#283)(api, output_path, unit_test_binary, e2e_test_binary):**
+&mdash; **def [RunTestsAndCoverageLocally](/scripts/slave/recipes/openscreen.py#284)(api, output_path, unit_test_binary, e2e_test_binary):**
 
 Runs unit tests and e2e tests locally and calculates code coverage
 
-&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#277)(api, unit_test_binary, e2e_test_binary):**
+&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#278)(api, unit_test_binary, e2e_test_binary):**
 
 Runs unit tests and e2e tests locally
 
