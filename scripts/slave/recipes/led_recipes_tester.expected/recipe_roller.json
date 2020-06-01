@@ -511,432 +511,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger luci.chromium.try:linux-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:linux-rel.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:linux-rel.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:linux-rel.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:linux-rel.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger luci.chromium.try-m83:linux-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2145684"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:linux-rel.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:linux-rel.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:linux-rel.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:linux-rel.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger luci.chromium.try-m83:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2145684"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:win10_chromium_x64_rel_ng.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:win10_chromium_x64_rel_ng.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m83:win10_chromium_x64_rel_ng.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger luci.chromium.try-m84:linux-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2204425"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:linux-rel.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:linux-rel.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:linux-rel.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:linux-rel.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger luci.chromium.try-m84:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2204425"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:win10_chromium_x64_rel_ng.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:win10_chromium_x64_rel_ng.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "trigger luci.chromium.try-m84:win10_chromium_x64_rel_ng.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task5\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -1005,6 +579,91 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test luci.chromium.try:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try:linux-rel.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:linux-rel.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1016,9 +675,94 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try:linux-rel task",
+    "name": "test luci.chromium.try:linux-rel.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
     ]
   },
   {
@@ -1033,9 +777,94 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try:win10_chromium_x64_rel_ng task",
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m83:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m83:linux-rel.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2145684"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
     ]
   },
   {
@@ -1050,9 +879,94 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try-m83:linux-rel task",
+    "name": "test luci.chromium.try-m83:linux-rel.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2145684"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2145684@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
     ]
   },
   {
@@ -1067,9 +981,94 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try-m83:win10_chromium_x64_rel_ng task",
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m84:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m84:linux-rel.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2204425"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task4\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
     ]
   },
   {
@@ -1084,9 +1083,94 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try-m84:linux-rel task",
+    "name": "test luci.chromium.try-m84:linux-rel.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2204425"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2204425@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led launch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
     ]
   },
   {
@@ -1101,9 +1185,9 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try-m84:win10_chromium_x64_rel_ng task",
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.collect",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

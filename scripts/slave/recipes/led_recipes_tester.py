@@ -6,24 +6,25 @@
 
 import attr
 import collections
+import gevent
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/led',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
-
-  'depot_tools/gclient',
-  'depot_tools/bot_update',
-  'depot_tools/tryserver',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/futures',
+    'recipe_engine/json',
+    'recipe_engine/led',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'depot_tools/gclient',
+    'depot_tools/bot_update',
+    'depot_tools/tryserver',
 ]
 
 
@@ -360,103 +361,87 @@ def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
   return None
 
 
-def _trigger_builders(api, affected_files, affected_recipes, led_builders,
-                      cl_workdir, recipes_cfg_path):
-  """Trigger led jobs for builders that are affected by the change.
+def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
+                  cl_workdir, client_py_workdir, recipes_cfg_path, mutex):
+  """Try running a builder with the patched recipe.
 
   Args:
     api - The recipe API object.
     affected_files - The set of files affected by the change.
     affected_recipes - The set of recipes affected by the change.
-    led_builders - A mapping that maps builder name to the led job
-      definition for the builder.
+    builder - The name of the builder to test.
+    led_builder - The led job definition for the builder.
     cl_workdir - A Path object identifying the root of the repo
       checkout.
+    client_py_workdir - A Path object identifying the root of the
+      client_py checkout.
     recipes_cfg_path - A Path object identifying the location of the
       recipes.cfg file.
-
-  Returns:
-    An OrderedDict mapping builder name to the swarming task ID for the
-    triggered led job. Depending on the affected files/recipes, it may
-    be determined that some of the builders don't need to be run, the
-    returned dictionary contains keys only for those builders that are
-    run.
+    mutex - A mutex context manager that can be used to guard critical
+      sections.
 
   Raises:
-    StepFailure if any of the led calls fail.
+    InfraFailure if any of the led calls fail.
+    StepFailure if the triggered task failed.
   """
-  triggered_jobs = collections.OrderedDict()
+  with api.step.nest('test {}'.format(builder)) as presentation:
+    cl_key = _get_cl_category_to_trigger(affected_files, affected_recipes,
+                                         builder, _get_recipe(led_builder),
+                                         recipes_cfg_path)
+    if not cl_key:
+      presentation.step_text = (
+          '\nNot running a tryjob for {!r}. The CL does not affect the '
+          '{!r} recipe and the CL does not affect recipes.cfg'.format(
+              builder, _get_recipe(led_builder)))
+      return
 
-  for builder, led_builder in led_builders.iteritems():
-    with api.context(cwd=cl_workdir.join('build')):
-      trigger_name = 'trigger {}'.format(builder)
-      cl_key = _get_cl_category_to_trigger(affected_files, affected_recipes,
-                                           builder, _get_recipe(led_builder),
-                                           recipes_cfg_path)
-      if not cl_key:
-        result = api.step(trigger_name, [])
-        result.presentation.step_text = (
-            '\nNot running a tryjob for {!r}. The CL does not affect the '
-            '{!r} recipe and the CL does not affect recipes.cfg'.format(
-                builder, _get_recipe(led_builder)))
-        continue
+    with api.step.nest('trigger'), api.context(
+        cwd=cl_workdir.join('build'), infra_steps=True):
+      # FIXME: We should check if the recipe we're testing tests patches to
+      # chromium/src. For now just assume this works.
+      bucket = builder.split(':', 1)[0]
+      cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
+      ir = led_builder.then('edit-cr-cl', cl)
+      # TODO(gbeaty) Once the recipe engine no longer supports annotations and
+      # nest step presentation is reflected in the UI before it's closed, we can
+      # just update the nest step's presentation
+      step_result = api.step.active_result
+      step_result.presentation.links['Test CL ({})'.format(cl_key)] = cl
+      presentation.links.update(step_result.presentation.links)
 
-      with api.step.nest(trigger_name):
-        # FIXME: We should check if the recipe we're testing tests patches to
-        # chromium/src. For now just assume this works.
-        bucket = builder.split(':', 1)[0]
-        cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
-        ir = led_builder.then('edit-cr-cl', cl)
-        preso = api.step.active_result.presentation
-        preso.step_text += 'Using %s testing CL' % cl_key
-        preso.links['Test CL'] = cl
-
-        # ir - intermediate result
+      # TODO(https://crbug.com/1088020) Once edit-recipe-bundle is concurrency
+      # safe, remove the use of the mutex, the gevent import and the gevent
+      # whitelist entry from scripts/slave/unittests/recipe_test.py
+      # Editing the recipe bundle is not concurrency safe, so make sure only one
+      # edit-recipe-bundle call is happening at once
+      with mutex:
         ir = ir.then('edit-recipe-bundle')
-        # We used to set `is_experimental` to true, but the chromium recipe
-        # currently uses that to deprioritize swarming tasks, which results in
-        # very slow runtimes for the led task. Because this recipe blocks the
-        # build.git CQ, we decided the tradeoff to run these edited recipes in
-        # production mode instead would be better.
-        ir = ir.then('edit', '-exp', 'false')
-        ir = ir.then('launch')
-        result = ir.result
+      # We used to set `is_experimental` to true, but the chromium recipe
+      # currently uses that to deprioritize swarming tasks, which results in
+      # very slow runtimes for the led task. Because this recipe blocks the
+      # build.git CQ, we decided the tradeoff to run these edited recipes in
+      # production mode instead would be better.
+      ir = ir.then('edit', '-exp', 'false')
+      ir = ir.then('launch')
 
-        triggered_jobs[builder] = result['swarming']
+      job = ir.result['swarming']
+      presentation.links.update(api.step.active_result.presentation.links)
 
-  return triggered_jobs
-
-
-def _collect_triggered_jobs(api, triggered_jobs, client_py_workdir):
-  # Check out the client-py repo, which gives us swarming.py.
-  client_py_config = api.gclient.make_config()
-  soln = client_py_config.solutions.add()
-  soln.name = 'client-py'
-  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
-  _checkout_project(api, client_py_workdir, client_py_config, False)
-
-  for builder, job in triggered_jobs.items():
-    result = None
-    try:
-      result = api.python(
-          'collect %s task' % builder,
-          client_py_workdir.join('client-py', 'swarming.py'),
-          [
-              'collect',
-              '-S',
-              job['host_name'],
-              job['task_id'],
-              # Needed because these jobs often take >40 minutes, since they're
-              # regular tryjobs.
-              '--print-status-updates',
-              # Don't need task stdout; if the task fails then the user should
-              # just look at the task itself.
-              '--task-output-stdout=none',
-          ])
-    finally:
-      if result:
-        result.presentation.links['Swarming task'] = 'https://%s/task?id=%s' % (
-            job['host_name'], job['task_id'])
+    api.python(
+        'collect',
+        client_py_workdir.join('client-py', 'swarming.py'),
+        [
+            'collect',
+            '-S',
+            job['host_name'],
+            job['task_id'],
+            # Needed because these jobs often take >40 minutes, since they're
+            # regular tryjobs.
+            '--print-status-updates',
+            # Don't need task stdout; if the task fails then the user should
+            # just look at the task itself.
+            '--task-output-stdout=none',
+        ])
 
 
 # TODO(martiniss): make this work if repo_name != 'build'
@@ -490,19 +475,24 @@ def RunSteps(api, repo_name):
   affected_recipes = _determine_affected_recipes(
       api, affected_files, recipes, recipes_py_path, recipes_cfg_path)
 
-  # We don't currently check anything about the list of builders to trigger.
-  # This is because the only existing builder which runs this recipe uses a
-  # service account which is only allowed to trigger jobs in the
-  # luci.chromium.try bucket. That builder is not in that bucket, so there's no
-  # possibility for running a tryjob on itself.
-  triggered_jobs = _trigger_builders(api, affected_files, affected_recipes,
-                                     led_builders, cl_workdir, recipes_cfg_path)
+  # Check out the client-py repo, which gives us swarming.py.
+  client_py_config = api.gclient.make_config()
+  soln = client_py_config.solutions.add()
+  soln.name = 'client-py'
+  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
+  _checkout_project(api, client_py_workdir, client_py_config, False)
 
-  if not triggered_jobs:
-    api.python.succeeding_step('exiting', 'no tryjobs to run, exiting')
-    return
+  mutex = gevent.lock.RLock()
 
-  _collect_triggered_jobs(api, triggered_jobs, client_py_workdir)
+  futures = []
+  for builder, led_builder in led_builders.iteritems():
+    futures.append(
+        api.futures.spawn(_test_builder, api, affected_files, affected_recipes,
+                          builder, led_builder, cl_workdir, client_py_workdir,
+                          recipes_cfg_path, mutex))
+
+  for f in api.futures.wait(futures):
+    f.result()
 
 
 def GenTests(api):
@@ -557,7 +547,7 @@ def GenTests(api):
         }))
 
   def led_launch_name(name):
-    return 'trigger {}.led launch'.format(name)
+    return 'test {}.trigger.led launch'.format(name)
 
   def led_launch(name, task_id='task0'):
     return api.step_data(
@@ -590,7 +580,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       default_builders(launch=False),
-      api.post_check(post_process.MustRun, 'exiting'),
+      api.post_check(post_process.DoesNotRunRE, 'test .*\.trigger'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -736,7 +726,8 @@ def GenTests(api):
       api.post_check(
           post_process.DoesNotRun,
           *[led_get_builder_name(b) for b in IOS_PATH_BASED_BUILDERS.builders]),
-      api.post_check(post_process.MustRun, 'exiting'),
+      api.post_check(post_process.DoesNotRunRE, 'test .*\.trigger'),
+      api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
