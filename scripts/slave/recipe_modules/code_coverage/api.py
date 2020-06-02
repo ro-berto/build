@@ -49,6 +49,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._use_java_coverage = properties.use_java_coverage
     # Platform for which this build is running.
     self._platform = None
+    # Determines whether a component mapping should be used for non-per-cl
+    # coverage runs.
+    self._include_component_mapping = True
 
   @property
   def use_clang_coverage(self):
@@ -785,9 +788,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       if pattern:
         args.extend(['--exclusion-pattern', pattern])
 
-      args.extend(
-          ['--component-mapping-path',
-           self._generate_component_mapping()])
+      if self._include_component_mapping:
+        args.extend(
+            ['--component-mapping-path',
+             self._generate_component_mapping()])
 
     if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])

@@ -1717,11 +1717,11 @@ use this.
 
 This module contains apis to generate code coverage data.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#67)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#70)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#246)(self, affected_files, output_dir=None):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#249)(self, affected_files, output_dir=None):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1729,7 +1729,7 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#79)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#82)(self):**
 
 A temporary directory for the metadata.
 
@@ -1737,9 +1737,9 @@ It's a temporary directory with a sub directory named in current test type.
 Temp dir is created on first access to this property. Subdirs are created
 on first access when processing each test type.
 
-&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/code_coverage/api.py#61)(self):**
+&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/code_coverage/api.py#64)(self):**
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#410)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#413)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1747,7 +1747,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#292)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#295)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1755,7 +1755,7 @@ Args:
   tests (list of steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#419)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#422)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1765,11 +1765,11 @@ uploads them to the code-coverage-data storage bucket.
 Args:
   **kwargs: Kwargs for python and gsutil steps.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#72)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#75)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#644)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#647)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1778,11 +1778,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [use\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#53)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#56)(self):**
 
-&emsp; **@property**<br>&mdash; **def [use\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#57)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#60)(self):**
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#106)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#109)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
@@ -5150,7 +5150,7 @@ Recipe for building and running tests for Libyuv stand-alone.
 
 Recipe for building and running tests for Open Screen stand-alone.
 
-&mdash; **def [CalculateCodeCoverage](/scripts/slave/recipes/openscreen.py#232)(api, output_path, unit_test_binary, e2e_test_binary):**
+&mdash; **def [CalculateCodeCoverage](/scripts/slave/recipes/openscreen.py#233)(api, output_path, unit_test_binary, e2e_test_binary):**
 
 Calculates code coverage from raw coverage data generated by prior test
 runs.
@@ -5180,15 +5180,15 @@ Returns list of POSIX paths of files affected by patch.
 
 Determines what the platform label is, e.g. 'mac' or 'linux64'.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#329)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#330)(api):**
 
 Main function body for execution on the current bot.
 
-&mdash; **def [RunTestsAndCoverageLocally](/scripts/slave/recipes/openscreen.py#284)(api, output_path, unit_test_binary, e2e_test_binary):**
+&mdash; **def [RunTestsAndCoverageLocally](/scripts/slave/recipes/openscreen.py#285)(api, output_path, unit_test_binary, e2e_test_binary):**
 
 Runs unit tests and e2e tests locally and calculates code coverage
 
-&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#278)(api, unit_test_binary, e2e_test_binary):**
+&mdash; **def [RunTestsLocally](/scripts/slave/recipes/openscreen.py#279)(api, unit_test_binary, e2e_test_binary):**
 
 Runs unit tests and e2e tests locally
 

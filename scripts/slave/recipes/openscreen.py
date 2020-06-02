@@ -214,6 +214,7 @@ def SetCodeCoverageConstants(api, checkout_dir, host_tool_label):
   api.profiles._llvm_base_path = llvm_dir
   api.code_coverage._platform = host_tool_label
   api.code_coverage._use_clang_coverage = True
+  api.code_coverage._include_component_mapping = False
 
   paths_to_check = [
       api.profiles.llvm_profdata_exec, api.code_coverage.cov_executable,
