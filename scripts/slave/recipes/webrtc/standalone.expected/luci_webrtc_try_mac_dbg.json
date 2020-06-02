@@ -3889,7 +3889,7 @@
   },
   {
     "cmd": [],
-    "name": "install swarming"
+    "name": "install infra/tools/luci/swarming"
   },
   {
     "cmd": [
@@ -3905,7 +3905,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "install swarming.ensure package directory",
+    "name": "install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3925,7 +3925,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "install swarming.ensure_installed",
+    "name": "install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

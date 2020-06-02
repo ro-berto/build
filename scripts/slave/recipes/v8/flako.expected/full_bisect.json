@@ -363,7 +363,7 @@
   },
   {
     "cmd": [],
-    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming",
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -381,7 +381,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming.ensure package directory",
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@"
     ]
@@ -400,7 +400,7 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming.ensure_installed",
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

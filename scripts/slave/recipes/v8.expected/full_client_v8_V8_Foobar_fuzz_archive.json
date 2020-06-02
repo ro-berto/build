@@ -5,7 +5,7 @@
   },
   {
     "cmd": [],
-    "name": "initialization.install swarming",
+    "name": "initialization.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -23,7 +23,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "initialization.install swarming.ensure package directory",
+    "name": "initialization.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -42,7 +42,7 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "initialization.install swarming.ensure_installed",
+    "name": "initialization.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

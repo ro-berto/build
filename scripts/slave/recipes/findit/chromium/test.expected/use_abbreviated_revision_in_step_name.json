@@ -1285,7 +1285,7 @@
   },
   {
     "cmd": [],
-    "name": "test gfedcba.install swarming",
+    "name": "test gfedcba.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1307,7 +1307,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test gfedcba.install swarming.ensure package directory",
+    "name": "test gfedcba.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -1330,7 +1330,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test gfedcba.install swarming.ensure_installed",
+    "name": "test gfedcba.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
