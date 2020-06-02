@@ -4098,14 +4098,33 @@
   },
   {
     "cmd": [],
-    "name": "ensure swarming"
+    "name": "install swarming"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\swarming_client",
+      "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -4115,7 +4134,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
-    "name": "ensure swarming.ensure_installed",
+    "name": "install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4171,7 +4190,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "audio_decoder_unittests",
@@ -4250,7 +4269,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "common_audio_unittests",
@@ -4329,7 +4348,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "common_video_unittests",
@@ -4408,7 +4427,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "low_bandwidth_audio_test",
@@ -4487,7 +4506,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "modules_tests",
@@ -4588,7 +4607,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "modules_unittests",
@@ -4777,7 +4796,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "peerconnection_unittests",
@@ -4922,7 +4941,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "rtc_media_unittests",
@@ -5001,7 +5020,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "rtc_pc_unittests",
@@ -5080,7 +5099,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "rtc_stats_unittests",
@@ -5159,7 +5178,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "rtc_unittests",
@@ -5348,7 +5367,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "slow_tests",
@@ -5427,7 +5446,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "system_wrappers_unittests",
@@ -5506,7 +5525,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "test_support_unittests",
@@ -5585,7 +5604,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "tools_unittests",
@@ -5664,7 +5683,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "video_engine_tests",
@@ -5809,7 +5828,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "voip_unittests",
@@ -5888,7 +5907,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "webrtc_nonparallel_tests",
@@ -5967,7 +5986,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "video_capture_tests on Windows",
@@ -6046,7 +6065,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "webrtc_perf_tests on Windows",

@@ -4860,14 +4860,32 @@
   },
   {
     "cmd": [],
-    "name": "ensure swarming"
+    "name": "install swarming"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+    ],
+    "infra_step": true,
+    "name": "install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/swarming_client",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -4876,7 +4894,7 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "ensure swarming.ensure_installed",
+    "name": "install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4931,7 +4949,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "apprtcmobile_tests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5009,7 +5027,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "sdk_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5087,7 +5105,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "sdk_framework_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5165,7 +5183,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "audio_decoder_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5243,7 +5261,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "common_audio_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5321,7 +5339,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "common_video_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5399,7 +5417,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "modules_tests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5477,7 +5495,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "modules_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5555,7 +5573,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "rtc_media_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5633,7 +5651,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "rtc_pc_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5711,7 +5729,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "rtc_stats_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5789,7 +5807,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "rtc_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5867,7 +5885,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "system_wrappers_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -5945,7 +5963,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "test_support_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -6023,7 +6041,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "tools_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -6101,7 +6119,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "video_capture_tests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -6179,7 +6197,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "video_engine_tests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -6257,7 +6275,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "voip_unittests (iPhone 6s iOS 10.3.1) on Mac-10.14",
@@ -6335,7 +6353,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "webrtc_nonparallel_tests (iPhone 6s iOS 10.3.1) on Mac-10.14",

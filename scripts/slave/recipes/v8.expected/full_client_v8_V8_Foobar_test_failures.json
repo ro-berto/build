@@ -116,7 +116,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "infra_step": true,

@@ -937,14 +937,33 @@
   },
   {
     "cmd": [],
-    "name": "ensure swarming"
+    "name": "install swarming"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "name": "install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/swarming_client",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -954,7 +973,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "ensure swarming.ensure_installed",
+    "name": "install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1009,7 +1028,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "test-local xcode version (iPhone X iOS 11.0) (with patch) on iOS-11.0",
@@ -1086,7 +1105,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "build-global xcode version (iPhone X iOS 10.0) (with patch) on iOS-10.0",

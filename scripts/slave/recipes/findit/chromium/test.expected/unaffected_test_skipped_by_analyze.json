@@ -1295,9 +1295,28 @@
   },
   {
     "cmd": [],
-    "name": "test r1.ensure swarming",
+    "name": "test r1.install swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "test r1.install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -1305,7 +1324,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\swarming_client",
+      "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -1315,7 +1334,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
-    "name": "test r1.ensure swarming.ensure_installed",
+    "name": "test r1.install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1372,7 +1391,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]\\swarming_client"
+        "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin"
       ]
     },
     "name": "test r1.affected_tests (r1)",

@@ -363,9 +363,27 @@
   },
   {
     "cmd": [],
-    "name": "calibration attempt 1.check mjsunit/foobar at #1.ensure swarming",
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+    ],
+    "infra_step": true,
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@"
     ]
   },
   {
@@ -373,7 +391,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/swarming_client",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -382,7 +400,7 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "calibration attempt 1.check mjsunit/foobar at #1.ensure swarming.ensure_installed",
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -438,7 +456,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
@@ -518,7 +536,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
@@ -960,7 +978,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
@@ -1041,7 +1059,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
@@ -1122,7 +1140,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 2",
@@ -1630,7 +1648,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 0",
@@ -1711,7 +1729,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 1",
@@ -1791,7 +1809,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 2",
@@ -1871,7 +1889,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 3",
@@ -2397,7 +2415,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 0",
@@ -2477,7 +2495,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 1",
@@ -2557,7 +2575,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 2",
@@ -2637,7 +2655,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 3",
@@ -3121,7 +3139,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 0",
@@ -3202,7 +3220,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 1",
@@ -3282,7 +3300,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 2",
@@ -3362,7 +3380,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 3",

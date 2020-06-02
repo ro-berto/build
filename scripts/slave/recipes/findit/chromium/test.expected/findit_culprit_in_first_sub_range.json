@@ -1287,9 +1287,31 @@
   },
   {
     "cmd": [],
-    "name": "test r5.ensure swarming",
+    "name": "test r5.install swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "test r5.install swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -1297,7 +1319,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/swarming_client",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -1310,7 +1332,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r5.ensure swarming.ensure_installed",
+    "name": "test r5.install swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1370,7 +1392,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "test r5.gl_tests (r5)",
@@ -2428,7 +2450,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "test r6.gl_tests (r6)",
@@ -3489,7 +3511,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "test r1.gl_tests (r1)",

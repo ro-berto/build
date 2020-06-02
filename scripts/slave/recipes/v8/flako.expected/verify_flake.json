@@ -127,7 +127,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/swarming_client"
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #0.check mjsunit/foobar at #0 - shard 1",
