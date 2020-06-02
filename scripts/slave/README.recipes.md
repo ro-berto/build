@@ -4799,9 +4799,9 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/devtools/devtools-frontend.py#31)(api):**
 
-&mdash; **def [on\_cq\_experiment](/scripts/slave/recipes/devtools/devtools-frontend.py#133)(api):**
+&mdash; **def [on\_cq\_experiment](/scripts/slave/recipes/devtools/devtools-frontend.py#134)(api):**
 
-&mdash; **def [publish\_coverage\_points](/scripts/slave/recipes/devtools/devtools-frontend.py#159)(api):**
+&mdash; **def [publish\_coverage\_points](/scripts/slave/recipes/devtools/devtools-frontend.py#160)(api):**
 
 &mdash; **def [run\_e2e](/scripts/slave/recipes/devtools/devtools-frontend.py#108)(api):**
 
@@ -4815,7 +4815,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [run\_unit\_tests](/scripts/slave/recipes/devtools/devtools-frontend.py#89)(api):**
 
-&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#141)():**
+&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#142)():**
 ### *recipes* / [disk:examples/full](/scripts/slave/recipe_modules/disk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/disk/examples/full.py#5): [disk](#recipe_modules-disk), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

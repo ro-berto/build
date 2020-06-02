@@ -545,7 +545,9 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\builder\\devtools-frontend\\scripts\\test\\run_e2e.py"
+      "[CACHE]\\builder\\devtools-frontend\\scripts\\test\\run_test_suite.py",
+      "--target=Release",
+      "--test-suite=e2e"
     ],
     "env_prefixes": {
       "PATH": [

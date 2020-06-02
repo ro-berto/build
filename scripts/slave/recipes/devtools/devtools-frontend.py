@@ -106,7 +106,8 @@ def run_localization_check(api):
 
 
 def run_e2e(api):
-  run_script(api, 'E2E tests', 'run_e2e.py')
+  run_script(api, 'E2E tests', 'run_test_suite.py',
+             ['--target=Release', '--test-suite=e2e'])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
