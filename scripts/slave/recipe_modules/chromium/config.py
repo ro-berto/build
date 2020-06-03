@@ -139,11 +139,12 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
   )
 
 
-config_ctx = config_item_context(BaseConfig)
+def validate_config(c):
+  """Validate the configuration.
 
-
-@config_ctx(is_root=True)
-def BASE(c):
+  This will be called after chromium.{set,make,apply}_config to validate
+  the config object.
+  """
   host_targ_tuples = [(c.HOST_PLATFORM, c.HOST_ARCH, c.HOST_BITS),
                       (c.TARGET_PLATFORM, c.TARGET_ARCH, c.TARGET_BITS)]
 
@@ -183,6 +184,20 @@ def BASE(c):
   if c.HOST_BITS < c.TARGET_BITS:
     raise BadConf('host bits < targ bits')  # pragma: no cover
 
+  if c.project_generator.tool not in PROJECT_GENERATORS:  # pragma: no cover
+    raise BadConf('"%s" is not a supported project generator tool, the '
+                  'supported ones are: %s' %
+                  (c.project_generator.tool, ','.join(PROJECT_GENERATORS)))
+
+  if c.BUILD_CONFIG not in ['Coverage', 'Release', 'Debug']:  # pragma: no cover
+    raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
+
+
+config_ctx = config_item_context(BaseConfig)
+
+
+@config_ctx(is_root=True)
+def BASE(c):
   c.build_config_fs = c.BUILD_CONFIG
   if c.HOST_PLATFORM == 'win':
     if c.TARGET_BITS == 64:
@@ -201,10 +216,6 @@ def BASE(c):
           'linux': '.sh'
       })
 
-  if c.project_generator.tool not in PROJECT_GENERATORS:  # pragma: no cover
-    raise BadConf('"%s" is not a supported project generator tool, the '
-                  'supported ones are: %s' % (c.project_generator.tool,
-                                              ','.join(PROJECT_GENERATORS)))
   gyp_arch = {
       ('intel', 32): 'ia32',
       ('intel', 64): 'x64',
@@ -229,9 +240,6 @@ def BASE(c):
   # flow.
   if c.TARGET_PLATFORM == 'mac':
     c.env.FORCE_MAC_TOOLCHAIN = 1
-
-  if c.BUILD_CONFIG not in ['Coverage', 'Release', 'Debug']:  # pragma: no cover
-    raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
 
 
 @config_ctx()

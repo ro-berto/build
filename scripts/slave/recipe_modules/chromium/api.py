@@ -13,6 +13,7 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
 from . import types as chromium
+from .config import validate_config
 
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -58,6 +59,18 @@ class ChromiumApi(recipe_api.RecipeApi):
   @property
   def xcode_build_version(self):
     return self._xcode_build_version
+
+  def make_config_params(self, *args, **kwargs):
+    config_object, params = super(ChromiumApi,
+                                  self).make_config_params(*args, **kwargs)
+    if config_object is not None:
+      validate_config(config_object)
+    return config_object, params
+
+  def apply_config(self, config_name, config_object=None, *args, **kwargs):
+    super(ChromiumApi, self).apply_config(config_name, config_object, *args,
+                                          **kwargs)
+    validate_config(config_object or self.c)
 
   def ensure_chromium_layout(self):
     """Ensures that Chromium build layout is installed.
