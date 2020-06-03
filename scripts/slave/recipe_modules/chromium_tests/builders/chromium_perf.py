@@ -260,3 +260,8 @@ _AddIsolatedTestSpec('android-pixel2_webview-processor-perf', 'android',
 _AddIsolatedTestSpec('win-10-processor-perf', 'win', 'win-10-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-processor-perf', 'win',
                      'win-10_laptop_low_end-perf')
+
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-processor-perf', 'mac',
+                     'mac-10_12_laptop_low_end-perf')
+_AddIsolatedTestSpec('mac-10_13_laptop_high_end-processor-perf', 'mac',
+                     'mac-10_13_laptop_high_end-perf')
