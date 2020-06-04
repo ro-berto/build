@@ -25,6 +25,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -77,6 +80,9 @@
       "[CACHE]/builder/src/tools_webrtc/audio_quality"
     ],
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -91,6 +97,9 @@
       "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
     ],
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -107,6 +116,9 @@
       "[CACHE]/builder/src/rtc_tools/testing"
     ],
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -123,6 +135,9 @@
       "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
     ],
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

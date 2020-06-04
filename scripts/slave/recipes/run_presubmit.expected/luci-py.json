@@ -84,6 +84,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -172,6 +175,9 @@
     ],
     "cwd": "[CACHE]/builder/Luci_py_Presubmit",
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

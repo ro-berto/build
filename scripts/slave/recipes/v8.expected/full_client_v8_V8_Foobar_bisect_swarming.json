@@ -29,6 +29,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -803,6 +806,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1246,6 +1252,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1727,6 +1736,9 @@
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
