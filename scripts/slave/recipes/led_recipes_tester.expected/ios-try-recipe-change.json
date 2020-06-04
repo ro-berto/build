@@ -665,6 +665,29 @@
   },
   {
     "cmd": [],
+    "name": "bundle recipes"
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "bundle recipes.led edit-recipe-bundle",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"digest\": \"fake-recipe-bundle-hash\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try:linux-rel'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
@@ -726,7 +749,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
@@ -741,11 +763,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:ios-simulator.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try:ios-simulator.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -760,9 +783,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:ios-simulator.trigger.led edit",
+    "name": "test luci.chromium.try:ios-simulator.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -775,7 +797,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led launch",
     "~followup_annotations": [
@@ -828,7 +849,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2145971"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
@@ -843,11 +863,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -862,9 +883,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit",
+    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -877,7 +897,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:ios-simulator.trigger.led launch",
     "~followup_annotations": [
@@ -930,7 +949,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2204441"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
@@ -945,11 +963,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -964,9 +983,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit",
+    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -979,7 +997,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:ios-simulator.trigger.led launch",
     "~followup_annotations": [

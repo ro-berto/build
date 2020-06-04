@@ -6,7 +6,6 @@
 
 import attr
 import collections
-import gevent
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
@@ -362,7 +361,7 @@ def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
 
 
 def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
-                  cl_workdir, client_py_workdir, recipes_cfg_path, mutex):
+                  client_py_workdir, recipes_cfg_path, bundle):
   """Try running a builder with the patched recipe.
 
   Args:
@@ -371,14 +370,12 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
     affected_recipes - The set of recipes affected by the change.
     builder - The name of the builder to test.
     led_builder - The led job definition for the builder.
-    cl_workdir - A Path object identifying the root of the repo
-      checkout.
     client_py_workdir - A Path object identifying the root of the
       client_py checkout.
     recipes_cfg_path - A Path object identifying the location of the
       recipes.cfg file.
-    mutex - A mutex context manager that can be used to guard critical
-      sections.
+    bundle - A Bundle object that can be applied to an led job to edit
+      the recipe bundle.
 
   Raises:
     InfraFailure if any of the led calls fail.
@@ -395,8 +392,7 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
               builder, _get_recipe(led_builder)))
       return
 
-    with api.step.nest('trigger'), api.context(
-        cwd=cl_workdir.join('build'), infra_steps=True):
+    with api.step.nest('trigger'), api.context(infra_steps=True):
       # FIXME: We should check if the recipe we're testing tests patches to
       # chromium/src. For now just assume this works.
       bucket = builder.split(':', 1)[0]
@@ -409,13 +405,7 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       step_result.presentation.links['Test CL ({})'.format(cl_key)] = cl
       presentation.links.update(step_result.presentation.links)
 
-      # TODO(https://crbug.com/1088020) Once edit-recipe-bundle is concurrency
-      # safe, remove the use of the mutex, the gevent import and the gevent
-      # whitelist entry from scripts/slave/unittests/recipe_test.py
-      # Editing the recipe bundle is not concurrency safe, so make sure only one
-      # edit-recipe-bundle call is happening at once
-      with mutex:
-        ir = ir.then('edit-recipe-bundle')
+      ir = bundle.apply(ir)
       # We used to set `is_experimental` to true, but the chromium recipe
       # currently uses that to deprioritize swarming tasks, which results in
       # very slow runtimes for the led task. Because this recipe blocks the
@@ -482,14 +472,35 @@ def RunSteps(api, repo_name):
   soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
   _checkout_project(api, client_py_workdir, client_py_config, False)
 
-  mutex = gevent.lock.RLock()
+  # TODO(https://crbug.com/1088020) Switch to using the led module's bundle
+  # functionality when it is ready
+  class Bundle(object):
+
+    def __init__(self):
+      self._future = api.futures.spawn(self._create_bundle)
+
+    @staticmethod
+    def _create_bundle():
+      # It doesn't matter which builder the led job belongs to, the recipe
+      # bundle will be the same, so just bundle it once and apply the hash to
+      # each one in the trigger greenlets
+      led_job = next(led_builders.itervalues())
+      with api.step.nest('bundle recipes'), api.context(
+          cwd=cl_workdir.join('build'), infra_steps=True):
+        led_out = led_job.then('edit-recipe-bundle')
+      return led_out.result['user_payload']['digest']
+
+    def apply(self, led_job):
+      return led_job.then('edit', '-rbh', self._future.result())
+
+  bundle = Bundle()
 
   futures = []
   for builder, led_builder in led_builders.iteritems():
     futures.append(
         api.futures.spawn(_test_builder, api, affected_files, affected_recipes,
-                          builder, led_builder, cl_workdir, client_py_workdir,
-                          recipes_cfg_path, mutex))
+                          builder, led_builder, client_py_workdir,
+                          recipes_cfg_path, bundle))
 
   for f in api.futures.wait(futures):
     f.result()
@@ -532,6 +543,15 @@ def GenTests(api):
                              'recipes': affected_recipes,
                          }))
 
+  def bundle_recipes():
+    return api.step_data(
+        'bundle recipes.led edit-recipe-bundle',
+        stdout=api.json.output({
+            'user_payload': {
+                'digest': 'fake-recipe-bundle-hash',
+            },
+        }))
+
   def led_get_builder_name(name):
     return 'get led builders.get {}.led get-builder'.format(name)
 
@@ -572,6 +592,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(RECIPE),
+      bundle_recipes(),
       default_builders(launch=True),
   )
 
@@ -593,6 +614,7 @@ def GenTests(api):
           'random/file.py',
           'infra/config/recipes.cfg',
       ),
+      bundle_recipes(),
       default_builders(launch=True),
   )
 
@@ -604,6 +626,7 @@ def GenTests(api):
           'random/file.py',
           'infra/config/recipes.cfg',
       ),
+      bundle_recipes(),
       default_builders(launch=True),
   )
 
@@ -674,6 +697,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
+      bundle_recipes(),
       led_get_builder('luci.chromium.try:arbitrary-builder'),
       led_launch('luci.chromium.try:arbitrary-builder'),
       led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
@@ -693,6 +717,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
+      bundle_recipes(),
       led_get_builder('luci.chromium.try:arbitrary-builder'),
       led_launch('luci.chromium.try:arbitrary-builder'),
       led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
@@ -737,6 +762,7 @@ def GenTests(api):
       gerrit_change(),
       affected_files('scripts/slave/recipe_modules/ios/api.py',),
       affected_recipes('ios/try'),
+      bundle_recipes(),
       default_builders(launch=False),
       led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
       led_launch('luci.chromium.try:ios-simulator', task_id='task0'),
@@ -752,6 +778,7 @@ def GenTests(api):
       gerrit_change(),
       affected_files('scripts/slave/recipes/ios/try.py',),
       affected_recipes('ios/try'),
+      bundle_recipes(),
       default_builders(launch=False),
       led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
       led_launch('luci.chromium.try:ios-simulator', task_id='task0'),

@@ -581,6 +581,29 @@
   },
   {
     "cmd": [],
+    "name": "bundle recipes"
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "bundle recipes.led edit-recipe-bundle",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"digest\": \"fake-recipe-bundle-hash\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/1286761@@@",
@@ -600,7 +623,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:linux-rel.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -615,11 +637,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:linux-rel.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -634,9 +657,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:linux-rel.trigger.led edit",
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -649,7 +671,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:linux-rel.trigger.led launch",
     "~followup_annotations": [
@@ -702,7 +723,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -717,11 +737,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -736,9 +757,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit",
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -751,7 +771,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led launch",
     "~followup_annotations": [
@@ -804,7 +823,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2145971"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -819,11 +837,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -838,9 +857,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit",
+    "name": "test luci.chromium.try-m83:linux-rel.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -853,7 +871,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:linux-rel.trigger.led launch",
     "~followup_annotations": [
@@ -906,7 +923,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2145684"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -921,11 +937,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -940,9 +957,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit",
+    "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -955,7 +971,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng.trigger.led launch",
     "~followup_annotations": [
@@ -1008,7 +1023,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2204441"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -1023,11 +1037,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1042,9 +1057,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit",
+    "name": "test luci.chromium.try-m84:linux-rel.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1057,7 +1071,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:linux-rel.trigger.led launch",
     "~followup_annotations": [
@@ -1110,7 +1123,6 @@
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2204425"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
@@ -1125,11 +1137,12 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit-recipe-bundle"
+      "edit",
+      "-rbh",
+      "fake-recipe-bundle-hash"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit-recipe-bundle",
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1144,9 +1157,8 @@
       "-exp",
       "false"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit",
+    "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led edit (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1159,7 +1171,6 @@
       "[CACHE]/led/led",
       "launch"
     ],
-    "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng.trigger.led launch",
     "~followup_annotations": [
