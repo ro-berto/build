@@ -118,3 +118,31 @@ BUILDERS = bot_db.BotDatabase.create({
             ),
     },
 })
+
+
+# The compile_targets field is being removed, this check will prevent
+# back-sliding by only allowing files that haven't yet been migrated to use it
+COMPILE_TARGETS_MASTER_ALLOW_LIST = [
+    'chromium.chromiumos',
+    'chromium.clang',
+    'chromium.devtools-frontend',
+    'chromium.fuzz',
+    'chromium.fyi',
+    'chromium.goma.fyi',
+    'chromium.memory',
+    'chromium.perf',
+    'chromium.perf.fyi',
+    'client.devtools-frontend.integration',
+    'client.openscreen.chromium',
+    'client.v8.chromium',
+    'client.v8.fyi',
+]
+
+for master, builders in BUILDERS.builders_by_master.iteritems():
+  if master in COMPILE_TARGETS_MASTER_ALLOW_LIST:
+    continue
+  for builder, spec in builders.iteritems():
+    assert not spec.compile_targets, (
+        'Please do not add additional uses of the compile_targets field, '
+        'compile targets should be specified in the source side spec file\n'
+        '  master: {}, builder: {}').format(master, builder)
