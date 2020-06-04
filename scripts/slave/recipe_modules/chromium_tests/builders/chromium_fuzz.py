@@ -83,23 +83,6 @@ SPEC = {
             compile_targets=['chromium_builder_asan'],
             simulation_platform='mac',
         ),
-    'Mac ASAN Debug':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            bot_type=bot_spec.BUILDER,
-            cf_archive_build=True,
-            cf_gs_bucket='chromium-browser-asan',
-            cf_gs_acl='public-read',
-            cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
-            simulation_platform='mac',
-        ),
     'ASAN Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',

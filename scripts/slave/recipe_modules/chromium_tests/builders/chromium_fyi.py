@@ -472,40 +472,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
-    'mac-autofill-captured-sites-rel':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            bot_type=bot_spec.BUILDER_TESTER,
-            compile_targets=[
-                'captured_sites_interactive_tests',
-            ],
-            test_results_config='staging_server',
-            simulation_platform='mac',
-        ),
-    'win-autofill-captured-sites-rel':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            bot_type=bot_spec.BUILDER_TESTER,
-            compile_targets=[
-                'captured_sites_interactive_tests',
-            ],
-            test_results_config='staging_server',
-            simulation_platform='win',
-        ),
     'ios-simulator-cronet':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
