@@ -54,7 +54,7 @@
         },
         "open-tree": true,
         "status-url": "https://infra-status.appspot.com",
-        "set-status": true,
+        "set-status": false,
         "password-file": "/creds/gatekeeper/infra_status_password"
     },
     "ios": {
