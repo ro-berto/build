@@ -89,6 +89,7 @@ SPEC = {
             chromium_apply_config=[
                 'clobber',
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
