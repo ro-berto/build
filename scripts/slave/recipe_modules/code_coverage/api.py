@@ -651,7 +651,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       additional_merge=None,
       # TODO(crbug.com/1077304) - migrate this to 'sparse' once the
       # merge scripts have migrated
-      no_sparse=False):
+      no_sparse=False,
+      skip_validation=False):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.chromium_swarming.task.
@@ -671,6 +672,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args += [
           '--no-sparse',
       ]
+    if skip_validation:
+      args += ['--skip-validation']
+
     new_merge = {
         'script': self.m.profiles.merge_results_script,
         'args': args,

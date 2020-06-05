@@ -85,7 +85,8 @@ def RunSteps(api):
         step,
         test.target_name,
         additional_merge=getattr(test, '_merge', None),
-        no_sparse=True)
+        no_sparse=True,
+        skip_validation=True)
 
   api.code_coverage.process_coverage_data(tests)
 

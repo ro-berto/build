@@ -1823,8 +1823,10 @@ class SwarmingTest(Test):
       # TODO(crbug.com/1077304) - Migrate this to sparse once the merge
       # scripts have migrated to supporting --sparse.
       no_sparse = False
+      skip_validation = False
       if using_pgo:
         no_sparse = True
+        skip_validation = True
       # TODO(crbug.com/1076055) - Refactor this to the profiles recipe_module
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
       # script tests) in a wrapper that knows how to merge coverage/pgo profile
@@ -1835,6 +1837,7 @@ class SwarmingTest(Test):
           self.step_name(suffix),
           self.target_name,
           no_sparse=no_sparse,
+          skip_validation=skip_validation,
           additional_merge=self._merge or task.merge)
 
     if suffix.startswith('retry shards'):

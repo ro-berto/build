@@ -1774,7 +1774,7 @@ Args:
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#647)(self, step_name, target_name, additional_merge=None, no_sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#647)(self, step_name, target_name, additional_merge=None, no_sparse=False, skip_validation=False):**
 
 Returns a merge object understood by the swarming module.
 
