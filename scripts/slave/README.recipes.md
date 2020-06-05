@@ -137,6 +137,7 @@
   * [chromium_tests:tests/api/deapply_patch](#recipes-chromium_tests_tests_api_deapply_patch)
   * [chromium_tests:tests/api/download_and_unzip_build](#recipes-chromium_tests_tests_api_download_and_unzip_build)
   * [chromium_tests:tests/api/get_common_args_for_scripts](#recipes-chromium_tests_tests_api_get_common_args_for_scripts)
+  * [chromium_tests:tests/api/get_compile_targets](#recipes-chromium_tests_tests_api_get_compile_targets)
   * [chromium_tests:tests/api/get_scheduler_jobs_to_trigger](#recipes-chromium_tests_tests_api_get_scheduler_jobs_to_trigger)
   * [chromium_tests:tests/api/integration_steps](#recipes-chromium_tests_tests_api_integration_steps)
   * [chromium_tests:tests/api/lookup_bot_metadata](#recipes-chromium_tests_tests_api_lookup_bot_metadata)
@@ -4444,6 +4445,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#13)(api):**
+### *recipes* / [chromium\_tests:tests/api/get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_compile_targets.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_compile_targets.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_compile_targets.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/api/get\_scheduler\_jobs\_to\_trigger](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_scheduler_jobs_to_trigger.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_scheduler_jobs_to_trigger.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

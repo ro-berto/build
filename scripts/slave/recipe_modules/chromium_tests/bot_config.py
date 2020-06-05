@@ -4,6 +4,7 @@
 
 import functools
 
+from recipe_engine import recipe_api
 from recipe_engine.types import FrozenDict, freeze
 
 from . import bot_db as bot_db_module
@@ -146,7 +147,7 @@ class BotConfig(object):
         )
         tests[builder_id] = builder_tests
 
-    return BuildConfig(self, source_side_specs, tests)
+    return BuildConfig(chromium_tests_api, self, source_side_specs, tests)
 
 
 @attrs()
@@ -165,6 +166,11 @@ class BuildConfig(object):
   referenced by a bot ID (and would thus be mirrored by trybots).
   """
 
+  # TODO(https://crbug.com/1071225) Remove this once we no longer need to track
+  # removal of recipe-side configuration values
+  # The type is looser than would be nice, but trying to make it a tighter match
+  # would cause an import cycle
+  _chromium_tests_api = attrib(recipe_api.RecipeApi)
   bot_config = attrib(BotConfig)
   _source_side_specs = mapping_attrib(str, FrozenDict)
   _tests = mapping_attrib(chromium.BuilderId, tuple)
@@ -193,13 +199,48 @@ class BuildConfig(object):
 
   def get_compile_targets(self, tests):
     compile_targets = set()
+
+    # Track the migration of compile_targets to source side specs
+    migrated = {}
+    needs_migration = {}
+
     for builder_id in self.bot_config.builder_ids:
       bot_spec = self.bot_config.bot_db[builder_id]
-      compile_targets.update(bot_spec.compile_targets)
+
+      recipe_compile_targets = set(bot_spec.compile_targets)
+      compile_targets.update(recipe_compile_targets)
+
       source_side_spec = self._source_side_specs[builder_id.master].get(
           builder_id.builder, {})
-      compile_targets.update(
+      source_compile_targets = set(
           source_side_spec.get('additional_compile_targets', []))
+      compile_targets.update(source_compile_targets)
+
+      migrated[builder_id] = recipe_compile_targets & source_compile_targets
+      needs_migration[builder_id] = (
+          recipe_compile_targets - source_compile_targets)
+
+    migrated = {k: v for k, v in migrated.iteritems() if v}
+    needs_migration = {k: v for k, v in needs_migration.iteritems() if v}
+
+    if migrated or needs_migration:
+
+      def step_name(builder_id, targets):
+        return '{}/{}/{}'.format(builder_id.master, builder_id.builder,
+                                 ','.join(sorted(targets)))
+
+      step_api = self._chromium_tests_api.m.step
+      with step_api.nest('compile_targets migration') as presentation:
+        presentation.step_text = (
+            '\nThis is an informational step for infra maintainers')
+        if migrated:
+          with step_api.nest('migrated'):
+            for builder_id, targets in sorted(migrated.iteritems()):
+              step_api(step_name(builder_id, targets), [])
+        if needs_migration:
+          with step_api.nest('needs migration'):
+            for builder_id, targets in sorted(needs_migration.iteritems()):
+              step_api(step_name(builder_id, targets), [])
 
     for t in tests:
       compile_targets.update(t.compile_targets())
