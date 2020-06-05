@@ -508,7 +508,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.linux',
                 buildername='Fuchsia ARM64',
-                execution_mode=try_spec.COMPILE,
             ),
         'fuchsia-arm64-cast':
             try_spec.TrySpec.create_for_single_mirror(
