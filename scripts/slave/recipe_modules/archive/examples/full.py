@@ -34,7 +34,7 @@ def RunSteps(api):
   if 'generic_archive' in api.properties:
     api.archive.generic_archive(
         build_dir=api.m.path.mkdtemp(),
-        got_revision_cp=api.properties.get('got_revision_cp'),
+        update_properties=api.properties.get('update_properties'),
         config=None)
     return
 
@@ -175,7 +175,7 @@ def GenTests(api):
     if include_dirs:
       archive_data.dirs.extend(['locales', 'swiftshader'])
     archive_data.gcs_bucket = 'any-bucket'
-    archive_data.gcs_path = '{%position%}/' + archive_filename
+    archive_data.gcs_path = '{%position%}/{%commit%}/' + archive_filename
     archive_data.archive_type = archive_type
     input_properties.archive_datas.extend([archive_data])
 
@@ -183,7 +183,10 @@ def GenTests(api):
         'generic_archive_{}'.format(archive_type),
         api.properties(
             generic_archive=True,
-            got_revision_cp='refs/heads/master@{#762565}',
+            update_properties={
+                'got_revision': TEST_HASH_MAIN,
+                'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+            },
             **{'$build/archive': input_properties}),
         api.post_process(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
@@ -193,7 +196,21 @@ def GenTests(api):
         'generic_archive_missing_got_revision_cp_{}'.format(archive_type),
         api.properties(
             generic_archive=True,
-            got_revision_cp='',
+            update_properties={
+                'got_revision': TEST_HASH_MAIN,
+            },
+            **{'$build/archive': input_properties}),
+        api.post_process(post_process.StatusFailure),
+        api.post_process(post_process.DropExpectation),
+    )
+
+    yield api.test(
+        'generic_archive_missing_got_revision_{}'.format(archive_type),
+        api.properties(
+            generic_archive=True,
+            update_properties={
+                'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+            },
             **{'$build/archive': input_properties}),
         api.post_process(post_process.StatusFailure),
         api.post_process(post_process.DropExpectation),
@@ -202,7 +219,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_nothing_to_archive',
       api.properties(
-          generic_archive=True, got_revision_cp='', **{'$build/archive': {}}),
+          generic_archive=True, update_properties={}, **{'$build/archive': {}}),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -217,7 +234,9 @@ def GenTests(api):
   yield api.test(
       'generic_archive_dirs_unsupported',
       api.properties(
-          generic_archive=True, **{'$build/archive': input_properties}),
+          generic_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

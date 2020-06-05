@@ -145,7 +145,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         return commit
 
     commit = update_properties.get('got_revision')
-    assert GIT_COMMIT_HASH_RE.match(commit), commit
+    if commit:
+      assert GIT_COMMIT_HASH_RE.match(commit), commit
     return commit
 
   def _get_comparable_upload_path_for_sort_key(self, branch, number):
@@ -481,7 +482,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return output_path
 
-  def generic_archive(self, build_dir, got_revision_cp, config):
+  def generic_archive(self, build_dir, update_properties, config):
     """Archives one or multiple packages to google cloud storage.
 
     The exact configuration of the archive is specified by InputProperties. See
@@ -490,9 +491,8 @@ class ArchiveApi(recipe_api.RecipeApi):
     Args:
       build_dir: The absolute path to the build output directory, e.g.
                  [slave-build]/src/out/Release
-      got_revision_cp: This property from chromium.build_properties specifies
-                       the commit position of the checked out commit of the
-                       chromium tree.
+      update_properties: The properties from the bot_update step (containing
+                         commit information).
       config: An instance of archive/properties.proto:InputProperties.
               DEPRECATED: If None, this will default to the global property
               $build/archive.
@@ -507,16 +507,27 @@ class ArchiveApi(recipe_api.RecipeApi):
       for archive_data in config.archive_datas:
 
         # Perform dynamic configuration from placeholders, if necessary.
-        position_placeholder = '{%position%}'
         gcs_path = archive_data.gcs_path
+
+        position_placeholder = '{%position%}'
         if position_placeholder in gcs_path:
-          if not got_revision_cp:
+          commit_position = self._get_commit_position(update_properties, None)
+          if not commit_position:
             self.m.python.failing_step(
-                'Missing got_revision_cp',
-                'got_revision_cp is needed to populate the {%position%} '
-                'placeholder')
-          _, position = self.m.commit_position.parse(got_revision_cp)
+                'Missing position placeholder',
+                'got_revision_cp or got_src_revision_cp is needed to populate '
+                'the {%position%} placeholder')
+          _, position = self.m.commit_position.parse(commit_position)
           gcs_path = gcs_path.replace(position_placeholder, str(position))
+
+        commit_placeholder = '{%commit%}'
+        if commit_placeholder in gcs_path:
+          commit = self._get_git_commit(update_properties, None)
+          if not commit:
+            self.m.python.failing_step(
+                'Missing commit placeholder',
+                'got_revision is needed to populate the {%commit%} placeholder')
+          gcs_path = gcs_path.replace(commit_placeholder, commit)
 
         expanded_files = set(archive_data.files)
         for filename in archive_data.file_globs:

@@ -351,7 +351,7 @@ If you need to upload or download build artifacts (or any other files) for
 something other than Chromium flavor, consider using 'zip' + 'gsutil' or
 'isolate' modules instead.
 
-&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#158)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
+&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#159)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
 
 Archives and uploads a build to google storage.
 
@@ -394,12 +394,12 @@ Args:
                     it from the commit information.  This will be formatted
                     as YYYYMMDDHHMM.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#335)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#336)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#484)(self, build_dir, got_revision_cp, config):**
+&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#485)(self, build_dir, update_properties, config):**
 
 Archives one or multiple packages to google cloud storage.
 
@@ -409,14 +409,13 @@ archive/properties.proto.
 Args:
   build_dir: The absolute path to the build output directory, e.g.
              [slave-build]/src/out/Release
-  got_revision_cp: This property from chromium.build_properties specifies
-                   the commit position of the checked out commit of the
-                   chromium tree.
+  update_properties: The properties from the bot_update step (containing
+                     commit information).
   config: An instance of archive/properties.proto:InputProperties.
           DEPRECATED: If None, this will default to the global property
           $build/archive.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#445)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#446)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -427,11 +426,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#384)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#385)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#434)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#435)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.

@@ -556,7 +556,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # https://crbug.com/1076679.
     self.m.archive.generic_archive(
         build_dir=self.m.chromium.output_dir,
-        got_revision_cp=self.m.chromium.build_properties.get('got_revision_cp'),
+        update_properties=update_step.presentation.properties,
         config=None)
 
   def _get_scheduler_jobs_to_trigger(self, builder_id, bot_config):
