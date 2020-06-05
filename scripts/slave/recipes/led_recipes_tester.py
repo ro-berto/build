@@ -6,6 +6,7 @@
 
 import attr
 import collections
+import contextlib
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
@@ -21,6 +22,7 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'depot_tools/gclient',
     'depot_tools/bot_update',
     'depot_tools/tryserver',
@@ -361,7 +363,7 @@ def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
 
 
 def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
-                  client_py_workdir, recipes_cfg_path, bundle):
+                  recipes_cfg_path, bundle):
   """Try running a builder with the patched recipe.
 
   Args:
@@ -370,8 +372,6 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
     affected_recipes - The set of recipes affected by the change.
     builder - The name of the builder to test.
     led_builder - The led job definition for the builder.
-    client_py_workdir - A Path object identifying the root of the
-      client_py checkout.
     recipes_cfg_path - A Path object identifying the location of the
       recipes.cfg file.
     bundle - A Bundle object that can be applied to an led job to edit
@@ -417,28 +417,20 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       job = ir.result['swarming']
       presentation.links.update(api.step.active_result.presentation.links)
 
-    api.python(
-        'collect',
-        client_py_workdir.join('client-py', 'swarming.py'),
-        [
-            'collect',
-            '-S',
-            job['host_name'],
-            job['task_id'],
-            # Needed because these jobs often take >40 minutes, since they're
-            # regular tryjobs.
-            '--print-status-updates',
-            # Don't need task stdout; if the task fails then the user should
-            # just look at the task itself.
-            '--task-output-stdout=none',
-        ])
+    with api.swarming.with_server(job['host_name']):
+      api.swarming.collect(
+          'collect',
+          [job['task_id']],
+          # We're launching LUCI builders, so they can be viewed in the Milo UI,
+          # which is much better than the stdout, so don't take the time to
+          # download the stdout
+          task_output_stdout='none')
 
 
 # TODO(martiniss): make this work if repo_name != 'build'
 def RunSteps(api, repo_name):
   workdir_base = api.path['cache']
   cl_workdir = workdir_base.join(repo_name)
-  client_py_workdir = workdir_base.join('client_py')
   recipes_dir = workdir_base.join('recipe_engine')
 
   # Needed to run `recipes.py analyze`.
@@ -465,13 +457,6 @@ def RunSteps(api, repo_name):
   affected_recipes = _determine_affected_recipes(
       api, affected_files, recipes, recipes_py_path, recipes_cfg_path)
 
-  # Check out the client-py repo, which gives us swarming.py.
-  client_py_config = api.gclient.make_config()
-  soln = client_py_config.solutions.add()
-  soln.name = 'client-py'
-  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
-  _checkout_project(api, client_py_workdir, client_py_config, False)
-
   # TODO(https://crbug.com/1088020) Switch to using the led module's bundle
   # functionality when it is ready
   class Bundle(object):
@@ -495,12 +480,15 @@ def RunSteps(api, repo_name):
 
   bundle = Bundle()
 
+  # Kick off a future to make the swarming client ready to use so that the
+  # install appears as a top-level step
+  api.futures.spawn_immediate(api.swarming.ensure_client)
+
   futures = []
   for builder, led_builder in led_builders.iteritems():
     futures.append(
         api.futures.spawn(_test_builder, api, affected_files, affected_recipes,
-                          builder, led_builder, client_py_workdir,
-                          recipes_cfg_path, bundle))
+                          builder, led_builder, recipes_cfg_path, bundle))
 
   for f in api.futures.wait(futures):
     f.result()
