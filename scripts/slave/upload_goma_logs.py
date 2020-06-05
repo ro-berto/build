@@ -13,6 +13,10 @@ import json
 import os
 import sys
 
+from google.cloud import bigquery
+from google.oauth2 import service_account
+
+from slave import goma_bq_utils
 from slave import goma_utils
 
 GOMA_LOGS_PROJECT = 'goma-logs'
@@ -24,29 +28,6 @@ def GetBigQueryClient(service_account_json):
   Args:
     service_account_json: a JSON file for BigQuery service account.
   """
-  # TODO(yyanagisawa): remove following debug print.
-  #                    (crbug.com/822042)
-
-  for env in ('PYTHONPATH', 'VPYTHON_CLEAR_PYTHONPATH'):
-    print('%s=%s' % (env, os.environ.get(env, '<not set>')),
-          file=sys.stderr)
-  print('sys.path=%s' % sys.path, file=sys.stderr)
-
-  # TODO(yyanagisawa): move this back to the top line when flakiness solved
-  #                    (crbug.com/822042)
-  try:
-    from google.cloud import bigquery
-    from google.oauth2 import service_account
-  except ImportError as e:
-    print(e, file=sys.stderr)
-    for p in sys.path:
-      print('path=%s' % p, file=sys.stderr)
-      for root, dirs, files in os.walk(p):
-        print(' root=%s, dirs=%s, files=%s' % (root, dirs, files),
-              file=sys.stderr)
-      print()
-    raise
-
   if service_account_json:
     creds = service_account.Credentials.from_service_account_file(
         service_account_json)
@@ -196,20 +177,10 @@ def main():
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
 
-  bqclient = None
-  # TODO(yyanagisawa): remove move this when flakiness is solved
-  #                    (crbug.com/822042)
-  # Without Build ID, we do not use BigQuery.  Let me minimize the
-  # points that cause crbug.com/822042.
-  if args.build_id and args.bigquery_upload:
+  if args.goma_stats_file and args.build_id and args.bigquery_upload:
     bqclient = GetBigQueryClient(args.bigquery_service_account_json)
     if not bqclient:
       raise Exception('Unable to create BigQuery client.')
-
-  if args.goma_stats_file and args.build_id and bqclient:
-    # TODO(yyanagisawa): move this back to the top line when flakiness is solved
-    #                    (crbug.com/822042)
-    from slave import goma_bq_utils
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
                                    args.goma_counterz_file,
                                    args.json_status,
