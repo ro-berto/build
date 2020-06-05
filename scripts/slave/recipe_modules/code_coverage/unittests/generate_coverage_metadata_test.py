@@ -680,6 +680,90 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertListEqual(expected_compressed_files, compressed_data['files'])
 
 
+
+  # This test uses the following code:
+  # /path/to/src/dir1/file1.cc
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # /path/to/src/dir2/file2.cc
+  # 1|      1|int main() { return 0; }
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
+  @mock.patch.object(generator, '_get_per_target_coverage_summary')
+  @mock.patch.object(generator.repository_util, 'GetFileRevisions')
+  @mock.patch.object(generator, '_get_coverage_data_in_json')
+  def test_generate_metadata_for_full_repo_coverage_without_component(
+      self, mock_get_coverage_data, mock_GetFileRevisions,
+      mock_get_per_target_coverage_summary):
+    # Number of files should not exceed 1000; otherwise sharding will happen.
+    mock_GetFileRevisions.return_value = {
+        '//dir1/file1.cc': ('hash1', 1234),
+        '//dir2/file2.cc': ('hash2', 5678),
+    }
+    mock_get_coverage_data.return_value = {
+        'data': [{
+            'files': [
+                {
+                    'segments': [
+                        [1, 12, 1, True, True],
+                        [2, 7, 1, True, True],
+                        [2, 14, 1, True, False],
+                        [2, 18, 0, True, True],
+                        [2, 25, 1, True, False],
+                        [2, 27, 1, True, True],
+                        [4, 4, 0, True, False],
+                        [6, 3, 0, True, True],
+                        [7, 2, 0, False, False],
+                    ],
+                    'summary': {
+                        'lines': {
+                            'count': 7,
+                            'covered': 4,
+                            'percent': 57
+                        },
+                    },
+                    'filename': '/path/to/src/dir1/file1.cc',
+                },
+                {
+                    'segments': [[1, 12, 1, True, True],
+                                 [1, 25, 0, False, False]],
+                    'summary': {
+                        'lines': {
+                            'count': 1,
+                            'covered': 1,
+                            'percent': 100,
+                        },
+                    },
+                    'filename': '/path/to/src/dir2/file2.cc',
+                },
+            ]
+        }]
+    }
+
+    # We don't care about the summaries for this test.
+    mock_get_per_target_coverage_summary.return_value = {}
+
+    compressed_data, _ = generator._generate_metadata(
+        src_path='/path/to/src',
+        output_dir='/path/to/output_dir',
+        profdata_path='/path/to/coverage.profdata',
+        llvm_cov_path='/path/to/llvm-cov',
+        binaries=['/path/to/binary1', '/path/to/binary2'],
+        component_mapping=None,
+        sources=[],
+        diff_mapping=None,
+        exclusions='.*bad_file.*',
+        arch=None)
+
+    self.assertIsNone(compressed_data.get('components'))
+
   @mock.patch('psutil.cpu_count')
   @mock.patch('subprocess.check_output')
   def test_per_target_summaries(self, call, cpu_count):

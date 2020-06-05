@@ -746,9 +746,9 @@ def main():
     with open(params.diff_mapping_path) as f:
       diff_mapping = json.load(f)
 
-  assert (component_mapping is None) != (diff_mapping is None), (
-      'Either component_mapping (for full-repo coverage) or diff_mapping '
-      '(for per-cl coverage) must be specified.')
+  assert (component_mapping is None) or (diff_mapping is None), (
+      'component_mapping (for full-repo coverage) and diff_mapping '
+      '(for per-cl coverage) cannot be specified at the same time.')
 
   compressed_data, summaries = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
