@@ -119,7 +119,7 @@ SPEC = {
                 'mb_luci_auth',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=['android', 'enable_wpr_tests'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
