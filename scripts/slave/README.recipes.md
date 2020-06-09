@@ -292,6 +292,7 @@
   * [test_utils:tests/run_tests_with_patch](#recipes-test_utils_tests_run_tests_with_patch)
   * [test_utils:tests/test_results](#recipes-test_utils_tests_test_results)
   * [test_utils:tests/upload_results_to_resultdb](#recipes-test_utils_tests_upload_results_to_resultdb)
+  * [tint](#recipes-tint)
   * [traceback:examples/full](#recipes-traceback_examples_full)
   * [tricium_clang_tidy_wrapper](#recipes-tricium_clang_tidy_wrapper)
   * [tricium_metrics](#recipes-tricium_metrics)
@@ -5380,6 +5381,11 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#5): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/resultdb][recipe_engine/recipe_modules/resultdb]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#34)(api, is_swarming_test=True):**
+### *recipes* / [tint](/scripts/slave/recipes/tint.py)
+
+[DEPS](/scripts/slave/recipes/tint.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/tint.py#123)(api, target_cpu, debug, clang):**
 ### *recipes* / [traceback:examples/full](/scripts/slave/recipe_modules/traceback/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
