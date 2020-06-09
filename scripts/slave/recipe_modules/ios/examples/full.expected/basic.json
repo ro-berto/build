@@ -254,7 +254,7 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"artifact\": \"Chrome.app\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"upload_path\": \"some_path/Webkit-{%revision%}.zip\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"upload_path\": \"some_path/Webkit-{%revision%}-{%timestamp%}.zip\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"9abc\"@@@",
@@ -830,12 +830,12 @@
       "----",
       "cp",
       "[CACHE]/builder/src/out/Debug-iphonesimulator/Chrome.app",
-      "gs://mock-gcs-bucket/some_path/Webkit-HEAD.zip"
+      "gs://mock-gcs-bucket/some_path/Webkit-HEAD-20120514125323.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload Chrome.app (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/some_path/Webkit-HEAD.zip@@@"
+      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/some_path/Webkit-HEAD-20120514125323.zip@@@"
     ]
   },
   {

@@ -551,6 +551,12 @@ class iOSApi(recipe_api.RecipeApi):
         revision = revision or self.m.buildbucket.gitiles_commit.id
         upload_path = upload_path.replace(revision_placeholder, revision)
 
+      timestamp_placeholder = '{%timestamp%}'
+      if upload_path and timestamp_placeholder in upload_path:
+        # timestamp is required by clusterfuzz for fetching latest
+        timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
+        upload_path = upload_path.replace(timestamp_placeholder, timestamp)
+
       if artifact.get('symupload'):
         self.symupload(name, artifact['symupload'])
       elif artifact.get('compress'):

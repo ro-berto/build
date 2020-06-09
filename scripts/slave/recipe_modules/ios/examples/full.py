@@ -71,8 +71,10 @@ def GenTests(api):
                     'symupload': 'https://clients2.google.com/cr/symbol',
                 },
                 {
-                    'artifact': 'Chrome.app',
-                    'upload_path': 'some_path/Webkit-{%revision%}.zip'
+                    'artifact':
+                        'Chrome.app',
+                    'upload_path':
+                        'some_path/Webkit-{%revision%}-{%timestamp%}.zip'
                 },
             ],
             'tests': [
