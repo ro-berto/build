@@ -484,12 +484,13 @@ class GomaApi(recipe_api.RecipeApi):
 
     args = [
         '--upload-compiler-proxy-info',
-        '--log-url-json-file', self.m.json.output(),
-        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+        '--log-url-json-file',
+        self.m.json.output(),
+        '--gsutil-py-path',
+        self.m.depot_tools.gsutil_py_path,
     ]
     if not self._use_luci_auth:
       args += [
-          '--bigquery-upload',
           '--bigquery-service-account-json',
           self.bigquery_service_account_json_path,
       ]

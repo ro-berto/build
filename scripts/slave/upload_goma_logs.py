@@ -16,6 +16,8 @@ import sys
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
+from infra_libs import luci_auth
+
 from slave import goma_bq_utils
 from slave import goma_utils
 
@@ -31,6 +33,8 @@ def GetBigQueryClient(service_account_json):
   if service_account_json:
     creds = service_account.Credentials.from_service_account_file(
         service_account_json)
+  elif luci_auth.available():
+    creds = luci_auth.LUCICredentials()
   else:
     return None
   return bigquery.client.Client(project=GOMA_LOGS_PROJECT, credentials=creds)
@@ -109,8 +113,6 @@ def main():
   parser.add_argument('--bigquery-service-account-json', default='',
                       metavar='FILENAME',
                       help='Service account json for BigQuery')
-  parser.add_argument('--bigquery-upload', action='store_true',
-                      help='upload to BigQuery')
 
   # Builder ID.
   parser.add_argument('--builder-id-json', default='',
@@ -177,7 +179,7 @@ def main():
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
 
-  if args.goma_stats_file and args.build_id and args.bigquery_upload:
+  if args.goma_stats_file and args.build_id:
     bqclient = GetBigQueryClient(args.bigquery_service_account_json)
     if not bqclient:
       raise Exception('Unable to create BigQuery client.')
