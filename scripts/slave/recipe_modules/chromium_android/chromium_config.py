@@ -67,7 +67,6 @@ def cronet_builder(c):
   c.gn_args.append('disable_ftp_support=true')
   c.gn_args.append('enable_reporting=true')
   c.gn_args.append('enable_websockets=false')
-  c.gn_args.append('force_local_build_id=true')
   c.gn_args.append('include_transport_security_state_preload_list=false')
   c.gn_args.append('use_crash_key_stubs=true')
   c.gn_args.append('use_hashed_jni_names=true')
