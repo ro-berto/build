@@ -4,7 +4,6 @@
 
 from .. import bot_spec, steps
 from . import chromium
-from . import chromium_chromiumos
 from . import chromium_linux
 from . import chromium_mac
 from . import chromium_win

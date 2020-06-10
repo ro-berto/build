@@ -123,7 +123,6 @@ BUILDERS = bot_db.BotDatabase.create({
 # The compile_targets field is being removed, this check will prevent
 # back-sliding by only allowing files that haven't yet been migrated to use it
 COMPILE_TARGETS_MASTER_ALLOW_LIST = [
-    'chromium.chromiumos',
     'chromium.clang',
     'chromium.devtools-frontend',
     'chromium.fuzz',
