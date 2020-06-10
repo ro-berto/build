@@ -83,11 +83,11 @@ class BotSpec(object):
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type == DUMMY_TESTER:
       # DUMMY_TESTER bots should never be executed, so most fields are invalid
-      # The testing field is a dict; one of the keys overrides the location of
-      # the src-side spec, which is the point of DUMMY_TESTER bots, so it is
-      # valid to set
+      # The source_side_spec field overrides the location of the src-side spec,
+      # which is the point of DUMMY_TESTER bots, so it is valid to set
       invalid_attrs = get_filtered_attrs(*[
-          a for a in attr.fields_dict(cls) if a not in ('bot_type', 'testing')
+          a for a in attr.fields_dict(cls)
+          if a not in ('bot_type', 'source_side_spec_file')
       ])
       assert not invalid_attrs, (
           "The following fields are ignored when 'bot_type' is {!r}: {}".format(
