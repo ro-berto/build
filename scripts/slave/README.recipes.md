@@ -133,6 +133,7 @@
   * [chromium_tests:tests/api/compile_specific_targets](#recipes-chromium_tests_tests_api_compile_specific_targets)
   * [chromium_tests:tests/api/configure_build](#recipes-chromium_tests_tests_api_configure_build)
   * [chromium_tests:tests/api/create_bot_config_object](#recipes-chromium_tests_tests_api_create_bot_config_object)
+  * [chromium_tests:tests/api/create_build_config](#recipes-chromium_tests_tests_api_create_build_config)
   * [chromium_tests:tests/api/create_test_runner](#recipes-chromium_tests_tests_api_create_test_runner)
   * [chromium_tests:tests/api/deapply_patch](#recipes-chromium_tests_tests_api_deapply_patch)
   * [chromium_tests:tests/api/download_and_unzip_build](#recipes-chromium_tests_tests_api_download_and_unzip_build)
@@ -4427,6 +4428,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#14)(api):**
+### *recipes* / [chromium\_tests:tests/api/create\_build\_config](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_build_config.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_build_config.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_build_config.py#16)(api):**
 ### *recipes* / [chromium\_tests:tests/api/create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_test_runner.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_test_runner.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

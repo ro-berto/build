@@ -88,12 +88,18 @@ class BotConfig(object):
 
   def _get_source_side_spec(self, chromium_tests_api, mastername):
     if len(self.builder_ids) == 1:
-      bot_spec = self.bot_db[self.builder_ids[0]]
+      builder_id = self.builder_ids[0]
+      bot_spec = self.bot_db[builder_id]
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
       if bot_spec.source_side_spec is not None:  # pragma: no cover
-        return {self.builder_ids[0].builder: bot_spec.source_side_spec}
+        return (
+            {
+                self.builder_ids[0].builder: bot_spec.source_side_spec
+            },
+            (builder_id, 'source_side_spec', bot_spec.source_side_spec),
+        )
 
       # Similar to the source_side_spec special case above, but expected to
       # contain the spec for every builder on the waterfall. This is necessary
@@ -101,18 +107,36 @@ class BotConfig(object):
       # breaks parent/child builder relationships due to the parent not knowing
       # which targets to build and isolate for its children.
       elif bot_spec.downstream_spec is not None:  # pragma: no cover
-        return bot_spec.downstream_spec
+        return (
+            bot_spec.downstream_spec,
+            (builder_id, 'downstream_spec', bot_spec.downstream_spec),
+        )
 
     source_side_spec_file = self.source_side_spec_file or '%s.json' % mastername
 
-    return chromium_tests_api.read_source_side_spec(source_side_spec_file)
+    return chromium_tests_api.read_source_side_spec(source_side_spec_file), None
 
   def _get_source_side_specs(self, chromium_tests_api):
     masters = set(key.master for key in self.all_keys)
     specs = {}
+    migration = set()
     for master_name in sorted(masters):
-      specs[master_name] = self._get_source_side_spec(chromium_tests_api,
-                                                      master_name)
+      spec, migration_details = self._get_source_side_spec(
+          chromium_tests_api, master_name)
+      specs[master_name] = spec
+      if migration_details is not None:
+        migration.add(migration_details)
+    if migration:
+      step_api = chromium_tests_api.m.step
+      json_api = chromium_tests_api.m.json
+      with step_api.nest('source side spec migration') as presentation:
+        presentation.step_text = (
+            '\nThis is an informational step for infra maintainers')
+        for builder_id, field, content in sorted(migration):
+          step_name = '{}/{}'.format(builder_id.master, builder_id.builder)
+          result = step_api(step_name, [])
+          result.presentation.logs[field] = json_api.dumps(content, indent=4)
+
     return specs
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
