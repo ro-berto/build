@@ -16,7 +16,8 @@ def RunSteps(api):
   task = api.chromium_swarming.task(
       name=api.properties.get('task_name', 'sample_task'),
       isolated='0123456789012345678901234567890123456789',
-      optional_dimensions=opt_dims)
+      optional_dimensions=opt_dims,
+      env_prefixes={'FOO': ['some/path']})
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
 
@@ -38,11 +39,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-
-  def _StepCommandNotContains(check, step_odict, step, args):
-    check("args '%s' should be a list" % str(args), isinstance(args, list))
-    check('Step %s does not contain %s' % (step, args),
-          all(arg not in step_odict[step].cmd for arg in args))
 
   yield api.test(
       'wait_for_capacity',
@@ -80,22 +76,6 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        'missing-json task',
                        ['--allow-missing-json']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'implied_packages',
-      api.properties(task_name='no-template-task'),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] no-template-task', ['--cipd-package']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'no_implied_packages',
-      api.properties(pool='chromium.tests.template', task_name='template-task'),
-      api.post_process(_StepCommandNotContains, '[trigger] template-task',
-                       ['--cipd-package', '--env-prefix']),
       api.post_process(post_process.DropExpectation),
   )
 

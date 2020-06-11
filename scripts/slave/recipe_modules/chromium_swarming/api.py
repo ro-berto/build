@@ -15,57 +15,6 @@ from recipe_engine import util as recipe_util
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
-# The IMPLIED_*_BINARIES will be installed to the swarming task at this local
-# path.
-IMPLIED_BINARY_PATH = '.swarming_module'
-
-# This is the name and path for the cache used for the implied binaries
-# (specifically vpython). The name of the implied cache will be prepended with
-# IMPLIED_CACHE_NAME, and the path will be relative to IMPLIED_CACHE_BASE.
-IMPLIED_CACHE_NAME = 'swarming_module_cache'
-IMPLIED_CACHE_BASE = '.swarming_module_cache'
-IMPLIED_CACHES = {
-  'vpython': 'vpython',
-}
-IMPLIED_ENV_PREFIXES = {
-  'VPYTHON_VIRTUALENV_ROOT': '/'.join((IMPLIED_CACHE_BASE, 'vpython')),
-}
-
-# These CIPD packages will be automatically put on $PATH for all swarming tasks
-# generated from this module. Each key is the name of a package to install and
-# its associated value is a dict with the following keys:
-#   - "version" (required): the version of the package to install.
-#   - "install_path" (optional): path relative to IMPLIED_BINARY_PATH to install
-#     the package to. If unspecified, the package is installed to
-#     IMPLIED_BINARY_PATH.
-#   - "env_path" (optional): path relative to the installed path to put on
-#     $PATH. If unspecified, the package's installation root is put on $PATH.
-IMPLIED_CIPD_BINARIES = {
-    # Both vpython versions MUST be changed together.
-    'infra/tools/luci/vpython/${platform}': {
-        'version': 'git_revision:b01b3ede35a24f76f21420f11d13f234848e5d34',
-    },
-    'infra/tools/luci/vpython-native/${platform}': {
-        'version': 'git_revision:b01b3ede35a24f76f21420f11d13f234848e5d34',
-    },
-    'infra/tools/luci/logdog/butler/${platform}': {
-        'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
-    },
-
-    # NOTE(crbug.com/842234): these aren't currently available on mips. See
-    # SwarmingApi.trigger_task for hack.
-    'infra/python/cpython/${platform}': {
-        'install_path': 'cpython',
-        'env_path': 'bin',
-        'version': 'version:2.7.15.chromium14',
-    },
-    'infra/python/cpython3/${platform}': {
-        'install_path': 'cpython3',
-        'env_path': 'bin',
-        'version': 'version:3.8.0b1.chromium.1',
-    },
-}
-
 PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)
 PER_TARGET_SWARMING_DIMS.update({
     'android': {
@@ -793,60 +742,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_results
 
-  def slice_with_implied_cipd_packages(self, task_slice):
-    """Returns a copy of |task_slice| with the implied CIPD packages.
-
-    This will also add the packages' required PATH environment prefixes.
-    See IMPLIED_CIPD_BINARIES for a complete list of packages. CIPD packages
-    previously specified by the task_slice will remain.
-
-    Args:
-      task_slice: a swarming.TaskSlice object.
-    Returns:
-      A copy of task_slice with the implied CIPD packages added.
-    """
-    # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
-    # always access them on $PATH.
-    cipd_ensure_file = task_slice.cipd_ensure_file
-    task_cipd_packages = task_slice.cipd_ensure_file.packages
-    if task_cipd_packages:
-      for path in task_cipd_packages:
-        assert not path.startswith(IMPLIED_BINARY_PATH), (
-            'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,))
-
-    to_add = dict(IMPLIED_CIPD_BINARIES)
-
-    path_env_prefix = set()
-    for pkg, details in sorted(to_add.items()):
-      path = IMPLIED_BINARY_PATH
-      if details.get('install_path'):
-        path = '/'.join((path, details['install_path']))
-      if details.get('env_path'):
-        path_env_prefix.add('/'.join((path, details['env_path'])))
-      else:
-        path_env_prefix.add(path)
-      vers = 'TEST_VERSION' if self._test_data.enabled else details['version']
-      cipd_ensure_file.add_package(pkg, vers, subdir=path)
-
-    return (
-        task_slice.with_cipd_ensure_file(cipd_ensure_file).with_env_prefixes(
-            PATH=sorted(path_env_prefix, key=lambda x: (len(x), x))))
-
-  def slice_with_implied_named_caches(self, task_slice):
-    """Returns a copy of |task_slice| with the implied named caches.
-
-    See IMPLIED_CACHES for a complete list of named caches.
-
-    Args:
-      task_slice: a swarming.TaskSlice object.
-    Returns:
-      A copy of task_slice with the implied named caches added.
-    """
-    return task_slice.with_named_caches({
-        '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE, v))
-        for k, v in IMPLIED_CACHES.iteritems()
-    })
-
   def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
@@ -859,17 +754,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     task_request = task.request
     task_slice = task_request[0].with_named_caches(task.named_caches)
-    # TODO(crbug.com/812428): Remove this check (and the methods it gates)
-    # after every pool has migrated to task templates.
-    if not task_slice.dimensions.get('pool', '').endswith('.template'):
-      task_slice = self.slice_with_implied_cipd_packages(task_slice)
-      task_slice = self.slice_with_implied_named_caches(task_slice)
-
-    # update $PATH
-    env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
-    if not task_slice.dimensions.get('pool', '').endswith('.template'):
-      for k, path in IMPLIED_ENV_PREFIXES.iteritems():
-        env_prefixes.setdefault(k, [path])
 
     # Trigger parameters.
     pre_trigger_args = ['trigger']
@@ -962,8 +846,8 @@ class SwarmingApi(recipe_api.RecipeApi):
             '%s:%s:%s' % (path or '.', package_name, package_version)
         ])
 
-    if env_prefixes:
-      for key, paths in sorted(env_prefixes.items()):
+    if task_slice.env_prefixes:
+      for key, paths in sorted(dict(task_slice.env_prefixes).items()):
         for path in paths:
           args.extend(('--env-prefix', key, path))
 
