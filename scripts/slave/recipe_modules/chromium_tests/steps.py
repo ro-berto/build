@@ -875,7 +875,7 @@ class SizesStep(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     step_result = api.chromium.sizes(self.results_url, self.perf_id)
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
     return step_result
 
   def compile_targets(self):
@@ -967,7 +967,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
               {'valid': True, 'failures': []}))
     finally:
       result = api.step.active_result
-      self._suffix_step_name_map[suffix] = result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
 
       failures = None
       if result.json.output:
@@ -1153,7 +1153,7 @@ class LocalGTestTest(Test):
       # JSON files. crbug.com/584469
     finally:
       step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
         self.update_test_run(
             api, suffix, api.test_utils.canonical.result_format())
@@ -1987,7 +1987,7 @@ class SwarmingTest(Test):
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
       self._tasks[suffix])
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     metadata = self.step_metadata(suffix)
     step_result.presentation.logs['step_metadata'] = (json.dumps(
@@ -2102,7 +2102,8 @@ class SwarmingGTestTest(SwarmingTest):
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     step_result = super(SwarmingGTestTest, self).run(api, suffix)
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    step_name = '.'.join(step_result.name_tokens)
+    self._suffix_step_name_map[suffix] = step_name
     gtest_results = step_result.test_utils.gtest_results
     self._gtest_results[suffix] = gtest_results
     # Only upload test results if we have gtest results.
@@ -2115,7 +2116,7 @@ class SwarmingGTestTest(SwarmingTest):
       api.test_results.upload(
           api.json.input(parsed_gtest_data),
           chrome_revision=chrome_revision,
-          test_type=step_result.step['name'])
+          test_type=step_name)
     return step_result
 
 
@@ -2253,7 +2254,7 @@ class LocalIsolatedScriptTest(Test):
       # to that of SwarmingIsolatedScriptTest. They probably should be shared
       # between the two.
       step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
       results = step_result.json.output
       presentation = step_result.presentation
 
@@ -2395,7 +2396,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # Noted when uploading to test-results, the step_name is expected to be an
       # exact match to the step name on the build.
       self.results_handler.upload_results(
-          api, results, step_result.step['name'],
+          api, results, '.'.join(step_result.name_tokens),
           not bool(self.deterministic_failures(suffix)), suffix)
     return step_result
 
@@ -2430,7 +2431,7 @@ class PythonBasedTest(Test):
         cmd_args,
         step_test_data=default_factory_for_tests,
         ok_ret='any')
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
     test_results = step_result.test_utils.test_results
     presentation = step_result.presentation
     if (test_results.valid and
@@ -2482,7 +2483,7 @@ class AndroidTest(Test):
       step_result = f.result
       raise
     finally:
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
       self.update_test_run(
           api, suffix, api.test_utils.canonical.result_format())
       presentation_step = api.python.succeeding_step(
@@ -2495,7 +2496,7 @@ class AndroidTest(Test):
 
         api.test_results.upload(
             api.json.input(gtest_results.raw),
-            test_type=step_result.step['name'],
+            test_type='.'.join(step_result.name_tokens),
             chrome_revision=api.bot_update.last_returned_properties.get(
                 'got_revision_cp', 'refs/x@{#0}'))
 
@@ -2610,7 +2611,7 @@ class BlinkTest(Test):
         step_result.presentation.status = api.step.WARNING
     finally:
       step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
       # TODO(dpranke): crbug.com/357866 - note that all comparing against
       # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
@@ -2634,7 +2635,7 @@ class BlinkTest(Test):
             api, results, step_result.presentation)
 
         self.results_handler.upload_results(
-            api, results, step_result.step['name'],
+            api, results, '.'.join(step_result.name_tokens),
             not bool(self.deterministic_failures(suffix)), suffix)
 
     return step_result
@@ -2688,7 +2689,7 @@ class IncrementalCoverageTest(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     step_result = api.chromium_android.coverage_report(upload=False)
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
     return step_result
@@ -2727,7 +2728,7 @@ class FindAnnotatedTest(Test):
           api.path['checkout'].join(
               'tools', 'android', 'find_annotated_tests.py'),
           args=args)
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
     api.gsutil.upload(
         temp_output_dir.join(
             '%s-android-chrome.json' % timestamp_string),
@@ -2865,7 +2866,7 @@ class MockTest(Test):
     with self._mock_exit_codes(api):
       step_result = api.step(
           '%s%s' % (self.name, self._mock_suffix(suffix)), None)
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     return step_result
 
@@ -3050,7 +3051,7 @@ class SwarmingIosTest(SwarmingTest):
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
       task['task'])
-    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     # Add any iOS test runner results to the display.
     shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
@@ -3108,7 +3109,7 @@ class SwarmingIosTest(SwarmingTest):
       if api.path.exists(test_results):
         api.test_results.upload(
           test_results,
-          step_result.step['name'],
+          '.'.join(step_result.name_tokens),
           api.bot_update.last_returned_properties.get(
             'got_revision_cp', 'refs/x@{#0}'),
           builder_name_suffix='%s-%s' % (
