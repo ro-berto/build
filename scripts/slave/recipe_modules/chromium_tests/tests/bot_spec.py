@@ -73,23 +73,6 @@ def RunSteps(api):
     )
   api.assertions.assertEqual(caught.exception.message, message)
 
-  # parent_mastername validations **********************************************
-  parent_mastername_spec = bot_spec.BotSpec.create(
-      parent_mastername='fake-master',
-      parent_buildername='fake-builder',
-  )
-
-  # Required field when parent_mastername is set
-  message = (
-      "'parent_buildername' must be provided when 'parent_mastername' is set")
-  with api.assertions.assertRaises(AssertionError) as caught:
-    bot_spec.BotSpec.create(parent_mastername='fake-master')
-  api.assertions.assertEqual(caught.exception.message, message)
-
-  with api.assertions.assertRaises(AssertionError) as caught:
-    parent_mastername_spec.evolve(parent_buildername=None)
-  api.assertions.assertEqual(caught.exception.message, message)
-
   # archive_build validations **************************************************
   archive_build_spec = bot_spec.BotSpec.create(
       archive_build=True,

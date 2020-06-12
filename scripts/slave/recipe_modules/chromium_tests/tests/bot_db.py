@@ -19,22 +19,25 @@ def RunSteps(api):
 
   db = bot_db.BotDatabase.create({
       'master-1': {
-              'builder-1-a': {},
-              'builder-1-b': {
-                  'parent_buildername': 'builder-1-a',
-              },
+          'builder-1-a': {},
+          'builder-1-b': {
+              'parent_buildername': 'builder-1-a',
+              'bot_type': bot_spec.TESTER,
+          },
       },
       'master-2': {
-              'builder-2': {
-                  'parent_mastername': 'master-1',
-                  'parent_buildername': 'builder-1-a',
-              },
+          'builder-2': {
+              'parent_mastername': 'master-1',
+              'parent_buildername': 'builder-1-a',
+              'bot_type': bot_spec.TESTER,
+          },
       },
       'master-3': {
-              'builder-3-a':
-                  bot_spec.BotSpec.create(parent_buildername='builder-3-c'),
-              'builder-3-b': {},
-              'builder-3-c': {},
+          'builder-3-a':
+              bot_spec.BotSpec.create(
+                  parent_buildername='builder-3-c', bot_type=bot_spec.TESTER),
+          'builder-3-b': {},
+          'builder-3-c': {},
       },
   })
 
@@ -49,15 +52,20 @@ def RunSteps(api):
       set(db.keys()), {key_1a, key_1b, key_2, key_3a, key_3b, key_3c})
   api.assertions.assertEqual(db[key_1a], EMPTY_SPEC)
   api.assertions.assertEqual(
-      db[key_1b], bot_spec.BotSpec.create(parent_buildername='builder-1-a'))
+      db[key_1b],
+      bot_spec.BotSpec.create(
+          parent_buildername='builder-1-a', bot_type=bot_spec.TESTER))
   api.assertions.assertEqual(
       db[key_2],
       bot_spec.BotSpec.create(
           parent_mastername='master-1',
           parent_buildername='builder-1-a',
+          bot_type=bot_spec.TESTER,
       ))
   api.assertions.assertEqual(
-      db[key_3a], bot_spec.BotSpec.create(parent_buildername='builder-3-c'))
+      db[key_3a],
+      bot_spec.BotSpec.create(
+          parent_buildername='builder-3-c', bot_type=bot_spec.TESTER))
   api.assertions.assertEqual(db[key_3b], EMPTY_SPEC)
   api.assertions.assertEqual(db[key_3c], EMPTY_SPEC)
 

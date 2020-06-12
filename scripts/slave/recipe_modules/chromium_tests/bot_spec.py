@@ -125,10 +125,11 @@ class BotSpec(object):
     if self.bot_type == TESTER:
       assert self.parent_buildername is not None, (
           'Tester-only bot must specify a parent builder')
-
-    if self.parent_mastername:
-      assert self.parent_buildername, ("'parent_buildername' must be provided "
-                                       "when 'parent_mastername' is set")
+    elif self.bot_type in BUILDER_TYPES:
+      assert self.parent_buildername is None, (
+          'Non-tester-only bot must not specify a parent builder')
+      assert self.parent_mastername is None, (
+          'Non-tester-only bot must not specify parent master name')
 
     if self.archive_build:
       assert self.gs_bucket, (
