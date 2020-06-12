@@ -1,4 +1,4 @@
-# Copyright 2020 The Chromium Authors. All Rights Reserved.
+# Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 """Binary size analysis for patchsets."""
@@ -24,12 +24,12 @@ class BinarySizeApi(recipe_api.RecipeApi):
     super(BinarySizeApi, self).__init__(**kwargs)
     self._analyze_targets = list(properties.analyze_targets or
                                  constants.DEFAULT_ANALYZE_TARGETS)
-    self._compile_targets = list(properties.compile_targets or
-                                 constants.DEFAULT_COMPILE_TARGETS)
-    self._results_bucket = (
+    self.compile_targets = list(properties.compile_targets or
+                                constants.DEFAULT_COMPILE_TARGETS)
+    self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
-    self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
-    self._mapping_name = (
+    self.apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
+    self.mapping_name = (
         properties.android.mapping_name or constants.DEFAULT_MAPPING_FILE_NAME)
 
   def android_binary_size(self,
@@ -158,7 +158,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_basename = 'with_patch' if with_patch else 'without_patch'
 
     raw_result = self.m.chromium_tests.run_mb_and_compile(
-        self._compile_targets, None, suffix)
+        self.compile_targets, None, suffix)
 
     if raw_result.status != common_pb.SUCCESS:
       return None, raw_result
@@ -166,12 +166,12 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_dir = staging_dir.join(results_basename)
     self.m.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
-    apk_path = self.m.chromium_android.apk_path(self._apk_name)
-    mapping_path = self.m.chromium_android.apk_path(self._mapping_name)
+    apk_path = self.m.chromium_android.apk_path(self.apk_name)
+    mapping_path = self.m.chromium_android.apk_path(self.mapping_name)
 
     self.m.file.copy(
-        'Extracting Proguard Mapping ({}){}'.format(self._mapping_name, suffix),
-        mapping_path, results_dir.join(self._apk_name + '.mapping'))
+        'Extracting Proguard Mapping ({}){}'.format(self.mapping_name, suffix),
+        mapping_path, results_dir.join(self.apk_name + '.mapping'))
     # Can't use self.m.chromium_android.resource_sizes() without it trying to
     # upload the results.
     self.m.python(
@@ -187,7 +187,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.m.json.read('resource_sizes result{}'.format(suffix),
                      results_dir.join('results-chart.json'))
 
-    size_path = results_dir.join(self._apk_name + '.size')
+    size_path = results_dir.join(self.apk_name + '.size')
     self.m.chromium_android.supersize_archive(
         apk_path, size_path, step_suffix=suffix)
     return results_dir, None
@@ -301,7 +301,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
               '--author',
               author,
               '--apk-name',
-              self._apk_name,
+              self.apk_name,
               '--before-dir',
               before_dir,
               '--after-dir',
@@ -319,12 +319,12 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                    self.m.buildbucket.build.number, filename)
     self.m.gsutil.upload(
         source=staging_dir.join(filename),
-        bucket=self._results_bucket,
+        bucket=self.results_bucket,
         dest=gs_dest,
         name='archive ' + filename,
         unauthenticated_url=True)
     return constants.ARCHIVED_URL_FMT.format(
-        bucket=self._results_bucket, dest=gs_dest)
+        bucket=self.results_bucket, dest=gs_dest)
 
   def _check_for_failed_expectation_files(self, results_path):
     checker_script = self.resource('trybot_failed_expectations_checker.py')

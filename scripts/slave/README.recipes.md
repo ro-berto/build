@@ -62,6 +62,7 @@
   * [art](#recipes-art)
   * [attr_utils:tests/full](#recipes-attr_utils_tests_full)
   * [binary_size:tests/android_binary_size](#recipes-binary_size_tests_android_binary_size)
+  * [binary_size_generator_tot](#recipes-binary_size_generator_tot)
   * [binary_size_trybot](#recipes-binary_size_trybot)
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
@@ -4030,6 +4031,16 @@ Packages Android SDK packages as CIPD packages.
 [DEPS](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py#11): [binary\_size](#recipe_modules-binary_size), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py#20)(api):**
+### *recipes* / [binary\_size\_generator\_tot](/scripts/slave/recipes/binary_size_generator_tot.py)
+
+[DEPS](/scripts/slave/recipes/binary_size_generator_tot.py#9): [binary\_size](#recipe_modules-binary_size), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_generator_tot.py#30)(api):**
+
+Zips up and uploads analysis files for android-binary-size trybot to use.
+
+This recipe will be run continuously on chromium ToT to keep the latest zip
+upload as recent as possible.
 ### *recipes* / [binary\_size\_trybot](/scripts/slave/recipes/binary_size_trybot.py)
 
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#7): [binary\_size](#recipe_modules-binary_size), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
