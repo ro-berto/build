@@ -343,43 +343,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android WebView P FYI (rel)',
             ),
     },
-    'tryserver.chromium': {
-        'android-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='android-official',
-            ),
-        'chromeos-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='chromeos-official',
-            ),
-        'fuchsia-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='fuchsia-official',
-            ),
-        'linux-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='linux-official',
-            ),
-        'mac-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='mac-official',
-            ),
-        'win-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='win-official',
-            ),
-        'win32-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium',
-                buildername='win-official',
-            ),
-    },
     'tryserver.chromium.angle': {
         'android_angle_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
