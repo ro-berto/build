@@ -21,7 +21,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='win',
         ),
     'Win ASan Release Media':
@@ -42,7 +41,6 @@ SPEC = {
             cf_gs_bucket='chrome-test-builds/media',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='win',
         ),
     'Mac ASAN Release':
@@ -59,7 +57,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='mac',
         ),
     'Mac ASAN Release Media':
@@ -80,7 +77,6 @@ SPEC = {
             cf_gs_bucket='chrome-test-builds/media',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='mac',
         ),
     'ASAN Release':
@@ -113,7 +109,6 @@ SPEC = {
             cf_gs_bucket='chrome-test-builds/media',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'ASAN Debug':
@@ -132,7 +127,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'ChromiumOS ASAN Release':
@@ -153,7 +147,6 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             cf_archive_subdir_suffix='chromeos',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     # The build process is described at
@@ -175,7 +168,6 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'ASan Release (32-bit x86 with V8-ARM)':
@@ -193,7 +185,6 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'ASan Release Media (32-bit x86 with V8-ARM)':
@@ -211,7 +202,6 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     # The build process for TSan is described at
@@ -230,7 +220,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-tsan',
             cf_gs_acl='public-read',
             cf_archive_name='tsan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'TSAN Debug':
@@ -247,7 +236,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-tsan',
             cf_gs_acl='public-read',
             cf_archive_name='tsan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     # The build process for MSan is described at
@@ -266,7 +254,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-msan',
             cf_gs_acl='public-read',
             cf_archive_name='msan-no-origins',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'MSAN Release (chained origins)':
@@ -283,7 +270,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-msan',
             cf_gs_acl='public-read',
             cf_archive_name='msan-chained-origins',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     'UBSan Release':
@@ -300,7 +286,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-ubsan',
             cf_gs_acl='public-read',
             cf_archive_name='ubsan',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
     # The build process for UBSan vptr is described at
@@ -320,7 +305,6 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='ubsan-vptr',
             cf_archive_subdir_suffix='vptr',
-            compile_targets=['chromium_builder_asan'],
             simulation_platform='linux',
         ),
 }

@@ -125,7 +125,6 @@ BUILDERS = bot_db.BotDatabase.create({
 COMPILE_TARGETS_MASTER_ALLOW_LIST = [
     'chromium.clang',
     'chromium.devtools-frontend',
-    'chromium.fuzz',
     'chromium.fyi',
     'chromium.goma.fyi',
     'chromium.memory',
