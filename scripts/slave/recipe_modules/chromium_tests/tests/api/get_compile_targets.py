@@ -43,10 +43,10 @@ def GenTests(api):
       }),
       api.post_check(
           post_process.DoesNotRunRE, 'compile_targets migration\.migrated\.'
-          'fake-master/fake-builder/.*'),
+          'fake-master%fake-builder%.*'),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.needs migration.'
-          'fake-master/fake-builder/bar,baz,foo,shaz'),
+          'fake-master%fake-builder%bar,baz,foo,shaz'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -68,10 +68,10 @@ def GenTests(api):
       }),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.migrated.'
-          'fake-master/fake-builder/baz,foo'),
+          'fake-master%fake-builder%baz,foo'),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.needs migration.'
-          'fake-master/fake-builder/bar,shaz'),
+          'fake-master%fake-builder%bar,shaz'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -94,11 +94,11 @@ def GenTests(api):
           }),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.migrated.'
-          'fake-master/fake-builder/bar,baz,foo,shaz'),
+          'fake-master%fake-builder%bar,baz,foo,shaz'),
       api.post_check(
           post_process.DoesNotRunRE,
           'compile_targets migration\.needs migration\.'
-          'fake-master/fake-builder/.*'),
+          'fake-master%fake-builder%.*'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

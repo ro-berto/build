@@ -133,7 +133,7 @@ class BotConfig(object):
         presentation.step_text = (
             '\nThis is an informational step for infra maintainers')
         for builder_id, field, content in sorted(migration):
-          step_name = '{}/{}'.format(builder_id.master, builder_id.builder)
+          step_name = '{}%{}'.format(builder_id.master, builder_id.builder)
           result = step_api(step_name, [])
           result.presentation.logs[field] = json_api.dumps(content, indent=4)
 
@@ -250,7 +250,7 @@ class BuildConfig(object):
     if migrated or needs_migration:
 
       def step_name(builder_id, targets):
-        return '{}/{}/{}'.format(builder_id.master, builder_id.builder,
+        return '{}%{}%{}'.format(builder_id.master, builder_id.builder,
                                  ','.join(sorted(targets)))
 
       step_api = self._chromium_tests_api.m.step

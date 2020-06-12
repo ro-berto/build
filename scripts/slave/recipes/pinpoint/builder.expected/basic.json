@@ -332,7 +332,7 @@
   },
   {
     "cmd": [],
-    "name": "compile_targets migration.needs migration.chromium.perf/android-builder-perf/android_tools,cc_perftests,chrome_public_apk,chromium_builder_perf,dump_syms,gpu_perftests,microdump_stackwalk,push_apps_to_background_apk,system_webview_apk,system_webview_shell_apk",
+    "name": "compile_targets migration.needs migration.chromium.perf%android-builder-perf%android_tools,cc_perftests,chrome_public_apk,chromium_builder_perf,dump_syms,gpu_perftests,microdump_stackwalk,push_apps_to_background_apk,system_webview_apk,system_webview_shell_apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]

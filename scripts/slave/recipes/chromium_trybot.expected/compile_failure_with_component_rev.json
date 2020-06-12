@@ -389,7 +389,7 @@
   },
   {
     "cmd": [],
-    "name": "compile_targets migration.needs migration.client.v8.fyi/V8 Linux GN/blink_tests,extensions_browsertests,gin_unittests,net_unittests,pdfium_test,postmortem-metadata,unit_tests",
+    "name": "compile_targets migration.needs migration.client.v8.fyi%V8 Linux GN%blink_tests,extensions_browsertests,gin_unittests,net_unittests,pdfium_test,postmortem-metadata,unit_tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
