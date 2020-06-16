@@ -124,7 +124,7 @@
         "open-tree": true,
         "password-file": "/creds/gatekeeper/webrtc_status_password",
         "revision-properties": "got_revision",
-        "set-status": true,
+        "set-status": false,
         "status-url": "https://webrtc-status.appspot.com",
         "track-revisions": true
     },
