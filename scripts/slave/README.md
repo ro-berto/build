@@ -1,8 +1,8 @@
 # scripts/slave
 
-This directory contains scripts which run on buildbot 'slave' machines.
-The primary form of these scripts is in [recipes][1], which live
-in the `recipes` and `recipe_modules` folders.
+This directory contains scripts and modules that are executed by the
+[recipes][1] that are run by chromium's LUCI builders. The recipes live in the
+`recipes` and `recipe_modules` directories.
 
 [1]: https://chromium.googlesource.com/infra/luci/recipes-py
 
@@ -37,3 +37,57 @@ Failing to train the expectations will cause the CQ to reject the patch; it will
 run the simulation tests in `test` mode, which checks to see that the
 expectation files match the current recipe code, but doesn't emit the new JSON
 files if it finds a descrepancy.
+
+# Directory contents
+
+Ideally, with the exception of `recipes.py`, the files in this directory will be
+moved under the `recipes` or `recipe_modules` directories as resources.
+
+* `annotation_utils.py` - used by [runtest.py][2]
+* `archive_profiling_data.py` - used by [runtest.py][2], but does not have recipe set in [.gitattributes][3]
+* `build_directory.py` - used by [runtest.py][2], [archive\_profiling\_data.py][4], [process\_dumps.py][5], [zip\_build.py][6], [chromium/archive\_build.py][7] and [chromium/archive\_layout\_test\_results.py][8]
+* `crash_utils.py` - used by [runtest.py][2]
+* `daemonizer.py` - used by [chromium\_android/api.py][9]
+* `goma_bq_utils.py` - used by [upload\_goma\_logs.py][10]
+* `goma_utils.py` - used by [upload\_goma\_logs.py][10], [goma/resources/cloudtail\_utils.py][11] and [goma\_bq\_utils.py][12]
+* `gsutil` - *TODO*
+* `gsutil.bat` - *TODO*
+* `gsutil_download.py` - called by [chromium\_gsutil/api.py][13]
+* `gtest_slave_utils.py` - used by [runtest.py][2]
+* `histogram_results_parser.py` - used by [runtest.py][2]
+* `kill_processes.py` - used by [chromium/api.py][14]
+* `performance_log_processor.py` - used by [runtest.py][2] and [telemetry\_utils.py][15]
+* `process_dumps.py` - used by [chromium/api.py][14]
+* `results_dashboard.py` - used by [runtest.py][2] and [upload\_perf\_dashboard\_results.py][16]
+* `runisolatedtest.py` - called by [runtest.py][2]
+* `runtest.py` - called by [chromium\_tests/api.py][17]
+* `slave_utils.py` - *TODO*
+* `tee.py` - called by [chromium\_android/api.py][9] and [chromium/api.py][14]
+* `telemetry_utils.py` - used by [runtest.py][2]
+* `upload_goma_logs.py` - called by [chromium/api.py][14] and [goma/api.py][18]
+  * `upload_goma_logs.py.vpython` - vpython spec
+* `upload_perf_dashboard_results.py` - called by [cronet/api.py][19]
+* `xvfb.py` - used by [runtest.py][2]
+* `zip_build.py` - called by [archive/api.py][20]
+
+[2]: ./runtest.py
+[3]: ./.gitattributes
+[4]: ./archive_profiling_data.py
+[5]: ./process_dumps.py
+[6]: ./zip_build.py
+[7]: ./chromium/archive_build.py
+[8]: ./chromium/archive_layout_test_results.py
+[9]: /scripts/slave/recipe_modules/chromium_android/api.py
+[10]: ./upload_goma_logs.py
+[11]: /scripts/slave/recipe_modules/goma/resources/cloudtail_utils.py
+[12]: ./goma_bq_utils.py
+
+[13]: /scripts/slave/recipe_modules/chromium_gsutil/api.py
+[14]: /scripts/slave/recipe_modules/chromium/api.py
+[15]: ./telemetry_utils.py
+[16]: ./upload_perf_dashboard_result.py
+[17]: /scripts/slave/recipe_modules/chromium_tests/api.py
+
+[18]: /scripts/slave/recipe_modules/goma/api.py
+[19]: /scripts/slave/recipe_modules/cronet/api.py
+[20]: /scripts/slave/recipe_modules/archive/api.py
