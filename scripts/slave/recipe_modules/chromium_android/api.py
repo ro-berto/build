@@ -106,7 +106,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def init_and_sync(self, gclient_config='android_bare',
                     with_branch_heads=False, use_bot_update=True,
-                    use_git_cache=True, manifest_name=None):
+                    use_git_cache=True):
     # TODO(crbug.com/726431): Remove this once downstream bots stop using it.
     if use_git_cache:
       spec = self.m.gclient.make_config(gclient_config)
@@ -129,8 +129,7 @@ class AndroidApi(recipe_api.RecipeApi):
       refs = [refs]
     if use_bot_update:
       result = self.m.bot_update.ensure_checkout(
-          spec, refs=refs, with_branch_heads=with_branch_heads,
-          manifest_name=manifest_name)
+          spec, refs=refs, with_branch_heads=with_branch_heads)
     else:
       result = self.m.gclient.checkout(spec)
 
