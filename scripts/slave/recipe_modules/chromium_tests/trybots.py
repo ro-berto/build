@@ -1063,6 +1063,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.mac',
                 buildername='Mac Builder',
+                tester='Mac10.15 Tests',
             ),
         'mac_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
