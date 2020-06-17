@@ -112,6 +112,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium.android.fyi',
                 buildername='android-marshmallow-x86-fyi-rel',
             ),
+        'android-nougat-arm64-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.android',
+                buildername='android-nougat-arm64-rel',
+            ),
         'android-pie-arm64-coverage-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',
