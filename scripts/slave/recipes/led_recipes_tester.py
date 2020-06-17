@@ -1,6 +1,6 @@
-# Copyright 2016 The LUCI Authors. All rights reserved.
-# Use of this source code is governed under the Apache License, Version 2.0
-# that can be found in the LICENSE file.
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 
 """Tests a recipe CL by running a chromium builder."""
 
@@ -10,6 +10,8 @@ import contextlib
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
+
+from PB.go.chromium.org.luci.led.job import job as job_pb2
 
 DEPS = [
     'recipe_engine/context',
@@ -127,19 +129,13 @@ class RelatedBuilder(object):
 
 
 def _get_recipe(led_builder):
-  buildbucket = led_builder.result.get('buildbucket')
-  if buildbucket: # pragma: no cover
-    # new path
-    build_proto = buildbucket['bbagent_args']['build']
-    return build_proto['input']['properties']['recipe']
-
-  # TODO(iannucci): delete this once new led has settled
-  # see if this is old led or new led
-  # Recipe we run probably doesn't change between slices.
-  job_slice = led_builder.result['job_slices'][0]
-  # TODO(martiniss): Use recipe_cipd_source to determine which repo this recipe
-  # lives in. For now we assume the recipe lives in the repo the CL lives in.
-  return job_slice['userland']['recipe_name']
+  build_proto = led_builder.result.buildbucket.bbagent_args.build
+  try:
+    return build_proto.input.properties['recipe']
+  except ValueError as ex:  # pragma: no cover
+    # If you see this in simulations, it's possible that you are missing a
+    # led_get_builder clause.
+    raise ValueError("build has no recipe set (%s): %r" % (ex, build_proto))
 
 
 def _checkout_project(api, workdir, gclient_config, patch):
@@ -414,13 +410,13 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       ir = ir.then('edit', '-exp', 'false')
       ir = ir.then('launch')
 
-      job = ir.result['swarming']
+      job = ir.launch_result
       presentation.links.update(api.step.active_result.presentation.links)
 
-    with api.swarming.with_server(job['host_name']):
+    with api.swarming.with_server(job.swarming_hostname):
       api.swarming.collect(
           'collect',
-          [job['task_id']],
+          [job.task_id],
           # We're launching LUCI builders, so they can be viewed in the Milo UI,
           # which is much better than the stdout, so don't take the time to
           # download the stdout
@@ -473,7 +469,7 @@ def RunSteps(api, repo_name):
       with api.step.nest('bundle recipes'), api.context(
           cwd=cl_workdir.join('build'), infra_steps=True):
         led_out = led_job.then('edit-recipe-bundle')
-      return led_out.result['user_payload']['digest']
+      return led_out.result.user_payload.digest
 
     def apply(self, led_job):
       return led_job.then('edit', '-rbh', self._future.result())
@@ -531,64 +527,43 @@ def GenTests(api):
                              'recipes': affected_recipes,
                          }))
 
-  def bundle_recipes():
-    return api.step_data(
-        'bundle recipes.led edit-recipe-bundle',
-        stdout=api.json.output({
-            'user_payload': {
-                'digest': 'fake-recipe-bundle-hash',
-            },
-        }))
-
   def led_get_builder_name(name):
     return 'get led builders.get {}.led get-builder'.format(name)
 
-  def led_get_builder(name, recipe=RECIPE):
-    return api.step_data(
-        led_get_builder_name(name),
-        stdout=api.json.output({
-            'job_slices': [{
-                'userland': {
-                    'recipe_name': recipe,
-                },
-            }],
-        }))
+  def parse_legacy_buildername(name):
+    # TODO: stop using buildbucket v1 buildernames.
+    bucket, buildername = name.split(':', 1)
+    assert bucket.startswith('luci.')
+    project, bucket = bucket[len('luci.'):].split('.', 1)
+    return project, bucket, buildername
 
-  def led_launch_name(name):
-    return 'test {}.trigger.led launch'.format(name)
+  def non_existent_builder(name):
+    return api.led.mock_get_builder(None, *parse_legacy_buildername(name))
 
-  def led_launch(name, task_id='task0'):
-    return api.step_data(
-        led_launch_name(name),
-        stdout=api.json.output({
-            'swarming': {
-                'host_name': 'chromium-swarm.appspot.com',
-                'task_id': task_id,
-            }
-        }))
+  def led_set_builder_recipe(name, recipe):
+    build = job_pb2.Definition()
+    build.buildbucket.bbagent_args.build.input.properties['recipe'] = recipe
+    return api.led.mock_get_builder(build, *parse_legacy_buildername(name))
 
-  def default_builders(launch):
-    t = api.empty_test_data()
-    for i, b in enumerate(DEFAULT_BUILDERS):
-      t += led_get_builder(b)
-      if launch:
-        t += led_launch(b, task_id='task{}'.format(i))
-    return t
+  def default_builders():
+    # Set the default recipe for all chromium builders
+    build = job_pb2.Definition()
+    build.buildbucket.bbagent_args.build.input.properties['recipe'] = RECIPE
+    return api.led.mock_get_builder(build, 'chromium')
 
   yield api.test(
       'basic',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(RECIPE),
-      bundle_recipes(),
-      default_builders(launch=True),
+      default_builders(),
   )
 
   yield api.test(
       'no_jobs_to_run',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(launch=False),
+      default_builders(),
       api.post_check(post_process.DoesNotRunRE, 'test .*\.trigger'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -602,8 +577,7 @@ def GenTests(api):
           'random/file.py',
           'infra/config/recipes.cfg',
       ),
-      bundle_recipes(),
-      default_builders(launch=True),
+      default_builders(),
   )
 
   yield api.test(
@@ -614,15 +588,14 @@ def GenTests(api):
           'random/file.py',
           'infra/config/recipes.cfg',
       ),
-      bundle_recipes(),
-      default_builders(launch=True),
+      default_builders(),
   )
 
   yield api.test(
       'analyze_missing_json',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(launch=False),
+      default_builders(),
       api.override_step_data('determine affected recipes', retcode=1),
       api.post_check(post_process.StepException, 'determine affected recipes'),
       api.post_check(post_process.StatusException),
@@ -633,7 +606,7 @@ def GenTests(api):
       'analyze_failure',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(launch=False),
+      default_builders(),
       api.step_data(
           'determine affected recipes',
           api.json.output({
@@ -685,31 +658,18 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
-      bundle_recipes(),
-      led_get_builder('luci.chromium.try:arbitrary-builder'),
-      led_launch('luci.chromium.try:arbitrary-builder'),
-      led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
-      led_launch('luci.chromium.try-m83:arbitrary-builder'),
-      led_get_builder('luci.chromium.try-m84:arbitrary-builder'),
-      led_launch('luci.chromium.try-m84:arbitrary-builder'),
+      default_builders(),
       api.post_check(post_process.DoesNotRun,
                      *[led_get_builder_name(b) for b in DEFAULT_BUILDERS]),
       api.post_process(post_process.DropExpectation),
   )
-
-  def non_existent_builder(name):
-    return api.step_data(led_get_builder_name(name), retcode=1)
 
   yield api.test(
       'footer_builder_not_on_all_branches',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
-      bundle_recipes(),
-      led_get_builder('luci.chromium.try:arbitrary-builder'),
-      led_launch('luci.chromium.try:arbitrary-builder'),
-      led_get_builder('luci.chromium.try-m83:arbitrary-builder'),
-      led_launch('luci.chromium.try-m83:arbitrary-builder'),
+      default_builders(),
       non_existent_builder('luci.chromium.try-m84:arbitrary-builder'),
       api.post_check(
           post_process.StepWarning,
@@ -735,7 +695,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(),
-      default_builders(launch=False),
+      default_builders(),
       api.post_check(
           post_process.DoesNotRun,
           *[led_get_builder_name(b) for b in IOS_PATH_BASED_BUILDERS.builders]),
@@ -750,14 +710,10 @@ def GenTests(api):
       gerrit_change(),
       affected_files('scripts/slave/recipe_modules/ios/api.py',),
       affected_recipes('ios/try'),
-      bundle_recipes(),
-      default_builders(launch=False),
-      led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try:ios-simulator', task_id='task0'),
-      led_get_builder('luci.chromium.try-m83:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try-m83:ios-simulator', task_id='task3'),
-      led_get_builder('luci.chromium.try-m84:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try-m84:ios-simulator', task_id='task2'),
+      default_builders(),
+      led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-81:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-83:ios-simulator', 'ios/try'),
   )
 
   yield api.test(
@@ -766,12 +722,8 @@ def GenTests(api):
       gerrit_change(),
       affected_files('scripts/slave/recipes/ios/try.py',),
       affected_recipes('ios/try'),
-      bundle_recipes(),
-      default_builders(launch=False),
-      led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try:ios-simulator', task_id='task0'),
-      led_get_builder('luci.chromium.try-m83:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try-m83:ios-simulator', task_id='task3'),
-      led_get_builder('luci.chromium.try-m84:ios-simulator', recipe='ios/try'),
-      led_launch('luci.chromium.try-m84:ios-simulator', task_id='task2'),
+      default_builders(),
+      led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-81:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-83:ios-simulator', 'ios/try'),
   )

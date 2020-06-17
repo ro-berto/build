@@ -342,16 +342,25 @@
     "name": "get led builders.get luci.chromium.try:linux-rel.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -370,16 +379,25 @@
     "name": "get led builders.get luci.chromium.try:win10_chromium_x64_rel_ng.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -398,16 +416,25 @@
     "name": "get led builders.get luci.chromium.try-m83:linux-rel.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m83\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -426,16 +453,25 @@
     "name": "get led builders.get luci.chromium.try-m83:win10_chromium_x64_rel_ng.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m83\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -454,16 +490,25 @@
     "name": "get led builders.get luci.chromium.try-m84:linux-rel.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m84\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -482,16 +527,25 @@
     "name": "get led builders.get luci.chromium.try-m84:win10_chromium_x64_rel_ng.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m84\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -510,16 +564,25 @@
     "name": "get led builders.get luci.chromium.try:ios-simulator.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"ios/try\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"ios/try\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -538,16 +601,25 @@
     "name": "get led builders.get luci.chromium.try-m83:ios-simulator.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"ios/try\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m83\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -566,16 +638,25 @@
     "name": "get led builders.get luci.chromium.try-m84:ios-simulator.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"ios/try\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try-m84\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -613,15 +694,31 @@
     "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "bundle recipes.led edit-recipe-bundle",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"digest\": \"fake-recipe-bundle-hash\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"6c3d4fb83f80105ec96ae39337d4a4e75d2964da\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -680,42 +777,42 @@
     "cmd": [],
     "name": "test luci.chromium.try:linux-rel",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try:linux-rel'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try:linux-rel'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try:win10_chromium_x64_rel_ng'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try:win10_chromium_x64_rel_ng'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try-m83:linux-rel",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m83:linux-rel'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m83:linux-rel'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try-m83:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m83:win10_chromium_x64_rel_ng'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m83:win10_chromium_x64_rel_ng'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try-m84:linux-rel",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m84:linux-rel'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m84:linux-rel'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try-m84:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m84:win10_chromium_x64_rel_ng'. The CL does not affect the 'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m84:win10_chromium_x64_rel_ng'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
@@ -723,7 +820,7 @@
     "name": "test luci.chromium.try:ios-simulator",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/1286761@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -741,12 +838,36 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"1286761\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"ios/try\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@",
       "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/1286761@@@"
     ]
   },
@@ -755,15 +876,43 @@
       "[CACHE]/led/led",
       "edit",
       "-rbh",
-      "fake-recipe-bundle-hash"
+      "6c3d4fb83f80105ec96ae39337d4a4e75d2964da"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"1286761\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"ios/try\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"6c3d4fb83f80105ec96ae39337d4a4e75d2964da\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -775,11 +924,39 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit (2)",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"6c3d4fb83f80105ec96ae39337d4a4e75d2964da\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"ios-simulator\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"1286761\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"ios/try\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"6c3d4fb83f80105ec96ae39337d4a4e75d2964da\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
     ]
   },
   {
@@ -789,16 +966,17 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led launch",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"6c3d4fb83f80105ec96ae39337d4a4e75d2964da\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -811,14 +989,14 @@
       "/path/to/tmp/json",
       "-task-output-stdout",
       "none",
-      "task0"
+      "fake-task-id"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.collect",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"task0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-task-id\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
@@ -832,7 +1010,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"task0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -846,248 +1024,14 @@
     "cmd": [],
     "name": "test luci.chromium.try-m83:ios-simulator",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/2145971@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2145971"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/2145971@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-rbh",
-      "fake-recipe-bundle-hash"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led edit (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.trigger.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "collect",
-      "-server",
-      "chromium-swarm.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
-      "-task-output-stdout",
-      "none",
-      "task3"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m83:ios-simulator.collect",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"task3\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"my_task_0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"task3\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: my_task_0@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: my_task_0@@@",
-      "@@@STEP_LINK@task isolated outputs: my_task_0@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m83:ios-simulator'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
     "cmd": [],
     "name": "test luci.chromium.try-m84:ios-simulator",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/2204441@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/2204441"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"ios/try\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL (slow)@https://chromium-review.googlesource.com/c/chromium/src/+/2204441@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-rbh",
-      "fake-recipe-bundle-hash"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led edit (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.trigger.led launch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "collect",
-      "-server",
-      "chromium-swarm.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
-      "-task-output-stdout",
-      "none",
-      "task2"
-    ],
-    "infra_step": true,
-    "name": "test luci.chromium.try-m84:ios-simulator.collect",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"task2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"my_task_0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"task2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: my_task_0@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: my_task_0@@@",
-      "@@@STEP_LINK@task isolated outputs: my_task_0@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_TEXT@<br/>Not running a tryjob for 'luci.chromium.try-m84:ios-simulator'. The CL does not affect the u'foo_recipe' recipe and the CL does not affect recipes.cfg@@@"
     ]
   },
   {
