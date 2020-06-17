@@ -867,6 +867,23 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.rpc.v1.Recorder",
+      "BatchCreateTestExonerations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "name": "exonerate unexpected passes (with patch)",
+    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "import sys; sys.exit(0)"

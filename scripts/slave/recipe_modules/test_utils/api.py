@@ -317,19 +317,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # Should be removed when led v2 starts to create invocations.
         return invalid_results, failed_test_suites
 
+      test_variants = self._test_variants_with_unexpected_results(
+          invocations, suffix)
+
+      step_name = 'exonerate unexpected passes'
       if suffix == 'without patch':
-        # Test variants that still fail unexpectedly in (without patch) steps
-        # are exonerated.
-        # This is to be consistent with the current recipe logic at
-        # http://shortn/_KibEsLgpJK
-        test_variants = self._test_variants_with_unexpected_failures(
-            invocations)
-        exonerations = self._test_exonerations_for_test_variants(test_variants)
-        self.m.resultdb.exonerate(
-            test_exonerations=exonerations,
-            step_name='exonerate without patch failures',
-        )
-      else:
+        step_name = 'exonerate unexpected without patch results'
+      elif suffix:
+        step_name = '%s (%s)' % (step_name, suffix)
+
+      exonerations = self._test_exonerations_for_test_variants(
+          test_variants, suffix)
+      self.m.resultdb.exonerate(
+          test_exonerations=exonerations,
+          step_name=step_name,
+      )
+      if suffix != 'without patch':
         # Include the derived invocations in the build's invocation.
         # Note that 'without patch' results are derived but not included in
         # the builds' invocation, since the results are not related to the
@@ -344,17 +347,18 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_test_suites
 
-  def _test_variants_with_unexpected_failures(self, invocations):
-    """Gets test variants with unexpected failures.
+  def _test_variants_with_unexpected_results(self, invocations, suffix):
+    """Gets test variants with unexpected results.
 
     This is a helper function to get test variants to exonerate.
 
     To be consistent with the current recipe logic at http://shortn/_KibEsLgpJK,
-    test variants with unexpected failures in (without patch) steps will be
-    exonerated.
+      - test variants with unexpected failures in (without patch) steps will be
+      exonerated.
+      - test variants with unexpected passes in any step will be exonerated.
 
-    This is subject to change if all unexpected results should be exonerated,
-    instead of just unexpected failures.
+    This is subject to change if other unexpected results besides above
+    mentioned cases should also be exonerated.
 
     Args:
       invocations (dict): A dict {invocation_id: api.resultdb.Invocation}.
@@ -378,6 +382,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
               ],
           ),
         }
+      suffix (str): suffix to add to the step name.
 
     Returns:
       A dict of test variants in the format:
@@ -402,7 +407,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     res = {}
     for inv in invocations.values():
       for tr in inv.test_results:
-        if tr.expected or tr.status == test_result_pb2.PASS:
+        if suffix != 'without patch':
+          # Unexpected results including unexpected failures in without patch
+          # steps will not cause a build failure.
+          # See http://shortn/_KibEsLgpJK
+          should_exonerate = not tr.expected
+        else:
+          # Unexpected passes do not cause a build failure.
+          should_exonerate = (not tr.expected and
+                              tr.status == test_result_pb2.PASS)
+        if not should_exonerate:
           continue
 
         res.setdefault(tr.test_id, [])
@@ -418,16 +432,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return res
 
-  def _test_exonerations_for_test_variants(self, test_variants):
+  def _test_exonerations_for_test_variants(self, test_variants, suffix):
     """Gets test exonerations for ResultDB test variants.
 
     Args:
       test_variants (dict): A dict of test variants in the format.
         See returned value of _test_variants_with_unexpected_failures.
+      suffix (str): suffix to add to the step name.
 
     Returns:
       A list of test_result_pb2.TestExoneration.
     """
+    explanation_html = 'Unexpected passes do not cause a build failure'
+    if suffix == 'without patch':
+      explanation_html = (
+          'Unexpected results in (without patch) steps do not cause a build'
+          ' failure, including unexpected failures (http://shortn/_KibEsLgpJK)')
     ret = []
     for test_id, variants in test_variants.iteritems():
       for v in variants:
@@ -436,8 +456,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 test_id=test_id,
                 variant=v,
                 # TODO(crbug.com/1076096): add deep link to the Milo UI to
-                #  display the without patch test results.
-                explanation_html='Unexpected failure without patch',
+                #  display the exonerated test results.
+                explanation_html=explanation_html,
             ))
     return ret
 

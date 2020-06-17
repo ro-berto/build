@@ -273,7 +273,7 @@ def GenTests(api):
           results=inv_bundle_with_failures,
       ),
       api.post_process(post_process.MustRun,
-                       'exonerate without patch failures'),
+                       'exonerate unexpected without patch results'),
       api.post_process(post_process.DropExpectation))
 
   yield api.test(
@@ -325,5 +325,60 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'include derived test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
-                       'exonerate without patch failures'),
+                       'exonerate unexpected without patch results'),
+      api.post_process(post_process.DropExpectation))
+
+  inv_bundle_with_unexpected_passes = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t1',
+                      expected=True,
+                      status=test_result_pb2.PASS,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t2',
+                      expected=False,
+                      status=test_result_pb2.PASS,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+              ],
+          ),
+  }
+
+  yield api.test(
+      'exonerate_unexpected_passes',
+      api.properties(
+          mastername='m',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ),
+      api.buildbucket.build(
+          build_pb2.Build(
+              builder=build_pb2.BuilderID(
+                  project='chromium',
+                  bucket='try',
+                  builder='linux-rel',
+              ),
+              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=False)),
+      api.resultdb.chromium_derive(
+          step_name='derive test results (with patch)',
+          results=inv_bundle_with_unexpected_passes,
+      ),
+      api.post_process(post_process.MustRun,
+                       'exonerate unexpected passes (with patch)'),
       api.post_process(post_process.DropExpectation))
