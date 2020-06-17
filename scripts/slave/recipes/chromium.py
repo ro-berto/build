@@ -1137,22 +1137,16 @@ def GenTests(api):
             api.json.output({}), failure=True, retcode=1))
   )
 
-  yield (
-    api.test('dynamic_junit_test') +
-    props(mastername='chromium.android',
-          builder='android-kitkat-arm-rel') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.android', {
-            'android-kitkat-arm-rel': {
-                'junit_tests': [
-                    {
-                        'test': 'base_junit_tests',
-                    },
-                ],
-            },
-        }
-    )
-  )
+  yield (api.test('dynamic_junit_test') + props(
+      mastername='chromium.android', builder='android-marshmallow-arm64-rel') +
+         api.chromium_tests.read_source_side_spec(
+             'chromium.android', {
+                 'android-marshmallow-arm64-rel': {
+                     'junit_tests': [{
+                         'test': 'base_junit_tests',
+                     },],
+                 },
+             }))
 
   yield (
     api.test('dynamic_gtest_on_builder') +

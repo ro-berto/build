@@ -10,16 +10,16 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder/tester 'android-kitkat-arm-rel' on master 'chromium.android'@@@",
+      "@@@STEP_TEXT@<br/>running builder/tester 'android-marshmallow-arm64-rel' on master 'chromium.android'@@@",
       "@@@STEP_LOG_LINE@bots.json@[@@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
       "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"builder/tester\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"android-kitkat-arm-rel\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"android-marshmallow-arm64-rel\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.android\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@android-kitkat-arm-rel@https://ci.chromium.org/p/chromium/src/builders/ci/android-kitkat-arm-rel@@@"
+      "@@@STEP_LINK@android-marshmallow-arm64-rel@https://ci.chromium.org/p/chromium/src/builders/ci/android-marshmallow-arm64-rel@@@"
     ]
   },
   {
@@ -272,7 +272,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DOWNLOAD_VR_TEST_APKS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=arm64 use_goma=1",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -298,7 +298,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.android.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"android-kitkat-arm-rel\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"android-marshmallow-arm64-rel\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"junit_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"test\": \"base_junit_tests\"@@@",
@@ -427,7 +427,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "android-kitkat-arm-rel",
+      "android-marshmallow-arm64-rel",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -454,7 +454,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "android-kitkat-arm-rel",
+      "android-marshmallow-arm64-rel",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -489,7 +489,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_kitkat_arm_rel"
+      "[CACHE]/goma/data/android_marshmallow_arm64_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -513,7 +513,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_kitkat_arm_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_marshmallow_arm64_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -727,10 +727,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"android-kitkat-arm-rel\", \"project\": \"chromium/src\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"android-marshmallow-arm64-rel\", \"project\": \"chromium/src\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android-kitkat-arm-rel",
+      "android-marshmallow-arm64-rel",
       "--buildbot-mastername",
       "chromium.android",
       "--buildbot-slavename",
@@ -850,7 +850,7 @@
       "--master-name",
       "chromium.android",
       "--builder-name",
-      "android-kitkat-arm-rel",
+      "android-marshmallow-arm64-rel",
       "--build-number",
       "0",
       "--test-type",

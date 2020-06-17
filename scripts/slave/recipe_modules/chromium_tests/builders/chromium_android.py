@@ -416,10 +416,6 @@ SPEC.update([
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config('android-incremental-dbg', config='Debug'),
     stock_config(
-        'android-kitkat-arm-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        chromium_config_kwargs={'TARGET_BITS': 32}),
-    stock_config(
         'android-lollipop-arm-rel',
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 32}),

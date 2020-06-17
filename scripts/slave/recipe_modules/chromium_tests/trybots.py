@@ -86,11 +86,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium.android',
                 buildername='android-cronet-arm-dbg',
             ),
-        'android-kitkat-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.android',
-                buildername='android-kitkat-arm-rel',
-            ),
         'android-lollipop-arm-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.android',
