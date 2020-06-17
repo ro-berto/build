@@ -5446,9 +5446,9 @@ Recipe for archiving officially tagged v8 builds.
 
 &mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#137)(api, name, project_name):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#248)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#252)(api):**
 
-&mdash; **def [commit\_messages\_log\_entries](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#178)(api, repo, from_commit, to_commit):**
+&mdash; **def [commit\_messages\_log\_entries](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#182)(api, repo, from_commit, to_commit):**
 
 Returns list of log entries to be added to commit message.
 
@@ -5458,9 +5458,9 @@ Args:
   from_commit: Parent of first rolled commit.
   to_commit: Newest rolled commit.
 
-&mdash; **def [create\_gclient\_config](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#239)(api, target_config):**
+&mdash; **def [create\_gclient\_config](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#243)(api, target_config):**
 
-&mdash; **def [roll\_chromium\_pin](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#217)(api):**
+&mdash; **def [roll\_chromium\_pin](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#221)(api):**
 
 Updates the values of gclient variables chromium_(win|mac|linux) with the
 latest prebuilt versions.

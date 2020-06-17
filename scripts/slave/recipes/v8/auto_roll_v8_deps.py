@@ -155,7 +155,11 @@ def GetDEPS(api, name, project_name):
   # Transform into dict. Skip the solution prefix in keys (e.g. src/).
   deps = {}
   for line in step_result.stdout.strip().splitlines():
-    key, value = line.strip().split(' ')
+    tokens = line.strip().split(' ')
+    if len(tokens) != 2:
+      raise Exception("malformatted DEPS entry '%s'" % tokens)
+
+    key, value = tokens
 
     # Remove trailing colon.
     key = key.rstrip(':')
@@ -437,6 +441,8 @@ src/third_party/snappy/src: https://chromium.googlesource.com/external/snappy.gi
 src/tools/gyp: https://chromium.googlesource.com/external/gyp.git@e7079f0e0e14108ab0dba58728ff219637458563
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001"""
+  bad_cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
+src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762"""
 
   def template(testname, buildername, solution_name='v8'):
     return api.test(
@@ -476,6 +482,22 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
           'look up base_trace_event_common',
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       )
+  )
+
+  yield api.test(
+      'bad-cr-roll',
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='Auto-roll - v8 deps',
+          revision='',
+      ),
+      api.override_step_data(
+          'gclient get src deps',
+          api.raw_io.stream_output(bad_cr_deps_info, stream='stdout'),
+      ),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.expect_exception("Exception"),
   )
 
   yield (
