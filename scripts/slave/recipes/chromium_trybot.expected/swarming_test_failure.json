@@ -1318,7 +1318,7 @@
     "cmd": [
       "rdb",
       "rpc",
-      "luci.resultdb.rpc.v1.Recorder",
+      "luci.resultdb.v1.Recorder",
       "BatchCreateTestExonerations",
       "-include-update-token"
     ],
@@ -1619,7 +1619,7 @@
     "cmd": [
       "rdb",
       "rpc",
-      "luci.resultdb.rpc.v1.Recorder",
+      "luci.resultdb.v1.Recorder",
       "BatchCreateTestExonerations",
       "-include-update-token"
     ],
