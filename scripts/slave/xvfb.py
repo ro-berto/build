@@ -5,6 +5,7 @@
 """Functions to setup xvfb, which is used by the linux machines.
 """
 
+import logging
 import os
 import platform
 import signal
@@ -151,6 +152,17 @@ def StopVirtualX(slave_build_name):
     print 'Stopping Xvfb with pid %d ...' % xvfb_pid
     # If the process doesn't exist, we raise an exception that we can ignore.
     try:
+      if slave_build_name == 'WebRTC Chromium Linux Tester':
+        logging.info('[crbug.com/1071006] - Running `ps aux`.')
+        processes = subprocess.check_output(['ps', 'aux']).splitlines()
+        for line in processes:
+          logging.info('[crbug.com/1071006] - %s', line)
+
+        for i in range(60):
+          time.sleep(1)
+          logging.info(
+              '[crbug.com/1071006] - Killing Xvfb PID %s, iteration %d',
+              xvfb_pid, i)
       os.kill(xvfb_pid, signal.SIGKILL)
     except OSError:
       print '... killing failed, presuming unnecessary.'
