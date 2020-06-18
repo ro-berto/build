@@ -362,8 +362,8 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
     ]
     command.extend(shlex.split(compile_command))
 
-    logging.debug('In %r, running %s', in_dir, ' '.join(
-        pipes.quote(c) for c in command))
+    logging.debug('In %r, running %s', in_dir,
+                  ' '.join(pipes.quote(c) for c in command))
 
     try:
       tidy = subprocess.Popen(
@@ -503,8 +503,8 @@ def _parse_compile_commands(stream):
 
     m = re.search(r'-o\s+(\S+)', command)
     if not m:
-      raise ValueError(
-          'compile_commands action %r lacks an output file' % command)
+      raise ValueError('compile_commands action %r lacks an output file' %
+                       command)
 
     yield _CompileCommand(
         target_name=m.group(1),
@@ -950,9 +950,9 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   # Can't use pool.imap variants here due to the timeout workaround below.
   results = []
   for action in tidy_actions:
-    results.append((action,
-                    pool.apply_async(run_tidy_action,
-                                     (clang_tidy_binary, action))))
+    results.append(
+        (action, pool.apply_async(run_tidy_action,
+                                  (clang_tidy_binary, action))))
   pool.close()
 
   all_findings = set()
@@ -1283,9 +1283,10 @@ def main():
       clang_tidy_binary,
       use_threads=False)
 
-  results = _convert_tidy_output_json_obj(
-      base_path, tidy_actions, failed_actions, failed_tidy_actions,
-      timed_out_actions, findings, only_src_files)
+  results = _convert_tidy_output_json_obj(base_path, tidy_actions,
+                                          failed_actions, failed_tidy_actions,
+                                          timed_out_actions, findings,
+                                          only_src_files)
 
   # Do a two-step write, so the user can't see partial results.
   tempfile_name = findings_file + '.new'

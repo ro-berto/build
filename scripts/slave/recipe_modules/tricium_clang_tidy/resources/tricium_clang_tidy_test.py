@@ -43,8 +43,8 @@ def _run_under_py3(test_file, test_args):
     raise _MissingDependencyError('python3')
 
   return subprocess.check_output(
-      ['python3', test_file] + test_args, stderr=subprocess.STDOUT).decode(
-          'utf-8', 'ignore')
+      ['python3', test_file] + test_args,
+      stderr=subprocess.STDOUT).decode('utf-8', 'ignore')
 
 
 def main():

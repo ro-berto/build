@@ -45,6 +45,7 @@
   * [test_results](#recipe_modules-test_results)
   * [test_utils](#recipe_modules-test_utils)
   * [traceback](#recipe_modules-traceback)
+  * [tricium_clang_tidy](#recipe_modules-tricium_clang_tidy) &mdash; Recipe module to encapsulate the logic of calling clang-tidy on a list of affected files, gather warnings, and post via Tricium.
   * [ts_mon](#recipe_modules-ts_mon)
   * [v8](#recipe_modules-v8)
   * [webrtc](#recipe_modules-webrtc)
@@ -296,6 +297,7 @@
   * [test_utils:tests/upload_results_to_resultdb](#recipes-test_utils_tests_upload_results_to_resultdb)
   * [tint](#recipes-tint)
   * [traceback:examples/full](#recipes-traceback_examples_full)
+  * [tricium_clang_tidy:tests/example](#recipes-tricium_clang_tidy_tests_example)
   * [tricium_clang_tidy_wrapper](#recipes-tricium_clang_tidy_wrapper)
   * [tricium_metrics](#recipes-tricium_metrics)
   * [ts_mon:tests/example](#recipes-ts_mon_tests_example)
@@ -3448,6 +3450,22 @@ The test_results will be an instance of the TestResults class.
 Returns a string containing an exception traceback.
 
 Calls traceback.format_exc but during testing removes absolute paths.
+### *recipe_modules* / [tricium\_clang\_tidy](/scripts/slave/recipe_modules/tricium_clang_tidy)
+
+[DEPS](/scripts/slave/recipe_modules/tricium_clang_tidy/__init__.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]
+
+Recipe module to encapsulate the logic of calling clang-tidy on a list
+of affected files, gather warnings, and post via Tricium.
+
+#### **class [TriciumClangTidyApi](/scripts/slave/recipe_modules/tricium_clang_tidy/api.py#113)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&mdash; **def [lint\_source\_files](/scripts/slave/recipe_modules/tricium_clang_tidy/api.py#115)(self, output_dir, file_paths):**
+
+Runs clang-tidy on provided source files in file_paths, then writes
+warnings to Tricium.
+
+file_paths is an interable of Path, only files that exist and have C/C++
+extensions will be linted.
 ### *recipe_modules* / [ts\_mon](/scripts/slave/recipe_modules/ts_mon)
 
 [DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
@@ -5384,19 +5402,16 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/traceback/examples/full.py#16)(api):**
+### *recipes* / [tricium\_clang\_tidy:tests/example](/scripts/slave/recipe_modules/tricium_clang_tidy/tests/example.py)
+
+[DEPS](/scripts/slave/recipe_modules/tricium_clang_tidy/tests/example.py#10): [tricium\_clang\_tidy](#recipe_modules-tricium_clang_tidy), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/tricium_clang_tidy/tests/example.py#22)(api):**
 ### *recipes* / [tricium\_clang\_tidy\_wrapper](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py)
 
-[DEPS](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#10): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [goma](#recipe_modules-goma), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]
+[DEPS](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#11): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [goma](#recipe_modules-goma), [tricium\_clang\_tidy](#recipe_modules-tricium_clang_tidy), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#235)(api):**
-
-&mdash; **def [tricium\_has\_message](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#309)(check, steps, message):**
-
-&mdash; **def [tricium\_has\_no\_messages](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#304)(check, steps):**
-
-&mdash; **def [tricium\_has\_replacements](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#316)(check, steps, \*expected_replacements):**
-
-&mdash; **def [tricium\_outputs\_json](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#326)(check, steps, json_obj):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#42)(api):**
 ### *recipes* / [tricium\_metrics](/scripts/slave/recipes/tricium_metrics.py)
 
 [DEPS](/scripts/slave/recipes/tricium_metrics.py#9): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]

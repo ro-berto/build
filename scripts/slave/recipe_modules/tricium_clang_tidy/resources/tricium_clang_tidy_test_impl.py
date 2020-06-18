@@ -1075,7 +1075,8 @@ class Tests(unittest.TestCase):
         parse_ninja_deps=lambda _: [
             ('foo.o', ['/foo.cc', '/foo.h']),
             ('bar.o', ['/bar.cc', '/foo.h']),
-            ('baz.o', ['/baz.cc']),],
+            ('baz.o', ['/baz.cc']),
+        ],
         cc_to_target_map=cc_to_target_map,
         gn_desc=tidy._GnDesc(per_target_srcs={
             '//path/to/my:targ': ['/foo.cc', '/foo.h', '/bar.cc', '/baz.cc'],
