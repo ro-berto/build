@@ -5,7 +5,6 @@
 """Functions to setup xvfb, which is used by the linux machines.
 """
 
-import logging
 import os
 import platform
 import signal
@@ -56,8 +55,8 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   # See: https://crbug.com/715848
   env = os.environ.copy()
   if env.get('TMPDIR') and env['TMPDIR'] != '/tmp':
-      print 'Overriding TMPDIR to "/tmp" for Xvfb, was: %s' % (env['TMPDIR'],)
-      env['TMPDIR'] = '/tmp'
+    print 'Overriding TMPDIR to "/tmp" for Xvfb, was: %s' % (env['TMPDIR'],)
+    env['TMPDIR'] = '/tmp'
 
   if xdisplaycheck_path and os.path.exists(xdisplaycheck_path):
     print 'Verifying Xvfb is not running ...'
@@ -153,16 +152,17 @@ def StopVirtualX(slave_build_name):
     # If the process doesn't exist, we raise an exception that we can ignore.
     try:
       if slave_build_name == 'WebRTC Chromium Linux Tester':
-        logging.info('[crbug.com/1071006] - Running `ps aux`.')
+        print('[crbug.com/1071006] - Running `ps aux`.')
         processes = subprocess.check_output(['ps', 'aux']).splitlines()
         for line in processes:
-          logging.info('[crbug.com/1071006] - %s', line)
+          print('[crbug.com/1071006] - %s' % line)
 
         for i in range(60):
           time.sleep(1)
-          logging.info(
-              '[crbug.com/1071006] - Killing Xvfb PID %s, iteration %d',
-              xvfb_pid, i)
+          print(
+              '[crbug.com/1071006] - Killing Xvfb PID %s, iteration %d' %
+              (xvfb_pid, i)
+          )
       os.kill(xvfb_pid, signal.SIGKILL)
     except OSError:
       print '... killing failed, presuming unnecessary.'
