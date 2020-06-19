@@ -1282,26 +1282,6 @@
   },
   {
     "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.Recorder",
-      "BatchCreateTestExonerations",
-      "-include-update-token"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "exonerate unexpected passes (with patch)",
-    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\"}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
@@ -1560,26 +1540,6 @@
     "name": "derive test results (retry shards with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.Recorder",
-      "BatchCreateTestExonerations",
-      "-include-update-token"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "exonerate unexpected passes (retry shards with patch)",
-    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-00000000133a\"}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -2478,26 +2438,6 @@
     "name": "derive test results (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.Recorder",
-      "BatchCreateTestExonerations",
-      "-include-update-token"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "exonerate unexpected without patch results",
-    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-00000000133d\"}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
