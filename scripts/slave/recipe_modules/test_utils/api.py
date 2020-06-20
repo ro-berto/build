@@ -12,8 +12,8 @@ from recipe_engine import util as recipe_util
 from . import canonical
 from .util import GTestResults, TestResults
 
-from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (test_result as
-                                                           test_result_pb2)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
 
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
