@@ -48,7 +48,7 @@ def config(name,
     cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
     cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
     cfg['swarming_dimensions'] = {
-        'pool': 'chrome.tests.template',
+        'pool': 'chrome.tests',
         'os': 'Ubuntu-14.04',
     }
 
@@ -372,7 +372,7 @@ SPEC = {
             swarming_default_priority=210,
             swarming_dimensions={
                 'gpu': None,
-                'pool': 'chrome.tests.template',
+                'pool': 'chrome.tests',
             },
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -452,7 +452,7 @@ SPEC = {
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
-                'pool': 'chrome.tests.template',
+                'pool': 'chrome.tests',
                 'os': 'Windows-10',
             },
         ),
@@ -523,7 +523,7 @@ SPEC = {
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
-                'pool': 'chrome.tests.template',
+                'pool': 'chrome.tests',
                 'os': 'Windows-10',
             },
         ),

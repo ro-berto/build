@@ -112,7 +112,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests.template\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",

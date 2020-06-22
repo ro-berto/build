@@ -818,7 +818,7 @@
       "Mac",
       "--dimension",
       "pool",
-      "chromium.tests.template",
+      "chromium.tests",
       "--dimension",
       "xcode_version",
       "fake xcode version",

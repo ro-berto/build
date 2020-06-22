@@ -2971,10 +2971,8 @@ class SwarmingIosTest(SwarmingTest):
             dimension_set['os'] = dimension_set['host os']
             dimension_set.pop('host os')
 
-    # TODO(crbug.com/812428): Move this back to chromium.tests once it's using
-    # templates.
     self._dimensions = {
-        'pool': 'chromium.tests.template',
+        'pool': 'chromium.tests',
     }
 
     # TODO(crbug.com/835036): remove this when all configs are migrated to

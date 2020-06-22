@@ -638,7 +638,7 @@
       "Mac",
       "--dimension",
       "pool",
-      "chromium.tests.template",
+      "chromium.tests",
       "--named-cache",
       "xcode_ios_9abc",
       "Xcode.app",

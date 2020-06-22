@@ -1267,7 +1267,7 @@
       "Windows-7-SP1",
       "--dimension",
       "pool",
-      "chromium.tests.template",
+      "chromium.tests",
       "--tag",
       "bucket:ci",
       "--tag",

@@ -1267,7 +1267,7 @@
       "Ubuntu-16.04",
       "--dimension",
       "pool",
-      "chromium.tests.template",
+      "chromium.tests",
       "--tag",
       "bucket:ci",
       "--tag",
