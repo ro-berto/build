@@ -37,7 +37,7 @@ def RunSteps(api):
       api.properties['mastername'], api.properties['buildername'])
   try_spec = api.chromium_tests.trybots.get(builder_id)
   if try_spec is None:
-    try_spec = try_spec_module.TrySpec.create(bot_ids=[builder_id])
+    try_spec = try_spec_module.TrySpec.create(mirrors=[builder_id])
 
   bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   api.chromium_tests.configure_build(bot_config)

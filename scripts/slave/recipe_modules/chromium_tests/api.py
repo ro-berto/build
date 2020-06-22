@@ -1355,12 +1355,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # and looks up the configuration of the mirrored bot. For example,
     # <tryserver.chromium.mac, mac_chromium_dbg_ng> will return:
     # {
-    #   'bot_ids': {
+    #   'mirrors': {
     #                'mastername': 'chromium.mac',
     #                'buildername': 'Mac Builder (dbg)',
     #                'tester': 'Mac10.13 Tests (dbg)',
     #              },
-    #   'analyze_mode': None
+    #   'execution_mode': None
     # }
     # See ChromiumTestsApi for more details.
     try_db = try_spec_module.TryDatabase.normalize(mirrored_bots or
@@ -1373,7 +1373,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # configuration that uses the same <mastername, buildername> of the
       # triggering trybot.
       try_spec = {
-          'bot_ids': [builder_id],
+          'mirrors': [builder_id],
       }
 
     try_spec = try_spec_module.TrySpec.normalize(try_spec)

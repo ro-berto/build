@@ -73,7 +73,7 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                 ],
             ),
         'staging-chromium-rel':
-            try_spec.TrySpec.create(bot_ids=[
+            try_spec.TrySpec.create(mirrors=[
                 try_spec.TryMirror.create(
                     mastername='chromium.test',
                     buildername='staging-chromium-rel',

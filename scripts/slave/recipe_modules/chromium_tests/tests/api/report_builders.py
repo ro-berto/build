@@ -17,12 +17,12 @@ BUILDERS = {
 
 TRYBOTS = {
     'fake-try-master': {
-            'fake-try-builder': {
-                'bot_ids': [{
-                    'mastername': 'fake-master',
-                    'buildername': 'fake-builder',
-                }],
-            },
+        'fake-try-builder': {
+            'mirrors': [{
+                'mastername': 'fake-master',
+                'buildername': 'fake-builder',
+            }],
+        },
     },
 }
 

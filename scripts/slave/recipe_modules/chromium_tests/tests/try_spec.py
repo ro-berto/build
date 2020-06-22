@@ -81,7 +81,7 @@ def RunSteps(api):
   # TrySpec normalization ******************************************************
 
   # Normalization of a TrySpec
-  try_spec = try_spec_module.TrySpec.create(bot_ids=[{
+  try_spec = try_spec_module.TrySpec.create(mirrors=[{
       'mastername': 'fake-master',
       'buildername': 'fake-builder',
   }])
@@ -90,7 +90,7 @@ def RunSteps(api):
 
   # Normalization of a dictionary
   d = {
-      'bot_ids': [{
+      'mirrors': [{
           'mastername': 'fake-master',
           'buildername': 'fake-builder',
       }],
@@ -98,7 +98,7 @@ def RunSteps(api):
   try_spec = try_spec_module.TrySpec.normalize(d)
   api.assertions.assertEqual(
       try_spec,
-      try_spec_module.TrySpec.create(bot_ids=[{
+      try_spec_module.TrySpec.create(mirrors=[{
           'mastername': 'fake-master',
           'buildername': 'fake-builder',
       }]))
@@ -107,6 +107,10 @@ def RunSteps(api):
   d = {
       'fake-try-master': {
           'fake-try-builder': {
+              'mirrors': [{
+                  'mastername': 'fake-master',
+                  'buildername': 'fake-builder',
+              },],
               'foo': 'bar'
           },
       },
@@ -124,7 +128,7 @@ def RunSteps(api):
   db = try_spec_module.TryDatabase.create({
       'fake-try-master-1': {
           'fake-try-builder-1': {
-              'bot_ids': [{
+              'mirrors': [{
                   'mastername': 'master-1',
                   'buildername': 'builder-1',
               }],
@@ -132,7 +136,7 @@ def RunSteps(api):
       },
       'fake-try-master-2': {
           'fake-try-builder-2': {
-              'bot_ids': [{
+              'mirrors': [{
                   'mastername': 'master-2',
                   'buildername': 'builder-2',
               }],
@@ -148,13 +152,13 @@ def RunSteps(api):
   api.assertions.assertEqual(set(db.keys()), {try_key_1, try_key_2})
   api.assertions.assertEqual(
       db[try_key_1],
-      try_spec_module.TrySpec.create(bot_ids=[
+      try_spec_module.TrySpec.create(mirrors=[
           try_spec_module.TryMirror.create(
               mastername='master-1', buildername='builder-1')
       ]))
   api.assertions.assertEqual(
       db[try_key_2],
-      try_spec_module.TrySpec.create(bot_ids=[
+      try_spec_module.TrySpec.create(mirrors=[
           try_spec_module.TryMirror.create(
               mastername='master-2', buildername='builder-2')
       ]))
@@ -165,7 +169,7 @@ def RunSteps(api):
   try_db = try_spec_module.TryDatabase.create({
       'fake-try-master': {
           'fake-try-builder': {
-              'bot_ids': [{
+              'mirrors': [{
                   'mastername': 'master',
                   'buildername': 'builder',
               }],
@@ -179,7 +183,7 @@ def RunSteps(api):
   d = {
       'fake-try-master': {
           'fake-try-builder': {
-              'bot_ids': [{
+              'mirrors': [{
                   'mastername': 'master',
                   'buildername': 'builder',
               }],

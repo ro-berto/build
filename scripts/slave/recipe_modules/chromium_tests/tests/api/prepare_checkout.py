@@ -80,7 +80,7 @@ def GenTests(api):
       api.chromium_tests.trybots({
           'fake-try-master': {
               'fake-try-builder': {
-                  'bot_ids': [{
+                  'mirrors': [{
                       'mastername': 'fake-master',
                       'buildername': 'fake-builder',
                       'tester_mastername': 'fake-tester-master',
