@@ -1056,8 +1056,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'mac_chromium_10.15_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.mac',
-                buildername='Mac Builder',
+                mastername='chromium.fyi',
+                buildername='Mac Builder Next',
             ),
         'mac_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
