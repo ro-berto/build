@@ -193,101 +193,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.infra": [
-      {
-        "builders": {
-          "infra-continuous-xenial-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-trusty-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-precise-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-mac-10.13-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-win-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-recipes-tests": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-
-          "luci-gae-continuous-trusty-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-gae-continuous-mac": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-gae-continuous-win": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-
-          "luci-go-continuous-mac-10.13-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-trusty-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-win10-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-win7-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-xenial-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-
-          "build-recipes-tests": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "depot_tools-recipes-tests": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "recipe_engine-recipes-tests": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          }
-
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.linux": [
       {
         "categories": [
@@ -651,15 +556,6 @@
       ]
     },
 
-    "infra_tree_closer": {
-      "closing_optional": [
-        "*"
-      ],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)",
-      "tree_notify": [
-        "tandrii+infra-continuous-self-appointed-gardener@google.com"
-      ]
-    },
     "pdfium_all": {
       "closing_optional": [
         "*"

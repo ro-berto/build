@@ -47,16 +47,6 @@
             "https://build.chromium.org/p/chromium": ["Android"]
         }
     },
-    "infra": {
-        "build-db": "infra_db.json",
-        "masters": {
-            "https://build.chromium.org/p/chromium.infra": ["*"]
-        },
-        "open-tree": true,
-        "status-url": "https://infra-status.appspot.com",
-        "set-status": false,
-        "password-file": "/creds/gatekeeper/infra_status_password"
-    },
     "ios": {
         "build-db": "ios_db.json",
         "open-tree": false,
