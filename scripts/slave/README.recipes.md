@@ -4838,23 +4838,23 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/devtools/devtools-frontend.py#31)(api):**
 
-&mdash; **def [on\_cq\_experiment](/scripts/slave/recipes/devtools/devtools-frontend.py#134)(api):**
+&mdash; **def [on\_cq\_experiment](/scripts/slave/recipes/devtools/devtools-frontend.py#135)(api):**
 
-&mdash; **def [publish\_coverage\_points](/scripts/slave/recipes/devtools/devtools-frontend.py#160)(api):**
+&mdash; **def [publish\_coverage\_points](/scripts/slave/recipes/devtools/devtools-frontend.py#161)(api):**
 
-&mdash; **def [run\_e2e](/scripts/slave/recipes/devtools/devtools-frontend.py#108)(api):**
+&mdash; **def [run\_e2e](/scripts/slave/recipes/devtools/devtools-frontend.py#109)(api):**
 
-&mdash; **def [run\_lint\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#100)(api):**
+&mdash; **def [run\_lint\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#101)(api):**
 
-&mdash; **def [run\_localization\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#104)(api):**
+&mdash; **def [run\_localization\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#105)(api):**
 
 &mdash; **def [run\_script](/scripts/slave/recipes/devtools/devtools-frontend.py#82)(api, step_name, script, args=None):**
 
-&mdash; **def [run\_type\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#93)(api):**
+&mdash; **def [run\_type\_check](/scripts/slave/recipes/devtools/devtools-frontend.py#94)(api):**
 
 &mdash; **def [run\_unit\_tests](/scripts/slave/recipes/devtools/devtools-frontend.py#89)(api):**
 
-&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#142)():**
+&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#143)():**
 ### *recipes* / [disk:examples/full](/scripts/slave/recipe_modules/disk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/disk/examples/full.py#5): [disk](#recipe_modules-disk), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

@@ -87,7 +87,8 @@ def run_script(api, step_name, script, args=None):
 
 
 def run_unit_tests(api):
-  run_script(api, 'Unit Tests', 'run_unittests.py', ['--target=Release'])
+  run_script(api, 'Unit Tests', 'run_unittests.py',
+             ['--target=Release', '--coverage'])
 
 
 def run_type_check(api):
