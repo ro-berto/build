@@ -23,8 +23,8 @@ def CreateBuilderConfig(os, bits, top_of_tree):
   return _chromium_dawn_spec(
       os,
       bits,
-      bot_type=bot_spec.BUILDER,
       gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
+      serialize_tests=True,
   )
 
 
@@ -32,18 +32,8 @@ def CreateTesterConfig(os, bits, builder):
   return _chromium_dawn_spec(
       os,
       bits,
-      bot_type=bot_spec.TESTER,
+      execution_mode=bot_spec.TEST,
       parent_buildername=builder,
-      serialize_tests=True,
-  )
-
-
-def CreateBuilderTesterConfig(os, bits, top_of_tree):
-  return _chromium_dawn_spec(
-      os,
-      bits,
-      bot_type=bot_spec.BUILDER_TESTER,
-      gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
       serialize_tests=True,
   )
 
@@ -100,5 +90,5 @@ SPEC = {
     'Dawn Win10 x64 DEPS Release (NVIDIA)':
         CreateTesterConfig('win', 64, 'Dawn Win10 x64 DEPS Builder'),
     'Dawn Win10 x64 ASAN Release':
-        CreateBuilderTesterConfig('win', 64, top_of_tree=True),
+        CreateBuilderConfig('win', 64, top_of_tree=True),
 }

@@ -22,7 +22,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type='builder',
             compile_targets=[
                 'blink_tests',
             ],

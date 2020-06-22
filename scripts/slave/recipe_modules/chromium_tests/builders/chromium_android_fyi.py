@@ -25,7 +25,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Android WebLayer P FYI (rel)':
@@ -40,7 +39,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Android WebView P FYI (rel)':
@@ -55,7 +53,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Memory Infra Tester':
@@ -68,7 +65,6 @@ SPEC = {
                 'TARGET_BITS': 32,
                 'TARGET_PLATFORM': 'android',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='main_builder_mb',
             simulation_platform='linux',
         ),
@@ -84,7 +80,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android-pie-arm64-fyi-rel':
@@ -99,7 +94,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android-pie-x86-fyi-rel':
@@ -114,7 +108,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android-weblayer-pie-x86-fyi-rel':
@@ -129,7 +122,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android-bfcache-rel':
@@ -143,7 +135,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder_mb',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
 }

@@ -13,7 +13,6 @@ SPEC = {
     'android_chromium_compile':
         _tryserver_webrtc_spec(
             android_config='base_config',
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -28,7 +27,6 @@ SPEC = {
         ),
     'linux_chromium_compile':
         _tryserver_webrtc_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -41,7 +39,6 @@ SPEC = {
         ),
     'linux_chromium_compile_dbg':
         _tryserver_webrtc_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -54,7 +51,6 @@ SPEC = {
         ),
     'mac_chromium_compile':
         _tryserver_webrtc_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -67,7 +63,6 @@ SPEC = {
         ),
     'win_chromium_compile':
         _tryserver_webrtc_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -80,7 +75,6 @@ SPEC = {
         ),
     'win_chromium_compile_dbg':
         _tryserver_webrtc_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={

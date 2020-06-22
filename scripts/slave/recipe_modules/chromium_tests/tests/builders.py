@@ -76,7 +76,7 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object([builder_id])
 
   # For testers, check that various configs are equal to the builder's
-  if bot_config.bot_type == bot_spec.TESTER:
+  if bot_config.execution_mode == bot_spec.TEST:
     validate_tester_config(api, builder_id.master, builder_id.builder,
                            bot_config)
 
@@ -86,7 +86,7 @@ def RunSteps(api):
 
 def GenTests(api):
   for builder_id, builder_spec in sorted(builders.BUILDERS.iteritems()):
-    if builder_spec.bot_type == bot_spec.DUMMY_TESTER:
+    if builder_spec.execution_mode == bot_spec.PROVIDE_TEST_SPEC:
       continue
     mastername = builder_id.master
     buildername = builder_id.builder

@@ -18,7 +18,6 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
-            bot_type=bot_spec.BUILDER_TESTER,
         ),
     'android-marshmallow-arm64-rel-swarming':
         bot_spec.BotSpec.create(
@@ -33,7 +32,6 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
-            bot_type=bot_spec.BUILDER_TESTER,
         ),
     'linux-rel-swarming':
         bot_spec.BotSpec.create(
@@ -44,7 +42,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='linux',
-            bot_type=bot_spec.BUILDER_TESTER,
         ),
     'mac-rel-swarming':
         bot_spec.BotSpec.create(
@@ -55,7 +52,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='mac',
-            bot_type=bot_spec.BUILDER_TESTER,
         ),
     'win-rel-swarming':
         bot_spec.BotSpec.create(
@@ -66,7 +62,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='win',
-            bot_type=bot_spec.BUILDER_TESTER,
         ),
 }
 

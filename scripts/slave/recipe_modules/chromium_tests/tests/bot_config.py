@@ -15,7 +15,7 @@ DEPS = [
 
 def RunSteps(api):
   # Test failed normalization of bot specs
-  spec = {'bot_type': bot_spec.TESTER}
+  spec = {'execution_mode': bot_spec.TEST}
   builders = {
       'fake-master': {
               'fake-builder': spec,
@@ -25,29 +25,29 @@ def RunSteps(api):
                                                     'fake-builder')
   with api.assertions.assertRaises(AssertionError) as caught:
     bot_config_module.BotConfig.create(builders, [builder_id])
-  message = ('Tester-only bot must specify a parent builder '
+  message = ('Test-only builder must specify a parent builder '
              "while creating spec for builder {!r}".format(builder_id))
   api.assertions.assertEqual(message, caught.exception.message)
 
   # Set up data for testing bot_config methods
   builders = {
       'fake-master': {
-              'fake-builder':
-                  bot_spec.BotSpec.create(),
-              'fake-tester':
-                  bot_spec.BotSpec.create(
-                      bot_type=bot_spec.TESTER,
-                      parent_buildername='fake-builder',
-                  ),
+          'fake-builder':
+              bot_spec.BotSpec.create(),
+          'fake-tester':
+              bot_spec.BotSpec.create(
+                  execution_mode=bot_spec.TEST,
+                  parent_buildername='fake-builder',
+              ),
       },
       'fake-master2': {
-              'fake-builder2':
-                  bot_spec.BotSpec.create(),
-              'fake-tester2':
-                  bot_spec.BotSpec.create(
-                      bot_type=bot_spec.TESTER,
-                      parent_buildername='fake-builder',
-                  ),
+          'fake-builder2':
+              bot_spec.BotSpec.create(),
+          'fake-tester2':
+              bot_spec.BotSpec.create(
+                  execution_mode=bot_spec.TEST,
+                  parent_buildername='fake-builder',
+              ),
       },
   }
 

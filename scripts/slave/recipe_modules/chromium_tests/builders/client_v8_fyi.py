@@ -24,7 +24,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
@@ -41,7 +40,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
                 'extensions_browsertests',
@@ -70,7 +68,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
                 'gin_unittests',
@@ -91,7 +88,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -109,7 +105,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -127,7 +122,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -145,7 +139,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -163,7 +156,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -181,7 +173,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'blink_tests',
             ],
@@ -202,7 +193,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux Debug Builder',
             source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
@@ -220,7 +211,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'extensions_browsertests',
                 'net_unittests',
@@ -246,7 +236,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='win',
             serialize_tests=True,
@@ -267,7 +256,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='mac',
             serialize_tests=True,
@@ -288,7 +276,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
             serialize_tests=True,
@@ -309,7 +296,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
             serialize_tests=True,
@@ -328,7 +314,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_rel_mb',
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
             simulation_platform='linux',
         ),

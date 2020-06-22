@@ -109,7 +109,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
         compile_targets,
         tests_including_triggered=[],
         builder_id=builder_id,
-        override_bot_type='builder_tester')
+        override_execution_mode=bot_spec.COMPILE_AND_TEST)
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED
     return CompileResult.PASSED
@@ -129,8 +129,7 @@ def RunSteps(api, target_mastername, target_buildername,
   builder_id = chromium.BuilderId.create_for_master(target_mastername,
                                                     target_buildername)
   bot_config = api.chromium_tests.create_bot_config_object([builder_id])
-  api.chromium_tests.configure_build(
-      bot_config, override_bot_type='builder_tester')
+  api.chromium_tests.configure_build(bot_config)
 
   api.chromium.apply_config('goma_failfast')
 

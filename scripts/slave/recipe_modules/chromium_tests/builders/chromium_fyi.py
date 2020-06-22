@@ -81,7 +81,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='mac',
         ),
     'mac-osxbeta-rel':
@@ -96,7 +95,7 @@ SPEC = {
             swarming_dimensions={
                 'os': 'Mac-10.14',
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             test_results_config='staging_server',
             parent_mastername='chromium.mac',
             parent_buildername='Mac Builder',
@@ -146,7 +145,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
             test_results_config='staging_server',
@@ -163,7 +161,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
             test_results_config='staging_server',
@@ -180,7 +177,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
             test_results_config='staging_server',
@@ -207,7 +203,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[
                 'content_unittests',
                 'content_browsertests',
@@ -235,7 +230,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'mac-code-coverage':
@@ -248,7 +242,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
     'win32-arm64-rel':
@@ -261,7 +254,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_ARCH': 'arm'
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='win',
         ),
     'Win 10 Fast Ring':
@@ -288,7 +280,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -304,7 +295,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux remote_run Builder',
             test_specs=[
                 bot_spec.TestSpec.create(steps.LocalGTestTest,
@@ -324,7 +315,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='arm64_builder_mb',
             # TODO(crbug.com/876570): Here and below, we should move the
             # Mojo builders to a different "master" and get rid of this
@@ -345,7 +335,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='arm64_builder_mb',
             swarming_default_priority=25,
             simulation_platform='linux',
@@ -361,7 +350,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'linux',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             swarming_default_priority=25,
             simulation_platform='linux',
         ),
@@ -375,7 +363,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'mac-mojo-rel':
@@ -388,7 +375,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
     'Mojo Windows':
@@ -402,7 +388,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'win',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='win',
         ),
     'chromeos-amd64-generic-lacros-rel':
@@ -421,7 +406,6 @@ SPEC = {
                 'TARGET_CROS_BOARD': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'linux-autofill-captured-sites-rel':
@@ -434,7 +418,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'linux',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -453,7 +436,6 @@ SPEC = {
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'ios-simulator-cronet':
@@ -565,7 +547,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
     'ios-simulator-cr-recipe':
@@ -602,7 +583,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
     'android-code-coverage':
@@ -619,7 +599,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android-code-coverage-native':
@@ -636,7 +615,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Win10 Tests x64 1803':
@@ -648,7 +626,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_mastername='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
@@ -667,7 +645,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='win',
         ),
     'linux-upload-perfetto':
@@ -679,7 +656,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'mac-upload-perfetto':
@@ -691,7 +667,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='mac',
         ),
     'win-upload-perfetto':
@@ -703,7 +678,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='win',
         ),
 }
@@ -727,11 +701,10 @@ SPEC.update([
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config('linux-blink-heap-verification'),
-    stock_config(
-        'linux-chromium-tests-staging-builder', bot_type=bot_spec.BUILDER),
+    stock_config('linux-chromium-tests-staging-builder'),
     stock_config(
         'linux-chromium-tests-staging-tests',
-        bot_type=bot_spec.TESTER,
+        execution_mode=bot_spec.TEST,
         parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
@@ -740,10 +713,10 @@ SPEC.update([
     stock_config('linux-wpt-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
-    stock_config('win-pixel-builder-rel', bot_type=bot_spec.BUILDER),
+    stock_config('win-pixel-builder-rel'),
     stock_config(
         'win-pixel-tester-rel',
-        bot_type=bot_spec.TESTER,
+        execution_mode=bot_spec.TEST,
         parent_buildername='win-pixel-builder-rel'),
 ])
 

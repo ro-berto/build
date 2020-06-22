@@ -33,10 +33,11 @@ def chromium_perf(c):
   c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
-def _common_kwargs(bot_type, config_name, platform, target_bits, test_specs):
+def _common_kwargs(execution_mode, config_name, platform, target_bits,
+                   test_specs):
   spec = {
-      'bot_type':
-          bot_type,
+      'execution_mode':
+          execution_mode,
       'chromium_config':
           config_name,
       'chromium_config_kwargs': {
@@ -93,7 +94,7 @@ def BuildSpec(config_name,
     ]
 
   kwargs = _common_kwargs(
-      bot_type=bot_spec.BUILDER,
+      execution_mode=bot_spec.COMPILE_AND_TEST,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
@@ -133,7 +134,7 @@ def TestSpec(config_name,
              cros_board=None,
              target_arch=None):
   kwargs = _common_kwargs(
-      bot_type=bot_spec.TESTER,
+      execution_mode=bot_spec.TEST,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,

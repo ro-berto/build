@@ -16,16 +16,12 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              sequence_attrib)
 from RECIPE_MODULES.build import chromium
 
-BUILDER = 'builder'
-TESTER = 'tester'
-BUILDER_TESTER = 'builder_tester'
+COMPILE_AND_TEST = 'compile/test'
+TEST = 'test'
 # The type of a bot that is never actually executed, it is only used as the
 # tester in a trybot-mirror configuration so that src-side information can be
 # specified providing different test configurations
-DUMMY_TESTER = 'dummy_tester'
-
-BUILDER_TYPES = (BUILDER, BUILDER_TESTER)
-TESTER_TYPES = (TESTER, BUILDER_TESTER)
+PROVIDE_TEST_SPEC = 'provide-test-spec'
 
 
 @attrs()
@@ -80,24 +76,26 @@ class BotSpec(object):
     def get_filtered_attrs(*attributes):
       return [a for a in attributes if a in kwargs]
 
-    bot_type = kwargs.get('bot_type', BUILDER_TESTER)
-    if bot_type == DUMMY_TESTER:
-      # DUMMY_TESTER bots should never be executed, so most fields are invalid
-      # The source_side_spec field overrides the location of the src-side spec,
-      # which is the point of DUMMY_TESTER bots, so it is valid to set
+    execution_mode = kwargs.get('execution_mode', COMPILE_AND_TEST)
+
+    if execution_mode == PROVIDE_TEST_SPEC:
+      # Builders with execution mode PROVIDE_TEST_SPEC should never be executed,
+      # so most fields are invalid
+      # The source_side_spec_file field overrides the location of the src-side
+      # spec, which is the point of PROVIDE_TEST_SPEC, so it is valid to set
       invalid_attrs = get_filtered_attrs(*[
           a for a in attr.fields_dict(cls)
-          if a not in ('bot_type', 'source_side_spec_file')
+          if a not in ('execution_mode', 'source_side_spec_file')
       ])
       assert not invalid_attrs, (
-          "The following fields are ignored when 'bot_type' is {!r}: {}".format(
-              DUMMY_TESTER, invalid_attrs))
+          "The following fields are ignored when 'execution_mode' is {!r}: {}"
+          .format(PROVIDE_TEST_SPEC, invalid_attrs))
 
-    elif bot_type not in BUILDER_TYPES:
+    elif execution_mode != COMPILE_AND_TEST:
       invalid_attrs = get_filtered_attrs('compile_targets')
       assert not invalid_attrs, (
-          "The following fields are ignored unless 'bot_type' is one of {}: {}"
-          .format(BUILDER_TYPES, invalid_attrs))
+          "The following fields are ignored unless 'execution_mode' is {!r}: {}"
+          .format(COMPILE_AND_TEST, invalid_attrs))
 
     if not kwargs.get('archive_build'):
       invalid_attrs = get_filtered_attrs('gs_bucket', 'gs_acl', 'gs_build_name')
@@ -122,14 +120,14 @@ class BotSpec(object):
     return cls(**kwargs)
 
   def __attrs_post_init__(self):
-    if self.bot_type == TESTER:
+    if self.execution_mode == TEST:
       assert self.parent_buildername is not None, (
-          'Tester-only bot must specify a parent builder')
-    elif self.bot_type in BUILDER_TYPES:
+          'Test-only builder must specify a parent builder')
+    elif self.execution_mode == COMPILE_AND_TEST:
       assert self.parent_buildername is None, (
-          'Non-tester-only bot must not specify a parent builder')
+          'Non-test-only builder must not specify a parent builder')
       assert self.parent_mastername is None, (
-          'Non-tester-only bot must not specify parent master name')
+          'Non-test-only builder must not specify parent master name')
 
     if self.archive_build:
       assert self.gs_bucket, (
@@ -146,9 +144,16 @@ class BotSpec(object):
   # The LUCI project that the builder belongs to
   luci_project = attrib(str, default='chromium')
 
-  # The type of the bot
-  bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER, DUMMY_TESTER],
-                         default=BUILDER_TESTER)
+  # The execution mode of the builder
+  # COMPILE_AND_TEST - Compile targets and optionally run tests and/or trigger
+  #     a tester
+  # TEST - Run tests, requires a parent builder, some ancestor must have
+  #     COMPILE_AND_TEST execution mode
+  # PROVIDE_TEST_SPEC - Cannot actually be executed, can only be specified as a
+  #     tester in a trybot's mirror in order to provide an additional test spec
+  #     to read
+  execution_mode = enum_attrib([COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC],
+                               default=COMPILE_AND_TEST)
 
   # An optional mastername of the bot's parent builder - if parent_buildername
   # is provided and parent_mastername is not, the parent's mastername is the

@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import bot_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -25,7 +27,6 @@ CUSTOM_BUILDERS = {
                 'TARGET_PLATFORM': 'android',
             },
             'android_config': 'main_builder_mb',
-            'bot_type': 'builder',
             'simulation_platform': 'linux',
         },
     },
@@ -41,7 +42,7 @@ CUSTOM_BUILDERS = {
             },
             'parent_buildername': 'Fake Builder',
             'parent_mastername': 'chromium.example',
-            'bot_type': 'tester',
+            'execution_mode': bot_spec.TEST,
             'android_config': 'main_builder_mb',
             'android_apply_config': ['use_devil_provision'],
             'simulation_platform': 'linux',

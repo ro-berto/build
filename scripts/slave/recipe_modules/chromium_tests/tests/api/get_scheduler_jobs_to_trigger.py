@@ -75,7 +75,7 @@ def GenTests(api):
                   'fake-tester':
                       bot_spec.BotSpec.create(
                           luci_project='fake-project',
-                          bot_type=bot_spec.TESTER,
+                          execution_mode=bot_spec.TEST,
                           parent_buildername='fake-builder',
                       ),
               },

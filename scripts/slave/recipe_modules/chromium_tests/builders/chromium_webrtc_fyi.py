@@ -13,7 +13,6 @@ SPEC = {
     'WebRTC Chromium FYI Android Builder':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
-            bot_type=bot_spec.BUILDER_TESTER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -29,7 +28,6 @@ SPEC = {
     'WebRTC Chromium FYI Android Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -45,7 +43,6 @@ SPEC = {
     'WebRTC Chromium FYI Android Builder ARM64 (dbg)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -61,7 +58,7 @@ SPEC = {
     'WebRTC Chromium FYI Android Tests (dbg) (L Nexus5)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -79,7 +76,7 @@ SPEC = {
     'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -110,7 +107,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='mac',
         ),
     'WebRTC Chromium FYI ios-simulator':
@@ -133,7 +129,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Linux Builder':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -146,7 +141,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Linux Builder (dbg)':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER_TESTER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -159,7 +153,7 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Linux Tester':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -174,7 +168,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Mac Builder':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=[
                 'dcheck',
                 'mb',
@@ -192,7 +185,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Mac Builder (dbg)':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER_TESTER,
             chromium_apply_config=[
                 'dcheck',
                 'mb',
@@ -210,7 +202,7 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Mac Tester':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=[
                 'dcheck',
                 'mb',
@@ -230,7 +222,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Win Builder':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -243,7 +234,6 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Win Builder (dbg)':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.BUILDER_TESTER,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -256,7 +246,7 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Win10 Tester':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -271,7 +261,7 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Win7 Tester':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -286,7 +276,7 @@ SPEC = {
         ),
     'WebRTC Chromium FYI Win8 Tester':
         _chromium_webrtc_fyi_spec(
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
             chromium_config='chromium',
             chromium_config_kwargs={

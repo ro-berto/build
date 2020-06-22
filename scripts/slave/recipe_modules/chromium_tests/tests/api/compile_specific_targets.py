@@ -4,7 +4,7 @@
 
 from recipe_engine.post_process import Filter
 
-from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
 
 DEPS = [
     'chromium',
@@ -50,7 +50,7 @@ def RunSteps(api):
       build_config,
       compile_targets=['base_unittests'],
       tests_including_triggered=tests,
-      override_bot_type='builder_tester')
+      override_execution_mode=bot_spec.COMPILE_AND_TEST)
 
 
 def GenTests(api):

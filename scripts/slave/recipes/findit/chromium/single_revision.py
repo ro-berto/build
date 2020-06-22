@@ -97,8 +97,7 @@ def _configure_builder(api, target_tester):
       chromium.BuilderId.create_for_master(target_tester.master,
                                            target_tester.builder))
   bot_config = api.chromium_tests.create_bot_config_object([bot_mirror])
-  api.chromium_tests.configure_build(
-      bot_config, override_bot_type='builder_tester')
+  api.chromium_tests.configure_build(bot_config)
 
   # If there is a problem with goma, rather than default to compiling locally
   # only, fail. This is important because findit relies on fast compile for
@@ -117,7 +116,7 @@ def _configure_builder(api, target_tester):
 
   compile_kwargs = {
       'builder_id': bot_mirror.builder_id,
-      'override_bot_type': 'builder_tester',
+      'override_execution_mode': bot_spec.COMPILE_AND_TEST,
   }
   return bot_mirror.builder_id, bot_config, compile_kwargs
 
@@ -241,7 +240,7 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    bot_type='tester',
+                    execution_mode=bot_spec.TEST,
                     simulation_platform='linux',
                 ),
             'Linux Builder':
@@ -254,7 +253,6 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    bot_type='builder',
                     simulation_platform='linux',
                 ),
         },

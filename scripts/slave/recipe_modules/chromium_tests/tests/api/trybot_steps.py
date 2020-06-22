@@ -46,7 +46,7 @@ _TEST_BUILDERS = bot_db.BotDatabase.create({
             ),
         'retry-shards-test':
             bot_spec.BotSpec.create(
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 parent_buildername='retry-shards',
             ),
     },
@@ -212,15 +212,15 @@ def GenTests(api):
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
               'fake-master': {
-                          'fake-builder':
-                              bot_spec.BotSpec.create(
-                                  chromium_config='chromium',
-                                  gclient_config='chromium',
-                              ),
-                          'fake-dummy-tester':
-                              bot_spec.BotSpec.create(
-                                  bot_type=bot_spec.DUMMY_TESTER),
-                      },
+                  'fake-builder':
+                  bot_spec.BotSpec.create(
+                      chromium_config='chromium',
+                      gclient_config='chromium',
+                  ),
+                  'fake-dummy-tester':
+                  bot_spec.BotSpec.create(
+                      execution_mode=bot_spec.PROVIDE_TEST_SPEC),
+              },
           })),
       api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec(

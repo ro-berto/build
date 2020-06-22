@@ -73,8 +73,7 @@ def TargetMasterAndBuilder(api):
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
       [chromium.BuilderId.create_for_master(*TargetMasterAndBuilder(api))])
-  api.chromium_tests.configure_build(
-      bot_config, override_bot_type='builder_tester')
+  api.chromium_tests.configure_build(bot_config)
 
   base_dir = api.chromium_checkout.get_checkout_dir(bot_config)
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)

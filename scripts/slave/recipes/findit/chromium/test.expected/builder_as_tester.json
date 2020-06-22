@@ -1050,6 +1050,27 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "name": "test r1.find isolated tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"services_unittests\": \"[dummy hash for services_unittests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"services_unittests\": \"[dummy hash for services_unittests]\"}@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [

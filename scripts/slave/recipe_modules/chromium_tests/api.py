@@ -140,7 +140,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return chromium_config
 
-  def configure_build(self, bot_config, override_bot_type=None):
+  def configure_build(self, bot_config):
     self.m.chromium.set_config(bot_config.chromium_config,
                                **bot_config.chromium_config_kwargs)
     self.set_config(bot_config.chromium_tests_config)
@@ -345,7 +345,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                mb_phase=None,
                                mb_config_path=None,
                                mb_recursive_lookup=True,
-                               override_bot_type=None):
+                               override_execution_mode=None):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used.
@@ -369,7 +369,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mb_recursive_lookup - A boolean indicating whether the lookup operation
         should recursively expand any included files. If False, then the lookup
         output will contain the include statement.
-      override_bot_type - An optional override to change the bot type.
+      override_execution_mode - An optional override to change the execution
+        mode.
 
     Returns:
       RawResult object with compile step status and failure message
@@ -377,13 +378,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
-    bot_type = override_bot_type or bot_config.bot_type
+    execution_mode = override_execution_mode or bot_config.execution_mode
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
 
-    if bot_type in bot_spec_module.BUILDER_TYPES:
+    if execution_mode == bot_spec_module.COMPILE_AND_TEST:
       isolated_targets = [
           t.isolate_target
           for t in tests_including_triggered if t.uses_isolate
@@ -462,12 +463,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     bot_spec = bot_config.bot_db[builder_id]
 
-    bot_type = bot_spec.bot_type
-    assert bot_type in bot_spec_module.BUILDER_TYPES, (
-        'Called package_build for %s:%s, which is a "%s". '
-        'package_build only supports "builder" and "builder_tester". '
-        'This is a bug in your recipe.' % (builder_id.master,
-                                           builder_id.builder, bot_type))
+    assert bot_spec.execution_mode == bot_spec_module.COMPILE_AND_TEST, (
+        'Called package_build for %s:%s, which is has execution mode %r. '
+        'Only %r is supported by package_build. '
+        'This is a bug in your recipe.' %
+        (builder_id.master, builder_id.builder, bot_spec.execution_mode,
+         bot_spec_module.COMPILE_AND_TEST))
 
     if not bot_spec.cf_archive_build:
       build_revision = update_step.presentation.properties.get(
@@ -650,15 +651,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                bot_config,
                                build_archive_url=None,
                                build_revision=None,
-                               override_bot_type=None,
+                               override_execution_mode=None,
                                read_gn_args=True):
     assert isinstance(bot_config, bot_config_module.BotConfig), \
         "bot_config argument %r was not a BotConfig" % (bot_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
     bot_spec = bot_config.bot_db[builder_id]
-    bot_type = override_bot_type or bot_spec.bot_type
-    if bot_type != bot_spec_module.TESTER:  # pragma: no cover
+    execution_mode = override_execution_mode or bot_spec.execution_mode
+    if execution_mode != bot_spec_module.TEST:  # pragma: no cover
       return
 
     # Protect against hard to debug mismatches between directory names
@@ -714,14 +715,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(
         cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
         env=self.m.chromium.get_env()):
-      bot_type = bot_config.bot_type
-
-      if bot_type in bot_spec_module.TESTER_TYPES:
-        isolated_targets = [
-            t.isolate_target
-            for t in tests if t.uses_isolate]
-        if isolated_targets:
-          self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
+      isolated_targets = [t.isolate_target for t in tests if t.uses_isolate]
+      if isolated_targets:
+        self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
+                                           isolated_targets)
 
       # Some recipes use this wrapper to setup devices and have their own way
       # to run tests. If platform is Android and tests is None, run device
@@ -1027,8 +1024,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # need tags?)
     update_step, build_config = self.prepare_checkout(
         bot.settings, timeout=3600)
-    bot_type = bot.settings.bot_type
-    if bot_type == bot_spec_module.TESTER:
+    if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(
           bot,
           mb_config_path=mb_config_path,
@@ -1095,8 +1091,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       A dict containing additional properties that should be added to any
       triggered child builds.
     """
-    bot_type = bot.settings.bot_type
-
     isolate_transfer = any(
         t.uses_isolate for t in build_config.tests_triggered_by(bot.builder_id))
     non_isolated_tests = [
@@ -1110,7 +1104,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
-    if package_transfer and bot_type in bot_spec_module.BUILDER_TYPES:
+    if (package_transfer and
+        bot.settings.execution_mode == bot_spec_module.COMPILE_AND_TEST):
       self.package_build(
           bot.builder_id,
           bot_update_step,
@@ -1131,9 +1126,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       bot_update_step: the result of a previously executed bot_update step.
       build_config: a BuildConfig object.
     """
-    bot_type = bot.settings.bot_type
-
-    if not bot_type == bot_spec_module.TESTER:
+    if bot.settings.execution_mode != bot_spec_module.TEST:
       return
 
     non_isolated_tests = [
@@ -1382,10 +1375,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     settings = self.create_bot_config_object(
         try_spec.mirrors, builders=builders)
     for b in settings.builder_ids:
-      assert settings.bot_db[b].bot_type != bot_spec_module.DUMMY_TESTER, (
-          'bot {} has bot type {!r},'
+      assert (
+          settings.bot_db[b].execution_mode != bot_spec_module.PROVIDE_TEST_SPEC
+      ), ('builder {} has execution mode {!r},'
           ' which should only appear as a tester in a mirror configuration'
-          .format(b, bot_spec_module.DUMMY_TESTER))
+          .format(b, bot_spec_module.PROVIDE_TEST_SPEC))
 
     self._report_builders(settings)
 
@@ -1449,9 +1443,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     bot = self.lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
 
-    # Applies build/test configurations from bot.settings.
-    self.configure_build(
-        bot.settings, override_bot_type=bot_spec_module.BUILDER_TESTER)
+    self.configure_build(bot.settings)
 
     self.m.chromium.apply_config('trybot_flavor')
 
@@ -1508,7 +1500,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           build_config,
           compile_targets,
           tests_including_triggered,
-          override_bot_type=bot_spec_module.BUILDER_TESTER)
+          override_execution_mode=bot_spec_module.COMPILE_AND_TEST)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on
@@ -1524,16 +1516,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
 
+    def bot_type(execution_mode):
+      return ('builder' if execution_mode == bot_spec_module.COMPILE_AND_TEST
+              else 'tester')
+
     def present_bot(bot_mirror):
       if bot_mirror.tester_id:
-        return ('running tester %r on master %r against builder %r on master %r'
-                % (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
-                   bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
-      bot_type = bot_config.bot_db[bot_mirror.builder_id].bot_type
-      if bot_type == bot_spec_module.BUILDER_TESTER:
-        bot_type = 'builder/tester'
-      return ('running %s \'%s\' on master %r' %
-              (bot_type, bot_mirror.builder_id.builder,
+        return ("running tester '%s' on master '%s'"
+                " against builder '%s' on master '%s'" %
+                (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
+                 bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
+      execution_mode = bot_config.bot_db[bot_mirror.builder_id].execution_mode
+      return ("running %s '%s' on master '%s'" %
+              (bot_type(execution_mode), bot_mirror.builder_id.builder,
                bot_mirror.builder_id.master))
 
     lines = [''] + [present_bot(m) for m in bot_config.bot_mirrors]
@@ -1543,19 +1538,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     def as_dict(bot_mirror):
       if bot_mirror.tester_id:
         return {
+            'execution_mode': bot_spec_module.COMPILE_AND_TEST,
             'mastername': bot_mirror.builder_id.master,
             'buildername': bot_mirror.builder_id.builder,
             'tester_buildername': bot_mirror.tester_id.builder,
             'tester_mastername': bot_mirror.tester_id.master,
-            'bot_type': bot_spec_module.TESTER,
         }
-      bot_type = bot_config.bot_db[bot_mirror.builder_id].bot_type
-      if bot_type == bot_spec_module.BUILDER_TESTER:
-        bot_type = 'builder/tester'
       return {
+          'execution_mode': bot_config.execution_mode,
           'mastername': bot_mirror.builder_id.master,
           'buildername': bot_mirror.builder_id.builder,
-          'bot_type': bot_type,
       }
 
     bots_json = [as_dict(b) for b in bot_config.bot_mirrors]

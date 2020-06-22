@@ -45,29 +45,29 @@ def RunSteps(api):
 
   # Test validation ************************************************************
 
-  # bot_type validations *******************************************************
+  # execution_mode validations *************************************************
   tester_spec = bot_spec.BotSpec.create(
-      bot_type=bot_spec.TESTER,
+      execution_mode=bot_spec.TEST,
       parent_buildername='fake-parent',
   )
 
   # Testers must specify parent
-  message = 'Tester-only bot must specify a parent builder'
+  message = 'Test-only builder must specify a parent builder'
   with api.assertions.assertRaises(AssertionError) as caught:
-    bot_spec.BotSpec.create(bot_type=bot_spec.TESTER)
+    bot_spec.BotSpec.create(execution_mode=bot_spec.TEST)
   api.assertions.assertEqual(caught.exception.message, message)
 
   with api.assertions.assertRaises(AssertionError) as caught:
     tester_spec.evolve(parent_buildername=None)
   api.assertions.assertEqual(caught.exception.message, message)
 
-  # Invalid fields for non-builder bot_type
+  # Invalid fields for TEST execution_mode
   message = (
-      "The following fields are ignored unless 'bot_type' is one of {}: {}"
-      .format(bot_spec.BUILDER_TYPES, ['compile_targets']))
+      "The following fields are ignored unless 'execution_mode' is {!r}: {}"
+      .format(bot_spec.COMPILE_AND_TEST, ['compile_targets']))
   with api.assertions.assertRaises(AssertionError) as caught:
     bot_spec.BotSpec.create(
-        bot_type=bot_spec.TESTER,
+        execution_mode=bot_spec.TEST,
         parent_buildername='fake-builder',
         compile_targets=['foo', 'bar'],
     )

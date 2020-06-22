@@ -8,7 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import steps, try_spec
+from RECIPE_MODULES.build.chromium_tests import bot_spec, steps, try_spec
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -247,7 +247,7 @@ class FinditApi(recipe_api.RecipeApi):
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
             builder_id=bot_mirror.builder_id,
-            override_bot_type='builder_tester')
+            override_execution_mode=bot_spec.COMPILE_AND_TEST)
 
         if raw_result.status != common_pb.SUCCESS:
           return None, None, raw_result
@@ -347,8 +347,7 @@ class FinditApi(recipe_api.RecipeApi):
     # Configure to match the compile config on the builder.
     bot_config = self.m.chromium_tests.create_bot_config_object(
         [bot_mirror.builder_id], builders=builders)
-    self.m.chromium_tests.configure_build(
-        bot_config, override_bot_type='builder_tester')
+    self.m.chromium_tests.configure_build(bot_config)
 
     # We rely on goma for fast compile. It's better to fail early if goma can't
     # start.

@@ -16,7 +16,6 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
     'chromium.fake': {
         'cross-master-trigger-builder':
             bot_spec.BotSpec.create(
-                bot_type='builder',
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -27,7 +26,7 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
     'chromium.fake.fyi': {
         'cross-master-trigger-tester':
             bot_spec.BotSpec.create(
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 parent_buildername='cross-master-trigger-builder',
                 parent_mastername='chromium.fake',
             ),
@@ -73,7 +72,7 @@ def GenTests(api):
           },
           'fake-tester-master': {
               'fake-tester': {
-                  'bot_type': bot_spec.DUMMY_TESTER,
+                  'execution_mode': bot_spec.PROVIDE_TEST_SPEC,
               },
           },
       }),

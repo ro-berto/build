@@ -22,20 +22,21 @@ def RunSteps(api):
           'builder-1-a': {},
           'builder-1-b': {
               'parent_buildername': 'builder-1-a',
-              'bot_type': bot_spec.TESTER,
+              'execution_mode': bot_spec.TEST,
           },
       },
       'master-2': {
           'builder-2': {
               'parent_mastername': 'master-1',
               'parent_buildername': 'builder-1-a',
-              'bot_type': bot_spec.TESTER,
+              'execution_mode': bot_spec.TEST,
           },
       },
       'master-3': {
           'builder-3-a':
               bot_spec.BotSpec.create(
-                  parent_buildername='builder-3-c', bot_type=bot_spec.TESTER),
+                  parent_buildername='builder-3-c',
+                  execution_mode=bot_spec.TEST),
           'builder-3-b': {},
           'builder-3-c': {},
       },
@@ -54,18 +55,18 @@ def RunSteps(api):
   api.assertions.assertEqual(
       db[key_1b],
       bot_spec.BotSpec.create(
-          parent_buildername='builder-1-a', bot_type=bot_spec.TESTER))
+          parent_buildername='builder-1-a', execution_mode=bot_spec.TEST))
   api.assertions.assertEqual(
       db[key_2],
       bot_spec.BotSpec.create(
           parent_mastername='master-1',
           parent_buildername='builder-1-a',
-          bot_type=bot_spec.TESTER,
+          execution_mode=bot_spec.TEST,
       ))
   api.assertions.assertEqual(
       db[key_3a],
       bot_spec.BotSpec.create(
-          parent_buildername='builder-3-c', bot_type=bot_spec.TESTER))
+          parent_buildername='builder-3-c', execution_mode=bot_spec.TEST))
   api.assertions.assertEqual(db[key_3b], EMPTY_SPEC)
   api.assertions.assertEqual(db[key_3c], EMPTY_SPEC)
 

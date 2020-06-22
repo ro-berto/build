@@ -42,7 +42,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
     'chromium.example': {
         'Isolated Transfer Builder':
             _builder_spec(
-                bot_type='builder',
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -54,7 +53,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Isolated Transfer Tester':
             _builder_spec(
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -67,7 +66,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Isolated Transfer: mixed builder, isolated tester (builder)':
             _builder_spec(
-                bot_type='builder',
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -79,7 +77,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Isolated Transfer: mixed builder, isolated tester (tester)':
             _builder_spec(
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -94,7 +92,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Isolated Transfer: mixed BT, isolated tester (BT)':
             _builder_spec(
                 android_config='main_builder_mb',
-                bot_type='builder_tester',
                 chromium_config='android',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -107,7 +104,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Isolated Transfer: mixed BT, isolated tester (tester)':
             _builder_spec(
                 android_config='main_builder_mb',
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_config='android',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -115,13 +112,12 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_PLATFORM': 'android',
                 },
                 gclient_config='chromium',
-                parent_buildername=
+                parent_buildername=\
                 'Isolated Transfer: mixed BT, isolated tester (BT)',
                 simulation_platform='linux',
             ),
         'Packaged Transfer Builder':
             _builder_spec(
-                bot_type='builder',
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -133,7 +129,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Packaged Transfer Enabled Builder':
             _builder_spec(
-                bot_type='builder',
                 enable_package_transfer=True,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
@@ -146,7 +141,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Packaged Transfer Tester':
             _builder_spec(
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -160,7 +155,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Multiple Triggers: Builder':
             _builder_spec(
                 android_config='main_builder',
-                bot_type='builder',
                 chromium_apply_config=['mb'],
                 chromium_config='android',
                 chromium_config_kwargs={
@@ -175,7 +169,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Multiple Triggers: Mixed':
             _builder_spec(
                 android_config='main_builder',
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='android',
                 chromium_config_kwargs={
@@ -191,7 +185,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Multiple Triggers: Isolated':
             _builder_spec(
                 android_config='main_builder',
-                bot_type='tester',
+                execution_mode=bot_spec.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='android',
                 chromium_config_kwargs={

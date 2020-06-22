@@ -85,7 +85,6 @@ def GenTests(api):
                   },
                   gclient_config='chromium',
                   gclient_apply_config=['android'],
-                  bot_type='builder_tester',
                   simulation_platform='linux',
               ),
       },

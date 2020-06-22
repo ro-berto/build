@@ -29,7 +29,7 @@ def config(name,
           'TARGET_ARCH': target_arch,
           'TARGET_BITS': target_bits,
       },
-      'bot_type': bot_spec.BUILDER_TESTER,
+      'execution_mode': bot_spec.COMPILE_AND_TEST,
       'test_results_config': 'staging_server',
       'test_specs': {
           bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, name)
@@ -66,7 +66,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -80,7 +79,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=['chromium_builder_asan'],
             cf_archive_build=True,
             cf_gs_bucket='chromium-browser-cfi',
@@ -99,7 +97,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -117,7 +114,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -170,7 +166,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -187,7 +182,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -206,7 +200,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -235,7 +228,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -259,7 +251,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
@@ -274,7 +265,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
@@ -294,7 +284,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_asan_tot_release_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -314,7 +303,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_tot_debug_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -333,7 +321,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_builder_mb_x64',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -351,7 +338,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -381,7 +367,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -402,7 +387,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -423,7 +407,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
         ),
@@ -442,7 +425,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -469,7 +451,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -490,7 +471,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -513,7 +493,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -540,7 +519,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -557,7 +535,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -578,7 +555,6 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[

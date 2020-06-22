@@ -22,7 +22,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'fuchsia-x64-cast':
@@ -36,7 +35,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'fuchsia-x64-dbg':
@@ -50,7 +48,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'linux-blink-cors-rel':
@@ -79,7 +76,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'linux-ozone-rel':
@@ -91,7 +87,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             compile_targets=[],
             simulation_platform='linux',
         ),
@@ -104,7 +99,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='linux-ozone-rel',
             simulation_platform='linux',
         ),
@@ -117,7 +112,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='linux-ozone-rel',
             simulation_platform='linux',
         ),
@@ -130,7 +125,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='linux-ozone-rel',
             simulation_platform='linux',
         ),
@@ -151,7 +146,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'linux-trusty-rel':
@@ -182,7 +176,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux Builder',
             simulation_platform='linux',
         ),
@@ -198,7 +192,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux Builder (dbg)':
@@ -213,7 +206,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux Tests (dbg)(1)':
@@ -225,7 +217,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux Builder (dbg)',
             simulation_platform='linux',
         ),
@@ -262,7 +254,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Fuchsia ARM64':
@@ -276,7 +267,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Fuchsia x64 Cast Audio':
@@ -290,7 +280,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Fuchsia x64':
@@ -304,7 +293,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Leak Detection Linux':
@@ -332,7 +320,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
 }

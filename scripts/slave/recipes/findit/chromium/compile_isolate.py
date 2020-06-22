@@ -93,7 +93,7 @@ def RunSteps(api, target_mastername, target_testername,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
           builder_id=bot_mirror.builder_id,
-          override_bot_type='builder_tester')
+          override_execution_mode=bot_spec.COMPILE_AND_TEST)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
 
@@ -128,7 +128,6 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    bot_type='builder',
                     simulation_platform='linux',
                 ),
             'findit_tester':
@@ -140,7 +139,7 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    bot_type='tester',
+                    execution_mode=bot_spec.TEST,
                     parent_buildername='findit_builder',
                     simulation_platform='linux',
                     swarming_dimensions={
@@ -156,7 +155,6 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    bot_type='builder_tester',
                     simulation_platform='linux',
                     swarming_dimensions={
                         'os': 'Linux',

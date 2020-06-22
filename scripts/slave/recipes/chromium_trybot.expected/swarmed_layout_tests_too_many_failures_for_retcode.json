@@ -13,15 +13,15 @@
       "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on master 'chromium.linux' against builder 'Linux Builder' on master 'chromium.linux'<br/>running tester 'Linux Release (NVIDIA)' on master 'chromium.gpu' against builder 'GPU Linux Builder' on master 'chromium.gpu'@@@",
       "@@@STEP_LOG_LINE@bots.json@[@@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.linux\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Tests\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }, @@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"GPU Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.gpu\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Release (NVIDIA)\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.gpu\"@@@",
@@ -996,6 +996,29 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "mark: before_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "find isolated tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
+    ]
   },
   {
     "cmd": [],

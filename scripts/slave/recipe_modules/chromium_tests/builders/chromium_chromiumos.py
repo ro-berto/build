@@ -22,7 +22,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'chromeos',
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             archive_build=True,
             gs_bucket='chromium-browser-snapshots',
             gs_acl='public-read',
@@ -52,7 +51,7 @@ def _config(name,
           'TARGET_ARCH': target_arch,
           'TARGET_BITS': target_bits,
       },
-      'bot_type': bot_spec.BUILDER_TESTER,
+      'execution_mode': bot_spec.COMPILE_AND_TEST,
       'simulation_platform': 'linux',
   }
   if cros_board:

@@ -13,8 +13,8 @@
       "@@@STEP_TEXT@<br/>running tester 'Linux FYI Release (NVIDIA)' on master 'chromium.gpu.fyi'@@@",
       "@@@STEP_LOG_LINE@bots.json@[@@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux FYI Release (NVIDIA)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"test\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.gpu.fyi\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
@@ -411,11 +411,11 @@
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\": \"[dummy hash for base_unittests]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"base_unittests\": \"[dummy hash for base_unittests]\", \"browser_tests\": \"[dummy hash for browser_tests]\"}@@@"
     ]
   },
   {

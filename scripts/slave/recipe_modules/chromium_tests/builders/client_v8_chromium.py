@@ -23,7 +23,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[
                 'all',
             ],
@@ -38,7 +37,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Linux V8 API Stability':
@@ -51,7 +49,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[
                 'all',
             ],

@@ -15,6 +15,7 @@ DEPS = [
 
 from recipe_engine import post_process
 from PB.recipes.build.chromium_speed_processor import InputProperties
+from RECIPE_MODULES.build.chromium_tests import bot_spec
 
 PROPERTIES = InputProperties
 
@@ -23,11 +24,12 @@ def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     # 1. update the bot to have latest scripts
     bot = api.chromium_tests.lookup_bot_metadata(builders=None)
-    bot_type = bot.settings.bot_type
-    if bot_type != 'tester':
+    execution_mode = bot.settings.execution_mode
+    if execution_mode != bot_spec.TEST:
       api.python.infra_failing_step(
           'chromium_speed_tester',
-          'Unexpected bot type. Expect: tester, Actual: %s' % bot_type)
+          'Unexpected execution mode. Expect: %s, Actual: %s' %
+          (bot_spec.TEST, execution_mode))
     api.chromium_tests.configure_build(bot.settings)
     api.chromium_tests.prepare_checkout(
         bot.settings, timeout=3600, no_fetch_tags=True)

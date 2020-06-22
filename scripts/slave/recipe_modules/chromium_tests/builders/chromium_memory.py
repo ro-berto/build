@@ -25,7 +25,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Linux ASan LSan Builder':
@@ -41,7 +40,6 @@ SPEC = {
             chromium_apply_config=[
                 'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
             ],
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux ASan LSan Tests (1)':
@@ -57,7 +55,7 @@ SPEC = {
             chromium_apply_config=[
                 'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
             ],
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux ASan LSan Builder',
             simulation_platform='linux',
         ),
@@ -72,7 +70,7 @@ SPEC = {
             chromium_apply_config=['mb', 'mb_luci_auth', 'goma_high_parallel'],
             # We want to test ASan+sandbox as well, so run browser tests
             # again, this time with LSan disabled.
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux ASan LSan Builder',
             simulation_platform='linux',
         ),
@@ -85,7 +83,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'Linux MSan Builder':
@@ -97,7 +94,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux MSan Tests':
@@ -109,7 +105,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux MSan Builder',
             simulation_platform='linux',
         ),
@@ -123,7 +119,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux ChromiumOS MSan Tests':
@@ -136,7 +131,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux ChromiumOS MSan Builder',
             simulation_platform='linux',
         ),
@@ -149,7 +144,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux TSan Tests':
@@ -161,7 +155,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Linux TSan Builder',
             simulation_platform='linux',
         ),
@@ -177,7 +171,6 @@ SPEC = {
                 'mb',
                 'mb_luci_auth',
             ],
-            bot_type=bot_spec.BUILDER,
             simulation_platform='mac',
         ),
     'Mac ASan 64 Tests (1)':
@@ -192,7 +185,7 @@ SPEC = {
                 'mb',
                 'mb_luci_auth',
             ],
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             parent_buildername='Mac ASan 64 Builder',
             simulation_platform='mac',
         ),
@@ -206,7 +199,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
-            bot_type=bot_spec.BUILDER,
             simulation_platform='linux',
         ),
     'Linux Chromium OS ASan LSan Tests (1)':
@@ -220,7 +212,7 @@ SPEC = {
             },
             chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
             parent_buildername='Linux Chromium OS ASan LSan Builder',
-            bot_type=bot_spec.TESTER,
+            execution_mode=bot_spec.TEST,
             simulation_platform='linux',
         ),
     'WebKit Linux ASAN':
@@ -271,7 +263,6 @@ SPEC = {
             },
             gclient_config='chromium',
             gclient_apply_config=['android'],
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'win-asan':
@@ -283,7 +274,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['mb', 'mb_luci_auth'],
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='win',
         ),
 }

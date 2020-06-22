@@ -227,7 +227,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER,
             compile_targets=[
                 'chromedriver_webview_shell_apk',
             ],

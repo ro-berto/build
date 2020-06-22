@@ -17,7 +17,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
     'android_blink_rel':
@@ -35,7 +34,6 @@ SPEC = {
             },
             gclient_config='chromium',
             gclient_apply_config=['android'],
-            bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
         ),
 }
