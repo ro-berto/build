@@ -18,6 +18,7 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'recipe_engine/time',
     'zip',
 ]
 

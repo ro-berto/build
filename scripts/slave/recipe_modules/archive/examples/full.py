@@ -175,7 +175,8 @@ def GenTests(api):
     if include_dirs:
       archive_data.dirs.extend(['locales', 'swiftshader'])
     archive_data.gcs_bucket = 'any-bucket'
-    archive_data.gcs_path = '{%position%}/{%commit%}/' + archive_filename
+    archive_data.gcs_path = ('{%position%}/{%commit%}/{%timestamp%}' +
+                             archive_filename)
     archive_data.archive_type = archive_type
     input_properties.archive_datas.extend([archive_data])
 

@@ -529,6 +529,11 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'got_revision is needed to populate the {%commit%} placeholder')
           gcs_path = gcs_path.replace(commit_placeholder, commit)
 
+        timestamp_placeholder = '{%timestamp%}'
+        if timestamp_placeholder in gcs_path:
+          timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
+          gcs_path = gcs_path.replace(timestamp_placeholder, timestamp)
+
         expanded_files = set(archive_data.files)
         for filename in archive_data.file_globs:
           for f in self.m.file.glob_paths(
