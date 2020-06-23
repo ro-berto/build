@@ -101,6 +101,21 @@ SPEC = {
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
+    'mac-arm64':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            gclient_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
     # is here so that a try bot can be added.

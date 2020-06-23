@@ -152,8 +152,9 @@ def validate_config(c):
       if arch not in ('arm', 'intel'):  # pragma: no cover
         raise BadConf('%s/%s arch is not supported on %s' % (arch, bits, plat))
     elif plat == 'mac':
-      if arch != 'intel':  # pragma: no cover
-        raise BadConf('%s arch is not supported on %s' % (arch, plat))
+      if not (arch == 'intel' or
+              (arch == 'arm' and bits == 64)):  # pragma: no cover
+        raise BadConf('%s/%s arch is not supported on %s' % (arch, bits, plat))
     elif plat == 'win':
       if arch not in ('arm', 'intel'):  # pragma: no cover
         raise BadConf('%s arch is not supported on %s' % (arch, plat))
