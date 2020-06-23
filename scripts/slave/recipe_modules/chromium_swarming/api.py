@@ -1400,6 +1400,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     prefix = '[%s] ' % prefix if prefix else ''
     task_os = task.request[0].dimensions['os']
 
+    # The | character is used for the swarming OR operator, but | is reserved in
+    # step names, so substitute that now so it does not cause issues later on.
+    task_os = task_os.replace('|', ' or ')
+
     bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = ('' if (
         task_os == bot_os or task_os.lower() == self.m.platform.name.lower() or
