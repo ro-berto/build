@@ -422,6 +422,7 @@ SPEC.update([
             'goma_high_parallel'
         ],
         chromium_config_kwargs={'TARGET_BITS': 64}),
+    stock_config('android-marshmallow-x86-rel', android_config='x86_builder'),
     stock_config(
         'android-nougat-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
