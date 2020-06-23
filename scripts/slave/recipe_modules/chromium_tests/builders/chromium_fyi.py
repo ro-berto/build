@@ -531,6 +531,44 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'ios14-beta-simulator':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+                'mac_toolchain',
+            ],
+            chromium_tests_apply_config=[],
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
+    'ios14-sdk-simulator':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+                'mac_toolchain',
+            ],
+            chromium_tests_apply_config=[],
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
     'ios-simulator-multi-window':
         bot_spec.BotSpec.create(
             chromium_config='chromium',

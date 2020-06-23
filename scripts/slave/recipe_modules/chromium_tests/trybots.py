@@ -976,6 +976,16 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium.fyi',
                 buildername='ios13-sdk-simulator',
             ),
+        'ios14-beta-simulator':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.fyi',
+                buildername='ios14-beta-simulator',
+            ),
+        'ios14-sdk-simulator':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.fyi',
+                buildername='ios14-sdk-simulator',
+            ),
         'mac_chromium_archive_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium',
