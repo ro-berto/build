@@ -13,7 +13,7 @@ import posixpath
 
 
 def get_aggregated_coverage_data_from_files(files_coverage_data,
-                                            dir_to_component):
+                                            dir_to_component=None):
   """Aggregates files coverage data to directories and components.
 
   Note: this function assumes that all files are written in the same language,
@@ -21,7 +21,7 @@ def get_aggregated_coverage_data_from_files(files_coverage_data,
 
   Args:
     files_coverage_data (list): A list of File coverage data.
-    dir_to_component (dict): Mapping from directory to component.
+    dir_to_component (dict): Mapping from directory to component. Optional.
 
   Returns:
     A tuple of two elements: the first one is a dict mapping from directory to
@@ -41,6 +41,9 @@ def get_aggregated_coverage_data_from_files(files_coverage_data,
         'files': per_directory_files[dir_path],
         'summaries': per_directory_summaries[dir_path],
     }
+
+  if not dir_to_component:
+    return per_directory_coverage_data, None
 
   component_to_dirs = _extract_component_to_dirs_mapping(dir_to_component)
   per_component_coverage_data = {}

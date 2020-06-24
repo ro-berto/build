@@ -588,7 +588,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   per_directory_coverage_data = {}
   per_component_coverage_data = {}
-  if component_mapping:
+  if not diff_mapping:
     per_directory_coverage_data, per_component_coverage_data = (
         aggregation_util.get_aggregated_coverage_data_from_files(
             files_coverage_data, component_mapping))

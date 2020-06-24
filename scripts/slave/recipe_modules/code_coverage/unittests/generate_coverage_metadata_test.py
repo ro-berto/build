@@ -762,6 +762,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         exclusions='.*bad_file.*',
         arch=None)
 
+    self.assertIsNotNone(compressed_data.get('files'))
+    self.assertIsNotNone(compressed_data.get('dirs'))
     self.assertIsNone(compressed_data.get('components'))
 
   @mock.patch('psutil.cpu_count')
