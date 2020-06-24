@@ -13,27 +13,8 @@ import json
 import os
 import sys
 
-from google.cloud import bigquery
-from google.oauth2 import service_account
-
 from slave import goma_bq_utils
 from slave import goma_utils
-
-GOMA_LOGS_PROJECT = 'goma-logs'
-
-
-def GetBigQueryClient(service_account_json):
-  """Returns bigquery client for goma logs.
-
-  Args:
-    service_account_json: a JSON file for BigQuery service account.
-  """
-  if service_account_json:
-    creds = service_account.Credentials.from_service_account_file(
-        service_account_json)
-  else:
-    return None
-  return bigquery.client.Client(project=GOMA_LOGS_PROJECT, credentials=creds)
 
 
 def main():
@@ -109,8 +90,13 @@ def main():
   parser.add_argument('--bigquery-service-account-json', default='',
                       metavar='FILENAME',
                       help='Service account json for BigQuery')
-  parser.add_argument('--bigquery-upload', action='store_true',
-                      help='upload to BigQuery')
+  parser.add_argument(
+      '--bqupload-path',
+      default='',
+      metavar='FILENAME',
+      help='Specify bqupload command path. '
+      'Or, not upload CompileEvents to BigQuery.'
+  )
 
   # Builder ID.
   parser.add_argument('--builder-id-json', default='',
@@ -177,18 +163,13 @@ def main():
     with open(args.log_url_json_file, 'w') as f:
       f.write(json.dumps(viewer_urls))
 
-  if args.goma_stats_file and args.build_id and args.bigquery_upload:
-    bqclient = GetBigQueryClient(args.bigquery_service_account_json)
-    if not bqclient:
-      raise Exception('Unable to create BigQuery client.')
-    goma_bq_utils.SendCompileEvent(args.goma_stats_file,
-                                   args.goma_counterz_file,
-                                   args.json_status,
-                                   args.build_exit_status,
-                                   args.goma_crash_report_id_file,
-                                   args.build_id,
-                                   args.build_step_name,
-                                   bqclient)
+  if args.goma_stats_file and args.bqupload_path:
+    goma_bq_utils.SendCompileEvent(
+        args.goma_stats_file, args.goma_counterz_file, args.json_status,
+        args.build_exit_status, args.goma_crash_report_id_file, args.build_id,
+        args.build_step_name, args.bqupload_path,
+        args.bigquery_service_account_json
+    )
 
   if args.goma_stats_file:
     counter = goma_utils.MakeGomaExitStatusCounter(

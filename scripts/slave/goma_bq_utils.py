@@ -7,12 +7,17 @@
 
 import json
 import os
+import subprocess
+import tempfile
 
+from google.protobuf import json_format
 from infra_libs import bqh
 from slave.goma import compile_events_pb2
 from slave import goma_utils
 
+
 # The Google BigQuery dataset and table for CompileEvent.
+COMPILE_EVENTS_PROJECT = 'goma-logs'
 COMPILE_EVENTS_DATASET = 'client_events'
 COMPILE_EVENTS_TABLE = 'compile_events'
 
@@ -72,10 +77,10 @@ def SetStepInfo(json_file, exit_status, step_info):
     return
 
 
-def SendCompileEvent(goma_stats_file, goma_counterz_file,
-                     json_file, exit_status,
-                     goma_crash_report, build_id, step_name,
-                     bqclient):
+def SendCompileEvent(
+    goma_stats_file, goma_counterz_file, json_file, exit_status,
+    goma_crash_report, build_id, step_name, bqupload, service_account_json
+):
   """Insert CompileEvent to BigQuery table.
 
   Args:
@@ -87,7 +92,8 @@ def SendCompileEvent(goma_stats_file, goma_counterz_file,
                        if it crashed.
     build_id: Build ID string.
     step_name: a name of a compile step.
-    bqclient: an instance of BigQuery client.
+    bqupload: a path to the bqupload command.
+    service_account_json: a service account json file, or luci auth.
   """
   event = compile_events_pb2.CompileEvent()
   event.build_id = build_id
@@ -111,13 +117,33 @@ def SendCompileEvent(goma_stats_file, goma_counterz_file,
         event.exit_status = compile_events_pb2.CompileEvent.CRASHED
       if goma_utils.IsCompilerProxyKilledByFatalError():
         event.exit_status = compile_events_pb2.CompileEvent.DIED_WITH_LOG_FATAL
+    # Since bqupload does not accept a multi-line JSON, let me manually
+    # convert a dictionary to JSON.
+    json_out = json.dumps(
+        json_format.MessageToDict(
+            message=event, preserving_proto_field_name=True
+        )
+    )
 
     # BQ uploader.
-    bqh.send_rows(bqclient,
-                  COMPILE_EVENTS_DATASET,
-                  COMPILE_EVENTS_TABLE,
-                  [event])
-    print 'Uploaded CompileEvent to BQ %s.%s' % (
-        COMPILE_EVENTS_DATASET, COMPILE_EVENTS_TABLE)
-  except Exception, inst:  # safety net
+    table_name = '%s.%s.%s' % (
+        COMPILE_EVENTS_PROJECT, COMPILE_EVENTS_DATASET, COMPILE_EVENTS_TABLE
+    )
+    args = [bqupload]
+    if service_account_json:
+      args += ['-service-account-json', service_account_json]
+    args.append(table_name)
+
+    # To make bqupload work on Windows, we need to close before bqupload
+    # touches it.
+    temp = tempfile.NamedTemporaryFile(delete=False)
+    try:
+      with temp as f_out:
+        f_out.write(json_out)
+      args.append(temp.name)
+      subprocess.check_call(args)
+      print 'Uploaded CompileEvent to BQ %s: %s' % (table_name, args)
+    finally:
+      os.remove(temp.name)
+  except Exception as inst:  # safety net
     print('failed to send CompileEvent to BQ: %s' % inst)

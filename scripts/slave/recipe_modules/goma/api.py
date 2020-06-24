@@ -8,6 +8,9 @@ import socket
 from recipe_engine import recipe_api
 
 
+_BQUPLOAD_VERSION = 'git_revision:643892f957c8e106dff793468101f2ecfc31abb7'
+
+
 class GomaApi(recipe_api.RecipeApi):
   """
   GomaApi contains helper functions for using goma.
@@ -123,6 +126,14 @@ class GomaApi(recipe_api.RecipeApi):
     return self.default_cache_path_per_slave.join('client')
 
   @property
+  def _default_bqupload_dir(self):
+    return self.default_cache_path_per_slave.join('bqupload')
+
+  @property
+  def _default_bqupload_path(self):
+    return self._default_bqupload_dir.join('bqupload')
+
+  @property
   def _extra_package_path(self):
     return self.default_cache_path_per_slave.join('extra')
 
@@ -227,6 +238,10 @@ class GomaApi(recipe_api.RecipeApi):
           self._additional_platforms = additional_platforms
           for platform in self._additional_platforms:
             Download(platform, self._extra_package_path.join(platform))
+        # Download bqupload.
+        ensure_file = self.m.cipd.EnsureFile().add_package(
+            'infra/tools/bqupload/${platform}', _BQUPLOAD_VERSION)
+        self.m.cipd.ensure(self._default_bqupload_dir, ensure_file)
         return self._goma_dir
 
   def additional_goma_dir(self, platform):
@@ -489,7 +504,9 @@ class GomaApi(recipe_api.RecipeApi):
     ]
     if not self._use_luci_auth:
       args += [
-          '--bigquery-upload',
+          # TODO(yyanagisawa):  move this out of if-clause.
+          '--bqupload-path',
+          self._default_bqupload_path,
           '--bigquery-service-account-json',
           self.bigquery_service_account_json_path,
       ]
@@ -573,12 +590,11 @@ class GomaApi(recipe_api.RecipeApi):
       args.extend(['--buildbot-slavename', self.m.swarming.bot_id])
 
     result = self.m.build.python(
-      name=name or 'upload_log',
-      script=self.repo_resource('scripts', 'slave',
-                                        'upload_goma_logs.py'),
-      args=args,
-      venv=True,
-      step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
+        name=name or 'upload_log',
+        script=self.repo_resource('scripts', 'slave', 'upload_goma_logs.py'),
+        args=args,
+        venv=True,
+        step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
     for log in ('compiler_proxy_log', 'ninja_log'):
       if log in result.json.output:
