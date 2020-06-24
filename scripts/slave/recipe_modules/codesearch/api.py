@@ -166,6 +166,9 @@ class CodesearchApi(recipe_api.RecipeApi):
         experimental_suffix)
     self._create_kythe_index_pack(index_pack_kythe_name)
 
+    if self.m.tryserver.gerrit_change:
+      return
+
     assert self.c.bucket_name, (
         'Trying to upload Kythe index pack but no google storage bucket name')
     self._upload_kythe_index_pack(self.c.bucket_name, index_pack_kythe_name,
@@ -241,6 +244,8 @@ class CodesearchApi(recipe_api.RecipeApi):
        into this checkout.
     """
     if not self.c.SYNC_GENERATED_FILES:
+      return
+    if self.m.tryserver.gerrit_change:
       return
     assert self.c.generated_repo, (
         'Trying to check out generated files repo,'

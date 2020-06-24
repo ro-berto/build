@@ -16,6 +16,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
+  'depot_tools/tryserver',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
@@ -322,6 +323,23 @@ def GenTests(api):
             root_solution_revision_timestamp=1531887759),
         api.runtime(is_luci=True, is_experimental=False),
     )
+
+  yield api.test(
+      'full_%s_with_patch' %
+      _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='codesearch-gen-chromium-linux',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.step_data(
+          'generate gn target list',
+          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.runtime(is_luci=True, is_experimental=False),
+  )
+
 
   yield api.test(
       'full_%s_delete_generated_files_fail' %

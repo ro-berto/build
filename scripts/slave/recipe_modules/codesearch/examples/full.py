@@ -135,6 +135,19 @@ def GenTests(api):
     )
 
   yield api.test(
+      '%s_test_with_patch' %
+      sanitize('codesearch-gen-chromium-linux'),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='codesearch-gen-chromium-linux',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.runtime(is_luci=True, is_experimental=False),
+  )
+
+  yield api.test(
       '%s_delete_generated_files_fail' %
       sanitize('codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
