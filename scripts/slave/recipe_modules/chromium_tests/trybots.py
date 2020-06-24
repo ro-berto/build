@@ -65,6 +65,23 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='win10-blink-rel-dummy',
             ),
     },
+    'tryserver.chromium': {
+        'android-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='android-official',
+            ),
+        'fuchsia-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='fuchsia-official',
+            ),
+        'linux-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='linux-official',
+            ),
+    },
     'tryserver.chromium.android': {
         'android-10-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(

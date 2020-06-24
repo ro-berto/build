@@ -102,6 +102,34 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='mac',
         ),
+    'fuchsia-official':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['fuchsia_x64'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            simulation_platform='linux',
+        ),
+    'linux-official':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'linux-archive-dbg':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -132,6 +160,22 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Linux_x64',
             gs_acl='public-read',
+            simulation_platform='linux',
+        ),
+    'android-official':
+        bot_spec.BotSpec.create(
+            chromium_config='android',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+            },
+            android_config='main_builder',
             simulation_platform='linux',
         ),
     'android-archive-dbg':
