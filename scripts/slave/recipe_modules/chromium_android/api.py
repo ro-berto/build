@@ -337,6 +337,11 @@ class AndroidApi(recipe_api.RecipeApi):
         ['-f', self.m.adb.adb_path(), os.path.join('~', 'adb')],
         infra_step=True)
 
+  @property
+  def denylist_flag(self):
+    return ('--blacklist-file'
+            if self.c.deprecated_blacklist else '--denylist-file')
+
   def spawn_logcat_monitor(self):
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.build.python(
@@ -350,13 +355,11 @@ class AndroidApi(recipe_api.RecipeApi):
   def spawn_device_monitor(self):
     script = self.repo_resource('scripts', 'slave', 'daemonizer.py')
     args = [
-        '--action', 'restart',
-        '--pid-file-path', '/tmp/device_monitor.pid', '--',
-        self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                     'devil', 'android', 'tools',
-                                     'device_monitor.py'),
-        '--adb-path', self.m.adb.adb_path(),
-        '--blacklist-file', self.blacklist_file
+        '--action', 'restart', '--pid-file-path', '/tmp/device_monitor.pid',
+        '--', self.m.path['checkout'].join('third_party', 'catapult', 'devil',
+                                           'devil', 'android', 'tools',
+                                           'device_monitor.py'), '--adb-path',
+        self.m.adb.adb_path(), self.denylist_flag, self.denylist_file
     ]
     self.m.build.python('spawn_device_monitor', script, args, infra_step=True)
 
@@ -378,15 +381,24 @@ class AndroidApi(recipe_api.RecipeApi):
           'authorize_adb_devices', script, args, infra_step=True)
 
   @property
-  def blacklist_file(self):
+  def denylist_file(self):
     return self.out_path.join('bad_devices.json')
 
-  def non_blacklisted_devices(self):
-    if not self.m.path.exists(self.blacklist_file):
+  def non_denylisted_devices(self):
+    if not self.m.path.exists(self.denylist_file):
       return self.devices
-    step_result = self.m.json.read('read_blacklist_file', self.blacklist_file)
-    blacklisted_devices = step_result.json.output
-    return [s for s in self.devices if s not in blacklisted_devices]
+    step_result = self.m.json.read('read_denylist_file', self.denylist_file)
+    denylisted_devices = step_result.json.output
+    return [s for s in self.devices if s not in denylisted_devices]
+
+  # TODO(crbug.com/1097306): Remove these two functions once all
+  # references have been switched.
+  @property
+  def blacklist_file(self):  # pragma: no cover
+    return self.denylist_file
+
+  def non_blacklisted_devices(self):  # pragma: no cover
+    return self.non_denylisted_devices()
 
   def device_status_check(self):
     self.device_recovery()
@@ -456,10 +468,9 @@ class AndroidApi(recipe_api.RecipeApi):
         'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
         'device_recovery.py')
     args = [
-        '--blacklist-file', self.blacklist_file,
-        '--known-devices-file', self.known_devices_file,
-        '--adb-path', self.m.adb.adb_path(),
-        '-v'
+        self.denylist_flag, self.denylist_file, '--known-devices-file',
+        self.known_devices_file, '--adb-path',
+        self.m.adb.adb_path(), '-v'
     ]
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.python('device_recovery', script, args,
@@ -468,12 +479,18 @@ class AndroidApi(recipe_api.RecipeApi):
   def device_status(self, **kwargs):
     buildbot_file = '/home/chrome-bot/.adb_device_info'
     args = [
-        '--json-output', self.m.json.output(),
-        '--blacklist-file', self.blacklist_file,
-        '--known-devices-file', self.known_devices_file,
-        '--buildbot-path', buildbot_file,
-        '--adb-path', self.m.adb.adb_path(),
-        '-v', '--overwrite-known-devices-files',
+        '--json-output',
+        self.m.json.output(),
+        self.denylist_flag,
+        self.denylist_file,
+        '--known-devices-file',
+        self.known_devices_file,
+        '--buildbot-path',
+        buildbot_file,
+        '--adb-path',
+        self.m.adb.adb_path(),
+        '-v',
+        '--overwrite-known-devices-files',
     ]
     try:
       with self.m.context(env=self.m.chromium.get_env()):
@@ -569,10 +586,14 @@ class AndroidApi(recipe_api.RecipeApi):
   def provision_devices(self, skip_wipe=False, disable_location=False,
                         reboot_timeout=None, emulators=False, **kwargs):
     args = [
-        '--adb-path', self.m.adb.adb_path(),
-        '--blacklist-file', self.blacklist_file,
-        '--output-device-blacklist', self.m.json.output(add_json_log=False),
-        '-t', self.m.chromium.c.BUILD_CONFIG,
+        '--adb-path',
+        self.m.adb.adb_path(),
+        self.denylist_flag,
+        self.denylist_file,
+        '--output-device-blacklist',
+        self.m.json.output(add_json_log=False),
+        '-t',
+        self.m.chromium.c.BUILD_CONFIG,
         '-v',
     ]
     if skip_wipe:
@@ -612,10 +633,11 @@ class AndroidApi(recipe_api.RecipeApi):
   def adb_install_apk(self, apk, allow_downgrade=False, keep_data=False,
                       devices=None):
     install_cmd = [
-        self.m.path['checkout'].join('build',
-                                     'android',
-                                     'adb_install_apk.py'),
-        apk, '-v', '--blacklist-file', self.blacklist_file,
+        self.m.path['checkout'].join('build', 'android', 'adb_install_apk.py'),
+        apk,
+        '-v',
+        self.denylist_flag,
+        self.denylist_file,
     ]
     if int(self.m.chromium.get_version().get('MAJOR', 0)) > 50:
       install_cmd += ['--adb-path', self.m.adb.adb_path()]
@@ -638,7 +660,8 @@ class AndroidApi(recipe_api.RecipeApi):
         '-v',
         '--browser=%s' % self.c.channel,
         '--event-count=50000',
-        '--blacklist-file', self.blacklist_file,
+        self.denylist_flag,
+        self.denylist_file,
     ]
     with self.m.context(env={'BUILDTYPE': self.c.BUILD_CONFIG}):
       return self.test_runner(
@@ -906,7 +929,7 @@ class AndroidApi(recipe_api.RecipeApi):
                      args=None,
                      **kwargs):
     args = args or []
-    args.extend(['--blacklist-file', self.blacklist_file])
+    args.extend([self.denylist_flag, self.denylist_file])
     if verbose:
       args.append('--verbose')
     if result_details and not json_results_file:

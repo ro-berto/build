@@ -5,6 +5,6 @@
 from RECIPE_MODULES.build.chromium_android import CONFIG_CTX
 
 
-@CONFIG_CTX(includes=['base_config'])
+@CONFIG_CTX(includes=['base_config', 'deprecated_blacklist'])
 def libyuv(c):
   c.logcat_bucket = 'chromium-libyuv'

@@ -6,7 +6,7 @@
       "None/build/android/provision_devices.py",
       "--adb-path",
       "None/third_party/android_sdk/public/platform-tools/adb",
-      "--blacklist-file",
+      "--denylist-file",
       "None/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",

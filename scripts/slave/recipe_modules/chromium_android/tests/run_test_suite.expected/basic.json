@@ -2,7 +2,7 @@
   {
     "cmd": [
       "None/out/Release/bin/run_test_suite",
-      "--blacklist-file",
+      "--denylist-file",
       "None/out/bad_devices.json",
       "--verbose",
       "-t",

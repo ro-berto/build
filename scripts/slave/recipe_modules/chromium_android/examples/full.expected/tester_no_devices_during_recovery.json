@@ -399,7 +399,7 @@
       "vpython",
       "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
-      "--blacklist-file",
+      "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
@@ -423,7 +423,7 @@
       "-v",
       "--browser=chrome",
       "--event-count=50000",
-      "--blacklist-file",
+      "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
@@ -437,7 +437,7 @@
   {
     "cmd": [
       "[START_DIR]/src/out/Release/bin/run_unittests",
-      "--blacklist-file",
+      "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",

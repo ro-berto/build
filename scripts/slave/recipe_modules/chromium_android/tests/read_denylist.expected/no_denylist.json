@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "serial1",
+      "serial2"
+    ],
+    "name": "print devices"
+  },
+  {
+    "name": "$result"
+  }
+]

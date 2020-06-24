@@ -7,22 +7,42 @@
       "None/out/bad_devices.json",
       "/path/to/tmp/json"
     ],
-    "name": "read_blacklist_file",
+    "name": "read_denylist_file",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"serial1\": {}@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
     ]
   },
   {
-    "cmd": [
-      "echo",
-      "serial2"
-    ],
-    "name": "print devices"
+    "cmd": [],
+    "name": "RECIPE CRASH (Uncaught exception)",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@",
+      "The recipe has crashed at point 'Uncaught exception'!",
+      "",
+      "Traceback (most recent call last):",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/engine.py\", in run_steps",
+      "    raw_result = recipe_obj.run_steps(api, engine)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/recipe_deps.py\", in run_steps",
+      "    properties_def, api=api)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in invoke_with_properties",
+      "    arg_names, **additional_args)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
+      "    return callable_obj(*props, **additional_args)",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/chromium_android/tests/read_blacklist.py\", line 18, in RunSteps",
+      "    available_devices = api.chromium_android.non_blacklisted_devices()",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/recipe_api.py\", in _inner",
+      "    return func(*a, **kw)",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/chromium_android/api.py\", line 395, in non_blacklisted_devices",
+      "    return [s for s in self.devices if s not in blacklisted_devices]",
+      "TypeError: argument of type 'NoneType' is not iterable"
+    ]
   },
   {
+    "failure": {
+      "humanReason": "Uncaught Exception: TypeError(\"argument of type 'NoneType' is not iterable\",)"
+    },
     "name": "$result"
   }
 ]
