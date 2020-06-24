@@ -615,8 +615,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "[CACHE]/builder/src/out/Android64_Builder_arm64/low_bandwidth_audio_perf_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Android64_Builder_arm64/webrtc_perf_tests.isolated.gen.json"
     ],

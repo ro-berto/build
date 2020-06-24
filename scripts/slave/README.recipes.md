@@ -1181,7 +1181,7 @@ Tags can be added per individual task.
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#965)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#964)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -1193,7 +1193,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1629)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1628)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1248,11 +1248,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#320)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1580)(self, requests_json):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1579)(self, requests_json):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_collect\_task\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1079)(self, merge_script, merge_arguments, build_properties, requests_json, output_json=None, task_output_dir=None, allow_missing_json=False):**
+&mdash; **def [get\_collect\_task\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1078)(self, merge_script, merge_arguments, build_properties, requests_json, output_json=None, task_output_dir=None, allow_missing_json=False):**
 
 Generate the arguments needed to run collect_task.py.
 
@@ -1262,7 +1262,7 @@ Args:
   For the other arguments, please refer to collect_task.collect_task() for
   details.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1388)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1387)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1316,11 +1316,11 @@ Recipes are free to use other OS dimension if there's a need for it. For
 example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
 dimension.
 
-&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#987)(self):**
+&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#986)(self):**
 
 Report statistics on all tasks ran so far.
 
-&mdash; **def [run\_collect\_task\_script](/scripts/slave/recipe_modules/chromium_swarming/api.py#1252)(self, name, task_args, gen_step_test_data, \*\*kwargs):**
+&mdash; **def [run\_collect\_task\_script](/scripts/slave/recipe_modules/chromium_swarming/api.py#1251)(self, name, task_args, gen_step_test_data, \*\*kwargs):**
 
 &emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/chromium_swarming/api.py#210)(self, value):**
 
@@ -1447,7 +1447,7 @@ Returns:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1308)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1307)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 
@@ -2648,11 +2648,11 @@ Args:
 
 APIs for interacting with isolates.
 
-&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#300)(self, first_dir, second_dir, values):**
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#287)(self, first_dir, second_dir, values):**
 
 Archive different files of 2 builds.
 
-&mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#74)(self, targets):**
+&mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#63)(self, targets):**
 
 Asserts that all the targets in the passed list are present as keys in
 the 'swarm_hashes' property.
@@ -2663,18 +2663,18 @@ just fail later, on a 'trigger' step. But the main usefulness of this is
 that it automatically populates the 'swarm_hashes' property in testing
 context, so that it doesn't need to be manually specified through test_api.
 
-&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#60)(self, build_dir):**
+&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#49)(self, build_dir):**
 
 Cleans out all *.isolated files from the build directory in
 preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#347)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#334)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#376)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#363)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2688,7 +2688,7 @@ Args:
 Returns:
   Hash of the uploaded composite isolate.
 
-&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#96)(self, build_dir, targets=None, \*\*kwargs):**
+&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#85)(self, build_dir, targets=None, \*\*kwargs):**
 
 Returns a step which finds all *.isolated files in a build directory.
 
@@ -2703,11 +2703,11 @@ If |targets| is None, the step will use all *.isolated files it finds.
 Otherwise, it will verify that all |targets| are found and will use only
 them. If some expected targets are missing, will abort the build.
 
-&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#35)(self, value):**
+&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#34)(self, value):**
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#144)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#133)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2730,22 +2730,18 @@ Args:
     suffix: suffix of isolate_tests step.
         e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#263)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#250)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&emsp; **@namespace.setter**<br>&mdash; **def [namespace](/scripts/slave/recipe_modules/isolate/api.py#45)(self, value):**
-
-The namespace determines the algorithms used.
-
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#285)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#272)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
-&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#55)(self, value):**
+&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#44)(self, value):**
 
 Service account json to use.
 ### *recipe_modules* / [libyuv](/scripts/slave/recipe_modules/libyuv)

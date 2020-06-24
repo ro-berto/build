@@ -807,8 +807,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CACHE]/builder/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],

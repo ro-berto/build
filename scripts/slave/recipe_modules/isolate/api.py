@@ -23,7 +23,6 @@ class IsolateApi(recipe_api.RecipeApi):
     # TODO(maruel): Delete this recipe and use upstream isolated instead.
     # https://crbug.com/944904
     self._isolate_server = 'https://isolateserver.appspot.com'
-    self._namespace = 'default-gzip'
     self._isolated_tests = {}
     self._service_account_json = None
 
@@ -36,16 +35,6 @@ class IsolateApi(recipe_api.RecipeApi):
   def isolate_server(self, value):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
-
-  @property
-  def namespace(self):
-    """The namespace determines the algorithms used."""
-    return self._namespace
-
-  @namespace.setter
-  def namespace(self, value):
-    """The namespace determines the algorithms used."""
-    self._namespace = value
 
   @property
   def service_account_json(self):
@@ -201,8 +190,6 @@ class IsolateApi(recipe_api.RecipeApi):
           self.m.json.output(),
           '--isolate-server',
           self._isolate_server,
-          '--namespace',
-          self._namespace,
       ] + (['--verbose'] if verbose else [])
 
       if self.service_account_json:
@@ -400,7 +387,6 @@ class IsolateApi(recipe_api.RecipeApi):
         [
           'archive',
           '--isolate-server', self._isolate_server,
-          '--namespace', self._namespace,
           composed_isolate_file,
         ],
         stdout=self.m.raw_io.output_text(),

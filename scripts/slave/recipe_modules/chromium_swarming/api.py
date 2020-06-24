@@ -761,7 +761,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = [
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
-      '--namespace', self.m.isolate.namespace,
       '--priority', str(task_request.priority),
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),

@@ -220,8 +220,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://chrome-isolated.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CACHE]/builder/v8/out/Release/perf.isolated.gen.json"
     ],
@@ -273,8 +271,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json"
     ],

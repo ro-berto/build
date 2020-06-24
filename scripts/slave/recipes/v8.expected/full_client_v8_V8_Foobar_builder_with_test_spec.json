@@ -95,8 +95,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CACHE]/builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],

@@ -305,8 +305,6 @@
       "https://chromium-swarm-dev.appspot.com",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--priority",
       "30",
       "--task-name",

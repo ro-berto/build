@@ -1254,8 +1254,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp\\peerconnection_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -1278,8 +1276,6 @@
       "https://chromium-swarm.appspot.com",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--priority",
       "25",
       "--task-name",

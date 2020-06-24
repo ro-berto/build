@@ -1228,8 +1228,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
@@ -1285,8 +1283,6 @@
       "https://chromium-swarm.appspot.com",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--priority",
       "25",
       "--task-name",

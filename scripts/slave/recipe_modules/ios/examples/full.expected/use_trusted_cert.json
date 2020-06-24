@@ -582,8 +582,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--verbose",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
@@ -617,8 +615,6 @@
       "https://chromium-swarm.appspot.com",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
       "--priority",
       "200",
       "--task-name",
