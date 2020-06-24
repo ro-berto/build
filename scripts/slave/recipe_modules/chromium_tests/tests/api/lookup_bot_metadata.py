@@ -57,18 +57,3 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
-
-  yield api.test(
-      'missing-master-config',
-      api.chromium.ci_build(mastername='chromium.missing', builder='foo-rel'),
-      api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'missing-builder-config',
-      api.chromium.ci_build(
-          mastername='chromium.foo', builder='foo-missing-rel'),
-      api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation),
-  )

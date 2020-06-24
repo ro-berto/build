@@ -123,9 +123,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if (self._test_data.enabled and
           not self._test_data.get('handle_bot_config_errors', True)):
         raise  # pragma: no cover
-      self.m.python.failing_step(
-          'Incorrect or missing bot configuration',
-          [traceback.format_exc()],
+      self.m.python.infra_failing_step(
+          'Incorrect or missing bot configuration', [traceback.format_exc()],
           as_log='details')
 
   def get_config_defaults(self):
