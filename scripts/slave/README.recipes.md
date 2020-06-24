@@ -4023,7 +4023,7 @@ Packages Android SDK packages as CIPD packages.
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#654)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#657)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#82)(api):**
 
@@ -4031,11 +4031,11 @@ Packages Android SDK packages as CIPD packages.
 
 &mdash; **def [full\_checkout](/scripts/slave/recipes/art.py#89)(api):**
 
-&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#482)(api, read_barrier):**
+&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#485)(api, read_barrier):**
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#101)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
-&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#262)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#264)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
 ### *recipes* / [attr\_utils:tests/full](/scripts/slave/recipe_modules/attr_utils/tests/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/attr_utils/tests/full.py#14): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]

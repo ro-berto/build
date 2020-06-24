@@ -66,6 +66,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -91,6 +92,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -118,6 +120,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -146,6 +149,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -173,6 +177,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -200,6 +205,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -227,6 +233,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -254,6 +261,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -279,6 +287,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -304,6 +313,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -330,6 +340,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
@@ -352,6 +363,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
