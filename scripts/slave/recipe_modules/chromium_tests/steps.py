@@ -1820,12 +1820,12 @@ class SwarmingTest(Test):
               '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       })
 
-      # TODO(crbug.com/1077304) - Migrate this to sparse once the merge
-      # scripts have migrated to supporting --sparse.
-      no_sparse = False
+      sparse = True
       skip_validation = False
+
+      # code coverage runs llvm-profdata merge with --sparse. PGO does not.
       if using_pgo:
-        no_sparse = True
+        sparse = False
         skip_validation = True
       # TODO(crbug.com/1076055) - Refactor this to the profiles recipe_module
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
@@ -1836,8 +1836,8 @@ class SwarmingTest(Test):
       self._merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix),
           self.target_name,
-          no_sparse=no_sparse,
           skip_validation=skip_validation,
+          sparse=sparse,
           additional_merge=self._merge or task.merge)
 
     if suffix.startswith('retry shards'):

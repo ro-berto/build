@@ -712,7 +712,8 @@
       "--llvm-profdata",
       "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-profdata",
       "--profdata-filename-pattern",
-      ".+\\.profdata"
+      ".+\\.profdata",
+      "--sparse"
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
