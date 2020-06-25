@@ -886,6 +886,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium.fyi',
                 buildername='linux-wpt-fyi-rel',
             ),
+        'network_service_linux':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.linux',
+                buildername='Network Service Linux',
+            ),
     },
     'tryserver.chromium.chromiumos': {
         'chromeos-amd64-generic-cfi-thin-lto-rel':
