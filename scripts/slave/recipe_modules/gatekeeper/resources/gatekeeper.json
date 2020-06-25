@@ -164,19 +164,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/chromium.clang": [
-      {
-        "close_tree": false,
-        "builders": {
-          "ToTLinux*": {
-            "forgiving_optional": [ "*" ],
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.infra.cron": [
       {
         "close_tree": false,
