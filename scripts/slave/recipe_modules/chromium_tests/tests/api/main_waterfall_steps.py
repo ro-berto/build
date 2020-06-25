@@ -450,7 +450,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.override_step_data('find isolated tests', api.json.output({})),
       api.post_process(post_process.DoesNotRun, 'extract build'),
       api.post_process(post_process.DropExpectation),
   )

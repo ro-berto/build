@@ -715,7 +715,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
         env=self.m.chromium.get_env()):
       isolated_targets = [t.isolate_target for t in tests if t.uses_isolate]
-      if isolated_targets:
+      if (isolated_targets and
+          bot_config.execution_mode == bot_spec_module.COMPILE_AND_TEST):
         self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
                                            isolated_targets)
 

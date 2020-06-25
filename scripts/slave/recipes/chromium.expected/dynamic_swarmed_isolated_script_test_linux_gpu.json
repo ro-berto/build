@@ -417,29 +417,6 @@
     "name": "build directory"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "test_pre_run"
   },

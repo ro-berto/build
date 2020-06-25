@@ -428,30 +428,6 @@
     "name": "build directory"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\": \"[dummy hash for base_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"base_unittests\": \"[dummy hash for base_unittests]\", \"browser_tests\": \"[dummy hash for browser_tests]\"}@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "test_pre_run"
   },
