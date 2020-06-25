@@ -44,9 +44,21 @@ GN_PROPERTIES = [
 # List of dimensions used for starting swarming on ARM64.
 SWARMING_DIMENSIONS = {
     'cpu': 'arm64',
-    'pool': 'luci.flex.try',
     'os': 'Ubuntu-18.04'
 }
+
+FLEX_TRY_POOL = 'luci.flex.try'
+FLEX_CI_POOL = 'luci.flex.ci'
+POOL_DIMENSION = 'pool'
+
+
+def GetSwarmingDimensions(is_ci):
+  dimensions = SWARMING_DIMENSIONS
+  if is_ci:
+    dimensions[POOL_DIMENSION] = FLEX_CI_POOL
+  else:
+    dimensions[POOL_DIMENSION] = FLEX_TRY_POOL
+  return dimensions
 
 
 class FileInfo:
@@ -353,19 +365,21 @@ def RunSteps(api):
     env['ASAN_SYMBOLIZER_PATH'] = str(
         api.profiles.llvm_exec_path('llvm-symbolizer'))
 
+  is_ci = api.properties.get('is_ci', False)
   with api.context(cwd=checkout_path, env=env):
     host_tool_label = GetHostToolLabel(api.platform)
 
     # Populate Code coverage tool with the set of files that changed.
     use_coverage = api.properties.get('use_coverage', False)
-    full_repo_coverage = api.properties.get('is_ci', False)
     if use_coverage:
       with api.step.nest('initialize code coverage') as coverage_step:
         coverage_step.status = api.step.SUCCESS
         try:
           SetCodeCoverageConstants(api, checkout_path, host_tool_label)
 
-          if full_repo_coverage:
+          # Only continuous integration bots run full-repo coverage--trybots
+          # only run per-cl coverage.
+          if is_ci:
             # NOTE: By skipping the below instrument() call, the
             # code_coverage  module is set to perform full-repo coverage
             # calculations.
@@ -410,10 +424,8 @@ def RunSteps(api):
     is_arm64 = api.properties.get('target_cpu') == 'arm64'
     if is_arm64:
       assert not use_coverage
-      SwarmTests(api, output_path, checkout_path, SWARMING_DIMENSIONS)
-      return
-
-    if use_coverage:
+      SwarmTests(api, output_path, checkout_path, GetSwarmingDimensions(is_ci))
+    elif use_coverage:
       RunTestsAndCoverageLocally(api, output_path, unit_test_binary,
                                  e2e_test_binary)
     else:
@@ -511,6 +523,9 @@ def GenTests(api):
   yield api.test('linux_arm64_debug', api.platform('linux', 64),
                  api.buildbucket.try_build('openscreen', 'try'),
                  api.properties(is_debug=True, target_cpu='arm64'))
+  yield api.test('linux_arm64_debug_ci', api.platform('linux', 64),
+                 api.buildbucket.try_build('openscreen', 'ci'),
+                 api.properties(is_debug=True, target_cpu='arm64', is_ci=True))
   failed_result = api.swarming.task_result(
       id='0',
       name=UNIT_TEST_BINARY_NAME,
