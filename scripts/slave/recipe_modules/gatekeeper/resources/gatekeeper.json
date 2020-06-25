@@ -24,6 +24,9 @@
           "experimental_tests"
         ],
         "excluded_builders": [
+          "android-official",
+          "fuchsia-official",
+          "linux-official",
           "win-archive-dbg",
           "win32-archive-dbg"
         ],
