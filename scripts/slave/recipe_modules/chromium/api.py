@@ -895,8 +895,12 @@ class ChromiumApi(recipe_api.RecipeApi):
   def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
-    sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'legacy',
-        'scripts', 'slave', 'chromium', 'sizes.py')
+    sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'sizes.py')
+    # TODO(crbug.com/1097180): Remove this once source side change lands
+    if not self.m.path.exists(sizes_script):
+      sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'legacy',
+                                                  'scripts', 'slave',
+                                                  'chromium', 'sizes.py')
     sizes_args = ['--target', self.c.build_config_fs]
     if platform:
       sizes_args.extend(['--platform', platform])
