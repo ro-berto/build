@@ -106,7 +106,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=[
-                'clobber',
                 'mb',
             ],
             gclient_config='chromium',
@@ -121,7 +120,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=[
-                'clobber',
                 'mb',
             ],
             gclient_config='chromium',
@@ -166,7 +164,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='android',
             chromium_apply_config=[
-                'clobber',
                 'mb',
             ],
             gclient_config='chromium',
