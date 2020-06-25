@@ -534,9 +534,7 @@ def setup_swarming(
   api.chromium_swarming.default_priority = swarming_priority
   api.chromium_swarming.default_user = 'v8-flake-bisect'
   api.chromium_swarming.add_default_tag('purpose:v8-flake-bisect')
-  # TODO(crbug.com/812428): Move this back to chromium.tests once it's using
-  # templates.
-  api.chromium_swarming.set_default_dimension('pool', 'chromium.tests.template')
+  api.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
   api.chromium_swarming.set_default_dimension('gpu', 'none')
   api.chromium_swarming.task_output_stdout = 'all'
 
