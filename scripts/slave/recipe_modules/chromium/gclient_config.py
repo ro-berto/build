@@ -334,7 +334,7 @@ def use_clang_coverage(c):
 
 @CONFIG_CTX()
 def use_xcode_12_beta(c):  # pragma: no cover
-  c.solutions[0].custom_vars['mac_xcode_version'] = '12-beta'
+  c.solutions[0].custom_vars['mac_xcode_version'] = '"12-beta"'
 
 
 @CONFIG_CTX()
