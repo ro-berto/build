@@ -4,6 +4,7 @@
 
 DEPS = [
     'build',
+    'recipe_engine/path',
 ]
 
 def RunSteps(api):
@@ -14,6 +15,13 @@ def RunSteps(api):
         'runtest',
         api.build.repo_resource('scripts', 'slave', 'runtest.py'),
         args=['--foo', '--bar'])
+
+  api.build.python(
+      'unbuffered vpython',
+      api.build.repo_resource('scripts', 'slave', 'runtest.py'),
+      unbuffered=False,
+      venv=api.path['cache'].join('path', 'to', 'venv'),
+  )
 
 
 def GenTests(api):

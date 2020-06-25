@@ -494,27 +494,27 @@ Args:
     of additional gclient recipe_module configs to apply.
 ### *recipe_modules* / [build](/scripts/slave/recipe_modules/build)
 
-[DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [ToolsBuildApi](/scripts/slave/recipe_modules/build/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ToolsBuildApi](/scripts/slave/recipe_modules/build/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [gsutil\_py\_env](/scripts/slave/recipe_modules/build/api.py#29)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [gsutil\_py\_env](/scripts/slave/recipe_modules/build/api.py#30)(self):**
 
 Augments environment with `slave_utils.py` parameters.
     
 
-&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#38)(self, name, script, args=None, show_path=True, \*\*kwargs):**
+&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#39)(self, name, script, args=None, show_path=True, unbuffered=True, venv=None, \*\*kwargs):**
 
 Bootstraps a Python through "tools/build"'s "runit.py".
 
 This function has the same semantics as the "recipe_engine/python" module's
 __call__ method. It augments the call to run the invoked script through
 "runit.py", which runs the targeted script within the "tools/build"
-Python path enviornment.
+Python path environment.
 
-&emsp; **@property**<br>&mdash; **def [runit\_py](/scripts/slave/recipe_modules/build/api.py#11)(self):**
+&emsp; **@property**<br>&mdash; **def [runit\_py](/scripts/slave/recipe_modules/build/api.py#12)(self):**
 
-&emsp; **@property**<br>&mdash; **def [slave\_utils\_args](/scripts/slave/recipe_modules/build/api.py#15)(self):**
+&emsp; **@property**<br>&mdash; **def [slave\_utils\_args](/scripts/slave/recipe_modules/build/api.py#16)(self):**
 
 Returns (list): A list of arguments to supply to configure slave_utils
     parameters. See `slave_utils.py`'s AddArgs method.
@@ -4081,9 +4081,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipes/boringssl_docs.py#23)(api):**
 ### *recipes* / [build:examples/full](/scripts/slave/recipe_modules/build/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build)
+[DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build), [recipe\_engine/path][recipe_engine/recipe_modules/path]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#9)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#10)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
 
 [DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

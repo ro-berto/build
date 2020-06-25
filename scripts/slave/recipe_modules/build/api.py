@@ -4,7 +4,8 @@
 
 import contextlib
 
-from recipe_engine import recipe_api
+from recipe_engine import config_types, recipe_api
+
 
 class ToolsBuildApi(recipe_api.RecipeApi):
 
@@ -35,25 +36,40 @@ class ToolsBuildApi(recipe_api.RecipeApi):
         self.m.depot_tools.gsutil_py_path}):
       yield
 
-  def python(self, name, script, args=None, show_path=True, **kwargs):
+  def python(self,
+             name,
+             script,
+             args=None,
+             show_path=True,
+             unbuffered=True,
+             venv=None,
+             **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".
 
     This function has the same semantics as the "recipe_engine/python" module's
     __call__ method. It augments the call to run the invoked script through
     "runit.py", which runs the targeted script within the "tools/build"
-    Python path enviornment.
+    Python path environment.
     """
+    cmd = ['vpython' if venv else 'python']
+    if isinstance(venv, config_types.Path):
+      cmd += ['-vpython-spec', venv]
+
+    env = None
+    if unbuffered:
+      cmd.append('-u')
+    else:
+      env = {'PYTHONUNBUFFERED': None}
+
     # Replace "script" positional argument with "runit.py".
-    runit_args = []
+    cmd.append(self.runit_py)
     if show_path:
-      runit_args += ['--show-path']
-    if not kwargs.get('venv'):
-      runit_args += ['--with-third-party-lib']
-    runit_args += ['--', 'python', script]
+      cmd.append('--show-path')
+    if not venv:
+      cmd.append('--with-third-party-lib')
+    cmd.extend(['--', 'python', script])
     if args:
-      runit_args += args
-    return self.m.python(
-        name,
-        self.runit_py,
-        runit_args,
-        **kwargs)
+      cmd.extend(args)
+
+    with self.m.context(env=env, infra_steps=kwargs.pop('infra_step', None)):
+      return self.m.step(name, cmd, **kwargs)
