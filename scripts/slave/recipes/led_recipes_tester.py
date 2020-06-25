@@ -14,6 +14,7 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.led.job import job as job_pb2
 
 DEPS = [
+    'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/futures',
@@ -427,12 +428,6 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
 def RunSteps(api, repo_name):
   workdir_base = api.path['cache']
   cl_workdir = workdir_base.join(repo_name)
-  recipes_dir = workdir_base.join('recipe_engine')
-
-  # Needed to run `recipes.py analyze`.
-  recipes_config = api.gclient.make_config('recipes_py')
-  _checkout_project(api, recipes_dir, recipes_config, False)
-  recipes_dir = recipes_dir.join('infra', 'recipes-py')
 
   # Check out the repo for the CL, applying the patch.
   cl_config = api.gclient.make_config(repo_name)
@@ -448,7 +443,10 @@ def RunSteps(api, repo_name):
   recipes = set(
       _get_recipe(led_builder) for led_builder in led_builders.values())
 
-  recipes_py_path = recipes_dir.join('recipes.py')
+  recipes_py_path = api.cipd.ensure_tool(
+      'infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py',
+      version='refs/heads/master',
+      executable_path='recipe_engine/recipes.py')
   recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
   affected_recipes = _determine_affected_recipes(
       api, affected_files, recipes, recipes_py_path, recipes_cfg_path)
