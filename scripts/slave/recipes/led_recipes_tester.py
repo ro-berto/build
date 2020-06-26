@@ -139,14 +139,6 @@ def _get_recipe(led_builder):
     raise ValueError("build has no recipe set (%s): %r" % (ex, build_proto))
 
 
-def _checkout_project(api, workdir, gclient_config, patch):
-  api.file.ensure_directory('%s checkout' % gclient_config.solutions[0].name,
-                            workdir)
-
-  with api.context(cwd=workdir):
-    api.bot_update.ensure_checkout(patch=patch, gclient_config=gclient_config)
-
-
 def _process_footer_builders(api, builders):
   bad_builders = sorted(b for b in builders if ':' not in b)
   if bad_builders:
@@ -426,14 +418,13 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
 
 # TODO(martiniss): make this work if repo_name != 'build'
 def RunSteps(api, repo_name):
-  workdir_base = api.path['cache']
-  cl_workdir = workdir_base.join(repo_name)
+  with api.context(cwd=api.path['cache'].join('builder')):
+    update_result = api.bot_update.ensure_checkout(
+        patch=True, gclient_config=api.gclient.set_config(repo_name))
 
-  # Check out the repo for the CL, applying the patch.
-  cl_config = api.gclient.make_config(repo_name)
-  _checkout_project(api, cl_workdir, cl_config, True)
+  repo_path = api.path['cache'].join('builder',
+                                     update_result.json.output['root'])
 
-  repo_path = cl_workdir.join(repo_name)
   with api.context(cwd=repo_path):
     affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
 
@@ -465,7 +456,7 @@ def RunSteps(api, repo_name):
       # each one in the trigger greenlets
       led_job = next(led_builders.itervalues())
       with api.step.nest('bundle recipes'), api.context(
-          cwd=cl_workdir.join('build'), infra_steps=True):
+          cwd=repo_path, infra_steps=True):
         led_out = led_job.then('edit-recipe-bundle')
       return led_out.result.user_payload.digest
 
