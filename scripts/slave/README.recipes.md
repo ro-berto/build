@@ -1769,7 +1769,7 @@ Args:
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#649)(self, step_name, target_name, additional_merge=None, skip_validation=False, sparse=False):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#647)(self, step_name, target_name, additional_merge=None, no_sparse=False, skip_validation=False):**
 
 Returns a merge object understood by the swarming module.
 
@@ -2965,7 +2965,7 @@ Used by chromium_tests.run_tests() to process profile data when True.
 
 #### **class [ProfilesApi](/scripts/slave/recipe_modules/profiles/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [find\_merge\_errors](/scripts/slave/recipe_modules/profiles/api.py#165)(self):**
+&mdash; **def [find\_merge\_errors](/scripts/slave/recipe_modules/profiles/api.py#167)(self):**
 
 Search for any profiles that failed to merge
 
@@ -2973,7 +2973,7 @@ Search for any profiles that failed to merge
 
 &emsp; **@property**<br>&mdash; **def [llvm\_profdata\_exec](/scripts/slave/recipe_modules/profiles/api.py#51)(self):**
 
-&mdash; **def [merge\_profdata](/scripts/slave/recipe_modules/profiles/api.py#102)(self, output_artifact, profdata_filename_pattern=None, sparse=False):**
+&mdash; **def [merge\_profdata](/scripts/slave/recipe_modules/profiles/api.py#104)(self, output_artifact, profdata_filename_pattern=None, no_sparse=False):**
 
 Helper function to invoke 'merge_steps.py'.
 
@@ -2981,8 +2981,8 @@ Args:
   output_artifact (str): filename of the output, ending in .profdata.
   profdata_filename_pattern (str): (optional) regex pattern to pass to
     'merge_steps.py' when searching for .profdata files.
-  sparse (bool): (optional) flag to invoke the merge script with sparse.
-    Defaults to False.
+  no_sparse (bool): (optional) flag to invoke the merge script without
+    sparse. Defaults to False.
 
 &emsp; **@property**<br>&mdash; **def [merge\_results\_script](/scripts/slave/recipe_modules/profiles/api.py#36)(self):**
 
@@ -3019,7 +3019,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [profile\_subdirs](/scripts/slave/recipe_modules/profiles/api.py#40)(self):**
 
-&mdash; **def [upload](/scripts/slave/recipe_modules/profiles/api.py#140)(self, bucket, path, local_artifact, args=None, link_name=None):**
+&mdash; **def [upload](/scripts/slave/recipe_modules/profiles/api.py#142)(self, bucket, path, local_artifact, args=None, link_name=None):**
 
 Invokes gsutil recipe module to upload.
 

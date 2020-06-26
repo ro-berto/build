@@ -20,7 +20,7 @@ def RunSteps(api):
   # fake path for start_dir
   api.chromium_checkout._working_dir = api.path['start_dir']
 
-  api.profiles.merge_profdata('some_artifact', '.*', sparse=True)
+  api.profiles.merge_profdata('some_artifact', '.*', no_sparse=True)
 
 
 def GenTests(api):

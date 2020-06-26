@@ -99,18 +99,20 @@ class ProfilesApi(recipe_api.RecipeApi):
 
     return self._profile_subdirs[identifier]
 
+  # TODO(crbug.com/1077304) - migrate this to sparse once the merge scripts
+  # have migrated
   def merge_profdata(self,
                      output_artifact,
                      profdata_filename_pattern=None,
-                     sparse=False):
+                     no_sparse=False):
     """Helper function to invoke 'merge_steps.py'.
 
     Args:
       output_artifact (str): filename of the output, ending in .profdata.
       profdata_filename_pattern (str): (optional) regex pattern to pass to
         'merge_steps.py' when searching for .profdata files.
-      sparse (bool): (optional) flag to invoke the merge script with sparse.
-        Defaults to False.
+      no_sparse (bool): (optional) flag to invoke the merge script without
+        sparse. Defaults to False.
     """
     args = [
         '--input-dir',
@@ -127,9 +129,9 @@ class ProfilesApi(recipe_api.RecipeApi):
           profdata_filename_pattern,
       ]
 
-    if sparse:
+    if no_sparse:
       args += [
-          '--sparse',
+          '--no-sparse',
       ]
 
     self.m.python(

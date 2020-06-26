@@ -125,7 +125,7 @@ class PgoApi(recipe_api.RecipeApi):
           self.TEMP_PROFDATA_FILENAME)
       # We want to run llvm-profdata without the --sparse argument.
       # https://llvm.org/docs/CommandGuide/llvm-profdata.html#profdata-merge
-      self.m.profiles.merge_profdata(profdata_artifact)
+      self.m.profiles.merge_profdata(profdata_artifact, no_sparse=True)
 
       if not self.m.path.exists(profdata_artifact):
         self.m.python.failing_step(
