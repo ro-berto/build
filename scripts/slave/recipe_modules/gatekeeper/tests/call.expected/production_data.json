@@ -108,9 +108,6 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.infra.cron\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.boringssl\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
@@ -318,7 +315,6 @@
       "--filter-domain",
       "chromium.org,google.com,intel.com,opera.com,vewd.com",
       "https://build.chromium.org/p/client.boringssl",
-      "https://build.chromium.org/p/chromium.infra.cron",
       "https://build.chromium.org/p/chromium.fyi",
       "https://build.chromium.org/p/client.crashpad"
     ],

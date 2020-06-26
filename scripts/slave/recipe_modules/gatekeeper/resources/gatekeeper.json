@@ -164,26 +164,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/chromium.infra.cron": [
-      {
-        "close_tree": false,
-        "builders": {
-          "Build From Tarball": {
-            "forgiving_optional": ["*"],
-            "tree_notify": [
-              "raphael.kubo.da.costa@intel.com"
-            ]
-          },
-          "publish_tarball": {
-            "forgiving_optional": ["*"],
-            "tree_notify": [
-              "raphael.kubo.da.costa@intel.com",
-              "thomasanderson@chromium.org"
-            ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.linux": [
       {
         "categories": [
