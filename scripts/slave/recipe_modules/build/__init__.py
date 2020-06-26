@@ -4,5 +4,6 @@
 DEPS = [
     'depot_tools/depot_tools',
     'recipe_engine/context',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/step',
 ]

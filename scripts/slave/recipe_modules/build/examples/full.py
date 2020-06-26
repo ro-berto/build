@@ -5,6 +5,7 @@
 DEPS = [
     'build',
     'recipe_engine/path',
+    'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):
@@ -21,6 +22,12 @@ def RunSteps(api):
       api.build.repo_resource('scripts', 'slave', 'runtest.py'),
       unbuffered=False,
       venv=api.path['cache'].join('path', 'to', 'venv'),
+  )
+
+  api.build.python(
+      'legacy annotation',
+      api.build.repo_resource('scripts', 'slave', 'runtest.py'),
+      legacy_annotation=True,
   )
 
 

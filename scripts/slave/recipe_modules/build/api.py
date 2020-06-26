@@ -43,6 +43,7 @@ class ToolsBuildApi(recipe_api.RecipeApi):
              show_path=True,
              unbuffered=True,
              venv=None,
+             legacy_annotation=False,
              **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".
 
@@ -50,6 +51,12 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     __call__ method. It augments the call to run the invoked script through
     "runit.py", which runs the targeted script within the "tools/build"
     Python path environment.
+
+    If legacy_annotation is set to true, it means the script we are running will
+    emit legacy @@@annotation@@@. The script will be executed via
+    `legacy_annotation` module from recipe_engine to adapt to the new luciexe
+    protocol. Note that this feature is DEPRECATED and all new usecase should
+    use StepPresentation instead to modify build.
     """
     cmd = ['vpython' if venv else 'python']
     if isinstance(venv, config_types.Path):
@@ -72,4 +79,10 @@ class ToolsBuildApi(recipe_api.RecipeApi):
       cmd.extend(args)
 
     with self.m.context(env=env, infra_steps=kwargs.pop('infra_step', None)):
+      if legacy_annotation:
+        for std_handle in ('stdin', 'stdout', 'stderr'):
+          if kwargs.pop(std_handle, None) is not None:  # pragma: no cover
+            raise ValueError('std placeholder is not supported in'
+                             'legacy_annotation mode; got %s' % (std_handle,))
+        return self.m.legacy_annotation(name, cmd, **kwargs)
       return self.m.step(name, cmd, **kwargs)

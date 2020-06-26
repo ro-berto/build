@@ -494,7 +494,7 @@ Args:
     of additional gclient recipe_module configs to apply.
 ### *recipe_modules* / [build](/scripts/slave/recipe_modules/build)
 
-[DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ToolsBuildApi](/scripts/slave/recipe_modules/build/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -503,7 +503,7 @@ Args:
 Augments environment with `slave_utils.py` parameters.
     
 
-&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#39)(self, name, script, args=None, show_path=True, unbuffered=True, venv=None, \*\*kwargs):**
+&mdash; **def [python](/scripts/slave/recipe_modules/build/api.py#39)(self, name, script, args=None, show_path=True, unbuffered=True, venv=None, legacy_annotation=False, \*\*kwargs):**
 
 Bootstraps a Python through "tools/build"'s "runit.py".
 
@@ -511,6 +511,12 @@ This function has the same semantics as the "recipe_engine/python" module's
 __call__ method. It augments the call to run the invoked script through
 "runit.py", which runs the targeted script within the "tools/build"
 Python path environment.
+
+If legacy_annotation is set to true, it means the script we are running will
+emit legacy @@@annotation@@@. The script will be executed via
+`legacy_annotation` module from recipe_engine to adapt to the new luciexe
+protocol. Note that this feature is DEPRECATED and all new usecase should
+use StepPresentation instead to modify build.
 
 &emsp; **@property**<br>&mdash; **def [runit\_py](/scripts/slave/recipe_modules/build/api.py#12)(self):**
 
@@ -4081,9 +4087,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipes/boringssl_docs.py#23)(api):**
 ### *recipes* / [build:examples/full](/scripts/slave/recipe_modules/build/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build), [recipe\_engine/path][recipe_engine/recipe_modules/path]
+[DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#10)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#11)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
 
 [DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -5690,6 +5696,7 @@ The changes are:
 [recipe_engine/recipe_modules/isolated]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-isolated
 [recipe_engine/recipe_modules/json]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-json
 [recipe_engine/recipe_modules/led]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-led
+[recipe_engine/recipe_modules/legacy_annotation]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-legacy_annotation
 [recipe_engine/recipe_modules/path]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-path
 [recipe_engine/recipe_modules/platform]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-platform
 [recipe_engine/recipe_modules/properties]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/73d761140f9f149b901fe37330a2ec3835917ff8/README.recipes.md#recipe_modules-properties
