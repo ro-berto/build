@@ -50,6 +50,8 @@ DEFAULT_BUILDERS = (
     'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m84:linux-rel',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-m85:linux-rel',
+    'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
 )
 
 
@@ -65,6 +67,7 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
         'luci.chromium.try:ios-simulator',
         'luci.chromium.try-m83:ios-simulator',
         'luci.chromium.try-m84:ios-simulator',
+        'luci.chromium.try-m85:ios-simulator',
     ],
     files=[
         'scripts/slave/recipes/ios/try.py',
@@ -81,6 +84,7 @@ FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
 )
 
 # CL to use when testing a recipe which touches chromium source.
@@ -113,6 +117,12 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/2204441',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2204425',
+    },
+    'luci.chromium.try-m85': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2270351',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2270701',
     },
 }
 
