@@ -135,6 +135,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       gn_args=List(basestring),
       clobber_before_runhooks=Single(
           bool, empty_val=False, required=False, hidden=False),
+      cros_checkout_qemu_image=Single(
+          bool, empty_val=False, required=False, hidden=False),
   )
 
 
@@ -686,6 +688,13 @@ def codesearch(c):
   # -k 0 prevents stopping on errors, so the compile step tries to do as much as
   # possible.
   c.compile_py.build_args = ['-k', '0']
+
+
+@config_ctx()
+def cros_checkout_qemu_image(c):
+  if not c.TARGET_CROS_BOARD:  # pragma: no cover
+    raise BadConf('cros_checkout_qemu_image requires a board')
+  c.cros_checkout_qemu_image = True
 
 
 @config_ctx()

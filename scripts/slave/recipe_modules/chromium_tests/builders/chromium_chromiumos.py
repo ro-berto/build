@@ -32,6 +32,7 @@ SPEC = {
 
 def _config(name,
             cros_board=None,
+            checkout_qemu_image=False,
             target_arch='intel',
             target_bits=64,
             gclient_apply_config=None):
@@ -57,17 +58,27 @@ def _config(name,
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
+  if checkout_qemu_image:
+    cfg['chromium_apply_config'].append('cros_checkout_qemu_image')
   return name, _chromium_chromiumos_spec(**cfg)
 
 
 SPEC.update([
     _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg'),
-    _config('chromeos-amd64-generic-asan-rel', cros_board='amd64-generic'),
     _config(
-        'chromeos-amd64-generic-cfi-thin-lto-rel', cros_board='amd64-generic'),
+        'chromeos-amd64-generic-asan-rel',
+        cros_board='amd64-generic',
+        checkout_qemu_image=True),
+    _config(
+        'chromeos-amd64-generic-cfi-thin-lto-rel',
+        cros_board='amd64-generic',
+        checkout_qemu_image=True),
     _config('chromeos-amd64-generic-dbg', cros_board='amd64-generic'),
-    _config('chromeos-amd64-generic-rel', cros_board='amd64-generic'),
+    _config(
+        'chromeos-amd64-generic-rel',
+        cros_board='amd64-generic',
+        checkout_qemu_image=True),
     _config(
         'chromeos-arm-generic-dbg',
         cros_board='arm-generic',
