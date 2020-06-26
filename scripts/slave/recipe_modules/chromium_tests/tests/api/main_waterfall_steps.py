@@ -22,6 +22,7 @@ DEPS = [
     'profiles',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -689,19 +690,28 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
-              failure=True)),
+              failure=True),
+          # The above failure is for dispatched task, the collect step
+          # itself succeeds.
+          api.legacy_annotation.success_step),
       api.override_step_data(
           'target2',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
-              failure=True)),
+              failure=True),
+      # The above failure is for dispatched task, the collect step
+      # itself succeeds.
+      api.legacy_annotation.success_step),
       api.override_step_data(
           'target3',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
-              failure=True)),
+              failure=True),
+      # The above failure is for dispatched task, the collect step
+      # itself succeeds.
+      api.legacy_annotation.success_step),
       api.post_process(post_process.DoesNotRunRE, 'skip retrying'),
       api.post_process(post_process.DropExpectation),
   )

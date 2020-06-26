@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/commit_position',
   'recipe_engine/file',
   'recipe_engine/json',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -1346,7 +1347,8 @@ def GenTests(api):
             },
         }
     ) +
-    api.override_step_data('base_unittests', retcode=1)
+    api.override_step_data('base_unittests',
+                           api.legacy_annotation.failure_step)
   )
 
   yield (
@@ -1613,7 +1615,8 @@ def GenTests(api):
             builder='WebRTC Chromium Mac Tester',
             parent_buildername='WebRTC Chromium Mac Builder') +
       api.platform('mac', 64) +
-      api.override_step_data('browser_tests', retcode=1) +
+      api.override_step_data(
+          'browser_tests', api.legacy_annotation.failure_step) +
       api.post_process(post_process.StepFailure, 'browser_tests') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)

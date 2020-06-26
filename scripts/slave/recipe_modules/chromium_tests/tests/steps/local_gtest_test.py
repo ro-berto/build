@@ -62,10 +62,14 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(),
-      api.override_step_data('base_unittests (with patch)',
-                             api.test_utils.canned_gtest_output(passing=False)),
-      api.override_step_data('base_unittests (without patch)',
-                             api.test_utils.canned_gtest_output(passing=True)),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.test_utils.canned_gtest_output(
+              passing=False, legacy_annotation=True)),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.test_utils.canned_gtest_output(
+              passing=True, legacy_annotation=True)),
   )
 
   yield api.test(

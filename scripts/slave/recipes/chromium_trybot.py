@@ -22,6 +22,7 @@ DEPS = [
   'recipe_engine/commit_position',
   'recipe_engine/file',
   'recipe_engine/json',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -121,8 +122,10 @@ def GenTests(api):
       }),
       suppress_analyze(),
       api.override_step_data('base_unittests (with patch)',
-                             canned_test(passing=True)),
-      api.override_step_data('process_dumps', retcode=1),
+                             canned_test(passing=True,
+                                         legacy_annotation=True)),
+      api.override_step_data('process_dumps',
+                             api.legacy_annotation.failure_step),
   )
 
   yield api.test(
@@ -132,9 +135,10 @@ def GenTests(api):
       base_unittests_additional_compile_target(),
       suppress_analyze(),
       api.override_step_data('base_unittests (with patch)',
-                             canned_test(passing=False)),
+                             canned_test(
+                                 passing=False, legacy_annotation=True)),
       api.override_step_data('base_unittests (without patch)',
-                             api.test_utils.gtest_results(None, retcode=1)),
+                             api.legacy_annotation.failure_step),
   )
 
   yield api.test(
@@ -389,8 +393,10 @@ def GenTests(api):
       }),
       suppress_analyze(),
       api.override_step_data('base_unittests (with patch)',
-                             canned_test(passing=False)),
-      api.step_data('compile (without patch)', retcode=1),
+                             canned_test(passing=False,
+                                         legacy_annotation=True)),
+      api.step_data('compile (without patch)',
+                    api.legacy_annotation.infra_failure_step),
   )
 
   yield api.test(

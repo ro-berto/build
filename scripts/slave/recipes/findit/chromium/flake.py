@@ -19,6 +19,7 @@ DEPS = [
     'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -179,7 +180,8 @@ def GenTests(api):
           'test r0.gl_tests (r0)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
+                  passed_test_names=['Test.One'])),
+          api.legacy_annotation.success_step),
   )
   yield api.test(
       'record_infra_failure',

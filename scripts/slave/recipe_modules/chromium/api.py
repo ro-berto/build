@@ -802,7 +802,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if annotate:
       full_args.append('--annotate=%s' % annotate)
-      kwargs['allow_subannotations'] = True
+      kwargs['legacy_annotation'] = True
 
     if results_url:
       full_args.append('--results-url=%s' % results_url)

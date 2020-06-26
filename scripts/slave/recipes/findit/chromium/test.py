@@ -19,6 +19,7 @@ DEPS = [
     'findit',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -564,7 +565,7 @@ def GenTests(api):
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-              failure=True)),
+              failure=True), api.legacy_annotation.success_step),
   )
 
   yield api.test(

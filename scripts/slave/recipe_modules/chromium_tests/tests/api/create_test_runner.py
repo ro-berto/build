@@ -8,6 +8,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'test_results',
@@ -35,7 +36,8 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123),
-      api.override_step_data('base_unittests', retcode=1),
+      api.override_step_data('base_unittests',
+                             api.legacy_annotation.failure_step),
   )
 
   yield api.test(
@@ -46,7 +48,8 @@ def GenTests(api):
           bot_id='test_bot_id',
           buildnumber=123,
           serialize_tests=True),
-      api.override_step_data('base_unittests', retcode=1),
+      api.override_step_data('base_unittests',
+                             api.legacy_annotation.failure_step),
   )
   yield api.test(
       'retry_failed_shards',
@@ -56,5 +59,6 @@ def GenTests(api):
           bot_id='test_bot_id',
           buildnumber=123,
           retry_failed_shards=True),
-      api.override_step_data('base_unittests', retcode=1),
+      api.override_step_data('base_unittests',
+                             api.legacy_annotation.failure_step),
   )

@@ -11,6 +11,7 @@ DEPS = [
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
