@@ -67,6 +67,11 @@ class BinarySizeApi(recipe_api.RecipeApi):
     """
     assert self.m.tryserver.is_tryserver
 
+    # Don't want milestone try builds to use gs analysis. The bucket for those
+    # looks like `try-m84`
+    is_trunk_builder = self.m.buildbucket.build.builder.bucket == 'try'
+    use_gs_analysis = gclient_config == 'chromium' and is_trunk_builder
+
     with self.m.chromium.chromium_layout():
       self.m.gclient.set_config(gclient_config)
       for gclient_apply_config in gclient_apply_configs or []:
@@ -88,8 +93,25 @@ class BinarySizeApi(recipe_api.RecipeApi):
           self.m.tryserver.get_footer('Binary-Size', patch_text=commit_message))
       allow_regressions = is_revert or has_size_footer
 
+      if use_gs_analysis:
+        gs_zip_path = self._check_for_recent_tot_analysis()
+        if gs_zip_path:
+          recent_upload_revision = self._parse_gs_zip_path(gs_zip_path)[1]
+          self.m.gclient.c.solutions[0].revision = recent_upload_revision
+
+        try:
+          bot_update_step = self.m.chromium_checkout.ensure_checkout()
+        except self.m.step.StepFailure:
+          # CL patch is incompatible with revision used in recently uploaded
+          # analysis. Use the most recent trunk commit instead.
+          self.m.gclient.c.solutions[0].revision = None
+          use_gs_analysis = False
+          bot_update_step = self.m.chromium_checkout.ensure_checkout()
+
+      else:  # pragma: no cover
+        bot_update_step = self.m.chromium_checkout.ensure_checkout()
+
       suffix = ' (with patch)'
-      bot_update_step = self.m.chromium_checkout.ensure_checkout()
       self.m.chromium.runhooks(name='runhooks' + suffix)
 
       self._clear_failed_expectation_files()
@@ -117,29 +139,35 @@ class BinarySizeApi(recipe_api.RecipeApi):
         expectations_json = self._check_for_failed_expectation_files(
             expectations_result_path)
 
-      with self.m.context(cwd=self.m.chromium_checkout.working_dir):
-        self.m.bot_update.deapply_patch(bot_update_step)
+      if use_gs_analysis and gs_zip_path:
+        without_results_dir = self._download_recent_tot_analysis(
+            gs_zip_path,
+            staging_dir,
+        )
+      else:
+        with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+          self.m.bot_update.deapply_patch(bot_update_step)
 
-      with self.m.context(cwd=self.m.path['checkout']):
-        suffix = ' (without patch)'
+        with self.m.context(cwd=self.m.path['checkout']):
+          suffix = ' (without patch)'
 
+          self.m.chromium.runhooks(name='runhooks' + suffix)
+          without_results_dir, raw_result = self._build_and_measure(
+              False, staging_dir)
+
+          if raw_result and raw_result.status != common_pb.SUCCESS:
+            self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
+                                          '')
+            return raw_result
+
+        # Re-apply patch so that the diff scripts can be tested via tryjobs.
+        # We could build without-patch first to avoid having to apply the patch
+        # twice, but it's nicer to fail fast when the patch does not compile.
+        suffix = ' (with patch again)'
+        with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
+          bot_update_step = self.m.bot_update.ensure_checkout(
+              suffix=suffix, patch=True)
         self.m.chromium.runhooks(name='runhooks' + suffix)
-        without_results_dir, raw_result = self._build_and_measure(
-            False, staging_dir)
-
-        if raw_result and raw_result.status != common_pb.SUCCESS:
-          self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
-                                        '')
-          return raw_result
-
-      # Re-apply patch so that the diff scripts can be tested via tryjobs.
-      # We could build without-patch first to avoid having to apply the patch
-      # twice, but it's nicer to fail fast when the patch does not compile.
-      suffix = ' (with patch again)'
-      with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
-        bot_update_step = self.m.bot_update.ensure_checkout(
-            suffix=suffix, patch=True)
-      self.m.chromium.runhooks(name='runhooks' + suffix)
 
       with self.m.context(cwd=self.m.path['checkout']):
         size_results_path = staging_dir.join('size_results.json')
@@ -152,6 +180,45 @@ class BinarySizeApi(recipe_api.RecipeApi):
         if not expectation_success or not binary_size_success:
           raise self.m.step.StepFailure(
               'Failed Checks. See Failing steps for details')
+
+  def _parse_gs_zip_path(self, gs_zip_path):
+    # Returns (timestamp, revision sha)
+    # Example path: 'android-binary-size/commit_size_analysis/
+    # 1592001045_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'
+    m = re.search(r'.*\/(.*)_(.*)\.zip', gs_zip_path)
+    return int(m.group(1)), m.group(2)
+
+  def _check_for_recent_tot_analysis(self):
+    gs_directory = 'android-binary-size/commit_size_analysis/'
+    gs_zip_path = self.m.gsutil.cat(
+        'gs://{bucket}/{source}'.format(
+            bucket=self.results_bucket, source=gs_directory + 'LATEST'),
+        stdout=self.m.raw_io.output(),
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+            'android-binary-size/commit_size_analysis/'
+            '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
+                constants.TEST_TIME)),
+        name='cat LATEST').stdout
+
+    latest_upload_timestamp = self._parse_gs_zip_path(gs_zip_path)[0]
+
+    # If the most recent upload was created over 2 hours ago, don't use it
+    if int(self.m.time.time()) - int(latest_upload_timestamp) > 7200:
+      return
+    return gs_zip_path
+
+  def _download_recent_tot_analysis(self, gs_zip_path, staging_dir):
+    local_zip = self.m.path.mkstemp()
+    self.m.gsutil.download(
+        bucket=self.results_bucket,
+        source=gs_zip_path,
+        dest=local_zip,
+        name='Downloading zip')
+
+    results_dir = staging_dir.join('without_patch')
+
+    self.m.zip.unzip('Unzipping tot analysis', local_zip, results_dir)
+    return results_dir
 
   def _build_and_measure(self, with_patch, staging_dir):
     suffix = ' (with patch)' if with_patch else ' (without patch)'
@@ -166,30 +233,23 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_dir = staging_dir.join(results_basename)
     self.m.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
-    apk_path = self.m.chromium_android.apk_path(self.apk_name)
-    mapping_path = self.m.chromium_android.apk_path(self.mapping_name)
+    generator_script = self.m.path['checkout'].join(
+        'tools', 'binary_size', 'generate_commit_size_analysis.py')
 
-    self.m.file.copy(
-        'Extracting Proguard Mapping ({}){}'.format(self.mapping_name, suffix),
-        mapping_path, results_dir.join(self.apk_name + '.mapping'))
-    # Can't use self.m.chromium_android.resource_sizes() without it trying to
-    # upload the results.
-    self.m.python(
-        'resource_sizes ({}){}'.format(self.m.path.basename(apk_path), suffix),
-        self.m.chromium_android.c.resource_sizes, [
-            str(apk_path),
-            '--output-format=chartjson',
-            '--output-dir',
+    self.m.step(
+        name='Generate commit size analysis files',
+        cmd=[
+            generator_script,
+            '--apk-name',
+            self.apk_name,
+            '--mapping-name',
+            self.mapping_name,
+            '--staging-dir',
             results_dir,
             '--chromium-output-directory',
             self.m.chromium.output_dir,
         ])
-    self.m.json.read('resource_sizes result{}'.format(suffix),
-                     results_dir.join('results-chart.json'))
 
-    size_path = results_dir.join(self.apk_name + '.size')
-    self.m.chromium_android.supersize_archive(
-        apk_path, size_path, step_suffix=suffix)
     return results_dir, None
 
   def _check_for_undocumented_increase(self, results_path, staging_dir,
