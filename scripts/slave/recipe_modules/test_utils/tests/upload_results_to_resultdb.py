@@ -17,6 +17,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
                                                        invocation_pb2)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
@@ -71,7 +72,7 @@ def GenTests(api):
       ),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
@@ -110,7 +111,7 @@ def GenTests(api):
       ),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
@@ -156,7 +157,7 @@ def GenTests(api):
           }),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
@@ -236,7 +237,7 @@ def GenTests(api):
       ),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
@@ -287,7 +288,7 @@ def GenTests(api):
       ),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
@@ -363,7 +364,7 @@ def GenTests(api):
       ),
       api.buildbucket.build(
           build_pb2.Build(
-              builder=build_pb2.BuilderID(
+              builder=builder_pb2.BuilderID(
                   project='chromium',
                   bucket='try',
                   builder='linux-rel',
