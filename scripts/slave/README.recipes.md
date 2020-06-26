@@ -531,7 +531,7 @@ invocation path for some of these is just too intertwined to confidently
 apply this via explicit args everywhere.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
 
-[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -4810,13 +4810,13 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros/cbuildbot_tryjob.py#63)(api):**
 ### *recipes* / [cros/swarming](/scripts/slave/recipes/cros/swarming.py)
 
-[DEPS](/scripts/slave/recipes/cros/swarming.py#13): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/cros/swarming.py#13): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [DoRunSteps](/scripts/slave/recipes/cros/swarming.py#42)(api):**
+&mdash; **def [DoRunSteps](/scripts/slave/recipes/cros/swarming.py#43)(api):**
 
-&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#69)(api, failure):**
+&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#70)(api, failure):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#20)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#21)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

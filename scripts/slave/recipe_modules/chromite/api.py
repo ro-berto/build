@@ -145,7 +145,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     args.append(config)
 
     cmd = [self.chromite_path.join('scripts', 'cbuildbot_launch')] + args
-    return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
+    return self.m.legacy_annotation(name, cmd, **kwargs)
 
   # Only used by the internal goma recipe.
   def checkout(self, manifest_url=None, repo_url=None, branch=None,

@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',

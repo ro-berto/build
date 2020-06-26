@@ -13,6 +13,7 @@ import re
 DEPS = [
   'chromite',
   'depot_tools/gitiles',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/properties',
 ]
 
@@ -110,7 +111,8 @@ def GenTests(api):
           cbb_config='swarming-build-config',
           buildset='cros/master_buildbucket_id/8904538489270332096',
       ),
-      api.step_data('cbuildbot_launch [swarming-build-config]', retcode=1),
+      api.step_data('cbuildbot_launch [swarming-build-config]',
+                    api.legacy_annotation.failure_step),
   )
 
   # Test a plain tryjob.
