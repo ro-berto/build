@@ -166,7 +166,7 @@ class CodesearchApi(recipe_api.RecipeApi):
         experimental_suffix)
     self._create_kythe_index_pack(index_pack_kythe_name)
 
-    if self.m.tryserver.gerrit_change:
+    if self.m.tryserver.is_tryserver:
       return
 
     assert self.c.bucket_name, (
@@ -245,7 +245,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     if not self.c.SYNC_GENERATED_FILES:
       return
-    if self.m.tryserver.gerrit_change:
+    if self.m.tryserver.is_tryserver:
       return
     assert self.c.generated_repo, (
         'Trying to check out generated files repo,'
