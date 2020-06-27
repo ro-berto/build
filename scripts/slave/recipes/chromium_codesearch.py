@@ -30,6 +30,30 @@ DEPS = [
   'recipe_engine/time',
 ]
 
+# Defines the trybots and the mirrored CI builder
+# The trybot will use the parameters from the mirrored CI builder.
+# It has the following strcture:
+# {
+#   <mastername which contains the trybots>: {
+#     <trybot name>: <mirred CI builder name, which should be one of builders
+#                     from SPEC['builders']>,
+#   }
+# }
+TRYBOT_SPEC = freeze({
+    'tryserver.chromium.codesearch': {
+        'codesearch-gen-chromium-android-try':
+            'codesearch-gen-chromium-android',
+        'codesearch-gen-chromium-chromiumos-try':
+            'codesearch-gen-chromium-chromiumos',
+        'codesearch-gen-chromium-fuchsia-try':
+            'codesearch-gen-chromium-fuchsia',
+        'codesearch-gen-chromium-linux-try':
+            'codesearch-gen-chromium-linux',
+        'codesearch-gen-chromium-win-try':
+            'codesearch-gen-chromium-win',
+    }
+})
+
 SPEC = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
@@ -164,7 +188,17 @@ PROPERTIES = {
 
 def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
              codesearch_mirror_revision, codesearch_mirror_revision_timestamp):
-  bot_config = SPEC.get('builders', {}).get(api.buildbucket.builder_name)
+  name_suffix = ''
+  builder_id = api.chromium.get_builder_id()
+  if api.tryserver.is_tryserver:
+    name_suffix = ' (with patch)'
+    builder = TRYBOT_SPEC.get(builder_id.master, {}).get(builder_id.builder)
+    assert builder is not None, ('Could not find trybot %s:%s in TRYBOT_SPEC' %
+                                 (builder_id.master, builder_id.builder))
+  else:
+    builder = builder_id.builder
+  bot_config = SPEC.get('builders', {}).get(builder)
+  assert bot_config is not None, ('Could not find builder %s in SPEC' % builder)
   platform = bot_config.get('platform', 'linux')
   experimental = bot_config.get('experimental', False)
   corpus = bot_config.get('corpus', 'chromium-linux')
@@ -214,7 +248,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
   # entering 'y' to agree to a license.
   with api.context(env={'CHROME_HEADLESS': '1'}):
-    api.chromium.runhooks()
+    api.chromium.runhooks(name='runhooks%s' % name_suffix)
 
   # Cleans up generated files. This is to prevent old generated files from
   # being left in the out directory. Note that this needs to be run *before*
@@ -241,8 +275,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
           'KYTHE_OUTPUT_DIRECTORY': kzip_dir,
           'KYTHE_CORPUS': corpus
       }):
-    raw_result = api.chromium.compile(targets, use_goma_module=True,
-                         out_dir='out', target=gen_repo_out_dir or 'Debug')
+    raw_result = api.chromium.compile(
+        targets,
+        name='compile%s' % name_suffix,
+        use_goma_module=True,
+        out_dir='out',
+        target=gen_repo_out_dir or 'Debug')
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -326,20 +364,22 @@ def GenTests(api):
 
   yield api.test(
       'full_%s_with_patch' %
-      _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      _sanitize_nonalpha('codesearch-gen-chromium-linux-try'),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
-          builder='codesearch-gen-chromium-linux',
+          builder='codesearch-gen-chromium-linux-try',
           git_repo='https://chromium.googlesource.com/chromium/src',
           change_number=91827,
           patch_set=1),
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.properties.generic(
+          mastername='tryserver.chromium.codesearch',
+          buildername='codesearch-gen-chromium-linux-try'),
       api.runtime(is_luci=True, is_experimental=False),
   )
-
 
   yield api.test(
       'full_%s_delete_generated_files_fail' %

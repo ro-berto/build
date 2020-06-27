@@ -321,7 +321,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -344,7 +344,7 @@
       "-m",
       "chromium.infra.codesearch",
       "-b",
-      "codesearch-gen-chromium-linux",
+      "codesearch-gen-chromium-linux-try",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -370,7 +370,7 @@
       "-m",
       "chromium.infra.codesearch",
       "-b",
-      "codesearch-gen-chromium-linux",
+      "codesearch-gen-chromium-linux-try",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -508,7 +508,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/codesearch_gen_chromium_linux"
+      "[CACHE]/goma/data/codesearch_gen_chromium_linux_try"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -534,7 +534,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux_try",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -613,7 +613,7 @@
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [
@@ -638,7 +638,7 @@
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
-    "name": "compile confirm no-op"
+    "name": "compile (with patch) confirm no-op"
   },
   {
     "cmd": [],
@@ -758,7 +758,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "compile",
+      "compile (with patch)",
       "--ninja-log-compiler",
       "goma-clang",
       "--goma-stats-file",
@@ -770,10 +770,12 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"codesearch-gen-chromium-linux\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"codesearch-gen-chromium-linux-try\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-linux",
+      "codesearch-gen-chromium-linux-try",
+      "--buildbot-mastername",
+      "tryserver.chromium.codesearch",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
