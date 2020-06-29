@@ -151,7 +151,7 @@ def StopVirtualX(slave_build_name):
     print 'Stopping Xvfb with pid %d ...' % xvfb_pid
     # If the process doesn't exist, we raise an exception that we can ignore.
     try:
-      if slave_build_name == 'WebRTC Chromium Linux Tester':
+      if slave_build_name == 'build11-b9':
         print('[crbug.com/1071006] - Running `ps aux`.')
         processes = subprocess.check_output(['ps', 'aux']).splitlines()
         for line in processes:
