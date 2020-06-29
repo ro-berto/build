@@ -295,6 +295,7 @@ def CreateArchive(build_dir, staging_dir, files_list, archive_name,
 
   print 'Creating archive %s ...' % archive_name
 
+  files_list = ExpandWildcards(build_dir, files_list)
   if allow_missing:
     # Filter out files that don't exist.
     filtered_file_list = [f.strip() for f in files_list if

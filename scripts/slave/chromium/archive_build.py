@@ -426,10 +426,17 @@ class StagerBase(object):
     self._archive_files = archive_utils.ExpandWildcards(self._build_dir,
                                                         files_list)
     archives_list = fparser.ParseArchiveLists()
-    # Check files and revision numbers.
-    all_files_list = self._archive_files + [item['filename'] for sublist in
-                                            archives_list.values() for item in
-                                            sublist]
+    archives_files_list = [
+        item['filename']
+        for sublist in archives_list.values()
+        for item in sublist
+    ]
+    archives_files_list = archive_utils.ExpandWildcards(
+        self._build_dir, archives_files_list
+    )
+
+    # Check that all the files for all the archives exist.
+    all_files_list = self._archive_files + archives_files_list
     all_files_list.append(self._version_file)
     not_found = archive_utils.VerifyFiles(all_files_list, self._build_dir,
                                           self.options.ignore)
