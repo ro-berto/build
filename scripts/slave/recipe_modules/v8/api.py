@@ -819,7 +819,7 @@ class V8Api(recipe_api.RecipeApi):
         )
 
   def _is_muted_branch(self):
-    return self.m.buildbucket.build.builder.bucket in ['ci.br']
+    return self.m.buildbucket.build.builder.bucket not in ['ci', 'try']
 
   @property
   def depot_tools_path(self):
