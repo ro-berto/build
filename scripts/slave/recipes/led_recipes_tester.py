@@ -417,13 +417,15 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       presentation.links.update(api.step.active_result.presentation.links)
 
     with api.swarming.with_server(job.swarming_hostname):
-      api.swarming.collect(
+      results = api.swarming.collect(
           'collect',
           [job.task_id],
           # We're launching LUCI builders, so they can be viewed in the Milo UI,
           # which is much better than the stdout, so don't take the time to
           # download the stdout
           task_output_stdout='none')
+      for result in results:
+        result.analyze()
 
 
 # TODO(martiniss): make this work if repo_name != 'build'
@@ -556,6 +558,27 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       default_builders(),
+  )
+
+  yield api.test(
+      'expired_tryjob',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
+      affected_recipes(RECIPE),
+      default_builders(),
+      # Step has a retcode of 0 in production.
+      api.step_data(
+          'test luci.chromium.try:linux-rel.collect',
+          api.json.output({
+              'deadbeef': {
+                  'results': {
+                      'name': 'test',
+                      'state': 'EXPIRED',
+                  },
+              },
+          })),
+      api.post_check(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
