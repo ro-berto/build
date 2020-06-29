@@ -7,6 +7,7 @@ from contextlib import contextmanager
 DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/context',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -111,11 +112,11 @@ def _AnnotatedStepsSteps(api, got_revision):
     with api.context(cwd=api.path['checkout'], env=env):
       with api.depot_tools.on_path():
         with _PlatformSDK(api):
-          api.python('annotated steps',
-                     api.path['checkout'].join(
-                        'buildbot', 'buildbot_selector.py'),
-                     venv=True,
-                     allow_subannotations=True)
+          cmd = [
+            'vpython', '-u',
+            api.path['checkout'].join('buildbot', 'buildbot_selector.py')
+          ]
+          api.legacy_annotation('annotated steps', cmd)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode
@@ -187,7 +188,7 @@ def GenTests(api):
           buildnumber=1234,
           slavetype='BuilderTester',
       ),
-      api.step_data('annotated steps', retcode=1),
+      api.step_data('annotated steps', api.legacy_annotation.failure_step),
   )
 
   yield api.test(

@@ -85,8 +85,107 @@
     "name": "gclient runhooks"
   },
   {
-    "allow_subannotations": true,
+    "cmd": [],
+    "name": "install infra/tools/run_annotations"
+  },
+  {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest"
+    ],
+    "cwd": "[START_DIR]/native_client",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
+      "BUILDBOT_BUILDNUMBER": "5678",
+      "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
+      "BUILDBOT_MASTERNAME": "client.nacl",
+      "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "BUILDBOT_SLAVE_TYPE": "BuilderTester",
+      "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
+      "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
+      "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
+      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest",
+      "-ensure-file",
+      "infra/tools/run_annotations/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/native_client",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
+      "BUILDBOT_BUILDNUMBER": "5678",
+      "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
+      "BUILDBOT_MASTERNAME": "client.nacl",
+      "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "BUILDBOT_SLAVE_TYPE": "BuilderTester",
+      "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
+      "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
+      "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
+      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
+      "--",
       "vpython",
       "-u",
       "[START_DIR]/native_client/buildbot/buildbot_selector.py"
@@ -102,8 +201,13 @@
       "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
       "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",
       "BUILDBOT_TRIGGERED_BY_SLAVENAME": "TestSlave",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
       "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py",
+      "TEMP": "[CLEANUP]/tmp_tmp_2",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TMP": "[CLEANUP]/tmp_tmp_2",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

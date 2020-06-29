@@ -8,6 +8,7 @@ DEPS = [
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
@@ -47,10 +48,8 @@ def RunSteps(api):
     depot_tools_path = checkout_root.join('depot_tools')
     with api.context(cwd=api.path['checkout'], env=env,
                      env_suffixes={'PATH': [depot_tools_path]}):
-      api.python('annotated steps',
-                 api.path['checkout'].join('src', 'build.py'),
-                 allow_subannotations=True,
-                 unbuffered=True)
+      cmd = ['vpython', '-u', api.path['checkout'].join('src', 'build.py')]
+      api.legacy_annotation('annotated steps', cmd)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode
@@ -77,5 +76,5 @@ def GenTests(api):
 
   yield (
       test('linux_fail') +
-      api.step_data('annotated steps', retcode=1)
+      api.step_data('annotated steps', api.legacy_annotation.failure_step)
   )
