@@ -615,31 +615,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/src/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r3.get version",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@VERSION@MAJOR=51@@@",
-      "@@@STEP_LOG_LINE@VERSION@MINOR=0@@@",
-      "@@@STEP_LOG_LINE@VERSION@BUILD=2704@@@",
-      "@@@STEP_LOG_LINE@VERSION@PATCH=0@@@",
-      "@@@STEP_LOG_END@VERSION@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
@@ -652,6 +627,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -679,6 +655,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -776,6 +753,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -803,6 +781,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -1449,6 +1428,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1476,6 +1456,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -1573,6 +1554,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1600,6 +1582,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"

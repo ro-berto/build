@@ -1249,9 +1249,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--android-version-name=%s' % android_version_name]
     # TODO(crbug.com/1060857): Remove this once swarming task templates
     # support command prefixes.
-    if (self.c.project_generator.use_luci_auth
-        # --luci-auth landed in mb.py shortly after M82 branch point.
-        and int(self.get_version().get('MAJOR', 0)) > 82):
+    if self.c.project_generator.use_luci_auth:
       args += ['--luci-auth']
 
     step_kwargs = {

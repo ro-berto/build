@@ -157,22 +157,8 @@ def GenTests(api):
   yield api.test(
       'mb_luci_auth',
       api.properties(chromium_apply_config=['mb', 'mb_luci_auth']),
-      api.chromium.override_version(major=83),
       api.post_process(post_process.StepCommandContains, 'generate_build_files',
                        ['--luci-auth']),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  def no_luci_auth(check, steps):
-    cmd = steps['generate_build_files'].cmd
-    check('--luci-auth' not in cmd)
-
-  yield api.test(
-      'mb_luci_auth_81',
-      api.properties(chromium_apply_config=['mb', 'mb_luci_auth']),
-      api.chromium.override_version(major=82),
-      api.post_check(no_luci_auth),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
