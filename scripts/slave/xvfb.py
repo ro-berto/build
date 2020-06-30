@@ -164,6 +164,13 @@ def StopVirtualX(slave_build_name):
               (xvfb_pid, i)
           )
       os.kill(xvfb_pid, signal.SIGKILL)
+      if slave_build_name == 'build11-b9':
+        for i in range(60):
+          time.sleep(1)
+          print(
+              '[crbug.com/1071006] - Killed Xvfb PID %s, iteration %d.' %
+              (xvfb_pid, i)
+          )
     except OSError:
       print '... killing failed, presuming unnecessary.'
     os.remove(xvfb_pid_filename)
