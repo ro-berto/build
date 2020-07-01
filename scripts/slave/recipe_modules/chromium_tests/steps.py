@@ -1385,6 +1385,7 @@ class JSONResultsHandler(ResultsHandler):
     return test_results.canonical_result_format()
 
   def _add_links_to_artifacts(self, api, results, presentation):
+    del api
     # Add any links to artifacts that are already available.
     # TODO(https://crbug.com/980274): Either handle the case of artifacts whose
     # paths are filepaths, or add the ability for merge scripts to upload
