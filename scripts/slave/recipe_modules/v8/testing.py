@@ -570,7 +570,7 @@ class V8SwarmingTest(V8Test):
           name=self.test['name'] + self.test_step_config.step_name_suffix,
           script=self.api.v8.resource('collect_v8_task.py'),
           args=args,
-          allow_subannotations=True,
+          legacy_annotation=True,
           infra_step=True,
           step_test_data=kwargs.pop('step_test_data', None),
           **kwargs)

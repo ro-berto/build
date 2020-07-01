@@ -51,6 +51,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def output_json(self, has_failures=False, wrong_results=False, flakes=False,
                   unmarked_slow_test=False):
     slowest_tests = V8TestApi.SLOWEST_TESTS()
+    # The collect step is still on legacy @@@annotation@@@
+    successful_collect_step = self.m.legacy_annotation.success_step
     if unmarked_slow_test:
       slowest_tests += [{
         'name': 'mjsunit/slow',
@@ -60,7 +62,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'marked_slow': False,
       }]
     if not has_failures:
-      return self.m.json.output([{
+      return successful_collect_step + self.m.json.output([{
         'arch': 'theArch',
         'mode': 'theMode',
         'results': [],
@@ -68,7 +70,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'tags': [],
       }])
     if wrong_results:
-      return self.m.json.output([{
+      return successful_collect_step + self.m.json.output([{
         'arch': 'theArch1',
         'mode': 'theMode1',
         'results': [],
@@ -83,7 +85,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'tags': [],
       }])
     if flakes:
-      return self.m.json.output([{
+      return successful_collect_step + self.m.json.output([{
         'arch': 'theArch1',
         'mode': 'theMode1',
         'results': [
@@ -196,7 +198,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'exit_code': 1,
       })
 
-    return self.m.json.output([{
+    return successful_collect_step + self.m.json.output([{
       'arch': 'theArch',
       'mode': 'theMode',
       'results': results,
@@ -227,7 +229,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }])
+    }]) + self.m.legacy_annotation.success_step
 
   def one_flake(self, num_fuzz=False):
     if num_fuzz:
@@ -278,7 +280,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }])
+    }]) + self.m.legacy_annotation.success_step
 
   def infra_failure(self):
     return self.m.json.output([{
@@ -287,7 +289,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'results': [],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': ['UNRELIABLE_RESULTS'],
-    }])
+    }]) + self.m.legacy_annotation.success_step
 
   def failures_example(self, variant1='default', variant2='default'):
     flags = {'default': '', 'stress': ' --stress-opt'}
@@ -328,7 +330,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }])
+    }]) + self.m.legacy_annotation.success_step
 
   def example_scheduler_buildbucket_trigger(self, key='a'):
     trigger = triggers_pb2.Trigger(id=key)

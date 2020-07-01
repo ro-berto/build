@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
+  'recipe_engine/legacy_annotation',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -366,7 +367,7 @@ def GenTests(api):
         parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
     ) +
-    api.step_data('Check', retcode=1)
+    api.step_data('Check', api.legacy_annotation.infra_failure_step)
   )
 
   yield (

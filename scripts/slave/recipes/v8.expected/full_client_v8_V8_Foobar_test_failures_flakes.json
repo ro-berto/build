@@ -85,8 +85,11 @@
     "name": "trigger tests.[trigger] Check"
   },
   {
-    "allow_subannotations": true,
     "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
+      "--",
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -112,6 +115,13 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env": {
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TEMP": "[CLEANUP]/tmp_tmp_2",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TMP": "[CLEANUP]/tmp_tmp_2",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
+    },
     "env_prefixes": {
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"

@@ -55,7 +55,7 @@
       "--json-input",
       "[CLEANUP]/coverage_output_tmp_1/data.json",
       "--output-dir",
-      "[CLEANUP]/coverage_data_tmp_2"
+      "[CLEANUP]/coverage_data_tmp_4"
     ],
     "name": "Split coverage data"
   },
@@ -72,7 +72,7 @@
       "-a",
       "public-read",
       "-R",
-      "[CLEANUP]/coverage_data_tmp_2/*",
+      "[CLEANUP]/coverage_data_tmp_4/*",
       "gs://chromium-v8/tryserver/sanitizer_coverage/gerrit/456789/12/linux64/"
     ],
     "infra_step": true,
