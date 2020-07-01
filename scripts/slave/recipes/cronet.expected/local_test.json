@@ -281,6 +281,7 @@
       "local_test",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[START_DIR]/src",
@@ -305,6 +306,7 @@
       "local_test",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Debug"

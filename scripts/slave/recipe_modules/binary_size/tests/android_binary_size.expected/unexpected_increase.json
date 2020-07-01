@@ -401,6 +401,7 @@
       "android_binary_size",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--luci-auth",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"//chrome/android:monochrome_public_minimal_apks\", \"//tools/binary_size:binary_size_trybot_py\"]}",
@@ -583,6 +584,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -609,6 +611,7 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"

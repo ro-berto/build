@@ -123,9 +123,13 @@ class V8Api(recipe_api.RecipeApi):
       # Builders and builder_testers both build and need the following set of
       # default chromium configs:
       if use_goma:
-        default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
+        default['chromium_apply_config'] = [
+            'default_compiler', 'goma', 'mb', 'mb_no_luci_auth'
+        ]
       else:
-        default['chromium_apply_config'] = ['default_compiler', 'mb']
+        default['chromium_apply_config'] = [
+            'default_compiler', 'mb', 'mb_no_luci_auth'
+        ]
     return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
   def update_bot_config(self, bot_config, binary_size_tracking, build_config,

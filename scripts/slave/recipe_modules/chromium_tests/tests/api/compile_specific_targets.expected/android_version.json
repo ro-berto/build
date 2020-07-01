@@ -410,6 +410,7 @@
       "[CACHE]/goma/client",
       "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2",
+      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -439,6 +440,7 @@
       "[CACHE]/goma/client",
       "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2",
+      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Debug"
