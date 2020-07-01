@@ -119,7 +119,7 @@ SPEC = {
         ),
     'ToTiOS':
         _chromium_clang_spec(
-            chromium_config='chromium',
+            chromium_config='chromium_no_goma',
             chromium_apply_config=[
                 'mb',
                 'mb_luci_auth',
@@ -137,7 +137,7 @@ SPEC = {
         ),
     'ToTiOSDevice':
         _chromium_clang_spec(
-            chromium_config='chromium',
+            chromium_config='chromium_no_goma',
             chromium_apply_config=[
                 'mb',
                 'mb_luci_auth',
