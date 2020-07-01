@@ -407,7 +407,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     res = {}
     for inv in invocations.values():
       for tr in inv.test_results:
-        if suffix != 'without patch':
+        if suffix == 'without patch':
           # Unexpected results including unexpected failures in without patch
           # steps will not cause a build failure.
           # See http://shortn/_KibEsLgpJK

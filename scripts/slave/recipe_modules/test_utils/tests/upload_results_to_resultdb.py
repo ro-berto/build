@@ -349,6 +349,13 @@ def GenTests(api):
                       variant={'def': {
                           'key1': 'value1',
                       }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t3',
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
               ],
           ),
   }
