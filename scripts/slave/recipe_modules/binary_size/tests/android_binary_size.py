@@ -63,7 +63,6 @@ def GenTests(api):
   yield api.test(
       'patch_fixes_build', api.binary_size.build(), override_analyze(),
       api.override_step_data('compile (without patch)', retcode=1),
-      api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.MustRun,
                        constants.PATCH_FIXED_BUILD_STEP_NAME),
       api.post_process(post_process.DropExpectation))
@@ -205,31 +204,5 @@ def GenTests(api):
       api.post_check(has_expected_supersize_link, bucket='fake-results-bucket'),
       api.post_check(
           has_expected_binary_size_url, bucket='fake-results-bucket'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
-
-  yield api.test(
-      'valid_latest_file', api.binary_size.build(), override_analyze(),
-      override_expectation(),
-      api.post_process(post_process.MustRun, 'gsutil Downloading zip'),
-      api.post_process(post_process.DoesNotRun, 'compile (without patch)'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
-
-  yield api.test(
-      'valid_latest_file_merge_conflict', api.binary_size.build(),
-      override_analyze(), override_expectation(),
-      api.override_step_data('bot_update', retcode=1),
-      api.post_process(post_process.MustRun, 'bot_update (2)'),
-      api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
-      api.post_process(post_process.MustRun, 'compile (without patch)'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
-
-  yield api.test(
-      'invalid_latest_file', api.binary_size.build(), override_analyze(),
-      override_expectation(), api.time.seed(constants.TEST_TIME + 7230),
-      api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
-      api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
