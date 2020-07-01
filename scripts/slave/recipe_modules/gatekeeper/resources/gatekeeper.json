@@ -260,11 +260,6 @@
           "experimental_tests"
         ],
         "builders": {
-          "Linux*": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ]
-          },
           "*": {}
         },
         "excluded_builders": [
