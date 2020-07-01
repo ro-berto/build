@@ -631,6 +631,37 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
+      "-i",
+      "{\"builder_name\": \"Android64 Builder arm64\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{\\\"low_bandwidth_audio_perf_test\\\": \\\"[dummy hash for low_bandwidth_audio_perf_test]\\\", \\\"webrtc_perf_tests\\\": \\\"[dummy hash for webrtc_perf_tests]\\\"}\", \"isolate_server\": \"https://isolateserver.appspot.com\"}",
+      "-o",
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "name": "pinpoint isolate upload",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",

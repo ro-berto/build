@@ -270,6 +270,13 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
+  @property
+  def is_triggering_perf_tests(self):
+    for triggered_bot in self.bot.triggered_bots():
+      if self.get_bot(*triggered_bot).test_suite.endswith('perf_swarming'):
+        return self.bot.should_build
+    return False
+
   def is_compile_needed(self, phase=None, is_ios=False):
     test_targets = set()
     non_isolated_test_targets = set()
@@ -565,6 +572,14 @@ class WebRTCApi(recipe_api.RecipeApi):
   def isolate(self):
     self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                  targets=self._isolated_targets)
+    if self.is_triggering_perf_tests:
+      if not self.m.tryserver.is_tryserver:
+        self.m.perf_dashboard.upload_isolate(
+            self.m.buildbucket.builder_name,
+            self.m.perf_dashboard.get_change_info([{
+                'repository': 'webrtc',
+                'git_hash': self.revision
+            }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
 
   def get_binary_sizes(self, files=None, base_dir=None):
     if files is None:
