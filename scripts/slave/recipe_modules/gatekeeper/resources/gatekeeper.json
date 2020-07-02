@@ -303,7 +303,8 @@
             "thestig@chromium.org"
         ]
       }
-    ],
+    ]
+  },
 
   "categories": {
     "chromium_memory_full": {
