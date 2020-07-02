@@ -153,12 +153,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           map(str, self.c.env.PATH) + ['%(PATH)s'])
     if self.c.env.GOMA_SERVER_HOST:
       ret['GOMA_SERVER_HOST'] = self.c.env.GOMA_SERVER_HOST
-    # TODO(crbug.com/1069318): Set these two from findit using Goma API instead.
-    if self.c.env.GOMA_RPC_EXTRA_PARAMS:
-      ret['GOMA_RPC_EXTRA_PARAMS'] = self.c.env.GOMA_RPC_EXTRA_PARAMS
-    if self.c.env.GOMA_ARBITRARY_TOOLCHAIN_SUPPORT:
-      ret['GOMA_ARBITRARY_TOOLCHAIN_SUPPORT'] = \
-        self.c.env.GOMA_ARBITRARY_TOOLCHAIN_SUPPORT
     if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB:
       ret['GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB'] = \
         self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB

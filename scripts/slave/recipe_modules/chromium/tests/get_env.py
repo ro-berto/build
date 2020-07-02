@@ -28,18 +28,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'goma_ats',
-      api.platform('mac', 64),
-      api.properties(chromium_apply_config=['goma_ats']),
-  )
-
-  yield api.test(
-      'goma_rbe_prod',
-      api.platform('mac', 64),
-      api.properties(chromium_apply_config=['goma_rbe_prod']),
-  )
-
-  yield api.test(
       'goma_staging',
       api.platform('mac', 64),
       api.properties(chromium_apply_config=['goma_staging']),
