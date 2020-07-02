@@ -9,9 +9,12 @@ DEPS = [
 
 def RunSteps(api):
   api.goma.ensure_goma(client_type='candidate')
-  api.goma.set_client_flags('goma.chromium.org', '?prod')
+  api.goma.configure_enable_ats()
   api.goma.start()
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test(
+      'basic',
+      api.goma(server_host='goma.chromium.org', rpc_extra_params="?prod"),
+  )

@@ -135,8 +135,7 @@ def RunSteps(api, target_mastername, target_buildername,
 
   # Since these builders run on different platforms, and require different Goma
   # settings depending on the platform, set the Goma flags using recipe configs.
-  # TODO(crbug.com/1069318): Remove goma_rbe_prod and goma_ats configs.
-  api.goma.set_client_flags('goma.chromium.org', '?prod')
+  api.goma.configure_enable_ats()
 
   checked_out_revision, cached_revision = api.findit.record_previous_revision(
       bot_config)

@@ -237,7 +237,7 @@
   * [gn:tests/refs](#recipes-gn_tests_refs)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
-  * [goma:tests/client_flags](#recipes-goma_tests_client_flags)
+  * [goma:tests/configure_enable_ats](#recipes-goma_tests_configure_enable_ats)
   * [goma:tests/ensure](#recipes-goma_tests_ensure)
   * [goma:tests/jobs](#recipes-goma_tests_jobs)
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
@@ -2374,7 +2374,7 @@ property when running the recipe with the full path. e.g.
 Note that the goma client directory must exist inside the recipe workdir.
 A symlink (on mac/linux) is enough, though.
 
-&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#247)(self, platform):**
+&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#244)(self, platform):**
 
 Return the Goma client dir for the platform.
 
@@ -2386,7 +2386,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#86)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#604)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#601)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2413,6 +2413,13 @@ Raises:
 
 &emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#77)(self):**
 
+&mdash; **def [configure\_enable\_ats](/scripts/slave/recipe_modules/goma/api.py#178)(self):**
+
+Sets enable_ats flag based on server_host and rpc_extra_params flags.
+
+Some builders run on a mix of Linux/Mac/Win. They need to call this function
+to set the ATS flag on a per-build basis.
+
 &emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#81)(self):**
 
 &emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#149)(self):**
@@ -2428,7 +2435,7 @@ Uses value from property "$build/goma:{"debug":true}" if configured
 
 &emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#124)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#194)(self, client_type=None, additional_platforms=None, ephemeral=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#191)(self, client_type=None, additional_platforms=None, ephemeral=False):**
 
 ensure goma is installed.
 
@@ -2442,9 +2449,9 @@ Args:
              This is for mitigating crbug.com/997733 to avoid sharing
              Goma client among builders.
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#259)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#256)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#263)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#260)(self):**
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#69)(self):**
 
@@ -2470,22 +2477,14 @@ This function caches the _recommended_jobs.
 
 &emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#73)(self):**
 
-&mdash; **def [set\_client\_flags](/scripts/slave/recipe_modules/goma/api.py#178)(self, server_host, rpc_extra_params):**
-
-Sets flags for connecting to Goma server host.
-
-Args:
-  server_host: Goma server host address
-  rpc_extra_params: Params to pass to the server when making RPC calls
-
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#336)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#333)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#429)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#426)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -5035,11 +5034,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#5): [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#14)(api):**
-### *recipes* / [goma:tests/client\_flags](/scripts/slave/recipe_modules/goma/tests/client_flags.py)
+### *recipes* / [goma:tests/configure\_enable\_ats](/scripts/slave/recipe_modules/goma/tests/configure_enable_ats.py)
 
-[DEPS](/scripts/slave/recipe_modules/goma/tests/client_flags.py#5): [goma](#recipe_modules-goma)
+[DEPS](/scripts/slave/recipe_modules/goma/tests/configure_enable_ats.py#5): [goma](#recipe_modules-goma)
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/client_flags.py#10)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/configure_enable_ats.py#10)(api):**
 ### *recipes* / [goma:tests/ensure](/scripts/slave/recipe_modules/goma/tests/ensure.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/tests/ensure.py#5): [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

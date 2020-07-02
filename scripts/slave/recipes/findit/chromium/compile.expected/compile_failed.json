@@ -755,7 +755,6 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -763,8 +762,6 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -856,13 +853,10 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r1.postprocess_for_goma.goma_jsonstatus",
@@ -892,13 +886,10 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r1.postprocess_for_goma.goma_stat",
@@ -917,13 +908,10 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "test r1.postprocess_for_goma.stop_goma",

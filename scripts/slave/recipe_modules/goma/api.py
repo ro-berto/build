@@ -175,19 +175,16 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._recommended_jobs
 
-  def set_client_flags(self, server_host, rpc_extra_params):
-    """Sets flags for connecting to Goma server host.
+  def configure_enable_ats(self):
+    """Sets enable_ats flag based on server_host and rpc_extra_params flags.
 
-    Args:
-      server_host: Goma server host address
-      rpc_extra_params: Params to pass to the server when making RPC calls
+    Some builders run on a mix of Linux/Mac/Win. They need to call this function
+    to set the ATS flag on a per-build basis.
     """
-    self._goma_server_host = server_host
-    self._goma_rpc_extra_params = rpc_extra_params
-
     # Set ATS if connecting to Goma RBE from a client OS that supports ATS.
-    if (server_host in ('staging-goma.chromium.org', 'goma.chromium.org') and
-        rpc_extra_params in ('?tot', '?staging', '?prod') and
+    if (self._goma_server_host in ('staging-goma.chromium.org',
+                                   'goma.chromium.org') and
+        self._goma_rpc_extra_params in ('?tot', '?staging', '?prod') and
         (self.m.platform.is_linux or self.m.platform.is_win)):
       self._enable_ats = True
 

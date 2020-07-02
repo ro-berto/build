@@ -73,8 +73,8 @@ def RunSteps(api, properties):
   # 5. Build what's needed.
 
   # Since these builders run on different platforms, and require different Goma
-  # settings depending on the platform, set the Goma flags using recipe configs.
-  api.goma.set_client_flags('goma.chromium.org', '?prod')
+  # settings depending on the platform, set the Goma ATS flag based on the OS.
+  api.goma.configure_enable_ats()
 
   if compile_targets:
     compile_result = api.chromium_tests.compile_specific_targets(
