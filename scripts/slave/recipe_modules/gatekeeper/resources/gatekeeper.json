@@ -20,7 +20,7 @@
     "https://build.chromium.org/p/chromium": [
       {
         "categories": [
-          "webrtc_tree_closer",
+          "chromium_tree_closer",
           "experimental_tests"
         ],
         "excluded_builders": [
@@ -311,7 +311,7 @@
           "webrtc-sheriff-sto@grotations.appspotmail.com"
         ],
         "categories": [
-          "chromium_tree_closer",
+          "webrtc_tree_closer",
           "experimental_tests"
         ],
         "builders": {
