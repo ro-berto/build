@@ -106,18 +106,6 @@
             "https://build.chromium.org/p/client.v8.fyi": ["*"]
         }
     },
-    "webrtc": {
-        "build-db": "webrtc_build_db.json",
-        "masters": {
-            "https://build.chromium.org/p/client.webrtc": ["*"]
-        },
-        "open-tree": true,
-        "password-file": "/creds/gatekeeper/webrtc_status_password",
-        "revision-properties": "got_revision",
-        "set-status": false,
-        "status-url": "https://webrtc-status.appspot.com",
-        "track-revisions": true
-    },
     "chromium.perf": {
         "masters": {
             "https://build.chromium.org/p/chromium.perf": ["*"]

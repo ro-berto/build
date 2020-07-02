@@ -176,20 +176,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://v8-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"webrtc_build_db.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.webrtc\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/webrtc_status_password\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revision-properties\": \"got_revision\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"set-status\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://webrtc-status.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -370,30 +356,6 @@
       "https://build.chromium.org/p/chromium.perf"
     ],
     "name": "gatekeeper: chromium.perf"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
-      "--json",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper.json",
-      "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json",
-      "--verbose",
-      "--status-url",
-      "https://webrtc-status.appspot.com",
-      "--open-tree",
-      "--track-revisions",
-      "--revision-properties",
-      "got_revision",
-      "--build-db",
-      "[CACHE]/builder/webrtc_build_db.json",
-      "--password-file",
-      "/creds/gatekeeper/webrtc_status_password",
-      "https://build.chromium.org/p/client.webrtc"
-    ],
-    "name": "gatekeeper: webrtc"
   },
   {
     "cmd": [

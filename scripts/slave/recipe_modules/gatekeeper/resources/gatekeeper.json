@@ -304,26 +304,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/client.webrtc": [
-      {
-        "tree_notify": [
-          "webrtc-sheriff-mtv@grotations.appspotmail.com",
-          "webrtc-sheriff-sto@grotations.appspotmail.com"
-        ],
-        "categories": [
-          "webrtc_tree_closer",
-          "experimental_tests"
-        ],
-        "builders": {
-          "*": { "categories": [ "webrtc_all"] }
-        },
-        "excluded_builders": [
-          "Mac64 Builder",
-          "Win32 Builder (Clang)",
-          "*UWP*"
-        ]
-      }
-    ],
 
   "categories": {
     "chromium_memory_full": {
@@ -388,29 +368,6 @@
         "update_scripts",
         "steps"
       ]
-    },
-    "webrtc_all": {
-      "forgiving_optional": [
-        "bot_update",
-        "package build",
-        "extract build",
-        "cleanup_temp",
-        "taskkill"
-      ],
-      "closing_optional": [
-        "compile",
-        "gn"
-      ]
-    },
-    "webrtc_tree_closer": {
-      "closing_optional": [
-        "bot_update",
-        "compile",
-        "gclient runhooks",
-        "runhooks",
-        "update"
-      ],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     }
   }
 }
