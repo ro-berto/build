@@ -32,11 +32,6 @@
         ],
 
         "builders": {
-          "linux-archive-rel": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ]
-          },
           "win32-archive-rel": {
             "categories": [
               "chromium_windows"
@@ -97,18 +92,12 @@
             "categories": [
               "chromium_tree_closer",
               "experimental_tests"
-            ],
-            "tree_notify": [
-              "agrieve@chromium.org"
             ]
           },
           "Deterministic Android": {
             "categories": [
               "chromium_tree_closer",
               "experimental_tests"
-            ],
-            "tree_notify": [
-              "agrieve@chromium.org"
             ]
           },
           "*": {}
@@ -184,25 +173,11 @@
             "categories": [
               "experimental_tests"
             ],
-            "tree_notify": [
-              "shinyak@chromium.org",
-              "tikuta@chromium.org",
-              "ukai@chromium.org",
-              "yyanagisawa@chromium.org"
-            ],
             "forgiving_optional": ["*"]
           },
           "linux-ozone-rel": {
             "categories": [
               "experimental_tests"
-            ],
-            "tree_notify": [
-              "fwang@chromium.org",
-              "maksim.sisov@chromium.org",
-              "rjkroege@chromium.org",
-              "thomasanderson@chromium.org",
-              "timbrown@chromium.org",
-              "tonikitoo@chromium.org"
             ],
             "forgiving_optional": [
               "*"
@@ -349,98 +324,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/chromium.fyi": [
-      {
-        "builders": {
-          "Closure Compilation Linux": {
-            "tree_notify": [
-              "dbeam+closure-bots@chromium.org",
-              "fukino+closure-bots@chromium.org",
-              "hirono+closure-bots@chromium.org",
-              "vitalyp@chromium.org"
-            ],
-            "forgiving_optional": [
-              "update_scripts",
-              "setup_build",
-              "bot_update"
-            ],
-            "closing_optional": [
-              "generate_gyp_files",
-              "compile",
-              "generate_v2_gyp_files",
-              "compile_v2"
-            ]
-          },
-          "fuchsia-fyi-arm64-rel": {
-            "forgiving_optional": ["*"]
-          },
-          "fuchsia-fyi-x64-dbg": {
-            "forgiving_optional": ["*"]
-          },
-          "fuchsia-fyi-x64-rel": {
-            "forgiving_optional": ["*"]
-          },
-          "Mojo Android": {
-            "forgiving_optional": ["*"]
-          },
-          "Mojo Linux": {
-            "forgiving_optional": ["*"]
-          },
-          "Site Isolation Android": {
-            "tree_notify": [
-              "nasko+fyi-bots@chromium.org",
-              "creis+fyi-bots@chromium.org",
-              "lukasza+fyi-bots@chromium.org",
-              "alexmos+fyi-bots@chromium.org"
-            ],
-            "forgiving_optional": [
-              "*"
-            ]
-          },
-          "CFI Linux ToT": {
-            "tree_notify": [
-              "pcc@chromium.org"
-            ],
-            "forgiving_optional": ["*"],
-            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
-          },
-          "CFI Linux CF": {
-            "tree_notify": [
-              "pcc@chromium.org"
-            ],
-            "forgiving_optional": ["*"],
-            "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
-          },
-          "Win 10 Fast Ring": {
-            "tree_notify": [
-              "wfh@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
-          "linux-blink-heap-verification": {
-            "tree_notify": [
-              "mlippautz+fyi-bots@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
-          "linux-annotator-rel": {
-            "tree_notify": [
-              "pastarmovj@chromium.org",
-              "nicolaso@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
-          "win-annotator-rel": {
-            "tree_notify": [
-              "pastarmovj@chromium.org",
-              "nicolaso@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          }
-        }
-      }
-    ]
-  },
 
   "categories": {
     "chromium_memory_full": {
