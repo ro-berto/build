@@ -33,8 +33,8 @@
 
         "builders": {
           "win32-archive-rel": {
-            "categories": [
-              "chromium_windows"
+            "forgiving_optional": [
+              "taskkill"
             ]
           },
           "*": {}
@@ -307,12 +307,6 @@
   },
 
   "categories": {
-    "chromium_memory_full": {
-      "closing_optional": [
-        "*"
-      ]
-    },
-
     "chromium_tree_closer": {
       "closing_optional": [
         "bot_update",
@@ -323,25 +317,6 @@
       ],
       "sheriff_classes": ["sheriff"],
       "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
-    },
-
-    "chromium_windows": {
-      "forgiving_optional": [
-        "svnkill",
-        "taskkill"
-      ]
-    },
-
-    "chromium_compile": {
-      "closing_optional": [
-        "compile"
-      ]
-    },
-
-    "chromium_archive_build": {
-      "forgiving_optional": [
-        "archive_build"
-      ]
     },
 
     "chromium_android": {
