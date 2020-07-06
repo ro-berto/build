@@ -46,8 +46,6 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 DEFAULT_BUILDERS = (
     'luci.chromium.try:linux-rel',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium.try-m83:linux-rel',
-    'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m84:linux-rel',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m85:linux-rel',
@@ -65,7 +63,6 @@ class PathBasedBuilderSet(object):
 IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
     builders=[
         'luci.chromium.try:ios-simulator',
-        'luci.chromium.try-m83:ios-simulator',
         'luci.chromium.try-m84:ios-simulator',
         'luci.chromium.try-m85:ios-simulator',
     ],
@@ -82,7 +79,6 @@ PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
 # recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium.try-m83:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
 )
@@ -105,12 +101,6 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
-    },
-    'luci.chromium.try-m83': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2145971',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2145684',
     },
     'luci.chromium.try-m84': {
         'slow':
