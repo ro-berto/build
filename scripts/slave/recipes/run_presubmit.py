@@ -25,9 +25,10 @@ DEPS = [
     'recipe_engine/runtime',
     'recipe_engine/step',
     'depot_tools/tryserver',
-    # The following two recipe modules are not used here,
+    # The following three recipe modules are not used here,
     # but apparently set spooky gclient configs,
     # which get used by this recipe through "api.gclient.set_config".
+    'libyuv',
     'v8',
     'webrtc',
 ]
