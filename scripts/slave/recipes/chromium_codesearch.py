@@ -257,8 +257,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   api.codesearch.cleanup_old_generated()
 
   api.codesearch.generate_compilation_database(
-      targets, mastername='chromium.infra.codesearch',
-      buildername=api.buildbucket.builder_name)
+      targets, mastername=builder_id.master, buildername=builder_id.builder)
   api.codesearch.generate_gn_target_list()
 
   # Prepare Java Kythe output directory

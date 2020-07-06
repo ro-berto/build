@@ -55,8 +55,8 @@ BUILDERS = freeze({
 })
 
 def RunSteps(api):
-  buildername = api.buildbucket.builder_name
-  builder = BUILDERS[buildername]
+  builder_id = api.chromium.get_builder_id()
+  builder = BUILDERS[builder_id.builder]
 
   platform = builder.get('platform', 'linux')
   corpus = builder.get('corpus', 'chromium-linux')
@@ -91,8 +91,7 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   api.codesearch.generate_compilation_database(
-      targets, mastername='chromium.infra.codesearch',
-      buildername=buildername)
+      targets, mastername=builder_id.master, buildername=builder_id.builder)
   api.codesearch.generate_gn_target_list()
 
   api.codesearch.cleanup_old_generated()
@@ -125,18 +124,19 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield api.test(
         '%s_test_basic' % sanitize(buildername),
-        api.properties.generic(buildername=buildername),
+        api.properties.generic(
+            mastername='chromium.infra.codesearch', buildername=buildername),
         api.runtime(is_luci=True, is_experimental=False),
     )
     yield api.test(
         '%s_test_experimental' % sanitize(buildername),
-        api.properties.generic(buildername=buildername),
+        api.properties.generic(
+            mastername='chromium.infra.codesearch', buildername=buildername),
         api.runtime(is_luci=True, is_experimental=True),
     )
 
   yield api.test(
-      '%s_test_with_patch' %
-      sanitize('codesearch-gen-chromium-linux'),
+      '%s_test_with_patch' % sanitize('codesearch-gen-chromium-linux'),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
@@ -144,6 +144,9 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src',
           change_number=91827,
           patch_set=1),
+      api.properties.generic(
+          mastername='tryserver.chromium.codesearch',
+          buildername='codesearch-gen-chromium-linux'),
       api.runtime(is_luci=True, is_experimental=False),
   )
 
