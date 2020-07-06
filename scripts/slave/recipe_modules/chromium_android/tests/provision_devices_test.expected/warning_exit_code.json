@@ -8,7 +8,7 @@
       "None/third_party/android_sdk/public/platform-tools/adb",
       "--denylist-file",
       "None/out/bad_devices.json",
-      "--output-device-blacklist",
+      "--output-device-denylist",
       "/path/to/tmp/json",
       "-t",
       "Debug",

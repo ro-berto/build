@@ -590,7 +590,8 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.adb.adb_path(),
         self.denylist_flag,
         self.denylist_file,
-        '--output-device-blacklist',
+        '--output-device-blacklist'
+        if self.c.deprecated_blacklist else '--output-device-denylist',
         self.m.json.output(add_json_log=False),
         '-t',
         self.m.chromium.c.BUILD_CONFIG,

@@ -924,9 +924,9 @@ This uses runtests.py to upload the results to the perf dashboard.
 
 #### **class [AndroidApi](/scripts/slave/recipe_modules/chromium_android/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [adb\_install\_apk](/scripts/slave/recipe_modules/chromium_android/api.py#633)(self, apk, allow_downgrade=False, keep_data=False, devices=None):**
+&mdash; **def [adb\_install\_apk](/scripts/slave/recipe_modules/chromium_android/api.py#634)(self, apk, allow_downgrade=False, keep_data=False, devices=None):**
 
-&mdash; **def [apk\_path](/scripts/slave/recipe_modules/chromium_android/api.py#630)(self, apk):**
+&mdash; **def [apk\_path](/scripts/slave/recipe_modules/chromium_android/api.py#631)(self, apk):**
 
 &mdash; **def [authorize\_adb\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#375)(self):**
 
@@ -934,15 +934,15 @@ This uses runtests.py to upload the results to the perf dashboard.
 
 &mdash; **def [clean\_local\_files](/scripts/slave/recipe_modules/chromium_android/api.py#145)(self, clean_pyc_files=True):**
 
-&mdash; **def [common\_tests\_final\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#887)(self, force_latest_version=False, checkout_dir=None):**
+&mdash; **def [common\_tests\_final\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#888)(self, force_latest_version=False, checkout_dir=None):**
 
-&mdash; **def [common\_tests\_setup\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#876)(self, \*\*provision_kwargs):**
+&mdash; **def [common\_tests\_setup\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#877)(self, \*\*provision_kwargs):**
 
 &mdash; **def [configure\_from\_properties](/scripts/slave/recipe_modules/chromium_android/api.py#65)(self, config_name, \*\*kwargs):**
 
 &emsp; **@property**<br>&mdash; **def [coverage\_dir](/scripts/slave/recipe_modules/chromium_android/api.py#44)(self):**
 
-&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#991)(self, upload=True, \*\*kwargs):**
+&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#992)(self, upload=True, \*\*kwargs):**
 
 Creates an EMMA HTML report and optionally uploads it to storage bucket.
 
@@ -959,7 +959,7 @@ Returns:
 
 &mdash; **def [create\_adb\_symlink](/scripts/slave/recipe_modules/chromium_android/api.py#332)(self):**
 
-&mdash; **def [create\_result\_details](/scripts/slave/recipe_modules/chromium_android/api.py#691)(self, step_name, json_results_file):**
+&mdash; **def [create\_result\_details](/scripts/slave/recipe_modules/chromium_android/api.py#692)(self, step_name, json_results_file):**
 
 &emsp; **@property**<br>&mdash; **def [denylist\_file](/scripts/slave/recipe_modules/chromium_android/api.py#383)(self):**
 
@@ -982,7 +982,7 @@ Get or create the path to the file containing changes for this revision.
 This file will contain a dict mapping file paths to lists of changed lines
 for each file. This is used to generate incremental coverage reports.
 
-&mdash; **def [generate\_breakpad\_symbols](/scripts/slave/recipe_modules/chromium_android/api.py#753)(self, symbols_dir, binary_path, root_chromium_dir):**
+&mdash; **def [generate\_breakpad\_symbols](/scripts/slave/recipe_modules/chromium_android/api.py#754)(self, symbols_dir, binary_path, root_chromium_dir):**
 
 Generate breakpad symbols.
 
@@ -993,7 +993,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1108)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1109)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1004,13 +1004,13 @@ coverage directory.
 
 &mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#189)(self, commitrefs=None, step_test_data=None, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1169)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1170)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
 &mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#407)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1037)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1038)(self):**
 
 Creates an incremental code coverage report.
 
@@ -1021,7 +1021,7 @@ Generates a JSON file containing incremental coverage stats. Requires
 
 &emsp; **@property**<br>&mdash; **def [known\_devices\_file](/scripts/slave/recipe_modules/chromium_android/api.py#48)(self):**
 
-&mdash; **def [logcat\_dump](/scripts/slave/recipe_modules/chromium_android/api.py#719)(self):**
+&mdash; **def [logcat\_dump](/scripts/slave/recipe_modules/chromium_android/api.py#720)(self):**
 
 &mdash; **def [make\_zip\_archive](/scripts/slave/recipe_modules/chromium_android/api.py#69)(self, step_name, archive_name, files=None, preserve_paths=True, include_filters=None, exclude_filters=None, \*\*kwargs):**
 
@@ -1036,7 +1036,7 @@ Args:
   include_filters: List of globs to be included in the archive.
   exclude_filters: List of globs to be excluded from the archive.
 
-&mdash; **def [monkey\_test](/scripts/slave/recipe_modules/chromium_android/api.py#657)(self, \*\*kwargs):**
+&mdash; **def [monkey\_test](/scripts/slave/recipe_modules/chromium_android/api.py#658)(self, \*\*kwargs):**
 
 &mdash; **def [non\_blacklisted\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#400)(self):**
 
@@ -1048,15 +1048,15 @@ Args:
 
 &mdash; **def [resource\_sizes](/scripts/slave/recipe_modules/chromium_android/api.py#203)(self, apk_path, chartjson_file=False, perf_id=None, step_suffix=''):**
 
-&mdash; **def [run\_bisect\_script](/scripts/slave/recipe_modules/chromium_android/api.py#905)(self, extra_src='', path_to_config='', \*\*kwargs):**
+&mdash; **def [run\_bisect\_script](/scripts/slave/recipe_modules/chromium_android/api.py#906)(self, extra_src='', path_to_config='', \*\*kwargs):**
 
-&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#965)(self, suite, target_name=None, verbose=True, json_results_file=None, suffix=None, additional_args=None, \*\*kwargs):**
+&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#966)(self, suite, target_name=None, verbose=True, json_results_file=None, suffix=None, additional_args=None, \*\*kwargs):**
 
-&mdash; **def [run\_telemetry\_browser\_test](/scripts/slave/recipe_modules/chromium_android/api.py#672)(self, test_name, browser='android-chromium'):**
+&mdash; **def [run\_telemetry\_browser\_test](/scripts/slave/recipe_modules/chromium_android/api.py#673)(self, test_name, browser='android-chromium'):**
 
 Run a telemetry browser test.
 
-&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#921)(self, suite, verbose=True, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
+&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#922)(self, suite, verbose=True, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
 
 &mdash; **def [run\_tree\_truth](/scripts/slave/recipe_modules/chromium_android/api.py#177)(self, additional_repos=None):**
 
@@ -1066,9 +1066,9 @@ Run a telemetry browser test.
 
 &mdash; **def [spawn\_logcat\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#345)(self):**
 
-&mdash; **def [stack\_tool\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#824)(self, force_latest_version=False):**
+&mdash; **def [stack\_tool\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#825)(self, force_latest_version=False):**
 
-&mdash; **def [stackwalker](/scripts/slave/recipe_modules/chromium_android/api.py#777)(self, root_chromium_dir, binary_paths):**
+&mdash; **def [stackwalker](/scripts/slave/recipe_modules/chromium_android/api.py#778)(self, root_chromium_dir, binary_paths):**
 
 Runs stack walker tool to symbolize breakpad crashes.
 
@@ -1079,7 +1079,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1149)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1150)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1093,9 +1093,9 @@ Returns:
 
 Creates a .size file for the given .apk or .minimal.apks.
 
-&mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#859)(self):**
+&mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#860)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1192)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1193)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 

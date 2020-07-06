@@ -598,7 +598,7 @@
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
       "--denylist-file",
       "[CACHE]/builder/src/out/bad_devices.json",
-      "--output-device-blacklist",
+      "--output-device-denylist",
       "/path/to/tmp/json",
       "-t",
       "Debug",
