@@ -537,7 +537,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         "%s\.profdata" %
         constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
     self.m.profiles.merge_profdata(
-        merged_profdata, profdata_filename_pattern=input_profdata_pattern)
+        merged_profdata,
+        profdata_filename_pattern=input_profdata_pattern,
+        sparse=True)
 
     if not self.m.path.exists(merged_profdata):
       return None
@@ -644,15 +646,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'https://storage.cloud.google.com/%s/%s/index.html' %
         (self._gs_bucket, html_report_gs_path))
 
-  def shard_merge(
-      self,
-      step_name,
-      target_name,
-      additional_merge=None,
-      # TODO(crbug.com/1077304) - migrate this to 'sparse' once the
-      # merge scripts have migrated
-      no_sparse=False,
-      skip_validation=False):
+  def shard_merge(self,
+                  step_name,
+                  target_name,
+                  additional_merge=None,
+                  skip_validation=False,
+                  sparse=False):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.chromium_swarming.task.
@@ -668,12 +667,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         '--test-target-name',
         target_name,
     ]
-    if no_sparse:
-      args += [
-          '--no-sparse',
-      ]
     if skip_validation:
-      args += ['--skip-validation']
+      args += [
+          '--skip-validation',
+      ]
+    if sparse:
+      args += [
+          '--sparse',
+      ]
 
     new_merge = {
         'script': self.m.profiles.merge_results_script,
