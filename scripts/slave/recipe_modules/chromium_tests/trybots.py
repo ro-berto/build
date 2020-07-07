@@ -81,6 +81,16 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium',
                 buildername='linux-official',
             ),
+        'win-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='win-official',
+            ),
+        'win32-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='win32-official',
+            ),
     },
     'tryserver.chromium.android': {
         'android-10-arm64-rel':

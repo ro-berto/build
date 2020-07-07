@@ -5,6 +5,18 @@
 from .. import bot_spec
 
 SPEC = {
+    'win32-official':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'TARGET_BITS': 32,
+            },
+            simulation_platform='win',
+        ),
     'win32-archive-dbg':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -35,6 +47,18 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Win',
             gs_acl='public-read',
+            simulation_platform='win',
+        ),
+    'win-official':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+            },
             simulation_platform='win',
         ),
     'win-archive-dbg':

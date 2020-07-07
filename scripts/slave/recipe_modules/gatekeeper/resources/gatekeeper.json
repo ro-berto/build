@@ -28,7 +28,9 @@
           "fuchsia-official",
           "linux-official",
           "win-archive-dbg",
+          "win-official",
           "win32-archive-dbg"
+          "win32-official"
         ],
 
         "builders": {
