@@ -213,6 +213,22 @@ SPEC = {
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
+    'Mac10.15 Tests':
+        _chromium_mac_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mb_luci_auth',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='Mac Builder',
+            simulation_platform='mac',
+        ),
     'Mac Builder (dbg)':
         _chromium_mac_spec(
             chromium_config='chromium',
