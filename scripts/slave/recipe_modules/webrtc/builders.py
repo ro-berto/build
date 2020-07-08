@@ -615,7 +615,7 @@ BUILDERS = freeze({
                     'libjingle_peerconnection_so.so', 'apks/AppRTCMobile.apk'
                 ],
                 'triggers': [
-                    'luci.webrtc.perf/Perf Android32 (K Nexus5)',
+                    'luci.webrtc.perf/Perf Android32 (M Nexus5)',
                     'luci.webrtc.perf/Perf Android32 (M AOSP Nexus6)',
                 ],
             },
@@ -766,7 +766,7 @@ BUILDERS = freeze({
                 },
                 'swarming_timeout': 10800,  # 3h
             },
-            'Perf Android32 (K Nexus5)': {
+            'Perf Android32 (M Nexus5)': {
                 'recipe_config': 'webrtc_android_perf_swarming',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Release',
@@ -774,7 +774,7 @@ BUILDERS = freeze({
                     'TARGET_ARCH': 'arm',
                     'TARGET_BITS': 32,
                 },
-                'perf_id': 'webrtc-android-tests-nexus5-kitkat',
+                'perf_id': 'webrtc-android-tests-nexus5-marshmallow',
                 'bot_type': 'tester',
                 'parent_buildername': 'Android32 Builder arm',
                 'testing': {
@@ -785,7 +785,7 @@ BUILDERS = freeze({
                     'os': 'Android',
                     'android_devices': '1',
                     'device_type': 'hammerhead',  # Nexus 5.
-                    'device_os': 'K',
+                    'device_os': 'M',
                 },
                 'swarming_timeout': 10800,  # 3h
             },

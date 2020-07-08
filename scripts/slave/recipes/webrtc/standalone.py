@@ -125,13 +125,13 @@ def GenTests(api):
 
   yield generate_builder(
       'luci.webrtc.perf',
-      'Perf Android32 (K Nexus5)',
+      'Perf Android32 (M Nexus5)',
       suffix='_forced',
       parent_got_revision='a' * 40,
       revision=None)
   yield generate_builder(
       'luci.webrtc.perf',
-      'Perf Android32 (K Nexus5)',
+      'Perf Android32 (M Nexus5)',
       suffix='_forced_invalid',
       revision=None)
 
