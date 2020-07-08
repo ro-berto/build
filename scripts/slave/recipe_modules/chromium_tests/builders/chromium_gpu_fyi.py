@@ -1517,6 +1517,7 @@ SPEC = {
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=[
+                'cros_checkout_qemu_image',
                 'mb',
                 'mb_luci_auth',
             ],
