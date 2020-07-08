@@ -25,27 +25,6 @@ def GenTests(api):
     return bot_spec.BotSpec.create(
         chromium_config='chromium', gclient_config='chromium', **kwargs)
 
-  source_side_spec = {
-      'additional_compile_targets': ['foo', 'bar', 'baz'],
-  }
-
-  yield api.test(
-      'source_side_spec',
-      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
-              'fake-master': {
-                  'fake-builder': spec(source_side_spec=source_side_spec),
-              },
-          })),
-      api.post_check(post_process.LogEquals,
-                     'source side spec migration.fake-master%fake-builder',
-                     'source_side_spec',
-                     api.json.dumps(source_side_spec, indent=4)),
-      api.post_check(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
   downstream_spec = {
       'fake-builder': {
           'additional_compile_targets': ['foo', 'bar'],

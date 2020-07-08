@@ -91,22 +91,12 @@ class BotConfig(object):
       builder_id = self.builder_ids[0]
       bot_spec = self.bot_db[builder_id]
 
-      # The official builders specify the test spec using a test_spec property
-      # in the bot_config instead of reading it from a file.
-      if bot_spec.source_side_spec is not None:  # pragma: no cover
-        return (
-            {
-                self.builder_ids[0].builder: bot_spec.source_side_spec
-            },
-            (builder_id, 'source_side_spec', bot_spec.source_side_spec),
-        )
-
-      # Similar to the source_side_spec special case above, but expected to
-      # contain the spec for every builder on the waterfall. This is necessary
-      # because only having one builder like in the source_side_spec approach
-      # breaks parent/child builder relationships due to the parent not knowing
-      # which targets to build and isolate for its children.
-      elif bot_spec.downstream_spec is not None:  # pragma: no cover
+      # Some internal builders specify the source side spec using the
+      # downstream_spec field of BotSpec instead of reading it from a file
+      # If specified, the downstream_spec field holds a dictionary containing
+      # the same content as the deserialized JSON of the source side spec would
+      # contain
+      if bot_spec.downstream_spec is not None:  # pragma: no cover
         return (
             bot_spec.downstream_spec,
             (builder_id, 'downstream_spec', bot_spec.downstream_spec),
