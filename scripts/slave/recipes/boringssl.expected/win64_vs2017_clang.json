@@ -22,6 +22,9 @@
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300",
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "env_suffixes": {
@@ -64,6 +67,9 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "env_suffixes": {
@@ -84,6 +90,9 @@
       "[START_DIR]\\boringssl\\build"
     ],
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "infra_step": true,
@@ -102,6 +111,9 @@
       "[START_DIR]\\boringssl\\build"
     ],
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "infra_step": true,
@@ -126,6 +138,9 @@
     ],
     "cwd": "[START_DIR]\\boringssl\\build",
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "cmake"
@@ -143,6 +158,9 @@
       "[START_DIR]\\boringssl\\build"
     ],
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "ninja"
@@ -158,6 +176,9 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "check filenames"
@@ -178,6 +199,9 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "unit tests",
@@ -241,6 +265,9 @@
     ],
     "cwd": "[START_DIR]\\boringssl\\ssl\\test\\runner",
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "ssl tests",
@@ -297,6 +324,9 @@
       "mspdbsrv.exe"
     ],
     "env": {
+      "GOCACHE": "[CACHE]\\gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
     "name": "taskkill mspdbsrv"

@@ -4,6 +4,11 @@
       "uname",
       "-a"
     ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "name": "uname"
   },
   {
@@ -28,7 +33,10 @@
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -69,6 +77,11 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/boringssl",
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -86,6 +99,11 @@
       "rmtree",
       "[START_DIR]/boringssl/build"
     ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "infra_step": true,
     "name": "clean"
   },
@@ -101,6 +119,11 @@
       "0777",
       "[START_DIR]/boringssl/build"
     ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "infra_step": true,
     "name": "mkdir"
   },
@@ -120,6 +143,11 @@
       "[START_DIR]/boringssl"
     ],
     "cwd": "[START_DIR]/boringssl/build",
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "name": "cmake"
   },
   {
@@ -131,6 +159,11 @@
       "-C",
       "[START_DIR]/boringssl/build"
     ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "name": "ninja"
   },
   {
@@ -143,6 +176,11 @@
       "[START_DIR]/boringssl/util/check_filenames.go"
     ],
     "cwd": "[START_DIR]/boringssl",
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
     "name": "check filenames"
   },
   {
@@ -158,6 +196,9 @@
     ],
     "cwd": "[START_DIR]/boringssl",
     "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
       "MSAN_SYMBOLIZER_PATH": "[START_DIR]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
     },
     "name": "unit tests",
@@ -218,6 +259,9 @@
     ],
     "cwd": "[START_DIR]/boringssl/ssl/test/runner",
     "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
       "MSAN_SYMBOLIZER_PATH": "[START_DIR]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
     },
     "name": "ssl tests",

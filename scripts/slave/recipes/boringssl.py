@@ -241,8 +241,14 @@ def _CleanupMSVC(api):
 
 def RunSteps(api):
   buildername = api.buildbucket.builder_name
-  with api.context(
-      env=_GetBuilderEnv(buildername)), api.osx_sdk('ios'), _CleanupMSVC(api):
+  env = _GetBuilderEnv(buildername)
+  # Point Go's module and build caches to reused cache directories.
+  env['GOCACHE'] = api.path['cache'].join('gocache')
+  env['GOPATH'] = api.path['cache'].join('gopath')
+  # Disable modifications to go.mod so missing entries are treated as an error
+  # instead.
+  env['GOFLAGS'] = '-mod=readonly'
+  with api.context(env=env), api.osx_sdk('ios'), _CleanupMSVC(api):
     # Print the kernel version on Linux builders. BoringSSL is sensitive to
     # whether the kernel has getrandom support.
     if api.platform.is_linux:
