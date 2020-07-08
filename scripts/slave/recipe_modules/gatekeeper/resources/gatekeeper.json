@@ -106,7 +106,6 @@
         },
         "excluded_builders": [
           "android-incremental-dbg",
-          "android-marshmallow-x86-rel",
           "android-nougat-arm64-rel",
           "Oreo Phone Tester"
         ]
