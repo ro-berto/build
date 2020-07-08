@@ -43,6 +43,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'recipe_engine/time',
+    'symupload',
     'test_results',
     'test_utils',
     'traceback',

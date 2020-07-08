@@ -563,6 +563,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         update_properties=update_step.presentation.properties,
         config=None)
 
+    self.m.symupload(self.m.chromium.output_dir)
+
   def _get_scheduler_jobs_to_trigger(self, builder_id, bot_config):
     """Get the LUCI scheduler jobs to trigger.
 

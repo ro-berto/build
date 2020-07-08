@@ -1,0 +1,20 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipe_modules.build.symupload;
+
+// Next id: 3
+message SymuploadData {
+  // The artifact that should be uploaded by symupload. The artifact is relative
+  // to the build directory, which is passed alongside this proto to the
+  // symupload code.
+  string artifact = 1;
+
+  // The full url to pass to symupload.
+  string url = 2;
+}
+
+// Next id: 2
+message InputProperties { repeated SymuploadData symupload_datas = 1; }
