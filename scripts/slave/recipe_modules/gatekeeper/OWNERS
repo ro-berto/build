@@ -1,7 +1,7 @@
-ehmaldonado@chromium.org
-hinoka@chromium.org
+# Ensure gatekeeper changes are reviewed by those in charge of deprecating it.
+set noparent
+
 jsca@chromium.org
 machenbach@chromium.org
-martiniss@chromium.org
+nqmtuan@chromium.org
 orodley@chromium.org
-smut@google.com
