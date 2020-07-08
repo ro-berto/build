@@ -5180,9 +5180,27 @@ Recipe for building and running tests for Libyuv stand-alone.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/math_utils/tests/mean_error.py#10)(api):**
 ### *recipes* / [nacl](/scripts/slave/recipes/nacl.py)
 
-[DEPS](/scripts/slave/recipes/nacl.py#7): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/nacl.py#7): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/nacl.py#134)(api):**
+&mdash; **def [AnnotatedStepsSteps](/scripts/slave/recipes/nacl.py#90)(api, got_revision, checkout_path, compiled_sources_path):**
+
+&mdash; **def [CheckoutSteps](/scripts/slave/recipes/nacl.py#77)(api):**
+
+&mdash; **def [ParseSwarmingResults](/scripts/slave/recipes/nacl.py#165)(api, builder_name, results):**
+
+Called after swarming.collect() to produce proper step results.
+
+&emsp; **@contextmanager**<br>&mdash; **def [PlatformSDK](/scripts/slave/recipes/nacl.py#62)(api):**
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/nacl.py#254)(api):**
+
+&mdash; **def [TriggerHardwareTests](/scripts/slave/recipes/nacl.py#197)(api, got_revision, checkout_path, compiled_sources_path, dimensions):**
+
+Triggers tests on ARM hardware bots with precompiled sources.
+
+&mdash; **def [UploadFilesToIsolateStorage](/scripts/slave/recipes/nacl.py#151)(api, files):**
+
+Pushes files up to the isolate server storage.
 ### *recipes* / [ndk/ndk\_buildbot](/scripts/slave/recipes/ndk/ndk_buildbot.py)
 
 [DEPS](/scripts/slave/recipes/ndk/ndk_buildbot.py#5): [chromite](#recipe_modules-chromite), [ndk](#recipe_modules-ndk), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

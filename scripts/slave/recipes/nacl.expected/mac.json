@@ -182,6 +182,8 @@
       "restart"
     ],
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -198,8 +200,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -247,6 +248,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -256,8 +259,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -296,6 +298,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -305,8 +309,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -328,6 +331,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -337,8 +342,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -369,6 +373,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -378,8 +384,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -410,6 +415,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -419,8 +426,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -451,7 +457,7 @@
     "cmd": [
       "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
       "--output",
-      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
+      "[CLEANUP]/tmp_tmp_2/sub_build.pb",
       "--",
       "vpython",
       "-u",
@@ -459,6 +465,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -467,14 +475,13 @@
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_3",
       "NOCONTROL_GOMA": "1",
       "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py",
-      "TEMP": "[CLEANUP]/tmp_tmp_2",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TMP": "[CLEANUP]/tmp_tmp_2",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
+      "TEMP": "[CLEANUP]/tmp_tmp_3",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_3",
+      "TMP": "[CLEANUP]/tmp_tmp_3",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_3"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -494,6 +501,8 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "BETWEEN_BUILDERS": "[CLEANUP]/between_builders_tmp_1",
+      "BOT_TYPE": "builder_bot",
       "BUILDBOT_BUILDERNAME": "mac-newlib-dbg-asan",
       "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
@@ -503,8 +512,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
