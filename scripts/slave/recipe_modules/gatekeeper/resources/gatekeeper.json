@@ -201,16 +201,12 @@
             "sheriff_classes": ["sheriff_ios"]
           },
           "ios-simulator": {
-            "sheriff_classes": ["sheriff_ios"],
-            "closing_optional": [],
-            "comment": ["closing_optional due to crbug.com/393861"]
+            "sheriff_classes": ["sheriff_ios"]
           },
           "ios-simulator-full-configs": {
-            "sheriff_classes": ["sheriff_ios"],
-            "closing_optional": []
+            "sheriff_classes": ["sheriff_ios"]
           },
           "ios-simulator-noncq": {
-            "closing_optional": [],
             "sheriff_classes": ["sheriff_ios"]
           },
           "*": {}
