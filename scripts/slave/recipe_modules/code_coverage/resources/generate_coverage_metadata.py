@@ -276,7 +276,7 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   line_data, block_data = _extract_coverage_info(segments)
   line_data = sorted(line_data.items(), key=lambda x: x[0])
-  if diff_mapping and rel_file_path in diff_mapping:
+  if diff_mapping is not None and rel_file_path in diff_mapping:
     line_mapping = diff_mapping[rel_file_path]
     line_data, block_data = _rebase_line_and_block_data(line_data, block_data,
                                                         line_mapping)
@@ -588,7 +588,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   per_directory_coverage_data = {}
   per_component_coverage_data = {}
-  if not diff_mapping:
+  if diff_mapping is None:
     per_directory_coverage_data, per_component_coverage_data = (
         aggregation_util.get_aggregated_coverage_data_from_files(
             files_coverage_data, component_mapping))
@@ -596,7 +596,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
                                                binaries, arch)
 
-  if not diff_mapping:
+  if diff_mapping is None:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
         files_coverage_data, src_path, 'DEPS')
 
