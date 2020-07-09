@@ -108,7 +108,6 @@ SPEC = freeze({
         'app_list_unittests',
         'base_unittests',
         'browser_tests',
-        'cacheinvalidation_unittests',
         'chromeos_unittests',
         'components_unittests',
         'compositor_unittests',
