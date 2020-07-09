@@ -96,21 +96,6 @@ def GenTests(api):
 
   yield from_config('chromium_tsan2')
 
-  yield api.test(
-      'chromium_official_linux',
-      api.properties(
-          chromium_config='chromium_official', target_platform='linux'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'chromium_official_win',
-      api.platform('win', 64),
-      api.properties(
-          chromium_config='chromium_official_internal', target_platform='win'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   yield from_config('android_clang')
 
   yield from_config('android_asan')

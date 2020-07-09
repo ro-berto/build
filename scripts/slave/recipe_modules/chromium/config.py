@@ -636,24 +636,6 @@ def chromium_clang(c):
   c.compile_py.default_targets = ['all']
 
 
-@config_ctx(includes=['chromium', 'official'])
-def chromium_official(c):
-  # TODO(phajdan.jr): Unify compile targets used by official builders.
-  if c.TARGET_PLATFORM == 'win':
-    c.compile_py.default_targets = ['chrome_official_builder']
-  elif c.TARGET_PLATFORM in ['linux', 'mac']:
-    c.compile_py.default_targets = []
-
-
-@config_ctx(includes=['chromium_official'])
-def chromium_official_internal(c):
-  # TODO(mmoss): This isn't right, since CHECKOUT_PATH is the directory that
-  # the primary solution (i.e. 'src') is checked out to, but we need the
-  # top-level, .gclient path.
-  c.project_generator.config_path = c.CHECKOUT_PATH.join(
-      'src-internal', 'tools', 'mb', 'mb_config.pyl')
-
-
 @config_ctx(includes=['android_common', 'ninja', 'default_compiler', 'goma'])
 def android(_):
   pass

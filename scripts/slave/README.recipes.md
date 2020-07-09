@@ -4201,7 +4201,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#10): [chromium](#recipe_modules-chromium), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#28)(api):**
+
+&emsp; **@chromium.config.config_ctx()**<br>&mdash; **def [mb\_overrides](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#19)(c):**
 ### *recipes* / [chromium:tests/mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/tests/mb_isolate_everything.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_isolate_everything.py#9): [chromium](#recipe_modules-chromium)

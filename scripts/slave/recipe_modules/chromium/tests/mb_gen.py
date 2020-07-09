@@ -15,6 +15,16 @@ DEPS = [
   'recipe_engine/json',
 ]
 
+
+@chromium.config.config_ctx()
+def mb_overrides(c):
+  c.project_generator.config_path = c.CHECKOUT_PATH.join(
+      'override', 'mb_config.pyl')
+  c.project_generator.isolate_map_paths = [
+      c.CHECKOUT_PATH.join('override', 'gn_isolate_map.pyl')
+  ]
+
+
 def RunSteps(api):
   api.chromium.set_config(
       api.properties.get('chromium_config', 'chromium'),
@@ -24,10 +34,6 @@ def RunSteps(api):
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
 
-  if api.properties.get('use_explicit_isolate_map_path'):
-    api.chromium.c.project_generator.isolate_map_paths = [
-        api.path['checkout'].join(
-            'testing', 'buildbot', 'gn_isolate_map.pyl')]
   api.chromium.mb_gen(
       chromium.BuilderId.create_for_master('test_mastername',
                                            'test_buildername'),
@@ -58,10 +64,8 @@ def GenTests(api):
   )
 
   yield api.test(
-      'explicit_mb',
-      api.properties(
-          use_explicit_isolate_map_path=True,
-          chromium_apply_config=['chromium_official']),
+      'mb_overrides',
+      api.properties(chromium_apply_config=['mb_overrides']),
   )
 
   yield api.test(
