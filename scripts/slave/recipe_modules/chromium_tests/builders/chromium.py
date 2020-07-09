@@ -12,6 +12,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
+            gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
                 'TARGET_BITS': 32,
             },
@@ -56,6 +57,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
+            gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
             },
