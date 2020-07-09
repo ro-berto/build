@@ -300,50 +300,44 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if parsed.scheme:
       swarming_host = parsed.netloc
 
-    # Failure of these steps should not fail the build.
-    # TODO(crbug.com/1021849): raise the failures instead of swallowing them.
-    try:
-      invocations = self.m.resultdb.chromium_derive(
-          step_name=derive_step_name,
-          swarming_host=swarming_host,
-          task_ids=swarming_task_ids,
-          variants_with_unexpected_results=True,
-      )
+    invocations = self.m.resultdb.chromium_derive(
+        step_name=derive_step_name,
+        swarming_host=swarming_host,
+        task_ids=swarming_task_ids,
+        variants_with_unexpected_results=True,
+    )
 
-      if not self.m.resultdb.enabled:
-        # Checks if resultdb integration is enabled.
-        # Temporary workaround to make sure led builds don't fail because of
-        # this.
-        # Should be removed when led v2 starts to create invocations.
-        return invalid_results, failed_test_suites
+    if not self.m.resultdb.enabled:
+      # Checks if resultdb integration is enabled.
+      # Temporary workaround to make sure led builds don't fail because of
+      # this.
+      # Should be removed when led v2 starts to create invocations.
+      return invalid_results, failed_test_suites
 
-      test_variants = self._test_variants_with_unexpected_results(
-          invocations, suffix)
+    test_variants = self._test_variants_with_unexpected_results(
+        invocations, suffix)
 
-      step_name = 'exonerate unexpected passes'
-      if suffix == 'without patch':
-        step_name = 'exonerate unexpected without patch results'
-      elif suffix:
-        step_name = '%s (%s)' % (step_name, suffix)
+    step_name = 'exonerate unexpected passes'
+    if suffix == 'without patch':
+      step_name = 'exonerate unexpected without patch results'
+    elif suffix:
+      step_name = '%s (%s)' % (step_name, suffix)
 
-      exonerations = self._test_exonerations_for_test_variants(
-          test_variants, suffix)
-      self.m.resultdb.exonerate(
-          test_exonerations=exonerations,
-          step_name=step_name,
-      )
-      if suffix != 'without patch':
-        # Include the derived invocations in the build's invocation.
-        # Note that 'without patch' results are derived but not included in
-        # the builds' invocation, since the results are not related to the
-        # patch under test.
-        include_step_name = ('include derived test results (%s)' % suffix
-                             if suffix else 'include derived test results')
-        self.m.resultdb.include_invocations(
-            invocations.keys(), step_name=include_step_name)
-    except (self.m.step.InfraFailure,
-            self.m.step.StepFailure):  # pragma: no cover
-      pass
+    exonerations = self._test_exonerations_for_test_variants(
+        test_variants, suffix)
+    self.m.resultdb.exonerate(
+        test_exonerations=exonerations,
+        step_name=step_name,
+    )
+    if suffix != 'without patch':
+      # Include the derived invocations in the build's invocation.
+      # Note that 'without patch' results are derived but not included in
+      # the builds' invocation, since the results are not related to the
+      # patch under test.
+      include_step_name = ('include derived test results (%s)' %
+                           suffix if suffix else 'include derived test results')
+      self.m.resultdb.include_invocations(
+          invocations.keys(), step_name=include_step_name)
 
     return invalid_results, failed_test_suites
 
