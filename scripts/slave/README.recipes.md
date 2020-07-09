@@ -151,7 +151,6 @@
   * [chromium_tests:tests/api/report_builders](#recipes-chromium_tests_tests_api_report_builders)
   * [chromium_tests:tests/api/runhooks](#recipes-chromium_tests_tests_api_runhooks)
   * [chromium_tests:tests/api/set_up_swarming](#recipes-chromium_tests_tests_api_set_up_swarming)
-  * [chromium_tests:tests/api/trigger_child_builds](#recipes-chromium_tests_tests_api_trigger_child_builds)
   * [chromium_tests:tests/api/trybot_steps](#recipes-chromium_tests_tests_api_trybot_steps)
   * [chromium_tests:tests/api/trybot_steps_for_tests](#recipes-chromium_tests_tests_api_trybot_steps_for_tests)
   * [chromium_tests:tests/api/trybot_steps_with_specific_tests](#recipes-chromium_tests_tests_api_trybot_steps_with_specific_tests)
@@ -4548,11 +4547,6 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#5): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#21)(api):**
-### *recipes* / [chromium\_tests:tests/api/trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#53)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#11): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [profiles](#recipe_modules-profiles), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
