@@ -228,19 +228,6 @@
         ]
       }
     ],
-    "https://build.chromium.org/p/chromium.perf": [
-      {
-        "forgive_all": "true",
-        "subject_template": "%(project_name)s %(builder_name)s %(result)s",
-        "categories": [
-          "chromium_tree_closer",
-          "experimental_tests"
-        ],
-        "builders": {
-          "*": {}
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.win": [
       {
         "categories": [
