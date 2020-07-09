@@ -23,7 +23,7 @@ def CreateStandardConfig(platform, apply_configs=None):
       chromium_config='chromium',
       # Non-Android builder always uses regular mb.
       chromium_apply_config=(
-          ['mb', 'mb_luci_auth', 'goma_failfast', 'use_autoninja'
+          ['mb', 'goma_failfast', 'use_autoninja'
           ] + apply_configs),
       gclient_config='chromium',
       chromium_config_kwargs={

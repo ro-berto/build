@@ -14,7 +14,7 @@ SPEC = {
     'Linux ChromiumOS Full':
         _chromium_chromiumos_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -42,9 +42,7 @@ def _config(name,
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
       'chromium_config': 'chromium',
-      # TODO(crbug.com/1060857): Remove 'mb_luci_auth' when task templates can
-      # handle it themselves.
-      'chromium_apply_config': ['mb', 'mb_luci_auth'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
       'chromium_config_kwargs': {

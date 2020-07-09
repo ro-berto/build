@@ -15,7 +15,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='android',
             chromium_apply_config=[
-                'mb', 'mb_luci_auth', 'download_vr_test_apks'
+                'mb', 'download_vr_test_apks'
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -38,7 +38,7 @@ SPEC = {
             # This doesn't affect the build, but ensures that trybots get
             # the right runtime flags.
             chromium_apply_config=[
-                'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
+                'lsan', 'mb', 'goma_high_parallel'
             ],
             simulation_platform='linux',
         ),
@@ -53,7 +53,7 @@ SPEC = {
             # Enable LSan at runtime. This disables the sandbox in browser
             # tests. http://crbug.com/336218
             chromium_apply_config=[
-                'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
+                'lsan', 'mb', 'goma_high_parallel'
             ],
             execution_mode=bot_spec.TEST,
             parent_buildername='Linux ASan LSan Builder',
@@ -67,7 +67,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['mb', 'mb_luci_auth', 'goma_high_parallel'],
+            chromium_apply_config=['mb', 'goma_high_parallel'],
             # We want to test ASan+sandbox as well, so run browser tests
             # again, this time with LSan disabled.
             execution_mode=bot_spec.TEST,
@@ -77,7 +77,7 @@ SPEC = {
     'Linux CFI':
         _chromium_memory_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -89,7 +89,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_msan',
             gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -100,7 +100,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_msan',
             gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -114,7 +114,7 @@ SPEC = {
             chromium_config='chromium_msan',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -126,7 +126,7 @@ SPEC = {
             chromium_config='chromium_msan',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -139,7 +139,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -150,7 +150,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -169,7 +169,6 @@ SPEC = {
             },
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             simulation_platform='mac',
         ),
@@ -183,7 +182,6 @@ SPEC = {
             },
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             execution_mode=bot_spec.TEST,
             parent_buildername='Mac ASan 64 Builder',
@@ -198,7 +196,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['lsan', 'mb'],
             simulation_platform='linux',
         ),
     'Linux Chromium OS ASan LSan Tests (1)':
@@ -210,7 +208,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['lsan', 'mb'],
             parent_buildername='Linux Chromium OS ASan LSan Builder',
             execution_mode=bot_spec.TEST,
             simulation_platform='linux',
@@ -223,7 +221,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['asan', 'mb'],
             simulation_platform='linux',
         ),
     'WebKit Linux MSAN':
@@ -234,7 +232,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['asan', 'mb'],
             simulation_platform='linux',
         ),
     'WebKit Linux Leak':
@@ -245,7 +243,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             compile_targets=[
                 'blink_tests',
             ],
@@ -255,7 +253,7 @@ SPEC = {
         _chromium_memory_spec(
             android_config='main_builder',
             chromium_config='android_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -273,7 +271,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             simulation_platform='win',
         ),
 }

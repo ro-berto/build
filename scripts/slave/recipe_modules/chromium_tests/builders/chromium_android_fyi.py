@@ -16,7 +16,7 @@ SPEC = {
     'Android WebView P Blink-CORS FYI (rel)':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -30,7 +30,7 @@ SPEC = {
     'Android WebLayer P FYI (rel)':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -44,7 +44,7 @@ SPEC = {
     'Android WebView P FYI (rel)':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -71,7 +71,7 @@ SPEC = {
     'android-marshmallow-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -85,7 +85,7 @@ SPEC = {
     'android-pie-arm64-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -99,7 +99,7 @@ SPEC = {
     'android-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -113,7 +113,7 @@ SPEC = {
     'android-weblayer-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={

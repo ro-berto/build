@@ -14,7 +14,7 @@ SPEC = {
     'fuchsia-arm64-cast':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64'],
             chromium_config_kwargs={
@@ -27,7 +27,7 @@ SPEC = {
     'fuchsia-x64-cast':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -40,7 +40,7 @@ SPEC = {
     'fuchsia-x64-dbg':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -55,7 +55,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -69,7 +68,6 @@ SPEC = {
             chromium_config='chromium_no_goma',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -81,7 +79,7 @@ SPEC = {
     'linux-ozone-rel':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -93,7 +91,7 @@ SPEC = {
     'Linux Ozone Tester (Headless)':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -106,7 +104,7 @@ SPEC = {
     'Linux Ozone Tester (X11)':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -119,7 +117,7 @@ SPEC = {
     'Linux Ozone Tester (Wayland)':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -134,7 +132,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
 
                 # This is specified because 'linux-rel' builder
                 # is one of the slowest builder in CQ (crbug.com/804251).
@@ -153,7 +150,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -167,7 +163,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
                 'goma_high_parallel',
             ],
             gclient_config='chromium',
@@ -185,7 +180,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -199,7 +193,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -211,7 +204,7 @@ SPEC = {
     'Linux Tests (dbg)(1)':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -224,7 +217,7 @@ SPEC = {
     'Cast Audio Linux':
         _chromium_linux_spec(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -235,7 +228,7 @@ SPEC = {
     'Cast Linux':
         _chromium_linux_spec(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -246,7 +239,7 @@ SPEC = {
     'Fuchsia ARM64 Cast Audio':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64'],
             chromium_config_kwargs={
@@ -259,7 +252,7 @@ SPEC = {
     'Fuchsia ARM64':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
@@ -272,7 +265,7 @@ SPEC = {
     'Fuchsia x64 Cast Audio':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -285,7 +278,7 @@ SPEC = {
     'Fuchsia x64':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -301,7 +294,6 @@ SPEC = {
             gclient_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -314,7 +306,7 @@ SPEC = {
     'Network Service Linux':
         _chromium_linux_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

@@ -21,7 +21,7 @@ def config(name,
            official=False):
   cfg = {
       'chromium_config': chromium_config,
-      'chromium_apply_config': ['mb', 'mb_luci_auth'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
@@ -59,7 +59,7 @@ SPEC = {
     'CFI Linux ToT':
         _chromium_clang_spec(
             chromium_config='clang_tot_linux',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -72,7 +72,7 @@ SPEC = {
     'CFI Linux CF':
         _chromium_clang_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
@@ -90,7 +90,7 @@ SPEC = {
     'UBSanVptr Linux':
         _chromium_clang_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
@@ -103,7 +103,7 @@ SPEC = {
     'linux-win_cross-rel':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'win'],
             chromium_config_kwargs={
@@ -122,7 +122,6 @@ SPEC = {
             chromium_config='chromium_no_goma',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
                 'mac_toolchain',
             ],
             chromium_tests_apply_config=[],
@@ -140,7 +139,6 @@ SPEC = {
             chromium_config='chromium_no_goma',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
                 'mac_toolchain',
             ],
             chromium_tests_apply_config=[],
@@ -156,7 +154,7 @@ SPEC = {
     'ToTWinCFI':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -172,7 +170,7 @@ SPEC = {
     'ToTWinCFI64':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -188,7 +186,7 @@ SPEC = {
     'ToTWinOfficial':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -216,7 +214,7 @@ SPEC = {
     'ToTWinThinLTO64':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -244,7 +242,7 @@ SPEC = {
     'CrWinAsan':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -258,7 +256,7 @@ SPEC = {
     'CrWinAsan(dll)':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -272,7 +270,7 @@ SPEC = {
     'ToTAndroidASan':
         _chromium_clang_spec(
             chromium_config='clang_tot_android_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
@@ -291,7 +289,7 @@ SPEC = {
     'ToTAndroid (dbg)':
         _chromium_clang_spec(
             chromium_config='clang_tot_android_dbg',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
@@ -311,7 +309,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_android',
             gclient_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -328,7 +326,7 @@ SPEC = {
     'ToTMac':
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -347,7 +345,7 @@ SPEC = {
     'ToTMacOfficial':
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -377,7 +375,7 @@ SPEC = {
     'ToTMac (dbg)':
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -397,7 +395,7 @@ SPEC = {
     'ToTMacASan':
         _chromium_clang_spec(
             chromium_config='clang_tot_mac_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -413,7 +411,7 @@ SPEC = {
     'ToTWin':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_official_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -441,7 +439,7 @@ SPEC = {
     'ToTWin(dbg)':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -461,7 +459,7 @@ SPEC = {
     'ToTWin(dll)':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -481,7 +479,7 @@ SPEC = {
     'ToTWin64':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_official_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -509,7 +507,7 @@ SPEC = {
     'ToTWinASanLibfuzzer':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -525,7 +523,7 @@ SPEC = {
     'ToTWin64(dbg)':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -545,7 +543,7 @@ SPEC = {
     'ToTWin64(dll)':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={

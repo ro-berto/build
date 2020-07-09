@@ -217,7 +217,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='android',
             chromium_apply_config=[
-                'mb', 'mb_luci_auth', 'download_vr_test_apks'
+                'mb', 'download_vr_test_apks'
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],

@@ -10,7 +10,7 @@ SPEC = {
     'Win ASan Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_win_clang_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -27,7 +27,6 @@ SPEC = {
             chromium_config='chromium_win_clang_asan',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
                 'clobber',
             ],
             gclient_config='chromium',
@@ -44,7 +43,7 @@ SPEC = {
     'Mac ASAN Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -61,7 +60,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
                 'clobber',
             ],
             gclient_config='chromium',
@@ -78,7 +76,7 @@ SPEC = {
     'ASAN Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -93,7 +91,7 @@ SPEC = {
     'ASAN Release Media':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -110,7 +108,7 @@ SPEC = {
             # Maybe remove the 'chromium_asan' config if this builder is
             # removed.
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -127,7 +125,7 @@ SPEC = {
             # Maybe remove the 'chromium_asan' config if this builder is
             # removed.
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -148,7 +146,7 @@ SPEC = {
             # Maybe remove the 'chromium_asan' config if this builder is
             # removed.
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -164,7 +162,7 @@ SPEC = {
     'ASan Release (32-bit x86 with V8-ARM)':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -180,7 +178,7 @@ SPEC = {
     'ASan Release Media (32-bit x86 with V8-ARM)':
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'clobber'],
+            chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -198,7 +196,7 @@ SPEC = {
     'TSAN Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'tsan2', 'clobber'],
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -213,7 +211,7 @@ SPEC = {
     'TSAN Debug':
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'tsan2', 'clobber'],
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -230,7 +228,7 @@ SPEC = {
     'MSAN Release (no origins)':
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'msan', 'clobber'],
+            chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -245,7 +243,7 @@ SPEC = {
     'MSAN Release (chained origins)':
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'mb_luci_auth', 'msan', 'clobber'],
+            chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -260,7 +258,7 @@ SPEC = {
     'UBSan Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_linux_ubsan',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -277,7 +275,7 @@ SPEC = {
     'UBSan vptr Release':
         bot_spec.BotSpec.create(
             chromium_config='chromium_linux_ubsan_vptr',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
