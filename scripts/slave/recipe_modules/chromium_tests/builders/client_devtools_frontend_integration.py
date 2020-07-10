@@ -16,7 +16,7 @@ SPEC = {
     'DevTools Linux':
         _client_devtools_frontend_integration_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

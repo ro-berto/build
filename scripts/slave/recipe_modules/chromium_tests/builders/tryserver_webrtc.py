@@ -13,7 +13,7 @@ SPEC = {
     'android_chromium_compile':
         _tryserver_webrtc_spec(
             android_config='base_config',
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
+            chromium_apply_config=['dcheck', 'mb', 'android'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -27,7 +27,7 @@ SPEC = {
         ),
     'linux_chromium_compile':
         _tryserver_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -39,7 +39,7 @@ SPEC = {
         ),
     'linux_chromium_compile_dbg':
         _tryserver_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -51,7 +51,7 @@ SPEC = {
         ),
     'mac_chromium_compile':
         _tryserver_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -63,7 +63,7 @@ SPEC = {
         ),
     'win_chromium_compile':
         _tryserver_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -75,7 +75,7 @@ SPEC = {
         ),
     'win_chromium_compile_dbg':
         _tryserver_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

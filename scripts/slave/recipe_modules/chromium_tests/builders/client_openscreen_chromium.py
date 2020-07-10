@@ -28,7 +28,7 @@ SPEC = {
     'chromium_linux64_debug':
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],
             chromium_config_kwargs={
@@ -41,7 +41,7 @@ SPEC = {
     'chromium_mac_debug':
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],
             chromium_config_kwargs={

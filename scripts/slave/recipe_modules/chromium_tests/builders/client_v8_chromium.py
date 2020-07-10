@@ -16,7 +16,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'mb_luci_auth',
             ],
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -31,7 +30,7 @@ SPEC = {
     'Linux - Future (dbg)':
         _client_v8_chromium_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -42,7 +41,7 @@ SPEC = {
     'Linux V8 API Stability':
         _client_v8_chromium_spec(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=['v8_canary', 'with_branch_heads'],
             chromium_config_kwargs={

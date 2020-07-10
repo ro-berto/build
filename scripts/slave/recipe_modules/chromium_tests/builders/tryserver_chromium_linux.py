@@ -8,7 +8,7 @@ SPEC = {
     'linux-autofill-assistant':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -20,7 +20,7 @@ SPEC = {
     'linux-layout-tests-edit-ng':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -32,7 +32,7 @@ SPEC = {
     'linux-layout-tests-fragment-item':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
-            chromium_apply_config=['mb', 'mb_luci_auth'],
+            chromium_apply_config=['mb'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
