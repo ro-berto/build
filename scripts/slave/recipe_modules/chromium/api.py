@@ -1074,26 +1074,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       runhooks_env['MAC_TOOLCHAIN_INSTALLER'] = (
           self.get_mac_toolchain_installer())
 
-    # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
-    # it to not show confusing information in the build logs.
-    if self.c.use_gyp_env and not self.c.TARGET_CROS_BOARD:
+    if self.c.use_gyp_env:
       # TODO(sbc): Ideally we would not need gyp_env set during runhooks when
       # we are not running gyp, but there are some hooks (such as sysroot
       # installation that peek at GYP_DEFINES and modify thier behaviour
       # accordingly.
       runhooks_env.update(self.c.gyp_env.as_jsonish())
 
-    # runhooks will invoke the 'cros chrome-sdk' if we're building for a cros
-    # board, so use system python if this is the case.
-    # TODO(crbug.com/810460): Remove the system python wrapping.
-    optional_system_python = contextlib.contextmanager(
-        lambda: (x for x in [None]))()
-    if self.c.TARGET_CROS_BOARD:
-      # Wrap 'runhooks' through 'cros chrome-sdk'
-      optional_system_python = self.m.chromite.with_system_python()
-    with optional_system_python:
-      with self.m.context(env=runhooks_env):
-        self.m.gclient.runhooks(**kwargs)
+    with self.m.context(env=runhooks_env):
+      self.m.gclient.runhooks(**kwargs)
 
   @_with_chromium_layout
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
