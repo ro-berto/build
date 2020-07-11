@@ -317,6 +317,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # Should be removed when led v2 starts to create invocations.
         return invalid_results, failed_test_suites
 
+      if suffix != 'without patch':
+        # Include the derived invocations in the build's invocation.
+        # Note that 'without patch' results are derived but not included in
+        # the builds' invocation, since the results are not related to the
+        # patch under test.
+        include_step_name = ('include derived test results (%s)' % suffix
+                             if suffix else 'include derived test results')
+        self.m.resultdb.include_invocations(
+            invocations.keys(), step_name=include_step_name)
+
       test_variants = self._test_variants_with_unexpected_results(
           invocations, suffix)
 
@@ -332,15 +342,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
           test_exonerations=exonerations,
           step_name=step_name,
       )
-      if suffix != 'without patch':
-        # Include the derived invocations in the build's invocation.
-        # Note that 'without patch' results are derived but not included in
-        # the builds' invocation, since the results are not related to the
-        # patch under test.
-        include_step_name = ('include derived test results (%s)' % suffix
-                             if suffix else 'include derived test results')
-        self.m.resultdb.include_invocations(
-            invocations.keys(), step_name=include_step_name)
     except (self.m.step.InfraFailure,
             self.m.step.StepFailure):  # pragma: no cover
       pass
