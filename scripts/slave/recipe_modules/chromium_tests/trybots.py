@@ -562,6 +562,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='fuchsia-x64-dbg',
                 execution_mode=try_spec.COMPILE,
             ),
+        'fuchsia-fyi-arm64-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.fyi',
+                buildername='fuchsia-fyi-arm64-dbg',
+            ),
         'fuchsia-fyi-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',

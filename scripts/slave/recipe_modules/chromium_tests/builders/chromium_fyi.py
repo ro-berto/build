@@ -147,6 +147,22 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'fuchsia-fyi-arm64-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            # Serialize the tests to limit capacity usage.
+            serialize_tests=True,
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
     'fuchsia-fyi-arm64-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
