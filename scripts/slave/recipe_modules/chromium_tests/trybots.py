@@ -81,6 +81,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium',
                 buildername='linux-official',
             ),
+        'mac-official':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium',
+                buildername='mac-official',
+            ),
         'win-official':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium',

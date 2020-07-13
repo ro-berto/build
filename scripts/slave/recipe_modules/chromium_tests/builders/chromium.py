@@ -95,6 +95,19 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='win',
         ),
+    'mac-official':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['checkout_pgo_profiles'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
     'mac-archive-dbg':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
