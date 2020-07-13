@@ -348,7 +348,7 @@ Run an ADB command.
 &mdash; **def [set\_adb\_path](/scripts/slave/recipe_modules/adb/api.py#20)(self, adb_path):**
 ### *recipe_modules* / [archive](/scripts/slave/recipe_modules/archive)
 
-[DEPS](/scripts/slave/recipe_modules/archive/__init__.py#7): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/archive/__init__.py#7): [build](#recipe_modules-build), [tar](#recipe_modules-tar), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 #### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#24)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -407,7 +407,7 @@ Args:
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#485)(self, build_dir, update_properties, config):**
+&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#509)(self, build_dir, update_properties, config):**
 
 Archives one or multiple packages to google cloud storage.
 

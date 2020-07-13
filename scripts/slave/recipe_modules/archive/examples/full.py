@@ -164,6 +164,7 @@ def GenTests(api):
       (properties.ArchiveData.ARCHIVE_TYPE_UNSPECIFIED, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_ZIP, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_FILES, '', False),
+      (properties.ArchiveData.ARCHIVE_TYPE_TAR_GZ, 'any-path.tar.gz', True),
   ):
     input_properties = properties.InputProperties()
     archive_data = properties.ArchiveData()

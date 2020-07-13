@@ -19,6 +19,7 @@ DEPS = [
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/time',
+    'tar',
     'zip',
 ]
 

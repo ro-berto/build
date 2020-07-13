@@ -454,6 +454,30 @@ class ArchiveApi(recipe_api.RecipeApi):
     inserted into the URL."""
     return self._legacy_url(True, gs_bucket_name, extra_url_components)
 
+  def _create_targz_archive_for_upload(self, build_dir, files, directories):
+    """Adds files and dirs to a tar.gz file to be uploaded.
+
+    Args:
+      build_dir: The absolute path to the build output directory.
+      files: List of files to include. Paths are relative to |build_dir|.
+      directories: List of directories to include. Paths are relative to
+                   |build_dir|.
+
+    Returns:
+      Absolute path to the archive file.
+    """
+    tmp_dir = self.m.path.mkdtemp()
+    output = tmp_dir.join('artifact.tar.gz')
+    pkg = self.m.tar.make_package(build_dir, output, 'gz')
+
+    for f in files:
+      pkg.add_file(build_dir.join(f))
+    for directory in directories:
+      pkg.add_directory(build_dir.join(directory))
+
+    pkg.tar('Create tar.gz archive')
+    return output
+
   def _create_zip_archive_for_upload(self, build_dir, files, directories):
     """Adds files and directories to a zip file to be uploaded.
 
@@ -559,6 +583,10 @@ class ArchiveApi(recipe_api.RecipeApi):
           uploads = {
               build_dir.join(f): '/'.join([gcs_path, f]) for f in expanded_files
           }
+        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
+          archive_file = self._create_targz_archive_for_upload(
+              build_dir, expanded_files, archive_data.dirs)
+          uploads = {archive_file: gcs_path}
         else:
           archive_file = self._create_zip_archive_for_upload(
               build_dir, expanded_files, archive_data.dirs)
