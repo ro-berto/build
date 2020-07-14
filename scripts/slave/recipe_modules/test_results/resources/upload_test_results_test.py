@@ -11,10 +11,8 @@ import sys
 import tempfile
 import unittest
 
-sys.path.insert(
-    0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..'))
-import common.env
-common.env.Install()
+sys.path.insert(0,
+                os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
 import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -167,7 +165,7 @@ class UploadTestResultsTest(unittest.TestCase):
       self.assertEquals(augmented_json.get('master_name'), 'sauron')
       self.assertEquals(augmented_json.get('builder_name'), 'hobbit')
       self.assertEquals(augmented_json.get('build_number'), '1234')
-      self.assertEquals(augmented_json.get('build_id'), '2345')
+      self.assertEquals(augmented_json.get('build_id'), 2345)
       self.assertEquals(augmented_json.get('chromium_revision'), '99999')
 
       files = [('full_results.json', uploaded_json_result_path)]
