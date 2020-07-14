@@ -86,3 +86,38 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'same-project-trigger-override',
+      api.chromium.ci_build(
+          project='bar-project',
+          mastername='fake-master',
+          builder='fake-builder',
+      ),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-master': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(luci_project='foo-project'),
+                  'fake-tester':
+                      bot_spec.BotSpec.create(
+                          execution_mode=bot_spec.TEST,
+                          parent_buildername='fake-builder',
+                          luci_project='foo-project',
+                      ),
+              },
+          })),
+      api.properties(
+          expected={
+              'bar-project': ['fake-tester'],
+          },
+          **{
+              '$build/chromium_tests': {
+                  'project_trigger_overrides': {
+                      'foo-project': 'bar-project',
+                  },
+              },
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

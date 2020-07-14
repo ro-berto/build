@@ -19,4 +19,25 @@ message InputProperties {
   // in different buckets. We don't have bucket information for builders in the
   // recipes, only the bucket of the currently running builder.
   bool bucketed_triggers = 1;
+
+  // Maps LUCI projects declared in recipe BotSpecs to the LUCI project to use
+  // when triggering builders.
+  //
+  // For branch CI support using separate projects for milestones, there will be
+  // builders in different projects that use the same BotSpec instance. The
+  // BotSpec indicates the LUCI project associated with the builder. The
+  // recipe-declared project for a builder will only be accurate for the main
+  // version of the builder, not the branched versions of the builder. This
+  // property corrects the inaccuracy by mapping the project on a BotSpec to the
+  // actual project to use.
+  //
+  // Example:
+  //   (mastername='chromium.linux', buildername='Linux Tests') sets its parent
+  //   to (mastername='chromium.linux', mastername='Linux Builder'). When
+  //   'Linux Builder' runs, it triggers 'Linux Tests'. The BotSpec for
+  //   'Linux Tests' has 'chromium' as the value of its luci_project attribute,
+  //   so by default it triggers the 'Linux Tests' job in project 'chromium'.
+  //   If the properties maps 'chromium' to 'chromium-m86', then instead the
+  //   'Linux Tests' job in project 'chromium-m86' will be triggered.
+  map<string, string> project_trigger_overrides = 2;
 }

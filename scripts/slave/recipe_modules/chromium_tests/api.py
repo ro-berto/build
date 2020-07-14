@@ -95,6 +95,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
     self._bucketed_triggers = input_properties.bucketed_triggers
+    self._project_trigger_overrides = input_properties.project_trigger_overrides
     self._builders = builders_module.BUILDERS
     self._trybots = trybots_module.TRYBOTS
     if self._test_data.enabled:
@@ -582,7 +583,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for child_id in sorted(bot_config.bot_db.bot_graph[builder_id]):
       child_spec = bot_config.bot_db[child_id]
       job = get_job_name(child_id.builder)
-      scheduler_jobs[child_spec.luci_project].append(job)
+      luci_project = self._project_trigger_overrides.get(
+          child_spec.luci_project, child_spec.luci_project)
+
+      scheduler_jobs[luci_project].append(job)
 
     return scheduler_jobs
 
