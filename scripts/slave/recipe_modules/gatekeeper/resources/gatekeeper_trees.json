@@ -16,10 +16,10 @@
             "https://build.chromium.org/p/chromium.memory": ["*"],
             "https://build.chromium.org/p/chromium.win": ["*"]
         },
-        "open-tree": true,
+        "open-tree": false,
         "password-file": "/creds/gatekeeper/chromium_status_password",
         "revision-properties": "got_revision_cp",
-        "set-status": true,
+        "set-status": false,
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
