@@ -2,7 +2,6 @@
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Unit tests for json_results_generator.py.
 
  $ PYTHONPATH=../..:../../../third_party \
@@ -21,16 +20,15 @@ from json_results_generator import JSONResultsGenerator
 from test_result import canonical_name
 from test_result import TestResult
 
-
 MOCK_LOCATION_DATA = {
-  'AlignedMemoryTest.StackAlignment': {
-    'file': 'foo/bar/allocation_test.cc',
-    'line': 789,
-  },
-  'AlignedMemoryTest.StaticAlignment': {
-    'file': 'foo/bar/allocation_test.cc',
-    'line': 12,
-  },
+    'AlignedMemoryTest.StackAlignment': {
+        'file': 'foo/bar/allocation_test.cc',
+        'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+        'file': 'foo/bar/allocation_test.cc',
+        'line': 12,
+    },
 }
 
 
@@ -51,8 +49,8 @@ class JSONGeneratorTest(unittest.TestCase):
     FLAKY_tests = get_test_set(tests_set, 'FLAKY_')
     MAYBE_tests = get_test_set(tests_set, 'MAYBE_')
     FAILS_tests = get_test_set(tests_set, 'FAILS_')
-    PASS_tests = tests_set - (DISABLED_tests | FLAKY_tests | FAILS_tests |
-        MAYBE_tests) - set(failed_tests_list)
+    PASS_tests = tests_set - (DISABLED_tests | FLAKY_tests | FAILS_tests
+                              | MAYBE_tests) - set(failed_tests_list)
 
     failed_tests = set(failed_tests_list) - DISABLED_tests
 
@@ -61,15 +59,19 @@ class JSONGeneratorTest(unittest.TestCase):
     for i, test in enumerate(tests_set):
       test_name = canonical_name(test)
       test_timings[test_name] = i
-      test_results_map[test_name] = [TestResult(test,
-          status='FAILURE' if (test in failed_tests) else 'SUCCESS',
-          elapsed_time=test_timings[test_name])]
+      test_results_map[test_name] = [
+          TestResult(
+              test,
+              status='FAILURE' if (test in failed_tests) else 'SUCCESS',
+              elapsed_time=test_timings[test_name])
+      ]
 
     # Do not write to an actual file.
     mock_writer = lambda path, data: True
 
     generator = JSONResultsGenerator(
-        self.builder_name, self.build_number,
+        self.builder_name,
+        self.build_number,
         '',
         test_results_map,
         file_writer=mock_writer,
@@ -122,14 +124,7 @@ class JSONGeneratorTest(unittest.TestCase):
     trie = generate_test_timings_trie(
         individual_test_timings, path_delimiter='/')
 
-    expected_trie = {
-      'bar.html': 0,
-      'foo': {
-        'bar': {
-          'baz.html': 1200,
-        }
-      }
-    }
+    expected_trie = {'bar.html': 0, 'foo': {'bar': {'baz.html': 1200,}}}
 
     self.assertEqual(json.dumps(trie), json.dumps(expected_trie))
 
