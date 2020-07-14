@@ -124,8 +124,6 @@
     ],
     "https://build.chromium.org/p/chromium.gpu": [
       {
-        "tree_notify": ["chrome-gpu-build-failures@google.com"],
-        "sheriff_classes": ["sheriff", "sheriff_gpu"],
         "categories": [
           "chromium_tree_closer",
           "experimental_tests"
@@ -298,9 +296,7 @@
         "gclient runhooks",
         "runhooks",
         "update"
-      ],
-      "sheriff_classes": ["sheriff"],
-      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
+      ]
     },
 
     "chromium_android": {
