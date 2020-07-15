@@ -4,6 +4,9 @@ per-file README.recipes.md=*
 per-file goma_utils.py=file://scripts/slave/goma/GOMA_OWNERS
 per-file upload_goma_logs.py=file://scripts/slave/goma/GOMA_OWNERS
 
+per-file chromium_export_metadata*=ehmaldonado@chromium.org
+per-file chromium_export_metadata*=nodir@chromium.org
+
 # tikuta is OWNER of goma related changes.
 tikuta@chromium.org
 tikuta@google.com

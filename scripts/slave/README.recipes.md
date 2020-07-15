@@ -122,6 +122,7 @@
   * [chromium_clang_coverage_tot](#recipes-chromium_clang_coverage_tot)
   * [chromium_codesearch](#recipes-chromium_codesearch)
   * [chromium_codesearch_initiator](#recipes-chromium_codesearch_initiator) &mdash; A recipe for picking and tagging a stable revision for chromium/src.
+  * [chromium_export_metadata](#recipes-chromium_export_metadata) &mdash; Exports directory metadata to GCS.
   * [chromium_gsutil:examples/full](#recipes-chromium_gsutil_examples_full)
   * [chromium_integration](#recipes-chromium_integration)
   * [chromium_libfuzzer](#recipes-chromium_libfuzzer)
@@ -4400,6 +4401,24 @@ but are marked by kythe with the synthetic commit hash so cross references can
 linked by commit hash.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#44)(api):**
+### *recipes* / [chromium\_export\_metadata](/scripts/slave/recipes/chromium_export_metadata.py)
+
+[DEPS](/scripts/slave/recipes/chromium_export_metadata.py#25): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Exports directory metadata to GCS.
+
+Exports metadata from DIR_METADATA files to Google Storage.
+* COMPUTED form: gs://chromium-owners/metadata_computed.json
+* FULL form:     gs://chromium-owners/metadata_full.json
+
+In legacy format:
+* COMPUTED form: gs://chromium-owners/component_map_subdirs.json
+* FULL form:     gs://chromium-owners/component_map.json
+
+See more on forms in
+https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/tools/dirmd/proto/mapping.proto
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_export_metadata.py#36)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]
