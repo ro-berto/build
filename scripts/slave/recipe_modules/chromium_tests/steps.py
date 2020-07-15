@@ -1546,13 +1546,6 @@ class LayoutTestResultsHandler(JSONResultsHandler):
         base + '/layout-test-results/results.html')
     archive_result.presentation.links['(zip)'] = (
         base + '/layout-test-results.zip')
-    if not passed:
-      # This makes sure that the step shows up when people select 'non-green'
-      # on the Milo UI.
-      archive_result.presentation.status = api.step.FAILURE
-      archive_result.presentation.step_text = (
-          "Step is marked red because the test itself failed. This is done so"
-          " the step shows up in the \"Non-Green\" step filter in the UI.")
 
 
 class SwarmingTest(Test):
