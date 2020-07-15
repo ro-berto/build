@@ -1,28 +1,4 @@
 {
-    "chromiumos": {
-        "masters": {
-            "https://build.chromium.org/p/chromium.chromiumos": ["*"]
-        }
-    },
-    "chromium": {
-        "build-db": "waterfall_build_db.json",
-        "masters": {
-            "https://build.chromium.org/p/chrome": ["*"],
-            "https://build.chromium.org/p/chromium": ["*"],
-            "https://build.chromium.org/p/chromium.chromiumos": ["*"],
-            "https://build.chromium.org/p/chromium.gpu": ["*"],
-            "https://build.chromium.org/p/chromium.linux": ["*"],
-            "https://build.chromium.org/p/chromium.mac": ["*"],
-            "https://build.chromium.org/p/chromium.memory": ["*"],
-            "https://build.chromium.org/p/chromium.win": ["*"]
-        },
-        "open-tree": false,
-        "password-file": "/creds/gatekeeper/chromium_status_password",
-        "revision-properties": "got_revision_cp",
-        "set-status": false,
-        "status-url": "https://chromium-status.appspot.com",
-        "track-revisions": true
-    },
     "devtools": {
         "build-db": "devtools_tree_closers_build_db.json",
         "gitiles-config": {
@@ -38,27 +14,6 @@
         "set-status": true,
         "status-url": "https://devtools-status.appspot.com",
         "track-revisions": false
-    },
-    "android": {
-        "open-tree": false,
-        "set-status": false,
-        "masters": {
-            "https://build.chromium.org/p/chromium.android": ["*"],
-            "https://build.chromium.org/p/chromium": ["Android"]
-        }
-    },
-    "ios": {
-        "build-db": "ios_db.json",
-        "open-tree": false,
-        "set-status": false,
-        "masters": {
-          "https://build.chromium.org/p/chromium.mac": [
-              "ios-device",
-              "ios-simulator",
-              "ios-simulator-full-configs",
-              "ios-simulator-noncq"
-          ]
-        }
     },
     "pdfium": {
         "build-db": "pdfium_build_db.json",
