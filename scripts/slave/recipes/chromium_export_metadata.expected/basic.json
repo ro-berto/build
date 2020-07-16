@@ -300,7 +300,7 @@
       "-root",
       "[CACHE]/builder/src",
       "-bucket",
-      "chromium-owners"
+      "chrome-metadata"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

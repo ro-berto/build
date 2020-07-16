@@ -5,8 +5,8 @@
 """Exports directory metadata to GCS.
 
 Exports metadata from DIR_METADATA files to Google Storage.
-* COMPUTED form: gs://chromium-owners/metadata_computed.json
-* FULL form:     gs://chromium-owners/metadata_full.json
+* COMPUTED form: gs://chrome-metadata/metadata_computed.json
+* FULL form:     gs://chrome-metadata/metadata_full.json
 
 In legacy format:
 * COMPUTED form: gs://chromium-owners/component_map_subdirs.json
@@ -29,9 +29,7 @@ DEPS = [
     'recipe_engine/step',
 ]
 
-# TODO(crbug.com/1102997): replace with a bucket that is not owned by
-# findit-for-me Cloud project.
-DEST_BUCKET = 'chromium-owners'
+DEST_BUCKET = 'chrome-metadata'
 
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.

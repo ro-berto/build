@@ -4409,8 +4409,8 @@ linked by commit hash.
 Exports directory metadata to GCS.
 
 Exports metadata from DIR_METADATA files to Google Storage.
-* COMPUTED form: gs://chromium-owners/metadata_computed.json
-* FULL form:     gs://chromium-owners/metadata_full.json
+* COMPUTED form: gs://chrome-metadata/metadata_computed.json
+* FULL form:     gs://chrome-metadata/metadata_full.json
 
 In legacy format:
 * COMPUTED form: gs://chromium-owners/component_map_subdirs.json
@@ -4419,7 +4419,7 @@ In legacy format:
 See more on forms in
 https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/tools/dirmd/proto/mapping.proto
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_export_metadata.py#36)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_export_metadata.py#34)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]
@@ -5011,7 +5011,7 @@ jobs they have as low latency as possible in their bot_update steps.
 &mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/test.py#105)(api, target_mastername, target_testername, good_revision, bad_revision, tests, use_analyze, suspected_revisions, test_on_good_revision, test_repeat_count):**
 ### *recipes* / [findit/chromium/update\_components](/scripts/slave/recipes/findit/chromium/update_components.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/update_components.py#18): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/update_components.py#20): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Traverse the source tree and update a cloud file with component mappings.
 
@@ -5019,9 +5019,9 @@ In each OWNERS file, a component and a team may be defined. This recipe calls
 a script that gathers all the information onto a json file and refreshes a
 world-readable cloud location.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/update_components.py#128)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/update_components.py#130)(api):**
 
-&mdash; **def [RunStepsForFile](/scripts/slave/recipes/findit/chromium/update_components.py#70)(api, filename, extra_arguments, step_suffix):**
+&mdash; **def [RunStepsForFile](/scripts/slave/recipes/findit/chromium/update_components.py#72)(api, filename, extra_arguments, step_suffix):**
 ### *recipes* / [findit:examples/full](/scripts/slave/recipe_modules/findit/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/findit/examples/full.py#5): [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

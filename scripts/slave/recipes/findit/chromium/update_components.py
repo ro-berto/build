@@ -9,6 +9,8 @@ a script that gathers all the information onto a json file and refreshes a
 world-readable cloud location.
 """
 
+# TODO(crbug.com/1106176): remove this file.
+
 import copy
 import re
 
