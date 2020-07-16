@@ -41,6 +41,7 @@ deps = {
 
 def V8RevisionFrom(deps):
   Var = lambda var: '%s'  # pylint: disable=W0612
+  Str = lambda s: s  # pylint: disable=W0612
   exec(deps)
   return vars['v8_revision']
 
