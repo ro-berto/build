@@ -295,21 +295,13 @@
   },
   {
     "cmd": [
-      "dirmd",
+      "[CACHE]/builder/src/third_party/depot_tools/dirmd",
       "chromium-update",
       "-root",
       "[CACHE]/builder/src",
       "-bucket",
       "chrome-metadata"
     ],
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "dirmd chromium-update"
   },
   {

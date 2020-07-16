@@ -39,14 +39,14 @@ def RunSteps(api):
   api.chromium_tests.configure_build(bot_config)
   api.chromium_tests.prepare_checkout(bot_config)
 
-  with api.depot_tools.on_path():
-    api.step('dirmd chromium-update', [
-      'dirmd', 'chromium-update',
-      '-root', api.path['checkout'],
-      '-bucket', DEST_BUCKET,
-      # TODO(crbug.com/1102997): pass -bucket-legacy when we ensure the
-      # tool works correctly.
-    ])
+  api.step('dirmd chromium-update', [
+    api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
+    'chromium-update',
+    '-root', api.path['checkout'],
+    '-bucket', DEST_BUCKET,
+    # TODO(crbug.com/1102997): pass -bucket-legacy when we ensure the
+    # tool works correctly.
+  ])
 
 
 def GenTests(api):
