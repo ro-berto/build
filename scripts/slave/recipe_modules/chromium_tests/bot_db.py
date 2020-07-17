@@ -15,17 +15,6 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
 from RECIPE_MODULES.build.chromium.types import BuilderId
 
 
-def _migration_validation(builder_id, builder_spec):
-  """Validate that back-sliding of BotSpec migrations does not occur."""
-  if builder_spec.downstream_spec is not None:
-    assert builder_id.master in (
-        'fake-master',
-        'internal.chrome.fyi',
-    ), ('Use of the downstream_spec field is deprecated,'
-        ' instead update or add a source side spec file for master {!r}.'
-        ' Contact gbeaty@ if you need assistance.').format(builder_id.master)
-
-
 @attrs()
 class BotDatabase(collections.Mapping):
   """A database that provides information for multiple masters.
@@ -74,8 +63,6 @@ class BotDatabase(collections.Mapping):
           message = '{} while creating spec for builder {!r}'.format(
               e.message, builder_id)
           raise type(e)(message), None, sys.exc_info()[2]
-
-        _migration_validation(builder_id, builder_spec)
 
         builders_for_master[builder_name] = builder_spec
         db[builder_id] = builder_spec

@@ -226,12 +226,6 @@ class BotSpec(object):
   # A path relative to chromium.c.source_side_spec_dir containing the
   # information describing the tests to be run for this builder
   source_side_spec_file = attrib(str, default=None)
-  # A dictionary describing the tests to be run for this builder's master - has
-  # the same format as one of the *.json files under //testing/buildbot of
-  # chromium/src
-  # Do not add any new uses of this: instead add or update the appropriate
-  # source side spec file
-  downstream_spec = mapping_attrib(str, default=None)
 
   # A bool controlling whether an isolate is uploaded to the perf dashboard
   perf_isolate_upload = attrib(bool, default=False)

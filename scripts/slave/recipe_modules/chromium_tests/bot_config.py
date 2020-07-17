@@ -86,47 +86,14 @@ class BotConfig(object):
                           for k, v in per_builder_values.iteritems()))
     return values[0]
 
-  def _get_source_side_spec(self, chromium_tests_api, mastername):
-    if len(self.builder_ids) == 1:
-      builder_id = self.builder_ids[0]
-      bot_spec = self.bot_db[builder_id]
-
-      # Some internal builders specify the source side spec using the
-      # downstream_spec field of BotSpec instead of reading it from a file
-      # If specified, the downstream_spec field holds a dictionary containing
-      # the same content as the deserialized JSON of the source side spec would
-      # contain
-      if bot_spec.downstream_spec is not None:  # pragma: no cover
-        return (
-            bot_spec.downstream_spec,
-            (builder_id, 'downstream_spec', bot_spec.downstream_spec),
-        )
-
-    source_side_spec_file = self.source_side_spec_file or '%s.json' % mastername
-
-    return chromium_tests_api.read_source_side_spec(source_side_spec_file), None
-
   def _get_source_side_specs(self, chromium_tests_api):
     masters = set(key.master for key in self.all_keys)
     specs = {}
-    migration = set()
     for master_name in sorted(masters):
-      spec, migration_details = self._get_source_side_spec(
-          chromium_tests_api, master_name)
+      source_side_spec_file = (
+          self.source_side_spec_file or '%s.json' % master_name)
+      spec = chromium_tests_api.read_source_side_spec(source_side_spec_file)
       specs[master_name] = spec
-      if migration_details is not None:
-        migration.add(migration_details)
-    if migration:
-      step_api = chromium_tests_api.m.step
-      json_api = chromium_tests_api.m.json
-      with step_api.nest('source side spec migration') as presentation:
-        presentation.step_text = (
-            '\nThis is an informational step for infra maintainers')
-        for builder_id, field, content in sorted(migration):
-          step_name = '{}%{}'.format(builder_id.master, builder_id.builder)
-          result = step_api(step_name, [])
-          result.presentation.logs[field] = json_api.dumps(content, indent=4)
-
     return specs
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
