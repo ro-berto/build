@@ -570,16 +570,26 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
   def isolate(self):
-    self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                 targets=self._isolated_targets)
-    if self.is_triggering_perf_tests:
-      if not self.m.tryserver.is_tryserver:
-        self.m.perf_dashboard.upload_isolate(
-            self.m.buildbucket.builder_name,
-            self.m.perf_dashboard.get_change_info([{
-                'repository': 'webrtc',
-                'git_hash': self.revision
-            }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
+    if self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
+      # Set the swarm_hashes name so that it is found by pinpoint.
+      commit_position = self.revision_cp.replace('@', '(at)')
+      swarm_hashes_property_name = '_'.join(
+          ('swarm_hashes', commit_position, 'without_patch'))
+      self.m.isolate.isolate_tests(
+          self.m.chromium.output_dir,
+          targets=self._isolated_targets,
+          swarm_hashes_property_name=swarm_hashes_property_name)
+
+      # Upload the isolate file to the pinpoint server.
+      self.m.perf_dashboard.upload_isolate(
+          self.m.buildbucket.builder_name,
+          self.m.perf_dashboard.get_change_info([{
+              'repository': 'webrtc',
+              'git_hash': self.revision
+          }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
+    else:
+      self.m.isolate.isolate_tests(
+          self.m.chromium.output_dir, targets=self._isolated_targets)
 
   def get_binary_sizes(self, files=None, base_dir=None):
     if files is None:
