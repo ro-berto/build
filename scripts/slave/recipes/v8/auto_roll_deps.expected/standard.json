@@ -287,6 +287,94 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "\nvars = {\n  'chromium_git': 'https://chromium.googlesource.com',\n  'v8_revision': 'deadbeef',\n}\n\ndeps = {\n  'src/v8':\n    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),\n}\n",
+      "[CLEANUP]/gitiles_tmp_1/DEPS"
+    ],
+    "infra_step": true,
+    "name": "gitiles",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@DEPS@@@@",
+      "@@@STEP_LOG_LINE@DEPS@vars = {@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'chromium_git': 'https://chromium.googlesource.com',@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'v8_revision': 'deadbeef',@@@",
+      "@@@STEP_LOG_LINE@DEPS@}@@@",
+      "@@@STEP_LOG_LINE@DEPS@@@@",
+      "@@@STEP_LOG_LINE@DEPS@deps = {@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'src/v8':@@@",
+      "@@@STEP_LOG_LINE@DEPS@    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),@@@",
+      "@@@STEP_LOG_LINE@DEPS@}@@@",
+      "@@@STEP_LOG_END@DEPS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "getdep",
+      "--var=v8_revision",
+      "--deps-file=[CLEANUP]/gitiles_tmp_1/DEPS"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient get gitiles deps"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "\nvars = {\n  'chromium_git': 'https://chromium.googlesource.com',\n  'v8_revision': 'deadbeef',\n}\n\ndeps = {\n  'src/v8':\n    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),\n}\n",
+      "[CLEANUP]/local_tmp_2/DEPS"
+    ],
+    "infra_step": true,
+    "name": "local",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@DEPS@@@@",
+      "@@@STEP_LOG_LINE@DEPS@vars = {@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'chromium_git': 'https://chromium.googlesource.com',@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'v8_revision': 'deadbeef',@@@",
+      "@@@STEP_LOG_LINE@DEPS@}@@@",
+      "@@@STEP_LOG_LINE@DEPS@@@@",
+      "@@@STEP_LOG_LINE@DEPS@deps = {@@@",
+      "@@@STEP_LOG_LINE@DEPS@  'src/v8':@@@",
+      "@@@STEP_LOG_LINE@DEPS@    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),@@@",
+      "@@@STEP_LOG_LINE@DEPS@}@@@",
+      "@@@STEP_LOG_END@DEPS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "getdep",
+      "--var=v8_revision",
+      "--deps-file=[CLEANUP]/local_tmp_2/DEPS"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient get local deps"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/v8/tools/release/auto_roll.py",

@@ -13,6 +13,7 @@ DEPS = [
   'depot_tools/gitiles',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -39,11 +40,40 @@ deps = {
 """
 
 
-def V8RevisionFrom(deps):
-  Var = lambda var: '%s'  # pylint: disable=W0612
-  Str = lambda s: s  # pylint: disable=W0612
-  exec(deps)
-  return vars['v8_revision']
+def get_v8_revision(api, name, deps):
+  deps_file = api.path.mkdtemp(name).join('DEPS')
+  api.file.write_text(name, deps_file, deps)
+  return api.gclient(
+      'get %s deps' % name,
+      ['getdep', '--var=v8_revision', '--deps-file=%s' % deps_file],
+      stdout=api.raw_io.output_text(),
+  ).stdout.strip()
+
+
+def is_gitiles_inconsistent(api):
+  """Returns whether the DEPS from gitiles and the local file are inconsistent.
+  """
+  # Get deps file from gitiles.
+  gitiles_deps = api.gitiles.download_file(
+      'https://chromium.googlesource.com/chromium/src',
+      'DEPS',
+      branch='refs/heads/master',
+      step_test_data= lambda: api.json.test_api.output({
+        'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
+      }),
+  )
+
+  # Get the deps file used by the auto roller.
+  local_deps = api.git(
+      'cat-file', 'blob', 'HEAD:DEPS',
+      stdout=api.raw_io.output_text(),
+      step_test_data= lambda: api.raw_io.test_api.stream_output(
+          TEST_DEPS_FILE % 'deadbeef'),
+  ).stdout
+
+  return (get_v8_revision(api, 'gitiles', gitiles_deps) !=
+          get_v8_revision(api, 'local', local_deps))
+
 
 def RunSteps(api):
   monitoring_state = 'failure'
@@ -122,26 +152,8 @@ def RunSteps(api):
 
     api.v8.checkout()
 
-    # Get deps file from gitiles.
-    gitiles_deps = api.gitiles.download_file(
-        'https://chromium.googlesource.com/chromium/src',
-        'DEPS',
-        branch='refs/heads/master',
-        step_test_data= lambda: api.json.test_api.output({
-          'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
-        }),
-    )
-
-    # Get the deps file used by the auto roller.
-    local_deps = api.git(
-        'cat-file', 'blob', 'HEAD:DEPS',
-        stdout=api.raw_io.output_text(),
-        step_test_data= lambda: api.raw_io.test_api.stream_output(
-            TEST_DEPS_FILE % 'deadbeef'),
-    ).stdout
-
-    # Require both HEADs to be consistent before proceeding.
-    if V8RevisionFrom(gitiles_deps) != V8RevisionFrom(local_deps):
+    # Require local and gitiles DEPS to be consistent before proceeding.
+    if is_gitiles_inconsistent(api):
       api.step('Local checkout is lagging behind.', cmd=None)
       api.step.active_result.presentation.status = api.step.WARNING
       monitoring_state = 'inconsistent'
@@ -220,6 +232,10 @@ def GenTests(api):
       api.override_step_data(
           'git cat-file',
           api.raw_io.stream_output(TEST_DEPS_FILE % 'beefdead')),
+      api.override_step_data(
+          'gclient get local deps',
+          api.raw_io.stream_output('beefdead', stream='stdout'),
+      ),
   )
   yield api.test(
       'standard_experimental',
