@@ -19,6 +19,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       buildnumber
       got_cr_revision
       got_revision
+      got_src_revision
       mastername
       patch_issue
       patch_set
@@ -67,6 +68,10 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       'got_revision': (bot_update_step.presentation.properties.get(
           'got_revision',
           bot_update_step.presentation.properties.get('got_src_revision'))),
+      # Similar to got_cr_revision, but for use in repos where the primary
+      # repo is not Chromium and got_cr_revision is not defined.
+      'got_src_revision':
+          bot_update_step.presentation.properties.get('got_src_revision'),
       'mastername':
           api.properties.get('mastername'),
       'patch_issue':
