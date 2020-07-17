@@ -582,7 +582,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_1",
+      "/path/to/tmp/",
       "--merge-script",
       "[START_DIR]/checkout/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",

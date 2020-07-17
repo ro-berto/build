@@ -327,7 +327,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_1",
+      "/path/to/tmp/",
       "--merge-script",
       "[START_DIR]/src/path/to/script.py",
       "--merge-script-stdout-file",
