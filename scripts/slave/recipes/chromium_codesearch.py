@@ -41,16 +41,11 @@ DEPS = [
 # }
 TRYBOT_SPEC = freeze({
     'tryserver.chromium.codesearch': {
-        'codesearch-gen-chromium-android-try':
-            'codesearch-gen-chromium-android',
-        'codesearch-gen-chromium-chromiumos-try':
-            'codesearch-gen-chromium-chromiumos',
-        'codesearch-gen-chromium-fuchsia-try':
-            'codesearch-gen-chromium-fuchsia',
-        'codesearch-gen-chromium-linux-try':
-            'codesearch-gen-chromium-linux',
-        'codesearch-gen-chromium-win-try':
-            'codesearch-gen-chromium-win',
+        'gen-android-try': 'codesearch-gen-chromium-android',
+        'gen-chromiumos-try': 'codesearch-gen-chromium-chromiumos',
+        'gen-fuchsia-try': 'codesearch-gen-chromium-fuchsia',
+        'gen-linux-try': 'codesearch-gen-chromium-linux',
+        'gen-win-try': 'codesearch-gen-chromium-win',
     }
 })
 
@@ -361,12 +356,11 @@ def GenTests(api):
     )
 
   yield api.test(
-      'full_%s_with_patch' %
-      _sanitize_nonalpha('codesearch-gen-chromium-linux-try'),
+      'full_%s_with_patch' % _sanitize_nonalpha('gen-linux-try'),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
-          builder='codesearch-gen-chromium-linux-try',
+          builder='gen-linux-try',
           git_repo='https://chromium.googlesource.com/chromium/src',
           change_number=91827,
           patch_set=1),
@@ -375,7 +369,7 @@ def GenTests(api):
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
       api.properties.generic(
           mastername='tryserver.chromium.codesearch',
-          buildername='codesearch-gen-chromium-linux-try'),
+          buildername='gen-linux-try'),
       api.runtime(is_luci=True, is_experimental=False),
   )
 

@@ -347,7 +347,7 @@
       "-m",
       "tryserver.chromium.codesearch",
       "-b",
-      "codesearch-gen-chromium-linux-try",
+      "gen-linux-try",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -373,7 +373,7 @@
       "-m",
       "tryserver.chromium.codesearch",
       "-b",
-      "codesearch-gen-chromium-linux-try",
+      "gen-linux-try",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -511,7 +511,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/codesearch_gen_chromium_linux_try"
+      "[CACHE]/goma/data/gen_linux_try"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -537,7 +537,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/gen_linux_try",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -773,10 +773,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"codesearch-gen-chromium-linux-try\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"gen-linux-try\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-linux-try",
+      "gen-linux-try",
       "--buildbot-mastername",
       "tryserver.chromium.codesearch",
       "--buildbot-slavename",
