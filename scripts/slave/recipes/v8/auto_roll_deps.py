@@ -159,7 +159,9 @@ def RunSteps(api):
       monitoring_state = 'inconsistent'
       return
 
-    with api.context(cwd=api.path['checkout'].join('v8')):
+    with api.context(cwd=api.path['checkout'].join('v8'),
+                     env={'DEPOT_TOOLS_UPDATE': '0'},
+                     env_prefixes={'PATH': [api.v8.depot_tools_path]}):
       safe_buildername = ''.join(
         c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
       if api.runtime.is_experimental:

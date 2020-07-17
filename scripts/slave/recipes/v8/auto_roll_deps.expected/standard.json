@@ -391,6 +391,14 @@
       "[CACHE]/workdir"
     ],
     "cwd": "[CACHE]/builder/src/v8",
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/depot_tools"
+      ]
+    },
     "name": "roll deps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
