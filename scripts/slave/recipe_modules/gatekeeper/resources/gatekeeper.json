@@ -4,21 +4,6 @@
               "this files's format."],
 
   "masters": {
-    "https://build.chromium.org/p/client.boringssl": [
-      {
-        "tree_notify": [
-          "boringssl@google.com"
-        ],
-
-        "builders": {
-          "*": {
-            "forgiving_optional": [
-              "*"
-            ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/client.crashpad": [
       {
         "builders": {
