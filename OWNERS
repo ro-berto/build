@@ -2,10 +2,10 @@
 # come to the wrong place. The correct location for that is:
 # https://chromium.googlesource.com/chromium/src/+/master/build/OWNERS
 
-set noparent
 bpastene@chromium.org
 bpastene@google.com
 dpranke@chromium.org
+dpranke@google.com
 efoo@chromium.org
 estaab@chromium.org
 estaab@google.com
