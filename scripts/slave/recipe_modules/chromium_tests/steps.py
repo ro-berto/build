@@ -1277,9 +1277,6 @@ class JSONResultsHandler(ResultsHandler):
             hi_left=hi_left, hi_right=hi_right)
 
   def upload_results(self, api, results, step_name, passed, step_suffix=None):
-    if hasattr(results, 'as_jsonish'):
-      results = results.as_jsonish()
-
     # Only version 3 of results is supported by the upload server.
     if not results or results.get('version', None) != 3:
       return
@@ -2395,15 +2392,29 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return step_result
 
 
-class PythonBasedTest(Test):
-  def __init__(self, name, **kwargs):
-    super(PythonBasedTest, self).__init__(name, **kwargs)
+class MiniInstallerTest(Test):  # pylint: disable=W0232
+
+  def __init__(self, **kwargs):
+    super(MiniInstallerTest, self).__init__('test_installer', **kwargs)
 
   def compile_targets(self):
-    return []  # pragma: no cover
+    return ['mini_installer_tests']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
-    raise NotImplementedError()  # pragma: no cover
+    test_path = api.path['checkout'].join('chrome', 'test', 'mini_installer')
+    args = [
+        '--build-dir',
+        api.chromium.c.build_dir,
+        '--target',
+        api.chromium.c.build_config_fs,
+        '--force-clean',
+        '--config',
+        test_path.join('config', 'config.config'),
+    ]
+    args.extend(cmd_args)
+    return api.python(
+        self.step_name(suffix), test_path.join('test_installer.py'), args,
+        **kwargs)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -2532,130 +2543,6 @@ class AndroidJunitTest(AndroidTest):
         json_results_file=json_results_file,
         step_test_data=(
             lambda: api.test_utils.test_api.canned_gtest_output(False)))
-
-
-class BlinkTest(Test):
-  # TODO(dpranke): This should be converted to a PythonBasedTest, although it
-  # will need custom behavior because we archive the results as well.
-  def __init__(self, extra_args=None):
-    super(BlinkTest, self).__init__('blink_web_tests')
-    self._extra_args = extra_args
-    self.results_handler = LayoutTestResultsHandler()
-
-  def compile_targets(self):
-    return ['blink_tests']
-
-  @property
-  def uses_local_devices(self):
-    return True
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    results_dir = api.path['start_dir'].join('layout-test-results')
-
-    step_name = self.step_name(suffix)
-    args = [
-        '--target', api.chromium.c.BUILD_CONFIG,
-        '--results-directory', results_dir,
-        '--build-dir', api.chromium.c.build_dir,
-        '--json-test-results', api.test_utils.test_results(add_json_log=False),
-        '--master-name', api.properties['mastername'],
-        '--build-number', str(api.buildbucket.build.number),
-        '--builder-name', api.buildbucket.builder_name,
-        '--step-name', step_name,
-        '--no-show-results',
-        '--clobber-old-results',  # Clobber test results before each run.
-        '--exit-after-n-failures', '5000',
-        '--exit-after-n-crashes-or-timeouts', '100',
-        '--debug-rwt-logging',
-
-        # layout test failures are retried 3 times when '--test-list' is not
-        # passed, but only once when '--test-list' is passed. We want to always
-        # retry 3 times, so we explicitly specify it.
-        '--num-retries', '3',
-    ]
-
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      args.extend(['--platform', 'android'])
-
-    if self._extra_args:
-      args.extend(self._extra_args)
-
-    tests_to_retry = self._tests_to_retry(suffix)
-    if tests_to_retry:
-      test_list = "\n".join(tests_to_retry)
-      args.extend(['--test-list', api.raw_io.input_text(test_list),
-                   '--skipped', 'always'])
-
-    try:
-      default_factory_for_tests = (lambda:
-          api.test_utils.test_api.canned_test_output(passing=True,
-                                                     minimal=True))
-      step_result = api.python(
-        step_name,
-        api.path['checkout'].join('third_party', 'blink', 'tools',
-                                  'run_web_tests.py'),
-        args,
-        step_test_data=default_factory_for_tests)
-
-      # Mark steps with unexpected flakes as warnings. Do this here instead of
-      # "finally" blocks because we only want to do this if step was successful.
-      # We don't want to possibly change failing steps to warnings.
-      if step_result and step_result.test_utils.test_results.unexpected_flakes:
-        step_result.presentation.status = api.step.WARNING
-    finally:
-      step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-
-      # TODO(dpranke): crbug.com/357866 - note that all comparing against
-      # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
-      # or abnormally; it does not tell us how many failures there actually
-      # were, which might be much higher (up to 5000 diffs, where we
-      # would bail out early with --exit-after-n-failures) or lower
-      # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
-      # which case the retcode is actually 130
-      if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-        self.update_test_run(
-            api, suffix, api.test_utils.canonical.result_format())
-      else:
-        self.update_test_run(
-            api, suffix, step_result.test_utils.test_results.
-            canonical_result_format())
-
-      if step_result:
-        results = step_result.test_utils.test_results
-
-        self.results_handler.render_results(
-            api, results, step_result.presentation)
-
-        self.results_handler.upload_results(
-            api, results, '.'.join(step_result.name_tokens),
-            not bool(self.deterministic_failures(suffix)), suffix)
-
-    return step_result
-
-
-class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
-  def __init__(self, **kwargs):
-    super(MiniInstallerTest, self).__init__('test_installer', **kwargs)
-
-  def compile_targets(self):
-    return ['mini_installer_tests']
-
-  def run_step(self, api, suffix, cmd_args, **kwargs):
-    test_path = api.path['checkout'].join('chrome', 'test', 'mini_installer')
-    args = [
-      '--build-dir', api.chromium.c.build_dir,
-      '--target', api.chromium.c.build_config_fs,
-      '--force-clean',
-      '--config', test_path.join('config', 'config.config'),
-    ]
-    args.extend(cmd_args)
-    return api.python(
-      self.step_name(suffix),
-      test_path.join('test_installer.py'),
-      args,
-      **kwargs)
 
 
 class IncrementalCoverageTest(Test):

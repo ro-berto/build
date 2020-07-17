@@ -26,50 +26,33 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
     return test_results_json, retcode, name
 
-  def canned_test_output(self, passing, minimal=False, passes=9001,
-                         num_additional_failures=0,
-                         path_separator=None,
-                         retcode=None,
-                         unexpected_flakes=False):
+  # TODO(dpranke): Rewrite the BoringSSL recipe's tests to not use this routine,
+  # and then delete this routine.
+  def canned_test_output(self, passing):
     """Produces mock output for a recipe step that outputs a TestResults object.
 
     Args:
       passing - Determines if this test result is passing or not.
-      passes - The number of (theoretically) passing tests.
-      minimal - If True, the canned output will omit one test to emulate the
-                effect of running fewer than the total number of tests.
-      num_additional_failures - the number of failed tests to simulate in
-                addition to the three generated if passing is False.
 
     Returns: A test_results placeholder.
     """
     if_failing = lambda fail_val: None if passing else fail_val
-    t = TestResults({'version': 3})
-    sep = path_separator or '/'
-    t.raw['path_separator'] = sep
-    t.raw['num_passes'] = passes
-    t.raw['num_regressions'] = 0
-    t.add_result('flake%stotally-flakey.html' % sep, 'PASS',
+    t = TestResults({
+        'version': 3,
+        'path_separator': '/',
+        'num_passes': 9001,
+        'num_regressions': 0,
+    })
+    t.add_result('flake/totally-flakey.html', 'PASS',
                  if_failing('TIMEOUT PASS'))
-    t.add_result('flake%stimeout-then-crash.html' % sep, 'CRASH',
+    t.add_result('flake/timeout-then-crash.html', 'CRASH',
                  if_failing('TIMEOUT CRASH'))
-    t.add_result('flake%sslow.html' % sep, 'SLOW',
-                 if_failing('TIMEOUT SLOW'))
-    t.add_result('tricky%stotally-maybe-not-awesome.html' % sep, 'PASS',
+    t.add_result('flake/slow.html', 'SLOW', if_failing('TIMEOUT SLOW'))
+    t.add_result('tricky/totally-maybe-not-awesome.html', 'PASS',
                  if_failing('FAIL'))
-    t.add_result('bad%stotally-bad-probably.html' % sep, 'PASS',
-                 if_failing('FAIL'))
-    if not minimal:
-      t.add_result('good%stotally-awesome.html' % sep, 'PASS')
-    for i in xrange(num_additional_failures):
-      t.add_result('bad%sfailing%d.html' % (sep, i), 'PASS', 'FAIL')
-    if unexpected_flakes:
-      t.add_result('flake%sflakey.html' % sep, 'PASS', 'FAIL PASS')
-
-    if not passing and retcode is None:
-      retcode = min(
-          t.raw['num_regressions'], TestUtilsApi.MAX_FAILURES_EXIT_STATUS)
-
+    t.add_result('bad/totally-bad-probably.html', 'PASS', if_failing('FAIL'))
+    t.add_result('good/totally-awesome.html', 'PASS')
+    retcode = t.raw['num_regressions']
     return self.test_results(json.dumps(t.as_jsonish()), retcode)
 
   @recipe_test_api.placeholder_step_data

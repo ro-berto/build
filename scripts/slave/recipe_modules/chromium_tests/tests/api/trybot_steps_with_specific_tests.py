@@ -48,14 +48,11 @@ def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
 
   update_step, _build_config = api.chromium_tests.prepare_checkout(bot.settings)
 
-  if api.properties.get('use_gtest', True):
-    kwargs = {}
-    if api.properties.get('shards'):
-      kwargs['shards'] = api.properties['shards']
+  kwargs = {}
+  if api.properties.get('shards'):
+    kwargs['shards'] = api.properties['shards']
 
-    tests = [steps.SwarmingGTestTest('base_unittests', **kwargs)]
-  else:
-    tests = [steps.BlinkTest()]
+  tests = [steps.SwarmingGTestTest('base_unittests', **kwargs)]
 
   if api.properties.get('use_custom_dimensions', False):
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')
@@ -385,36 +382,6 @@ def GenTests(api):
     )
 
   expected_findit_metadata = {
-      'Failing With Patch Tests That Caused Build Failure': {
-          'blink_web_tests (with patch)': [
-              'bad/totally-bad-probably.html',
-              'tricky/totally-maybe-not-awesome.html'
-          ],
-      },
-      'Step Layer Flakiness': {},
-      'Step Layer Skipped Known Flakiness': {},
-  }
-  yield api.test(
-      'findit_step_layer_flakiness',
-      api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          use_gtest=False,
-          retry_failed_shards=True,
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.override_step_data('blink_web_tests (with patch)',
-                             api.test_utils.canned_test_output(passing=False)),
-      api.override_step_data('blink_web_tests (without patch)',
-                             api.test_utils.canned_test_output(passing=True)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  expected_findit_metadata = {
       'Failing With Patch Tests That Caused Build Failure': {},
       'Step Layer Flakiness': {
           'base_unittests (with patch) on Windows-10': ['Test.Two',],
@@ -426,7 +393,6 @@ def GenTests(api):
       api.chromium.try_build(
           mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(
-          use_gtest=True,
           use_custom_dimensions=True,
           retry_failed_shards=True,
           swarm_hashes={
@@ -761,35 +727,6 @@ def GenTests(api):
       api.post_process(post_process.StepTextContains,
                        'base_unittests (test results summary)',
                        ['ignored', 'Test.Two']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  def generate_blink_results(test_output):
-    results = {'version': 3}
-    results['tests'] = {
-        'random_test_name': {
-            'expected': 'PASS',
-            'actual': test_output
-        }
-    }
-    return json.dumps(results)
-
-  # This test confirms that generate_blink_results() generates valid results.
-  yield api.test(
-      'blink_pass',
-      api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          use_gtest=False,
-          swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.override_step_data(
-          'blink_web_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.test_results(generate_blink_results('PASS')),
-              failure=False)),
-      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
