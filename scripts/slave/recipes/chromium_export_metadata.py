@@ -42,7 +42,7 @@ def RunSteps(api):
   api.step('dirmd chromium-update', [
     api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
     'chromium-update',
-    '-root', api.path['checkout'],
+    '-chromium-checkout', api.path['checkout'],
     '-bucket', DEST_BUCKET,
     # TODO(crbug.com/1102997): pass -bucket-legacy when we ensure the
     # tool works correctly.

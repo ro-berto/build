@@ -297,7 +297,7 @@
     "cmd": [
       "[CACHE]/builder/src/third_party/depot_tools/dirmd",
       "chromium-update",
-      "-root",
+      "-chromium-checkout",
       "[CACHE]/builder/src",
       "-bucket",
       "chrome-metadata"
