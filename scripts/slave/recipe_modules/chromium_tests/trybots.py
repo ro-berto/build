@@ -896,6 +896,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU Linux Builder',
                 tester='Linux Release (NVIDIA)',
             ),
+        'linux-lacros-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                mastername='chromium.fyi',
+                buildername='linux-lacros-builder-rel',
+                tester='linux-lacros-tester-rel',
+            ),
         'linux-trusty-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.linux',
@@ -964,12 +970,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.chromiumos',
                 buildername='linux-chromeos-rel',
-            ),
-        'linux-lacros-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.fyi',
-                buildername='linux-lacros-builder-rel',
-                tester='linux-lacros-tester-rel',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-chromeos-amd64-generic':
