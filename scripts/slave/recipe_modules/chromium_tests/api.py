@@ -40,7 +40,7 @@ RECIPE_CONFIG_PATHS = [
 # json output of the "gerrit fetch current CL info" recipe step, and find the
 # values of owner._account_id.
 # chromium and v8-ci-autorollers
-AUTOROLLER_ACCOUNT_IDS = ('1302611', '1274527')
+AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
 
 
 class BotMetadata(object):
@@ -1487,7 +1487,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # changes to other variables, whose effects are not easily discernible.
     owner = self.m.tryserver.gerrit_change_owner
     if ('DEPS' in affected_files and owner and
-        owner.get('_account_id', '') in AUTOROLLER_ACCOUNT_IDS):
+        owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS):
       try:
         affected_files = self.m.gclient.diff_deps(
             self.m.chromium_checkout.checkout_dir)

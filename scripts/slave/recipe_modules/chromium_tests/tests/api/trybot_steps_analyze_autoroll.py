@@ -28,7 +28,7 @@ def GenTests(api):
           api.json.output([{
               'owner': {
                   # chromium-autoroller
-                  '_account_id': '1302611'
+                  '_account_id': 1302611
               },
               'branch': 'master',
               'revisions': {},

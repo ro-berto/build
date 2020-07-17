@@ -62,7 +62,7 @@
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"owner\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"_account_id\": \"1302611\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"_account_id\": 1302611@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {}@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
