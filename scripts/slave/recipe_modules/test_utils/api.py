@@ -765,15 +765,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if new_failures:
       result.presentation.logs[
           'failures caused build to fail'] = self.m.json.dumps(
-              new_failures, indent=2).split('/n')
+              new_failures, indent=2).split('\n')
     if ignored_failures:
       result.presentation.logs[
           'failures ignored as they also fail without patch'] = (
-              self.m.json.dumps(ignored_failures, indent=2).split('/n'))
+              self.m.json.dumps(ignored_failures, indent=2).split('\n'))
     if ignored_flakes:
       result.presentation.logs[
           'failures ignored as they are known to be flaky'] = self.m.json.dumps(
-              ignored_flakes, indent=2).split('/n')
+              ignored_flakes, indent=2).split('\n')
 
     if new_failures:
       result.presentation.status = self.m.step.FAILURE
