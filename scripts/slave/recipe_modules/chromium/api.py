@@ -613,10 +613,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
       goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
           self.c.compile_py.goma_max_active_fail_fallback_tasks)
-    if self.c.compile_py.goma_failfast:
+    if (self.m.tryserver.is_tryserver or
+        self.c.compile_py.goma_failfast):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
-      # TODO(crbug.com/1101457): Re-enable this for trybots.
       goma_env['GOMA_FAIL_FAST'] = 'true'
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
