@@ -166,7 +166,6 @@
   * [chromium_tests:tests/steps/android_junit_test](#recipes-chromium_tests_tests_steps_android_junit_test)
   * [chromium_tests:tests/steps/artifact_links](#recipes-chromium_tests_tests_steps_artifact_links)
   * [chromium_tests:tests/steps/experimental_test](#recipes-chromium_tests_tests_steps_experimental_test)
-  * [chromium_tests:tests/steps/find_annotated_test](#recipes-chromium_tests_tests_steps_find_annotated_test)
   * [chromium_tests:tests/steps/generate_fuchsia_test](#recipes-chromium_tests_tests_steps_generate_fuchsia_test)
   * [chromium_tests:tests/steps/generate_gtest](#recipes-chromium_tests_tests_steps_generate_gtest)
   * [chromium_tests:tests/steps/generate_isolated_script](#recipes-chromium_tests_tests_steps_generate_isolated_script)
@@ -4646,11 +4645,6 @@ without error.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/experimental_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/experimental_test.py#20)(api):**
-### *recipes* / [chromium\_tests:tests/steps/find\_annotated\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/find_annotated_test.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/find_annotated_test.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/find_annotated_test.py#19)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/generate\_fuchsia\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/generate_fuchsia_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/generate_fuchsia_test.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
