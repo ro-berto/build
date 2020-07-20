@@ -110,6 +110,21 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'mac-arm64':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            gclient_config='chromium',
+            gclient_apply_config=['use_xcode_12_beta'],
+            chromium_apply_config=[
+                'mb',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
     'Mac10.10 Tests':
         _chromium_mac_spec(
             chromium_config='chromium',
