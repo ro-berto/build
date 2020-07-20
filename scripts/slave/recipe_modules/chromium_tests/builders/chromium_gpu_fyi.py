@@ -1234,7 +1234,6 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
-
             ],
             gclient_config='chromium',
             gclient_apply_config=[
@@ -1480,6 +1479,11 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                # Some tests on this bot depend on being unauthenticated with
+                # GS, so don't run the tests inside a luci-auth context to avoid
+                # having the BOTO config setup for the task's service account.
+                # TODO(crbug.com/1057152): Fix this.
+                'mb_no_luci_auth',
             ],
             gclient_config='chromium',
             gclient_apply_config=[

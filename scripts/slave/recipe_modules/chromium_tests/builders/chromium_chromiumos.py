@@ -35,6 +35,7 @@ def _config(name,
             checkout_qemu_image=False,
             target_arch='intel',
             target_bits=64,
+            chromium_apply_config=None,
             gclient_apply_config=None):
   gclient_apply_config = gclient_apply_config or []
   if 'chromeos' not in gclient_apply_config:
@@ -53,6 +54,8 @@ def _config(name,
       'execution_mode': bot_spec.COMPILE_AND_TEST,
       'simulation_platform': 'linux',
   }
+  if chromium_apply_config:
+    cfg['chromium_apply_config'].extend(chromium_apply_config)
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
@@ -92,5 +95,10 @@ SPEC.update([
         cros_board='kevin',
         target_arch='arm',
         target_bits=32,
-        gclient_apply_config=['arm'])
+        gclient_apply_config=['arm'],
+        # Some tests on this bot depend on being unauthenticated with GS, so
+        # don't run the tests inside a luci-auth context to avoid having the
+        # BOTO config setup for the task's service account.
+        # TODO(crbug.com/1057152): Fix this.
+        chromium_apply_config=['mb_no_luci_auth'])
 ])
