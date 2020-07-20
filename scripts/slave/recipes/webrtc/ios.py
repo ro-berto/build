@@ -336,9 +336,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.0',
-                    # TODO(crbug.com/812428): Move back to chrome.tests once
-                    # everything's switched over.
-                    'pool': 'chrome.tests.template',
+                    'pool': 'chrome.tests',
                 },
             },
             'iOS64 Release': {
@@ -363,9 +361,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4.1',
-                    # TODO(crbug.com/812428): Move back to chrome.tests once
-                    # everything's switched over.
-                    'pool': 'chrome.tests.template',
+                    'pool': 'chrome.tests',
                 },
             },
             'iOS64 Perf': {
@@ -425,9 +421,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.0',
-                    # TODO(crbug.com/812428): Move back to chrome.tests once
-                    # everything's switched over.
-                    'pool': 'chrome.tests.template',
+                    'pool': 'chrome.tests',
                 },
             },
             'ios_arm64_rel': {
@@ -452,9 +446,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4.1',
-                    # TODO(crbug.com/812428): Move back to chrome.tests once
-                    # everything's switched over.
-                    'pool': 'chrome.tests.template',
+                    'pool': 'chrome.tests',
                 },
             },
             'ios_arm64_perf': {
