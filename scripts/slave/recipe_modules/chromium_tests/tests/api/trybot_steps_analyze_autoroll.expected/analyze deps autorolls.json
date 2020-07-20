@@ -403,56 +403,6 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "checkout",
-      "HEAD~",
-      "--",
-      "DEPS"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "checkout the previous DEPS"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[depot_tools]/gclient.py",
-      "recurse",
-      "RECIPE_MODULE[depot_tools::gclient]/resources/diff_deps.py"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "gclient recursively git diff all DEPS",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@",
-      "@@@STEP_LOG_LINE@DepsDiffException@Unexpected result: autoroll diff found 0 files changed@@@",
-      "@@@STEP_LOG_END@DepsDiffException@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "checkout",
-      "HEAD",
-      "--",
-      "DEPS"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "checkout the original DEPS"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
