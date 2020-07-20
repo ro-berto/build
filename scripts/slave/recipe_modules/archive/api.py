@@ -10,7 +10,6 @@ import manual_bisect_files
 from PB.recipe_modules.build.archive.properties import ArchiveData
 from recipe_engine import recipe_api
 
-
 # Regular expression to identify a Git hash.
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 # The Google Storage metadata key for the full commit position.
@@ -36,26 +35,40 @@ class ArchiveApi(recipe_api.RecipeApi):
     # This input property is populated by the global property $build/archive.
     self._default_config = props
 
-  def zip_and_upload_build(
-      self, step_name, target, build_url=None, src_dir=None,
-      build_revision=None, cros_board=None, package_dsym_files=False,
-      exclude_files=None, exclude_perf_test_files=False,
-      update_properties=None, store_by_hash=True,
-      platform=None, **kwargs):
+  def zip_and_upload_build(self,
+                           step_name,
+                           target,
+                           build_url=None,
+                           src_dir=None,
+                           build_revision=None,
+                           cros_board=None,
+                           package_dsym_files=False,
+                           exclude_files=None,
+                           exclude_perf_test_files=False,
+                           update_properties=None,
+                           store_by_hash=True,
+                           platform=None,
+                           **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
     if not src_dir:
       src_dir = self.m.path['checkout']
     args = [
-        '--target', target,
-        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-        '--staging-dir', self.m.path['cache'].join('chrome_staging'),
-        '--src-dir', src_dir,
+        '--target',
+        target,
+        '--gsutil-py-path',
+        self.m.depot_tools.gsutil_py_path,
+        '--staging-dir',
+        self.m.path['cache'].join('chrome_staging'),
+        '--src-dir',
+        src_dir,
     ]
     args += self.m.build.slave_utils_args
     if 'build_archive_url' in self.m.properties:
-      args.extend(['--use-build-url-name', '--build-url',
-                   self.m.properties['build_archive_url']])
+      args.extend([
+          '--use-build-url-name', '--build-url',
+          self.m.properties['build_archive_url']
+      ])
     elif build_url:
       args.extend(['--build-url', build_url])
     if build_revision:
@@ -70,11 +83,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--gs-acl', self.m.properties['gs_acl']])
     if exclude_perf_test_files and platform:
       include_bisect_file_list = (
-        manual_bisect_files.CHROME_REQUIRED_FILES.get(platform))
+          manual_bisect_files.CHROME_REQUIRED_FILES.get(platform))
       include_bisect_strip_list = (
-        manual_bisect_files.CHROME_STRIP_LIST.get(platform))
+          manual_bisect_files.CHROME_STRIP_LIST.get(platform))
       include_bisect_whitelist = (
-        manual_bisect_files.CHROME_WHITELIST_FILES.get(platform))
+          manual_bisect_files.CHROME_WHITELIST_FILES.get(platform))
       if include_bisect_file_list:
         inclusions = ','.join(include_bisect_file_list)
         args.extend(['--include-files', inclusions])
@@ -88,28 +101,29 @@ class ArchiveApi(recipe_api.RecipeApi):
       # If update_properties is passed in and store_by_hash is False,
       # we store it with commit position number instead of a hash
       if update_properties and not store_by_hash:
-        commit_position = self._get_commit_position(
-                            update_properties, None)
+        commit_position = self._get_commit_position(update_properties, None)
         _, cp_number = self.m.commit_position.parse(commit_position)
         args.extend(['--build_revision', cp_number])
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    args.extend(['--factory-properties', properties_json,
-                 '--build-properties', properties_json])
+    args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
     args.extend(['--json-urls', self.m.json.output()])
 
     kwargs['step_test_data'] = lambda: self.test_api.m.json.output({
-      'storage_url': 'gs://zip_build.example.com/output.zip',
-      'zip_url':
-        'https://storage.cloud.google.com/zip_build.example.com/output.zip',
+        'storage_url':
+            'gs://zip_build.example.com/output.zip',
+        'zip_url':
+            'https://storage.cloud.google.com/zip_build.example.com/output.zip',
     })
     result = self.m.build.python(
-      step_name,
-      self.repo_resource('scripts', 'slave', 'zip_build.py'),
-      args,
-      infra_step=True,
-      **kwargs
-    )
+        step_name,
+        self.repo_resource('scripts', 'slave', 'zip_build.py'),
+        args,
+        infra_step=True,
+        **kwargs)
     urls = result.json.output
     if 'storage_url' in urls:
       result.presentation.links['download'] = urls['storage_url']
@@ -125,8 +139,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       key = 'got_%s_revision_cp' % primary_project
     else:
       key = 'got_revision_cp'
-    return update_properties.get(key, update_properties.get(
-        'got_src_revision_cp'))
+    return update_properties.get(key,
+                                 update_properties.get('got_src_revision_cp'))
 
   def _get_git_commit(self, update_properties, primary_project):
     """Returns: (str/None) the git commit hash for a given project.
@@ -257,16 +271,17 @@ class ArchiveApi(recipe_api.RecipeApi):
     # Build the list of files to archive.
     filter_result = self.m.python(
         'filter build_dir',
-        self.resource('filter_build_files.py'),
-        [
-          '--dir', build_dir,
-          '--platform', self.m.platform.name,
-          '--output', self.m.json.output(),
+        self.resource('filter_build_files.py'), [
+            '--dir',
+            build_dir,
+            '--platform',
+            self.m.platform.name,
+            '--output',
+            self.m.json.output(),
         ],
         infra_step=True,
         step_test_data=lambda: self.m.json.test_api.output(['file1', 'file2']),
-        **kwargs
-    )
+        **kwargs)
 
     zip_file_list = filter_result.json.output
 
@@ -293,27 +308,22 @@ class ArchiveApi(recipe_api.RecipeApi):
     if revision_dir:
       component = '-%s-component' % revision_dir
 
-    zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
-                                            platform_name,
-                                            target_name,
-                                            component,
-                                            sortkey_path)
+    zip_file_base_name = '%s-%s-%s%s-%s' % (
+        archive_prefix, platform_name, target_name, component, sortkey_path)
     if self.m.runtime.is_experimental:
       zip_file_base_name += ('-experimental')
     zip_file_name = '%s.zip' % zip_file_base_name
 
     self.m.build.python(
         'zipping',
-        self.resource('zip_archive.py'),
-        [
-          staging_dir,
-          zip_file_base_name,
-          self.m.json.input(zip_file_list),
-          build_dir,
+        self.resource('zip_archive.py'), [
+            staging_dir,
+            zip_file_base_name,
+            self.m.json.input(zip_file_list),
+            build_dir,
         ],
         infra_step=True,
-        **kwargs
-    )
+        **kwargs)
 
     zip_file = staging_dir.join(zip_file_name)
 
@@ -333,17 +343,25 @@ class ArchiveApi(recipe_api.RecipeApi):
     )
     self.m.file.remove(zip_file_name, zip_file)
 
-  def download_and_unzip_build(
-      self, step_name, target, build_url, src_dir=None,
-      build_revision=None, build_archive_url=None, **kwargs):
+  def download_and_unzip_build(self,
+                               step_name,
+                               target,
+                               build_url,
+                               src_dir=None,
+                               build_revision=None,
+                               build_archive_url=None,
+                               **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
     if not src_dir:
       src_dir = self.m.path['checkout']
     args = [
-        '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-        '--target', target,
-        '--src-dir', src_dir,
+        '--gsutil-py-path',
+        self.m.depot_tools.gsutil_py_path,
+        '--target',
+        target,
+        '--src-dir',
+        src_dir,
     ]
     args += self.m.build.slave_utils_args
     if build_archive_url:
@@ -354,12 +372,12 @@ class ArchiveApi(recipe_api.RecipeApi):
         args.extend(['--build_revision', build_revision])
 
     properties = (
-      ('mastername', '--master-name'),
-      ('parent_builddir', '--parent-build-dir'),
-      ('parentname', '--parent-builder-name'),
-      ('parentslavename', '--parent-slave-name'),
-      ('webkit_dir', '--webkit-dir'),
-      ('revision_dir', '--revision-dir'),
+        ('mastername', '--master-name'),
+        ('parent_builddir', '--parent-build-dir'),
+        ('parentname', '--parent-builder-name'),
+        ('parentslavename', '--parent-slave-name'),
+        ('webkit_dir', '--webkit-dir'),
+        ('revision_dir', '--revision-dir'),
     )
     for property_name, switch_name in properties:
       if self.m.properties.get(property_name):
@@ -373,12 +391,11 @@ class ArchiveApi(recipe_api.RecipeApi):
     args.extend(['--build-number', self.m.buildbucket.build.number])
 
     self.m.build.python(
-      step_name,
-      self.repo_resource('scripts', 'slave', 'extract_build.py'),
-      args,
-      infra_step=True,
-      **kwargs
-    )
+        step_name,
+        self.repo_resource('scripts', 'slave', 'extract_build.py'),
+        args,
+        infra_step=True,
+        **kwargs)
 
   # FIXME(machenbach): This is currently used by win64 builders as well, which
   # have win32 in their archive names, which is confusing.
@@ -426,8 +443,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       result += ('/' + extra_url_components)
     if is_download:
       result += ('/' + self.m.properties['parent_buildername'] + '/' +
-                 'full-build-' + self.legacy_platform_name() +
-                 '.zip')
+                 'full-build-' + self.legacy_platform_name() + '.zip')
     else:
       result += '/' + self.m.buildbucket.builder_name
     return result

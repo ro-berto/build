@@ -41,32 +41,23 @@ class TestCascadeConfig(unittest.TestCase):
 
   def test_cascade_config(self):
     v = infra_platform.cascade_config({
-      (): {
-        'generic': True,
-      },
-      ('linux',): {
-        'os': 'linux',
-      },
-      ('linux', 32): {
-        'bits': 'linux-32',
-      },
-      ('linux', 'armv6l'): {
-        'machine': 'linux-armv6l',
-      },
-      ('linux', 'x86'): {
-        'machine': 'linux-x86',
-      },
-      ('linux', 'armv6l', 32): {
-        'all': 'linux-armv6l-32',
-      },
-    }, plat=('linux', 'armv6l', 32))
-    self.assertEqual(v, {
-        'generic': True,
-        'os': 'linux',
-        'bits': 'linux-32',
-        'machine': 'linux-armv6l',
-        'all': 'linux-armv6l-32',
-    })
+        (): {'generic': True,},
+        ('linux',): {'os': 'linux',},
+        ('linux', 32): {'bits': 'linux-32',},
+        ('linux', 'armv6l'): {'machine': 'linux-armv6l',},
+        ('linux', 'x86'): {'machine': 'linux-x86',},
+        ('linux', 'armv6l', 32): {'all': 'linux-armv6l-32',},
+    },
+                                      plat=('linux', 'armv6l', 32))
+    self.assertEqual(
+        v, {
+            'generic': True,
+            'os': 'linux',
+            'bits': 'linux-32',
+            'machine': 'linux-armv6l',
+            'all': 'linux-armv6l-32',
+        }
+    )
 
 
 if __name__ == '__main__':

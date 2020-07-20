@@ -17,13 +17,17 @@ from slave import slave_utils
 def layout_test(options, args):
   """Parse options and call run-webkit-tests, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
-  blink_scripts_dir = chromium_utils.FindUpward(build_dir,
-    'third_party', 'blink', 'tools')
+  blink_scripts_dir = chromium_utils.FindUpward(
+      build_dir, 'third_party', 'blink', 'tools'
+  )
   lint_tests_script = os.path.join(
-      blink_scripts_dir, 'lint_test_expectations.py')
+      blink_scripts_dir, 'lint_test_expectations.py'
+  )
 
-  return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                                [lint_tests_script])
+  return slave_utils.RunPythonCommandInBuildDir(
+      build_dir, options.target, [lint_tests_script]
+  )
+
 
 def main():
   option_parser = optparse.OptionParser()
@@ -31,12 +35,17 @@ def main():
 
   # Note that --target isn't needed for --lint-test-files, but the
   # RunPythonCommandInBuildDir() will get upset if we don't say something.
-  option_parser.add_option('', '--target', default='release',
-      help='DumpRenderTree build configuration (Release or Debug)')
+  option_parser.add_option(
+      '',
+      '--target',
+      default='release',
+      help='DumpRenderTree build configuration (Release or Debug)'
+  )
 
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
   return layout_test(options, args)
+
 
 if '__main__' == __name__:
   sys.exit(main())

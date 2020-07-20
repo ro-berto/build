@@ -130,10 +130,13 @@ def SetBuilderIDToCounter(builder_id, counter):
     counter[key] = value
 
 
-def UploadToGomaLogGS(file_path, gs_filename,
-                      text_to_append=None,
-                      metadata=None,
-                      override_gsutil=None):
+def UploadToGomaLogGS(
+    file_path,
+    gs_filename,
+    text_to_append=None,
+    metadata=None,
+    override_gsutil=None
+):
   """Upload a file to Google Cloud Storage (gs://chrome-goma-log).
 
   Note that the uploaded file would automatically be gzip compressed.
@@ -149,8 +152,7 @@ def UploadToGomaLogGS(file_path, gs_filename,
   """
   hostname = GetShortHostname()
   today = datetime.datetime.utcnow().date()
-  log_path = '%s/%s/%s.gz' % (
-    today.strftime('%Y/%m/%d'), hostname, gs_filename)
+  log_path = '%s/%s/%s.gz' % (today.strftime('%Y/%m/%d'), hostname, gs_filename)
   gs_path = 'gs://%s/%s' % (GOMA_LOG_GS_BUCKET, log_path)
   temp = tempfile.NamedTemporaryFile(delete=False)
   try:
@@ -160,19 +162,24 @@ def UploadToGomaLogGS(file_path, gs_filename,
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
           gzipf_out.write(text_to_append)
-    slave_utils.GSUtilCopy(temp.name, gs_path,
-                           metadata=metadata, override_gsutil=override_gsutil)
+    slave_utils.GSUtilCopy(
+        temp.name, gs_path, metadata=metadata, override_gsutil=override_gsutil
+    )
     print "Copied log file to %s" % gs_path
   finally:
     os.remove(temp.name)
   return log_path
 
 
-def UploadGomaCompilerProxyInfo(override_gsutil=None,
-                                builder='unknown', master='unknown',
-                                slave='unknown',
-                                builder_id=None, is_luci=False,
-                                is_experimental=False):
+def UploadGomaCompilerProxyInfo(
+    override_gsutil=None,
+    builder='unknown',
+    master='unknown',
+    slave='unknown',
+    builder_id=None,
+    is_luci=False,
+    is_experimental=False
+):
   """Upload compiler_proxy{,-subproc}.INFO and gomacc.INFO to Google Storage.
 
   Args:
@@ -187,27 +194,27 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
 
   builderinfo = {
-    'builder': builder,
-    'master': master,
-    'slave': slave,
-    'os': chromium_utils.PlatformName(),
-    'is_luci': is_luci,
-    'is_experimental': is_experimental,
+      'builder': builder,
+      'master': master,
+      'slave': slave,
+      'os': chromium_utils.PlatformName(),
+      'is_luci': is_luci,
+      'is_experimental': is_experimental,
   }
   if builder_id:
     builderinfo['builder_id'] = builder_id
 
   # Needs to begin with x-goog-meta for custom metadata.
   # https://cloud.google.com/storage/docs/gsutil/addlhelp/WorkingWithObjectMetadata#custom-metadata
-  metadata = {
-    'x-goog-meta-builderinfo': json.dumps(builderinfo)
-  }
+  metadata = {'x-goog-meta-builderinfo': json.dumps(builderinfo)}
 
   if latest_subproc_info:
-    UploadToGomaLogGS(latest_subproc_info,
-                      os.path.basename(latest_subproc_info),
-                      metadata=metadata,
-                      override_gsutil=override_gsutil)
+    UploadToGomaLogGS(
+        latest_subproc_info,
+        os.path.basename(latest_subproc_info),
+        metadata=metadata,
+        override_gsutil=override_gsutil
+    )
   else:
     print 'No compiler_proxy-subproc.INFO to upload'
   latest_info = GetLatestGomaCompilerProxyInfo()
@@ -217,24 +224,25 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
   log_path = UploadToGomaLogGS(
-      latest_info, os.path.basename(latest_info),
+      latest_info,
+      os.path.basename(latest_info),
       metadata=metadata,
-      override_gsutil=override_gsutil)
-  viewer_url = ('https://chromium-build-stats.appspot.com/compiler_proxy_log/'
-                + log_path)
+      override_gsutil=override_gsutil
+  )
+  viewer_url = (
+      'https://chromium-build-stats.appspot.com/compiler_proxy_log/' + log_path
+  )
   print 'Visualization at %s' % viewer_url
 
   gomacc_logs = GetListOfGomaccInfoAfterCompilerProxyStart()
   if gomacc_logs:
-    UploadGomaccInfo(gomacc_logs,
-                     metadata=metadata,
-                     override_gsutil=override_gsutil)
+    UploadGomaccInfo(
+        gomacc_logs, metadata=metadata, override_gsutil=override_gsutil
+    )
   return viewer_url
 
 
-def UploadGomaccInfo(gomacc_logs,
-                     metadata=None,
-                     override_gsutil=None):
+def UploadGomaccInfo(gomacc_logs, metadata=None, override_gsutil=None):
   """Upload gomacc logs if any
 
   Args:
@@ -256,17 +264,27 @@ def UploadGomaccInfo(gomacc_logs,
     # close the file here. Otherwise this will fail on Win.
     temp_file.close()
 
-    UploadToGomaLogGS(temp_file.name, gs_tarfile_name,
-                      metadata=metadata,
-                      override_gsutil=override_gsutil)
+    UploadToGomaLogGS(
+        temp_file.name,
+        gs_tarfile_name,
+        metadata=metadata,
+        override_gsutil=override_gsutil
+    )
   finally:
     if not temp_file.closed:
       temp_file.close()
     os.remove(temp_file.name)
 
+
 def UploadNinjaLog(
-    outdir, compiler, command, exit_status, build_id, step_name,
-    override_gsutil=None):
+    outdir,
+    compiler,
+    command,
+    exit_status,
+    build_id,
+    step_name,
+    override_gsutil=None
+):
   """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
   in the same folder with goma's compiler_proxy.INFO.
 
@@ -294,13 +312,10 @@ def UploadNinjaLog(
   if isinstance(command, str) or isinstance(command, unicode):
     command = [command]
 
-  info = {'cmdline': command,
-          'cwd': cwd,
-          'platform': platform,
-          'exit': exit_status,
-          'build_id': build_id,
-          'step_name': step_name,
-          'env': {}}
+  info = {
+      'cmdline': command, 'cwd': cwd, 'platform': platform, 'exit': exit_status,
+      'build_id': build_id, 'step_name': step_name, 'env': {}
+  }
   for k, v in os.environ.iteritems():
     info['env'][k] = v
   if compiler:
@@ -314,15 +329,20 @@ def UploadNinjaLog(
   hostname = GetShortHostname()
   pid = os.getpid()
   ninja_log_filename = 'ninja_log.%s.%s.%s.%d' % (
-      hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid)
+      hostname, username, mtime.strftime('%Y%m%d-%H%M%S'), pid
+  )
   additional_text = '# end of ninja log\n' + json.dumps(info)
   log_path = UploadToGomaLogGS(
-      ninja_log_path, ninja_log_filename, text_to_append=additional_text,
-      override_gsutil=override_gsutil)
+      ninja_log_path,
+      ninja_log_filename,
+      text_to_append=additional_text,
+      override_gsutil=override_gsutil
+  )
   viewer_url = 'https://chromium-build-stats.appspot.com/ninja_log/' + log_path
   print 'Visualization at %s' % viewer_url
 
   return viewer_url
+
 
 def IsCompilerProxyKilledByFatalError():
   """Returns true if goma compiler_proxy is killed by CHECK or LOG(FATAL)."""
@@ -337,10 +357,15 @@ def IsCompilerProxyKilledByFatalError():
   return False
 
 
-def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
-                              builder='unknown', master='unknown',
-                              slave='unknown', builder_id=None,
-                              is_luci=False):
+def MakeGomaExitStatusCounter(
+    goma_stats_file,
+    goma_crash_report,
+    builder='unknown',
+    master='unknown',
+    slave='unknown',
+    builder_id=None,
+    is_luci=False
+):
   """Make Goma exit status counter. This counter indicates compiler_proxy
      has finished without problem, crashed, or killed. This counter will
      be used to alert to goma team.
@@ -446,28 +471,33 @@ def SendCountersToTsMon(counters):
       counters_json.append('--counter')
       counters_json.append(c_json)
 
-    cmd = [sys.executable,
-           run_cmd,
-           'infra.tools.send_ts_mon_values', '--verbose',
-           '--ts-mon-target-type', 'task',
-           '--ts-mon-task-service-name', 'goma-client',
-           '--ts-mon-task-job-name', 'default']
+    cmd = [
+        sys.executable, run_cmd, 'infra.tools.send_ts_mon_values', '--verbose',
+        '--ts-mon-target-type', 'task', '--ts-mon-task-service-name',
+        'goma-client', '--ts-mon-task-job-name', 'default'
+    ]
     cmd.extend(counters_json)
     cmd_filter = chromium_utils.FilterCapture()
-    retcode = chromium_utils.RunCommand(cmd, filter_obj=cmd_filter,
-                                        max_time=30)
+    retcode = chromium_utils.RunCommand(cmd, filter_obj=cmd_filter, max_time=30)
     if retcode:
-      print('Execution of send_ts_mon_values failed with code %s'
-            % retcode)
+      print('Execution of send_ts_mon_values failed with code %s' % retcode)
       print '\n'.join(cmd_filter.text)
   except Exception as ex:
-    print('error while sending counters to ts_mon: counter=%s: %s'
-          % (counters, ex))
+    print(
+        'error while sending counters to ts_mon: counter=%s: %s' %
+        (counters, ex)
+    )
 
 
-def MakeGomaStatusCounter(json_file, exit_status,
-                          builder='unknown', master='unknown', slave='unknown',
-                          builder_id=None, is_luci=False):
+def MakeGomaStatusCounter(
+    json_file,
+    exit_status,
+    builder='unknown',
+    master='unknown',
+    slave='unknown',
+    builder_id=None,
+    is_luci=False
+):
   """Make latest Goma status counter which will be sent to ts_mon.
 
   Args:
@@ -508,8 +538,7 @@ def MakeGomaStatusCounter(json_file, exit_status,
       result = 'exception'
     elif exit_status != 0:
       result = 'failure'
-      if (exit_status < 0 or
-          not infra_status or
+      if (exit_status < 0 or not infra_status or
           infra_status['ping_status_code'] != 200 or
           infra_status.get('num_user_error', 0) > 0):
         result = 'exception'
@@ -521,11 +550,10 @@ def MakeGomaStatusCounter(json_file, exit_status,
       ping_status_code = infra_status['ping_status_code']
 
     counter = {
-        'name': 'goma/failure',
-        'value': num_failure,
+        'name': 'goma/failure', 'value': num_failure,
         'os': chromium_utils.PlatformName(),
-        'ping_status_code': ping_status_code,
-        'result': result}
+        'ping_status_code': ping_status_code, 'result': result
+    }
     if is_luci:
       counter['name'] = '%s_luci' % counter['name']
       SetBuilderIDToCounter(builder_id, counter)
@@ -541,15 +569,22 @@ def MakeGomaStatusCounter(json_file, exit_status,
     return counter
 
   except Exception as ex:
-    print('error while making goma status counter for ts_mon: jons_file=%s: %s'
-          % (json_file, ex))
+    print(
+        'error while making goma status counter for ts_mon: jons_file=%s: %s' %
+        (json_file, ex)
+    )
     return None
 
 
-def MakeGomaFailureReasonCounter(json_file, exit_status,
-                                 builder='unknown', master='unknown',
-                                 slave='unknown', builder_id=None,
-                                 is_luci=False):
+def MakeGomaFailureReasonCounter(
+    json_file,
+    exit_status,
+    builder='unknown',
+    master='unknown',
+    slave='unknown',
+    builder_id=None,
+    is_luci=False
+):
   """Make latest Goma failure reason counter which will be sent to ts_mon.
 
   Args:
@@ -604,11 +639,10 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
       result = 'exception'
 
     counter = {
-        'name': 'goma/failure_reason',
-        'value': 1,
-        'os': chromium_utils.PlatformName(),
-        'result': result,
-        'exception_reason': reason}
+        'name': 'goma/failure_reason', 'value': 1,
+        'os': chromium_utils.PlatformName(), 'result': result,
+        'exception_reason': reason
+    }
     if is_luci:
       counter['name'] = '%s_luci' % counter['name']
       SetBuilderIDToCounter(builder_id, counter)
@@ -624,6 +658,8 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
     return counter
 
   except Exception as ex:
-    print('error while making goma status counter for ts_mon: jons_file=%s: %s'
-          % (json_file, ex))
+    print(
+        'error while making goma status counter for ts_mon: jons_file=%s: %s' %
+        (json_file, ex)
+    )
     return None

@@ -21,7 +21,6 @@ import sys
 from common import chromium_utils
 from slave import build_directory
 
-
 COVERAGE_DIR_POSTFIX = '_coverage'
 COVERAGE_INFO = 'coverage.info'
 
@@ -58,13 +57,11 @@ def RunCroc(cov_files, cmdline):
 
 def CrocCommand(platform, cov_files, html_dir):
   cmdline = [
-    sys.executable,
-    'src/tools/code_coverage/croc.py',
-    '-c', 'src/build/common.croc',
-    '-c', 'src/build/%s/chrome_%s.croc' % (platform, platform),
-    '-r', os.getcwd(),
-    '--tree',
-    '--html', html_dir]
+      sys.executable, 'src/tools/code_coverage/croc.py', '-c',
+      'src/build/common.croc', '-c',
+      'src/build/%s/chrome_%s.croc' % (platform, platform), '-r',
+      os.getcwd(), '--tree', '--html', html_dir
+  ]
   for cov_file in cov_files:
     cmdline += ['-i', cov_file]
   return cmdline
@@ -72,8 +69,7 @@ def CrocCommand(platform, cov_files, html_dir):
 
 def ReplaceCoveragePath(cov_file, build_dir):
   """Replace the coverage path to this system 'src' directory."""
-  src_dir = chromium_utils.AbsoluteCanonicalPath(
-      os.path.join(build_dir, '..'))
+  src_dir = chromium_utils.AbsoluteCanonicalPath(os.path.join(build_dir, '..'))
   src_dir = os.path.normpath(src_dir)
 
   input_file = open(cov_file)
@@ -95,8 +91,10 @@ def FetchCoverageFiles(options):
     cov_dir = test.replace('_', '') + COVERAGE_DIR_POSTFIX
     output_path = os.path.join(target_dir, cov_dir)
     chromium_utils.MaybeMakeDirectory(output_path)
-    cov_src = ('/%s/%s/%s/%s/' % (options.upload_dir, options.platform,
-                                  options.build_id, cov_dir))
+    cov_src = (
+        '/%s/%s/%s/%s/' %
+        (options.upload_dir, options.platform, options.build_id, cov_dir)
+    )
     if options.sharded_tests and test in options.sharded_tests:
       # Copy all Lvoc files.
       for shard_count in xrange(1, options.browser_total_shards + 1):
@@ -117,8 +115,9 @@ def ProcessCoverage(options, args):
     FetchCoverageFiles(options)
 
   # Process total coverage.
-  coverage_dirs = [x.replace('_', '') + COVERAGE_DIR_POSTFIX for x in
-                   options.tests]
+  coverage_dirs = [
+      x.replace('_', '') + COVERAGE_DIR_POSTFIX for x in options.tests
+  ]
   target_dir = os.path.join(options.build_dir, options.target)
   cov_files = []
   for cov in coverage_dirs:
@@ -155,19 +154,24 @@ def main():
   platforms = ['linux', 'mac', 'win']
 
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--target',
-                           default='Debug',
-                           help='build target (Debug, Release) '
-                                '[default: %default]')
+  option_parser.add_option(
+      '--target',
+      default='Debug',
+      help='build target (Debug, Release) '
+      '[default: %default]'
+  )
   option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--platform',
-                           default=default_platform,
-                           help='specify platform (%s) [default: %%default]'
-                                % ', '.join(platforms))
-  option_parser.add_option('--build-id',
-                           help='The build number of the tested build.')
-  option_parser.add_option('--upload-dir',
-                           help='Path coverage file was uploaded to.')
+  option_parser.add_option(
+      '--platform',
+      default=default_platform,
+      help='specify platform (%s) [default: %%default]' % ', '.join(platforms)
+  )
+  option_parser.add_option(
+      '--build-id', help='The build number of the tested build.'
+  )
+  option_parser.add_option(
+      '--upload-dir', help='Path coverage file was uploaded to.'
+  )
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()

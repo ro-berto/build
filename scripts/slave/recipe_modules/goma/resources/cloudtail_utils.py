@@ -22,11 +22,8 @@ def start_cloudtail(args):
     kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
 
   cloudtail_cmd = [
-      args.cloudtail_path,
-      'tail',
-      '--project-id', 'goma-logs',
-      '--log-id', 'goma_compiler_proxy',
-      '--path',
+      args.cloudtail_path, 'tail', '--project-id', 'goma-logs', '--log-id',
+      'goma_compiler_proxy', '--path',
       goma_utils.GetLatestGomaCompilerProxyInfo()
   ]
   if args.cloudtail_service_account_json:
@@ -67,6 +64,7 @@ def is_running_posix(pid):
 
 
 class NotDiedError(Exception):
+
   def __str__(self):
     return "NotDiedError"
 
@@ -94,8 +92,7 @@ def wait_termination_win(pid):
   handle = None
   try:
     handle = win32api.OpenProcess(
-        win32con.PROCESS_QUERY_INFORMATION | win32con.SYNCHRONIZE,
-        False, pid)
+        win32con.PROCESS_QUERY_INFORMATION | win32con.SYNCHRONIZE, False, pid)
     try:
       os.kill(pid, signal.CTRL_C_EVENT)
       print('CTRL_C_EVENT has been sent to process %d. '
@@ -164,22 +161,25 @@ def main():
 
   subparsers = parser.add_subparsers(help='commands for cloudtail')
 
-  parser_start = subparsers.add_parser('start',
-                                       help='subcommand to start cloudtail')
+  parser_start = subparsers.add_parser(
+      'start', help='subcommand to start cloudtail')
   parser_start.set_defaults(command='start')
-  parser_start.add_argument('--cloudtail-path', required=True,
-                            help='path of cloudtail binary')
-  parser_start.add_argument('--cloudtail-service-account-json',
-                            help='path of cloudtail service account json file')
+  parser_start.add_argument(
+      '--cloudtail-path', required=True, help='path of cloudtail binary')
+  parser_start.add_argument(
+      '--cloudtail-service-account-json',
+      help='path of cloudtail service account json file')
 
-  parser_start.add_argument('--pid-file', required=True,
-                            help='file written pid')
+  parser_start.add_argument(
+      '--pid-file', required=True, help='file written pid')
 
-  parser_stop = subparsers.add_parser('stop',
-                                      help='subcommand to stop cloudtail')
+  parser_stop = subparsers.add_parser(
+      'stop', help='subcommand to stop cloudtail')
   parser_stop.set_defaults(command='stop')
-  parser_stop.add_argument('--killed-pid-file', required=True,
-                           help='file written the pid to be killed.')
+  parser_stop.add_argument(
+      '--killed-pid-file',
+      required=True,
+      help='file written the pid to be killed.')
 
   args = parser.parse_args()
 

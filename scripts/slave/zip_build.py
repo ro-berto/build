@@ -28,27 +28,29 @@ MOJO_BINDINGS_PATH = 'gen/mojo/public/js/mojo_bindings.js'
 
 # A list of mojom search paths relative to the build directory.
 MOJOM_SEARCH_DIRS = [
-  'gen/components',
-  'gen/content/test/data',
-  'gen/device',
-  'gen/gpu/ipc/common/',
-  'gen/media/capture/mojo',
-  'gen/media/mojo/interfaces/',
-  'gen/mojo',
-  'gen/services',
-  'gen/skia/public/interfaces',
-  'gen/third_party/WebKit/public',
-  'gen/third_party/WebKit/Source',
-  'gen/third_party/blink/public',
-  'gen/third_party/blink/renderer',
-  'gen/url/mojo',
-  'gen/ui',
+    'gen/components',
+    'gen/content/test/data',
+    'gen/device',
+    'gen/gpu/ipc/common/',
+    'gen/media/capture/mojo',
+    'gen/media/mojo/interfaces/',
+    'gen/mojo',
+    'gen/services',
+    'gen/skia/public/interfaces',
+    'gen/third_party/WebKit/public',
+    'gen/third_party/WebKit/Source',
+    'gen/third_party/blink/public',
+    'gen/third_party/blink/renderer',
+    'gen/url/mojo',
+    'gen/ui',
 ]
 
 # Layout test data directory relative to the build directory.
 LAYOUT_TEST_DATA_DIR = 'gen/layout_test_data'
 
-class StagingError(Exception): pass
+
+class StagingError(Exception):
+  pass
 
 
 def CopyDebugCRT(build_dir):
@@ -57,7 +59,8 @@ def CopyDebugCRT(build_dir):
   # should not conflict with the others anyways.
   crt_dlls = glob.glob(
       'C:\\Program Files (x86)\\Microsoft Visual Studio *\\VC\\redist\\'
-      'Debug_NonRedist\\x86\\Microsoft.*.DebugCRT\\*.dll')
+      'Debug_NonRedist\\x86\\Microsoft.*.DebugCRT\\*.dll'
+  )
   for dll in crt_dlls:
     shutil.copy(dll, build_dir)
 
@@ -83,7 +86,8 @@ def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext, prune_limit):
     recent_name = zip_base + ('_%d' % saved_build) + zip_ext
     ordered_asc_by_build_number_list.append(recent_name)
     ordered_asc_by_build_number_list.append(
-        recent_name.replace(zip_ext, '_old' + zip_ext))
+        recent_name.replace(zip_ext, '_old' + zip_ext)
+    )
   return ordered_asc_by_build_number_list
 
 
@@ -110,9 +114,11 @@ def FileRegexWhitelist(options):
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
-    return (r'^(chrome[_.]dll|chrome[_.]exe'
-            # r'|browser_test.+|unit_tests'
-            r')\.pdb$')
+    return (
+        r'^(chrome[_.]dll|chrome[_.]exe'
+        # r'|browser_test.+|unit_tests'
+        r')\.pdb$'
+    )
 
   return '$NO_FILTER^'
 
@@ -188,30 +194,35 @@ def WriteRevisionFile(dirname, build_revision):
     # Script only works on python 2.6
     # pylint: disable=E1123
     tmp_revision_file = tempfile.NamedTemporaryFile(
-        mode='w', dir=dirname,
-        delete=False)
+        mode='w', dir=dirname, delete=False
+    )
     tmp_revision_file.write('%s' % build_revision)
     tmp_revision_file.close()
     chromium_utils.MakeWorldReadable(tmp_revision_file.name)
-    dest_path = os.path.join(dirname,
-                             chromium_utils.FULL_BUILD_REVISION_FILENAME)
+    dest_path = os.path.join(
+        dirname, chromium_utils.FULL_BUILD_REVISION_FILENAME
+    )
     shutil.move(tmp_revision_file.name, dest_path)
     return dest_path
   except IOError:
     print 'Writing to revision file in %s failed.' % dirname
 
-def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                           zip_file_name, strip_files=None):
+
+def MakeUnversionedArchive(
+    build_dir, staging_dir, zip_file_list, zip_file_name, strip_files=None
+):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
   # Prevents having zip_file_list to contain duplicates
   zip_file_list = list(set(zip_file_list))
-  (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
-                                               zip_file_name,
-                                               zip_file_list,
-                                               build_dir,
-                                               raise_error=True,
-                                               strip_files=strip_files)
+  (zip_dir, zip_file) = chromium_utils.MakeZip(
+      staging_dir,
+      zip_file_name,
+      zip_file_list,
+      build_dir,
+      raise_error=True,
+      strip_files=strip_files
+  )
 
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):
@@ -256,8 +267,9 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   return (zip_base, zip_ext, versioned_file)
 
 
-def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
-                          gsutil_py_path=None):
+def UploadToGoogleStorage(
+    versioned_file, revision_file, build_url, gs_acl, gsutil_py_path=None
+):
   override_gsutil = None
   if gsutil_py_path:
     override_gsutil = [sys.executable, gsutil_py_path]
@@ -266,7 +278,8 @@ def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
                                 override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
-        (versioned_file, build_url))
+        (versioned_file, build_url)
+    )
   print 'Successfully uploaded %s to %s' % (versioned_file, build_url)
 
   # The file showing the latest uploaded revision must be named LAST_CHANGE
@@ -277,7 +290,8 @@ def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl,
                                 override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
-        (last_change_file, build_url))
+        (last_change_file, build_url)
+    )
   print 'Successfully uploaded %s to %s' % (last_change_file, build_url)
   os.remove(last_change_file)
   return '/'.join([build_url, os.path.basename(versioned_file)])
@@ -287,7 +301,8 @@ def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
   """Removes old archives so that we don't exceed disk space."""
   zip_list = glob.glob(os.path.join(staging_dir, zip_base + '_*' + zip_ext))
   saved_zip_list = GetRecentBuildsByBuildNumber(
-      zip_list, zip_base, zip_ext, prune_limit)
+      zip_list, zip_base, zip_ext, prune_limit
+  )
   saved_mtime_list = GetRecentBuildsByModificationTime(zip_list, prune_limit)
 
   # Prune zip files not matched by the whitelists above.
@@ -301,11 +316,14 @@ class PathMatcher(object):
   """Generates a matcher which can be used to filter file paths."""
 
   def __init__(self, options):
+
     def CommaStrParser(val):
       return [f.strip() for f in csv.reader([val]).next()]
+
     self.inclusions = CommaStrParser(options.include_files)
-    self.exclusions = (CommaStrParser(options.exclude_files)
-                       + chromium_utils.FileExclusions())
+    self.exclusions = (
+        CommaStrParser(options.exclude_files) + chromium_utils.FileExclusions()
+    )
     self.regex_whitelist = FileRegexWhitelist(options)
     self.regex_blacklist = FileRegexBlacklist(options)
     self.exclude_unmatched = options.exclude_unmatched
@@ -321,8 +339,8 @@ class PathMatcher(object):
         "Blacklist regex: '%s'" % self.regex_blacklist,
         'Zip unmatched files: %s' % (not self.exclude_unmatched),
         'Exclude extra: %s' % self.exclude_extra,
-        "Custom Whitelist regex: '%s'" % self.custom_whitelist])
-
+        "Custom Whitelist regex: '%s'" % self.custom_whitelist
+    ])
 
   def Match(self, filename):
     for p in self.inclusions:
@@ -331,8 +349,7 @@ class PathMatcher(object):
     for p in self.exclusions:
       if fnmatch.fnmatch(filename, p):
         return False
-    if (self.custom_whitelist and
-       re.match(self.custom_whitelist, filename)):
+    if (self.custom_whitelist and re.match(self.custom_whitelist, filename)):
       return True
     if self.exclude_extra:
       return False
@@ -345,17 +362,20 @@ class PathMatcher(object):
 
 def Archive(options):
   build_dir = build_directory.GetBuildOutputDirectory(
-      options.src_dir, options.cros_board)
+      options.src_dir, options.cros_board
+  )
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
-  staging_dir = (options.staging_dir or
-                 slave_utils.GetStagingDir(options.src_dir))
+  staging_dir = (
+      options.staging_dir or slave_utils.GetStagingDir(options.src_dir)
+  )
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
   if not options.build_revision:
     build_revision = slave_utils.GetBuildRevisions(
-        options.src_dir, options.revision_dir)
+        options.src_dir, options.revision_dir
+    )
   else:
     build_revision = options.build_revision
 
@@ -364,7 +384,8 @@ def Archive(options):
       options.build_number,
       options.parent_build_number,
       build_revision,
-      use_try_buildnumber=(not options.append_deps_patch_sha))
+      use_try_buildnumber=(not options.append_deps_patch_sha)
+  )
 
   # TODO(robertocn): Remove this if no one other than bisect uses it.
   if options.append_deps_patch_sha:
@@ -392,8 +413,10 @@ def Archive(options):
   # Build the list of files to archive.
   zip_file_list = []
   for root, dirs, files in os.walk(build_dir):
+
     def rel(f):
       return os.path.relpath(os.path.join(root, f), build_dir)
+
     zip_file_list += [rel(f) for f in files if path_filter.Match(rel(f))]
 
     # For some reason os.walk returns symbolic links that point to directories
@@ -401,8 +424,10 @@ def Archive(options):
     # they appeared in files instead.
     def islink(f):
       return os.path.islink(os.path.join(root, f))
-    zip_file_list += [rel(d) for d in dirs if islink(d) and
-                      path_filter.Match(rel(d))]
+
+    zip_file_list += [
+        rel(d) for d in dirs if islink(d) and path_filter.Match(rel(d))
+    ]
     dirs[:] = [d for d in dirs if not islink(d) and path_filter.Match(rel(d))]
 
   # Include mojo public JS library.
@@ -420,12 +445,17 @@ def Archive(options):
   print 'Include layout test data: %s' % layout_test_data_files
   zip_file_list.extend(layout_test_data_files)
 
-  zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                                    unversioned_base_name,
-                                    strip_files=options.strip_files)
+  zip_file = MakeUnversionedArchive(
+      build_dir,
+      staging_dir,
+      zip_file_list,
+      unversioned_base_name,
+      strip_files=options.strip_files
+  )
 
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
-      zip_file, version_suffix, options)
+      zip_file, version_suffix, options
+  )
 
   prune_limit = 10
   if options.build_url.startswith('gs://'):
@@ -442,14 +472,18 @@ def Archive(options):
   if options.build_url.startswith('gs://'):
     zip_url = UploadToGoogleStorage(
         versioned_file, revision_file, options.build_url, options.gs_acl,
-        options.gsutil_py_path)
+        options.gsutil_py_path
+    )
 
-    storage_url = ('https://storage.cloud.google.com/%s/%s' %
-        (options.build_url[len('gs://'):], os.path.basename(versioned_file)))
+    storage_url = (
+        'https://storage.cloud.google.com/%s/%s' %
+        (options.build_url[len('gs://'):], os.path.basename(versioned_file))
+    )
     urls['storage_url'] = storage_url
   else:
     staging_path = (
-        os.path.splitdrive(versioned_file)[1].replace(os.path.sep, '/'))
+        os.path.splitdrive(versioned_file)[1].replace(os.path.sep, '/')
+    )
     zip_url = 'http://' + options.slave_name + staging_path
 
   urls['zip_url'] = zip_url
@@ -458,65 +492,117 @@ def Archive(options):
 
 
 def AddOptions(option_parser):
-  option_parser.add_option('--target',
-                           help='build target to archive (Debug or Release)')
-  option_parser.add_option('--src-dir', default='src',
-                           help='path to the top-level sources directory')
+  option_parser.add_option(
+      '--target', help='build target to archive (Debug or Release)'
+  )
+  option_parser.add_option(
+      '--src-dir',
+      default='src',
+      help='path to the top-level sources directory'
+  )
   option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--exclude-files', default='',
-                           help='Comma separated list of files that should '
-                                'always be excluded from the zip.')
-  option_parser.add_option('--include-files', default='',
-                           help='Comma separated list of files that should '
-                                'always be included in the zip.')
-  option_parser.add_option('--whitelist', default='',
-                           help='Custom regex whitelist to include files')
-  option_parser.add_option('--exclude-extra', action='store_true',
-                           default=False, help='Only includes include file list'
-                           'and regex whitelist match provided')
+  option_parser.add_option(
+      '--exclude-files',
+      default='',
+      help='Comma separated list of files that should '
+      'always be excluded from the zip.'
+  )
+  option_parser.add_option(
+      '--include-files',
+      default='',
+      help='Comma separated list of files that should '
+      'always be included in the zip.'
+  )
+  option_parser.add_option(
+      '--whitelist', default='', help='Custom regex whitelist to include files'
+  )
+  option_parser.add_option(
+      '--exclude-extra',
+      action='store_true',
+      default=False,
+      help='Only includes include file list'
+      'and regex whitelist match provided'
+  )
   option_parser.add_option('--master-name', help='Name of the buildbot master.')
   option_parser.add_option('--slave-name', help='Name of the buildbot slave.')
-  option_parser.add_option('--build-number', type=int,
-                           help='Buildbot build number.')
-  option_parser.add_option('--parent-build-number', type=int,
-                           help='Buildbot parent build number.')
-  option_parser.add_option('--revision-dir',
-                           help='Directory path that shall be used to decide '
-                                'the revision number for the archive, '
-                                'relative to --src-dir')
-  option_parser.add_option('--build_revision',
-                           help='The revision the archive should be at. '
-                                'Overrides the revision found on disk.')
-  option_parser.add_option('--exclude-unmatched', action='store_true',
-                           help='Exclude all files not matched by a whitelist')
-  option_parser.add_option('--build-url', default='',
-                           help=('Optional URL to which to upload build '
-                                 '(overrides build_url factory property)'))
-  option_parser.add_option('--use-build-url-name', action='store_true',
-                           help=('Use the filename given in --build-url instead'
-                                 'of generating one.'))
-  option_parser.add_option('--cros-board',
-                           help=('If building for Chrom[e|ium]OS via the '
-                                 'simple chrome workflow, the name of the '
-                                 'target CROS board.'))
-  option_parser.add_option('--package-dsym-files', action='store_true',
-                           default=False, help='Add also dSYM files.')
+  option_parser.add_option(
+      '--build-number', type=int, help='Buildbot build number.'
+  )
+  option_parser.add_option(
+      '--parent-build-number', type=int, help='Buildbot parent build number.'
+  )
+  option_parser.add_option(
+      '--revision-dir',
+      help='Directory path that shall be used to decide '
+      'the revision number for the archive, '
+      'relative to --src-dir'
+  )
+  option_parser.add_option(
+      '--build_revision',
+      help='The revision the archive should be at. '
+      'Overrides the revision found on disk.'
+  )
+  option_parser.add_option(
+      '--exclude-unmatched',
+      action='store_true',
+      help='Exclude all files not matched by a whitelist'
+  )
+  option_parser.add_option(
+      '--build-url',
+      default='',
+      help=(
+          'Optional URL to which to upload build '
+          '(overrides build_url factory property)'
+      )
+  )
+  option_parser.add_option(
+      '--use-build-url-name',
+      action='store_true',
+      help=(
+          'Use the filename given in --build-url instead'
+          'of generating one.'
+      )
+  )
+  option_parser.add_option(
+      '--cros-board',
+      help=(
+          'If building for Chrom[e|ium]OS via the '
+          'simple chrome workflow, the name of the '
+          'target CROS board.'
+      )
+  )
+  option_parser.add_option(
+      '--package-dsym-files',
+      action='store_true',
+      default=False,
+      help='Add also dSYM files.'
+  )
   option_parser.add_option('--append-deps-patch-sha', action='store_true')
   option_parser.add_option('--gs-acl')
-  option_parser.add_option('--strip-files', default='',
-                           help='Comma separated list of files that should '
-                                'be stripped of symbols in the zip.')
-  option_parser.add_option('--json-urls',
-                           help=('Path to json file containing uploaded '
-                                 'archive urls. If this is omitted then '
-                                 'the urls will be emitted as buildbot '
-                                 'annotations.'))
-  option_parser.add_option('--staging-dir',
-                           help='Directory to use for staging the archives. '
-                                'Default behavior is to automatically detect '
-                                'slave\'s build directory.')
-  option_parser.add_option('--gsutil-py-path',
-                           help='Specify path to gsutil.py script.')
+  option_parser.add_option(
+      '--strip-files',
+      default='',
+      help='Comma separated list of files that should '
+      'be stripped of symbols in the zip.'
+  )
+  option_parser.add_option(
+      '--json-urls',
+      help=(
+          'Path to json file containing uploaded '
+          'archive urls. If this is omitted then '
+          'the urls will be emitted as buildbot '
+          'annotations.'
+      )
+  )
+  option_parser.add_option(
+      '--staging-dir',
+      help='Directory to use for staging the archives. '
+      'Default behavior is to automatically detect '
+      'slave\'s build directory.'
+  )
+  option_parser.add_option(
+      '--gsutil-py-path', help='Specify path to gsutil.py script.'
+  )
 
 
 def main(argv):
@@ -536,14 +622,16 @@ def main(argv):
     options.build_number = options.build_properties.get('buildnumber')
   if not options.parent_build_number:
     options.parent_build_number = options.build_properties.get(
-        'parent_buildumber')
+        'parent_buildumber'
+    )
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
   if not options.build_url:
     options.build_url = options.factory_properties.get('build_url', '')
   if not options.append_deps_patch_sha:
     options.append_deps_patch_sha = options.factory_properties.get(
-        'append_deps_patch_sha')
+        'append_deps_patch_sha'
+    )
   if not options.gs_acl:
     options.gs_acl = options.factory_properties.get('gs_acl')
   if options.strip_files:
@@ -559,6 +647,7 @@ def main(argv):
     with open(options.json_urls, 'w') as json_file:
       json.dump(urls, json_file)
   return 0
+
 
 if '__main__' == __name__:
   sys.exit(main(sys.argv))

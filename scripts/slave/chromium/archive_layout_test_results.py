@@ -57,10 +57,9 @@ def archive_layout(args):
   print "Archiving %d files" % len(file_list)
   print
 
-  zip_file = chromium_utils.MakeZip(staging_dir,
-                                    results_dir_basename,
-                                    file_list,
-                                    args.results_dir)[1]
+  zip_file = chromium_utils.MakeZip(
+      staging_dir, results_dir_basename, file_list, args.results_dir
+  )[1]
 
   wc_dir = os.path.dirname(chrome_dir)
   last_change = slave_utils.GetHashOrRevision(wc_dir)
@@ -93,8 +92,9 @@ def archive_layout(args):
   gs_build_results_dir = gs_build_dir + '/' + results_dir_basename
 
   if args.step_name:
-    gs_latest_dir = '/'.join([args.gs_bucket, builder_name, args.step_name,
-                              'results'])
+    gs_latest_dir = '/'.join([
+        args.gs_bucket, builder_name, args.step_name, 'results'
+    ])
   else:
     gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
   gs_latest_results_dir = gs_latest_dir + '/' + results_dir_basename
@@ -105,28 +105,32 @@ def archive_layout(args):
   cache_control = "public, max-age=31556926"
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(zip_file,
-                                  gs_build_dir,
-                                  gs_acl=gs_acl,
-                                  cache_control=cache_control,
-                                  add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(
+      zip_file,
+      gs_build_dir,
+      gs_acl=gs_acl,
+      cache_control=cache_control,
+      add_quiet_flag=True
+  )
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
   if rc:
-      print "cp failed: %d" % rc
-      return rc
+    print "cp failed: %d" % rc
+    return rc
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(last_change_file,
-                                  gs_build_results_dir,
-                                  gs_acl=gs_acl,
-                                  cache_control=cache_control,
-                                  add_quiet_flag=True)
+  rc = slave_utils.GSUtilCopyFile(
+      last_change_file,
+      gs_build_results_dir,
+      gs_acl=gs_acl,
+      cache_control=cache_control,
+      add_quiet_flag=True
+  )
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
   if rc:
-      print "cp failed: %d" % rc
-      return rc
+    print "cp failed: %d" % rc
+    return rc
 
   if args.store_latest:
     # The 'latest' results need to be not cached at all (Cloud Storage defaults
@@ -135,28 +139,32 @@ def archive_layout(args):
     cache_control = 'no-cache'
 
     start = time.time()
-    rc = slave_utils.GSUtilCopyFile(zip_file,
-                                    gs_latest_dir,
-                                    gs_acl=gs_acl,
-                                    cache_control=cache_control,
-                                    add_quiet_flag=True)
+    rc = slave_utils.GSUtilCopyFile(
+        zip_file,
+        gs_latest_dir,
+        gs_acl=gs_acl,
+        cache_control=cache_control,
+        add_quiet_flag=True
+    )
     print "took %.1f seconds" % (time.time() - start)
     sys.stdout.flush()
     if rc:
-        print "cp failed: %d" % rc
-        return rc
+      print "cp failed: %d" % rc
+      return rc
 
     start = time.time()
-    rc = slave_utils.GSUtilCopyFile(last_change_file,
-                                    gs_latest_results_dir,
-                                    gs_acl=gs_acl,
-                                    cache_control=cache_control,
-                                    add_quiet_flag=True)
+    rc = slave_utils.GSUtilCopyFile(
+        last_change_file,
+        gs_latest_results_dir,
+        gs_acl=gs_acl,
+        cache_control=cache_control,
+        add_quiet_flag=True
+    )
     print "took %.1f seconds" % (time.time() - start)
     sys.stdout.flush()
     if rc:
-        print "cp failed: %d" % rc
-        return rc
+      print "cp failed: %d" % rc
+      return rc
 
   return 0
 
@@ -165,26 +173,45 @@ def _ParseArgs():
   parser = argparse.ArgumentParser()
   # TODO(crbug.com/655798): Make --build-dir not ignored.
   parser.add_argument('--build-dir', help='ignored')
-  parser.add_argument('--results-dir', required=True,
-                      help='path to layout test results')
-  parser.add_argument('--builder-name', required=True,
-                      help='The name of the builder running this script.')
-  parser.add_argument('--build-number', type=int, required=True,
-                      help='Build number of the builder running this script.')
-  parser.add_argument('--step-name',
-                      help='The name of the test step that produced '
-                           'these results.')
-  parser.add_argument('--gs-bucket', required=True,
-                      help='The Google Storage bucket to upload to.')
-  parser.add_argument('--gs-acl',
-                      help='The access policy for Google Storage files.')
-  parser.add_argument('--store-latest', action='store_true',
-                      help='If this script should update the latest results in'
-                           'cloud storage.')
-  parser.add_argument('--staging-dir',
-                      help='Directory to use for staging the archives. '
-                           'Default behavior is to automatically detect '
-                           'slave\'s build directory.')
+  parser.add_argument(
+      '--results-dir', required=True, help='path to layout test results'
+  )
+  parser.add_argument(
+      '--builder-name',
+      required=True,
+      help='The name of the builder running this script.'
+  )
+  parser.add_argument(
+      '--build-number',
+      type=int,
+      required=True,
+      help='Build number of the builder running this script.'
+  )
+  parser.add_argument(
+      '--step-name',
+      help='The name of the test step that produced '
+      'these results.'
+  )
+  parser.add_argument(
+      '--gs-bucket',
+      required=True,
+      help='The Google Storage bucket to upload to.'
+  )
+  parser.add_argument(
+      '--gs-acl', help='The access policy for Google Storage files.'
+  )
+  parser.add_argument(
+      '--store-latest',
+      action='store_true',
+      help='If this script should update the latest results in'
+      'cloud storage.'
+  )
+  parser.add_argument(
+      '--staging-dir',
+      help='Directory to use for staging the archives. '
+      'Default behavior is to automatically detect '
+      'slave\'s build directory.'
+  )
   slave_utils_callback = slave_utils.AddArgs(parser)
 
   args = parser.parse_args()
@@ -195,10 +222,12 @@ def _ParseArgs():
 
 def main():
   args = _ParseArgs()
-  logging.basicConfig(level=logging.INFO,
-                      format='%(asctime)s %(filename)s:%(lineno)-3d'
-                             ' %(levelname)s %(message)s',
-                      datefmt='%y%m%d %H:%M:%S')
+  logging.basicConfig(
+      level=logging.INFO,
+      format='%(asctime)s %(filename)s:%(lineno)-3d'
+      ' %(levelname)s %(message)s',
+      datefmt='%y%m%d %H:%M:%S'
+  )
   return archive_layout(args)
 
 

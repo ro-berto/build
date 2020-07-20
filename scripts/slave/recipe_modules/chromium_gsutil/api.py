@@ -6,7 +6,11 @@ from recipe_engine import recipe_api
 
 
 class ChromiumGSUtilApi(recipe_api.RecipeApi):
-  def download_latest_file(self, base_url, partial_name, destination,
+
+  def download_latest_file(self,
+                           base_url,
+                           partial_name,
+                           destination,
                            name='Download latest file from GS'):
     """Get the latest archived object with the given base url and partial name.
 
@@ -16,10 +20,10 @@ class ChromiumGSUtilApi(recipe_api.RecipeApi):
       destination: Destination file/directory where the file will be downloaded.
       name: The name of the step.
     """
-    gsutil_download_path = self.repo_resource(
-        'scripts', 'slave', 'gsutil_download.py')
-    args = ['--url', base_url,
-            '--dst', destination,
-            '--partial-name', partial_name]
+    gsutil_download_path = self.repo_resource('scripts', 'slave',
+                                              'gsutil_download.py')
+    args = [
+        '--url', base_url, '--dst', destination, '--partial-name', partial_name
+    ]
     with self.m.context(cwd=self.m.path['start_dir']):
       return self.m.build.python(name, gsutil_download_path, args)

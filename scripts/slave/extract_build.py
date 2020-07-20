@@ -17,13 +17,16 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
+
 class ExtractHandler(object):
+
   def __init__(self, url, archive_name):
     self.url = url
     self.archive_name = archive_name
 
 
 class GSHandler(ExtractHandler):
+
   def __init__(self, url, archive_name, gsutil_py_path=None):
     super(GSHandler, self).__init__(url, archive_name)
     self.gsutil_py_path = gsutil_py_path
@@ -33,7 +36,8 @@ class GSHandler(ExtractHandler):
     if self.gsutil_py_path:
       override_gsutil = [sys.executable, self.gsutil_py_path]
     status = slave_utils.GSUtilCopy(
-        self.url, '.', override_gsutil=override_gsutil)
+        self.url, '.', override_gsutil=override_gsutil
+    )
     if 0 != status:
       return False
     try:
@@ -45,6 +49,7 @@ class GSHandler(ExtractHandler):
 
 
 class WebHandler(ExtractHandler):
+
   @chromium_utils.RunAndPrintDots
   def download(self):
     try:
@@ -76,13 +81,15 @@ def GetBuildUrl(options, build_revision):
       options.master_name,
       options.build_number,
       options.parent_build_number,
-      build_revision, extract=True)
+      build_revision,
+      extract=True
+  )
 
   replace_dict = {
-    'base_filename': base_filename,
-    'parentname': options.parent_builder_name,
-    'parentslavename': options.parent_slave_name,
-    'parent_builddir': options.parent_build_dir,
+      'base_filename': base_filename,
+      'parentname': options.parent_builder_name,
+      'parentslavename': options.parent_slave_name,
+      'parent_builddir': options.parent_build_dir,
   }
   # If builddir isn't specified, assume buildbot used the builder name
   # as the root folder for the build.
@@ -90,9 +97,11 @@ def GetBuildUrl(options, build_revision):
     replace_dict['parent_builddir'] = replace_dict.get('parentname', '')
   url = options.build_url
   if not url:
-    url = ('http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
-           'chrome_staging')
-  if url[-4:] != '.zip': # assume filename not specified
+    url = (
+        'http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
+        'chrome_staging'
+    )
+  if url[-4:] != '.zip':  # assume filename not specified
     # Append the filename to the base URL. First strip any trailing slashes.
     url = url.rstrip('/')
     url = '%s/%s' % (url, '%(base_filename)s.zip')
@@ -107,7 +116,8 @@ def real_main(options):
       and rename it to build\\BuildDir\\Target
   """
   abs_build_dir = os.path.abspath(
-      build_directory.GetBuildOutputDirectory(options.src_dir))
+      build_directory.GetBuildOutputDirectory(options.src_dir)
+  )
   target_build_output_dir = os.path.join(abs_build_dir, options.target)
 
   # Generic name for the archive.
@@ -119,7 +129,8 @@ def real_main(options):
   src_dir = os.path.dirname(abs_build_dir)
   if not options.build_revision and not options.build_archive_url:
     build_revision = slave_utils.GetBuildRevisions(
-        src_dir, revision_dir=options.revision_dir)
+        src_dir, revision_dir=options.revision_dir
+    )
   else:
     build_revision = options.build_revision
   url, archive_name = GetBuildUrl(options, build_revision)
@@ -131,8 +142,10 @@ def real_main(options):
 
   if url.startswith('gs://'):
     handler = GSHandler(
-        url=url, archive_name=archive_name,
-        gsutil_py_path=options.gsutil_py_path)
+        url=url,
+        archive_name=archive_name,
+        gsutil_py_path=options.gsutil_py_path
+    )
   else:
     handler = WebHandler(url=url, archive_name=archive_name)
 
@@ -181,8 +194,8 @@ def real_main(options):
       print "Trying to determine the latest build's revision number..."
       try:
         build_revision_file_name = os.path.join(
-            target_build_output_dir,
-            chromium_utils.FULL_BUILD_REVISION_FILENAME)
+            target_build_output_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME
+        )
         build_revision_file = open(build_revision_file_name, 'r')
         print 'Latest build is revision: %s' % build_revision_file.read()
         build_revision_file.close()
@@ -201,38 +214,58 @@ def real_main(options):
 def main():
   option_parser = optparse.OptionParser()
 
-  option_parser.add_option('--target',
-                           help='build target to archive (Debug or Release)')
-  option_parser.add_option('--src-dir', default='src',
-                           help='path to the top-level sources directory')
+  option_parser.add_option(
+      '--target', help='build target to archive (Debug or Release)'
+  )
+  option_parser.add_option(
+      '--src-dir',
+      default='src',
+      help='path to the top-level sources directory'
+  )
   option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--master-name', help='Name of the buildbot master.')
-  option_parser.add_option('--build-number', type=int,
-                           help='Buildbot build number.')
-  option_parser.add_option('--parent-build-dir',
-                           help='Path to build directory on parent buildbot '
-                                'builder.')
-  option_parser.add_option('--parent-builder-name',
-                           help='Name of parent buildbot builder.')
-  option_parser.add_option('--parent-slave-name',
-                           help='Name of parent buildbot slave.')
-  option_parser.add_option('--parent-build-number', type=int,
-                           help='Buildbot parent build number.')
-  option_parser.add_option('--build-url',
-                           help='Base url where to find the build to extract')
-  option_parser.add_option('--build-archive-url',
-                           help='Exact url where to find the build to extract')
-  option_parser.add_option('--build_revision',
-                           help='Revision of the build that is being '
-                                'archived. Overrides the revision found on '
-                                'the local disk')
-  option_parser.add_option('--revision-dir',
-                           help=('Directory path that shall be used to decide '
-                                 'the revision number for the archive, '
-                                 'relative to the src/ dir.'))
+  option_parser.add_option(
+      '--build-number', type=int, help='Buildbot build number.'
+  )
+  option_parser.add_option(
+      '--parent-build-dir',
+      help='Path to build directory on parent buildbot '
+      'builder.'
+  )
+  option_parser.add_option(
+      '--parent-builder-name', help='Name of parent buildbot builder.'
+  )
+  option_parser.add_option(
+      '--parent-slave-name', help='Name of parent buildbot slave.'
+  )
+  option_parser.add_option(
+      '--parent-build-number', type=int, help='Buildbot parent build number.'
+  )
+  option_parser.add_option(
+      '--build-url', help='Base url where to find the build to extract'
+  )
+  option_parser.add_option(
+      '--build-archive-url',
+      help='Exact url where to find the build to extract'
+  )
+  option_parser.add_option(
+      '--build_revision',
+      help='Revision of the build that is being '
+      'archived. Overrides the revision found on '
+      'the local disk'
+  )
+  option_parser.add_option(
+      '--revision-dir',
+      help=(
+          'Directory path that shall be used to decide '
+          'the revision number for the archive, '
+          'relative to the src/ dir.'
+      )
+  )
   option_parser.add_option('--build-output-dir', help='ignored')
-  option_parser.add_option('--gsutil-py-path',
-                           help='Specify path to gsutil.py script.')
+  option_parser.add_option(
+      '--gsutil-py-path', help='Specify path to gsutil.py script.'
+  )
   chromium_utils.AddPropertiesOptions(option_parser)
   slave_utils_callback = slave_utils.AddOpts(option_parser)
 
@@ -254,16 +287,18 @@ def main():
   if not options.parent_slave_name:
     options.parent_slave_name = options.build_properties.get('parentslavename')
   if not options.parent_build_number:
-    options.parent_build_number = int_if_given(options.build_properties.get(
-        'parent_buildnumber'))
+    options.parent_build_number = int_if_given(
+        options.build_properties.get('parent_buildnumber')
+    )
   if not options.build_url:
     options.build_url = options.factory_properties.get('build_url')
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
   if not options.revision_dir:
     options.revision_dir = options.factory_properties.get('revision_dir')
-  options.src_dir = (options.factory_properties.get('extract_build_src_dir')
-                     or options.src_dir)
+  options.src_dir = (
+      options.factory_properties.get('extract_build_src_dir') or options.src_dir
+  )
 
   return real_main(options)
 

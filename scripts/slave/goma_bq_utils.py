@@ -15,7 +15,6 @@ from infra_libs import bqh
 from slave.goma import compile_events_pb2
 from slave import goma_utils
 
-
 # The Google BigQuery dataset and table for CompileEvent.
 COMPILE_EVENTS_PROJECT = 'goma-logs'
 COMPILE_EVENTS_DATASET = 'client_events'
@@ -72,8 +71,10 @@ def SetStepInfo(json_file, exit_status, step_info):
     step_info.goma_failure_reason = goma_failure_reason
 
   except Exception as ex:
-    print('error while making goma status counter for ts_mon: jons_file=%s: %s'
-          % (json_file, ex))
+    print(
+        'error while making goma status counter for ts_mon: jons_file=%s: %s' %
+        (json_file, ex)
+    )
     return
 
 

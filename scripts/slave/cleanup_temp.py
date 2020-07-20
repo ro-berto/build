@@ -58,7 +58,8 @@ def send_alert(path, left):
   except IOError, e:
     logging.error(
         'There was a failure while trying to send the stack trace.\n%s' %
-            str(e))
+        str(e)
+    )
 
 
 def cleanup_directory(directory_to_clean):
@@ -131,18 +132,20 @@ def remove_temp():
     else:
       print 'TEMP directory missing: %s' % root
 
+
 def get_free_space(path):
   """Returns the number of free bytes."""
   if sys.platform == 'win32':
     free_bytes = ctypes.c_ulonglong(0)
     ctypes.windll.kernel32.GetDiskFreeSpaceExW(
-        ctypes.c_wchar_p(path), None, None, ctypes.pointer(free_bytes))
+        ctypes.c_wchar_p(path), None, None, ctypes.pointer(free_bytes)
+    )
     return free_bytes.value
   f = os.statvfs(path)
   return f.f_bfree * f.f_frsize
 
 
-def check_free_space_path(path, min_free_space=1024*1024*1024):
+def check_free_space_path(path, min_free_space=1024 * 1024 * 1024):
   """Returns 1 if there isn't enough free space on |path|.
 
   Defaults to 1gb.
@@ -178,7 +181,8 @@ def _CleanupWindows(b_dir=None):
   with function_logger('removing any crash reports'):
     if 'LOCALAPPDATA' in os.environ:
       crash_reports = os.path.join(
-          os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
+          os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports'
+      )
       if os.path.isdir(crash_reports):
         for filename in os.listdir(crash_reports):
           filepath = os.path.join(crash_reports, filename)
@@ -254,7 +258,8 @@ def main():
     Cleanup()
   except FullDriveException, e:
     print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
-        e.path, e.free_space)
+        e.path, e.free_space
+    )
 
 
 if '__main__' == __name__:

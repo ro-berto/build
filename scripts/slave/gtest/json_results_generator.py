@@ -92,13 +92,20 @@ class JSONResultsGenerator(object):
   TIMES_MS_FILENAME = 'times_ms.json'
   FULL_RESULTS_FILENAME = 'full_results.json'
 
-  def __init__(self, builder_name, build_name, build_number,
-               results_file_base_path, builder_base_url,
-               test_results_map, svn_revisions=None,
-               test_results_server=None,
-               test_type='',
-               master_name='',
-               file_writer=None):
+  def __init__(
+      self,
+      builder_name,
+      build_name,
+      build_number,
+      results_file_base_path,
+      builder_base_url,
+      test_results_map,
+      svn_revisions=None,
+      test_results_server=None,
+      test_type='',
+      master_name='',
+      file_writer=None
+  ):
     """Modifies the results.json file. Grabs it off the archive directory
     if it is not found locally.
 
@@ -142,8 +149,9 @@ class JSONResultsGenerator(object):
   def generate_json_output(self):
     data = self.get_full_results_json()
     if data:
-      file_path = os.path.join(self._results_directory,
-                               self.FULL_RESULTS_FILENAME)
+      file_path = os.path.join(
+          self._results_directory, self.FULL_RESULTS_FILENAME
+      )
       self._write_json(data, file_path)
 
   def generate_times_ms_file(self):
@@ -226,13 +234,14 @@ class JSONResultsGenerator(object):
       return
 
     if not self._master_name:
-      logging.error('--test-results-server was set, but --master-name was not. '
-                    'Not uploading JSON files.')
+      logging.error(
+          '--test-results-server was set, but --master-name was not. '
+          'Not uploading JSON files.'
+      )
       return
 
     print 'Uploading JSON files for builder: %s' % self._builder_name
-    attrs = [('builder', self._builder_name),
-             ('testtype', self._test_type),
+    attrs = [('builder', self._builder_name), ('testtype', self._test_type),
              ('master', self._master_name)]
 
     files = [(f, os.path.join(self._results_directory, f)) for f in json_files]

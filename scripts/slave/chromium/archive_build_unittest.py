@@ -12,7 +12,8 @@ import unittest
 import sys
 
 BASE_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..')
+    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'
+)
 sys.path.append(os.path.join(BASE_DIR, 'scripts'))
 sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
@@ -20,36 +21,32 @@ from slave.chromium import archive_build
 from common import archive_utils_unittest
 from common import chromium_utils
 
+ZIP_TEST_FILES = ['file1.txt', 'file2.txt', 'file3.txt']
 
-ZIP_TEST_FILES = ['file1.txt',
-                  'file2.txt',
-                  'file3.txt']
+TEST_FILES = ['test1.exe', 'test2.exe', os.path.join('dir1', 'test3.exe')]
 
-TEST_FILES = ['test1.exe',
-              'test2.exe',
-              os.path.join('dir1', 'test3.exe')]
+TEST_FILES_NO_DEEP_DIRS = ['test1.exe', 'test2.exe']
 
-TEST_FILES_NO_DEEP_DIRS = ['test1.exe',
-                           'test2.exe']
-
-EXTRA_TEST_FILES = ['extra_test1.exe',
-                    'extra_test2.exe',
-                    os.path.join('extra_dir1', 'extra_test3.exe')]
+EXTRA_TEST_FILES = [
+    'extra_test1.exe', 'extra_test2.exe',
+    os.path.join('extra_dir1', 'extra_test3.exe')
+]
 
 
 class MockOptions(object):
   """ Class used to mock the optparse options object for the Stager.
   """
-  def __init__(self, src_dir, build_dir, target, archive_path,
-               extra_archive_paths, build_number, default_chromium_revision,
-               default_v8_revision,
-               build_name):
+
+  def __init__(
+      self, src_dir, build_dir, target, archive_path, extra_archive_paths,
+      build_number, default_chromium_revision, default_v8_revision, build_name
+  ):
     self.src_dir = src_dir
     self.build_dir = build_dir
     self.target = target
     self.dirs = {
-      'www_dir_base': archive_path,
-      'symbol_dir_base': archive_path,
+        'www_dir_base': archive_path,
+        'symbol_dir_base': archive_path,
     }
     self.extra_archive_paths = extra_archive_paths
     self.build_name = build_name
@@ -61,8 +58,12 @@ class MockOptions(object):
     self.factory_properties = {}
 
 
-class PlatformError(Exception): pass
-class InternalStateError(Exception): pass
+class PlatformError(Exception):
+  pass
+
+
+class InternalStateError(Exception):
+  pass
 
 
 class ArchiveTest(unittest.TestCase):
@@ -83,7 +84,8 @@ class ArchiveTest(unittest.TestCase):
       self.build_dir = os.path.join(self.temp_dir, 'xcodebuild')
     else:
       raise PlatformError(
-          'Platform "%s" is not currently supported.' % sys.platform)
+          'Platform "%s" is not currently supported.' % sys.platform
+      )
     os.makedirs(os.path.join(self.build_dir, self.target))
     self.src_dir = os.path.join(self.temp_dir, 'build', 'src')
     os.makedirs(self.src_dir)
@@ -109,12 +111,18 @@ class ArchiveTest(unittest.TestCase):
     # The stager object will be initialized in initializeStager method.
     self.stager = None
 
-  def initializeStager(self, build_number=None, default_chromium_revision=None,
-                       default_v8_revision=None, build_name=None):
-    self.options = MockOptions(self.src_dir, self.build_dir, self.target,
-                               self.archive_dir, self.extra_files_dir,
-                               build_number, default_chromium_revision,
-                               default_v8_revision, build_name)
+  def initializeStager(
+      self,
+      build_number=None,
+      default_chromium_revision=None,
+      default_v8_revision=None,
+      build_name=None
+  ):
+    self.options = MockOptions(
+        self.src_dir, self.build_dir, self.target, self.archive_dir,
+        self.extra_files_dir, build_number, default_chromium_revision,
+        default_v8_revision, build_name
+    )
     if self.options.build_number:
       self.stager = archive_build.StagerByBuildNumber(self.options)
     else:
@@ -133,7 +141,8 @@ class ArchiveTest(unittest.TestCase):
       self.tool_dir = 'chrome/tools/build/mac'
     else:
       raise PlatformError(
-          'Platform "%s" is not currently supported.' % sys.platform)
+          'Platform "%s" is not currently supported.' % sys.platform
+      )
     self.tool_dir = os.path.join(self.src_dir, self.tool_dir)
     os.makedirs(self.tool_dir)
 
@@ -146,7 +155,8 @@ class ArchiveTest(unittest.TestCase):
     f.close()
 
     archive_utils_unittest.CreateFileSetInDir(
-        os.path.join(self.build_dir, self.target), file_list)
+        os.path.join(self.build_dir, self.target), file_list
+    )
 
   def createExtraTestFiles(self):
     if not self.tool_dir:
@@ -182,8 +192,9 @@ class ArchiveTest(unittest.TestCase):
     self.stager.UploadTests(self.archive_dir)
 
     expected_archived_tests = TEST_FILES
-    archived_tests = os.listdir(os.path.join(self.archive_dir,
-                                             'chrome-win32.test'))
+    archived_tests = os.listdir(
+        os.path.join(self.archive_dir, 'chrome-win32.test')
+    )
     self.assertEquals(len(expected_archived_tests), len(archived_tests))
 
   def testUploadTestsWithExtras(self):
@@ -197,8 +208,9 @@ class ArchiveTest(unittest.TestCase):
     self.stager.UploadTests(self.archive_dir)
 
     expected_archived_tests = TEST_FILES + EXTRA_TEST_FILES
-    archived_tests = os.listdir(os.path.join(self.archive_dir,
-                                             'chrome-win32.test'))
+    archived_tests = os.listdir(
+        os.path.join(self.archive_dir, 'chrome-win32.test')
+    )
     self.assertEquals(len(expected_archived_tests), len(archived_tests))
 
   def testUploadTestsNoDeepPaths(self):
@@ -211,8 +223,9 @@ class ArchiveTest(unittest.TestCase):
     self.stager.UploadTests(self.archive_dir)
 
     expected_archived_tests = TEST_FILES_NO_DEEP_DIRS
-    archived_tests = os.listdir(os.path.join(self.archive_dir,
-                                             'chrome-win32.test'))
+    archived_tests = os.listdir(
+        os.path.join(self.archive_dir, 'chrome-win32.test')
+    )
     self.assertEquals(len(expected_archived_tests), len(archived_tests))
 
   def testGenerateRevisionFile(self):
@@ -225,10 +238,12 @@ class ArchiveTest(unittest.TestCase):
     self.assertEquals(None, self.stager.GetLastBuildRevision())
     fp = open(self.stager.revisions_path)
     revisions_dict = json.loads(fp.read())
-    self.assertEquals(self.stager.last_chromium_revision,
-                      revisions_dict['chromium_revision'])
-    self.assertEquals(self.stager.last_v8_revision,
-                      revisions_dict['v8_revision'])
+    self.assertEquals(
+        self.stager.last_chromium_revision, revisions_dict['chromium_revision']
+    )
+    self.assertEquals(
+        self.stager.last_v8_revision, revisions_dict['v8_revision']
+    )
     fp.close()
 
   def testSaveToLastChangeFileAndGetLastBuildRevisionByChromiumRevision(self):
@@ -290,8 +305,9 @@ class ArchiveTest(unittest.TestCase):
     self.initializeStager(build_number, chromium_revision, v8_revision)
     self.assertNotEquals(self.stager._build_name, build_name)
 
-    self.initializeStager(build_number, chromium_revision,
-                          v8_revision, build_name)
+    self.initializeStager(
+        build_number, chromium_revision, v8_revision, build_name
+    )
     self.assertEquals(self.stager._build_name, build_name)
 
 

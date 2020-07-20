@@ -30,8 +30,11 @@ class LogProcessorTest(unittest.TestCase):
     self._revision = 12345
 
   def _ConstructDefaultProcessor(
-      self, log_processor_class, factory_properties=None,
-      perf_expectations_path=None):
+      self,
+      log_processor_class,
+      factory_properties=None,
+      perf_expectations_path=None
+  ):
     """Creates a log processor instance.
 
     Args:
@@ -47,8 +50,10 @@ class LogProcessorTest(unittest.TestCase):
     factory_properties['perf_name'] = 'test-system'
     factory_properties['test_name'] = 'test-name'
     processor = log_processor_class(
-        revision=self._revision, build_properties={},
-        factory_properties=factory_properties)
+        revision=self._revision,
+        build_properties={},
+        factory_properties=factory_properties
+    )
 
     # Set custom percentiles. This will be used by GraphingLogProcessor, which
     # has and uses a private member attribute called _percentiles.
@@ -74,11 +79,13 @@ class LogProcessorTest(unittest.TestCase):
   def _CheckFileExistsWithData(self, logs, targetfile):
     """Asserts that |targetfile| exists in the |logs| dict and is non-empty."""
     self.assertTrue(targetfile in logs, 'File %s was not output.' % targetfile)
-    self.assertTrue(logs[targetfile], 'File %s did not contain data.' %
-                    targetfile)
+    self.assertTrue(
+        logs[targetfile], 'File %s did not contain data.' % targetfile
+    )
 
   def _ConstructParseAndCheckLogfiles(
-      self, inputfiles, logfiles, log_processor_class, *args, **kwargs):
+      self, inputfiles, logfiles, log_processor_class, *args, **kwargs
+  ):
     """Uses a log processor to process the given input files.
 
     Args:
@@ -90,7 +97,8 @@ class LogProcessorTest(unittest.TestCase):
       A dictionary mapping output file name to output file lines.
     """
     parser = self._ConstructDefaultProcessor(
-        log_processor_class, *args, **kwargs)
+        log_processor_class, *args, **kwargs
+    )
     for inputfile in inputfiles:
       self._ProcessLog(parser, inputfile)
 
@@ -101,7 +109,8 @@ class LogProcessorTest(unittest.TestCase):
     return logs
 
   def _ConstructParseAndCheckJSON(
-      self, inputfiles, logfiles, subdir, log_processor_class, *args, **kwargs):
+      self, inputfiles, logfiles, subdir, log_processor_class, *args, **kwargs
+  ):
     """Processes input with a log processor and checks against expectations.
 
     Args:
@@ -111,7 +120,8 @@ class LogProcessorTest(unittest.TestCase):
       log_processor_class: A log processor class.
     """
     logs = self._ConstructParseAndCheckLogfiles(
-        inputfiles, logfiles, log_processor_class, *args, **kwargs)
+        inputfiles, logfiles, log_processor_class, *args, **kwargs
+    )
     for filename in logfiles:
       actual = json.loads('\n'.join(logs[filename]))
       if subdir:
@@ -119,8 +129,10 @@ class LogProcessorTest(unittest.TestCase):
       else:
         path = os.path.join(test_env.DATA_PATH, filename)
       expected = json.load(open(path))
-      self.assertEqual(expected, actual, 'JSON data in %s did not match '
-          'expectations.' % filename)
+      self.assertEqual(
+          expected, actual, 'JSON data in %s did not match '
+          'expectations.' % filename
+      )
 
 
 class GraphingLogProcessorTest(LogProcessorTest):
@@ -129,12 +141,18 @@ class GraphingLogProcessorTest(LogProcessorTest):
   def testSummary(self):
     """Tests the output of "summary" files, which contain per-graph data."""
     input_files = ['graphing_processor.log']
-    output_files = ['%s-summary.dat' % graph for graph in ('commit_charge',
-        'ws_final_total', 'vm_final_browser', 'vm_final_total',
-        'ws_final_browser', 'processes', 'artificial_graph')]
+    output_files = [
+        '%s-summary.dat' % graph for graph in (
+            'commit_charge', 'ws_final_total', 'vm_final_browser',
+            'vm_final_total', 'ws_final_browser', 'processes',
+            'artificial_graph'
+        )
+    ]
 
-    self._ConstructParseAndCheckJSON(input_files, output_files, None,
-        performance_log_processor.GraphingLogProcessor)
+    self._ConstructParseAndCheckJSON(
+        input_files, output_files, None,
+        performance_log_processor.GraphingLogProcessor
+    )
 
   def testGraphList(self):
     """Tests the output of "graphs.dat" files, which contains a graph list."""
@@ -142,12 +160,15 @@ class GraphingLogProcessorTest(LogProcessorTest):
     graphfile = 'graphs.dat'
     output_files = [graphfile]
 
-    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        performance_log_processor.GraphingLogProcessor)
+    logs = self._ConstructParseAndCheckLogfiles(
+        input_files, output_files,
+        performance_log_processor.GraphingLogProcessor
+    )
 
     actual = json.loads('\n'.join(logs[graphfile]))
-    expected = json.load(open(
-        os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat')))
+    expected = json.load(
+        open(os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat'))
+    )
 
     self.assertEqual(len(actual), len(expected))
 
@@ -161,29 +182,36 @@ class GraphingLogProcessorTest(LogProcessorTest):
     summary_file = 'hist1-summary.dat'
     output_files = [summary_file]
 
-    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        performance_log_processor.GraphingLogProcessor)
+    logs = self._ConstructParseAndCheckLogfiles(
+        input_files, output_files,
+        performance_log_processor.GraphingLogProcessor
+    )
 
     actual = json.loads('\n'.join(logs[summary_file]))
-    expected = json.load(open(
-        os.path.join(test_env.DATA_PATH, summary_file)))
+    expected = json.load(open(os.path.join(test_env.DATA_PATH, summary_file)))
 
-    self.assertEqual(actual, expected, 'Filename %s did not contain expected '
-        'data.' % summary_file)
+    self.assertEqual(
+        actual, expected, 'Filename %s did not contain expected '
+        'data.' % summary_file
+    )
 
   def testHistogramPercentiles(self):
     input_files = ['graphing_processor.log']
     summary_files = ['hist1_%s-summary.dat' % str(p) for p in TEST_PERCENTILES]
     output_files = summary_files
 
-    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
-        performance_log_processor.GraphingLogProcessor)
+    logs = self._ConstructParseAndCheckLogfiles(
+        input_files, output_files,
+        performance_log_processor.GraphingLogProcessor
+    )
 
     for filename in output_files:
       actual = json.loads('\n'.join(logs[filename]))
       expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
-      self.assertEqual(actual, expected, 'Filename %s did not contain expected '
-          'data.' % filename)
+      self.assertEqual(
+          actual, expected, 'Filename %s did not contain expected '
+          'data.' % filename
+      )
 
 
 class GraphingLogProcessorPerfTest(LogProcessorTest):
@@ -195,7 +223,8 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
 
   def _TestPerfExpectations(self, perf_expectations_file):
     perf_expectations_path = os.path.join(
-        test_env.DATA_PATH, perf_expectations_file)
+        test_env.DATA_PATH, perf_expectations_file
+    )
 
     input_file = 'graphing_processor.log'
     graph_file = 'graphs.dat'
@@ -203,13 +232,15 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
     parser = self._ConstructDefaultProcessor(
         performance_log_processor.GraphingLogProcessor,
         factory_properties={'expectations': True, 'perf_id': 'tester'},
-        perf_expectations_path=perf_expectations_path)
+        perf_expectations_path=perf_expectations_path
+    )
 
     self._ProcessLog(parser, input_file)
 
     actual = json.loads('\n'.join(parser.PerformanceLogs()[graph_file]))
-    expected = json.load(open(
-        os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat')))
+    expected = json.load(
+        open(os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat'))
+    )
 
     self.assertEqual(len(actual), len(expected))
 
@@ -239,7 +270,8 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
 
   def testPerfExpectationsImproveRelativeFloatNonSci(self):
     step = self._TestPerfExpectations(
-        'perf_improve_relative_float_nonscientific.json')
+        'perf_improve_relative_float_nonscientific.json'
+    )
     expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (25.10%)')
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(WARNINGS, step.evaluateCommand('mycommand'))
@@ -270,7 +302,8 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
 
   def testPerfExpectationsRegressAbsoluteFloatNonSci(self):
     step = self._TestPerfExpectations(
-        'perf_regress_absolute_float_nonscientific.json')
+        'perf_regress_absolute_float_nonscientific.json'
+    )
     expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (2.55%)')
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(FAILURE, step.evaluateCommand('mycommand'))
@@ -343,14 +376,16 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
 
   def testPerfExpectationsRegressZero(self):
     step = self._TestPerfExpectations(
-        'perf_test_better_lower_regress_zero.json')
+        'perf_test_better_lower_regress_zero.json'
+    )
     expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (inf%)')
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(FAILURE, step.evaluateCommand('mycommand'))
 
   def testPerfExpectationsImproveZero(self):
     step = self._TestPerfExpectations(
-        'perf_test_better_higher_improve_zero.json')
+        'perf_test_better_higher_improve_zero.json'
+    )
     expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (inf%)')
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(WARNINGS, step.evaluateCommand('mycommand'))

@@ -27,13 +27,20 @@ from . import try_spec as try_spec_module
 from . import trybots as trybots_module
 from . import steps
 
-
 # Paths which affect recipe config and behavior in a way that survives
 # deapplying user's patch.
 RECIPE_CONFIG_PATHS = [
     r'testing/buildbot/.*json$',
     r'testing/buildbot/.*pyl$',
 ]
+
+# These account ids are obtained by looking at gerrit API responses.
+# Specifically, just find a build from a desired CL author, look at the
+# json output of the "gerrit fetch current CL info" recipe step, and find the
+# values of owner._account_id.
+# chromium and v8-ci-autorollers
+AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
+
 
 class BotMetadata(object):
 
@@ -148,9 +155,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.gclient.set_config(bot_config.gclient_config)
 
     default_test_results_config = (
-        'staging_server'
-        if self.m.runtime.is_experimental
-        else 'public_server')
+        'staging_server' if self.m.runtime.is_experimental else 'public_server')
     self.m.test_results.set_config(bot_config.test_results_config or
                                    default_test_results_config)
 
@@ -256,8 +261,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return source_side_spec
 
-  def create_test_runner(self, tests, suffix='', serialize_tests=False,
-                         retry_failed_shards=False, retry_invalid_shards=False):
+  def create_test_runner(self,
+                         tests,
+                         suffix='',
+                         serialize_tests=False,
+                         retry_failed_shards=False,
+                         retry_invalid_shards=False):
     """Creates a test runner to run a set of tests.
 
     Args
@@ -286,7 +295,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failed_tests = set()
       for tl in tests_list:
         invalid_ts, failed_ts = self.m.test_utils.run_tests(
-            self.m, tl, suffix, retry_failed_shards=retry_failed_shards,
+            self.m,
+            tl,
+            suffix,
+            retry_failed_shards=retry_failed_shards,
             retry_invalid_shards=retry_invalid_shards)
         failed_tests = failed_tests.union(failed_ts, invalid_ts)
 
@@ -296,8 +308,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return result_pb2.RawResult(
             status=common_pb.FAILURE,
             summary_markdown=self._format_unrecoverable_failures(
-                failed_tests, suffix)
-        )
+                failed_tests, suffix))
 
     return test_runner
 
@@ -321,13 +332,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     arch_id = chromium_config.TARGET_ARCH, chromium_config.TARGET_BITS
     arch_digit = self._ARCHITECTURE_DIGIT_MAP.get(arch_id, None)
     assert arch_digit is not None, (
-        'Architecture and bits (%r) does not have a version digit assigned'
-        % arch_id)
+        'Architecture and bits (%r) does not have a version digit assigned' %
+        arch_id)
 
     android_version_name = '%(MAJOR)s.%(MINOR)s.%(BUILD)s.%(PATCH)s' % version
-    android_version_code = '%d%03d%d0' % (int(version['BUILD']),
-                                          int(version['PATCH']),
-                                          arch_digit)
+    android_version_code = '%d%03d%d0' % (int(
+        version['BUILD']), int(version['PATCH']), arch_digit)
     if log_details:
       self.log('version:%s' % version)
       self.log('android_version_name:%s' % android_version_name)
@@ -390,8 +400,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if execution_mode == bot_spec_module.COMPILE_AND_TEST:
       isolated_targets = [
-          t.isolate_target
-          for t in tests_including_triggered if t.uses_isolate
+          t.isolate_target for t in tests_including_triggered if t.uses_isolate
       ]
 
       if isolated_targets:
@@ -399,7 +408,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       name_suffix = ''
       if self.m.tryserver.is_tryserver:
-        name_suffix=' (with patch)'
+        name_suffix = ' (with patch)'
 
       android_version_name, android_version_code = (
           self.get_android_version_details(bot_config, log_details=True))
@@ -428,8 +437,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           # property name.
           swarm_hashes_property_name = 'swarm_hashes_%s_%s_patch' % (
               update_step.presentation.properties['got_revision_cp'].replace(
-                # At sign may clash with annotations format.
-                '@', '(at)'), 'with' if has_patch else 'without')
+                  # At sign may clash with annotations format.
+                  '@',
+                  '(at)'),
+              'with' if has_patch else 'without')
 
         # 'compile' just prepares all information needed for the isolation,
         # and the isolation is a separate step.
@@ -444,12 +455,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
               self.m.perf_dashboard.get_change_info([{
-                  'repository': 'chromium',
+                  'repository':
+                      'chromium',
                   'git_hash':
                       update_step.presentation.properties['got_revision'],
-              }]),
-              self.m.isolate.isolate_server,
-              self.m.isolate.isolated_tests)
+              }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
       return raw_result
 
   def package_build(self, builder_id, update_step, bot_config, reasons=None):
@@ -478,7 +488,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_revision = update_step.presentation.properties.get(
           'got_revision',
           update_step.presentation.properties.get('got_src_revision'))
-
 
       # For archiving 'chromium.perf', the builder also archives a version
       # without perf test files for manual bisect.
@@ -521,7 +530,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         ])
         package_step.presentation.logs['why is this running?'] = (
             standard_reasons)
-
 
   def archive_build(self, builder_id, update_step, bot_config):
     """Archive the build if the bot is configured to do so.
@@ -616,9 +624,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if scheduler_jobs:
       self.m.scheduler.emit_triggers(
-          ((self.m.scheduler.BuildbucketTrigger(properties=properties),
-            project, jobs)
-           for project, jobs in scheduler_jobs.iteritems()),
+          ((self.m.scheduler.BuildbucketTrigger(properties=properties), project,
+            jobs) for project, jobs in scheduler_jobs.iteritems()),
           step_name='trigger')
 
   def run_mb_and_compile(self,
@@ -680,15 +687,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # The best way to ensure the old build directory is not used is to
     # remove it.
     self.m.file.rmtree(
-      'build directory',
-      self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+        'build directory',
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
     legacy_build_url = None
     build_revision = (
-        build_revision
-        or self.m.properties.get('parent_got_revision')
-        or update_step.presentation.properties.get('got_revision')
-        or update_step.presentation.properties.get('got_src_revision'))
+        build_revision or self.m.properties.get('parent_got_revision') or
+        update_step.presentation.properties.get('got_revision') or
+        update_step.presentation.properties.get('got_src_revision'))
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
     if not build_archive_url:
@@ -696,11 +702,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                      builder_id.master)
 
     self.m.archive.download_and_unzip_build(
-      step_name='extract build',
-      target=self.m.chromium.c.build_config_fs,
-      build_url=legacy_build_url,
-      build_revision=build_revision,
-      build_archive_url=build_archive_url)
+        step_name='extract build',
+        target=self.m.chromium.c.build_config_fs,
+        build_url=legacy_build_url,
+        build_revision=build_revision,
+        build_archive_url=build_archive_url)
 
     if read_gn_args:
       self.m.gn.get_args(
@@ -733,8 +739,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Some recipes use this wrapper to setup devices and have their own way
       # to run tests. If platform is Android and tests is None, run device
       # steps.
-      require_device_steps = (tests is None or
-                              any([t.uses_local_devices for t in tests]))
+      require_device_steps = (
+          tests is None or any([t.uses_local_devices for t in tests]))
 
       if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
           require_device_steps):
@@ -795,21 +801,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     Returns:
       A RawResult object with the failure message and status
     """
-    compile_targets = list(itertools.chain(
-        *[t.compile_targets() for t in failing_tests]))
+    compile_targets = list(
+        itertools.chain(*[t.compile_targets() for t in failing_tests]))
     if compile_targets:
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
       failing_swarming_tests = [
-          t.isolate_target
-          for t in failing_tests if t.uses_isolate]
+          t.isolate_target for t in failing_tests if t.uses_isolate
+      ]
       if failing_swarming_tests:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-      raw_result = self.run_mb_and_compile(
-          compile_targets,
-          failing_swarming_tests,
-          ' (%s)' % suffix
-      )
+      raw_result = self.run_mb_and_compile(compile_targets,
+                                           failing_swarming_tests,
+                                           ' (%s)' % suffix)
       if raw_result:
         # Clobber the bot upon compile failure without patch.
         # See crbug.com/724533 for more detail.
@@ -822,8 +826,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if failing_swarming_tests:
         swarm_hashes_property_name = 'swarm_hashes'
         if 'got_revision_cp' in bot_update_step.presentation.properties:
-          revision_cp = (bot_update_step.
-              presentation.properties['got_revision_cp'].replace('@', '(at)'))
+          revision_cp = (
+              bot_update_step.presentation.properties['got_revision_cp']
+              .replace('@', '(at)'))
           swarm_hashes_property_name = 'swarm_hashes_%s_%s' % (
               revision_cp, suffix.replace(' ', '_'))
         self.m.isolate.isolate_tests(
@@ -955,10 +960,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
 
     paths = {
-      'checkout': self.m.path['checkout'],
-      'runit.py': self.repo_resource('scripts', 'tools', 'runit.py'),
-      'runtest.py': self.repo_resource(
-          'scripts', 'slave', 'runtest.py'),
+        'checkout': self.m.path['checkout'],
+        'runit.py': self.repo_resource('scripts', 'tools', 'runit.py'),
+        'runtest.py': self.repo_resource('scripts', 'slave', 'runtest.py'),
     }
     args.extend(['--paths', self.m.json.input(paths)])
 
@@ -1006,10 +1010,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     result = self.m.python(
         name='get compile targets for scripts',
-        script=self.m.path['checkout'].join(
-            'testing', 'scripts', 'get_compile_targets.py'),
+        script=self.m.path['checkout'].join('testing', 'scripts',
+                                            'get_compile_targets.py'),
         args=[
-            '--output', self.m.json.output(),
+            '--output',
+            self.m.json.output(),
             '--',
         ] + self.get_common_args_for_scripts(bot_config),
         step_test_data=lambda: self.m.json.test_api.output({}))
@@ -1184,8 +1189,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for test_suite in unrecoverable_test_suites:
       # Both 'with patch' and 'without patch' must have valid results to
       # skip CQ retries.
-      valid_results, _ = (
-          test_suite.with_patch_failures_including_retry())
+      valid_results, _ = (test_suite.with_patch_failures_including_retry())
       if not valid_results:
         return True
 
@@ -1198,8 +1202,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.chromium_checkout.working_dir):
       # If tests fail, we want to fix Chromium revision only. Tests will use
       # the dependencies versioned in 'src' tree.
-      self.m.bot_update.resolve_fixed_revision(
-          bot_update_step.json.output, 'src')
+      self.m.bot_update.resolve_fixed_revision(bot_update_step.json.output,
+                                               'src')
 
       # NOTE: 'ignore_input_commit=True' gets a checkout using the commit
       # before the tested commit, effectively deapplying the gitiles commit
@@ -1219,8 +1223,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def integration_steps(self, builders=None, bots=None):
     return self.run_tests_with_and_without_changes(
-      builders=builders, mirrored_bots=bots,
-      deapply_changes=self.deapply_deps)
+        builders=builders,
+        mirrored_bots=bots,
+        deapply_changes=self.deapply_deps)
 
   def trybot_steps(self, builders=None, trybots=None):
     return self.run_tests_with_and_without_changes(
@@ -1267,7 +1272,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:
       compile_failure, unrecoverable_test_suites = self._run_tests_with_retries(
-        task, deapply_changes)
+          task, deapply_changes)
       if compile_failure:
         return compile_failure
 
@@ -1287,8 +1292,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               unrecoverable_test_suites, 'with patch'),
           status=common_pb.FAILURE)
 
-  def _format_unrecoverable_failures(self, unrecoverable_test_suites,
-                                     suffix, size_limit=700, failure_limit=4):
+  def _format_unrecoverable_failures(self,
+                                     unrecoverable_test_suites,
+                                     suffix,
+                                     size_limit=700,
+                                     failure_limit=4):
     """Creates list of failed tests formatted using markdown.
 
     Args:
@@ -1339,8 +1347,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for index, failure in enumerate(deterministic_failures):
         if index >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
-          hint = '- ...%d more failure(s) (%d total)...' % (
-              failure_size - index, failure_size)
+          hint = '- ...%d more failure(s) (%d total)...' % (failure_size -
+                                                            index, failure_size)
           test_summary_lines.append(hint)
           current_size += len(hint)
           break
@@ -1407,8 +1415,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           set(compile_targets) - set(test_targets))
       analyze_names = ['chromium'] + list(bot.config.analyze_names)
       mb_config_path = (
-          self.m.chromium.c.project_generator.config_path
-          or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
+          self.m.chromium.c.project_generator.config_path or
+          self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
       test_targets, compile_targets = self.m.filter.analyze(
           affected_files,
           test_targets,
@@ -1465,7 +1473,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, timeout=3600, no_fetch_tags=True)
 
     self.m.chromium_swarming.configure_swarming(
-      'chromium', precommit=self.m.tryserver.is_tryserver)
+        'chromium', precommit=self.m.tryserver.is_tryserver)
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
@@ -1542,8 +1550,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                bot_mirror.builder_id.master))
 
     lines = [''] + [present_bot(m) for m in bot_config.bot_mirrors]
-    result = self.m.python.succeeding_step(
-        'report builders', '<br/>'.join(lines))
+    result = self.m.python.succeeding_step('report builders',
+                                           '<br/>'.join(lines))
 
     def as_dict(bot_mirror):
       if bot_mirror.tester_id:
@@ -1587,12 +1595,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               bot_mirror.builder_id.builder,
           ))
 
-
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""
-    return sorted(set(x
-                      for test in tests
-                      for x in test.compile_targets()))
+    return sorted(set(x for test in tests for x in test.compile_targets()))
 
   def _is_source_file(self, filepath):
     """Returns true iff the file is a source file."""
@@ -1611,7 +1616,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
-
 
   def lookup_builder_gn_args(self,
                              bot_meta_data,

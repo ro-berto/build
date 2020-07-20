@@ -19,7 +19,7 @@ import sys
 from slave import results_dashboard
 from slave import slave_utils
 
-from common import chromium_utils # pylint: disable=W0611
+from common import chromium_utils  # pylint: disable=W0611
 
 
 def _GetMainRevision(commit_pos, build_dir, revision=None):
@@ -41,8 +41,9 @@ def _GetMainRevision(commit_pos, build_dir, revision=None):
 def _GetDashboardJson(options):
   main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
   revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
-    options.got_webrtc_revision, options.got_v8_revision, options.version,
-    options.git_revision, main_revision)
+      options.got_webrtc_revision, options.got_v8_revision, options.version,
+      options.git_revision, main_revision
+  )
   reference_build = 'reference' in options.name
   stripped_test_name = options.name.replace('.reference', '')
   results = {}
@@ -52,16 +53,25 @@ def _GetDashboardJson(options):
   if not 'charts' in results:
     # These are legacy results.
     dashboard_json = results_dashboard.MakeListOfPoints(
-      results, options.perf_id, stripped_test_name, options.buildername,
-      options.buildnumber, {}, _GetMachineGroup(options),
-      revisions_dict=revisions)
+        results,
+        options.perf_id,
+        stripped_test_name,
+        options.buildername,
+        options.buildnumber, {},
+        _GetMachineGroup(options),
+        revisions_dict=revisions
+    )
   else:
     dashboard_json = results_dashboard.MakeDashboardJsonV1(
-      results,
-      revisions, stripped_test_name, options.perf_id,
-      options.buildername, options.buildnumber,
-      {}, reference_build,
-      perf_dashboard_machine_group=_GetMachineGroup(options))
+        results,
+        revisions,
+        stripped_test_name,
+        options.perf_id,
+        options.buildername,
+        options.buildnumber, {},
+        reference_build,
+        perf_dashboard_machine_group=_GetMachineGroup(options)
+    )
   return dashboard_json
 
 
@@ -70,7 +80,8 @@ def _GetMachineGroup(options):
   if options.is_luci_builder and not perf_dashboard_machine_group:
     raise ValueError(
         "Luci builder must set 'perf_dashboard_machine_group'. See "
-        'bit.ly/perf-dashboard-machine-group for more details')
+        'bit.ly/perf-dashboard-machine-group for more details'
+    )
   elif not options.is_luci_builder:
     # TODO(crbug.com/801289):
     # Remove this code path once all builders are converted to LUCI.
@@ -80,9 +91,10 @@ def _GetMachineGroup(options):
 
 def _GetDashboardHistogramData(options):
   revisions = {
-      '--chromium_commit_positions': _GetMainRevision(
-          options.got_revision_cp, options.build_dir),
-      '--chromium_revisions': options.git_revision
+      '--chromium_commit_positions':
+          _GetMainRevision(options.got_revision_cp, options.build_dir),
+      '--chromium_revisions':
+          options.git_revision
   }
 
   if options.got_webrtc_revision:
@@ -94,10 +106,16 @@ def _GetDashboardHistogramData(options):
   stripped_test_name = options.name.replace('.reference', '')
 
   return results_dashboard.MakeHistogramSetWithDiagnostics(
-      options.results_file, options.chromium_checkout_dir, stripped_test_name,
-      options.perf_id, options.buildername, options.buildnumber, revisions,
+      options.results_file,
+      options.chromium_checkout_dir,
+      stripped_test_name,
+      options.perf_id,
+      options.buildername,
+      options.buildnumber,
+      revisions,
       is_reference_build,
-      perf_dashboard_machine_group=_GetMachineGroup(options))
+      perf_dashboard_machine_group=_GetMachineGroup(options)
+  )
 
 
 def _CreateParser():
@@ -150,12 +168,9 @@ def main(args):
       with open(options.output_json_file, 'w') as output_file:
         json.dump(dashboard_json, output_file)
     if not results_dashboard.SendResults(
-        dashboard_json,
-        options.results_url,
-        options.build_dir,
+        dashboard_json, options.results_url, options.build_dir,
         options.output_json_dashboard_url,
-        send_as_histograms=options.send_as_histograms,
-        oauth_token=oauth_token):
+        send_as_histograms=options.send_as_histograms, oauth_token=oauth_token):
       return 1
   else:
     print 'Error: No perf dashboard JSON was produced.'

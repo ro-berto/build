@@ -25,7 +25,7 @@ def main():
       sys.executable,
       os.path.join('src', 'tools', 'checkbins', 'checkbins.py'),
       os.path.join(build_dir, options.target)
-      ])
+  ])
 
 
 if '__main__' == __name__:

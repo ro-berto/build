@@ -27,7 +27,9 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
-class StagingError(Exception): pass
+
+class StagingError(Exception):
+  pass
 
 
 def ShouldPackageFile(filename, target):
@@ -62,28 +64,26 @@ def archive(options, args):
   print 'Staging in %s' % build_dir
 
   # Build the list of files to archive.
-  zip_file_list = [f for f in os.listdir(build_dir)
-                   if ShouldPackageFile(f, options.target)]
+  zip_file_list = [
+      f for f in os.listdir(build_dir) if ShouldPackageFile(f, options.target)
+  ]
 
   subdir = None
 
   # TODO(nsylvain): We need to move linux to a subdir as well, but aarya is not
   # ready with the server-side change.
   if chromium_utils.IsMac():
-    subdir = '%s-%s' % (chromium_utils.PlatformName(),
-                        options.target.lower())
+    subdir = '%s-%s' % (chromium_utils.PlatformName(), options.target.lower())
 
   prefix = options.factory_properties.get('asan_archive_name', 'asan')
-  zip_file_name = '%s-%s-%s-%d' % (prefix,
-                                   chromium_utils.PlatformName(),
-                                   options.target.lower(),
-                                   build_revision)
+  zip_file_name = '%s-%s-%s-%d' % (
+      prefix, chromium_utils.PlatformName(), options.target.lower(),
+      build_revision
+  )
 
-  (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
-                                               zip_file_name,
-                                               zip_file_list,
-                                               build_dir,
-                                               raise_error=True)
+  (zip_dir, zip_file) = chromium_utils.MakeZip(
+      staging_dir, zip_file_name, zip_file_list, build_dir, raise_error=True
+  )
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
@@ -95,12 +95,13 @@ def archive(options, args):
 
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   gs_acl = options.factory_properties.get('gs_acl', None)
-  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket, subdir=subdir,
-                                      gs_acl=gs_acl)
+  status = slave_utils.GSUtilCopyFile(
+      zip_file, gs_bucket, subdir=subdir, gs_acl=gs_acl
+  )
   if status:
-    raise StagingError('Failed to upload %s to %s. Error %d' % (zip_file,
-                                                                gs_bucket,
-                                                                status))
+    raise StagingError(
+        'Failed to upload %s to %s. Error %d' % (zip_file, gs_bucket, status)
+    )
   else:
     # Delete the file, it is not needed anymore.
     os.remove(zip_file)
@@ -110,13 +111,17 @@ def archive(options, args):
 
 def main(argv):
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--target', default='Release',
-                           help='build target to archive (Debug or Release)')
+  option_parser.add_option(
+      '--target',
+      default='Release',
+      help='build target to archive (Debug or Release)'
+  )
   option_parser.add_option('--build-dir', help='ignored')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
   return archive(options, args)
+
 
 if '__main__' == __name__:
   sys.exit(main(sys.argv))

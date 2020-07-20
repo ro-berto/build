@@ -25,6 +25,7 @@ import test_env  # pylint: disable=relative-import
 from slave import results_dashboard
 from common import chromium_utils
 
+
 class FakeDateTime(object):
   # pylint: disable=R0201
   def utctimetuple(self):
@@ -42,7 +43,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     super(ResultsDashboardFormatTest, self).setUp()
     self.maxDiff = None
     os.environ['BUILDBOT_BUILDBOTURL'] = (
-        'http://build.chromium.org/p/my.master/')
+        'http://build.chromium.org/p/my.master/'
+    )
 
   def test_MakeDashboardJsonV1(self):
     self.internal_Test_MakeDashboardJsonV1()
@@ -54,124 +56,112 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     with mock.patch('slave.results_dashboard._GetTimestamp') as getTS:
       getTS.side_effect = [307226, 307226]
 
-      v1json = results_dashboard.MakeDashboardJsonV1(
-          {'some_json': 'from_telemetry', 'enabled': enabled},
-          {
-              'rev': 'f46bf3c',
-               'git_revision': 'f46bf3c',
-               'v8_rev': '73a34f',
-               'commit_pos': 307226
-          },
-          'foo_test',
-          'my-bot',
-          'Builder',
-          '10',
-          {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
-          True, 'ChromiumPerf')
-      self.assertEqual(
-          {
-              'master': 'ChromiumPerf',
-              'bot': 'my-bot',
-              'chart_data': {'some_json': 'from_telemetry', 'enabled': enabled},
-              'is_ref': True,
-              'test_suite_name': 'foo_test',
-              'point_id': 307226,
-              'supplemental': {
-                  'annotation': 'xyz',
-                  'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                  '/my.master/builders/Builder/builds/10/steps/'
-                                  'foo_test/logs/stdio)')
-              },
-              'versions': {
-                  'v8_rev': '73a34f',
-                  'chromium': 'f46bf3c',
-                  'my_rev': '789abc01'
-                }
-          },
-          v1json)
+      v1json = results_dashboard.MakeDashboardJsonV1({
+          'some_json': 'from_telemetry', 'enabled': enabled
+      }, {
+          'rev': 'f46bf3c', 'git_revision': 'f46bf3c', 'v8_rev': '73a34f',
+          'commit_pos': 307226
+      }, 'foo_test', 'my-bot', 'Builder', '10', {
+          'a_annotation': 'xyz', 'r_my_rev': '789abc01'
+      }, True, 'ChromiumPerf')
+      self.assertEqual({
+          'master': 'ChromiumPerf', 'bot': 'my-bot', 'chart_data': {
+              'some_json': 'from_telemetry', 'enabled': enabled
+          }, 'is_ref': True, 'test_suite_name': 'foo_test', 'point_id': 307226,
+          'supplemental': {
+              'annotation':
+                  'xyz', 'a_stdio_uri': (
+                      '[Buildbot stdio](http://build.chromium.org/p'
+                      '/my.master/builders/Builder/builds/10/steps/'
+                      'foo_test/logs/stdio)'
+                  )
+          }, 'versions':
+              {'v8_rev': '73a34f', 'chromium': 'f46bf3c', 'my_rev': '789abc01'}
+      }, v1json)
 
   @mock.patch('subprocess.call')
   def test_MakeHistogramSetWithDiagnostics_CallsAddReservedDiagnostics(
-      self, call):
-    with tempfile.NamedTemporaryFile(
-        suffix='.json', prefix='test') as f:
+      self, call
+  ):
+    with tempfile.NamedTemporaryFile(suffix='.json', prefix='test') as f:
       f.write(json.dumps({'histogram': 'data'}))
       f.flush()
 
       def _mock_call(args):
-        self.assertEqual(args, [
-          sys.executable,
-         '/path/to/chromium/src/third_party/catapult/tracing/bin/'
-         'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
-         'bot', '--builds', '1', '--masters', 'ChromiumPerf',
-         '--is_reference_build', '', '--log_urls_k', 'Buildbot stdio',
-         '--log_urls_v',
-         'http://build.chromium.org/p/my.master/'
-         'builders/builder/builds/1/steps/foo.test/logs/stdio',
-         f.name])
+        self.assertEqual(
+            args, [
+                sys.executable,
+                '/path/to/chromium/src/third_party/catapult/tracing/bin/'
+                'add_reserved_diagnostics', '--benchmarks', 'foo.test',
+                '--bots', 'bot', '--builds', '1', '--masters', 'ChromiumPerf',
+                '--is_reference_build', '', '--log_urls_k', 'Buildbot stdio',
+                '--log_urls_v', 'http://build.chromium.org/p/my.master/'
+                'builders/builder/builds/1/steps/foo.test/logs/stdio', f.name
+            ]
+        )
+
       call.side_effect = _mock_call
 
       results_dashboard.MakeHistogramSetWithDiagnostics(
           f.name, '/path/to/chromium', 'foo.test', 'bot', 'builder', 1, {},
-          False, 'ChromiumPerf')
+          False, 'ChromiumPerf'
+      )
 
   def test_MakeListOfPoints_MinimalCase(self):
     """A very simple test of a call to MakeListOfPoints."""
 
-    actual_points = results_dashboard.MakeListOfPoints(
-        {
-            'bar': {
-                'traces': {'baz': ["100.0", "5.0"]},
-                'rev': '307226',
-            }
-        },
-        'my-bot', 'foo_test', 'Builder', 10, {}, 'MyMaster')
-    expected_points = [
-        {
-            'master': 'MyMaster',
-            'bot': 'my-bot',
-            'test': 'foo_test/bar/baz',
-            'revision': 307226,
-            'value': '100.0',
-            'error': '5.0',
-            'supplemental_columns': {
-                'r_commit_pos': 307226,
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
-            },
+    actual_points = results_dashboard.MakeListOfPoints({
+        'bar': {
+            'traces': {'baz': ["100.0", "5.0"]},
+            'rev': '307226',
         }
-    ]
+    }, 'my-bot', 'foo_test', 'Builder', 10, {}, 'MyMaster')
+    expected_points = [{
+        'master': 'MyMaster',
+        'bot': 'my-bot',
+        'test': 'foo_test/bar/baz',
+        'revision': 307226,
+        'value': '100.0',
+        'error': '5.0',
+        'supplemental_columns': {
+            'r_commit_pos':
+                307226, 'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
+        },
+    }]
     self.assertEqual(expected_points, actual_points)
 
   def test_MakeListOfPoints_RevisionsDict(self):
     """A very simple test of a call to MakeListOfPoints."""
 
     actual_points = results_dashboard.MakeListOfPoints(
-        {
-            'bar': {
-                'traces': {'baz': ["100.0", "5.0"]},
-            }
+        {'bar': {'traces': {'baz': ["100.0", "5.0"]},}},
+        'my-bot',
+        'foo_test',
+        'Builder',
+        10, {},
+        revisions_dict={'rev': '377777'},
+        perf_dashboard_machine_group='MyMaster'
+    )
+    expected_points = [{
+        'master': 'MyMaster',
+        'bot': 'my-bot',
+        'test': 'foo_test/bar/baz',
+        'revision': 377777,
+        'value': '100.0',
+        'error': '5.0',
+        'supplemental_columns': {
+            'r_commit_pos':
+                377777, 'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
         },
-        'my-bot', 'foo_test', 'Builder',
-        10, {}, revisions_dict={'rev': '377777'},
-        perf_dashboard_machine_group='MyMaster')
-    expected_points = [
-        {
-            'master': 'MyMaster',
-            'bot': 'my-bot',
-            'test': 'foo_test/bar/baz',
-            'revision': 377777,
-            'value': '100.0',
-            'error': '5.0',
-            'supplemental_columns': {
-                'r_commit_pos': 377777,
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
-            },
-        }
-    ]
+    }]
     self.assertEqual(expected_points, actual_points)
 
   def test_MakeListOfPoints_GeneralCase(self):
@@ -190,9 +180,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'units': 'KB',
             },
             'x': {
-                'traces': {
-                    'y': [10.0, 0],
-                },
+                'traces': {'y': [10.0, 0],},
                 'important': ['y'],
                 'rev': '23456',
                 'git_revision': '46790669f8a2ecd7249ab92418260316b1c60dbf',
@@ -200,27 +188,34 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'units': 'count',
             },
         },
-        'my-bot', 'foo_test', 'Builder', 10,
+        'my-bot',
+        'foo_test',
+        'Builder',
+        10,
         {
             'r_bar': '89abcdef',
             # The supplemental columns here are included in all points.
         },
-        'MyMaster')
+        'MyMaster'
+    )
     expected_points = [
         {
             'master': 'MyMaster',
             'bot': 'my-bot',
-            'test': 'foo_test/bar', # Note that trace name is omitted.
+            'test': 'foo_test/bar',  # Note that trace name is omitted.
             'revision': 12345,
             'value': '100.0',
             'error': '5.0',
             'units': 'KB',
             'supplemental_columns': {
-                'r_bar': '89abcdef',
-                'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
+                'r_bar':
+                    '89abcdef', 'r_chromium':
+                        '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
                 # Note that v8 rev is not included since it was 'undefined'.
             },
         },
@@ -233,11 +228,14 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'units': 'KB',
             'supplemental_columns': {
-                'r_bar': '89abcdef',
-                'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
+                'r_bar':
+                    '89abcdef', 'r_chromium':
+                        '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
             },
         },
         {
@@ -250,12 +248,15 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'units': 'count',
             'important': True,
             'supplemental_columns': {
-                'r_v8_rev': '2345',
-                'r_bar': '89abcdef',
-                'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
+                'r_v8_rev':
+                    '2345', 'r_bar':
+                        '89abcdef', 'r_chromium':
+                            '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
             },
         },
     ]
@@ -264,43 +265,43 @@ class ResultsDashboardFormatTest(unittest.TestCase):
   @mock.patch('datetime.datetime', new=FakeDateTime)
   def test_MakeListOfPoints_TimestampUsedWhenRevisionIsNaN(self):
     """Tests sending data with a git hash as "revision"."""
-    actual_points = results_dashboard.MakeListOfPoints(
-        {
-            'bar': {
-                'traces': {'baz': ["100.0", "5.0"]},
-                'rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
-            }
-        },
-        'my-bot', 'foo_test', 'Builder', 10, {}, 'ChromiumPerf')
-    expected_points = [
-        {
-            'master': 'ChromiumPerf',
-            'bot': 'my-bot',
-            'test': 'foo_test/bar/baz',
-            # Corresponding timestamp for the fake datetime is used.
-            'revision': 1375315200,
-            'value': '100.0',
-            'error': '5.0',
-            'supplemental_columns': {
-                'r_chromium': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
-                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                                '/my.master/builders/Builder/builds/10/steps/'
-                                'foo_test/logs/stdio)')
-            },
+    actual_points = results_dashboard.MakeListOfPoints({
+        'bar': {
+            'traces': {'baz': ["100.0", "5.0"]},
+            'rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
         }
-    ]
+    }, 'my-bot', 'foo_test', 'Builder', 10, {}, 'ChromiumPerf')
+    expected_points = [{
+        'master': 'ChromiumPerf',
+        'bot': 'my-bot',
+        'test': 'foo_test/bar/baz',
+        # Corresponding timestamp for the fake datetime is used.
+        'revision': 1375315200,
+        'value': '100.0',
+        'error': '5.0',
+        'supplemental_columns': {
+            'r_chromium':
+                '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f', 'a_stdio_uri': (
+                    '[Buildbot stdio](http://build.chromium.org/p'
+                    '/my.master/builders/Builder/builds/10/steps/'
+                    'foo_test/logs/stdio)'
+                )
+        },
+    }]
     self.assertEqual(expected_points, actual_points)
-
 
   @mock.patch('datetime.datetime', new=FakeDateTime)
   def test_GetStdioUri(self):
     expected_supplemental_column = {
-        'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
-                        '/my.master/builders/Builder/builds/10/steps/'
-                        'foo_test/logs/stdio)')
+        'a_stdio_uri': (
+            '[Buildbot stdio](http://build.chromium.org/p'
+            '/my.master/builders/Builder/builds/10/steps/'
+            'foo_test/logs/stdio)'
+        )
     }
     stdio_uri_column = results_dashboard._GetStdioUriColumn(
-        'foo_test', 'Builder', 10)
+        'foo_test', 'Builder', 10
+    )
     self.assertEqual(expected_supplemental_column, stdio_uri_column)
 
 
@@ -311,9 +312,10 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
     super(ResultsDashboardSendDataTest, self).setUp()
     self.build_dir = tempfile.mkdtemp()
     os.makedirs(os.path.join(self.build_dir, results_dashboard.CACHE_DIR))
-    self.cache_file_name = os.path.join(self.build_dir,
-                                        results_dashboard.CACHE_DIR,
-                                        results_dashboard.CACHE_FILENAME)
+    self.cache_file_name = os.path.join(
+        self.build_dir, results_dashboard.CACHE_DIR,
+        results_dashboard.CACHE_FILENAME
+    )
 
   def tearDown(self):
     shutil.rmtree(self.build_dir)
@@ -331,81 +333,97 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       errors: A list of corresponding errors expected to be received.
       expected_result: Expected return value of SendResults
     """
-    idx = [0] # ref
+    idx = [0]  # ref
+
     def _mock_urlopen(url):
       i = idx[0]
       idx[0] += 1
       data, err = expected_json[i], errors[i]
       rhs_json = urllib.unquote_plus(url.data.replace('data=', ''))
-      self.assertEqual(sorted(json.loads(data)),
-                       sorted(json.loads(rhs_json)))
+      self.assertEqual(sorted(json.loads(data)), sorted(json.loads(rhs_json)))
       if err:
         raise err
 
     with mock.patch('urllib2.urlopen', side_effect=_mock_urlopen):
       result = results_dashboard.SendResults(
-          new_data, 'https:/x.com', self.build_dir)
+          new_data, 'https:/x.com', self.build_dir
+      )
       self.assertEqual(expected_result, result)
 
   def test_FailureRetried(self):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendResults(
-        {'sample': 1, 'master': 'm', 'bot': 'b',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 1, "master": "m", "bot": "b", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [urllib2.URLError('some reason')], True)
+    self._TestSendResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 1, "master": "m", "bot": "b", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    )], [urllib2.URLError('some reason')], True)
 
     # The next time, the old data is sent with the new data.
-    self._TestSendResults(
-        {'sample': 2, 'master': 'm2', 'bot': 'b2',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 1, "master": "m", "bot": "b", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'),
-         ('{"sample": 2, "master": "m2", "bot": "b2", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None, None], True)
+    self._TestSendResults({
+        'sample': 2, 'master': 'm2', 'bot': 'b2',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 1, "master": "m", "bot": "b", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    ),
+        (
+            '{"sample": 2, "master": "m2", "bot": "b2", '
+            '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+        )], [None, None], True)
 
   def test_SuccessNotRetried(self):
     """After being successfully sent, data is not re-sent."""
     # First, some data is sent.
-    self._TestSendResults(
-        {'sample': 1, 'master': 'm', 'bot': 'b',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 1, "master": "m", "bot": "b", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None], True)
+    self._TestSendResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 1, "master": "m", "bot": "b", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    )], [None], True)
 
     # The next time, the old data is not sent with the new data.
-    self._TestSendResults(
-        {'sample': 2, 'master': 'm2', 'bot': 'b2',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 2, "master": "m2", "bot": "b2", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [None], True)
+    self._TestSendResults({
+        'sample': 2, 'master': 'm2', 'bot': 'b2',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 2, "master": "m2", "bot": "b2", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    )], [None], True)
 
   def test_DoubleFailureFatal(self):
     """After two failures, SendResults should return False."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendResults(
-        {'sample': 1, 'master': 'm', 'bot': 'b',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 1, "master": "m", "bot": "b", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [urllib2.URLError('some reason')], True)
+    self._TestSendResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 1, "master": "m", "bot": "b", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    )], [urllib2.URLError('some reason')], True)
     # Next, data is sent again, another failure.
-    self._TestSendResults(
-        {'sample': 1, 'master': 'm', 'bot': 'b',
-         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234},
-        [('{"sample": 1, "master": "m", "bot": "b", '
-          '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}')],
-        [urllib2.URLError('some reason'), urllib2.URLError('some reason')],
-        False)
+    self._TestSendResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [(
+        '{"sample": 1, "master": "m", "bot": "b", '
+        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
+    )], [urllib2.URLError('some reason'),
+         urllib2.URLError('some reason')], False)
 
   def _TestSendHistogramResults(
-        self, new_data, expected_data, errors, status_codes,
-        expected_result, send_as_histograms=False, oauth_token=''):
+      self,
+      new_data,
+      expected_data,
+      errors,
+      status_codes,
+      expected_result,
+      send_as_histograms=False,
+      oauth_token=''
+  ):
     """Test one call of SendResults with the given set of arguments.
 
     This method will fail a test case if the JSON that gets sent and the
@@ -420,6 +438,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       expected_result: Expected return value of SendResults
     """
     idx = [0]
+
     def _fake_httplib2_req(url, data, token):
       i = idx[0]
       idx[0] += 1
@@ -436,68 +455,80 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
     with mock.patch('slave.results_dashboard._Httplib2Request',
                     side_effect=_fake_httplib2_req):
       result = results_dashboard.SendResults(
-          new_data, 'https://fake.dashboard', self.build_dir,
-          send_as_histograms=send_as_histograms, oauth_token=oauth_token)
+          new_data,
+          'https://fake.dashboard',
+          self.build_dir,
+          send_as_histograms=send_as_histograms,
+          oauth_token=oauth_token
+      )
       self.assertEqual(expected_result, result)
 
   def test_Histogram_500_Fatal(self):
     """500 responses are fatal."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data1'}],
-        [[{'histogram': 'data1'}]],
-        [None], [500], False,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data1'}],
+                                   [[{'histogram': 'data1'}]], [None], [500],
+                                   False,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
   def test_Histogram_403_Retried(self):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data1'}],
-        [[{'histogram': 'data1'}]],
-        [None], [403], True,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data1'}],
+                                   [[{'histogram': 'data1'}]], [None], [403],
+                                   True,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
     # The next time, the old data is sent with the new data.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data2'}],
-        [[{'histogram': 'data1'}], [{'histogram': 'data2'}]],
-        [None, None], [200, 200], True,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data2'}],
+                                   [[{'histogram': 'data1'}],
+                                    [{'histogram': 'data2'}]], [None, None],
+                                   [200, 200],
+                                   True,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
   def test_Histogram_UnexpectedException_Fatal(self):
     """Unexpected exceptions are fatal."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data1'}],
-        [[{'histogram': 'data1'}]],
-        [ValueError('foo')], [200], False,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data1'}],
+                                   [[{'histogram': 'data1'}]],
+                                   [ValueError('foo')], [200],
+                                   False,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
   def test_Histogram_UnexpectedException_Fatal(self):
     """Unexpected exceptions are fatal."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data1'}],
-        [[{'histogram': 'data1'}]],
-        [ValueError('foo')], [200], False,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data1'}],
+                                   [[{'histogram': 'data1'}]],
+                                   [ValueError('foo')], [200],
+                                   False,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
   def test_Histogram_TransientFailure_Retried(self):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data1'}],
-        [[{'histogram': 'data1'}]],
-        [httplib2.HttpLib2Error('some reason')], [200], True,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data1'}],
+                                   [[{'histogram': 'data1'}]],
+                                   [httplib2.HttpLib2Error('some reason')],
+                                   [200],
+                                   True,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
     # The next time, the old data is sent with the new data.
-    self._TestSendHistogramResults(
-        [{'histogram': 'data2'}],
-        [[{'histogram': 'data1'}], [{'histogram': 'data2'}]],
-        [None, None], [200, 200], True,
-        send_as_histograms=True, oauth_token='fake')
+    self._TestSendHistogramResults([{'histogram': 'data2'}],
+                                   [[{'histogram': 'data1'}],
+                                    [{'histogram': 'data2'}]], [None, None],
+                                   [200, 200],
+                                   True,
+                                   send_as_histograms=True,
+                                   oauth_token='fake')
 
 
 class ResultsDashboardTest(unittest.TestCase):
@@ -506,18 +537,19 @@ class ResultsDashboardTest(unittest.TestCase):
   # Testing private method.
   # pylint: disable=W0212
   def test_DashboardUrl_WithData(self):
-    self.assertEqual(
-        ('https://chromeperf.appspot.com/report'
-         '?masters=MyMaster&bots=b&tests=sunspider&rev=1234'),
-        results_dashboard._DashboardUrl(
-            'https://chromeperf.appspot.com',
-            [{
-                'master': 'MyMaster',
-                'bot': 'b',
-                'test': 'sunspider/Total',
-                'revision': 1234,
-                'value': 10,
-            }]))
+    self.assertEqual((
+        'https://chromeperf.appspot.com/report'
+        '?masters=MyMaster&bots=b&tests=sunspider&rev=1234'
+    ),
+                     results_dashboard._DashboardUrl(
+                         'https://chromeperf.appspot.com', [{
+                             'master': 'MyMaster',
+                             'bot': 'b',
+                             'test': 'sunspider/Total',
+                             'revision': 1234,
+                             'value': 10,
+                         }]
+                     ))
 
   def test_DashboardUrl_UnexpectedData(self):
     self.assertIsNone(results_dashboard._DashboardUrl('', {}))

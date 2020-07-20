@@ -7,7 +7,6 @@ import socket
 
 from recipe_engine import recipe_api
 
-
 _BQUPLOAD_VERSION = 'git_revision:643892f957c8e106dff793468101f2ecfc31abb7'
 
 
@@ -116,8 +115,8 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def default_cache_path(self):
-    safe_buildername = re.sub(
-        r'[^a-zA-Z0-9]', '_', self.m.buildbucket.builder_name)
+    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
+                              self.m.buildbucket.builder_name)
     data_cache = self.default_cache_path_per_slave.join('data')
     return data_cache.join(safe_buildername)
 
@@ -188,7 +187,9 @@ class GomaApi(recipe_api.RecipeApi):
         (self.m.platform.is_linux or self.m.platform.is_win)):
       self._enable_ats = True
 
-  def ensure_goma(self, client_type=None, additional_platforms=None,
+  def ensure_goma(self,
+                  client_type=None,
+                  additional_platforms=None,
                   ephemeral=False):
     """ensure goma is installed.
 
@@ -215,8 +216,8 @@ class GomaApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('ensure_goma') as step_result:
       if client_type != 'release':
-        step_result.presentation.step_text = (
-            '%s goma client is selected' % client_type)
+        step_result.presentation.step_text = ('%s goma client is selected' %
+                                              client_type)
         step_result.presentation.status = self.m.step.WARNING
 
       with self.m.context(infra_steps=True):
@@ -277,10 +278,7 @@ class GomaApi(recipe_api.RecipeApi):
     """
 
     cloudtail_args = [
-        'start',
-        '--cloudtail-path',
-        self.cloudtail_exe,
-        '--pid-file',
+        'start', '--cloudtail-path', self.cloudtail_exe, '--pid-file',
         self.m.raw_io.output_text(leak_to=self.cloudtail_pid_file)
     ]
     if not self._use_luci_auth:
@@ -290,27 +288,29 @@ class GomaApi(recipe_api.RecipeApi):
       ])
 
     self.m.build.python(
-      name='start cloudtail',
-      script=self.resource('cloudtail_utils.py'),
-      args=cloudtail_args,
-      step_test_data=(
-          lambda: self.m.raw_io.test_api.output_text('12345')),
-      infra_step=True)
+        name='start cloudtail',
+        script=self.resource('cloudtail_utils.py'),
+        args=cloudtail_args,
+        step_test_data=(lambda: self.m.raw_io.test_api.output_text('12345')),
+        infra_step=True)
     self._cloudtail_running = True
 
   def _run_jsonstatus(self):
     with self.m.context(env=self._goma_ctl_env):
       jsonstatus_result = self.m.python(
-          name='goma_jsonstatus', script=self.goma_ctl,
+          name='goma_jsonstatus',
+          script=self.goma_ctl,
           args=['jsonstatus',
                 self.m.json.output(leak_to=self.json_path)],
           step_test_data=lambda: self.m.json.test_api.output(
-              data={'notice': [{
-                  'infra_status': {
-                      'ping_status_code': 200,
-                      'num_user_error': 0,
-                  }
-              }]}))
+              data={
+                  'notice': [{
+                      'infra_status': {
+                          'ping_status_code': 200,
+                          'num_user_error': 0,
+                      }
+                  }]
+              }))
     self._goma_jsonstatus_called = True
 
     self._jsonstatus = jsonstatus_result.json.output
@@ -389,7 +389,9 @@ class GomaApi(recipe_api.RecipeApi):
           result = self.m.python(
               name='start_goma',
               script=self.goma_ctl,
-              args=['restart'], infra_step=True, **kwargs)
+              args=['restart'],
+              infra_step=True,
+              **kwargs)
           if not self._local_dir:
             result.presentation.links['cloudtail'] = (
                 'https://console.cloud.google.com/logs/viewer?'
@@ -423,9 +425,13 @@ class GomaApi(recipe_api.RecipeApi):
         cleanup()
         raise
 
-  def stop(self, build_exit_status, ninja_log_outdir=None,
-           ninja_log_compiler=None, ninja_log_command=None,
-           build_step_name='', **kwargs):
+  def stop(self,
+           build_exit_status,
+           ninja_log_outdir=None,
+           ninja_log_compiler=None,
+           ninja_log_command=None,
+           build_step_name='',
+           **kwargs):
     """Stop goma compiler_proxy.
 
     A user is expected to execute start beforehand.
@@ -451,16 +457,16 @@ class GomaApi(recipe_api.RecipeApi):
           self._run_jsonstatus()
 
           with self.m.context(env=self._goma_ctl_env):
-            self.m.python(name='goma_stat', script=self.goma_ctl,
-                          args=['stat'],
-                          **kwargs)
-            self.m.python(name='stop_goma', script=self.goma_ctl,
-                          args=['stop'], **kwargs)
-          self._upload_logs(ninja_log_outdir=ninja_log_outdir,
-                            ninja_log_compiler=ninja_log_compiler,
-                            ninja_log_command=ninja_log_command,
-                            build_exit_status=build_exit_status,
-                            build_step_name=build_step_name)
+            self.m.python(
+                name='goma_stat', script=self.goma_ctl, args=['stat'], **kwargs)
+            self.m.python(
+                name='stop_goma', script=self.goma_ctl, args=['stop'], **kwargs)
+          self._upload_logs(
+              ninja_log_outdir=ninja_log_outdir,
+              ninja_log_compiler=ninja_log_compiler,
+              ninja_log_command=ninja_log_command,
+              build_exit_status=build_exit_status,
+              build_step_name=build_step_name)
           if self._cloudtail_running:
             self._stop_cloudtail()
 
@@ -470,9 +476,13 @@ class GomaApi(recipe_api.RecipeApi):
         nested_result.presentation.status = self.m.step.EXCEPTION
         raise
 
-  def _upload_logs(self, ninja_log_outdir=None, ninja_log_compiler=None,
-                   ninja_log_command=None, build_exit_status=None,
-                   build_step_name='', name=None):
+  def _upload_logs(self,
+                   ninja_log_outdir=None,
+                   ninja_log_compiler=None,
+                   ninja_log_command=None,
+                   build_exit_status=None,
+                   build_step_name='',
+                   name=None):
     """
     Upload some logs to goma client log/monitoring server.
     * log of compiler_proxy
@@ -510,10 +520,10 @@ class GomaApi(recipe_api.RecipeApi):
       ]
 
     json_test_data = {
-      'compiler_proxy_log': (
-          'https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/'
-          '30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log'
-          '.INFO.20170329-222936.4420.gz')
+        'compiler_proxy_log': (
+            'https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/'
+            '30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log'
+            '.INFO.20170329-222936.4420.gz')
     }
 
     assert self._goma_jsonstatus_called
@@ -525,8 +535,10 @@ class GomaApi(recipe_api.RecipeApi):
       # Since ninja_log_command can be long, it exceeds command line length
       # limit. So we write it to a file.
       args.extend([
-          '--ninja-log-outdir', ninja_log_outdir,
-          '--ninja-log-command-file', self.m.json.input(ninja_log_command),
+          '--ninja-log-outdir',
+          ninja_log_outdir,
+          '--ninja-log-command-file',
+          self.m.json.input(ninja_log_command),
       ])
       json_test_data['ninja_log'] = (
           'https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/'
@@ -537,7 +549,8 @@ class GomaApi(recipe_api.RecipeApi):
 
     if build_step_name:
       args.extend([
-          '--build-step-name', build_step_name,
+          '--build-step-name',
+          build_step_name,
       ])
 
     if ninja_log_compiler:
@@ -545,7 +558,8 @@ class GomaApi(recipe_api.RecipeApi):
 
     if self._goma_ctl_env.get('GOMA_DUMP_STATS_FILE'):
       args.extend([
-          '--goma-stats-file', self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
+          '--goma-stats-file',
+          self._goma_ctl_env['GOMA_DUMP_STATS_FILE'],
       ])
 
       # We upload counterz stats when we upload goma_stats.
@@ -566,12 +580,14 @@ class GomaApi(recipe_api.RecipeApi):
       args.extend(['--build-id', build_id])
 
     builder_id = self.m.buildbucket.build.builder
-    args.extend(['--builder-id-json',
-                 self.m.json.input({
-                     'project': builder_id.project,
-                     'bucket': builder_id.bucket,
-                     'builder': builder_id.builder,
-                 })])
+    args.extend([
+        '--builder-id-json',
+        self.m.json.input({
+            'project': builder_id.project,
+            'bucket': builder_id.bucket,
+            'builder': builder_id.builder,
+        })
+    ])
     args.append('--is-luci')
 
     if self.m.runtime.is_experimental:
@@ -581,9 +597,7 @@ class GomaApi(recipe_api.RecipeApi):
     if self.m.buildbucket.builder_name:
       args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
     if 'mastername' in self.m.properties:
-      args.extend([
-          '--buildbot-mastername', self.m.properties['mastername']
-      ])
+      args.extend(['--buildbot-mastername', self.m.properties['mastername']])
     if self.m.swarming.bot_id:
       args.extend(['--buildbot-slavename', self.m.swarming.bot_id])
 
@@ -598,8 +612,13 @@ class GomaApi(recipe_api.RecipeApi):
       if log in result.json.output:
         result.presentation.links[log] = result.json.output[log]
 
-  def build_with_goma(self, ninja_command, name=None, ninja_log_outdir=None,
-                      ninja_log_compiler=None, goma_env=None, ninja_env=None,
+  def build_with_goma(self,
+                      ninja_command,
+                      name=None,
+                      ninja_log_outdir=None,
+                      ninja_log_compiler=None,
+                      goma_env=None,
+                      ninja_env=None,
                       **kwargs):
     """Build with ninja_command using goma
 
@@ -643,8 +662,9 @@ class GomaApi(recipe_api.RecipeApi):
       build_exit_status = e.retcode
       raise e
     finally:
-      self.stop(ninja_log_outdir=ninja_log_outdir,
-                ninja_log_compiler=ninja_log_compiler,
-                ninja_log_command=ninja_command,
-                build_exit_status=build_exit_status,
-                build_step_name=build_step_name)
+      self.stop(
+          ninja_log_outdir=ninja_log_outdir,
+          ninja_log_compiler=ninja_log_compiler,
+          ninja_log_command=ninja_command,
+          build_exit_status=build_exit_status,
+          build_step_name=build_step_name)

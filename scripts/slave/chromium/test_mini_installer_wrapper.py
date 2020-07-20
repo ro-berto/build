@@ -22,15 +22,19 @@ def main():
 
   mini_installer_dir = os.path.join('src', 'chrome', 'test', 'mini_installer')
   mini_installer_tests_config = os.path.join(
-      mini_installer_dir, 'config', 'config.config')
+      mini_installer_dir, 'config', 'config.config'
+  )
   return chromium_utils.RunCommand([
       sys.executable,
       os.path.join(mini_installer_dir, 'test_installer.py'),
-      '--config', mini_installer_tests_config,
-      '--build-dir', build_directory.GetBuildOutputDirectory(),
-      '--target', options.target,
+      '--config',
+      mini_installer_tests_config,
+      '--build-dir',
+      build_directory.GetBuildOutputDirectory(),
+      '--target',
+      options.target,
       '--force-clean',
-      ])
+  ])
 
 
 if '__main__' == __name__:

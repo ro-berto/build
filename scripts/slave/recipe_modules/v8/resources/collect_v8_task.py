@@ -14,7 +14,6 @@ import traceback
 
 from slave import slave_utils
 
-
 MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
 
 It can happen in following cases:
@@ -138,9 +137,8 @@ def merge_shard_results(output_dir, shards, options):
     # Not all tests run, combined JSON summary can not be trusted.
     tags.add('UNRELIABLE_RESULTS')
     as_str = bad_shards.as_str()
-    emit_warning(
-        'some shards did not complete: %s' % as_str,
-        MISSING_SHARDS_MSG % as_str)
+    emit_warning('some shards did not complete: %s' % as_str,
+                 MISSING_SHARDS_MSG % as_str)
 
   # Handle the case when all shards fail. Return minimalistic dict that has all
   # fields that a calling recipe expects to avoid recipe-level exceptions.
@@ -204,7 +202,7 @@ def parse_args(args):
   # Split |args| into options for shim and options for swarming.py script.
   if '--' in args:
     index = args.index('--')
-    shim_args, swarming_args = args[:index], args[index+1:]
+    shim_args, swarming_args = args[:index], args[index + 1:]
   else:
     shim_args, swarming_args = args, []
 
@@ -244,8 +242,7 @@ def main(args):
       merge_test_results(output_dir, shards, options)
       merge_coverage_data(output_dir, shards, options)
     except Exception:
-      emit_warning(
-          'failed to process v8 output JSON', traceback.format_exc())
+      emit_warning('failed to process v8 output JSON', traceback.format_exc())
 
   finally:
     shutil.rmtree(output_dir, ignore_errors=True)

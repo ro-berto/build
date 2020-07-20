@@ -30,24 +30,30 @@ class TelemetryResultsProcessor(object):
       with open(self._chart_filename) as f:
         return json.load(f)
     except (IOError, ValueError):
-      logging.error('Error reading telemetry results from %s',
-                    self._chart_filename)
-      logging.error('This usually means that telemetry did not run, so it could'
-          ' not generate the file. Please check the device running the test.')
+      logging.error(
+          'Error reading telemetry results from %s', self._chart_filename
+      )
+      logging.error(
+          'This usually means that telemetry did not run, so it could'
+          ' not generate the file. Please check the device running the test.'
+      )
     return None
 
   def Cleanup(self):
     try:
       os.remove(self._chart_filename)
     except OSError:
-      logging.error('Unable to remove telemetry output file %s',
-                    self._chart_filename)
+      logging.error(
+          'Unable to remove telemetry output file %s', self._chart_filename
+      )
     if self._cleanup_parent_dir:
       try:
         os.rmdir(os.path.dirname(self._chart_filename))
       except OSError:
-        logging.error('Unable to remove telemetry output dir %s',
-                      os.path.dirname(self._chart_filename))
+        logging.error(
+            'Unable to remove telemetry output dir %s',
+            os.path.dirname(self._chart_filename)
+        )
 
   def IsChartJson(self):
     """This is the new telemetry --chartjson output format."""
@@ -114,6 +120,8 @@ class TelemetryResultsProcessor(object):
           return '%s: %s' % (chart_name, _FormatHumanReadable(value))
       return None
 
-    gen = (_summary_to_string(chart_name, chart_values)
-        for chart_name, chart_values in sorted(charts.iteritems()))
+    gen = (
+        _summary_to_string(chart_name, chart_values)
+        for chart_name, chart_values in sorted(charts.iteritems())
+    )
     return [i for i in gen if i]

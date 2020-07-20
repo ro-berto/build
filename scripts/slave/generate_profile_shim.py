@@ -23,9 +23,10 @@ def main():
   parser.add_option('--profile-type-to-generate')
   options, args = parser.parse_args()
 
-  output_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
-                            options.target,
-                            'generated_profile')
+  output_dir = os.path.join(
+      build_directory.GetBuildOutputDirectory(), options.target,
+      'generated_profile'
+  )
   cmd = [
       sys.executable,
       os.path.join('src', 'tools', 'perf', 'generate_profile'),
@@ -34,7 +35,7 @@ def main():
       '--profile-type-to-generate=' + options.profile_type_to_generate,
       '--output-dir=' + output_dir,
       '--output-format=buildbot',
-      ] + args
+  ] + args
 
   return chromium_utils.RunCommand(cmd)
 

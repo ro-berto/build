@@ -19,77 +19,109 @@ from slave import goma_utils
 
 def main():
   parser = argparse.ArgumentParser(description='Upload goma related logs')
-  parser.add_argument('--upload-compiler-proxy-info',
-                      action='store_true',
-                      help='If set, the script will upload the latest '
-                      'compiler_proxy.INFO.')
-  parser.add_argument('--log-url-json-file',
-                      help='If set, the script will write url of uploaded '
-                      'log visualizer.')
-  parser.add_argument('--ninja-log-outdir',
-                      metavar='DIR',
-                      help='Directory that has .ninja_log file.')
-  parser.add_argument('--ninja-log-compiler',
-                      metavar='COMPILER',
-                      help='compiler name used for the build.')
+  parser.add_argument(
+      '--upload-compiler-proxy-info',
+      action='store_true',
+      help='If set, the script will upload the latest '
+      'compiler_proxy.INFO.'
+  )
+  parser.add_argument(
+      '--log-url-json-file',
+      help='If set, the script will write url of uploaded '
+      'log visualizer.'
+  )
+  parser.add_argument(
+      '--ninja-log-outdir',
+      metavar='DIR',
+      help='Directory that has .ninja_log file.'
+  )
+  parser.add_argument(
+      '--ninja-log-compiler',
+      metavar='COMPILER',
+      help='compiler name used for the build.'
+  )
   # TODO(shinyak): Remove this when everyone is using --ninja-log-command-file.
-  parser.add_argument('--ninja-log-command',
-                      metavar='COMMAND',
-                      help='command line options of the build.')
-  parser.add_argument('--ninja-log-command-file',
-                      metavar='FILE',
-                      help='command line options of the build, which is '
-                      'written in the file. this option is preferred to '
-                      '--ninja-log-command.')
-  parser.add_argument('--build-exit-status',
-                      type=int,
-                      metavar='EXIT_STATUS',
-                      help='build command exit status.')
-  parser.add_argument('--goma-stats-file',
-                      metavar='FILENAME',
-                      help='Filename of a GomaStats binary protobuf. '
-                      'If empty or non-existing file, it will report error '
-                      'to chrome infra monitoring system.')
-  parser.add_argument('--goma-counterz-file',
-                      help='Filename of a CounterzStats binary protobuf. '
-                      'If empty or non-existing file, it will report error '
-                      'to chrome infra monitoring system.')
-  parser.add_argument('--goma-crash-report-id-file',
-                      metavar='FILENAME',
-                      help='Filename that has a crash report id.')
+  parser.add_argument(
+      '--ninja-log-command',
+      metavar='COMMAND',
+      help='command line options of the build.'
+  )
+  parser.add_argument(
+      '--ninja-log-command-file',
+      metavar='FILE',
+      help='command line options of the build, which is '
+      'written in the file. this option is preferred to '
+      '--ninja-log-command.'
+  )
+  parser.add_argument(
+      '--build-exit-status',
+      type=int,
+      metavar='EXIT_STATUS',
+      help='build command exit status.'
+  )
+  parser.add_argument(
+      '--goma-stats-file',
+      metavar='FILENAME',
+      help='Filename of a GomaStats binary protobuf. '
+      'If empty or non-existing file, it will report error '
+      'to chrome infra monitoring system.'
+  )
+  parser.add_argument(
+      '--goma-counterz-file',
+      help='Filename of a CounterzStats binary protobuf. '
+      'If empty or non-existing file, it will report error '
+      'to chrome infra monitoring system.'
+  )
+  parser.add_argument(
+      '--goma-crash-report-id-file',
+      metavar='FILENAME',
+      help='Filename that has a crash report id.'
+  )
 
-  parser.add_argument('--json-status',
-                      metavar='JSON',
-                      help='path of json file generated from'
-                      ' ./goma_ctl.py jsonstatus')
-  parser.add_argument('--skip-sendgomatsmon', action='store_true',
-                      help='Represent whether send jsonstatus'
-                      ' and goma or compile.py exit_status log to TsMon.'
-                      ' This option is used when no need to send goma status'
-                      ' to monitoring server.')
+  parser.add_argument(
+      '--json-status',
+      metavar='JSON',
+      help='path of json file generated from'
+      ' ./goma_ctl.py jsonstatus'
+  )
+  parser.add_argument(
+      '--skip-sendgomatsmon',
+      action='store_true',
+      help='Represent whether send jsonstatus'
+      ' and goma or compile.py exit_status log to TsMon.'
+      ' This option is used when no need to send goma status'
+      ' to monitoring server.'
+  )
 
-  parser.add_argument('--gsutil-py-path',
-                      help='Specify path to gsutil.py script in depot_tools.')
+  parser.add_argument(
+      '--gsutil-py-path',
+      help='Specify path to gsutil.py script in depot_tools.'
+  )
 
   # Arguments set to os.environ
-  parser.add_argument('--buildbot-buildername',
-                      default='unknown',
-                      help='buildbot buildername')
-  parser.add_argument('--buildbot-mastername',
-                      default='unknown',
-                      help='buildbot mastername')
-  parser.add_argument('--buildbot-slavename',
-                      default='unknown',
-                      help='buildbot slavename')
+  parser.add_argument(
+      '--buildbot-buildername', default='unknown', help='buildbot buildername'
+  )
+  parser.add_argument(
+      '--buildbot-mastername', default='unknown', help='buildbot mastername'
+  )
+  parser.add_argument(
+      '--buildbot-slavename', default='unknown', help='buildbot slavename'
+  )
 
   # For CompileEvents.
-  parser.add_argument('--build-id', default=0, type=long,
-                      help='unique ID of the current build')
-  parser.add_argument('--build-step-name', default='',
-                      help='step name of the current build')
-  parser.add_argument('--bigquery-service-account-json', default='',
-                      metavar='FILENAME',
-                      help='Service account json for BigQuery')
+  parser.add_argument(
+      '--build-id', default=0, type=long, help='unique ID of the current build'
+  )
+  parser.add_argument(
+      '--build-step-name', default='', help='step name of the current build'
+  )
+  parser.add_argument(
+      '--bigquery-service-account-json',
+      default='',
+      metavar='FILENAME',
+      help='Service account json for BigQuery'
+  )
   parser.add_argument(
       '--bqupload-path',
       default='',
@@ -99,17 +131,20 @@ def main():
   )
 
   # Builder ID.
-  parser.add_argument('--builder-id-json', default='',
-                      metavar='FILENAME',
-                      help='path to Builder ID json file')
+  parser.add_argument(
+      '--builder-id-json',
+      default='',
+      metavar='FILENAME',
+      help='path to Builder ID json file'
+  )
 
   # From Runtime API.
-  parser.add_argument('--is-luci',
-                      action='store_true',
-                      help='True if this runs on LUCI')
-  parser.add_argument('--is-experimental',
-                      action='store_true',
-                      help='True if experimental')
+  parser.add_argument(
+      '--is-luci', action='store_true', help='True if this runs on LUCI'
+  )
+  parser.add_argument(
+      '--is-experimental', action='store_true', help='True if experimental'
+  )
 
   args = parser.parse_args()
   tsmon_counters = []
@@ -179,7 +214,8 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci)
+        is_luci=args.is_luci
+    )
     if counter:
       tsmon_counters.append(counter)
 
@@ -196,7 +232,8 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci)
+        is_luci=args.is_luci
+    )
     if counter:
       tsmon_counters.append(counter)
 
@@ -207,7 +244,8 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci)
+        is_luci=args.is_luci
+    )
     if counter:
       tsmon_counters.append(counter)
 

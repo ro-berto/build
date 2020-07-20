@@ -147,8 +147,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           step_text.append('<br/>%s<br/>' % section[0])
           step_text.extend(('%s<br/>' % line for line in section[1]))
       else:  # pragma: no cover
-        raise ValueError(
-            'Expected a one or two-element list, got %r instead.' % section)
+        raise ValueError('Expected a one or two-element list, got %r instead.' %
+                         section)
     return ''.join(step_text)
 
   def present_gtest_failures(self, step_result, presentation=None):
@@ -286,8 +286,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       task = t.get_task(suffix)
       swarming_task_ids.extend(task.get_task_ids())
 
-    derive_step_name = ('derive test results (%s)' % suffix
-                        if suffix else 'derive test results')
+    derive_step_name = ('derive test results (%s)' %
+                        suffix if suffix else 'derive test results')
     if len(swarming_task_ids) == 0:
       step_result = self.m.step('[skipped] %s' % derive_step_name, [])
       step_result.presentation.logs["stdout"] = [
@@ -717,9 +717,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # for analysis.
     self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
-  def _summarize_new_and_ignored_failures(
-      self, test_suite, new_failures, ignored_failures, ignored_flakes,
-      new_failures_text, ignored_failures_text, ignored_flakes_text):
+  def _summarize_new_and_ignored_failures(self, test_suite, new_failures,
+                                          ignored_failures, ignored_flakes,
+                                          new_failures_text,
+                                          ignored_failures_text,
+                                          ignored_flakes_text):
     """Summarizes new and ignored failures and flakes in the test_suite.
 
     Args:
@@ -743,10 +745,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     suffix = 'test results summary'
     if test_suite.name == 'blink_web_tests':
       dest_file = '%s.json' % suffix.replace(' ', '_')
-      self._archive_test_results_summary({
-          'failures': new_failures,
-          'ignored': ignored_failures
-      }, dest_file)
+      self._archive_test_results_summary(
+          {
+              'failures': new_failures,
+              'ignored': ignored_failures
+          }, dest_file)
 
     step_name = '%s (%s)' % (test_suite.name, suffix)
     _, truncated_new_failures = self.limit_failures(new_failures)
@@ -924,8 +927,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         continue
 
       flaky_tests = (
-          potential_test_flakes &
-          retry_shards_successes - test_suite.known_flaky_failures)
+          potential_test_flakes
+          & retry_shards_successes - test_suite.known_flaky_failures)
       if flaky_tests:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         step_layer_flakiness[step_name] = sorted(flaky_tests)
@@ -1104,8 +1107,8 @@ class SwarmingGroup(TestGroup):
            ' this build were finished collecting, but the recipe thinks the'
            ' following tests still need to be collected:\n%s\nSomething is'
            ' probably wrong with the swarming server. Falling back on the old'
-           ' collection logic.' % ', '.join(
-               test.name for test in self._task_ids_to_test.values())))
+           ' collection logic.' %
+           ', '.join(test.name for test in self._task_ids_to_test.values())))
       result.presentation.status = caller_api.step.WARNING
 
       for test in self._task_ids_to_test.values():

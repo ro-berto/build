@@ -13,7 +13,6 @@ import re
 
 from slave import slave_utils
 
-
 # Status codes that can be returned by the evaluateCommand method.
 # From buildbot.status.builder.
 # Duplicated from performance_log_processor to break dependency.
@@ -26,8 +25,10 @@ def getText(result, observer, name):
   Updates the waterfall with any unusual test output, with a link to logs of
   failed test steps.
   """
-  GTEST_DASHBOARD_BASE = ('https://test-results.appspot.com'
-                          '/dashboards/flakiness_dashboard.html')
+  GTEST_DASHBOARD_BASE = (
+      'https://test-results.appspot.com'
+      '/dashboards/flakiness_dashboard.html'
+  )
 
   # TODO(xusydoc): unify this with gtest reporting below so getText() is
   # less confusing
@@ -65,10 +66,11 @@ def getText(result, observer, name):
     if observer.master_name:
       # Include the link to the flakiness dashboard.
       failure_text.append('<div class="BuildResultInfo">')
-      failure_text.append('<a href="%s#testType=%s'
-                          '&tests=%s">' % (GTEST_DASHBOARD_BASE,
-                                           name,
-                                           ','.join(observer.FailedTests())))
+      failure_text.append(
+          '<a href="%s#testType=%s'
+          '&tests=%s">' %
+          (GTEST_DASHBOARD_BASE, name, ','.join(observer.FailedTests()))
+      )
       failure_text.append('Flakiness dashboard')
       failure_text.append('</a>')
       failure_text.append('</div>')
@@ -95,16 +97,19 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
 
   for failure in sorted(log_processor.FailedTests()):
     clean_test_name = re.sub(r'[^\w\.\-]', '_', failure)
-    slave_utils.WriteLogLines(clean_test_name,
-                              log_processor.FailureDescription(failure))
+    slave_utils.WriteLogLines(
+        clean_test_name, log_processor.FailureDescription(failure)
+    )
   for report_hash in sorted(log_processor.MemoryToolReportHashes()):
-    slave_utils.WriteLogLines(report_hash,
-                              log_processor.MemoryToolReport(report_hash))
+    slave_utils.WriteLogLines(
+        report_hash, log_processor.MemoryToolReport(report_hash)
+    )
 
   if log_processor.ParsingErrors():
     # Generate a log file containing the list of errors.
-    slave_utils.WriteLogLines('log parsing error(s)',
-                              log_processor.ParsingErrors())
+    slave_utils.WriteLogLines(
+        'log parsing error(s)', log_processor.ParsingErrors()
+    )
 
     log_processor.ClearParsingErrors()
 
@@ -131,8 +136,10 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
 
   if hasattr(log_processor, 'PerformanceLogs'):
     if not perf_dashboard_id:
-      raise Exception('runtest.py error: perf step specified but'
-                      'no test_id in factory_properties!')
+      raise Exception(
+          'runtest.py error: perf step specified but'
+          'no test_id in factory_properties!'
+      )
     for logname, log in log_processor.PerformanceLogs().iteritems():
       lines = [str(l).rstrip() for l in log]
       slave_utils.WriteLogLines(logname, lines, perf=perf_dashboard_id)

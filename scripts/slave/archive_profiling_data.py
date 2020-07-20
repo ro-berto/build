@@ -81,13 +81,16 @@ def Archive(revision, build_dir, builder_name, test_name):
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--revision', default=None,
-                           help='unique id for this run')
+  option_parser.add_option(
+      '', '--revision', default=None, help='unique id for this run'
+  )
   option_parser.add_option('', '--build-dir', help='ignored')
-  option_parser.add_option('', '--builder-name', default=None,
-                           help='name of the build machine')
-  option_parser.add_option('', '--test-name', default=None,
-                           help='name of the test')
+  option_parser.add_option(
+      '', '--builder-name', default=None, help='name of the build machine'
+  )
+  option_parser.add_option(
+      '', '--test-name', default=None, help='name of the test'
+  )
   options = option_parser.parse_args()[0]
   options.build_dir = build_directory.GetBuildOutputDirectory()
 

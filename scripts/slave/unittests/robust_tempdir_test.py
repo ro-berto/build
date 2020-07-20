@@ -12,6 +12,7 @@ from slave import robust_tempdir
 
 
 class RobustTempdirTest(unittest.TestCase):
+
   def test_empty(self):
     with robust_tempdir.RobustTempdir(prefix='robust_tempdir_test'):
       pass
@@ -24,8 +25,8 @@ class RobustTempdirTest(unittest.TestCase):
     self.assertFalse(os.path.exists(path))
 
   def test_leak(self):
-    with robust_tempdir.RobustTempdir(
-        prefix='robust_tempdir_test', leak=True) as rt:
+    with robust_tempdir.RobustTempdir(prefix='robust_tempdir_test',
+                                      leak=True) as rt:
       path = rt.tempdir()
       self.assertTrue(os.path.exists(path))
 

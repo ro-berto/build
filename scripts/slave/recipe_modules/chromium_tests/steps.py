@@ -16,7 +16,6 @@ import urlparse
 from recipe_engine import recipe_api
 from recipe_engine.types import freeze
 
-
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 # When we retry failing tests, we try to choose a high repeat count so that
@@ -29,7 +28,7 @@ REPEAT_COUNT_FOR_FAILING_TESTS = 10
 MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
 MAC_TOOLCHAIN_VERSION = (
     'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
-MAC_TOOLCHAIN_ROOT    = '.'
+MAC_TOOLCHAIN_ROOT = '.'
 
 # CIPD package containing various static test utilities and binaries for WPR
 # testing.  Used with WprProxySimulatorTestRunner.
@@ -55,9 +54,14 @@ IOS_PRODUCT_TYPES = {
     'iPhone 11': 'iPhone12,1',
 }
 
+
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
-  def __init__(self, repeat_count=None, test_filter=None, run_disabled=False,
+
+  def __init__(self,
+               repeat_count=None,
+               test_filter=None,
+               run_disabled=False,
                retry_limit=None):
     """Construct a TestOptions object with immutable attributes.
 
@@ -434,12 +438,13 @@ class Test(object):
     #
     # We never allow more than num_test_to_retry shards, since that would leave
     # shards doing nothing.
-    return int(min(min(
-        max(
-            original_num_shards * REPEAT_COUNT_FOR_FAILING_TESTS *
-                (float(num_tests_to_retry) / total_tests_ran),
-            1),
-        original_num_shards), num_tests_to_retry))
+    return int(
+        min(
+            min(
+                max(
+                    original_num_shards * REPEAT_COUNT_FOR_FAILING_TESTS *
+                    (float(num_tests_to_retry) / total_tests_ran), 1),
+                original_num_shards), num_tests_to_retry))
 
   def failures(self, suffix):
     """Return tests that failed at least once (list of strings)."""
@@ -488,7 +493,7 @@ class Test(object):
 
   @property
   def uses_local_devices(self):
-    return False # pragma: no cover
+    return False  # pragma: no cover
 
   def step_name(self, suffix):
     """Helper to uniformly combine tests's name with a suffix.
@@ -509,8 +514,7 @@ class Test(object):
         'isolate_target_name': self.isolate_target,
     }
     if suffix is not None:
-      data['patched'] = suffix in (
-          'with patch', 'retry shards with patch')
+      data['patched'] = suffix in ('with patch', 'retry shards with patch')
     return data
 
   def with_patch_failures_including_retry(self):
@@ -540,8 +544,7 @@ class Test(object):
       retry_suffix = ' '.join([retry_suffix, suffix])
     retry_shards_valid = self.has_valid_results(retry_suffix)
     if retry_shards_valid:
-      retry_shards_failures = self.deterministic_failures(
-          retry_suffix)
+      retry_shards_failures = self.deterministic_failures(retry_suffix)
 
     if original_run_valid and retry_shards_valid:
       # TODO(martiniss): Maybe change this behavior? This allows for failures
@@ -624,8 +627,7 @@ class Test(object):
 
     passing_tests = set()
     failing_tests = set()
-    for test_name, result in (
-        self.pass_fail_counts(suffix).iteritems()):
+    for test_name, result in (self.pass_fail_counts(suffix).iteritems()):
       if result['pass_count'] > 0:
         passing_tests.add(test_name)
       else:
@@ -779,21 +781,20 @@ class ExperimentalTest(TestWrapper):
     # experimental builders, albeit with different experiment keys.
 
     criteria = [
-      api.buildbucket.builder_name,
-      (api.tryserver.gerrit_change and api.tryserver.gerrit_change.change) or
+        api.buildbucket.builder_name,
+        (api.tryserver.gerrit_change and api.tryserver.gerrit_change.change) or
         api.buildbucket.build.number or '0',
-      self.name,
+        self.name,
     ]
 
     digest = hashlib.sha1(''.join(str(c) for c in criteria)).digest()
     short = struct.unpack_from('<H', digest)[0]
     return self._experiment_percentage * 0xffff >= short * 100
 
-
   def _is_in_experiment_and_has_valid_results(self, suffix):
     return (self._is_in_experiment and
-        super(ExperimentalTest, self).has_valid_results(
-            self._experimental_suffix(suffix)))
+            super(ExperimentalTest, self).has_valid_results(
+                self._experimental_suffix(suffix)))
 
   @property
   def abort_on_failure(self):
@@ -805,8 +806,8 @@ class ExperimentalTest(TestWrapper):
       return []
 
     try:
-      return super(ExperimentalTest, self).pre_run(
-          api, self._experimental_suffix(suffix))
+      return super(ExperimentalTest,
+                   self).pre_run(api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
 
@@ -817,8 +818,8 @@ class ExperimentalTest(TestWrapper):
       return []
 
     try:
-      return super(ExperimentalTest, self).run(
-          api, self._experimental_suffix(suffix))
+      return super(ExperimentalTest,
+                   self).run(api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
 
@@ -827,8 +828,8 @@ class ExperimentalTest(TestWrapper):
     if self._is_in_experiment:
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).has_valid_results(
-          self._experimental_suffix(suffix))
+      super(ExperimentalTest,
+            self).has_valid_results(self._experimental_suffix(suffix))
     return True
 
   #override
@@ -844,29 +845,30 @@ class ExperimentalTest(TestWrapper):
     if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).deterministic_failures(
-          self._experimental_suffix(suffix))
+      super(ExperimentalTest,
+            self).deterministic_failures(self._experimental_suffix(suffix))
     return []
 
   #override
-  def findit_notrun(self, suffix): # pragma: no cover
+  def findit_notrun(self, suffix):  # pragma: no cover
     if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).findit_notrun(
-          self._experimental_suffix(suffix))
+      super(ExperimentalTest,
+            self).findit_notrun(self._experimental_suffix(suffix))
     return set()
 
   def pass_fail_counts(self, suffix):
     if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).pass_fail_counts(
-          self._experimental_suffix(suffix))
+      super(ExperimentalTest,
+            self).pass_fail_counts(self._experimental_suffix(suffix))
     return {}
 
 
 class SizesStep(Test):
+
   def __init__(self, results_url, perf_id, **kwargs):
     super(SizesStep, self).__init__('sizes', **kwargs)
     self.results_url = results_url
@@ -895,7 +897,7 @@ class SizesStep(Test):
   def findit_notrun(self, suffix):
     return set()
 
-  def pass_fail_counts(self, suffix): # pragma: no cover
+  def pass_fail_counts(self, suffix):  # pragma: no cover
     return {}
 
 
@@ -912,12 +914,20 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self, name, script, all_compile_targets, script_args=None,
+  def __init__(self,
+               name,
+               script,
+               all_compile_targets,
+               script_args=None,
                override_compile_targets=None,
-               waterfall_mastername=None, waterfall_buildername=None, **kwargs):
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               **kwargs):
     super(ScriptTest, self).__init__(
-        name, waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername, **kwargs)
+        name,
+        waterfall_mastername=waterfall_mastername,
+        waterfall_buildername=waterfall_buildername,
+        **kwargs)
     self._script = script
     self._all_compile_targets = all_compile_targets
     self._script_args = script_args
@@ -932,8 +942,10 @@ class ScriptTest(Test):  # pylint: disable=W0232
     if not self._script in self._all_compile_targets:
       return []
 
-    return [string.Template(s).safe_substitute(substitutions)
-            for s in self._all_compile_targets[self._script]]
+    return [
+        string.Template(s).safe_substitute(substitutions)
+        for s in self._all_compile_targets[self._script]
+    ]
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -945,9 +957,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
     tests_to_retry = self._tests_to_retry(suffix)
     if tests_to_retry:
-      run_args.extend([
-          '--filter-file', api.json.input(tests_to_retry)
-      ])  # pragma: no cover
+      run_args.extend(['--filter-file',
+                       api.json.input(tests_to_retry)])  # pragma: no cover
 
     try:
       script_args = []
@@ -957,14 +968,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
           name,
           # Enforce that all scripts are in the specified directory
           # for consistency.
-          api.path['checkout'].join(
-              'testing', 'scripts', api.path.basename(self._script)),
-          args=(api.chromium_tests.get_common_args_for_scripts() +
-                script_args +
-                ['run', '--output', api.json.output()] +
-                run_args),
-          step_test_data=lambda: api.json.test_api.output(
-              {'valid': True, 'failures': []}))
+          api.path['checkout'].join('testing', 'scripts',
+                                    api.path.basename(self._script)),
+          args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
+                ['run', '--output', api.json.output()] + run_args),
+          step_test_data=lambda: api.json.test_api.output({
+              'valid': True,
+              'failures': []
+          }))
     finally:
       result = api.step.active_result
       self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
@@ -973,20 +984,21 @@ class ScriptTest(Test):  # pylint: disable=W0232
       if result.json.output:
         failures = result.json.output.get('failures')
       if failures is None:
-        self.update_test_run(
-            api, suffix, api.test_utils.canonical.result_format())
+        self.update_test_run(api, suffix,
+                             api.test_utils.canonical.result_format())
         api.python.failing_step(
             '%s with suffix %s had an invalid result' % (self.name, suffix),
             'The recipe expected the result to contain the key \'failures\'.'
-            ' Contents are:\n%s' % api.json.dumps(
-                result.json.output, indent=2))
+            ' Contents are:\n%s' % api.json.dumps(result.json.output, indent=2))
 
       # Most scripts do not emit 'successes'. If they start emitting
       # 'successes', then we can create a proper results dictionary.
       pass_fail_counts = {}
       for failing_test in failures:
-        pass_fail_counts.setdefault(
-            failing_test, {'pass_count': 0, 'fail_count': 0})
+        pass_fail_counts.setdefault(failing_test, {
+            'pass_count': 0,
+            'fail_count': 0
+        })
         pass_fail_counts[failing_test]['fail_count'] += 1
 
       # It looks like the contract we have with these tests doesn't expose how
@@ -994,19 +1006,16 @@ class ScriptTest(Test):  # pylint: disable=W0232
       # this should be fine for these tests.
       self.update_test_run(
           api, suffix, {
-          'failures': failures,
-          'valid': result.json.output['valid'],
-          'total_tests_ran': len(failures),
-          'pass_fail_counts': pass_fail_counts,
-          'findit_notrun': set(),
-      })
+              'failures': failures,
+              'valid': result.json.output['valid'],
+              'total_tests_ran': len(failures),
+              'pass_fail_counts': pass_fail_counts,
+              'findit_notrun': set(),
+          })
 
       _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
-          api.test_utils.format_step_text([
-            ['failures:', failures]
-          ]))
-
+          api.test_utils.format_step_text([['failures:', failures]]))
 
     return self._test_runs[suffix]
 
@@ -1109,8 +1118,8 @@ class LocalGTestTest(Test):
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = _test_options_for_running(self.test_options,
-                                             suffix, tests_to_retry)
+    test_options = _test_options_for_running(self.test_options, suffix,
+                                             tests_to_retry)
     args = _merge_args_and_test_options(self, self._args, test_options)
 
     if tests_to_retry:
@@ -1121,9 +1130,9 @@ class LocalGTestTest(Test):
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
     kwargs = {
-      'name': self.step_name(suffix),
-      'args': args,
-      'step_test_data': step_test_data,
+        'name': self.step_name(suffix),
+        'args': args,
+        'step_test_data': step_test_data,
     }
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
@@ -1145,22 +1154,24 @@ class LocalGTestTest(Test):
         args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
         api.python(self.target_name, script, args)
       else:
-        api.chromium.runtest(self.target_name, revision=self._revision,
-                             webkit_revision=self._webkit_revision,
-                             **kwargs)
+        api.chromium.runtest(
+            self.target_name,
+            revision=self._revision,
+            webkit_revision=self._webkit_revision,
+            **kwargs)
       # TODO(kbr): add functionality to generate_gtest to be able to
       # force running these local gtests via isolate from the src-side
       # JSON files. crbug.com/584469
     finally:
       step_result = api.step.active_result
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-      if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self.update_test_run(
-            api, suffix, api.test_utils.canonical.result_format())
+      if not hasattr(step_result, 'test_utils'):  # pragma: no cover
+        self.update_test_run(api, suffix,
+                             api.test_utils.canonical.result_format())
       else:
         gtest_results = step_result.test_utils.gtest_results
-        self.update_test_run(
-            api, suffix, gtest_results.canonical_result_format())
+        self.update_test_run(api, suffix,
+                             gtest_results.canonical_result_format())
 
       r = api.test_utils.present_gtest_failures(step_result)
       if r:
@@ -1196,7 +1207,7 @@ class ResultsHandler(object):
     """
     raise NotImplementedError()
 
-  def render_results(self, api, results, presentation): # pragma: no cover
+  def render_results(self, api, results, presentation):  # pragma: no cover
     """Renders the test result into the step's output presentation.
 
     Args:
@@ -1248,8 +1259,8 @@ class JSONResultsHandler(ResultsHandler):
 
     for test_name in sorted(failures):
       if index >= cls.MAX_FAILS:
-        failure_strings.append('* ... %d more (%d total) ...' % (
-            num_failures - cls.MAX_FAILS, num_failures))
+        failure_strings.append('* ... %d more (%d total) ...' %
+                               (num_failures - cls.MAX_FAILS, num_failures))
         break
       if failures[test_name] and 'shard' in failures[test_name]:
         shard = failures[test_name]['shard']
@@ -1269,12 +1280,14 @@ class JSONResultsHandler(ResultsHandler):
     if highlight and unexpected > 0:
       hi_left = '>>>'
       hi_right = '<<<'
-    return (
-        "* %(state)s: %(total)d (%(expected)d expected, "
-        "%(hi_left)s%(unexpected)d unexpected%(hi_right)s)") % dict(
-            state=state, total=expected+unexpected,
-            expected=expected, unexpected=unexpected,
-            hi_left=hi_left, hi_right=hi_right)
+    return ("* %(state)s: %(total)d (%(expected)d expected, "
+            "%(hi_left)s%(unexpected)d unexpected%(hi_right)s)") % dict(
+                state=state,
+                total=expected + unexpected,
+                expected=expected,
+                unexpected=unexpected,
+                hi_left=hi_left,
+                hi_right=hi_right)
 
   def upload_results(self, api, results, step_name, passed, step_suffix=None):
     # Only version 3 of results is supported by the upload server.
@@ -1287,8 +1300,9 @@ class JSONResultsHandler(ResultsHandler):
     _, chrome_revision = api.commit_position.parse(str(chrome_revision_cp))
     chrome_revision = str(chrome_revision)
     api.test_results.upload(
-      api.json.input(results), chrome_revision=chrome_revision,
-      test_type=step_name)
+        api.json.input(results),
+        chrome_revision=chrome_revision,
+        test_type=step_name)
 
   def render_results(self, api, results, presentation):
     failure_status = (
@@ -1312,10 +1326,9 @@ class JSONResultsHandler(ResultsHandler):
         presentation.status = failure_status
 
       step_text += [
-          ('%s passed, %s failed (%s total)' % (
-              len(results.passes.keys()),
-              len(results.unexpected_failures.keys()),
-              len(results.tests)),),
+          ('%s passed, %s failed (%s total)' %
+           (len(results.passes.keys()), len(
+               results.unexpected_failures.keys()), len(results.tests)),),
       ]
 
     else:
@@ -1327,14 +1340,10 @@ class JSONResultsHandler(ResultsHandler):
 
       step_text += [
           ('Total tests: %s' % len(results.tests), [
-              self._format_counts(
-                  'Passed',
-                  len(results.passes.keys()),
-                  len(results.unexpected_passes.keys())),
-              self._format_counts(
-                  'Skipped',
-                  len(results.skipped.keys()),
-                  len(results.unexpected_skipped.keys())),
+              self._format_counts('Passed', len(results.passes.keys()),
+                                  len(results.unexpected_passes.keys())),
+              self._format_counts('Skipped', len(results.skipped.keys()),
+                                  len(results.unexpected_skipped.keys())),
               self._format_counts(
                   'Failed',
                   len(results.failures.keys()),
@@ -1345,22 +1354,19 @@ class JSONResultsHandler(ResultsHandler):
                   len(results.flakes.keys()),
                   len(results.unexpected_flakes.keys()),
                   highlight=True),
-              ]
-          ),
+          ]),
       ]
 
     # format_step_text will automatically trim these if the list is empty.
     step_text += [
-        self._format_failures(
-            'Unexpected Failures', results.unexpected_failures),
+        self._format_failures('Unexpected Failures',
+                              results.unexpected_failures),
     ]
     step_text += [
-        self._format_failures(
-            'Unexpected Flakes', results.unexpected_flakes),
+        self._format_failures('Unexpected Flakes', results.unexpected_flakes),
     ]
     step_text += [
-        self._format_failures(
-            'Unexpected Skips', results.unexpected_skipped),
+        self._format_failures('Unexpected Skips', results.unexpected_skipped),
     ]
 
     # Unknown test results mean something has probably gone wrong, mark as an
@@ -1368,8 +1374,7 @@ class JSONResultsHandler(ResultsHandler):
     if results.unknown:
       presentation.status = api.step.EXCEPTION
     step_text += [
-        self._format_failures(
-            'Unknown test result', results.unknown),
+        self._format_failures('Unknown test result', results.unknown),
     ]
 
     presentation.step_text += api.test_utils.format_step_text(step_text)
@@ -1462,7 +1467,7 @@ class FakeCustomResultsHandler(ResultsHandler):
 
   def render_results(self, api, results, presentation):
     presentation.step_text += api.test_utils.format_step_text([
-        ['Fake results data',[]],
+        ['Fake results data', []],
     ])
     presentation.links['uploaded'] = 'fake://'
 
@@ -1488,6 +1493,7 @@ def _clean_step_name(step_name, suffix):
 
   return '%s (%s)' % (step_name, suffix)
 
+
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
@@ -1506,12 +1512,18 @@ class LayoutTestResultsHandler(JSONResultsHandler):
         'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
     archive_layout_test_args = [
-      '--results-dir', results_dir,
-      '--build-dir', api.chromium.c.build_dir,
-      '--build-number', buildnumber,
-      '--builder-name', buildername,
-      '--gs-bucket', 'gs://chromium-layout-test-archives',
-      '--staging-dir', api.path['cache'].join('chrome_staging'),
+        '--results-dir',
+        results_dir,
+        '--build-dir',
+        api.chromium.c.build_dir,
+        '--build-number',
+        buildnumber,
+        '--builder-name',
+        buildername,
+        '--gs-bucket',
+        'gs://chromium-layout-test-archives',
+        '--staging-dir',
+        api.path['cache'].join('chrome_staging'),
     ]
     if not api.tryserver.is_tryserver:
       archive_layout_test_args.append('--store-latest')
@@ -1527,16 +1539,14 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
     if api.properties.get('gs_acl'):
       archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
-    archive_result = api.build.python(
-      archive_step_name,
-      archive_layout_test_results,
-      archive_layout_test_args)
+    archive_result = api.build.python(archive_step_name,
+                                      archive_layout_test_results,
+                                      archive_layout_test_args)
 
     # TODO(tansell): Move this to render_results function
     sanitized_buildername = re.sub('[ .()]', '_', buildername)
-    base = (
-      "https://test-results.appspot.com/data/layout_results/%s/%s"
-      % (sanitized_buildername, buildnumber))
+    base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
+            (sanitized_buildername, buildnumber))
     base += '/' + step_name
 
     archive_result.presentation.links['layout_test_results'] = (
@@ -1547,8 +1557,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
 class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
-  SUFFIXES_TO_INCREASE_PRIORITY = [
-      'without patch', 'retry shards with patch' ]
+  SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
 
   def __init__(self,
                name,
@@ -1659,9 +1668,9 @@ class SwarmingTest(Test):
   def _get_gpu_suffix(dimensions):
     gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
     vendor_ids = {
-      '8086': 'Intel',
-      '10de': 'NVIDIA',
-      '1002': 'ATI',
+        '8086': 'Intel',
+        '10de': 'NVIDIA',
+        '1002': 'ATI',
     }
     gpu_vendor = vendor_ids.get(gpu_vendor_id) or '(%s)' % gpu_vendor_id
 
@@ -1682,30 +1691,30 @@ class SwarmingTest(Test):
   @staticmethod
   def _get_android_suffix(dimensions):
     device_codenames = {
-      'angler': 'Nexus 6P',
-      'athene': 'Moto G4',
-      'bullhead': 'Nexus 5X',
-      'dragon': 'Pixel C',
-      'flo': 'Nexus 7 [2013]',
-      'flounder': 'Nexus 9',
-      'foster': 'NVIDIA Shield',
-      'fugu': 'Nexus Player',
-      'goyawifi': 'Galaxy Tab 3',
-      'grouper': 'Nexus 7 [2012]',
-      'hammerhead': 'Nexus 5',
-      'herolte': 'Galaxy S7 [Global]',
-      'heroqlteatt': 'Galaxy S7 [AT&T]',
-      'j5xnlte': 'Galaxy J5',
-      'm0': 'Galaxy S3',
-      'mako': 'Nexus 4',
-      'manta': 'Nexus 10',
-      'marlin': 'Pixel 1 XL',
-      'sailfish': 'Pixel 1',
-      'shamu': 'Nexus 6',
-      'sprout': 'Android One',
-      'taimen': 'Pixel 2 XL',
-      'walleye': 'Pixel 2',
-      'zerofltetmo': 'Galaxy S6',
+        'angler': 'Nexus 6P',
+        'athene': 'Moto G4',
+        'bullhead': 'Nexus 5X',
+        'dragon': 'Pixel C',
+        'flo': 'Nexus 7 [2013]',
+        'flounder': 'Nexus 9',
+        'foster': 'NVIDIA Shield',
+        'fugu': 'Nexus Player',
+        'goyawifi': 'Galaxy Tab 3',
+        'grouper': 'Nexus 7 [2012]',
+        'hammerhead': 'Nexus 5',
+        'herolte': 'Galaxy S7 [Global]',
+        'heroqlteatt': 'Galaxy S7 [AT&T]',
+        'j5xnlte': 'Galaxy J5',
+        'm0': 'Galaxy S3',
+        'mako': 'Nexus 4',
+        'manta': 'Nexus 10',
+        'marlin': 'Pixel 1 XL',
+        'sailfish': 'Pixel 1',
+        'shamu': 'Nexus 6',
+        'sprout': 'Android One',
+        'taimen': 'Pixel 2 XL',
+        'walleye': 'Pixel 2',
+        'zerofltetmo': 'Galaxy S6',
     }
     targetted_device = dimensions['device_type']
     product_name = device_codenames.get(targetted_device, targetted_device)
@@ -1767,8 +1776,8 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def _apply_swarming_task_config(
-      self, task, api, suffix, isolated, filter_flag, filter_delimiter):
+  def _apply_swarming_task_config(self, task, api, suffix, isolated,
+                                  filter_flag, filter_delimiter):
     """Applies shared configuration for swarming tasks.
     """
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1785,7 +1794,8 @@ class SwarmingTest(Test):
       # sending the filter list if we're close to the limit -- this causes all
       # tests to be run.
       char_limit = 6000 if self._dispatches_to_windows() else 90000
-      expected_filter_length = (sum(len(x) for x in tests_to_retry) +
+      expected_filter_length = (
+          sum(len(x) for x in tests_to_retry) +
           len(tests_to_retry) * len(filter_delimiter))
 
       if expected_filter_length < char_limit:
@@ -1807,8 +1817,7 @@ class SwarmingTest(Test):
       # by this instrumentation, see:
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
       task_slice = task_slice.with_env_vars(**{
-          'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
+          'LLVM_PROFILE_FILE': '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       })
 
       sparse = True
@@ -1850,13 +1859,13 @@ class SwarmingTest(Test):
       # shards with patch' will simply reuse results from 'with patch'.
       # Regardless, we want to emit a failing step so that the error is not
       # overlooked.
-      if len(task.shard_indices) == 0: # pragma: no cover
+      if len(task.shard_indices) == 0:  # pragma: no cover
         api.python.failing_step(
-          'missing failed shards',
-          "Retry shards with patch is being run on {}, which has no failed "
-          "shards. This usually happens because of a test runner bug. The test "
-          "runner reports test failures, but had exit_code 0.".format(
-              self.step_name(suffix='with patch')))
+            'missing failed shards',
+            "Retry shards with patch is being run on {}, which has no failed "
+            "shards. This usually happens because of a test runner bug. The "
+            "test runner reports test failures, but had exit_code 0.".format(
+                self.step_name(suffix='with patch')))
     else:
       task.shard_indices = range(task.shards)
 
@@ -1873,8 +1882,8 @@ class SwarmingTest(Test):
       for package in self._cipd_packages:
         ensure_file.add_package(package[1], package[2], package[0])
 
-    task_slice = (task_slice.with_cipd_ensure_file(ensure_file).
-                   with_isolated(isolated))
+    task_slice = (
+        task_slice.with_cipd_ensure_file(ensure_file).with_isolated(isolated))
 
     if self._named_caches:
       task.named_caches.update(self._named_caches)
@@ -1913,10 +1922,10 @@ class SwarmingTest(Test):
         'test_suite': [self.canonical_name],
     }
 
-    task.request = (task_request.with_slice(0, task_slice).
-                      with_name(self.step_name(suffix)).
-                      with_service_account(self._service_account or '').
-                      with_tags(tags))
+    task.request = (
+        task_request.with_slice(0, task_slice).with_name(
+            self.step_name(suffix)).with_service_account(
+                self._service_account or '').with_tags(tags))
     return task
 
   def get_task(self, suffix):
@@ -1924,8 +1933,8 @@ class SwarmingTest(Test):
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
-    assert suffix not in self._tasks, (
-        'Test %s was already triggered' % self.step_name(suffix))
+    assert suffix not in self._tasks, ('Test %s was already triggered' %
+                                       self.step_name(suffix))
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
@@ -1977,7 +1986,7 @@ class SwarmingTest(Test):
           '%s wasn\'t triggered' % self.target_name)
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
-      self._tasks[suffix])
+        self._tasks[suffix])
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     metadata = self.step_metadata(suffix)
@@ -2001,8 +2010,7 @@ class SwarmingTest(Test):
     data = super(SwarmingTest, self).step_metadata(suffix)
     if suffix is not None:
       data['full_step_name'] = self._suffix_step_name_map[suffix]
-      data['patched'] = suffix in (
-          'with patch', 'retry shards with patch')
+      data['patched'] = suffix in ('with patch', 'retry shards with patch')
       data['dimensions'] = self._tasks[suffix].request[0].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
@@ -2079,8 +2087,8 @@ class SwarmingGTestTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.gtest_task()
-    self._apply_swarming_task_config(
-        task, api, suffix, isolated, '--gtest_filter', ':')
+    self._apply_swarming_task_config(task, api, suffix, isolated,
+                                     '--gtest_filter', ':')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -2210,11 +2218,12 @@ class LocalIsolatedScriptTest(Test):
     # a subset of the tests. (crbug.com/533481)
 
     json_results_file = api.json.output()
-    args.extend(
-        ['--isolated-script-test-output', json_results_file])
+    args.extend(['--isolated-script-test-output', json_results_file])
 
-    step_test_data = lambda: api.json.test_api.output(
-        {'valid': True, 'failures': []})
+    step_test_data = lambda: api.json.test_api.output({
+        'valid': True,
+        'failures': []
+    })
 
     kwargs = {}
     if self.isolate_profile_data:
@@ -2228,7 +2237,8 @@ class LocalIsolatedScriptTest(Test):
           # instead of locally.
           'env': {
               'LLVM_PROFILE_FILE':
-                  '${ISOLATED_OUTDIR}/profraw/default-%1m.profraw', },
+                  '${ISOLATED_OUTDIR}/profraw/default-%1m.profraw',
+          },
           # The results of the script will be isolated, and the .isolate will be
           # dumped to stdout.
           'stdout': api.raw_io.output(),
@@ -2239,7 +2249,8 @@ class LocalIsolatedScriptTest(Test):
           self.name,
           api.isolate.isolated_tests[self.target_name],
           args,
-          step_test_data=step_test_data, **kwargs)
+          step_test_data=step_test_data,
+          **kwargs)
     finally:
       # TODO(kbr, nedn): the logic of processing the output here is very similar
       # to that of SwarmingIsolatedScriptTest. They probably should be shared
@@ -2252,8 +2263,8 @@ class LocalIsolatedScriptTest(Test):
       test_results = api.test_utils.create_results_from_json(results)
       self.results_handler.render_results(api, test_results, presentation)
 
-      self.update_test_run(
-          api, suffix, self.results_handler.validate_results(api, results))
+      self.update_test_run(api, suffix,
+                           self.results_handler.validate_results(api, results))
 
       if (api.step.active_result.retcode == 0 and
           not self._test_runs[suffix]['valid']):
@@ -2319,7 +2330,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
-    self._perf_id=perf_id
+    self._perf_id = perf_id
     self._results_url = results_url
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
@@ -2350,8 +2361,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)
 
-    self._apply_swarming_task_config(
-        task, api, suffix, isolated, '--isolated-script-test-filter', '::')
+    self._apply_swarming_task_config(task, api, suffix, isolated,
+                                     '--isolated-script-test-filter', '::')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -2422,14 +2433,16 @@ class MiniInstallerTest(Test):  # pylint: disable=W0232
     # recipe engine will recognize that the second argument is a subclass of
     # OutputPlaceholder and use that to populate
     # step_result.test_utils.test_results.
-    cmd_args = ['--write-full-results-to',
-                api.test_utils.test_results(add_json_log=False)]
+    cmd_args = [
+        '--write-full-results-to',
+        api.test_utils.test_results(add_json_log=False)
+    ]
     tests_to_retry = self._tests_to_retry(suffix)
     if tests_to_retry:
       cmd_args.extend(tests_to_retry)  # pragma: no cover
 
-    default_factory_for_tests = (lambda:
-        api.test_utils.test_api.canned_test_output(passing=True))
+    default_factory_for_tests = (
+        lambda: api.test_utils.test_api.canned_test_output(passing=True))
     step_result = self.run_step(
         api,
         suffix,
@@ -2441,8 +2454,7 @@ class MiniInstallerTest(Test):  # pylint: disable=W0232
     presentation = step_result.presentation
     if (test_results.valid and
         step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
-      self.update_test_run(
-          api, suffix, test_results.canonical_result_format())
+      self.update_test_run(api, suffix, test_results.canonical_result_format())
       _, failures = api.test_utils.limit_failures(
           test_results.unexpected_failures.keys())
       presentation.step_text += api.test_utils.format_step_text([
@@ -2451,8 +2463,8 @@ class MiniInstallerTest(Test):  # pylint: disable=W0232
       if failures:
         presentation.status = api.step.FAILURE
     else:
-      self.update_test_run(
-          api, suffix, api.test_utils.canonical.result_format())
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format())
       presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
@@ -2460,10 +2472,15 @@ class MiniInstallerTest(Test):  # pylint: disable=W0232
 
 
 class AndroidTest(Test):
-  def __init__(self, name, compile_targets, waterfall_mastername=None,
+
+  def __init__(self,
+               name,
+               compile_targets,
+               waterfall_mastername=None,
                waterfall_buildername=None):
     super(AndroidTest, self).__init__(
-        name, waterfall_mastername=waterfall_mastername,
+        name,
+        waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
     self._compile_targets = compile_targets
 
@@ -2489,15 +2506,15 @@ class AndroidTest(Test):
       raise
     finally:
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-      self.update_test_run(
-          api, suffix, api.test_utils.canonical.result_format())
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format())
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
           step_result, presentation=presentation_step.presentation)
       if gtest_results:
-        self.update_test_run(
-            api, suffix, gtest_results.canonical_result_format())
+        self.update_test_run(api, suffix,
+                             gtest_results.canonical_result_format())
 
         api.test_results.upload(
             api.json.input(gtest_results.raw),
@@ -2546,9 +2563,10 @@ class AndroidJunitTest(AndroidTest):
 
 
 class IncrementalCoverageTest(Test):
+
   def __init__(self, **kwargs):
-    super(IncrementalCoverageTest, self).__init__(
-        'incremental coverage', **kwargs)
+    super(IncrementalCoverageTest, self).__init__('incremental coverage',
+                                                  **kwargs)
 
   @property
   def uses_local_devices(self):
@@ -2560,7 +2578,7 @@ class IncrementalCoverageTest(Test):
   def failures(self, suffix):
     return []
 
-  def pass_fail_counts(self, suffix): # pragma: no cover
+  def pass_fail_counts(self, suffix):  # pragma: no cover
     return {}
 
   def compile_targets(self):
@@ -2608,7 +2626,9 @@ class WebRTCPerfTest(LocalGTestTest):
     runtest_kwargs['perf_dashboard_id'] = name
     runtest_kwargs['annotate'] = 'graphing'
     super(WebRTCPerfTest, self).__init__(
-        name, args, commit_position_property=commit_position_property,
+        name,
+        args,
+        commit_position_property=commit_position_property,
         **runtest_kwargs)
 
   @recipe_api.composite_step
@@ -2624,10 +2644,9 @@ class WebRTCPerfTest(LocalGTestTest):
                            api.test_utils.canonical.result_format(valid=True))
     return result
 
-
   def _wire_up_perf_config(self, api):
     props = api.bot_update.last_returned_properties
-    perf_config = { 'a_default_rev': 'r_webrtc_git' }
+    perf_config = {'a_default_rev': 'r_webrtc_git'}
 
     # 'got_webrtc_revision' property is present for bots in both chromium.webrtc
     # and chromium.webrtc.fyi in reality, but due to crbug.com/713356, the
@@ -2678,7 +2697,7 @@ class MockTest(Test):
     return self._name
 
   @property
-  def runs_on_swarming(self): # pragma: no cover
+  def runs_on_swarming(self):  # pragma: no cover
     return self._runs_on_swarming
 
   @contextlib.contextmanager
@@ -2703,8 +2722,8 @@ class MockTest(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
-      step_result = api.step(
-          '%s%s' % (self.name, self._mock_suffix(suffix)), None)
+      step_result = api.step('%s%s' % (self.name, self._mock_suffix(suffix)),
+                             None)
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     return step_result
@@ -2712,14 +2731,14 @@ class MockTest(Test):
   def has_valid_results(self, suffix):
     self._api.step(
         'has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
-    if suffix in self._per_suffix_valid: # pragma: no cover
+    if suffix in self._per_suffix_valid:  # pragma: no cover
       return self._per_suffix_valid[suffix]
     return self._has_valid_results
 
   def failures(self, suffix):
-    self._api.step(
-        'failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
-    if suffix in self._per_suffix_failures: # pragma: no cover
+    self._api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)),
+                   None)
+    if suffix in self._per_suffix_failures:  # pragma: no cover
       return self._per_suffix_failures[suffix]
     return self._failures
 
@@ -2730,14 +2749,16 @@ class MockTest(Test):
   def pass_fail_counts(self, suffix):
     return {}
 
-  def compile_targets(self): # pragma: no cover
+  def compile_targets(self):  # pragma: no cover
     return []
 
   @property
   def abort_on_failure(self):
     return self._abort_on_failure
 
+
 class SwarmingIosTest(SwarmingTest):
+
   def __init__(self, swarming_service_account, platform, config, task,
                upload_test_results, result_callback, use_test_data):
     """
@@ -2789,14 +2810,14 @@ class SwarmingIosTest(SwarmingTest):
           replay_package_name,
           replay_package_version,
       ))
-    self._expiration = (self._task['test'].get('expiration_time') or
-                        self._config.get( 'expiration_time'))
+    self._expiration = (
+        self._task['test'].get('expiration_time') or
+        self._config.get('expiration_time'))
 
     self._hard_timeout = self._task['test'].get(
         'max runtime seconds') or self._config.get('max runtime seconds')
 
-    self._optional_dimensions = task['test'].get(
-        'optional_dimensions')
+    self._optional_dimensions = task['test'].get('optional_dimensions')
     if self._optional_dimensions:
       for dimension_list in self._optional_dimensions.values():
         for dimension_set in dimension_list:
@@ -2829,12 +2850,11 @@ class SwarmingIosTest(SwarmingTest):
       if self._config.get('device check'):
         self._dimensions['device_status'] = 'available'
       self._dimensions['device'] = IOS_PRODUCT_TYPES.get(
-        task['test']['device type'])
+          task['test']['device type'])
     if task['bot id']:
       self._dimensions['id'] = task['bot id']
     if task['pool']:
       self._dimensions['pool'] = task['pool']
-
 
   def pre_run(self, api, suffix):
     task = self._task
@@ -2842,12 +2862,16 @@ class SwarmingIosTest(SwarmingTest):
     task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
 
     swarming_task = api.chromium_swarming.task(
-      name=task['step name'],
-      task_output_dir=task['tmp_dir'],
-      failure_as_exception=False,
+        name=task['step name'],
+        task_output_dir=task['tmp_dir'],
+        failure_as_exception=False,
     )
     self._apply_swarming_task_config(
-        swarming_task, api, suffix, task['isolated hash'], filter_flag=None,
+        swarming_task,
+        api,
+        suffix,
+        task['isolated hash'],
+        filter_flag=None,
         filter_delimiter=None)
 
     task_slice = swarming_task.request[0]
@@ -2857,9 +2881,9 @@ class SwarmingIosTest(SwarmingTest):
     # specify typical dimensions [GPU, cpu type]. We explicitly override
     # dimensions here to get the desired results.
     task_slice = task_slice.with_dimensions(**self._dimensions)
-    swarming_task.request = (swarming_task.request.
-                              with_slice(0, task_slice).
-                              with_priority(task['test'].get('priority', 200)))
+    swarming_task.request = (
+        swarming_task.request.with_slice(0, task_slice).with_priority(
+            task['test'].get('priority', 200)))
 
     if self._platform == 'device' and self._config.get('device check'):
       swarming_task.wait_for_capacity = True
@@ -2868,8 +2892,7 @@ class SwarmingIosTest(SwarmingTest):
     named_cache = 'xcode_ios_%s' % (task['xcode build version'])
     swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
 
-    swarming_task.tags.add(
-        'device_type:%s' % str(task['test']['device type']))
+    swarming_task.tags.add('device_type:%s' % str(task['test']['device type']))
     swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
     swarming_task.tags.add('platform:%s' % self._platform)
     swarming_task.tags.add('test:%s' % str(task['test']['app']))
@@ -2882,12 +2905,11 @@ class SwarmingIosTest(SwarmingTest):
   def run(self, api, suffix):
     task = self._task
 
-    assert task['task'], (
-        'The task should have been triggered and have an '
-        'associated swarming task')
+    assert task['task'], ('The task should have been triggered and have an '
+                          'associated swarming task')
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
-      task['task'])
+        task['task'])
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     # Add any iOS test runner results to the display.
@@ -2909,8 +2931,10 @@ class SwarmingIosTest(SwarmingTest):
       if task['task'].failed_shards and not failed_tests:
         failed_tests = ['invalid test results']
 
-      pass_fail_counts = collections.defaultdict(
-          lambda: {'pass_count': 0, 'fail_count': 0})
+      pass_fail_counts = collections.defaultdict(lambda: {
+          'pass_count': 0,
+          'fail_count': 0
+      })
       for test in passed_tests:
         pass_fail_counts[test]['pass_count'] += 1
       for test in flaked_tests:
@@ -2920,21 +2944,22 @@ class SwarmingIosTest(SwarmingTest):
         pass_fail_counts[test]['fail_count'] += 1
       test_count = len(passed_tests) + len(flaked_tests) + len(failed_tests)
       canonical_results = api.test_utils.canonical.result_format(
-          valid=has_valid_results, failures=failed_tests,
-          total_tests_ran=test_count, pass_fail_counts=pass_fail_counts)
+          valid=has_valid_results,
+          failures=failed_tests,
+          total_tests_ran=test_count,
+          pass_fail_counts=pass_fail_counts)
       self.update_test_run(api, suffix, canonical_results)
 
       step_result.presentation.logs['test_summary.json'] = api.json.dumps(
-        test_summary_json, indent=2).splitlines()
+          test_summary_json, indent=2).splitlines()
       step_result.presentation.logs.update(logs)
-      step_result.presentation.links.update(
-        test_summary_json.get('links', {}))
+      step_result.presentation.links.update(test_summary_json.get('links', {}))
       if test_summary_json.get('step_text'):
         step_result.presentation.step_text = '%s<br />%s' % (
-          step_result.presentation.step_text, test_summary_json['step_text'])
+            step_result.presentation.step_text, test_summary_json['step_text'])
     else:
-      self.update_test_run(
-          api, suffix, api.test_utils.canonical.result_format())
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format())
 
     # Upload test results JSON to the flakiness dashboard.
     shard_output_dir_full_path = api.path.join(
@@ -2945,33 +2970,31 @@ class SwarmingIosTest(SwarmingTest):
                                    'full_results.json')
       if api.path.exists(test_results):
         api.test_results.upload(
-          test_results,
-          '.'.join(step_result.name_tokens),
-          api.bot_update.last_returned_properties.get(
-            'got_revision_cp', 'refs/x@{#0}'),
-          builder_name_suffix='%s-%s' % (
-            task['test']['device type'], task['test']['os']),
-          test_results_server='test-results.appspot.com',
+            test_results,
+            '.'.join(step_result.name_tokens),
+            api.bot_update.last_returned_properties.get('got_revision_cp',
+                                                        'refs/x@{#0}'),
+            builder_name_suffix='%s-%s' %
+            (task['test']['device type'], task['test']['os']),
+            test_results_server='test-results.appspot.com',
         )
 
     # Upload performance data result to the perf dashboard.
-    perf_results_path = api.path.join(
-      shard_output_dir, 'Documents', 'perf_result.json')
+    perf_results_path = api.path.join(shard_output_dir, 'Documents',
+                                      'perf_result.json')
     if self._result_callback:
       self._result_callback(name=task['test']['app'], step_result=step_result)
     elif perf_results_path in step_result.raw_io.output_dir:
-      data = api.json.loads(
-          step_result.raw_io.output_dir[perf_results_path])
+      data = api.json.loads(step_result.raw_io.output_dir[perf_results_path])
       data_decode = data['Perf Data']
       data_result = []
       for testcase in data_decode:
         for trace in data_decode[testcase]['value']:
           data_point = api.perf_dashboard.get_skeleton_point(
-            'chrome_ios_perf/%s/%s' % (testcase, trace),
-            # TODO(huangml): Use revision.
-            int(api.time.time()),
-            data_decode[testcase]['value'][trace]
-          )
+              'chrome_ios_perf/%s/%s' % (testcase, trace),
+              # TODO(huangml): Use revision.
+              int(api.time.time()),
+              data_decode[testcase]['value'][trace])
           data_point['units'] = data_decode[testcase]['unit']
           data_result.extend([data_point])
       api.perf_dashboard.set_default_config()

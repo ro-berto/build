@@ -20,18 +20,25 @@ def main():
 
   # Note that --target isn't needed for --lint-test-files, but the
   # RunPythonCommandInBuildDir() will get upset if we don't say something.
-  option_parser.add_option('', '--target', default='release',
-      help='DumpRenderTree build configuration (Release or Debug)')
+  option_parser.add_option(
+      '',
+      '--target',
+      default='release',
+      help='DumpRenderTree build configuration (Release or Debug)'
+  )
 
   options, _ = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
   build_dir = os.path.abspath(options.build_dir)
   blink_tools_dir = chromium_utils.FindUpward(
-    build_dir, 'third_party', 'blink', 'tools')
+      build_dir, 'third_party', 'blink', 'tools'
+  )
   command = [os.path.join(blink_tools_dir, 'run_blinkpy_tests.py')]
-  return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                                command)
+  return slave_utils.RunPythonCommandInBuildDir(
+      build_dir, options.target, command
+  )
+
 
 if '__main__' == __name__:
   sys.exit(main())

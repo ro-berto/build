@@ -92,8 +92,9 @@ class ArchiveCoverage(object):
       print 'build number: %s' % options.build_number
     print 'perf subdir: %s' % self.perf_subdir
 
-    self.archive_path = os.path.join(archive_config.www_dir_base, 'coverage',
-                                     self.perf_subdir)
+    self.archive_path = os.path.join(
+        archive_config.www_dir_base, 'coverage', self.perf_subdir
+    )
 
   def Upload(self, archive_folder):
     """Does the actual upload.
@@ -101,14 +102,17 @@ class ArchiveCoverage(object):
     Returns:
       0 if successful, or non-zero error code if error.
     """
-    from_dir = os.path.join(self.options.build_dir, self.options.target,
-                            archive_folder, 'coverage_croc_html')
+    from_dir = os.path.join(
+        self.options.build_dir, self.options.target, archive_folder,
+        'coverage_croc_html'
+    )
     if not os.path.exists(from_dir):
       print '%s directory does not exist' % from_dir
       return slave_utils.WARNING_EXIT_CODE
 
-    archive_path = os.path.join(self.archive_path, archive_folder,
-                                self.last_change)
+    archive_path = os.path.join(
+        self.archive_path, archive_folder, self.last_change
+    )
     archive_path = os.path.normpath(archive_path)
     print 'archive path: %s' % archive_path
 
@@ -121,8 +125,10 @@ class ArchiveCoverage(object):
       if retval:
         return retval
 
-      cmd = ['bash', '-c', 'scp -r -p %s/* %s:%s' %
-             (from_dir, self.archive_host, archive_path)]
+      cmd = [
+          'bash', '-c',
+          'scp -r -p %s/* %s:%s' % (from_dir, self.archive_host, archive_path)
+      ]
       print 'Running: ' + ' '.join(cmd)
       retval = subprocess.call(cmd)
       if retval:
@@ -140,17 +146,22 @@ class ArchiveCoverage(object):
 def Main():
   """Main routine."""
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--target',
-                           default='Debug',
-                           help='build target (Debug, Release) '
-                                '[default: %default]')
+  option_parser.add_option(
+      '--target',
+      default='Debug',
+      help='build target (Debug, Release) '
+      '[default: %default]'
+  )
   option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--perf-subdir',
-                           metavar='DIR',
-                           help='destination subdirectory under'
-                                'coverage')
-  option_parser.add_option('--build-number',
-                           help='destination subdirectory under perf-subdir')
+  option_parser.add_option(
+      '--perf-subdir',
+      metavar='DIR',
+      help='destination subdirectory under'
+      'coverage'
+  )
+  option_parser.add_option(
+      '--build-number', help='destination subdirectory under perf-subdir'
+  )
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
@@ -167,6 +178,7 @@ def Main():
   ac.Upload('browsertests_coverage')
 
   return 0
+
 
 if '__main__' == __name__:
   sys.exit(Main())

@@ -352,7 +352,7 @@ Run an ADB command.
 
 [DEPS](/scripts/slave/recipe_modules/archive/__init__.py#7): [build](#recipe_modules-build), [tar](#recipe_modules-tar), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#24)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#23)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Chromium specific module for zipping, uploading and downloading build
 artifacts implemented as a wrapper around zip_build.py script.
@@ -361,7 +361,7 @@ If you need to upload or download build artifacts (or any other files) for
 something other than Chromium flavor, consider using 'zip' + 'gsutil' or
 'isolate' modules instead.
 
-&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#159)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
+&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#173)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
 
 Archives and uploads a build to google storage.
 
@@ -404,12 +404,12 @@ Args:
                     it from the commit information.  This will be formatted
                     as YYYYMMDDHHMM.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#336)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#346)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#509)(self, build_dir, update_properties, config):**
+&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#525)(self, build_dir, update_properties, config):**
 
 Archives one or multiple packages to google cloud storage.
 
@@ -425,7 +425,7 @@ Args:
           DEPRECATED: If None, this will default to the global property
           $build/archive.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#446)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#462)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -436,11 +436,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#385)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#402)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#435)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#451)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.
@@ -451,7 +451,7 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#39)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
+&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#38)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
@@ -667,20 +667,20 @@ Returns: (context manager) A context manager that inserts system python
 
 &mdash; **def [apply\_config](/scripts/slave/recipe_modules/chromium/api.py#70)(self, config_name, config_object=None, \*args, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1567)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1571)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
-&emsp; **@property**<br>&mdash; **def [build\_properties](/scripts/slave/recipe_modules/chromium/api.py#168)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_properties](/scripts/slave/recipe_modules/chromium/api.py#160)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [chromium\_layout](/scripts/slave/recipe_modules/chromium/api.py#93)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [chromium\_layout](/scripts/slave/recipe_modules/chromium/api.py#91)(self):**
 
 Context manager that must be entered prior to performing any Chromium
 recipe operations. This is responsible for basic enviornment initialization.
 
 See "ensure_chromium_layout" for more information.
 
-&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#1049)(self):**
+&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#1062)(self):**
 
 Add an explicit clobber step if requested.
 
@@ -706,7 +706,7 @@ Returns:
 Raises:
   - InfraFailure when goma failure occurs
 
-&mdash; **def [configure\_bot](/scripts/slave/recipe_modules/chromium/api.py#213)(self, builders_dict, additional_configs=None):**
+&mdash; **def [configure\_bot](/scripts/slave/recipe_modules/chromium/api.py#206)(self, builders_dict, additional_configs=None):**
 
 Sets up the configurations and gclient to be ready for bot update.
 
@@ -721,7 +721,7 @@ Returns:
   A tuple of (builder_id, bot_config) for subsequent use in the
   recipe.
 
-&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#995)(self):**
+&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#1004)(self):**
 
 Remove the old "hermetic" toolchain cache.
 
@@ -736,25 +736,25 @@ Note: the layout must be installed into the engine context. The
 
 Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#959)(self, client_type='release'):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#969)(self, client_type='release'):**
 
-&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#1004)(self):**
+&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#1013)(self):**
 
-&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#1045)(self):**
+&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#1058)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1610)(self, _):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1624)(self, _):**
 
-&mdash; **def [get\_builder\_id](/scripts/slave/recipe_modules/chromium/api.py#208)(self):**
+&mdash; **def [get\_builder\_id](/scripts/slave/recipe_modules/chromium/api.py#201)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#941)(self, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#949)(self, \*\*kwargs):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium/api.py#116)(self):**
 
-&mdash; **def [get\_env](/scripts/slave/recipe_modules/chromium/api.py#149)(self):**
+&mdash; **def [get\_env](/scripts/slave/recipe_modules/chromium/api.py#141)(self):**
 
-&mdash; **def [get\_mac\_toolchain\_installer](/scripts/slave/recipe_modules/chromium/api.py#979)(self):**
+&mdash; **def [get\_mac\_toolchain\_installer](/scripts/slave/recipe_modules/chromium/api.py#988)(self):**
 
-&mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#177)(self):**
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#169)(self):**
 
 Returns a dictionary describing the version.
 
@@ -762,7 +762,7 @@ The dictionary will map the name of the portion of the version to its
 numeric value e.g.
 { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
 
-&mdash; **def [get\_version\_from\_file](/scripts/slave/recipe_modules/chromium/api.py#189)(self, version_file_path, step_name='get version'):**
+&mdash; **def [get\_version\_from\_file](/scripts/slave/recipe_modules/chromium/api.py#181)(self, version_file_path, step_name='get version'):**
 
 Returns the version information from a specified file.
 
@@ -788,7 +788,7 @@ build.
 
 &mdash; **def [make\_config\_params](/scripts/slave/recipe_modules/chromium/api.py#63)(self, \*args, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_analyze](/scripts/slave/recipe_modules/chromium/api.py#1268)(self, builder_id, analyze_input, name=None, mb_path=None, mb_config_path=None, chromium_config=None, build_dir=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_analyze](/scripts/slave/recipe_modules/chromium/api.py#1281)(self, builder_id, analyze_input, name=None, mb_path=None, mb_config_path=None, chromium_config=None, build_dir=None, phase=None, \*\*kwargs):**
 
 Determine which targets need to be built and tested.
 
@@ -805,9 +805,9 @@ Args:
 Returns:
   The StepResult from the analyze command.
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [mb\_failure\_handler](/scripts/slave/recipe_modules/chromium/api.py#1535)(self, name):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [mb\_failure\_handler](/scripts/slave/recipe_modules/chromium/api.py#1539)(self, name):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1404)(self, builder_id, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, recursive_lookup=False, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1411)(self, builder_id, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, recursive_lookup=False, \*\*kwargs):**
 
 Generate the build files in the source tree.
 
@@ -837,9 +837,9 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1503)(self, builder_id, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1507)(self, builder_id, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1331)(self, builder_id, name=None, mb_path=None, mb_config_path=None, recursive=False, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1336)(self, builder_id, name=None, mb_path=None, mb_config_path=None, recursive=False, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
 
 Lookup the GN args for the build.
 
@@ -869,15 +869,15 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#172)(self):**
+&emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#164)(self):**
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1555)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1559)(self, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#1087)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#1100)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#1160)(self, name, mb_command, builder_id, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#1173)(self, name, mb_command, builder_id, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
 
 Run an arbitrary mb command.
 
@@ -901,51 +901,51 @@ Args:
     master, builder and the path to the config file.
   **kwargs: Additional arguments to be forwarded onto the python API.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#1059)(self, env=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#1072)(self, env=None, \*\*kwargs):**
 
 Run the build-configuration hooks for chromium.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [runtest](/scripts/slave/recipe_modules/chromium/api.py#771)(self, test, args=None, xvfb=False, name=None, annotate=None, results_url=None, perf_dashboard_id=None, test_type=None, python_mode=False, point_id=None, revision=None, webkit_revision=None, test_launcher_summary_output=None, perf_id=None, perf_config=None, chartjson_file=False, use_histograms=False, tee_stdout_file=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [runtest](/scripts/slave/recipe_modules/chromium/api.py#768)(self, test, args=None, xvfb=False, name=None, annotate=None, results_url=None, perf_dashboard_id=None, test_type=None, python_mode=False, point_id=None, revision=None, webkit_revision=None, test_launcher_summary_output=None, perf_id=None, perf_config=None, chartjson_file=False, use_histograms=False, tee_stdout_file=None, \*\*kwargs):**
 
 Return a runtest.py invocation.
 
-&mdash; **def [set\_build\_properties](/scripts/slave/recipe_modules/chromium/api.py#205)(self, props):**
+&mdash; **def [set\_build\_properties](/scripts/slave/recipe_modules/chromium/api.py#198)(self, props):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [sizes](/scripts/slave/recipe_modules/chromium/api.py#888)(self, results_url=None, perf_id=None, platform=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [sizes](/scripts/slave/recipe_modules/chromium/api.py#894)(self, results_url=None, perf_id=None, platform=None, \*\*kwargs):**
 
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1549)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1553)(self):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#767)(self, tests):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#764)(self, tests):**
 
 &emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/chromium/api.py#59)(self):**
 ### *recipe_modules* / [chromium\_android](/scripts/slave/recipe_modules/chromium_android)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_android/__init__.py#5): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-#### **class [AndroidApi](/scripts/slave/recipe_modules/chromium_android/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [AndroidApi](/scripts/slave/recipe_modules/chromium_android/api.py#21)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [adb\_install\_apk](/scripts/slave/recipe_modules/chromium_android/api.py#634)(self, apk, allow_downgrade=False, keep_data=False, devices=None):**
+&mdash; **def [adb\_install\_apk](/scripts/slave/recipe_modules/chromium_android/api.py#663)(self, apk, allow_downgrade=False, keep_data=False, devices=None):**
 
-&mdash; **def [apk\_path](/scripts/slave/recipe_modules/chromium_android/api.py#631)(self, apk):**
+&mdash; **def [apk\_path](/scripts/slave/recipe_modules/chromium_android/api.py#660)(self, apk):**
 
-&mdash; **def [authorize\_adb\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#375)(self):**
+&mdash; **def [authorize\_adb\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#386)(self):**
 
-&emsp; **@property**<br>&mdash; **def [blacklist\_file](/scripts/slave/recipe_modules/chromium_android/api.py#396)(self):**
+&emsp; **@property**<br>&mdash; **def [blacklist\_file](/scripts/slave/recipe_modules/chromium_android/api.py#407)(self):**
 
-&mdash; **def [clean\_local\_files](/scripts/slave/recipe_modules/chromium_android/api.py#145)(self, clean_pyc_files=True):**
+&mdash; **def [clean\_local\_files](/scripts/slave/recipe_modules/chromium_android/api.py#150)(self, clean_pyc_files=True):**
 
-&mdash; **def [common\_tests\_final\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#888)(self, force_latest_version=False, checkout_dir=None):**
+&mdash; **def [common\_tests\_final\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#919)(self, force_latest_version=False, checkout_dir=None):**
 
-&mdash; **def [common\_tests\_setup\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#877)(self, \*\*provision_kwargs):**
+&mdash; **def [common\_tests\_setup\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#908)(self, \*\*provision_kwargs):**
 
 &mdash; **def [configure\_from\_properties](/scripts/slave/recipe_modules/chromium_android/api.py#65)(self, config_name, \*\*kwargs):**
 
 &emsp; **@property**<br>&mdash; **def [coverage\_dir](/scripts/slave/recipe_modules/chromium_android/api.py#44)(self):**
 
-&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#992)(self, upload=True, \*\*kwargs):**
+&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1018)(self, upload=True, \*\*kwargs):**
 
 Creates an EMMA HTML report and optionally uploads it to storage bucket.
 
@@ -960,23 +960,23 @@ Args:
 Returns:
   step_result: The recipe result from generating the coverage report.
 
-&mdash; **def [create\_adb\_symlink](/scripts/slave/recipe_modules/chromium_android/api.py#332)(self):**
+&mdash; **def [create\_adb\_symlink](/scripts/slave/recipe_modules/chromium_android/api.py#338)(self):**
 
-&mdash; **def [create\_result\_details](/scripts/slave/recipe_modules/chromium_android/api.py#692)(self, step_name, json_results_file):**
+&mdash; **def [create\_result\_details](/scripts/slave/recipe_modules/chromium_android/api.py#721)(self, step_name, json_results_file):**
 
-&emsp; **@property**<br>&mdash; **def [denylist\_file](/scripts/slave/recipe_modules/chromium_android/api.py#383)(self):**
+&emsp; **@property**<br>&mdash; **def [denylist\_file](/scripts/slave/recipe_modules/chromium_android/api.py#394)(self):**
 
-&emsp; **@property**<br>&mdash; **def [denylist\_flag](/scripts/slave/recipe_modules/chromium_android/api.py#340)(self):**
+&emsp; **@property**<br>&mdash; **def [denylist\_flag](/scripts/slave/recipe_modules/chromium_android/api.py#347)(self):**
 
-&mdash; **def [device\_recovery](/scripts/slave/recipe_modules/chromium_android/api.py#466)(self, \*\*kwargs):**
+&mdash; **def [device\_recovery](/scripts/slave/recipe_modules/chromium_android/api.py#487)(self, \*\*kwargs):**
 
-&mdash; **def [device\_status](/scripts/slave/recipe_modules/chromium_android/api.py#479)(self, \*\*kwargs):**
+&mdash; **def [device\_status](/scripts/slave/recipe_modules/chromium_android/api.py#500)(self, \*\*kwargs):**
 
-&mdash; **def [device\_status\_check](/scripts/slave/recipe_modules/chromium_android/api.py#403)(self):**
+&mdash; **def [device\_status\_check](/scripts/slave/recipe_modules/chromium_android/api.py#414)(self):**
 
 &emsp; **@property**<br>&mdash; **def [devices](/scripts/slave/recipe_modules/chromium_android/api.py#34)(self):**
 
-&mdash; **def [download\_build](/scripts/slave/recipe_modules/chromium_android/api.py#287)(self, bucket, path, extract_path=None, globs=None):**
+&mdash; **def [download\_build](/scripts/slave/recipe_modules/chromium_android/api.py#296)(self, bucket, path, extract_path=None, globs=None):**
 
 &emsp; **@property**<br>&mdash; **def [file\_changes\_path](/scripts/slave/recipe_modules/chromium_android/api.py#53)(self):**
 
@@ -985,7 +985,7 @@ Get or create the path to the file containing changes for this revision.
 This file will contain a dict mapping file paths to lists of changed lines
 for each file. This is used to generate incremental coverage reports.
 
-&mdash; **def [generate\_breakpad\_symbols](/scripts/slave/recipe_modules/chromium_android/api.py#754)(self, symbols_dir, binary_path, root_chromium_dir):**
+&mdash; **def [generate\_breakpad\_symbols](/scripts/slave/recipe_modules/chromium_android/api.py#785)(self, symbols_dir, binary_path, root_chromium_dir):**
 
 Generate breakpad symbols.
 
@@ -996,7 +996,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1109)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1136)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1005,26 +1005,26 @@ coverage directory.
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_android/api.py#28)(self):**
 
-&mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#189)(self, commitrefs=None, step_test_data=None, \*\*kwargs):**
+&mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#195)(self, commitrefs=None, step_test_data=None, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1170)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1200)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
-&mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#407)(self, args=None, \*\*kwargs):**
+&mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#418)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1038)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1065)(self):**
 
 Creates an incremental code coverage report.
 
 Generates a JSON file containing incremental coverage stats. Requires
 |file_changes_path| to contain a file with a valid JSON object.
 
-&mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/chromium_android/api.py#107)(self, gclient_config='android_bare', with_branch_heads=False, use_bot_update=True, use_git_cache=True):**
+&mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/chromium_android/api.py#111)(self, gclient_config='android_bare', with_branch_heads=False, use_bot_update=True, use_git_cache=True):**
 
 &emsp; **@property**<br>&mdash; **def [known\_devices\_file](/scripts/slave/recipe_modules/chromium_android/api.py#48)(self):**
 
-&mdash; **def [logcat\_dump](/scripts/slave/recipe_modules/chromium_android/api.py#720)(self):**
+&mdash; **def [logcat\_dump](/scripts/slave/recipe_modules/chromium_android/api.py#748)(self):**
 
 &mdash; **def [make\_zip\_archive](/scripts/slave/recipe_modules/chromium_android/api.py#69)(self, step_name, archive_name, files=None, preserve_paths=True, include_filters=None, exclude_filters=None, \*\*kwargs):**
 
@@ -1039,39 +1039,39 @@ Args:
   include_filters: List of globs to be included in the archive.
   exclude_filters: List of globs to be excluded from the archive.
 
-&mdash; **def [monkey\_test](/scripts/slave/recipe_modules/chromium_android/api.py#658)(self, \*\*kwargs):**
+&mdash; **def [monkey\_test](/scripts/slave/recipe_modules/chromium_android/api.py#690)(self, \*\*kwargs):**
 
-&mdash; **def [non\_blacklisted\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#400)(self):**
+&mdash; **def [non\_blacklisted\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#411)(self):**
 
-&mdash; **def [non\_denylisted\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#387)(self):**
+&mdash; **def [non\_denylisted\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#398)(self):**
 
 &emsp; **@property**<br>&mdash; **def [out\_path](/scripts/slave/recipe_modules/chromium_android/api.py#40)(self):**
 
-&mdash; **def [provision\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#586)(self, skip_wipe=False, disable_location=False, reboot_timeout=None, emulators=False, \*\*kwargs):**
+&mdash; **def [provision\_devices](/scripts/slave/recipe_modules/chromium_android/api.py#610)(self, skip_wipe=False, disable_location=False, reboot_timeout=None, emulators=False, \*\*kwargs):**
 
-&mdash; **def [resource\_sizes](/scripts/slave/recipe_modules/chromium_android/api.py#203)(self, apk_path, chartjson_file=False, perf_id=None, step_suffix=''):**
+&mdash; **def [resource\_sizes](/scripts/slave/recipe_modules/chromium_android/api.py#209)(self, apk_path, chartjson_file=False, perf_id=None, step_suffix=''):**
 
-&mdash; **def [run\_bisect\_script](/scripts/slave/recipe_modules/chromium_android/api.py#906)(self, extra_src='', path_to_config='', \*\*kwargs):**
+&mdash; **def [run\_bisect\_script](/scripts/slave/recipe_modules/chromium_android/api.py#935)(self, extra_src='', path_to_config='', \*\*kwargs):**
 
-&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#966)(self, suite, target_name=None, verbose=True, json_results_file=None, suffix=None, additional_args=None, \*\*kwargs):**
+&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#992)(self, suite, target_name=None, verbose=True, json_results_file=None, suffix=None, additional_args=None, \*\*kwargs):**
 
-&mdash; **def [run\_telemetry\_browser\_test](/scripts/slave/recipe_modules/chromium_android/api.py#673)(self, test_name, browser='android-chromium'):**
+&mdash; **def [run\_telemetry\_browser\_test](/scripts/slave/recipe_modules/chromium_android/api.py#702)(self, test_name, browser='android-chromium'):**
 
 Run a telemetry browser test.
 
-&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#922)(self, suite, verbose=True, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
+&mdash; **def [run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#952)(self, suite, verbose=True, result_details=False, store_tombstones=False, name=None, json_results_file=None, shard_timeout=None, args=None, \*\*kwargs):**
 
-&mdash; **def [run\_tree\_truth](/scripts/slave/recipe_modules/chromium_android/api.py#177)(self, additional_repos=None):**
+&mdash; **def [run\_tree\_truth](/scripts/slave/recipe_modules/chromium_android/api.py#182)(self, additional_repos=None):**
 
-&mdash; **def [shutdown\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#366)(self):**
+&mdash; **def [shutdown\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#375)(self):**
 
-&mdash; **def [spawn\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#355)(self):**
+&mdash; **def [spawn\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#364)(self):**
 
-&mdash; **def [spawn\_logcat\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#345)(self):**
+&mdash; **def [spawn\_logcat\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#352)(self):**
 
-&mdash; **def [stack\_tool\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#825)(self, force_latest_version=False):**
+&mdash; **def [stack\_tool\_steps](/scripts/slave/recipe_modules/chromium_android/api.py#856)(self, force_latest_version=False):**
 
-&mdash; **def [stackwalker](/scripts/slave/recipe_modules/chromium_android/api.py#778)(self, root_chromium_dir, binary_paths):**
+&mdash; **def [stackwalker](/scripts/slave/recipe_modules/chromium_android/api.py#809)(self, root_chromium_dir, binary_paths):**
 
 Runs stack walker tool to symbolize breakpad crashes.
 
@@ -1082,7 +1082,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1150)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1178)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1092,13 +1092,13 @@ Args:
 Returns:
   A list of file paths (strings) matching the provided |diff-filter|.
 
-&mdash; **def [supersize\_archive](/scripts/slave/recipe_modules/chromium_android/api.py#223)(self, apk_path, size_path, step_suffix=''):**
+&mdash; **def [supersize\_archive](/scripts/slave/recipe_modules/chromium_android/api.py#232)(self, apk_path, size_path, step_suffix=''):**
 
 Creates a .size file for the given .apk or .minimal.apks.
 
-&mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#860)(self):**
+&mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#891)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1193)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1223)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 
@@ -1106,15 +1106,15 @@ Args:
   step_name: Name of the step.
   args: Testrunner arguments.
 
-&mdash; **def [upload\_apks\_for\_bisect](/scripts/slave/recipe_modules/chromium_android/api.py#237)(self, update_properties, bucket, path):**
+&mdash; **def [upload\_apks\_for\_bisect](/scripts/slave/recipe_modules/chromium_android/api.py#246)(self, update_properties, bucket, path):**
 
 Uploads android apks for functional bisects.
 
-&mdash; **def [upload\_build](/scripts/slave/recipe_modules/chromium_android/api.py#262)(self, bucket, path):**
+&mdash; **def [upload\_build](/scripts/slave/recipe_modules/chromium_android/api.py#271)(self, bucket, path):**
 
-&mdash; **def [use\_devil\_adb](/scripts/slave/recipe_modules/chromium_android/api.py#315)(self):**
+&mdash; **def [use\_devil\_adb](/scripts/slave/recipe_modules/chromium_android/api.py#321)(self):**
 
-&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/chromium_android/api.py#303)(self, _):**
+&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/chromium_android/api.py#309)(self, _):**
 ### *recipe_modules* / [chromium\_checkout](/scripts/slave/recipe_modules/chromium_checkout)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_checkout/__init__.py#1): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1150,7 +1150,7 @@ Requires |ensure_checkout| to be called first.
 
 #### **class [ChromiumGSUtilApi](/scripts/slave/recipe_modules/chromium_gsutil/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [download\_latest\_file](/scripts/slave/recipe_modules/chromium_gsutil/api.py#9)(self, base_url, partial_name, destination, name='Download latest file from GS'):**
+&mdash; **def [download\_latest\_file](/scripts/slave/recipe_modules/chromium_gsutil/api.py#10)(self, base_url, partial_name, destination, name='Download latest file from GS'):**
 
 Get the latest archived object with the given base url and partial name.
 
@@ -1484,9 +1484,9 @@ Uses the 'get_states' endpoint on the swarming server.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#10): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [gn](#recipe_modules-gn), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [pgo](#recipe_modules-pgo), [puppet\_service\_account](#recipe_modules-puppet_service_account), [symupload](#recipe_modules-symupload), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/cq][recipe_engine/recipe_modules/cq], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-#### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#91)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#98)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#526)(self, builder_id, update_step, bot_config):**
+&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#534)(self, builder_id, update_step, bot_config):**
 
 Archive the build if the bot is configured to do so.
 
@@ -1499,9 +1499,9 @@ information.
 This is currently used to store builds long-term and to transfer them
 to clusterfuzz.
 
-&emsp; **@property**<br>&mdash; **def [builders](/scripts/slave/recipe_modules/chromium_tests/api.py#107)(self):**
+&emsp; **@property**<br>&mdash; **def [builders](/scripts/slave/recipe_modules/chromium_tests/api.py#114)(self):**
 
-&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#342)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=True, override_execution_mode=None):**
+&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#352)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=True, override_execution_mode=None):**
 
 Runs compile and related steps for given builder.
 
@@ -1532,11 +1532,11 @@ Args:
 Returns:
   RawResult object with compile step status and failure message
 
-&mdash; **def [configure\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#143)(self, bot_config):**
+&mdash; **def [configure\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#150)(self, bot_config):**
 
-&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#119)(self, builder_ids_or_bot_mirrors, builders=None):**
+&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#126)(self, builder_ids_or_bot_mirrors, builders=None):**
 
-&mdash; **def [create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/api.py#259)(self, tests, suffix='', serialize_tests=False, retry_failed_shards=False, retry_invalid_shards=False):**
+&mdash; **def [create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/api.py#264)(self, tests, suffix='', serialize_tests=False, retry_failed_shards=False, retry_invalid_shards=False):**
 
 Creates a test runner to run a set of tests.
 
@@ -1555,19 +1555,19 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1197)(self, bot_update_step):**
+&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1201)(self, bot_update_step):**
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#772)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#778)(self, bot_update_step):**
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#657)(self, builder_id, update_step, bot_config, build_archive_url=None, build_revision=None, override_execution_mode=None, read_gn_args=True):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#664)(self, builder_id, update_step, bot_config, build_archive_url=None, build_revision=None, override_execution_mode=None, read_gn_args=True):**
 
-&mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#226)(self, source_side_spec, bot_spec, buildername, mastername, swarming_dimensions, scripts_compile_targets_fn, bot_update_step):**
+&mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#231)(self, source_side_spec, bot_spec, buildername, mastername, swarming_dimensions, scripts_compile_targets_fn, bot_update_step):**
 
-&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#312)(self, bot_config, log_details=False):**
+&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#323)(self, bot_config, log_details=False):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#952)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#957)(self, bot_config=None):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#986)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#990)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1589,9 +1589,9 @@ Returns:
 TODO:
   * Only gather targets for the scripts that we might concievably run.
 
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#131)(self):**
+&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#138)(self):**
 
-&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1126)(self, bot, bot_update_step, build_config):**
+&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1131)(self, bot, bot_update_step, build_config):**
 
 Handles the tester half of the builder->tester transfer flow.
 
@@ -1605,15 +1605,15 @@ Args:
   bot_update_step: the result of a previously executed bot_update step.
   build_config: a BuildConfig object.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1220)(self, builders=None, bots=None):**
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1224)(self, builders=None, bots=None):**
 
-&mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#115)(self, message):**
+&mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#122)(self, message):**
 
-&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1354)(self, builders=None, mirrored_bots=None):**
+&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1362)(self, builders=None, mirrored_bots=None):**
 
-&mdash; **def [lookup\_builder\_gn\_args](/scripts/slave/recipe_modules/chromium_tests/api.py#1616)(self, bot_meta_data, mb_config_path=None, mb_phase=None, builders=None):**
+&mdash; **def [lookup\_builder\_gn\_args](/scripts/slave/recipe_modules/chromium_tests/api.py#1620)(self, bot_meta_data, mb_config_path=None, mb_phase=None, builders=None):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1018)(self, mb_config_path=None, mb_phase=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1023)(self, mb_config_path=None, mb_phase=None, builders=None):**
 
 Compiles and runs tests for chromium recipe.
 
@@ -1622,7 +1622,7 @@ Returns:
     and a failure message if a failure occurred.
   - None if no failures
 
-&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1072)(self, bot, bot_update_step, build_config):**
+&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1077)(self, bot, bot_update_step, build_config):**
 
 Handles the builder half of the builder->tester transfer flow.
 
@@ -1655,7 +1655,7 @@ Returns:
   A dict containing additional properties that should be added to any
   triggered child builds.
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#455)(self, builder_id, update_step, bot_config, reasons=None):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#465)(self, builder_id, update_step, bot_config, reasons=None):**
 
 Zip and upload the build to google storage.
 
@@ -1669,15 +1669,15 @@ Note that:
     handled in archive_build.
   - this may upload twice on perf builders.
 
-&mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#208)(self, bot_config, \*\*kwargs):**
+&mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#213)(self, bot_config, \*\*kwargs):**
 
-&mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#246)(self, source_side_spec_file):**
+&mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#251)(self, source_side_spec_file):**
 
-&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#624)(self, compile_targets, isolated_targets, name_suffix, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
+&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#631)(self, compile_targets, isolated_targets, name_suffix, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1641)(self, bot_meta_data, tests):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1645)(self, bot_meta_data, tests):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1242)(self, builders, mirrored_bots, deapply_changes, tests=None):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1247)(self, builders, mirrored_bots, deapply_changes, tests=None):**
 
 Compile and run tests for chromium_trybot recipe.
 
@@ -1694,24 +1694,24 @@ Returns:
   failure message if an error occurred.
   - None if no failures
 
-&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#197)(self, update_step):**
+&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#202)(self, update_step):**
 
-&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/chromium_tests/api.py#185)(self, bot_config):**
+&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/chromium_tests/api.py#190)(self, bot_config):**
 
-&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#593)(self, builder_id, update_step, bot_config, additional_properties=None):**
+&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#601)(self, builder_id, update_step, bot_config, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1225)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1230)(self, builders=None, trybots=None):**
 
-&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1231)(self, builders=None, trybots=None, tests=None):**
+&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1236)(self, builders=None, trybots=None, tests=None):**
 
 Similar to trybot_steps, but only runs certain tests.
 
 This is currently experimental code. Talk to martiniss@ if you want to
 use this.
 
-&emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#111)(self):**
+&emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#118)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#722)(self, bot_config, tests=None):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#728)(self, bot_config, tests=None):**
 ### *recipe_modules* / [code\_coverage](/scripts/slave/recipe_modules/code_coverage)
 
 [DEPS](/scripts/slave/recipe_modules/code_coverage/__init__.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [profiles](#recipe_modules-profiles), [swarming\_client](#recipe_modules-swarming_client), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1839,21 +1839,21 @@ Download and run the clang tool.
 
 Common steps for recipes that sync/build Cronet sources.
 
-#### **class [CronetApi](/scripts/slave/recipe_modules/cronet/api.py#15)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [CronetApi](/scripts/slave/recipe_modules/cronet/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#41)(self, builder_id=None, targets=None, use_goma=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#38)(self, builder_id=None, targets=None, use_goma=True):**
 
-&mdash; **def [get\_bucket](/scripts/slave/recipe_modules/cronet/api.py#66)(self, platform):**
+&mdash; **def [get\_bucket](/scripts/slave/recipe_modules/cronet/api.py#59)(self, platform):**
 
-&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#60)(self):**
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#54)(self):**
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#22)(self, recipe_config, kwargs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#107)(self, perf_id):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#99)(self, perf_id):**
 
-&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#92)(self, perf_id):**
+&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#83)(self, perf_id):**
 
-&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#72)(self, build_config, cronetdir=None, platform='android'):**
+&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#64)(self, build_config, cronetdir=None, platform='android'):**
 ### *recipe_modules* / [crrev](/scripts/slave/recipe_modules/crrev)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/__init__.py#1): [build](#recipe_modules-build), [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -2358,7 +2358,7 @@ Returns:
 
 [DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-#### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 GomaApi contains helper functions for using goma.
 
@@ -2377,7 +2377,7 @@ property when running the recipe with the full path. e.g.
 Note that the goma client directory must exist inside the recipe workdir.
 A symlink (on mac/linux) is enough, though.
 
-&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#244)(self, platform):**
+&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#245)(self, platform):**
 
 Return the Goma client dir for the platform.
 
@@ -2387,9 +2387,9 @@ Args:
 Returns:
   additional Goma client path.
 
-&emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#86)(self):**
+&emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#85)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#601)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#615)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2410,35 +2410,35 @@ Raises:
   StepFailure or InfraFailure if it fails to build or
   occurs something failure on goma steps.
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#90)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#89)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#97)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#96)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#77)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#76)(self):**
 
-&mdash; **def [configure\_enable\_ats](/scripts/slave/recipe_modules/goma/api.py#178)(self):**
+&mdash; **def [configure\_enable\_ats](/scripts/slave/recipe_modules/goma/api.py#177)(self):**
 
 Sets enable_ats flag based on server_host and rpc_extra_params flags.
 
 Some builders run on a mix of Linux/Mac/Win. They need to call this function
 to set the ATS flag on a per-build basis.
 
-&emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#81)(self):**
+&emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#80)(self):**
 
-&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#149)(self):**
+&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#148)(self):**
 
 Returns true if debug mode is turned on.
 
 Uses value from property "$build/goma:{"debug":true}" if configured
 (typically in cr-buildbucket.cfg).  Defaults to False.
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#117)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#116)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#111)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#110)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#124)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#123)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#191)(self, client_type=None, additional_platforms=None, ephemeral=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#190)(self, client_type=None, additional_platforms=None, ephemeral=False):**
 
 ensure goma is installed.
 
@@ -2452,24 +2452,24 @@ Args:
              This is for mitigating crbug.com/997733 to avoid sharing
              Goma client among builders.
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#256)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#257)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#260)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#261)(self):**
 
-&mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#69)(self):**
+&mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#68)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#140)(self):**
+&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#139)(self):**
 
 Returns number of jobs for parallel build using Goma.
 
 Uses value from property "$build/goma:{"jobs": JOBS}" if configured
 (typically in cr-buildbucket.cfg), else defaults to `recommended_goma_jobs`.
 
-&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#101)(self):**
+&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#100)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#106)(self):**
+&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#105)(self):**
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#158)(self):**
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#157)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
@@ -2478,7 +2478,7 @@ properties in cr-buildbucket.cfg.
 
 This function caches the _recommended_jobs.
 
-&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#73)(self):**
+&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#72)(self):**
 
 &mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#333)(self, env=None, \*\*kwargs):**
 
@@ -2487,7 +2487,7 @@ Start goma compiler_proxy.
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#426)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#428)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -3310,7 +3310,7 @@ deterministic errors.
 
 &emsp; **@property**<br>&mdash; **def [canonical](/scripts/slave/recipe_modules/test_utils/api.py#93)(self):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#981)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#984)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#124)(data):**
 
@@ -3325,7 +3325,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#994)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#997)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3422,11 +3422,11 @@ Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       otherwise unspecified reasons. This is a superset of
       invalid_test_suites.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#824)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#827)(self, caller_api, test_suite):**
 
 Summarizes a failing test suite that is not going to be retried.
 
-&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#881)(self, caller_api, test_suites):**
+&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#884)(self, caller_api, test_suites):**
 
 Exports a summary of flakiness for post-processing by FindIt.
 
@@ -3450,7 +3450,7 @@ This function emits a step with a fixed name, and metadata for FindIt.
 Before making changes to this function, check with the FindIt team to ensure
 that their post-processing will still work correctly.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#786)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#789)(self, caller_api, test_suite):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3465,7 +3465,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#984)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#987)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4125,7 +4125,7 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 
 [DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#11)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#12)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
 
 [DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

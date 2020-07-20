@@ -18,7 +18,6 @@ from .config import validate_config
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-
 _CR_COMPILE_GUARD_NAME = 'CR_COMPILE_GUARD.txt'
 _CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
     This file exists while a build compiles and is removed at the end of
@@ -30,6 +29,7 @@ _CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
 
 
 class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
+
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input_text('\n'.join(tests))
     super(TestLauncherFilterFileInputPlaceholder, self).__init__()
@@ -86,9 +86,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         'CHROME_HEADLESS': '1',
     }
 
-    return self.Layout(
-        env=env,
-    )
+    return self.Layout(env=env,)
 
   @contextlib.contextmanager
   def chromium_layout(self):
@@ -107,26 +105,22 @@ class ChromiumApi(recipe_api.RecipeApi):
     This is an INTERNAL method, and specifically decorates ChromiumApi member
     functions. DO NOT USE this outside of this class and module.
     """
+
     @functools.wraps(fn)
     def inner(self, *args, **kwargs):
       with self.chromium_layout():
         return fn(self, *args, **kwargs)
+
     return inner
 
   def get_config_defaults(self):
     defaults = {
-        'HOST_PLATFORM':
-            self.m.platform.name,
-        'HOST_ARCH':
-            self.m.platform.arch,
-        'HOST_BITS':
-            self.m.platform.bits,
-        'TARGET_PLATFORM':
-            self.m.platform.name,
-        'TARGET_ARCH':
-            self.m.platform.arch,
-        'TARGET_CROS_BOARD':
-            None,
+        'HOST_PLATFORM': self.m.platform.name,
+        'HOST_ARCH': self.m.platform.arch,
+        'HOST_BITS': self.m.platform.bits,
+        'TARGET_PLATFORM': self.m.platform.name,
+        'TARGET_ARCH': self.m.platform.arch,
+        'TARGET_CROS_BOARD': None,
 
         # NOTE: This is replicating logic which lives in
         # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
@@ -136,12 +130,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         # {TARGET,HOST}_{BITS,ARCH,PLATFORM}, for use across many tools (of
         # which gyp is one tool), we're taking a small risk and replicating the
         # logic here.
-        'TARGET_BITS': (
-            32 if self.m.platform.name == 'win' else self.m.platform.bits),
-        'BUILD_CONFIG':
-            self.m.properties.get('build_config', 'Release'),
-        'CHECKOUT_PATH':
-            self.m.path['checkout'],
+        'TARGET_BITS':
+            (32 if self.m.platform.name == 'win' else self.m.platform.bits),
+        'BUILD_CONFIG': self.m.properties.get('build_config', 'Release'),
+        'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
     return defaults
@@ -182,8 +174,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
     """
     if self._version is None:
-      self._version = self.get_version_from_file(
-          self.m.path['checkout'].join('chrome', 'VERSION'))
+      self._version = self.get_version_from_file(self.m.path['checkout'].join(
+          'chrome', 'VERSION'))
     return self._version
 
   def get_version_from_file(self, version_file_path, step_name='get version'):
@@ -194,11 +186,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
     """
     text = self.m.file.read_text(
-        step_name, version_file_path,
+        step_name,
+        version_file_path,
         test_data="MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n")
     version = {}
     for line in text.splitlines():
-      [k,v] = line.split('=', 1)
+      [k, v] = line.split('=', 1)
       version[k] = v
     return version
 
@@ -251,8 +244,12 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (builder_id, bot_config)
 
-  def _limit_error_list(self, error_list, char_limit, message_prefix ='',
-                        message_suffix='', line_format='{}',
+  def _limit_error_list(self,
+                        error_list,
+                        char_limit,
+                        message_prefix='',
+                        message_suffix='',
+                        line_format='{}',
                         limit_hint=''):
     """Limits combined length of strings and formats the error list.
 
@@ -280,8 +277,12 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return [message_prefix] + errors + [message_suffix]
 
-  def _format_failures(self, failure_summary, step_name,
-                       footer='', char_limit=700, line_limit=1000):
+  def _format_failures(self,
+                       failure_summary,
+                       step_name,
+                       footer='',
+                       char_limit=700,
+                       line_limit=1000):
     """Removes non-vital information from summary and adds markdown.
 
     Args:
@@ -313,11 +314,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     CODE_TAG = '```'
 
     summary_lines = self._limit_error_list(
-        summary_lines, char_limit,
+        summary_lines,
+        char_limit,
         message_prefix=CODE_TAG,
         message_suffix=CODE_TAG,
-        limit_hint='##### ...The message was too long...'
-      )
+        limit_hint='##### ...The message was too long...')
 
     # Header and footer are not reduced previously because
     # they have markdown and should not be encased in code tags.
@@ -331,8 +332,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return '\n'.join(summary_lines)
 
-  def _run_ninja(self, ninja_command, name=None, ninja_env=None,
-                 **kwargs):
+  def _run_ninja(self, ninja_command, name=None, ninja_env=None, **kwargs):
     """
     Run ninja with given command and env.
 
@@ -361,8 +361,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--ninja_info_output',
         self.m.json.output(add_json_log='on_failure', name='ninja_info'),
         '--failure_output',
-        self.m.raw_io.output(add_output_log='on_failure',
-                              name='failure_summary'),
+        self.m.raw_io.output(
+            add_output_log='on_failure', name='failure_summary'),
     ]
     if kwargs.get('no_prune_venv'):
       kwargs.pop('no_prune_venv')
@@ -370,21 +370,22 @@ class ChromiumApi(recipe_api.RecipeApi):
     script_args.append('--')
     script_args.extend(ninja_command)
 
-    example_json = {'failures': [{
-        'output_nodes': ['a.o'],
-        'rule': 'CXX',
-        'output': '''\
+    example_json = {
+        'failures': [{
+            'output_nodes': ['a.o'],
+            'rule': 'CXX',
+            'output': '''\
         filename:row:col: error: error info''',
-        'dependencies': ['b/a.cc']
-    }]}
+            'dependencies': ['b/a.cc']
+        }]
+    }
     example_failure_output = textwrap.dedent("""\
         [1/1] CXX a.o
         filename:row:col: error: error info
     """)
     step_test_data = (lambda: self.m.json.test_api.output(
-                          example_json, name='ninja_info') +
-                      self.m.raw_io.test_api.output(
-                            example_failure_output, name='failure_summary'))
+        example_json, name='ninja_info') + self.m.raw_io.test_api.output(
+            example_failure_output, name='failure_summary'))
     try:
       with self.m.context(env=ninja_env):
         ninja_step_result = self.m.python(
@@ -398,20 +399,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       ninja_step_result = ex.result
       if ninja_step_result.retcode != 1:
         raise self.m.step.InfraFailure(
-            ninja_step_result.name,
-            result=ninja_step_result
-        )
+            ninja_step_result.name, result=ninja_step_result)
 
-      failure_summary = (
-        '(retcode=%d) No failure summary provided.' % ninja_step_result.retcode
-      )
+      failure_summary = ('(retcode=%d) No failure summary provided.' %
+                         ninja_step_result.retcode)
       if ninja_step_result.raw_io.output:
         failure_summary = ninja_step_result.raw_io.output
 
       return CompileResult(
-          failure_summary=failure_summary,
-          retcode=ninja_step_result.retcode
-      )
+          failure_summary=failure_summary, retcode=ninja_step_result.retcode)
 
     finally:
       clang_crashreports_script = self.m.path['checkout'].join(
@@ -421,8 +417,11 @@ class ChromiumApi(recipe_api.RecipeApi):
                             self.m.buildbucket.builder_name)
         if self.m.buildbucket.build.number:
           source += '-%s' % self.m.buildbucket.build.number
-        self.m.python('process clang crashes', script=clang_crashreports_script,
-                      args=['--source', source], **kwargs)
+        self.m.python(
+            'process clang crashes',
+            script=clang_crashreports_script,
+            args=['--source', source],
+            **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
@@ -434,16 +433,13 @@ class ChromiumApi(recipe_api.RecipeApi):
           ninja_command_explain,
           stdout=self.m.raw_io.output_text(),
           step_test_data=(
-              lambda: self.m.raw_io.test_api.stream_output(
-                  ninja_no_work
-              )))
+              lambda: self.m.raw_io.test_api.stream_output(ninja_no_work)))
 
     if ninja_no_work in step_result.stdout:
       # No dependency issue found.
       return CompileResult(
           failure_summary='No dependency issues found',
-          retcode= ninja_step_result.exc_result.retcode
-      )
+          retcode=ninja_step_result.exc_result.retcode)
 
     step_result.presentation.step_text = (
         "This should have been a no-op, but it wasn't.")
@@ -457,12 +453,16 @@ class ChromiumApi(recipe_api.RecipeApi):
             wasn't a no-op). Consult the first "ninja explain:" line for a
             likely culprit.
          """).strip(),
-        retcode=1
-    )
+        retcode=1)
 
-  def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
-                           ninja_log_outdir=None, ninja_log_compiler=None,
-                           goma_env=None, **kwargs):
+  def _run_ninja_with_goma(self,
+                           ninja_command,
+                           ninja_env,
+                           name=None,
+                           ninja_log_outdir=None,
+                           ninja_log_compiler=None,
+                           goma_env=None,
+                           **kwargs):
     """
     Run ninja with goma.
     This function start goma, call _run_ninja and stop goma using goma module.
@@ -542,8 +542,13 @@ class ChromiumApi(recipe_api.RecipeApi):
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.
   @_with_chromium_layout
-  def compile(self, targets=None, name=None, out_dir=None,
-              target=None, use_goma_module=False, **kwargs):
+  def compile(self,
+              targets=None,
+              name=None,
+              out_dir=None,
+              target=None,
+              use_goma_module=False,
+              **kwargs):
     """Return a compile.py invocation.
 
     Args:
@@ -613,8 +618,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.goma_max_active_fail_fallback_tasks:
       goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
           self.c.compile_py.goma_max_active_fail_fallback_tasks)
-    if (self.m.tryserver.is_tryserver or
-        self.c.compile_py.goma_failfast):
+    if (self.m.tryserver.is_tryserver or self.c.compile_py.goma_failfast):
       # We rely on goma to meet cycle time goals on the tryserver. It's better
       # to fail early.
       goma_env['GOMA_FAIL_FAST'] = 'true'
@@ -671,16 +675,16 @@ class ChromiumApi(recipe_api.RecipeApi):
       finally:
         upload_ninja_log_args = [
             '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-            '--skip-sendgomatsmon',
-            '--ninja-log-outdir', target_output_dir,
-            '--ninja-log-command-file', self.m.json.input(command),
-            '--build-exit-status', compile_exit_status,
-            '--ninja-log-compiler', self.c.compile_py.compiler or 'unknown'
+            '--skip-sendgomatsmon', '--ninja-log-outdir', target_output_dir,
+            '--ninja-log-command-file',
+            self.m.json.input(command), '--build-exit-status',
+            compile_exit_status, '--ninja-log-compiler',
+            self.c.compile_py.compiler or 'unknown'
         ]
         self.m.build.python(
             name='upload_ninja_log',
-            script=self.repo_resource(
-                'scripts', 'slave', 'upload_goma_logs.py'),
+            script=self.repo_resource('scripts', 'slave',
+                                      'upload_goma_logs.py'),
             args=upload_ninja_log_args,
             venv=True)
 
@@ -688,11 +692,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         return result_pb2.RawResult(
             status=common_pb.FAILURE,
             summary_markdown=self._format_failures(
-                ninja_result.failure_summary,
-                name or 'compile',
-                'More information in raw_io.output[failure_summary]'
-            )
-        )
+                ninja_result.failure_summary, name or 'compile',
+                'More information in raw_io.output[failure_summary]'))
       return result_pb2.RawResult(status=common_pb.SUCCESS)
     try:
       with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
@@ -716,10 +717,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # will be handled here
     if ninja_result.retcode:
       failure_summary = self._format_failures(
-          ninja_result.failure_summary,
-          name or 'compile',
-          'More information in raw_io.output[failure_summary]'
-      )
+          ninja_result.failure_summary, name or 'compile',
+          'More information in raw_io.output[failure_summary]')
       return self._handle_goma_failures(failure_summary)
     return result_pb2.RawResult(status=common_pb.SUCCESS)
 
@@ -757,25 +756,36 @@ class ChromiumApi(recipe_api.RecipeApi):
       fake_step.presentation.step_text = failure_result_code
       props = fake_step.presentation.properties
       props['extra_result_code'] = [failure_result_code]
-      raise self.m.step.InfraFailure('Infra compile failure: %s'
-                                      % failure_summary)
+      raise self.m.step.InfraFailure('Infra compile failure: %s' %
+                                     failure_summary)
     return result_pb2.RawResult(
-        status=common_pb.FAILURE,
-        summary_markdown=failure_summary
-    )
+        status=common_pb.FAILURE, summary_markdown=failure_summary)
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):
     return TestLauncherFilterFileInputPlaceholder(self, tests)
 
   @_with_chromium_layout
-  def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
-              results_url=None, perf_dashboard_id=None, test_type=None,
-              python_mode=False, point_id=None, revision=None,
-              webkit_revision=None, test_launcher_summary_output=None,
-              perf_id=None, perf_config=None, chartjson_file=False,
+  def runtest(self,
+              test,
+              args=None,
+              xvfb=False,
+              name=None,
+              annotate=None,
+              results_url=None,
+              perf_dashboard_id=None,
+              test_type=None,
+              python_mode=False,
+              point_id=None,
+              revision=None,
+              webkit_revision=None,
+              test_launcher_summary_output=None,
+              perf_id=None,
+              perf_config=None,
+              chartjson_file=False,
               use_histograms=False,
-              tee_stdout_file=None, **kwargs):
+              tee_stdout_file=None,
+              **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, collections.Sequence), repr(args)
@@ -791,8 +801,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    full_args.extend(['--factory-properties', properties_json,
-                      '--build-properties', properties_json])
+    full_args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
 
     if annotate:
       full_args.append('--annotate=%s' % annotate)
@@ -819,10 +831,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if use_histograms:
       full_args.append('--use-histograms')
     if test_launcher_summary_output:
-      full_args.extend([
-        '--test-launcher-summary-output',
-        test_launcher_summary_output
-      ])
+      full_args.extend(
+          ['--test-launcher-summary-output', test_launcher_summary_output])
 
     # These properties are specified on every bot, so pass them down
     # unconditionally.
@@ -841,11 +851,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if webkit_revision:
       # TODO(kbr): figure out how to cover this line of code with
       # tests after the removal of the GPU recipe. crbug.com/584469
-      full_args.append(
-          '--webkit-revision=%s' % webkit_revision)  # pragma: no cover
+      full_args.append('--webkit-revision=%s' %
+                       webkit_revision)  # pragma: no cover
 
-    if (self.c.runtests.enable_asan or
-        self.c.runtests.run_asan_test):
+    if (self.c.runtests.enable_asan or self.c.runtests.run_asan_test):
       full_args.append('--enable-asan')
     if self.c.runtests.enable_lsan:
       full_args.append('--enable-lsan')
@@ -855,12 +864,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--enable-tsan')
     if self.c.runtests.enable_memcheck:
       full_args.extend([
-        '--pass-build-dir',
-        '--pass-target',
-        '--run-shell-script',
-        self.c.runtests.memory_tests_runner,
-        '--test', t_name,
-        '--tool', 'memcheck',
+          '--pass-build-dir',
+          '--pass-target',
+          '--run-shell-script',
+          self.c.runtests.memory_tests_runner,
+          '--test',
+          t_name,
+          '--tool',
+          'memcheck',
       ])
     else:
       full_args.append(test)
@@ -870,8 +881,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     runtest_path = self.repo_resource('scripts', 'slave', 'runtest.py')
     if tee_stdout_file:
       full_args = [tee_stdout_file, '--', 'python', runtest_path] + full_args
-      runtest_path = self.repo_resource(
-          'scripts', 'slave', 'tee.py')
+      runtest_path = self.repo_resource('scripts', 'slave', 'tee.py')
     with self.m.build.gsutil_py_env():
       # We need this, as otherwise runtest.py fails due to expecting the cwd to
       # be the checkout, when instead it's kitchen-workdir. We also can't use
@@ -879,11 +889,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # compared to what runtest.py expects.
       with self.m.context(cwd=self.m.path['cache'].join('builder')):
         return self.m.build.python(
-          step_name,
-          runtest_path,
-          args=full_args,
-          **kwargs
-        )
+            step_name, runtest_path, args=full_args, **kwargs)
 
   @_with_chromium_layout
   def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
@@ -901,24 +907,27 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       sizes_args.extend(['--platform', self.c.TARGET_PLATFORM])
 
-    run_tests_args = ['--target', self.c.build_config_fs,
-                      '--no-xvfb']
+    run_tests_args = ['--target', self.c.build_config_fs, '--no-xvfb']
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    run_tests_args.extend(['--factory-properties', properties_json,
-                           '--build-properties', properties_json])
+    run_tests_args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
     run_tests_args.extend([
         '--test-type=sizes',
         '--builder-name=%s' % self.m.buildbucket.builder_name,
         '--slave-name=%s' % self.m.properties['bot_id'],
         '--build-number=%s' % self.m.buildbucket.build.number,
-        '--run-python-script'])
+        '--run-python-script'
+    ])
 
     if perf_id:
       assert results_url is not None
-      run_tests_args.extend(['--annotate=graphing',
-                             '--results-url=%s' % results_url,
-                             '--perf-dashboard-id=sizes',
-                             '--perf-id=%s' % perf_id])
+      run_tests_args.extend([
+          '--annotate=graphing',
+          '--results-url=%s' % results_url, '--perf-dashboard-id=sizes',
+          '--perf-id=%s' % perf_id
+      ])
 
       # If we're on LUCI, we need to upload using the HistogramSet format
       # because IP whitelisting (what the older ChartJSON format uses for
@@ -929,8 +938,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # TODO(hans): We want this for all perf data, not just sizes.
       if self._clang_version:
         clang_rev = re.match(r'([\w-]+)', self._clang_version).group(1)
-        run_tests_args.append(
-            "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
+        run_tests_args.append("--perf-config={'r_clang_rev': '%s'}" % clang_rev)
 
     full_args = run_tests_args + [sizes_script] + sizes_args
 
@@ -941,16 +949,18 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def get_clang_version(self, **kwargs):
     with self.m.context(env=self.get_env()):
-      args=['--src-dir', self.m.path['checkout'],
-            '--output-json', self.m.json.output()]
+      args = [
+          '--src-dir', self.m.path['checkout'], '--output-json',
+          self.m.json.output()
+      ]
       if self.c.use_tot_clang:
         args.append('--use-tot-clang')
       step_result = self.m.build.python(
           'clang_revision',
           self.resource('clang_revision.py'),
           args=args,
-          step_test_data=lambda:
-              self.m.json.test_api.output({'clang_revision': '123456-7'}),
+          step_test_data=lambda: self.m.json.test_api.output(
+              {'clang_revision': '123456-7'}),
           **kwargs)
       clang_revision = step_result.json.output['clang_revision']
       step_result.presentation.properties['clang_revision'] = clang_revision
@@ -963,8 +973,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif no_goma_compiler == 'goma':
       no_goma_compiler = None
 
-    if (self.c.use_gyp_env and
-        'use_goma' in self.c.gyp_env.GYP_DEFINES and
+    if (self.c.use_gyp_env and 'use_goma' in self.c.gyp_env.GYP_DEFINES and
         self.c.gyp_env.GYP_DEFINES['use_goma'] == 0):
       self.c.compile_py.compiler = no_goma_compiler
       return
@@ -1019,28 +1028,32 @@ class ChromiumApi(recipe_api.RecipeApi):
     kind = self.c.mac_toolchain.kind or self.c.TARGET_PLATFORM
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named
     # cache. Make sure it exists, to avoid downloading Xcode on every build.
-    xcode_app_path = self.m.path['cache'].join(
-        'xcode_%s_%s.app' % (kind, xcode_build_version))
+    xcode_app_path = self.m.path['cache'].join('xcode_%s_%s.app' %
+                                               (kind, xcode_build_version))
 
     with self.m.step.nest('ensure xcode') as step_result:
       step_result.presentation.step_text = (
-          'Ensuring Xcode version %s in %s' % (
-              xcode_build_version, xcode_app_path))
+          'Ensuring Xcode version %s in %s' %
+          (xcode_build_version, xcode_app_path))
 
       self.delete_old_mac_toolchain()
 
       mac_toolchain_cmd = self.get_mac_toolchain_installer()
       install_args = [
-          mac_toolchain_cmd, 'install',
-          '-kind', kind,
-          '-xcode-version', xcode_build_version,
-          '-output-dir', xcode_app_path,
+          mac_toolchain_cmd,
+          'install',
+          '-kind',
+          kind,
+          '-xcode-version',
+          xcode_build_version,
+          '-output-dir',
+          xcode_app_path,
       ]
 
       self.m.step('install xcode', install_args, infra_step=True)
-      self.m.step('select xcode',
-                  ['sudo', 'xcode-select', '-switch', xcode_app_path],
-                  infra_step=True)
+      self.m.step(
+          'select xcode', ['sudo', 'xcode-select', '-switch', xcode_app_path],
+          infra_step=True)
 
   def ensure_toolchains(self):
     if self.c.HOST_PLATFORM == 'mac':
@@ -1108,12 +1121,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       assert self.c.TARGET_ARCH in ('arm', 'intel', 'mips')
 
     gn_cpu = {
-      ('intel', 32): 'x86',
-      ('intel', 64): 'x64',
-      ('arm',   32): 'arm',
-      ('arm',   64): 'arm64',
-      ('mips',  32): 'mips',
-      ('mipsel',  32): 'mipsel',
+        ('intel', 32): 'x86',
+        ('intel', 64): 'x64',
+        ('arm', 32): 'arm',
+        ('arm', 64): 'arm64',
+        ('mips', 32): 'mips',
+        ('mipsel', 32): 'mipsel',
     }.get((self.c.TARGET_ARCH, self.c.TARGET_BITS))
     if gn_cpu:
       gn_args.append('target_cpu="%s"' % gn_cpu)
@@ -1211,7 +1224,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
 
     if phase is not None:
-      args += [ '--phase', str(phase) ]
+      args += ['--phase', str(phase)]
 
     # self.c instead of chromium_config is not a mistake here, if we have
     # already ensured goma, we don't need to do it for this config object
@@ -1296,23 +1309,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args.extend(self._mb_isolate_map_file_args())
     mb_args.extend(self._mb_build_dir_args(build_dir))
     mb_args.extend([self.m.json.input(analyze_input), self.m.json.output()])
-    mb_args.extend([
-      '--json-output',
-      self.m.json.output(name="failure_summary")
-    ])
+    mb_args.extend(
+        ['--json-output',
+         self.m.json.output(name="failure_summary")])
 
-    step_test_data = (
-        lambda: self.m.json.test_api.output(
-                {
-                    'status': 'No dependency',
-                    'compile_targets': [],
-                    'test_targets': [],
-                }
-              ) +
-              self.m.json.test_api.output(
-                {}, name='failure_summary'
-              )
-    )
+    step_test_data = (lambda: self.m.json.test_api.output({
+        'status': 'No dependency',
+        'compile_targets': [],
+        'test_targets': [],
+    }) + self.m.json.test_api.output({}, name='failure_summary'))
     with self.mb_failure_handler(name):
       return self.run_mb_cmd(
           name,
@@ -1389,15 +1394,17 @@ class ChromiumApi(recipe_api.RecipeApi):
         additional_args=additional_args,
         ok_ret='any',
         stdout=self.m.raw_io.output_text(),
-        step_test_data=
-        lambda: self.m.raw_io.test_api.stream_output(lookup_test_data))
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+            lookup_test_data))
 
     gn_args = result.stdout
     if gn_args is not None:
       reformatted_gn_args = self.m.gn.reformat_args(gn_args)
-      self.m.gn.present_args(result, reformatted_gn_args,
-                             location=gn_args_location,
-                             max_text_lines=gn_args_max_text_lines)
+      self.m.gn.present_args(
+          result,
+          reformatted_gn_args,
+          location=gn_args_location,
+          max_text_lines=gn_args_max_text_lines)
 
     return gn_args
 
@@ -1463,10 +1470,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args = ['--json-output', self.m.json.output(name="failure_summary")]
 
     step_test_data = (
-        lambda: self.m.json.test_api.output(
-                {}, name='failure_summary'
-              )
-    )
+        lambda: self.m.json.test_api.output({}, name='failure_summary'))
 
     mb_args.extend(self._mb_isolate_map_file_args())
 
@@ -1541,16 +1545,16 @@ class ChromiumApi(recipe_api.RecipeApi):
         failure_summary = ex.result.json.outputs['failure_summary']
         if failure_summary and failure_summary['output']:
           ex.reason = self._format_failures(
-              failure_summary['output'], name,
-              footer='More information can be found in the stdout.'
-          )
+              failure_summary['output'],
+              name,
+              footer='More information can be found in the stdout.')
       raise
 
   def taskkill(self):
     self.m.build.python(
-      'taskkill',
-      self.repo_resource('scripts', 'slave', 'kill_processes.py'),
-      infra_step=True)
+        'taskkill',
+        self.repo_resource('scripts', 'slave', 'kill_processes.py'),
+        infra_step=True)
 
   def process_dumps(self, **kwargs):
     # Dumps are especially useful when other steps (e.g. tests) are failing.
@@ -1565,8 +1569,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       pass
 
   @_with_chromium_layout
-  def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
-                    build_name=None, **kwargs):
+  def archive_build(self,
+                    step_name,
+                    gs_bucket,
+                    gs_acl=None,
+                    mode=None,
+                    build_name=None,
+                    **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
     if self.m.runtime.is_experimental:
       gs_bucket += "/experimental"
@@ -1586,26 +1595,31 @@ class ChromiumApi(recipe_api.RecipeApi):
         c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
 
     args = [
-        '--src-dir', self.m.path['checkout'],
-        '--build-name', build_name or sanitized_buildername,
-        '--staging-dir', self.m.path['cache'].join('chrome_staging'),
-        '--target', self.c.build_config_fs,
-        '--factory-properties', self.m.json.dumps(fake_factory_properties),
+        '--src-dir',
+        self.m.path['checkout'],
+        '--build-name',
+        build_name or sanitized_buildername,
+        '--staging-dir',
+        self.m.path['cache'].join('chrome_staging'),
+        '--target',
+        self.c.build_config_fs,
+        '--factory-properties',
+        self.m.json.dumps(fake_factory_properties),
     ]
     args += self.m.build.slave_utils_args
     if self.build_properties:
       args += [
-        '--build-properties', self.m.json.dumps(self.build_properties),
+          '--build-properties',
+          self.m.json.dumps(self.build_properties),
       ]
     if mode:
       args.extend(['--mode', mode])
     self.m.build.python(
-      step_name,
-      self.repo_resource(
-          'scripts', 'slave', 'chromium', 'archive_build.py'),
-      args,
-      infra_step=True,
-      **kwargs)
+        step_name,
+        self.repo_resource('scripts', 'slave', 'chromium', 'archive_build.py'),
+        args,
+        infra_step=True,
+        **kwargs)
 
   def get_annotate_by_test_name(self, _):
     return 'graphing'
