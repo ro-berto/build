@@ -10,24 +10,6 @@
     "name": "reading gatekeeper_trees.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"devtools\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"devtools_tree_closers_build_db.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gitiles-config\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"path\": \"gatekeeper/tree_closers.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"ref\": \"refs/heads/infra/config\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repo_url\": \"https://chromium.googlesource.com/devtools/devtools-frontend\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.devtools-frontend.integration\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"open-tree\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"password-file\": \"/creds/gatekeeper/v8_status_password\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://devtools-status.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"filter-domain\": \"chromium.org,google.com,intel.com,opera.com,vewd.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
@@ -159,7 +141,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/devtools/devtools-frontend/+/refs/heads/infra/config/gatekeeper/tree_closers.json",
+      "https://chromium.googlesource.com/v8/v8/+/refs/heads/infra/config/gatekeeper/tree_closers.json",
       "--format",
       "text"
     ],
@@ -176,16 +158,23 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--verbose",
       "--status-url",
-      "https://devtools-status.appspot.com",
+      "https://v8-status.appspot.com",
       "--set-status",
       "--open-tree",
+      "--track-revisions",
+      "--revision-properties",
+      "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/devtools_tree_closers_build_db.json",
+      "[CACHE]/builder/v8_tree_closers_build_db.json",
       "--password-file",
       "/creds/gatekeeper/v8_status_password",
-      "https://build.chromium.org/p/client.devtools-frontend.integration"
+      "https://build.chromium.org/p/client.v8.fyi",
+      "https://build.chromium.org/p/client.v8.perf",
+      "https://build.chromium.org/p/client.v8",
+      "https://build.chromium.org/p/client.v8.clusterfuzz",
+      "https://build.chromium.org/p/client.v8.ports"
     ],
-    "name": "gatekeeper: devtools"
+    "name": "gatekeeper: v8-tree-closers"
   },
   {
     "cmd": [
@@ -227,49 +216,6 @@
       "https://build.chromium.org/p/client.crashpad"
     ],
     "name": "gatekeeper: non-closers"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--url",
-      "https://chromium.googlesource.com/v8/v8/+/refs/heads/infra/config/gatekeeper/tree_closers.json",
-      "--format",
-      "text"
-    ],
-    "name": "fetch refs/heads/infra/config:gatekeeper/tree_closers.json (2)"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
-      "--json",
-      "{}",
-      "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json",
-      "--verbose",
-      "--status-url",
-      "https://v8-status.appspot.com",
-      "--set-status",
-      "--open-tree",
-      "--track-revisions",
-      "--revision-properties",
-      "got_revision_cp",
-      "--build-db",
-      "[CACHE]/builder/v8_tree_closers_build_db.json",
-      "--password-file",
-      "/creds/gatekeeper/v8_status_password",
-      "https://build.chromium.org/p/client.v8.fyi",
-      "https://build.chromium.org/p/client.v8.perf",
-      "https://build.chromium.org/p/client.v8",
-      "https://build.chromium.org/p/client.v8.clusterfuzz",
-      "https://build.chromium.org/p/client.v8.ports"
-    ],
-    "name": "gatekeeper: v8-tree-closers"
   },
   {
     "name": "$result"
