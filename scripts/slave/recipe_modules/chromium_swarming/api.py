@@ -433,13 +433,29 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
 
-  def task(self, name=None, build_properties=None, cipd_packages=None,
-           collect_step=None, env=None, env_prefixes=None, extra_args=None,
-           failure_as_exception=True, idempotent=None,
-           ignore_task_failure=False, isolated=None, merge=None,
-           named_caches=None, optional_dimensions=None, raw_cmd=None,
-           service_account=None, shards=1, shard_indices=None,
-           task_output_dir=None, task_to_retry=None, trigger_script=None):
+  def task(self,
+           name=None,
+           build_properties=None,
+           cipd_packages=None,
+           collect_step=None,
+           env=None,
+           env_prefixes=None,
+           extra_args=None,
+           failure_as_exception=True,
+           idempotent=None,
+           ignore_task_failure=False,
+           isolated=None,
+           merge=None,
+           named_caches=None,
+           optional_dimensions=None,
+           raw_cmd=None,
+           service_account=None,
+           shards=1,
+           shard_indices=None,
+           task_output_dir=None,
+           task_to_retry=None,
+           trigger_script=None,
+           relative_cwd=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -522,6 +538,9 @@ class SwarmingApi(recipe_api.RecipeApi):
           shards in this task.
       * failure_as_exception: Boolean. Whether test failures should throw a
         recipe exception during the collect step.
+      * relative_cwd: An optional string indicating the working directory
+        relative to the task root where `raw_cmd` (or the command specified
+        in the isolate, if raw_cmd is empty) will run.
     """
 
     if not collect_step:
@@ -577,6 +596,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_isolated(isolated or ('0' * 40)).
       with_idempotent(idempotent)))
 
+    if relative_cwd:
+      request = request.with_slice(0,
+                                   request[0].with_relative_cwd(relative_cwd))
+
     return SwarmingTask(
       request=request,
       builder_info=builder_info,
@@ -595,8 +618,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       trigger_script=trigger_script
     )
 
-  def gtest_task(self, name=None, isolated=None, extra_args=None,
-                 cipd_packages=None, merge=None, **kwargs):
+  def gtest_task(self,
+                 name=None,
+                 isolated=None,
+                 extra_args=None,
+                 cipd_packages=None,
+                 merge=None,
+                 raw_cmd=None,
+                 relative_cwd=None,
+                 **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
     The implementation uses a test_utils.gtest_results() placeholder to parse
@@ -621,13 +651,19 @@ class SwarmingApi(recipe_api.RecipeApi):
         'standard_gtest_merge.py')}
 
     # Make a task, configure it to be collected through shim script.
-    task = self.task(name=name, cipd_packages=cipd_packages,
-                     collect_step=self._gtest_collect_step,
-                     extra_args=extra_args, isolated=isolated, merge=merge,
-                     **kwargs)
+    task = self.task(
+        name=name,
+        cipd_packages=cipd_packages,
+        collect_step=self._gtest_collect_step,
+        extra_args=extra_args,
+        isolated=isolated,
+        merge=merge,
+        raw_cmd=raw_cmd,
+        relative_cwd=relative_cwd,
+        **kwargs)
     return task
 
-  def isolated_script_task(self):
+  def isolated_script_task(self, raw_cmd=None, relative_cwd=None):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
     At the time of this writting, this code is used by WebRTC and
@@ -655,7 +691,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'script': self.merge_script_path('standard_isolated_script_merge.py')
     }
 
-    task = self.task()
+    task = self.task(raw_cmd=raw_cmd, relative_cwd=relative_cwd)
     task.extra_args = extra_args
     task.merge = merge
     task.collect_step = self._isolated_script_collect_step
@@ -854,16 +890,20 @@ class SwarmingApi(recipe_api.RecipeApi):
     if not task_slice.isolated == '0' * 40:
       args.extend(('--isolated', task_slice.isolated))
 
+    if task_slice.relative_cwd:
+      args.extend(['--relative-cwd', task_slice.relative_cwd])
+
     # Use a raw command as extra-args on tasks without command.
     if task_slice.command:
-      # Allow using only one of raw_cmd or extra_args.
-      assert not task.extra_args
       args.append('--raw-cmd')
 
     # Additional command line args for isolated command.
     if task.extra_args or task_slice.command:
       args.append('--')
-      args.extend(task.extra_args or task_slice.command)
+    if task_slice.command:
+      args.extend(task_slice.command)
+    if task.extra_args:
+      args.extend(task.extra_args)
 
     script = self.m.swarming_client.path.join('swarming.py')
     if task.trigger_script:

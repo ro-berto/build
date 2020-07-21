@@ -1657,6 +1657,8 @@ class SwarmingTest(Test):
         self._extra_suffix = self._get_gpu_suffix(dimensions)
       elif 'Android' == dimensions.get('os') and dimensions.get('device_type'):
         self._extra_suffix = self._get_android_suffix(dimensions)
+    self._raw_cmd = []
+    self._relative_cwd = None
 
   def _dispatches_to_windows(self):
     if self._dimensions:
@@ -1762,6 +1764,22 @@ class SwarmingTest(Test):
   @property
   def shards(self):
     return self._shards
+
+  @property
+  def raw_cmd(self):
+    return self._raw_cmd
+
+  @raw_cmd.setter
+  def raw_cmd(self, value):
+    self._raw_cmd = value
+
+  @property
+  def relative_cwd(self):
+    return self._relative_cwd
+
+  @relative_cwd.setter
+  def relative_cwd(self, value):
+    self._relative_cwd = value
 
   def create_task(self, api, suffix, isolated):
     """Creates a swarming task. Must be overridden in subclasses.
@@ -2087,6 +2105,8 @@ class SwarmingGTestTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.gtest_task()
+    task = api.chromium_swarming.gtest_task(
+        raw_cmd=self._raw_cmd, relative_cwd=self.relative_cwd)
     self._apply_swarming_task_config(task, api, suffix, isolated,
                                      '--gtest_filter', ':')
     return task
@@ -2356,7 +2376,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, api, suffix, isolated):
-    task = api.chromium_swarming.isolated_script_task()
+    task = api.chromium_swarming.isolated_script_task(
+        raw_cmd=self.raw_cmd, relative_cwd=self.relative_cwd)
 
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)

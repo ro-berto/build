@@ -451,6 +451,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
+        if self.c.use_swarming_command_lines:
+          self.set_swarming_command_lines(tests_including_triggered,
+                                          name_suffix)
+
         if bot_config.perf_isolate_upload:
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
@@ -461,6 +465,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                       update_step.presentation.properties['got_revision'],
               }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
       return raw_result
+
+  def set_swarming_command_lines(self, tests, suffix):
+    step_result = self.m.python(
+        'find command lines%s' % suffix,
+        self.resource('find_command_lines.py'), [
+            '--build-dir', self.m.chromium.output_dir, '--output-json',
+            self.m.json.output()
+        ],
+        step_test_data=lambda: self.m.json.test_api.output({}))
+    assert isinstance(step_result.json.output, dict)
+    command_lines = step_result.json.output
+    for test in tests:
+      if test.runs_on_swarming:
+        command_line = command_lines.get(test.target_name, [])
+        if command_line:
+          test.raw_cmd = command_line
+          test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
+                                                  self.m.path['checkout'])
 
   def package_build(self, builder_id, update_step, bot_config, reasons=None):
     """Zip and upload the build to google storage.
@@ -837,6 +859,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
+        if self.c.use_swarming_command_lines:
+          self.set_swarming_command_lines(
+              failing_tests, suffix=' (%s)' % suffix)
+
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
@@ -1069,7 +1095,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_properties=additional_trigger_properties)
     self.archive_build(bot.builder_id, update_step, bot.settings)
 
-    self.inbound_transfer(bot, update_step, build_config)
+    self.inbound_transfer(bot, update_step, build_config, mb_config_path,
+                          mb_phase)
 
     tests = build_config.tests_on(bot.builder_id)
     return self.run_tests(bot, tests)
@@ -1128,7 +1155,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           reasons=self._explain_package_transfer(bot, non_isolated_tests))
     return additional_trigger_properties
 
-  def inbound_transfer(self, bot, bot_update_step, build_config):
+  def inbound_transfer(self, bot, bot_update_step, build_config, mb_config_path,
+                       mb_phase):
     """Handles the tester half of the builder->tester transfer flow.
 
     See outbound_transfer for a discussion of transfer mechanisms.
@@ -1162,6 +1190,41 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.file.rmtree(
           'build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+
+      # In order to figure out what command lines to pass to swarming tasks,
+      # we call the `set_swarming_command_lines` method below, which reads
+      # the command lines out of the *.isolate files that MB generates
+      # during the `generate_build_files` step. However, on an isolate_transfer
+      # test-only bot, those isolate files don't exist (they do on exist
+      # on a package_transfer bot, since they are part of the packaged build),
+      # and so we need to re-run MB. This makes the build slightly slower,
+      # but the alternative would be to transfer the command lines from builder
+      # to tester some other way, which is more complicated and potentially
+      # somewhat fragile (e.g., if you tried to pass them via build properties
+      # you might hit limits on the length of properties).
+      if (self.m.chromium.c.project_generator.tool == 'mb' and
+          self.c.use_swarming_command_lines):
+        parent_builder_id = chromium.BuilderId.create_for_master(
+            bot.settings.parent_mastername or bot.builder_id.master,
+            bot.settings.parent_buildername)
+        use_goma = self._use_goma()
+        android_version_name, android_version_code = (
+            self.get_android_version_details(bot.settings, log_details=True))
+        isolated_targets = [
+            t.name
+            for t in build_config.tests_on(bot.builder_id)
+            if t.uses_isolate
+        ]
+        self.m.chromium.mb_gen(
+            parent_builder_id,
+            phase=mb_phase,
+            mb_config_path=mb_config_path,
+            use_goma=use_goma,
+            isolated_targets=isolated_targets,
+            name='generate_build_files',
+            android_version_code=android_version_code,
+            android_version_name=android_version_name)
+
     if package_transfer:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
@@ -1173,6 +1236,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'explain extract build',
           self._explain_package_transfer(bot, non_isolated_tests),
           as_log='why is this running?')
+
+    if self.c.use_swarming_command_lines:
+      self.set_swarming_command_lines(
+          build_config.tests_on(bot.builder_id), suffix='')
 
   def _explain_package_transfer(self, bot, non_isolated_tests):
     package_transfer_reasons = [
