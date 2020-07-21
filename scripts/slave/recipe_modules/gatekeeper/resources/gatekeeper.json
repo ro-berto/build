@@ -4,17 +4,6 @@
               "this files's format."],
 
   "masters": {
-    "https://build.chromium.org/p/client.crashpad": [
-      {
-        "builders": {
-          "*": {
-            "closing_optional": [
-              "*"
-            ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/client.pdfium": [
       {
         "categories": [

@@ -10,14 +10,6 @@
     "name": "reading gatekeeper_trees.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"filter-domain\": \"chromium.org,google.com,intel.com,opera.com,vewd.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.crashpad\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"pdfium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"pdfium_build_db.json\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
@@ -200,22 +192,6 @@
       "https://build.chromium.org/p/client.pdfium"
     ],
     "name": "gatekeeper: pdfium"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
-      "--json",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper.json",
-      "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json",
-      "--verbose",
-      "--filter-domain",
-      "chromium.org,google.com,intel.com,opera.com,vewd.com",
-      "https://build.chromium.org/p/client.crashpad"
-    ],
-    "name": "gatekeeper: non-closers"
   },
   {
     "name": "$result"

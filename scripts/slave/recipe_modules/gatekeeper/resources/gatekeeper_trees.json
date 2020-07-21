@@ -44,11 +44,5 @@
             "https://build.chromium.org/p/client.v8.chromium": ["*"],
             "https://build.chromium.org/p/client.v8.fyi": ["*"]
         }
-    },
-    "non-closers": {
-        "filter-domain": "chromium.org,google.com,intel.com,opera.com,vewd.com",
-        "masters": {
-            "https://build.chromium.org/p/client.crashpad": ["*"]
-        }
     }
 }
