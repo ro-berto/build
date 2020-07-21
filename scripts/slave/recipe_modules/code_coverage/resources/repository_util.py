@@ -65,6 +65,7 @@ def _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_content):
       'include_rules': [],
       'skip_child_includes': [],
       'hooks': [],
+      'Str': str,
   }
   var = _VarImpl(local_scope)
   global_scope = {
@@ -76,6 +77,7 @@ def _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_content):
       'include_rules': [],
       'skip_child_includes': [],
       'hooks': [],
+      'Str': str,
   }
   exec deps_content in global_scope, local_scope
 

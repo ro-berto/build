@@ -26,6 +26,7 @@ class RepositoryUtilTest(unittest.TestCase):
     deps_file_content = textwrap.dedent('''
       vars = {
         'chromium_git': 'https://chromium.googlesource.com',
+        'cros_boards': Str(''),
       }
 
       deps = {
