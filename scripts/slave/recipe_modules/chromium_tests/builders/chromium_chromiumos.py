@@ -36,14 +36,17 @@ def _config(name,
             target_arch='intel',
             target_bits=64,
             chromium_apply_config=None,
-            gclient_apply_config=None):
+            gclient_apply_config=None,
+            chromium_tests_apply_config=None):
   gclient_apply_config = gclient_apply_config or []
+  chromium_tests_apply_config = chromium_tests_apply_config or []
   if 'chromeos' not in gclient_apply_config:
     gclient_apply_config.append('chromeos')
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
+      'chromium_tests_apply_config': chromium_tests_apply_config,
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
       'chromium_config_kwargs': {
@@ -65,7 +68,10 @@ def _config(name,
 
 
 SPEC.update([
-    _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
+    _config(
+        'linux-chromeos-rel',
+        chromium_tests_apply_config=['use_swarming_command_lines'],
+        gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg'),
     _config(
         'chromeos-amd64-generic-asan-rel',
