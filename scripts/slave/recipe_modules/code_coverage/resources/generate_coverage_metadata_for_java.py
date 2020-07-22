@@ -310,10 +310,8 @@ def _parse_args(args):
       help='absolute path to the file that stores the diff mapping')
   params = parser.parse_args(args=args)
 
-  if params.component_mapping_path and not os.path.isfile(
-      params.component_mapping_path):
-    parser.error(
-        'Component mapping %s is missing' % params.component_mapping_path)
+  if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
+    parser.error('Dir metadata %s is missing' % params.dir_metadata_path)
 
   if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
     parser.error('Diff mapping %s is missing' % params.diff_mapping_path)
@@ -325,9 +323,13 @@ def main():
   params = _parse_args(sys.argv[1:])
 
   component_mapping = None
-  if params.component_mapping_path:
-    with open(params.component_mapping_path) as f:
-      component_mapping = json.load(f)['dir-to-component']
+  if params.dir_metadata_path:
+    with open(params.dir_metadata_path) as f:
+      component_mapping = {
+          d: md['monorail']['component']
+          for d, md in json.load(f)['dirs'].iteritems()
+          if 'monorail' in md and 'component' in md['monorail']
+      }
 
   diff_mapping = None
   if params.diff_mapping_path:

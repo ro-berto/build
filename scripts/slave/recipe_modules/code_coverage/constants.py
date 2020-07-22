@@ -5,8 +5,8 @@
 
 DEFAULT_BUCKET_NAME = 'code-coverage-data'
 
-# Name of the file to store the component map.
-COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
+# Name of the file to store the directory metadata.
+DIR_METADATA_FILE_NAME = 'dir_metadata.json'
 
 # Name of the file to store the line number mapping from bot to Gerrit.
 BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME = (

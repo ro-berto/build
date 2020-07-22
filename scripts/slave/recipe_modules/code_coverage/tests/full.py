@@ -118,8 +118,8 @@ def GenTests(api):
           'line number mapping from bot to Gerrit'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data for overall test coverage.Run '
-          'component extraction script to generate mapping'),
+          'process clang code coverage data for overall test coverage.Extract '
+          'directory metadata'),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
@@ -389,35 +389,32 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test('process java coverage for full-codebase',
-       api.properties.generic(
+  yield api.test(
+      'process java coverage for full-codebase',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='android-code-coverage',
           buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Run component extraction script to generate mapping'),
-       api.post_process(
+      api.code_coverage(use_java_coverage=True),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'Extract directory metadata'),
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
-       api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload JSON metadata'),
-       api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report'),
-       api.post_process(
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'gsutil Upload JSON metadata'),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'Generate JaCoCo HTML report'),
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Zip generated JaCoCo HTML report files'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'gsutil Upload zipped JaCoCo HTML report'),
-       api.post_process(
-          post_process.MustRun,
-          'Clean up Java coverage files'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test('skip collecting coverage data for java',
        api.properties.generic(
@@ -579,8 +576,8 @@ def GenTests(api):
           'Get all Android unstripped artifacts paths'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data for overall test coverage.Run '
-          'component extraction script to generate mapping'),
+          'process clang code coverage data for overall test coverage.Extract '
+          'directory metadata'),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
@@ -623,8 +620,8 @@ def GenTests(api):
           'line number mapping from bot to Gerrit'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data for overall test coverage.Run '
-          'component extraction script to generate mapping'),
+          'process clang code coverage data for overall test coverage.Extract '
+          'directory metadata'),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS)),

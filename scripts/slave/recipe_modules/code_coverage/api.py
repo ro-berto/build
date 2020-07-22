@@ -458,10 +458,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                   constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
           ])
         else:
-          component_mapping_path = self._generate_component_mapping()
+          dir_metadata_path = self._generate_dir_metadata()
           args.extend([
-              '--component-mapping-path',
-              component_mapping_path,
+              '--dir-metadata-path',
+              dir_metadata_path,
           ])
 
         self.m.python(
@@ -744,18 +744,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           data_type,
       )
 
-  def _generate_component_mapping(self):
-    """Generates the mapping from crbug components to directories."""
-    component_mapping = self.m.path.mkdtemp().join(
-        constants.COMPONENT_MAPPING_FILE_NAME)
-    script = self.m.path['checkout'].join('tools', 'checkteamtags',
-                                                'extract_components.py')
-    self.m.python(
-        'Run component extraction script to generate mapping',
-        script,
-        args=['-o', component_mapping],
-        stdout=self.m.raw_io.output_text(add_output_log=True))
-    return component_mapping
+  def _generate_dir_metadata(self):
+    """Extracts directory metadata, e.g. mapping to monorail component."""
+    dir_metadata = self.m.path.mkdtemp().join(constants.DIR_METADATA_FILE_NAME)
+    self.m.step('Extract directory metadata', [
+        self.m.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
+        'export', '-out', dir_metadata
+    ])
+    return dir_metadata
 
   def _generate_and_upload_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
@@ -794,9 +790,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         args.extend(['--exclusion-pattern', pattern])
 
       if self._include_component_mapping:
-        args.extend(
-            ['--component-mapping-path',
-             self._generate_component_mapping()])
+        args.extend(['--dir-metadata-path', self._generate_dir_metadata()])
 
     if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])

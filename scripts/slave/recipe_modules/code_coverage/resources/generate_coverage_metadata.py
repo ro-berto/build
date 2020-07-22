@@ -683,9 +683,9 @@ def _parse_args(args):
       type=str,
       help='absolute path to binaries to generate the coverage for')
   parser.add_argument(
-      '--component-mapping-path',
+      '--dir-metadata-path',
       type=str,
-      help='absolute path to json file mapping dirs to monorail components')
+      help='absolute path to json file mapping dirs to metadata')
   parser.add_argument(
       '--sources',
       nargs='*',
@@ -725,18 +725,21 @@ def main():
   if not os.path.isfile(params.profdata_path):
     raise RuntimeError('Input data %s is missing' % params.profdata_path)
 
-  if (params.component_mapping_path and
-      not os.path.isfile(params.component_mapping_path)):
-    raise RuntimeError(
-        'Component mapping %s is missing' % params.component_mapping)
+  if (params.dir_metadata_path and
+      not os.path.isfile(params.dir_metadata_path)):
+    raise RuntimeError('Dir metadata %s is missing' % params.dir_metadata_path)
 
   if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
     raise RuntimeError('Diff mapping %s is missing' % params.diff_mapping_path)
 
   component_mapping = None
-  if params.component_mapping_path:
-    with open(params.component_mapping_path) as f:
-      component_mapping = json.load(f)['dir-to-component']
+  if params.dir_metadata_path:
+    with open(params.dir_metadata_path) as f:
+      component_mapping = {
+          d: md['monorail']['component']
+          for d, md in json.load(f)['dirs'].iteritems()
+          if 'monorail' in md and 'component' in md['monorail']
+      }
 
   sources = params.sources or []
   abs_sources = [os.path.join(params.src_path, s) for s in sources]
