@@ -4423,7 +4423,7 @@ In legacy format:
 See more on forms in
 https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/tools/dirmd/proto/mapping.proto
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_export_metadata.py#34)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_export_metadata.py#35)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]

@@ -30,6 +30,7 @@ DEPS = [
 ]
 
 DEST_BUCKET = 'chrome-metadata'
+DEST_BUCKET_LEGACY = 'chromium-owners'
 
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.
@@ -44,8 +45,7 @@ def RunSteps(api):
     'chromium-update',
     '-chromium-checkout', api.path['checkout'],
     '-bucket', DEST_BUCKET,
-    # TODO(crbug.com/1102997): pass -bucket-legacy when we ensure the
-    # tool works correctly.
+    '-bucket-legacy', DEST_BUCKET_LEGACY,
   ])
 
 
