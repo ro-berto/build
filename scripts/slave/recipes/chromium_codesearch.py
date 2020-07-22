@@ -44,6 +44,7 @@ TRYBOT_SPEC = freeze({
         'gen-android-try': 'codesearch-gen-chromium-android',
         'gen-chromiumos-try': 'codesearch-gen-chromium-chromiumos',
         'gen-fuchsia-try': 'codesearch-gen-chromium-fuchsia',
+        'gen-lacros-try': 'codesearch-gen-chromium-lacros',
         'gen-linux-try': 'codesearch-gen-chromium-linux',
         'gen-win-try': 'codesearch-gen-chromium-win',
     }
@@ -71,6 +72,16 @@ SPEC = freeze({
       'gen_repo_out_dir': 'android-Debug',
       'corpus': 'chromium.googlesource.com/chromium/src',
       'build_config': 'android',
+    },
+    'codesearch-gen-chromium-lacros': {
+      'compile_targets': [
+        'all',
+      ],
+      'platform': 'lacros',
+      'sync_generated_files': True,
+      'gen_repo_branch': 'master',
+      'corpus': 'chromium.googlesource.com/chromium/src',
+      'build_config': 'lacros',
     },
     'codesearch-gen-chromium-linux': {
       'compile_targets': [
