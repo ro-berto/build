@@ -95,7 +95,7 @@
       "-h",
       "x-goog-meta-Cr-Commit-Position-Number:50110",
       "-h",
-      "x-goog-meta-Cr-Git-Commit:f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+      "x-goog-meta-Cr-Git-Commit:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "cp",
       "-a",
       "public-read",

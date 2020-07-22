@@ -49,7 +49,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
@@ -59,7 +59,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
@@ -70,7 +70,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"v8/tools/swarming_client\": {@@@",
@@ -85,7 +85,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
       "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"e4fee0b18f8163be6097c9c571640038896debc4\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#108913}\"@@@"
@@ -335,13 +335,13 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json"
     ],
     "infra_step": true,
     "name": "build.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
     ]
   },
   {
@@ -902,7 +902,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
@@ -912,7 +912,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"a0\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
@@ -923,7 +923,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"a0\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"v8/tools/swarming_client\": {@@@",
@@ -1117,13 +1117,13 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Foobar/a0.json"
     ],
     "infra_step": true,
     "name": "Bisect a0.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a0.json@@@"
     ]
   },
   {
@@ -1354,7 +1354,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a2\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
@@ -1364,7 +1364,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"a2\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
@@ -1375,7 +1375,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"a2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"v8/tools/swarming_client\": {@@@",
@@ -1569,13 +1569,13 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Foobar/a2.json"
     ],
     "infra_step": true,
     "name": "Bisect a2.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a2.json@@@"
     ]
   },
   {
@@ -1844,7 +1844,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8/tools/swarming_client\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8/tools/swarming_client.git\", @@@",
@@ -1854,7 +1854,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"a1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#108913}\"@@@",
@@ -1865,7 +1865,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"a1\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"v8/tools/swarming_client\": {@@@",
@@ -2059,13 +2059,13 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\", \"test262\": \"[dummy hash for test262]\"}",
-      "gs://chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/client.v8/V8 Foobar/a1.json"
     ],
     "infra_step": true,
     "name": "Bisect a1.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a1.json@@@"
     ]
   },
   {

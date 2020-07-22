@@ -140,12 +140,12 @@
       "public-read",
       "-R",
       "[CLEANUP]/gcov_coverage_html_tmp_2",
-      "gs://chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+      "gs://chromium-v8/linux64_gcov_rel/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
     "infra_step": true,
     "name": "gsutil coverage report",
     "~followup_annotations": [
-      "@@@STEP_LINK@report@https://storage.googleapis.com/chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c/index.html@@@"
+      "@@@STEP_LINK@report@https://storage.googleapis.com/chromium-v8/linux64_gcov_rel/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef/index.html@@@"
     ]
   }
 ]
