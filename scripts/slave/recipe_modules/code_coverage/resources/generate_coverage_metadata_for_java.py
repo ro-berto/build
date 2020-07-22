@@ -32,7 +32,10 @@ import repository_util
 # 'input_path':
 #   '$CHROMIUM_OUTPUT_DIR/\
 #    obj/chrome/android/features/tab_ui/java__process_prebuilt-filtered.jar'
-SOURCES_JSON_FILES_SUFFIX = '__jacoco_sources.json'
+
+# TODO (crbug.com/1107004): Remove device when ready to combine host and device
+# __jacoco_sources.
+SOURCES_JSON_FILES_SUFFIX = 'device__jacoco_sources.json'
 
 # Conforms to JaCoCo coverage counter types:
 # https://www.jacoco.org/jacoco/trunk/doc/counters.html
