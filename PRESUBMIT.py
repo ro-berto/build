@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Top-level presubmit script for buildbot.
+"""Top-level presubmit script for the tools/build repo.
 
 See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into git cl.
@@ -11,8 +11,8 @@ details on the presubmit API built into git cl.
 import re
 
 
-def GetBlackList(input_api):
-  return list(input_api.DEFAULT_BLACK_LIST) + [
+def GetFilesToSkip(input_api):
+  return list(input_api.DEFAULT_FILES_TO_SKIP) + [
       r'.*slave/.*/build.*/.*',
       r'.*slave/.*/isolate.*/.*',
       r'.*depot_tools/.*',
@@ -52,7 +52,7 @@ def CommitChecks(input_api, output_api):
   output.extend(input_api.canned_checks.RunPylint(
       input_api,
       output_api,
-      black_list=GetBlackList(input_api),
+      files_to_skip=GetFilesToSkip(input_api),
       disabled_warnings=disabled_warnings,
       extra_paths_list=infra_path + [
         # Initially, a separate run was done for unit tests but now that
@@ -65,17 +65,17 @@ def CommitChecks(input_api, output_api):
 
   tests = []
 
-  whitelist = [r'.+_test\.py$']
+  files_to_check = [r'.+_test\.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'slave', 'unittests'),
-      whitelist))
+      files_to_check=files_to_check))
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'common', 'unittests'),
-      whitelist))
+      files_to_check=files_to_check))
 
   recipe_modules_tests = (
       input_api.glob(
@@ -89,7 +89,7 @@ def CommitChecks(input_api, output_api):
         input_api,
         output_api,
         path,
-        whitelist))
+        files_to_check=files_to_check))
 
   recipes_resources = (
       input_api.glob(join('scripts', 'slave', 'recipes', '*.resources')) +
@@ -99,7 +99,7 @@ def CommitChecks(input_api, output_api):
         input_api,
         output_api,
         path,
-        whitelist))
+        files_to_check=files_to_check))
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
   # condition where multiple tests are trying to fetch at once.
@@ -114,7 +114,7 @@ def CommitChecks(input_api, output_api):
   output.extend(input_api.RunTests(tests))
 
   output.extend(input_api.canned_checks.PanProjectChecks(
-      input_api, output_api, excluded_paths=GetBlackList(input_api)))
+      input_api, output_api, excluded_paths=GetFilesToSkip(input_api)))
   return output
 
 
