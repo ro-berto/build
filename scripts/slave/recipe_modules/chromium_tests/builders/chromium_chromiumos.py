@@ -85,7 +85,8 @@ SPEC.update([
     _config(
         'chromeos-amd64-generic-rel',
         cros_board='amd64-generic',
-        checkout_qemu_image=True),
+        checkout_qemu_image=True,
+        chromium_tests_apply_config=['use_swarming_command_lines']),
     _config(
         'chromeos-arm-generic-dbg',
         cros_board='arm-generic',
@@ -95,7 +96,8 @@ SPEC.update([
         'chromeos-arm-generic-rel',
         cros_board='arm-generic',
         target_arch='arm',
-        target_bits=32),
+        target_bits=32,
+        chromium_tests_apply_config=['use_swarming_command_lines']),
     _config(
         'chromeos-kevin-rel',
         cros_board='kevin',
