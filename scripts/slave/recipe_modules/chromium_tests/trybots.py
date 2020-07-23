@@ -1071,16 +1071,18 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='Mac Builder Code Coverage',
                     tester='Mac10.13 Tests Code Coverage',
                 ),
-                try_spec.TryMirror.create(
-                    mastername='chromium.gpu',
-                    buildername='GPU Mac Builder Code Coverage',
-                    tester='Mac Release (Intel) Code Coverage',
-                ),
-                try_spec.TryMirror.create(
-                    mastername='chromium.gpu',
-                    buildername='GPU Mac Builder Code Coverage',
-                    tester='Mac Retina Release (AMD) Code Coverage',
-                ),
+                # TODO(https://crbug.com/1108842) Restore once capacity is
+                # returned
+                # try_spec.TryMirror.create(
+                #     mastername='chromium.gpu',
+                #     buildername='GPU Mac Builder Code Coverage',
+                #     tester='Mac Release (Intel) Code Coverage',
+                # ),
+                # try_spec.TryMirror.create(
+                #     mastername='chromium.gpu',
+                #     buildername='GPU Mac Builder Code Coverage',
+                #     tester='Mac Retina Release (AMD) Code Coverage',
+                # ),
             ]),
         'mac-rel':
             try_spec.TrySpec.create([
