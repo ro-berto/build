@@ -427,6 +427,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     ninja_no_work = 'ninja: no work to do.'
 
+    # Once we've compiled once, a second attempt to compile should do nothing.
+    # Any actual work we do here indicates that the dependency graph in GN is
+    # misconfigured somehow, which is bad and should break the build.
     with self.m.context(env=ninja_env):
       step_result = self.m.step(
           (name or 'compile') + ' confirm no-op',
