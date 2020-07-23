@@ -2104,7 +2104,6 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name]
 
   def create_task(self, api, suffix, isolated):
-    task = api.chromium_swarming.gtest_task()
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd, relative_cwd=self.relative_cwd)
     self._apply_swarming_task_config(task, api, suffix, isolated,
