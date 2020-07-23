@@ -4405,7 +4405,7 @@ index packs (used to generate xrefs) are all generated from the same revision,
 but are marked by kythe with the synthetic commit hash so cross references can
 linked by commit hash.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#44)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#45)(api):**
 ### *recipes* / [chromium\_export\_metadata](/scripts/slave/recipes/chromium_export_metadata.py)
 
 [DEPS](/scripts/slave/recipes/chromium_export_metadata.py#25): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
