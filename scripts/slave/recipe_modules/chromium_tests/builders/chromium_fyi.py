@@ -700,6 +700,20 @@ SPEC = {
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),
+    'Win10 Tests x64 1909':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_mastername='chromium.win',
+            parent_buildername='Win x64 Builder',
+            simulation_platform='win',
+        ),
     'win10-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
