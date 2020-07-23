@@ -17,6 +17,7 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -57,6 +58,7 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
