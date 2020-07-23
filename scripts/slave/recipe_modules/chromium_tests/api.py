@@ -7,6 +7,7 @@ import contextlib
 import copy
 import itertools
 import json
+import os
 import re
 import traceback
 
@@ -1543,6 +1544,34 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'chromium', precommit=self.m.tryserver.is_tryserver)
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
+
+    # When DEPS is autorolled, typically the change is an updated git revision.
+    # We use the following logic to figure out which files really changed.
+    # by checking out the old DEPS file and recursively running git diff on all
+    # of the repos listed in DEPS.
+    # When successful, diff_deps() replaces just ['DEPS'] with an actual list of
+    # affected files. When not successful, it falls back to the original logic
+    # We don't apply this logic to manual DEPS rolls, as they can contain
+    # changes to other variables, whose effects are not easily discernible.
+    owner = self.m.tryserver.gerrit_change_owner
+    if (bot.config.analyze_deps_autorolls and 'DEPS' in affected_files and
+        owner and owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS):
+      try:
+        revised_affected_files = self.m.gclient.diff_deps(
+            self.m.chromium_checkout.checkout_dir.join(
+                self.m.gclient.get_gerrit_patch_root()))
+        # Strip the leading src/
+        affected_files = [
+            os.path.join('',
+                         *src_file.split('/')[1:])
+            for src_file in revised_affected_files
+        ]
+
+      except self.m.gclient.DepsDiffException:
+        # Sometimes it can't figure out what changed, so it'll throw this.
+        # Ignoring this exception will leave affected_files as ['DEPS'],
+        # falling back to the original behavior of testing everything.
+        pass
 
     # Must happen before without patch steps.
     if self.m.code_coverage.using_coverage:

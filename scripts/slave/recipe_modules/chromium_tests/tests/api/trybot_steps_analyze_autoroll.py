@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -12,6 +14,33 @@ DEPS = [
     'test_utils',
 ]
 
+_TEST_BUILDERS = bot_db.BotDatabase.create({
+    'chromium.test': {
+        'chromium-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                gclient_config='chromium',
+            ),
+        'chromium-test-rel':
+            bot_spec.BotSpec.create(gclient_config='chromium',),
+    },
+})
+
+_TEST_TRYBOTS = try_spec.TryDatabase.create({
+    'tryserver.chromium.test': {
+        'chromium-rel':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        mastername='chromium.test',
+                        buildername='chromium-rel',
+                        tester='chromium-test-rel',
+                    ),
+                ],
+                analyze_deps_autorolls=True),
+    }
+})
+
 
 def RunSteps(api):
   assert api.tryserver.is_tryserver
@@ -20,19 +49,41 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  deps_changes = '''
+13>src/third_party/fake_lib/fake_file
+13>src/third_party/fake_lib/fake_file_2
+'''
+  cl_info = api.json.output([{
+      'owner': {
+          # chromium-autoroller
+          '_account_id': 1302611
+      },
+      'branch': 'master',
+      'revisions': {},
+  }])
+
   yield api.test(
-      'analyze deps autorolls',
-      api.chromium.try_build(),
-      api.override_step_data(
-          'gerrit fetch current CL info',
-          api.json.output([{
-              'owner': {
-                  # chromium-autoroller
-                  '_account_id': 1302611
-              },
-              'branch': 'master',
-              'revisions': {},
-          }])),
+      'analyze deps autorolls success',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.test', builder='chromium-rel'),
+      api.chromium_tests.builders(_TEST_BUILDERS),
+      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.override_step_data('gerrit fetch current CL info', cl_info),
       api.override_step_data('git diff to analyze patch',
                              api.raw_io.stream_output('DEPS')),
+      api.override_step_data('gclient recursively git diff all DEPS',
+                             api.raw_io.stream_output(deps_changes)),
+  )
+
+  yield api.test(
+      'analyze deps autorolls nothing',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.test', builder='chromium-rel'),
+      api.chromium_tests.builders(_TEST_BUILDERS),
+      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.override_step_data('gerrit fetch current CL info', cl_info),
+      api.override_step_data('git diff to analyze patch',
+                             api.raw_io.stream_output('DEPS')),
+      api.override_step_data('gclient recursively git diff all DEPS',
+                             api.raw_io.stream_output('')),
   )
