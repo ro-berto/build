@@ -295,9 +295,9 @@ def _parse_args(args):
       help='absolute path to the directory to traverse'
       '*__jacoco_sources.json files')
   parser.add_argument(
-      '--component-mapping-path',
+      '--dir-metadata-path',
       type=str,
-      help='absolute path to json file mapping dirs to monorail components')
+      help='absolute path to json file mapping dirs to metadata')
   parser.add_argument(
       '--source-files',
       nargs='*',
