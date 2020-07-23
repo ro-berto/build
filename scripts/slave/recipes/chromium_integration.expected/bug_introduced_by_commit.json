@@ -808,25 +808,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find command lines",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "import sys; sys.exit(0)"
     ],
     "env": {
@@ -2094,26 +2075,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find command lines (without patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

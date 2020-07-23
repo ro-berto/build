@@ -139,7 +139,6 @@ SPEC = {
                 # is one of the slowest builder in CQ (crbug.com/804251).
                 'goma_high_parallel',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -168,7 +167,6 @@ SPEC = {
                 'mb',
                 'goma_high_parallel',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
