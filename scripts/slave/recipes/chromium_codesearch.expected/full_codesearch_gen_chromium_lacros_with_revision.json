@@ -354,7 +354,7 @@
       "[CACHE]/builder/src/out/Debug",
       "-o",
       "[CACHE]/builder/src/out/Debug/compile_commands.json",
-      "all"
+      "chrome"
     ],
     "name": "generate compilation database"
   },
@@ -558,7 +558,8 @@
       "-k",
       "0",
       "-j",
-      "80"
+      "80",
+      "chrome"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -581,6 +582,7 @@
       "0",
       "-j",
       "80",
+      "chrome",
       "-d",
       "explain",
       "-n"
@@ -709,7 +711,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-k\", \"0\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-k\", \"0\", \"-j\", 80, \"chrome\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
