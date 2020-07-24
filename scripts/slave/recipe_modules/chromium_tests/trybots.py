@@ -684,13 +684,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='Linux Builder',
                     tester='Linux Tests',
                 ),
-                # TODO(crbug.com/1108842): Add GPU back once ATL capacity is
-                # online.
-                #try_spec.TryMirror.create(
-                #    mastername='chromium.gpu',
-                #    buildername='GPU Linux Builder',
-                #    tester='Linux Release (NVIDIA)',
-                #),
+                try_spec.TryMirror.create(
+                    mastername='chromium.gpu',
+                    buildername='GPU Linux Builder',
+                    tester='Linux Release (NVIDIA)',
+                ),
             ]),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
