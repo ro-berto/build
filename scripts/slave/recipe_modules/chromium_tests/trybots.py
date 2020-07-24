@@ -1336,13 +1336,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='Win x64 Builder',
                     tester='Win10 Tests x64',
                 ),
-                # TODO(crbug.com/1108842): Add GPU back once ATL capacity is
-                # online.
-                #try_spec.TryMirror.create(
-                #    mastername='chromium.gpu',
-                #    buildername='GPU Win x64 Builder',
-                #    tester='Win10 x64 Release (NVIDIA)',
-                #),
+                try_spec.TryMirror.create(
+                    mastername='chromium.gpu',
+                    buildername='GPU Win x64 Builder',
+                    tester='Win10 x64 Release (NVIDIA)',
+                ),
             ]),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
