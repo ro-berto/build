@@ -68,6 +68,7 @@ def _config(name,
 
 
 SPEC.update([
+    _config('linux-ash-chrome-builder-rel'),
     _config(
         'linux-chromeos-rel',
         chromium_tests_apply_config=['use_swarming_command_lines'],
