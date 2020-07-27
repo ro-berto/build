@@ -226,7 +226,6 @@
   * [findit/chromium/preemptive_bot_update](#recipes-findit_chromium_preemptive_bot_update) &mdash; Checkout the chromium src tree at the latest revision.
   * [findit/chromium/single_revision](#recipes-findit_chromium_single_revision)
   * [findit/chromium/test](#recipes-findit_chromium_test)
-  * [findit/chromium/update_components](#recipes-findit_chromium_update_components) &mdash; Traverse the source tree and update a cloud file with component mappings.
   * [findit:examples/full](#recipes-findit_examples_full)
   * [gae_sdk:examples/full](#recipes-gae_sdk_examples_full)
   * [gatekeeper](#recipes-gatekeeper) &mdash; Launches the gatekeeper.
@@ -5008,19 +5007,6 @@ jobs they have as low latency as possible in their bot_update steps.
 [DEPS](/scripts/slave/recipes/findit/chromium/test.py#16): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/test.py#105)(api, target_mastername, target_testername, good_revision, bad_revision, tests, use_analyze, suspected_revisions, test_on_good_revision, test_repeat_count):**
-### *recipes* / [findit/chromium/update\_components](/scripts/slave/recipes/findit/chromium/update_components.py)
-
-[DEPS](/scripts/slave/recipes/findit/chromium/update_components.py#20): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-Traverse the source tree and update a cloud file with component mappings.
-
-In each OWNERS file, a component and a team may be defined. This recipe calls
-a script that gathers all the information onto a json file and refreshes a
-world-readable cloud location.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/update_components.py#130)(api):**
-
-&mdash; **def [RunStepsForFile](/scripts/slave/recipes/findit/chromium/update_components.py#72)(api, filename, extra_arguments, step_suffix):**
 ### *recipes* / [findit:examples/full](/scripts/slave/recipe_modules/findit/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/findit/examples/full.py#5): [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
