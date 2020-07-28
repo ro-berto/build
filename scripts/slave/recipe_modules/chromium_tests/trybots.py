@@ -899,11 +899,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU Linux Builder',
                 tester='Linux Release (NVIDIA)',
             ),
-        'linux-lacros-rel':
+        'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',
-                buildername='linux-lacros-builder-rel',
-                tester='linux-lacros-tester-rel',
+                buildername='linux-lacros-builder-fyi-rel',
+                tester='linux-lacros-tester-fyi-rel',
             ),
         'linux-trusty-rel':
             try_spec.TrySpec.create_for_single_mirror(

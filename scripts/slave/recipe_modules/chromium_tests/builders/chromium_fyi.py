@@ -791,12 +791,12 @@ SPEC.update([
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
     stock_config(
-        'linux-lacros-builder-rel',
+        'linux-lacros-builder-fyi-rel',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     stock_config(
-        'linux-lacros-tester-rel',
+        'linux-lacros-tester-fyi-rel',
         execution_mode=bot_spec.TEST,
-        parent_buildername='linux-lacros-builder-rel'),
+        parent_buildername='linux-lacros-builder-fyi-rel'),
     stock_config('linux-perfetto-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
