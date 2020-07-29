@@ -75,6 +75,8 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
       'tint_build_spv_writer=true',
       'tint_build_wgsl_reader=true',
       'tint_build_wgsl_writer=true',
+      'tint_build_msl_writer=true',
+      'tint_build_hlsl_writer=true',
   ]
 
   if clang is not None:

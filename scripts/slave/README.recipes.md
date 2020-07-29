@@ -5473,7 +5473,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 [DEPS](/scripts/slave/recipes/tint.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/tint.py#123)(api, target_cpu, debug, clang):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/tint.py#125)(api, target_cpu, debug, clang):**
 ### *recipes* / [traceback:examples/full](/scripts/slave/recipe_modules/traceback/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
