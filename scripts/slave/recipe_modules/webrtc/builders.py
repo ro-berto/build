@@ -76,7 +76,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 }
             },
             'Win32 Release': {
@@ -92,7 +92,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
@@ -155,7 +155,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
@@ -923,7 +923,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 }
             },
             'win_x86_msvc_rel': {
@@ -939,7 +939,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
@@ -1035,7 +1035,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 },
             },
             'win_x86_clang_rel': {
@@ -1051,7 +1051,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
