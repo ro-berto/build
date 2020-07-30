@@ -899,6 +899,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU Linux Builder',
                 tester='Linux Release (NVIDIA)',
             ),
+        'linux-lacros-compile-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                # TODO(crbug.com/1104291): switch to mirror
+                # 'linux-lacros-builder-rel' on 'chromium.ci' once it's set up.
+                mastername='chromium.fyi',
+                buildername='linux-lacros-builder-fyi-rel',
+                execution_mode=try_spec.COMPILE,
+            ),
         'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',
