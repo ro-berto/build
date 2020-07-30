@@ -1429,17 +1429,7 @@ class V8Api(recipe_api.RecipeApi):
         #TODO(liviurau): rename or remove this property
         if self.bot_config.get('triggers_proxy'):
           ci_properties['archive'] = self._get_default_archive()
-        self.m.scheduler.emit_triggers(
-            [(
-              self.m.scheduler.BuildbucketTrigger(
-                properties=dict(
-                  ci_properties,
-                  **test_spec.as_properties_dict(builder_name)
-                ),
-              ), 'v8', [builder_name],
-            ) for builder_name in triggers],
-            step_name='trigger'
-        )
+        self._trigger_ci_builders(triggers, ci_properties, test_spec)
 
     if triggers_proxy:
       proxy_properties = {'archive': self._get_default_archive()}
@@ -1449,6 +1439,52 @@ class V8Api(recipe_api.RecipeApi):
           project='v8-internal',
           bucket='ci',
           step_name='trigger_internal')
+
+  def _trigger_ci_builders(self, builders, ci_properties, test_spec):
+    with self.m.step.nest('trigger'):
+      jobs = self._get_v8_jobs()
+      pairs = self._builder_job_pairs(builders, jobs)
+      scheduler_triggers = [(self._scheduler_trigger(builder_name,
+                                                     ci_properties,
+                                                     test_spec), 'v8', [job_id])
+                            for builder_name, job_id in pairs]
+      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+
+  def _scheduler_trigger(self, builder_name, ci_properties, test_spec):
+    return self.m.scheduler.BuildbucketTrigger(
+        properties=dict(ci_properties,
+                        **test_spec.as_properties_dict(builder_name)),)
+
+  def _builder_job_pairs(self, builders, jobs):
+    result = []
+    for builder in builders:
+      if builder in jobs:
+        job = builder
+      else:
+        bucket = self.m.buildbucket.build.builder.bucket
+        job = "%s-%s" % (bucket, builder)
+      result.append((builder, job))
+    return result
+
+  def _get_v8_jobs(self):
+    args = [
+        'prpc', 'call', '-format=json', 'luci-scheduler.appspot.com',
+        'scheduler.Scheduler.GetJobs'
+    ]
+    input_data = {"project": "v8"}
+    jobs_file = self.m.path['tmp_base'].join('jobs.json')
+    self.m.step(
+        "get V8 jobs",
+        args,
+        stdin=self.m.json.input(input_data),
+        stdout=self.m.json.output(leak_to=jobs_file),
+    )
+    response = self.m.json.read(
+        "read jobs json",
+        jobs_file,
+        step_test_data=lambda: self.test_api.m.json.output({'jobs': []})
+    ).json.output
+    return set(job['jobRef']['job'] for job in response['jobs'])
 
   def buildbucket_trigger(
       self, requests, project=None, bucket=None, step_name='trigger'):

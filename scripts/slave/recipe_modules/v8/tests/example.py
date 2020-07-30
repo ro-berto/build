@@ -5,10 +5,11 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'recipe_engine/buildbucket',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'v8',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'v8',
 ]
 
 def RunSteps(api):
@@ -30,19 +31,28 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.v8.test('client.v8', 'V8 Foobar')
+  yield api.v8.test('client.v8', 'V8 Foobar') + _job_exists(
+      api, 'v8_triggered_bot')
+  yield api.v8.test('client.v8', 'V8 Foobaz')
+  yield (api.v8.test(
+      'client.v8', 'V8 Foobar', 'custom_out_dir', out_dir='out-ref') +
+         api.v8.check_in_any_arg('compile', 'v8/out-ref/Release') +
+         api.v8.check_in_any_arg('isolate tests', 'v8/out-ref/Release') +
+         api.post_process(post_process.DropExpectation))
 
-  yield (
-      api.v8.test(
-        'client.v8', 'V8 Foobar', 'custom_out_dir', out_dir='out-ref') +
-      api.v8.check_in_any_arg('compile', 'v8/out-ref/Release') +
-      api.v8.check_in_any_arg('isolate tests', 'v8/out-ref/Release') +
-      api.post_process(post_process.DropExpectation)
-  )
+  yield (api.v8.test('client.v8', 'V8 Foobar', 'compile_failure') +
+         api.step_data('compile', retcode=1) +
+         api.post_process(post_process.StatusFailure) +
+         api.post_process(post_process.DropExpectation))
 
-  yield (
-    api.v8.test('client.v8', 'V8 Foobar', 'compile_failure') +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
-  )
+
+def _job_exists(api, builder_name):
+  return api.step_data(
+      'trigger.read jobs json',
+      api.json.output({
+          'jobs': [{
+              'jobRef': {
+                  'job': builder_name,
+              },
+          }],
+      }))
