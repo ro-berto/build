@@ -770,7 +770,6 @@ SPEC.update([
     stock_config('mac10.10-blink-rel-dummy', staging=False),
     stock_config('mac10.11-blink-rel-dummy', staging=False),
     stock_config('mac10.12-blink-rel-dummy', staging=False),
-    stock_config('mac10.13_retina-blink-rel-dummy', staging=False),
     stock_config('mac10.13-blink-rel-dummy', staging=False),
     stock_config('mac10.14-blink-rel-dummy', staging=False),
     stock_config('mac10.15-blink-rel-dummy', staging=False),

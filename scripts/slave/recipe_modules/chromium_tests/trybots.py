@@ -34,11 +34,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mastername='chromium.fyi',
                 buildername='mac10.12-blink-rel-dummy',
             ),
-        'mac10.13_retina-blink-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                mastername='chromium.mac',
-                buildername='WebKit Mac10.13 (retina)',
-            ),
         'mac10.13-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 mastername='chromium.fyi',
