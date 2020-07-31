@@ -856,7 +856,7 @@ class TestGTestJSONParserTests(unittest.TestCase):
 
       crbug.com/12345 [ OS_WIN  , OS_LINUX] Test.One
       crbug.com/12345 [OS_WIN CPU_64_BITS MODE_RELEASE] Test.Two/2
-      crbug.com/12345 [,OS_MACOSX, OS_WIN CPU_64_BITS, ] Perf/Test.Three
+      crbug.com/12345 [,OS_MAC, OS_WIN CPU_64_BITS, ] Perf/Test.Three
       crbug.com/12345 [ invalid.platform.spec ] Test.Four
       crbug.com/12345 [ OS_WIN CPU_32_BITS MODE_RELEASE ] Test.Five
       invalid line

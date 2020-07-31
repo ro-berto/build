@@ -559,7 +559,7 @@ class GTestJSONParser(object):
 
         [('MyTest.TestOne', [set('OS_WIN', 'CPU_32_BITS', 'MODE_RELEASE'),
                              set('OS_LINUX', 'CPU_64_BITS', 'MODE_DEBUG')]),
-         ('MyTest.TestTwo', [set('OS_MACOSX', 'CPU_64_BITS', 'MODE_RELEASE'),
+         ('MyTest.TestTwo', [set('OS_MAC', 'CPU_64_BITS', 'MODE_RELEASE'),
                              set('CPU_32_BITS')]),
          ('MyTest.TestThree', [set()]]
     """
