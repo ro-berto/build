@@ -3883,7 +3883,7 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#222)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#667)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#709)(self):**
 
 &emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#235)(self):**
 
@@ -3907,7 +3907,9 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#521)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#594)(self, files=None, base_dir=None):**
+&mdash; **def [find\_swarming\_command\_lines](/scripts/slave/recipe_modules/webrtc/api.py#594)(self):**
+
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#629)(self, files=None, base_dir=None):**
 
 &mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#243)(self, bucketname, buildername):**
 
@@ -3921,9 +3923,9 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#250)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#651)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#688)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#708)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#750)(self):**
 
 &mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#254)(self):**
 
@@ -3933,18 +3935,20 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#546)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#610)(self, phase=None):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#645)(self, phase=None):**
 
 Add a suite of test steps.
 
 Args:
   test_suite=The name of the test suite.
 
+&mdash; **def [set\_swarming\_command\_lines](/scripts/slave/recipe_modules/webrtc/api.py#605)(self, tests):**
+
 &emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#259)(self):**
 
 &emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#266)(self):**
 
-&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#724)(self, name, step_result):**
+&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#766)(self, name, step_result):**
 ### *recipe_modules* / [yaml](/scripts/slave/recipe_modules/yaml)
 
 [DEPS](/scripts/slave/recipe_modules/yaml/__init__.py#1): [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

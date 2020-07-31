@@ -787,6 +787,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/linux_memcheck",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",

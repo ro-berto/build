@@ -258,6 +258,8 @@ class WebRtcIsolatedGtest(object):
     self._cipd_packages = cipd_packages
     self._idempotent = idempotent
     self._result_handlers = result_handlers or []
+    self._raw_cmd = []
+    self._relative_cwd = None
 
     self._task = None
     self._has_collected = False
@@ -273,6 +275,26 @@ class WebRtcIsolatedGtest(object):
   @property
   def step_name(self):
     return self._name
+
+  @property
+  def raw_cmd(self):  # pragma: no cover
+    return self._raw_cmd
+
+  @raw_cmd.setter
+  def raw_cmd(self, value):
+    self._raw_cmd = value
+
+  @property
+  def relative_cwd(self):  # pragma: no cover
+    return self._relative_cwd
+
+  @relative_cwd.setter
+  def relative_cwd(self, value):
+    self._relative_cwd = value
+
+  @property
+  def runs_on_swarming(self):
+    return True
 
   def pre_run(self, api):
     """Launches the test on Swarming."""
@@ -306,7 +328,10 @@ class WebRtcIsolatedGtest(object):
     return step_result
 
   def create_task(self, api, isolated):
-    task = api.chromium_swarming.task(name=self.step_name)
+    task = api.chromium_swarming.task(
+        name=self.step_name,
+        raw_cmd=self._raw_cmd,
+        relative_cwd=self._relative_cwd)
 
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)
@@ -458,6 +483,10 @@ class Test(object):
     del api
     return []
 
+  @property
+  def runs_on_swarming(self):  # pragma: no cover
+    return False
+
 
 class PythonTest(Test):
 
@@ -477,6 +506,10 @@ class PythonTest(Test):
       with api.context(env=self._env):
         return api.python(self._test, self._script, self._args)
 
+  @property
+  def runs_on_swarming(self):
+    return False
+
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -487,6 +520,10 @@ class AndroidJunitTest(Test):
 
   def run(self, api):
     return api.chromium_android.run_java_unit_test_suite(self._name)
+
+  @property
+  def runs_on_swarming(self):
+    return False
 
 
 class IosTest(object):
@@ -502,3 +539,10 @@ class IosTest(object):
   @property
   def name(self):
     return self._name
+
+  @property
+  def runs_on_swarming(self):  # pragma: no cover
+    # Even if this sounds unrelated from Swarming, this is just a shell for an
+    # iOS test, the real test that will run is an instance of Chromium's
+    # SwarmingIosTest.
+    return True

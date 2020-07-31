@@ -591,6 +591,41 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir, targets=self._isolated_targets)
 
+  def find_swarming_command_lines(self):
+    step_result = self.m.python(
+        'find command lines',
+        self.m.chromium_tests.resource('find_command_lines.py'), [
+            '--build-dir', self.m.chromium.output_dir, '--output-json',
+            self.m.json.output()
+        ],
+        step_test_data=lambda: self.m.json.test_api.output({}))
+    assert isinstance(step_result.json.output, dict)
+    return step_result.json.output
+
+  def set_swarming_command_lines(self, tests):
+    if self.bot.bot_type == 'tester':
+      # Tester builders only triggers swarming tests built on 'builder' bots
+      # so the swarming command line needs to be retrieved from build
+      # parameters.
+      raw_command_lines = self.m.properties.get('swarming_command_lines')
+      swarming_command_lines = replace_string_in_dict(
+          raw_command_lines, 'WILL_BE_ISOLATED_OUTDIR', 'ISOLATED_OUTDIR')
+      # Tester builders run their tests in the parent builder out directory.
+      output_dir = str(self.m.chromium.output_dir).replace(
+          sanitize_file_name(self.buildername),
+          sanitize_file_name(self.bot.config.get('parent_buildername')))
+    else:
+      swarming_command_lines = self.find_swarming_command_lines()
+      output_dir = self.m.chromium.output_dir
+
+    relative_cwd = self.m.path.relpath(output_dir, self.m.path['checkout'])
+    for test in tests:
+      if test.runs_on_swarming:
+        command_line = swarming_command_lines.get(test.name, [])
+        if command_line:
+          test.raw_cmd = command_line
+          test.relative_cwd = relative_cwd
+
   def get_binary_sizes(self, files=None, base_dir=None):
     if files is None:
       files = self.bot.config.get('binary_size_files')
@@ -627,6 +662,8 @@ class WebRTCApi(recipe_api.RecipeApi):
           tests.append(t)
 
       if tests:
+        self.set_swarming_command_lines(tests)
+
         for test in tests:
           test.pre_run(self.m)
 
@@ -657,6 +694,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     triggered_bots = list(self.bot.triggered_bots())
     if triggered_bots:
+      raw_command_lines = self.find_swarming_command_lines()
+      # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
+      # the variable to be expanded by the builder instead of the tester.
+      properties['swarming_command_lines'] = replace_string_in_dict(
+          raw_command_lines, 'ISOLATED_OUTDIR', 'WILL_BE_ISOLATED_OUTDIR')
       properties['swarm_hashes'] = self.m.isolate.isolated_tests
 
       self.m.scheduler.emit_trigger(
@@ -771,3 +813,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 def sanitize_file_name(name):
   safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)
   return '_'.join(safe_with_spaces.split())
+
+
+def replace_string_in_dict(dict_input, old, new):
+  dict_output = {}
+  for key, values in dict_input.items():
+    dict_output[key] = [value.replace(old, new) for value in values]
+  return dict_output

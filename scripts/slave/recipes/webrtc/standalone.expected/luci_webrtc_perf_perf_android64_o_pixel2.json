@@ -764,7 +764,11 @@
       "stepname:webrtc_perf_tests on Android",
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
+      "--relative-cwd",
+      "out/Android64_Builder_arm64",
+      "--raw-cmd",
       "--",
+      "./dummy_cmd",
       "--save_worst_frame",
       "--nologs",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb"
