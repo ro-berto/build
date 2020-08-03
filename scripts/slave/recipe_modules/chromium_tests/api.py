@@ -1212,7 +1212,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         android_version_name, android_version_code = (
             self.get_android_version_details(bot.settings, log_details=True))
         isolated_targets = [
-            t.name
+            t.target_name
             for t in build_config.tests_on(bot.builder_id)
             if t.uses_isolate
         ]
