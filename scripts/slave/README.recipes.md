@@ -97,6 +97,7 @@
   * [chromium:tests/sizes](#recipes-chromium_tests_sizes)
   * [chromium:tests/taskkill](#recipes-chromium_tests_taskkill)
   * [chromium:tests/test_api_ci_build](#recipes-chromium_tests_test_api_ci_build)
+  * [chromium:tests/test_api_generic_build](#recipes-chromium_tests_test_api_generic_build)
   * [chromium:tests/test_api_try_build](#recipes-chromium_tests_test_api_try_build)
   * [chromium:tests/version](#recipes-chromium_tests_version)
   * [chromium_afl](#recipes-chromium_afl)
@@ -4269,6 +4270,11 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/test_api_ci_build.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/test_api_ci_build.py#15)(api):**
+### *recipes* / [chromium:tests/test\_api\_generic\_build](/scripts/slave/recipe_modules/chromium/tests/test_api_generic_build.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/test_api_generic_build.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/test_api_generic_build.py#15)(api):**
 ### *recipes* / [chromium:tests/test\_api\_try\_build](/scripts/slave/recipe_modules/chromium/tests/test_api_try_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/test_api_try_build.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
