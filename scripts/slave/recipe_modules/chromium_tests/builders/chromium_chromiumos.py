@@ -37,7 +37,8 @@ def _config(name,
             target_bits=64,
             chromium_apply_config=None,
             gclient_apply_config=None,
-            chromium_tests_apply_config=None):
+            chromium_tests_apply_config=None,
+            **kwargs):
   gclient_apply_config = gclient_apply_config or []
   chromium_tests_apply_config = chromium_tests_apply_config or []
   if 'chromeos' not in gclient_apply_config:
@@ -57,6 +58,7 @@ def _config(name,
       'execution_mode': bot_spec.COMPILE_AND_TEST,
       'simulation_platform': 'linux',
   }
+  cfg.update(**kwargs)
   if chromium_apply_config:
     cfg['chromium_apply_config'].extend(chromium_apply_config)
   if cros_board:
@@ -73,6 +75,13 @@ SPEC.update([
         chromium_tests_apply_config=['use_swarming_command_lines'],
         gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg'),
+    _config(
+        'linux-lacros-builder-rel',
+        gclient_apply_config=['checkout_prebuilt_ash_chrome']),
+    _config(
+        'linux-lacros-tester-rel',
+        execution_mode=bot_spec.TEST,
+        parent_buildername='linux-lacros-builder-rel'),
     _config(
         'chromeos-amd64-generic-asan-rel',
         cros_board='amd64-generic',
