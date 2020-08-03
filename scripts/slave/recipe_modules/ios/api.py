@@ -581,9 +581,6 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.show_outputs_ref_in_collect_step = False
     self.m.swarming_client.query_script_version('swarming.py')
 
-    # TODO(tikuta): Remove this after the switch (crbug.com/894045).
-    self.m.chromium_swarming.use_go_client = True
-
   @staticmethod
   def get_step_name(test):
     return str('%s (%s iOS %s)' % (

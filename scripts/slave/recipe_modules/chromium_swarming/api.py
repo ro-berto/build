@@ -1731,9 +1731,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       # everything else.
       self.default_priority = 40
 
-    # TODO(tikuta): Remove this (crbug.com/894045).
-    self.use_go_client = True # pylint: disable=attribute-defined-outside-init
-
     if path_to_testing_dir:
       self._path_to_testing_dir = path_to_testing_dir
     else:
