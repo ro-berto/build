@@ -366,8 +366,8 @@ def RunSteps(api):
       with api.context(cwd=api.path['checkout']):
         step_result = api.gclient(
             'setdep %s' % name.replace('/', '_'),
-            ['setdep', '-r', '%s/%s@%s' %
-             (target_config['solution_name'], name, new_ver)],
+            ['setdep', '-r', '%s@%s' %
+             (name, new_ver)],
             ok_ret='any',
         )
       if step_result.retcode == 0:

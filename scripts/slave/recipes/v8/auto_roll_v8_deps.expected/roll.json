@@ -384,7 +384,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/base/trace_event/common@deadbeef"
+      "base/trace_event/common@deadbeef"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -419,7 +419,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/build@deadbeef"
+      "build@deadbeef"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -495,7 +495,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil@resolved-instance_id-of-latest----------"
+      "tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil@resolved-instance_id-of-latest----------"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -513,7 +513,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/tools/gyp@e7079f0e0e14108ab0dba58728ff219637458563"
+      "tools/gyp@e7079f0e0e14108ab0dba58728ff219637458563"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -531,7 +531,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/tools/luci-go:infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7"
+      "tools/luci-go:infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -549,7 +549,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/tools/swarming_client@380e32662312eb107f06fcba6409b0409f8fe001"
+      "tools/swarming_client@380e32662312eb107f06fcba6409b0409f8fe001"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
