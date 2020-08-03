@@ -8,6 +8,7 @@
   * [attr_utils](#recipe_modules-attr_utils)
   * [binary_size](#recipe_modules-binary_size) &mdash; Binary size analysis for patchsets.
   * [build](#recipe_modules-build)
+  * [builder_group](#recipe_modules-builder_group) &mdash; Module for working with builder groups.
   * [chromite](#recipe_modules-chromite)
   * [chromium](#recipe_modules-chromium)
   * [chromium_android](#recipe_modules-chromium_android)
@@ -71,6 +72,7 @@
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
   * [build:examples/full](#recipes-build_examples_full)
+  * [builder_group:tests/builder_group](#recipes-builder_group_tests_builder_group)
   * [catapult](#recipes-catapult)
   * [celab](#recipes-celab)
   * [chromite:examples/full](#recipes-chromite_examples_full)
@@ -533,6 +535,47 @@ TODO(dnj): This function and its invocations should be deprecated in favor
 of using environment variables via "add_slave_utils_kwargs". The script
 invocation path for some of these is just too intertwined to confidently
 apply this via explicit args everywhere.
+### *recipe_modules* / [builder\_group](/scripts/slave/recipe_modules/builder_group)
+
+[DEPS](/scripts/slave/recipe_modules/builder_group/__init__.py#5): [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+Module for working with builder groups.
+
+A builder group is a semi-arbitrary grouping. Some defaults are set
+based on the builder group but otherwise there is no relationship in the
+code between builders in the same group. The grouping exists as an
+artifact of the buildbot CI system but is used heavily within the code
+as part of the identifier for a builder. Until such time as it can be
+removed, this provides an interface for determining a grouping.
+
+Grouping can be retrieved for the following builders:
+* current - The currently running builder.
+* parent - The builder that triggered the currently running builder.
+* target - The builder being targeted by the currently running builder.
+    This is used by findit, where a single builder performs bisection
+    for other builders by building using the target builder's
+    configuration.
+
+The interface also provides backwards compatibility for accessing the
+grouping by the legacy method of accessing mastername properties. These
+properties use names with non-inclusive language.
+
+#### **class [BuilderGroupApi](/scripts/slave/recipe_modules/builder_group/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&emsp; **@property**<br>&mdash; **def [for\_current](/scripts/slave/recipe_modules/builder_group/api.py#31)(self):**
+
+Get the builder group for the currently running builder.
+
+&emsp; **@property**<br>&mdash; **def [for\_parent](/scripts/slave/recipe_modules/builder_group/api.py#38)(self):**
+
+Get the builder group for the parent builder.
+
+&emsp; **@property**<br>&mdash; **def [for\_target](/scripts/slave/recipe_modules/builder_group/api.py#45)(self):**
+
+Get the builder group for the target builder.
+
+This is used by findit, which has a single builder that performs
+bisection using the configuration of another builder.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
 
 [DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/legacy\_annotation][recipe_engine/recipe_modules/legacy_annotation], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4136,6 +4179,11 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/build/examples/full.py#5): [build](#recipe_modules-build), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/build/examples/full.py#12)(api):**
+### *recipes* / [builder\_group:tests/builder\_group](/scripts/slave/recipe_modules/builder_group/tests/builder_group.py)
+
+[DEPS](/scripts/slave/recipe_modules/builder_group/tests/builder_group.py#7): [builder\_group](#recipe_modules-builder_group), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/builder_group/tests/builder_group.py#14)(api):**
 ### *recipes* / [catapult](/scripts/slave/recipes/catapult.py)
 
 [DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
