@@ -1089,6 +1089,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     additional_trigger_properties = self.outbound_transfer(
         bot, update_step, build_config)
 
+    if bot.settings.upload_isolates_but_do_not_run_tests:
+      self._explain_why_we_upload_isolates_but_do_not_run_tests()
+      return None
+
     self.trigger_child_builds(
         bot.builder_id,
         update_step,
@@ -1242,6 +1246,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.set_swarming_command_lines(
           build_config.tests_on(bot.builder_id), suffix='')
 
+  def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
+    self.m.python.succeeding_step(
+        'explain isolate tests', [
+            'This bot is uploading isolates so that individuals can download ',
+            'them and run tests locally when we do not yet have enough ',
+            'hardware available for bots to run the tests directly',
+        ],
+        as_log='why is this running?')
+
   def _explain_package_transfer(self, bot, non_isolated_tests):
     package_transfer_reasons = [
         'This builder is doing the full package transfer because:'
@@ -1336,6 +1349,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         builders=builders, mirrored_bots=mirrored_bots, tests_to_run=tests)
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
+
+    if task.bot.settings.upload_isolates_but_do_not_run_tests:
+      self._explain_why_we_upload_isolates_but_do_not_run_tests()
+      return None
 
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:

@@ -281,6 +281,12 @@ class BotSpec(object):
   # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
   simulation_platform = attrib(str, default=None)
 
+  # See api._explain_why_we_upload_isolates_but_do_not_run_tests() for
+  # Why this exists.
+  # TODO(crbug.com/1106083) - Remove this when we have hardware in Swarming
+  # and can run the tests; this should no longer be needed at that point.
+  upload_isolates_but_do_not_run_tests = attrib(bool, default=False)
+
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
 

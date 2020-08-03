@@ -113,6 +113,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
+            upload_isolates_but_do_not_run_tests=True,
         ),
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
@@ -657,9 +658,7 @@ SPEC = {
     'android-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks', 'mb'
-            ],
+            chromium_apply_config=['download_vr_test_apks', 'mb'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -673,9 +672,7 @@ SPEC = {
     'android-code-coverage-native':
         bot_spec.BotSpec.create(
             chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks', 'mb'
-            ],
+            chromium_apply_config=['download_vr_test_apks', 'mb'],
             gclient_config='chromium',
             gclient_apply_config=['android', 'use_clang_coverage'],
             chromium_config_kwargs={

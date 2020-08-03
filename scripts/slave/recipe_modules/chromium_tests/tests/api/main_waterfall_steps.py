@@ -20,6 +20,7 @@ DEPS = [
     'code_coverage',
     'pgo',
     'profiles',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
@@ -713,5 +714,45 @@ def GenTests(api):
       # itself succeeds.
       api.legacy_annotation.success_step),
       api.post_process(post_process.DoesNotRunRE, 'skip retrying'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  fake_master = 'fake_master'
+  fake_builder = 'fake-builder'
+  fake_test = 'fake_test'
+
+  yield api.test(
+      'ci_bot_uploads_isolates_but_does_not_run_tests',
+      api.properties(
+          config='Release',
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
+      ),
+      api.platform('linux', 64),
+      api.chromium.ci_build(mastername=fake_master, builder=fake_builder),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_master: {
+                  fake_builder:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          upload_isolates_but_do_not_run_tests=True,
+                      ),
+              }
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_master, {
+              fake_builder: {
+                  'isolated_scripts': [{
+                      'name': fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              }
+          }),
+      api.post_process(post_process.MustRun, 'isolate tests'),
+      api.post_process(post_process.MustRun, 'explain isolate tests'),
+      api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
       api.post_process(post_process.DropExpectation),
   )
