@@ -178,26 +178,6 @@ SPEC = {
             ],
             simulation_platform='linux',
         ),
-    # Bot names should be in sync with chromium.linux's names to retrieve
-    # the same test configuration files.
-    'Linux Tests (dbg)(1)':
-        _client_v8_fyi_spec(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chromium_lkgr',
-                'show_v8_revision',
-            ],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Linux Debug Builder',
-            source_side_spec_file='chromium.linux.json',
-            simulation_platform='linux',
-        ),
     'Linux ASAN Builder':
         _client_v8_fyi_spec(
             chromium_config='chromium_asan',
