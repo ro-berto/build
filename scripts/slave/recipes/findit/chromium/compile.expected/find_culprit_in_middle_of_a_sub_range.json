@@ -852,6 +852,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test r3.preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1660,6 +1667,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test r4.preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

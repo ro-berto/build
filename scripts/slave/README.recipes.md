@@ -2438,7 +2438,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#85)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#615)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#623)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2536,7 +2536,7 @@ Start goma compiler_proxy.
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#428)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#436)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 

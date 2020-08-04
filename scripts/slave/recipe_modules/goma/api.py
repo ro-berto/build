@@ -348,9 +348,11 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
           self.m.path['tmp_base'].join('crash_report_id'))
 
+      used_global_service_account = False
       if not self._local_dir and not self._use_luci_auth:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
             self.service_account_json_path)
+        used_global_service_account = True
 
       # Do not continue to build when unsupported compiler is used.
       self._goma_ctl_env['GOMA_HERMETIC'] = 'error'
@@ -397,6 +399,12 @@ class GomaApi(recipe_api.RecipeApi):
                 'https://console.cloud.google.com/logs/viewer?'
                 'project=goma-logs&resource=gce_instance%%2F'
                 'instance_id%%2F%s' % self._hostname)
+
+        # TODO(crbug.com/1105814): remove this when we completely migrated.
+        step_msg = 'goma_with_task_service_account'
+        if used_global_service_account:
+          step_msg = 'goma_with_global_service_account'
+        self.m.step(step_msg, cmd=None)
 
         self._goma_started = True
         if not self._local_dir:
