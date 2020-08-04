@@ -10,18 +10,28 @@ from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
 class BuilderId(object):
   """ID type identifying a builder.
 
-  Currently, the ID identifies a builder by the pair of mastername and
+  Currently, the ID identifies a builder by the pair of group and
   buildername. This type provides a means for modifying the underlying
   ID data without having to modify code that simply needs to provide an
   ID to some other code (e.g. switching to project, bucket, builder).
   """
 
-  master = attrib(str)
+  group = attrib(str)
   builder = attrib(str)
 
   @classmethod
+  def create_for_group(cls, group, builder):
+    return cls(group, builder)
+
+  # TODO(https://crbug.com/1109276): remove this
+  @classmethod
   def create_for_master(cls, mastername, builder):
-    return cls(mastername, builder)
+    return cls(mastername, builder)  # pragma: no cover
+
+  # TODO(https://crbug.com/1109276): remove this
+  @property
+  def master(self):
+    return self.group  # pragma: no cover
 
 
 @attrs()

@@ -31,7 +31,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.try_build(
-          mastername='test_mastername', builder='test_buildername'),
+          builder_group='test_group', builder='test_buildername'),
       api.post_process(post_process.MustRun, 'analyze'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -40,12 +40,10 @@ def GenTests(api):
   yield api.test(
       'analyze_failure',
       api.chromium.try_build(
-          mastername='test_mastername', builder='test_buildername'),
+          builder_group='test_group', builder='test_buildername'),
       api.step_data(
           'analyze',
-          api.json.output({
-              'output': 'ERROR at line 5: missing )'
-          },
+          api.json.output({'output': 'ERROR at line 5: missing )'},
                           name="failure_summary"),
           retcode=1),
       api.post_process(post_process.StatusFailure),
@@ -64,12 +62,10 @@ def GenTests(api):
   yield api.test(
       'analyze_failure_no_output',
       api.chromium.try_build(
-          mastername='test_mastername', builder='test_buildername'),
+          builder_group='test_group', builder='test_buildername'),
       api.step_data(
           'analyze',
-          api.json.output({
-              'output': ''
-          }, name="failure_summary"),
+          api.json.output({'output': ''}, name="failure_summary"),
           retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason,

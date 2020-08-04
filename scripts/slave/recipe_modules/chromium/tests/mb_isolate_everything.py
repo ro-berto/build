@@ -11,8 +11,7 @@ DEPS = ['chromium']
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium.mb_isolate_everything(
-      chromium.BuilderId.create_for_master('test_mastername',
-                                           'test_buildername'))
+      chromium.BuilderId.create_for_group('test-group', 'test-builder'))
 
 
 def GenTests(api):
@@ -20,7 +19,7 @@ def GenTests(api):
       'basic',
       api.post_process(post_process.StepCommandRE, 'generate .isolate files', [
           'python', '-u', r'.*/tools/mb/mb\.py', 'isolate-everything', '-m',
-          'test_mastername', '-b', 'test_buildername', '--config-file',
+          'test-group', '-b', 'test-builder', '--config-file',
           r'.*/tools/mb/mb_config\.pyl', '--goma-dir', '.*', '//out/Release'
       ]),
       api.post_process(post_process.DropExpectation),

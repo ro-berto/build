@@ -20,8 +20,7 @@ def RunSteps(api):
       TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
 
   gn_args = api.chromium.mb_lookup(
-      chromium.BuilderId.create_for_master('test_mastername',
-                                           'test_buildername'),
+      chromium.BuilderId.create_for_group('test-group', 'test-builder'),
       recursive=api.properties.get('recursive', False))
   expected_gn_args = api.properties.get('expected_gn_args')
   api.assertions.assertEqual(gn_args, expected_gn_args)

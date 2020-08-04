@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'builder_group',
     'chromium',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
@@ -15,14 +16,13 @@ DEPS = [
 def RunSteps(api):
   api.assertions.assertNotEqual(
       len(api.buildbucket.build.input.gerrit_changes), 0)
-  api.assertions.assertEqual(
-      api.properties.get('mastername', None), 'fake-master')
+  api.assertions.assertEqual(api.builder_group.for_current, 'fake-group')
 
 
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.try_build(mastername='fake-master'),
+      api.chromium.try_build(builder_group='fake-group'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

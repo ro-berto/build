@@ -199,17 +199,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._build_properties = props
 
   def get_builder_id(self):
-    mastername = self.m.properties.get('mastername')
+    builder_group = self.m.builder_group.for_current
     buildername = self.m.buildbucket.builder_name
-    return chromium.BuilderId.create_for_master(mastername, buildername)
+    return chromium.BuilderId.create_for_group(builder_group, buildername)
 
   def configure_bot(self, builders_dict, additional_configs=None):
     """Sets up the configurations and gclient to be ready for bot update.
 
-    builders_dict is a dict of mastername -> 'builders' -> buildername ->
-        bot_config.
+    builders_dict is a dict of builder_group -> buildername -> bot_config.
 
-    The current mastername and buildername are looked up from the
+    The current builder_group and buildername are looked up from the
     build properties; we then apply the configs specified in bot_config
     as appropriate.
 
@@ -223,8 +222,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # passed in from the slave config, but that doesn't exist today, so we
     # need a lookup mechanism to map bot name to build_config.
     builder_id = self.get_builder_id()
-    master_dict = builders_dict.get(builder_id.master, {})
-    bot_config = master_dict.get('builders', {}).get(builder_id.builder)
+    group_dict = builders_dict.get(builder_id.group, {})
+    bot_config = group_dict.get('builders', {}).get(builder_id.builder)
 
     self.set_config(bot_config.chromium_config or 'chromium',
                     **bot_config.chromium_config_kwargs)
@@ -413,7 +412,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       clang_crashreports_script = self.m.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')
       if self.m.path.exists(clang_crashreports_script):
-        source = '%s-%s' % (self.m.properties['mastername'],
+        source = '%s-%s' % (self.m.builder_group.for_current,
                             self.m.buildbucket.builder_name)
         if self.m.buildbucket.build.number:
           source += '-%s' % self.m.buildbucket.build.number
@@ -1196,8 +1195,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
         used.
-      mb_config_path: The path to the configuration file containing the master
-        and builder specifications to be used by mb. If not provided, the
+      mb_config_path: The path to the configuration file containing the builder
+        specifications to be used by mb. If not provided, the
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.
@@ -1205,8 +1204,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.c will be used.
       use_goma: Whether goma is needed or not. If use_goma=True but not yet
         installed, it will run ensure_goma to install goma client.
-      additional_args: Any args to the mb script besodes those for setting the
-        master, builder and the path to the config file.
+      additional_args: Any args to the mb script besides those for setting the
+        group, builder and the path to the config file.
       **kwargs: Additional arguments to be forwarded onto the python API.
     """
     chromium_config = chromium_config or self.c
@@ -1219,7 +1218,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     args = [
         mb_command,
         '-m',
-        builder_id.master,
+        builder_id.group,
         '-b',
         builder_id.builder,
         '--config-file',
@@ -1358,8 +1357,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
         used.
-      mb_config_path: The path to the configuration file containing the master
-        and builder specifications to be used by mb. If not provided, the
+      mb_config_path: The path to the configuration file containing the builder
+        specifications to be used by mb. If not provided, the
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.
@@ -1436,8 +1435,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
         used.
-      mb_config_path: The path to the configuration file containing the master
-        and builder specifications to be used by mb. If not provided, the
+      mb_config_path: The path to the configuration file containing the builder
+        specifications to be used by mb. If not provided, the
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.

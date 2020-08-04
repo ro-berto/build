@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'builder_group',
     'chromium',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
@@ -15,11 +16,9 @@ DEPS = [
 def RunSteps(api):
   api.assertions.assertTrue(
       api.buildbucket.build.input.HasField('gitiles_commit'))
-  api.assertions.assertEqual(
-      api.properties.get('mastername', None), 'fake-master')
-  api.assertions.assertEqual(
-      api.properties.get('parent_mastername', None),
-      api.properties['expected_parent_mastername'])
+  api.assertions.assertEqual(api.builder_group.for_current, 'fake-group')
+  api.assertions.assertEqual(api.builder_group.for_parent,
+                             api.properties['expected_parent_builder_group'])
   api.assertions.assertEqual(
       api.properties.get('parent_buildername', None),
       api.properties['expected_parent_buildername'])
@@ -28,9 +27,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.ci_build(mastername='fake-master'),
+      api.chromium.ci_build(builder_group='fake-group'),
       api.properties(
-          expected_parent_mastername=None,
+          expected_parent_builder_group=None,
           expected_parent_buildername=None,
       ),
       api.post_process(post_process.StatusSuccess),
@@ -40,11 +39,11 @@ def GenTests(api):
   yield api.test(
       'parent-builder',
       api.chromium.ci_build(
-          mastername='fake-master',
+          builder_group='fake-group',
           parent_buildername='fake-parent',
       ),
       api.properties(
-          expected_parent_mastername='fake-master',
+          expected_parent_builder_group='fake-group',
           expected_parent_buildername='fake-parent',
       ),
       api.post_process(post_process.StatusSuccess),
@@ -52,14 +51,14 @@ def GenTests(api):
   )
 
   yield api.test(
-      'parent-builder-and-master',
+      'parent-builder-and-group',
       api.chromium.ci_build(
-          mastername='fake-master',
-          parent_mastername='fake-parent-master',
+          builder_group='fake-group',
+          parent_builder_group='fake-parent-group',
           parent_buildername='fake-parent',
       ),
       api.properties(
-          expected_parent_mastername='fake-parent-master',
+          expected_parent_builder_group='fake-parent-group',
           expected_parent_buildername='fake-parent',
       ),
       api.post_process(post_process.StatusSuccess),

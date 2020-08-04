@@ -54,7 +54,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -65,7 +65,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_with_custom_mb_config',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -79,7 +79,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_without_compile_py',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -90,7 +90,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_with_goma_module',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -104,7 +104,7 @@ def GenTests(api):
   yield api.test(
       'basic_no_out_dir_with_goma_module',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -115,7 +115,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_build_failure',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -142,7 +142,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_ninja_build_failure',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -157,7 +157,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_ninja_no_op_failure',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -174,7 +174,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_start_failure',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -197,7 +197,7 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_ping_failure',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
@@ -223,7 +223,7 @@ def GenTests(api):
       'mac_basic',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.mac',
+          builder_group='chromium.mac',
           builder='Mac Builder',
           bot_id='build1-a1',
           build_number=77457,
@@ -238,7 +238,7 @@ def GenTests(api):
       'mac_toolchain',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.mac',
+          builder_group='chromium.mac',
           builder='Mac Builder',
           bot_id='build1-a1',
           build_number=77457,
@@ -254,7 +254,7 @@ def GenTests(api):
       'mac_toolchain_properties',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.mac',
+          builder_group='chromium.mac',
           builder='Mac Builder',
           bot_id='build1-a1',
           build_number=77457,
@@ -271,7 +271,7 @@ def GenTests(api):
       'chromeos_simplechrome',
       api.platform('linux', 64),
       api.chromium.ci_build(
-          mastername='chromium.chromiumos',
+          builder_group='chromium.chromiumos',
           builder='chromeos-amd64-generic-rel',
           bot_id='build1-a1',
           build_number=77457,

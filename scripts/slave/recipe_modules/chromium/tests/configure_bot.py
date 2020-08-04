@@ -14,7 +14,7 @@ DEPS = [
 
 
 _BUILDERS_DICT = {
-    'test_mastername': {
+    'test_group': {
         'builders': {
             'test_buildername':
                 chromium.BuilderSpec.create(

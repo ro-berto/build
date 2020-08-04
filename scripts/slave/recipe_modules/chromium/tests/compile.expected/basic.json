@@ -213,7 +213,7 @@
       "-u",
       "None/tools/clang/scripts/process_crashreports.py",
       "--source",
-      "test_mastername-Linux Builder-571"
+      "test_group-Linux Builder-571"
     ],
     "cwd": "None",
     "env": {
@@ -367,7 +367,7 @@
       "--buildbot-buildername",
       "Linux Builder",
       "--buildbot-mastername",
-      "test_mastername",
+      "test_group",
       "--buildbot-slavename",
       "fake-bot-id"
     ],

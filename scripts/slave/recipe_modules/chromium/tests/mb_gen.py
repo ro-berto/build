@@ -35,8 +35,7 @@ def RunSteps(api):
     api.chromium.apply_config(config)
 
   api.chromium.mb_gen(
-      chromium.BuilderId.create_for_master('test_mastername',
-                                           'test_buildername'),
+      chromium.BuilderId.create_for_group('test-group', 'test-builder'),
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,

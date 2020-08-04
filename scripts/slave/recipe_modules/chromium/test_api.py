@@ -26,35 +26,47 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     """
     return line_limit
 
-  def _common_test_data(self,
-                        bot_id,
-                        mastername,
-                        parent_mastername=None,
-                        parent_buildername=None):
-    props = self.m.properties(bot_id=bot_id)
-    if mastername is not None:
-      props += self.m.properties(mastername=mastername)
+  def _common_test_data(
+      self,
+      bot_id,
+      default_builder_group,
+      builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      mastername=None,
+      parent_builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      parent_mastername=None,
+      parent_buildername=None):
+    test_data = self.m.properties(bot_id=bot_id)
+    assert builder_group is None or mastername is None
+    builder_group = builder_group or mastername or default_builder_group
+    if builder_group is not None:
+      test_data += self.m.builder_group.for_current(builder_group)
     if parent_buildername is not None:
-      parent_mastername = parent_mastername or mastername
-      props += self.m.properties(
-          parent_mastername=parent_mastername,
-          parent_buildername=parent_buildername,
-      )
-    return props
+      parent_builder_group = (
+          parent_builder_group or parent_mastername or builder_group)
+      test_data += self.m.builder_group.for_parent(parent_builder_group)
+      test_data += self.m.properties(parent_buildername=parent_buildername)
+    return test_data
 
-  def ci_build(self,
-               project='chromium',
-               bucket='ci',
-               mastername='chromium.linux',
-               builder='Linux Builder',
-               parent_mastername=None,
-               parent_buildername=None,
-               bot_id='test_bot',
-               git_repo='https://chromium.googlesource.com/chromium/src',
-               revision='2d72510e447ab60a9728aeea2362d8be2cbd7789',
-               build_number=571,
-               tags=None,
-               **kwargs):
+  def ci_build(
+      self,
+      project='chromium',
+      bucket='ci',
+      builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      mastername=None,
+      builder='Linux Builder',
+      parent_builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      parent_mastername=None,
+      parent_buildername=None,
+      bot_id='test_bot',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+      revision='2d72510e447ab60a9728aeea2362d8be2cbd7789',
+      build_number=571,
+      tags=None,
+      **kwargs):
     """Create test data for a chromium CI build.
 
     Adding this to a test will set properties and inputs in a manner
@@ -63,12 +75,16 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     (or triggered by another builder that was triggered by a scheduler
     poller).
     """
-    props = self._common_test_data(
+    test_data = self._common_test_data(
         bot_id=bot_id,
+        default_builder_group='chromium.linux',
+        builder_group=builder_group,
         mastername=mastername,
+        parent_builder_group=parent_builder_group,
         parent_mastername=parent_mastername,
-        parent_buildername=parent_buildername)
-    return props + self.m.buildbucket.ci_build(
+        parent_buildername=parent_buildername,
+    )
+    return test_data + self.m.buildbucket.ci_build(
         project=project,
         bucket=bucket,
         builder=builder,
@@ -78,17 +94,22 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         tags=tags,
         **kwargs)
 
-  def generic_build(self,
-                    project='chromium',
-                    bucket='ci',
-                    mastername='chromium.linux',
-                    builder='Linux Builder',
-                    parent_mastername=None,
-                    parent_buildername=None,
-                    bot_id='test_bot',
-                    build_number=571,
-                    tags=None,
-                    **kwargs):
+  def generic_build(
+      self,
+      project='chromium',
+      bucket='ci',
+      builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      mastername=None,
+      builder='Linux Builder',
+      parent_builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      parent_mastername=None,
+      parent_buildername=None,
+      bot_id='test_bot',
+      build_number=571,
+      tags=None,
+      **kwargs):
     """Create test data for a generic chromium build.
 
     Adding this to a test will set properties and inputs in a manner
@@ -96,12 +117,16 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     neither an associated gitiles commit or gerrit change (e.g. CI
     builder triggered via the scheduler UI or a cron-like schedule).
     """
-    props = self._common_test_data(
+    test_data = self._common_test_data(
         bot_id=bot_id,
+        default_builder_group='chromium.linux',
+        builder_group=builder_group,
         mastername=mastername,
+        parent_builder_group=parent_builder_group,
         parent_mastername=parent_mastername,
-        parent_buildername=parent_buildername)
-    return props + self.m.buildbucket.generic_build(
+        parent_buildername=parent_buildername,
+    )
+    return test_data + self.m.buildbucket.generic_build(
         project=project,
         bucket=bucket,
         builder=builder,
@@ -109,26 +134,34 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         tags=tags,
         **kwargs)
 
-  def try_build(self,
-                project='chromium',
-                bucket='try',
-                mastername='tryserver.chromium.linux',
-                builder='linux-rel',
-                bot_id='test_bot',
-                git_repo='https://chromium.googlesource.com/chromium/src',
-                build_number=571,
-                change_number=456789,
-                patch_set=12,
-                tags=None,
-                **kwargs):
+  def try_build(
+      self,
+      project='chromium',
+      bucket='try',
+      builder_group=None,
+      # TODO(https://crbug.com/1109276): remove this
+      mastername=None,
+      builder='linux-rel',
+      bot_id='test_bot',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+      build_number=571,
+      change_number=456789,
+      patch_set=12,
+      tags=None,
+      **kwargs):
     """Create test data for a chromium try build.
 
     Adding this to a test will set properties and inputs in a manner
     that is compatible with the chromium module for try builds with an
     associated gerrit change.
     """
-    props = self._common_test_data(bot_id=bot_id, mastername=mastername)
-    return props + self.m.buildbucket.try_build(
+    test_data = self._common_test_data(
+        bot_id=bot_id,
+        default_builder_group='tryserver.chromium.linux',
+        builder_group=builder_group,
+        mastername=mastername,
+    )
+    return test_data + self.m.buildbucket.try_build(
         project=project,
         bucket=bucket,
         builder=builder,
@@ -160,8 +193,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     def _sanitize_nonalpha(text):
       return ''.join(c if c.isalnum() else '_' for c in text)
 
-    for mastername in builder_dict:
-      for buildername in builder_dict[mastername]['builders']:
+    for builder_group in builder_dict:
+      for buildername in builder_dict[builder_group]['builders']:
         if 'mac' in buildername or 'Mac' in buildername:
           platform_name = 'mac'
         elif 'win' in buildername or 'Win' in buildername:
@@ -169,21 +202,21 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         else:
           platform_name = 'linux'
         test = self.test(
-            'full_%s_%s' % (_sanitize_nonalpha(mastername),
+            'full_%s_%s' % (_sanitize_nonalpha(builder_group),
                             _sanitize_nonalpha(buildername)),
             self.m.platform.name(platform_name),
         )
-        if mastername.startswith('tryserver'):
+        if builder_group.startswith('tryserver'):
           test += self.try_build(
               project=project,
-              mastername=mastername,
+              builder_group=builder_group,
               builder=buildername,
               git_repo=git_repo,
           )
         else:
           test += self.ci_build(
               project=project,
-              mastername=mastername,
+              builder_group=builder_group,
               builder=buildername,
               git_repo=git_repo,
           )

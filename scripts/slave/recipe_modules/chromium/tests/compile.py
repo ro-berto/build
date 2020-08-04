@@ -47,7 +47,7 @@ def RunSteps(api, use_goma):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
                                                 'process_crashreports.py')),
   )
@@ -66,7 +66,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_fail',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.step_data('compile', retcode=1),
       api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
                                                 'process_crashreports.py')),
@@ -76,7 +76,7 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.override_step_data('compile', retcode=2),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
@@ -84,7 +84,7 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure_without_goma',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.properties(use_goma=False),
       api.override_step_data('compile', retcode=2),
       api.post_process(post_process.StatusException),
@@ -159,7 +159,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure_summary',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.chromium.change_line_limit(50),
       api.override_step_data(
           'compile',
@@ -187,7 +187,7 @@ def GenTests(api):
 
   yield api.test(
       'long_compile_failure',
-      api.chromium.generic_build(mastername='test_mastername'),
+      api.chromium.generic_build(builder_group='test_group'),
       api.chromium.change_char_size_limit(350),
       api.chromium.change_line_limit(50),
       api.override_step_data(
