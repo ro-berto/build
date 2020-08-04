@@ -259,6 +259,8 @@ def get_master_map():
         master = MASTER_URL_TEMPLATE + properties_json['$gatekeeper']['group']
       elif 'mastername' in properties_json:
         master = MASTER_URL_TEMPLATE + properties_json['mastername']
+      elif 'builder_group' in properties_json:
+        master = MASTER_URL_TEMPLATE + properties_json['builder_group']
       else:
         continue
       if builder_info['name'] in BUILDER_BLACKLIST:
