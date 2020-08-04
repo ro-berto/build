@@ -47,9 +47,7 @@ def RunSteps(api, use_goma):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(buildername='test_buildername'),
-      api.properties(buildnumber='1'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
                                                 'process_crashreports.py')),
   )
@@ -68,8 +66,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_fail',
-      api.properties(buildername='test_buildername'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.step_data('compile', retcode=1),
       api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
                                                 'process_crashreports.py')),
@@ -79,8 +76,7 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure',
-      api.properties(buildername='test_buildername'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.override_step_data('compile', retcode=2),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
@@ -88,8 +84,7 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure_without_goma',
-      api.properties(buildername='test_buildername'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.properties(use_goma=False),
       api.override_step_data('compile', retcode=2),
       api.post_process(post_process.StatusException),
@@ -98,15 +93,13 @@ def GenTests(api):
 
   yield api.test(
       'codesearch',
-      api.properties(
-          buildername='test_buildername', chromium_apply_config=['codesearch']),
+      api.properties(chromium_apply_config=['codesearch']),
   )
 
   yield api.test(
       'official_win_luci',
       api.properties(
           target_platform='win',
-          buildername='test_buildername',
           chromium_apply_config=['official']),
       api.runtime(is_luci=True, is_experimental=False),
   )
@@ -114,7 +107,6 @@ def GenTests(api):
   yield api.test(
       'chromeos',
       api.properties(
-          buildername='test_buildername',
           target_platform='chromeos',
           target_cros_board='x86-generic'),
   )
@@ -122,7 +114,6 @@ def GenTests(api):
   yield api.test(
       'chromeos_official',
       api.properties(
-          buildername='test_buildername',
           target_platform='chromeos',
           target_cros_board='x86-generic',
           chromium_apply_config=['official']),
@@ -132,35 +123,30 @@ def GenTests(api):
   yield api.test(
       'goma_canary',
       api.properties(
-          buildername='test_buildername',
           chromium_apply_config=['goma_canary']),
   )
 
   yield api.test(
       'goma_client_candidate',
       api.properties(
-          buildername='test_buildername',
           chromium_apply_config=['goma_client_candidate']),
   )
 
   yield api.test(
       'goma_localoutputcache_small',
       api.properties(
-          buildername='test_buildername',
           chromium_apply_config=['goma_localoutputcache_small']),
   )
 
   yield api.test(
       'goma_custom_jobs_debug',
-      api.properties(buildername='test_buildername'),
       api.goma(jobs=500, debug=True),
       api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
       'clang_tot',
-      api.properties(
-          buildername='test_buildername', chromium_apply_config=['clang_tot']),
+      api.properties(chromium_apply_config=['clang_tot']),
       api.post_process(post_process.StepCommandContains, 'clang_revision',
                        ['--use-tot-clang']),
       api.post_process(post_process.DropExpectation),
@@ -173,8 +159,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure_summary',
-      api.properties(buildername='test_buildername'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.chromium.change_line_limit(50),
       api.override_step_data(
           'compile',
@@ -202,8 +187,7 @@ def GenTests(api):
 
   yield api.test(
       'long_compile_failure',
-      api.properties(buildername='test_buildername'),
-      api.properties(mastername='test_mastername'),
+      api.chromium.generic_build(mastername='test_mastername'),
       api.chromium.change_char_size_limit(350),
       api.chromium.change_line_limit(50),
       api.override_step_data(
