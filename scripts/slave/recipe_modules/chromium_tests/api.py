@@ -1065,7 +1065,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # We should pass False here for bots that do not need tags. (Do any bots
     # need tags?)
     update_step, build_config = self.prepare_checkout(
-        bot.settings, timeout=3600)
+        bot.settings, timeout=3600, add_blamelists=True)
     if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(
           bot,

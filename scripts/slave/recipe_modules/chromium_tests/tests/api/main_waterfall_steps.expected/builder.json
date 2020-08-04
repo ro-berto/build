@@ -207,6 +207,13 @@
   },
   {
     "cmd": [],
+    "name": "set blamelist pins",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/milo/blamelist_pins@[{\"host\": \"fake.org\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"src\"}]@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
