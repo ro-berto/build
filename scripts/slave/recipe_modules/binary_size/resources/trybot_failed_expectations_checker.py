@@ -51,12 +51,11 @@ def _RebasePath(path, new_cwd, old_cwd):
 
 def main():
   parser = argparse.ArgumentParser()
-  mode_args = parser.add_mutually_exclusive_group(required=True)
-  mode_args.add_argument(
+  parser.add_argument(
       '--clear-expectations',
       action='store_true',
       help='Delete expectations files so they dont clober a new build.')
-  mode_args.add_argument(
+  parser.add_argument(
       '--check-expectations',
       action='store_true',
       help='Check for the existance of failed expecation files after a build.')
@@ -70,15 +69,16 @@ def main():
   expectations_dir = _RebasePath(expectations_dir, os.getcwd(),
                                  os.path.dirname(args.build_vars_path))
 
-  if args.clear_expectations:
-    _ClearExpectationsDir(expectations_dir)
-  else:
-    result = _CheckExpectationsDir(expectations_dir)
+  if args.check_expectations:
     if not args.results_path:
-      raise Exception('--results-path is required when passing '
-                      '--check-expectations')
+      parser.error('--results-path is required when passing '
+                   '--check-expectations')
+    result = _CheckExpectationsDir(expectations_dir)
     with open(args.results_path, 'w') as f:
       json.dump(result, f)
+
+  if args.clear_expectations:
+    _ClearExpectationsDir(expectations_dir)
 
 
 if __name__ == '__main__':
