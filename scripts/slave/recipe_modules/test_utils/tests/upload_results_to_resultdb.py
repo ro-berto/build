@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_swarming',
     'chromium_tests',
     'recipe_engine/buildbucket',
@@ -63,21 +64,13 @@ def GenTests(api):
 
   yield api.test(
       'include_invocation',
+      api.chromium.try_build(mastername='m', builder='linux-rel'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
       ),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ),
-              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -98,25 +91,18 @@ def GenTests(api):
                        'include derived test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'include derived test results (without patch)'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'swarming_test_results',
+      api.chromium.try_build(mastername='m', builder='linux-rel'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
       ),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ),
-              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -145,29 +131,23 @@ def GenTests(api):
                        'derive test results (retry shards with patch)'),
       api.post_process(post_process.MustRun,
                        'derive test results (without patch)'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'local_test_results',
+      api.chromium.try_build(mastername='m', builder='linux-rel'),
       api.properties(
-          mastername='m',
           is_swarming_test=False,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ),
-              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.post_process(post_process.DoesNotRun,
                        'derive test results (with patch)'),
       api.post_process(post_process.MustRun,
                        '[skipped] derive test results (with patch)'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'non_chromium_builder',
@@ -177,7 +157,8 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
-      ), api.buildbucket.try_build('project', 'try', 'linux-rel'),
+      ),
+      api.buildbucket.try_build('project', 'try', 'linux-rel'),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -186,7 +167,8 @@ def GenTests(api):
               failure=False)),
       api.post_process(post_process.DoesNotRun,
                        'derive test results (with patch)'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   inv_bundle_with_failures = {
       'invid':
@@ -228,21 +210,13 @@ def GenTests(api):
 
   yield api.test(
       'exonerate_without_patch_failures',
+      api.chromium.try_build(mastername='m', builder='linux-rel'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
       ),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ),
-              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -275,7 +249,8 @@ def GenTests(api):
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected without patch results'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'resultdb_unenabled',
@@ -327,7 +302,8 @@ def GenTests(api):
                        'include derived test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'exonerate unexpected without patch results'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   inv_bundle_with_unexpected_passes = {
       'invid':
@@ -362,21 +338,13 @@ def GenTests(api):
 
   yield api.test(
       'exonerate_unexpected_passes',
+      api.chromium.ci_build(mastername='m', builder='linux-rel'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
       ),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ),
-              infra=dict(resultdb=dict(invocation='invocations/u:inv')))),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -389,4 +357,5 @@ def GenTests(api):
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected passes (with patch)'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )

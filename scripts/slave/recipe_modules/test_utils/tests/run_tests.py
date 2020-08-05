@@ -70,12 +70,9 @@ def GenTests(api):
 
   yield api.test(
       'success',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests'),
       api.post_process(post_process.MustRun, 'test2'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -104,11 +101,9 @@ def GenTests(api):
 
   yield api.test(
       'success_swarming_one_task_still_pending',
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
@@ -129,11 +124,9 @@ def GenTests(api):
 
   yield api.test(
       'success_swarming_long_pending',
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
@@ -154,12 +147,9 @@ def GenTests(api):
 
   yield api.test(
       'failure',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests'),
       api.override_step_data('base_unittests', retcode=failure_code),
       api.post_process(post_process.MustRun, 'test2'),
       api.post_process(post_process.StatusFailure),
@@ -168,13 +158,9 @@ def GenTests(api):
 
   yield api.test(
       'failure_abort',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests',
-          abort_on_failure=True),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests', abort_on_failure=True),
       api.override_step_data('base_unittests', retcode=failure_code),
       api.post_process(post_process.DoesNotRun, 'test2'),
       api.post_process(post_process.StatusFailure),
@@ -183,12 +169,9 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests'),
       api.override_step_data('base_unittests', retcode=infra_code),
       api.post_process(post_process.DoesNotRun, 'test2'),
       api.post_process(post_process.StatusException),
@@ -196,11 +179,9 @@ def GenTests(api):
   )
   yield api.test(
       'retry_invalid_swarming',
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
           test_name='base_unittests_invalid_results',
           test_swarming=True,
           retry_invalid_shards=True,
@@ -223,12 +204,9 @@ def GenTests(api):
 
   yield api.test(
       'pre_run_failure',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests'),
       api.override_step_data(
           'test_pre_run.pre_run base_unittests', retcode=failure_code),
       api.post_process(post_process.MustRun, 'base_unittests'),
@@ -239,12 +217,9 @@ def GenTests(api):
 
   yield api.test(
       'pre_run_infra_failure',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
-          buildnumber=123,
-          test_name='base_unittests'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_builder'),
+      api.properties(test_name='base_unittests'),
       api.override_step_data(
           'test_pre_run.pre_run base_unittests', retcode=infra_code),
       api.post_process(post_process.DoesNotRun, 'base_unittests'),

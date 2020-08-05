@@ -5489,9 +5489,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#25)(api, warning, server_config):**
 ### *recipes* / [test\_utils:tests/exonerate\_flaky\_failures](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py)
 
-[DEPS](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py#36)(api, known_flakes_expectations, exclude_failed_test, has_too_many_failures):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py#37)(api, known_flakes_expectations, exclude_failed_test, has_too_many_failures):**
 ### *recipes* / [test\_utils:tests/gtest\_results](/scripts/slave/recipe_modules/test_utils/tests/gtest_results.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/gtest_results.py#10): [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5524,9 +5524,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/test_results.py#13)(api):**
 ### *recipes* / [test\_utils:tests/upload\_results\_to\_resultdb](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py)
 
-[DEPS](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#5): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/resultdb][recipe_engine/recipe_modules/resultdb]
+[DEPS](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/resultdb][recipe_engine/recipe_modules/resultdb]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#35)(api, is_swarming_test=True):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/upload_results_to_resultdb.py#36)(api, is_swarming_test=True):**
 ### *recipes* / [tint](/scripts/slave/recipes/tint.py)
 
 [DEPS](/scripts/slave/recipes/tint.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
