@@ -40,14 +40,12 @@ def _config(name,
             chromium_tests_apply_config=None,
             **kwargs):
   gclient_apply_config = gclient_apply_config or []
-  chromium_tests_apply_config = chromium_tests_apply_config or []
   if 'chromeos' not in gclient_apply_config:
     gclient_apply_config.append('chromeos')
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
-      'chromium_tests_apply_config': chromium_tests_apply_config,
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
       'chromium_config_kwargs': {
@@ -70,10 +68,7 @@ def _config(name,
 
 
 SPEC.update([
-    _config(
-        'linux-chromeos-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
-        gclient_apply_config=['use_clang_coverage']),
+    _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg'),
     _config(
         'linux-lacros-builder-rel',
@@ -94,8 +89,7 @@ SPEC.update([
     _config(
         'chromeos-amd64-generic-rel',
         cros_board='amd64-generic',
-        checkout_qemu_image=True,
-        chromium_tests_apply_config=['use_swarming_command_lines']),
+        checkout_qemu_image=True),
     _config(
         'chromeos-arm-generic-dbg',
         cros_board='arm-generic',
@@ -105,8 +99,7 @@ SPEC.update([
         'chromeos-arm-generic-rel',
         cros_board='arm-generic',
         target_arch='arm',
-        target_bits=32,
-        chromium_tests_apply_config=['use_swarming_command_lines']),
+        target_bits=32),
     _config(
         'chromeos-kevin-rel',
         cros_board='kevin',
