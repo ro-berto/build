@@ -151,8 +151,6 @@
   },
   {
     "cmd": [
-      "rdb",
-      "stream",
       "vpython",
       "-u",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
