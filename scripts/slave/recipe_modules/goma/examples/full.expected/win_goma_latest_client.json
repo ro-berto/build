@@ -90,7 +90,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\builder"
+      "[CACHE]\\goma\\data\\Linux_Builder"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -107,7 +107,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Linux_Builder",
       "GOMA_DONT_KILL_SUBPROCESS": "False",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -177,7 +177,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Linux_Builder",
       "GOMA_DONT_KILL_SUBPROCESS": "False",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -210,7 +210,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Linux_Builder",
       "GOMA_DONT_KILL_SUBPROCESS": "False",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -232,7 +232,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Linux_Builder",
       "GOMA_DONT_KILL_SUBPROCESS": "False",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -284,10 +284,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"builder\", \"project\": \"project\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "builder",
+      "Linux Builder",
       "--buildbot-mastername",
       "test_master",
       "--buildbot-slavename",

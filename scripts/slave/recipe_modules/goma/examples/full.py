@@ -6,6 +6,7 @@ import json
 import re
 
 DEPS = [
+    'chromium',
     'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
@@ -41,105 +42,95 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  properties = {
-      'mastername': 'test_master',
-      'bot_id': 'test_slave',
-      'build_command': ['ninja', '-C', 'out/Release'],
-      'ninja_log_outdir': 'out/Release',
-      'ninja_log_compiler': 'goma',
-      'build_data_dir': 'build_data_dir',
-  }
+  common_test_data = sum([
+      api.chromium.ci_build(mastername='test_master'),
+      api.properties(
+          build_command=['ninja', '-C', 'out/Release'],
+          ninja_log_outdir='out/Release',
+          ninja_log_compiler='goma',
+          build_data_dir='build_data_dir',
+      ),
+  ], api.empty_test_data())
 
   for platform in ('linux', 'win', 'mac'):
     yield api.test(
         platform,
+        common_test_data,
         api.platform.name(platform),
-        api.properties.generic(**properties),
-        api.buildbucket.ci_build(),
     )
 
   yield api.test(
       'linux_custom_jobs',
+      common_test_data,
       api.platform.name('linux'),
-      api.properties.generic(**properties),
       api.goma(jobs=80),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_debug',
+      common_test_data,
       api.platform.name('linux'),
-      api.properties.generic(**properties),
       api.goma(jobs=80, debug=True),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_compile_failed',
+      common_test_data,
       api.platform.name('linux'),
       api.step_data('ninja', retcode=1),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_start_goma_failed',
+      common_test_data,
       api.platform.name('linux'),
       api.step_data('preprocess_for_goma.start_goma', retcode=1),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_stop_goma_failed',
+      common_test_data,
       api.platform.name('linux'),
       api.step_data('postprocess_for_goma.stop_goma', retcode=1),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_set_custome_tmp_dir',
+      common_test_data,
       api.platform.name('linux'),
       api.properties(custom_tmp_dir='/tmp/goma_goma_module'),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_invalid_goma_jsonstatus',
+      common_test_data,
       api.platform.name('linux'),
       api.step_data('postprocess_for_goma.goma_jsonstatus',
                     api.json.output(data=None)),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'linux_local_run_goma_recipe',
+      common_test_data,
       api.platform.name('linux'),
       api.properties(**{"$build/goma": {
           "local": "[START_DIR]/goma",
       }}),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'win_goma_canary',
+      common_test_data,
       api.platform.name('win'),
       api.properties(client_type='candidate'),
-      api.properties.generic(**properties),
-      api.buildbucket.ci_build(),
   )
 
   yield api.test(
       'win_goma_latest_client',
+      common_test_data,
       api.platform.name('win'),
       api.properties(client_type='latest'),
-      api.properties.generic(**properties),
       api.post_process(post_process.MustRun, 'ensure_goma'),
       api.post_process(post_process.StepTextContains, 'ensure_goma',
                        ['latest']),
-      api.buildbucket.ci_build(),
   )

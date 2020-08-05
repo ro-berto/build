@@ -5153,9 +5153,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/refs.py#24)(api, targets, output_type):**
 ### *recipes* / [goma:examples/full](/scripts/slave/recipe_modules/goma/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/goma/examples/full.py#8): [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/goma/examples/full.py#8): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/examples/full.py#21)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/examples/full.py#22)(api):**
 ### *recipes* / [goma:tests/build\_with\_goma](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/tests/build_with_goma.py#5): [goma](#recipe_modules-goma), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

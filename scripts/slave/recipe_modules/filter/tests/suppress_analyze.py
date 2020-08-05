@@ -22,7 +22,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          mastername='test_mastername', buildername='test_buildername'),
+      api.chromium.generic_build(
+          mastername='test_mastername', builder='test_buildername'),
       api.filter.suppress_analyze(),
   )
