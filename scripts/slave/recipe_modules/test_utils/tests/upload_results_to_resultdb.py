@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_swarming',
     'chromium_tests',
@@ -64,7 +65,7 @@ def GenTests(api):
 
   yield api.test(
       'include_invocation',
-      api.chromium.try_build(mastername='m', builder='linux-rel'),
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -96,7 +97,7 @@ def GenTests(api):
 
   yield api.test(
       'swarming_test_results',
-      api.chromium.try_build(mastername='m', builder='linux-rel'),
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -136,7 +137,7 @@ def GenTests(api):
 
   yield api.test(
       'local_test_results',
-      api.chromium.try_build(mastername='m', builder='linux-rel'),
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           is_swarming_test=False,
           swarm_hashes={
@@ -151,8 +152,8 @@ def GenTests(api):
 
   yield api.test(
       'non_chromium_builder',
+      api.builder_group.for_current('g'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
@@ -210,7 +211,7 @@ def GenTests(api):
 
   yield api.test(
       'exonerate_without_patch_failures',
-      api.chromium.try_build(mastername='m', builder='linux-rel'),
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -254,8 +255,8 @@ def GenTests(api):
 
   yield api.test(
       'resultdb_unenabled',
+      api.builder_group.for_current('g'),
       api.properties(
-          mastername='m',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
@@ -338,7 +339,7 @@ def GenTests(api):
 
   yield api.test(
       'exonerate_unexpected_passes',
-      api.chromium.ci_build(mastername='m', builder='linux-rel'),
+      api.chromium.ci_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',

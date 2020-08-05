@@ -80,7 +80,7 @@ def GenTests(api):
 
   yield api.test(
       'immune to infra failure of querying flaky failures',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -98,7 +98,7 @@ def GenTests(api):
 
   yield api.test(
       'immune to ill-formed response',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -116,7 +116,7 @@ def GenTests(api):
 
   yield api.test(
       'immune to another ill-formed response',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -137,7 +137,7 @@ def GenTests(api):
 
   yield api.test(
       'empty response',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -150,7 +150,7 @@ def GenTests(api):
 
   yield api.test(
       'no failed tests',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           exclude_failed_test=True,
           **{
@@ -166,7 +166,7 @@ def GenTests(api):
 
   yield api.test(
       'no tests are marked as known flaky',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           known_flakes_expectations={},
           **{
@@ -183,7 +183,7 @@ def GenTests(api):
 
   yield api.test(
       'part of the tests are marked as known flaky',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           known_flakes_expectations={
               'failed_test': ['testA'],
@@ -213,7 +213,7 @@ def GenTests(api):
 
   yield api.test(
       'all of the tests are marked as known flaky',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           known_flakes_expectations={
               'failed_test': ['testA', 'testB'],
@@ -253,7 +253,7 @@ def GenTests(api):
 
   yield api.test(
       'skip querying if there are too many failures',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           exclude_failed_test=True,
           has_too_many_failures=True,
@@ -275,7 +275,7 @@ def GenTests(api):
   # limited number of failures.
   yield api.test(
       'keep querying if at least one test suite has limited failures',
-      api.chromium.generic_build(mastername='m', builder='b'),
+      api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
           has_too_many_failures=True,
           **{
