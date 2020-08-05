@@ -1050,8 +1050,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def main_waterfall_steps(self,
                            mb_config_path=None,
                            mb_phase=None,
-                           builders=None):
+                           builders=None,
+                           root_solution_revision=None):
     """Compiles and runs tests for chromium recipe.
+
+    Args:
+      root_solution_revision: Git revision of Chromium to check out.
+        Passed down to bot_update.ensure_checkout.
+        Used by CI bots of projects which are Chromium components,
+        like ANGLE CI bots, to run tests with a known good version of Chromium.
+        If omitted, ToT Chromium is checked out.
 
     Returns:
       - A RawResult object with the status of the build
@@ -1065,7 +1073,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # We should pass False here for bots that do not need tags. (Do any bots
     # need tags?)
     update_step, build_config = self.prepare_checkout(
-        bot.settings, timeout=3600, add_blamelists=True)
+        bot.settings,
+        timeout=3600,
+        add_blamelists=True,
+        root_solution_revision=root_solution_revision)
     if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(
           bot,
@@ -1308,11 +1319,29 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         mirrored_bots=bots,
         deapply_changes=self.deapply_deps)
 
-  def trybot_steps(self, builders=None, trybots=None):
+  def trybot_steps(self,
+                   builders=None,
+                   trybots=None,
+                   root_solution_revision=None):
+    """Compiles and runs tests for chromium recipe.
+
+    Args:
+      root_solution_revision: Git revision of Chromium to check out.
+        Passed down to bot_update.ensure_checkout.
+        Used by bots on CQs of projects which are Chromium components,
+        like ANGLE CQ, to run tests with a known good version of Chromium.
+        If omitted, ToT Chromium is checked out.
+
+    Returns:
+      - A RawResult object with the status of the build
+        and a failure message if a failure occurred.
+      - None if no failures
+    """
     return self.run_tests_with_and_without_changes(
         builders=builders,
         mirrored_bots=trybots,
-        deapply_changes=self.deapply_patch)
+        deapply_changes=self.deapply_patch,
+        root_solution_revision=root_solution_revision)
 
   def trybot_steps_for_tests(self, builders=None, trybots=None, tests=None):
     """Similar to trybot_steps, but only runs certain tests.
@@ -1329,7 +1358,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                          builders,
                                          mirrored_bots,
                                          deapply_changes,
-                                         tests=None):
+                                         tests=None,
+                                         root_solution_revision=None):
     """Compile and run tests for chromium_trybot recipe.
 
     Args:
@@ -1346,7 +1376,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     raw_result, task = self._calculate_tests_to_run(
-        builders=builders, mirrored_bots=mirrored_bots, tests_to_run=tests)
+        builders=builders,
+        mirrored_bots=mirrored_bots,
+        tests_to_run=tests,
+        root_solution_revision=root_solution_revision)
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
@@ -1526,7 +1559,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def _calculate_tests_to_run(self,
                               builders=None,
                               mirrored_bots=None,
-                              tests_to_run=None):
+                              tests_to_run=None,
+                              root_solution_revision=None):
     """Determines which tests need to be run.
 
     Args:
@@ -1555,7 +1589,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Chromium has a lot of tags which slow us down, we don't need them on
     # trybots, so don't fetch them.
     bot_update_step, build_config = self.prepare_checkout(
-        bot.settings, timeout=3600, no_fetch_tags=True)
+        bot.settings,
+        timeout=3600,
+        no_fetch_tags=True,
+        root_solution_revision=root_solution_revision)
 
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=self.m.tryserver.is_tryserver)
