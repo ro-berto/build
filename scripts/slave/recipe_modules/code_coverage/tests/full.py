@@ -13,7 +13,6 @@ DEPS = [
     'chromium_tests',
     'code_coverage',
     'profiles',
-    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -24,17 +23,9 @@ DEPS = [
 # Number of tests. Needed by the tests.
 _NUM_TESTS = 7
 
-# For trybot test data. If not given, buildbucket module will make the gerrit
-# project the same as the buildbucket project, but since
-# 'chromium' != 'chromium/src', and we check the patch's project against a
-# whitelist, let's pass this to the buildbucket test api to populate the values
-# as in production.
-_DEFAULT_GIT_REPO = 'https://chromium.googlesource.com/chromium/src'
-
 
 def RunSteps(api):
-  builder_id = chromium.BuilderId.create_for_master(
-      api.properties['mastername'], api.properties['buildername'])
+  builder_id = api.chromium.get_builder_id()
   try_spec = api.chromium_tests.trybots.get(builder_id)
   if try_spec is None:
     try_spec = try_spec_module.TrySpec.create(mirrors=[builder_id])
@@ -97,10 +88,8 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-chromeos-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -146,13 +135,11 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
   yield api.test(
       'with_exclusions_module_property',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-chromeos-code-coverage',
-          buildnumber=54,
-      ),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_exclude_sources='ios_test_files_and_test_utils'),
@@ -162,11 +149,8 @@ def GenTests(api):
 
   yield api.test(
       'with_exclusions',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-chromeos-code-coverage',
-          buildnumber=54,
-      ),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True, coverage_exclude_sources='all_test_files'),
       api.post_process(post_process.StatusSuccess),
@@ -175,17 +159,13 @@ def GenTests(api):
 
   yield api.test(
       'tryserver',
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
-      api.buildbucket.try_build(
-          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -227,10 +207,8 @@ def GenTests(api):
 
   yield api.test(
       'tryserver skip instrumenting if there are too many files',
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file%d.cc' % i for i in range(500)
@@ -239,34 +217,30 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test('tryserver unsupported repo',
-       api.properties.generic(
+  yield api.test(
+      'tryserver unsupported repo',
+      api.chromium.try_build(
           mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/file.cc',
-            'some/other/path/to/file.cc',
-          ]),
-       api.buildbucket.try_build(
-           project='chromium', builder='linux-rel',
-           git_repo='https://chromium.googlesource.com/v8/v8'),
-       api.post_process(
+          builder='linux-rel',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.post_process(
           post_process.MustRun,
           'skip processing coverage data, project(s) '
           'chromium-review.googlesource.com/v8/v8 is(are) unsupported',
-       ),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'merge errors',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.override_step_data(
           'process clang code coverage data for overall test coverage.Finding '
@@ -280,36 +254,27 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test('skip collecting coverage data',
-       api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/non_source_file.txt'
-          ]),
-       api.buildbucket.try_build(
-          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
-       api.post_process(
+  yield api.test(
+      'skip collecting coverage data',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
+      api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed'),
-       api.post_process(post_process.DropExpectation),)
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'skip processing coverage data if not data is found',
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
-      api.buildbucket.try_build(
-          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
       api.override_step_data(
           'process clang code coverage data for overall test coverage.filter '
           'binaries with valid data for %s binaries' % (_NUM_TESTS - 2),
@@ -327,58 +292,48 @@ def GenTests(api):
 
   yield api.test(
       'raise failure for full-codebase coverage',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.step_data((
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS),
                     retcode=1),
-      api.post_check(
-          lambda check, steps: check(steps['process clang code coverage data '
-              'for overall test coverage.gsutil '
-              'upload coverage metadata'
-              ''].output_properties['process_coverage_data_failure'] == True)
-      ),
+      api.post_check(lambda check, steps: check(steps[
+          'process clang code coverage data '
+          'for overall test coverage.gsutil '
+          'upload coverage metadata'
+          ''].output_properties['process_coverage_data_failure'] == True)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'do not raise failure for per-cl coverage',
-      api.properties.generic(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=54),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
-      api.buildbucket.try_build(
-          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
       api.step_data((
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in %s tests' % _NUM_TESTS),
                     retcode=1),
-      api.post_check(
-          lambda check, steps: check(steps['process clang code coverage data '
-              'for overall test coverage.gsutil '
-              'upload coverage metadata'
-              ''].output_properties['process_coverage_data_failure'] == True)
-      ),
+      api.post_check(lambda check, steps: check(steps[
+          'process clang code coverage data '
+          'for overall test coverage.gsutil '
+          'upload coverage metadata'
+          ''].output_properties['process_coverage_data_failure'] == True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'merged profdata does not exist',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(mock_merged_profdata=False),
       api.post_process(
@@ -391,10 +346,8 @@ def GenTests(api):
 
   yield api.test(
       'process java coverage for full-codebase',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='android-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='android-code-coverage'),
       api.code_coverage(use_java_coverage=True),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'Extract directory metadata'),
@@ -416,138 +369,114 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test('skip collecting coverage data for java',
-       api.properties.generic(
+  yield api.test(
+      'skip collecting coverage data for java',
+      api.chromium.generic_build(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-rel',
-          buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/non_source_file.txt'
-          ]),
-       api.post_process(
-          post_process.MustRun, 'save paths of affected files'),
-       api.post_process(
+          builder='android-marshmallow-arm64-rel'),
+      api.code_coverage(use_java_coverage=True),
+      api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
+      api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed'),
-       api.post_process(
-          post_process.MustRun,
-          'Clean up Java coverage files'),
-       api.post_process(post_process.DropExpectation),)
+      api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield api.test('process java coverage for per-cl',
-       api.properties.generic(
+  yield api.test(
+      'process java coverage for per-cl',
+      api.chromium.try_build(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-rel',
-          buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-rel',
-          git_repo=_DEFAULT_GIT_REPO),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/file.java',
-            'some/other/path/to/file.java',
-          ]),
-       api.post_process(
-          post_process.MustRun, 'save paths of affected files'),
-       api.post_process(
+          builder='android-marshmallow-arm64-rel'),
+      api.code_coverage(use_java_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.java',
+          'some/other/path/to/file.java',
+      ]),
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'generate line number mapping from bot to Gerrit'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
-       api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload JSON metadata'),
-       api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report'),
-       api.post_process(
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'gsutil Upload JSON metadata'),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'Generate JaCoCo HTML report'),
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Zip generated JaCoCo HTML report files'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'gsutil Upload zipped JaCoCo HTML report'),
-       api.post_process(
-          post_process.MustRun,
-          'Clean up Java coverage files'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield api.test('java metadata does not exist',
-       api.properties.generic(
+  yield api.test(
+      'java metadata does not exist',
+      api.chromium.try_build(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-rel',
-          buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-rel',
-          git_repo=_DEFAULT_GIT_REPO),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/FileTest.java',
-            'some/other/path/to/FileTest.java',
-          ]),
-       api.properties(
-          mock_java_metadata_path = False),
-       api.post_process(
+          builder='android-marshmallow-arm64-rel'),
+      api.code_coverage(use_java_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/FileTest.java',
+          'some/other/path/to/FileTest.java',
+      ]),
+      api.properties(mock_java_metadata_path=False),
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'generate line number mapping from bot to Gerrit'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun, 'process java coverage.'
           'skip processing because no metadata was generated'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield api.test('raise failure for java full-codebase coverage',
-       api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='android-code-coverage',
-          buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.step_data(
-          'process java coverage.Generate Java coverage metadata',
-          retcode=1),
-       api.post_check(lambda check, steps: check(steps[
-              'process java coverage.Generate Java coverage metadata'
-          ].output_properties['process_coverage_data_failure'] == True)),
-       api.post_process(post_process.StatusFailure),
-       api.post_process(post_process.DropExpectation),)
+  yield api.test(
+      'raise failure for java full-codebase coverage',
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='android-code-coverage'),
+      api.code_coverage(use_java_coverage=True),
+      api.step_data(
+          'process java coverage.Generate Java coverage metadata', retcode=1),
+      api.post_check(lambda check, steps: check(
+          steps['process java coverage.Generate Java coverage metadata'
+               ].output_properties['process_coverage_data_failure'] == True)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield api.test('do not raise failure for java per-cl coverage',
-       api.properties.generic(
+  yield api.test(
+      'do not raise failure for java per-cl coverage',
+      api.chromium.try_build(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-rel',
-          buildnumber=54),
-       api.code_coverage(use_java_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/file.java',
-            'some/other/path/to/file.java',
-          ]),
-       api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-rel',
-          git_repo=_DEFAULT_GIT_REPO),
-       api.step_data(
-          'process java coverage.Generate Java coverage metadata',
-          retcode=1),
-       api.post_check(lambda check, steps: check(steps[
-              'process java coverage.Generate Java coverage metadata'
-          ].output_properties['process_coverage_data_failure'] == True)),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+          builder='android-marshmallow-arm64-rel'),
+      api.code_coverage(use_java_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.java',
+          'some/other/path/to/file.java',
+      ]),
+      api.step_data(
+          'process java coverage.Generate Java coverage metadata', retcode=1),
+      api.post_check(lambda check, steps: check(
+          steps['process java coverage.Generate Java coverage metadata'
+               ].output_properties['process_coverage_data_failure'] == True)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'android native code coverage CI',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='android-code-coverage-native',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='android-code-coverage-native'),
       api.code_coverage(use_clang_coverage=True),
       api.step_data(
           'process clang code coverage data for overall test coverage.'
@@ -599,10 +528,8 @@ def GenTests(api):
 
   yield api.test(
       'iOS code coverage CI',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='ios-simulator-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='ios-simulator-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -656,20 +583,15 @@ def GenTests(api):
 
   yield api.test(
       'iOS code coverage tryserver',
-      api.properties.generic(
+      api.chromium.try_build(
           mastername='tryserver.chromium.mac',
-          buildername='ios-simulator-code-coverage',
-          buildnumber=54),
+          builder='ios-simulator-code-coverage'),
       api.code_coverage(use_clang_coverage=True, coverage_test_types=['unit']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
       api.properties(xcode_build_version='11c29'),
-      api.buildbucket.try_build(
-          project='chromium',
-          builder='ios-simulator-code-coverage',
-          git_repo=_DEFAULT_GIT_REPO),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -718,10 +640,8 @@ def GenTests(api):
 
   yield api.test(
       'raise failure for unsupported test type',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_test_types=['unsupportedtest', 'overall']),
@@ -735,20 +655,15 @@ def GenTests(api):
 
   yield api.test(
       'skip processing when more than one test type in per-cl coverage',
-      api.properties.generic(
+      api.chromium.try_build(
           mastername='tryserver.chromium.mac',
-          buildername='ios-simulator-code-coverage',
-          buildnumber=54),
+          builder='ios-simulator-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True, coverage_test_types=['unit', 'overall']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
           'some/other/path/to/file.cc',
       ]),
-      api.buildbucket.try_build(
-          project='chromium',
-          builder='ios-simulator-code-coverage',
-          git_repo=_DEFAULT_GIT_REPO),
       api.post_process(
           post_process.MustRun,
           'skip processing because of an exception when validating test types '
