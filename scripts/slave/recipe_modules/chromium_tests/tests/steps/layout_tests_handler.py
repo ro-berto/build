@@ -37,25 +37,29 @@ def GenTests(api):
   def boilerplate(**kwargs):
     mastername = 'chromium.linux'
     builder = 'Linux Tests'
-    return (api.properties.generic(
-        mastername=mastername,
-        parent_buildername='Linux Builder',
-        swarm_hashes={'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
-        **kwargs) + api.platform('linux', 64) +
-            api.buildbucket.ci_build(project='chromium/src', builder=builder) +
-            api.chromium_tests.read_source_side_spec(
-                mastername, {
-                    builder: {
-                        'isolated_scripts': [{
-                            'isolate_name': 'fake_test',
-                            'name': 'fake_test',
-                            'results_handler': 'layout tests',
-                            'swarming': {
-                                'can_use_on_swarming_builders': True,
-                            },
-                        }]
-                    }
-                }))
+    return sum([
+        api.chromium.ci_build(
+            mastername=mastername,
+            builder=builder,
+            parent_buildername='Linux Builder'),
+        api.properties.generic(
+            swarm_hashes={'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
+            **kwargs),
+        api.platform('linux', 64),
+        api.chromium_tests.read_source_side_spec(
+            mastername, {
+                builder: {
+                    'isolated_scripts': [{
+                        'isolate_name': 'fake_test',
+                        'name': 'fake_test',
+                        'results_handler': 'layout tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                        },
+                    }]
+                }
+            }),
+    ], api.empty_test_data())
 
   base_test_result = {
       'interrupted': False,

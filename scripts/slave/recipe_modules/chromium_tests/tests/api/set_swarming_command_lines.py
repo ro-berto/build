@@ -45,32 +45,35 @@ def GenTests(api):
   fake_test = 'fake_test'
 
   def fake_ci_builder(chromium_tests_apply_config):
-    return (api.properties.generic(
-        mastername=fake_master,
-        swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
-    ) + api.platform('linux', 64) + api.chromium_tests.builders(
-        bot_db.BotDatabase.create({
-            fake_master: {
-                fake_builder:
-                    bot_spec.BotSpec.create(
-                        chromium_config='chromium',
-                        gclient_config='chromium',
-                        chromium_tests_apply_config=chromium_tests_apply_config,
-                    ),
-            }
-        })) + api.buildbucket.ci_build(
-            project='chromium/src', builder=fake_builder) +
-            api.chromium_tests.read_source_side_spec(
-                fake_master, {
-                    fake_builder: {
-                        'isolated_scripts': [{
-                            'name': fake_test,
-                            'swarming': {
-                                'can_use_on_swarming_builders': True,
-                            }
-                        }],
-                    }
-                }))
+    return sum([
+        api.chromium.ci_build(mastername=fake_master, builder=fake_builder),
+        api.properties(
+            swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
+        api.platform('linux', 64),
+        api.chromium_tests.builders(
+            bot_db.BotDatabase.create({
+                fake_master: {
+                    fake_builder:
+                        bot_spec.BotSpec.create(
+                            chromium_config='chromium',
+                            gclient_config='chromium',
+                            chromium_tests_apply_config=\
+                            chromium_tests_apply_config,
+                        ),
+                },
+            })),
+        api.chromium_tests.read_source_side_spec(
+            fake_master, {
+                fake_builder: {
+                    'isolated_scripts': [{
+                        'name': fake_test,
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                        }
+                    }],
+                }
+            })
+    ], api.empty_test_data())
 
   yield api.test(
       'use_swarming_command_lines',
@@ -108,10 +111,10 @@ def GenTests(api):
 
   yield api.test(
       'split_builder_tester_also_finds_command_lines',
-      api.properties.generic(
-          mastername=fake_master,
-          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
-      ) + api.platform('linux', 64),
+      api.chromium.ci_build(mastername=fake_master, builder=fake_tester),
+      api.properties(
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
+      api.platform('linux', 64),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
               fake_master: {
@@ -135,7 +138,6 @@ def GenTests(api):
                       ),
               }
           })),
-      api.buildbucket.ci_build(project='chromium/src', builder=fake_tester),
       api.chromium_tests.read_source_side_spec(
           fake_master, {
               fake_tester: {
@@ -164,14 +166,12 @@ def GenTests(api):
 
   yield api.test(
       'trybot_with_test_failure',
-      api.properties.generic(
-          mastername=fake_master,
+      api.chromium.try_build(mastername=fake_master, builder=fake_try_builder),
+      api.properties(
           config='Release',
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
       api.platform('linux', 64),
-      api.buildbucket.try_build(
-          project='chromium/src', builder=fake_try_builder),
       api.chromium_tests.trybots(
           try_spec.TryDatabase.create({
               fake_master: {
