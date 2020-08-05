@@ -5,13 +5,14 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'ios',
-  'recipe_engine/buildbucket',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
+    'chromium',
+    'ios',
+    'recipe_engine/buildbucket',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
 ]
 
 def RunSteps(api):
@@ -53,17 +54,16 @@ def GenTests(api):
     check(expected == found_checkout_ios_webkit)
     check(expected == found_ios_webkit_revision)
 
-  basic_common = (
-      api.platform('mac', 64) + api.properties(
+  basic_common = sum([
+      api.platform('mac', 64),
+      api.chromium.try_build(
           mastername='chromium.fake',
-          bot_id='fake-vm',
-      ) + api.buildbucket.try_build(
-          project='chromium',
           builder='ios',
           build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-      ) + api.ios.make_test_build_config({
+          change_number=123456,
+          patch_set=7,
+      ),
+      api.ios.make_test_build_config({
           'xcode version':
               'fake xcode version',
           'env': {
@@ -104,10 +104,12 @@ def GenTests(api):
                   'bucket': 'fake-bucket-2',
               },
           ],
-      }) + api.step_data(
+      }),
+      api.step_data(
           'bootstrap swarming.swarming.py --version',
           stdout=api.raw_io.output_text('1.2.3'),
-      ))
+      ),
+  ], api.empty_test_data())
 
   yield api.test(
       'basic',
@@ -124,16 +126,12 @@ def GenTests(api):
   yield api.test(
       'goma',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.try_build(
           mastername='chromium.fake',
-          bot_id='fake-vm',
-      ),
-      api.buildbucket.try_build(
-          project='chromium',
           builder='ios',
           build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=123456,
+          patch_set=7,
       ),
       api.ios.make_test_build_config({
           'xcode version': 'fake xcode version',
@@ -153,16 +151,12 @@ def GenTests(api):
   yield api.test(
       'goma_canary',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.try_build(
           mastername='chromium.fake',
-          bot_id='fake-vm',
-      ),
-      api.buildbucket.try_build(
-          project='chromium',
           builder='ios',
           build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=123456,
+          patch_set=7,
       ),
       api.ios.make_test_build_config({
           'xcode version': 'fake xcode version',
@@ -183,16 +177,12 @@ def GenTests(api):
   yield api.test(
       'goma_compilation_failure',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.try_build(
           mastername='chromium.fake',
-          bot_id='fake-vm',
-      ),
-      api.buildbucket.try_build(
-          project='chromium',
           builder='ios',
           build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=123456,
+          patch_set=7,
       ),
       api.ios.make_test_build_config({
           'xcode version':
@@ -218,16 +208,9 @@ def GenTests(api):
   yield api.test(
       'clang-tot',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.try_build(
           mastername='chromium.clang',
-          bot_id='fake-vm',
-      ),
-      api.buildbucket.try_build(
-          project='chromium',
           builder='ios',
-          build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
       ),
       api.ios.make_test_build_config({
           'xcode version': 'fake xcode version',
@@ -246,16 +229,9 @@ def GenTests(api):
   yield api.test(
       'ios-webkit-tot',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.try_build(
           mastername='chromium.fake',
-          bot_id='fake-vm',
-      ),
-      api.buildbucket.try_build(
-          project='chromium',
           builder='ios-webkit-tot',
-          build_number=1,
-          revision='HEAD',
-          git_repo='https://chromium.googlesource.com/chromium/src',
       ),
       api.ios.make_test_build_config({
           'xcode version': 'fakexcodeversion-customwebkit',

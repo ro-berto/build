@@ -5208,34 +5208,34 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/halt/examples/full.py#9)(api):**
 ### *recipes* / [ios/try](/scripts/slave/recipes/ios/try.py)
 
-[DEPS](/scripts/slave/recipes/ios/try.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/ios/try.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#20)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#21)(api):**
 ### *recipes* / [ios/unified\_builder\_tester](/scripts/slave/recipes/ios/unified_builder_tester.py)
 
-[DEPS](/scripts/slave/recipes/ios/unified_builder_tester.py#7): [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/ios/unified_builder_tester.py#7): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/ios/unified_builder_tester.py#17)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/ios/unified_builder_tester.py#18)(api):**
 ### *recipes* / [ios:examples/full](/scripts/slave/recipe_modules/ios/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/examples/full.py#9): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/ios/examples/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/examples/full.py#21)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/examples/full.py#22)(api):**
 ### *recipes* / [ios:tests/isolate](/scripts/slave/recipe_modules/ios/tests/isolate.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/tests/isolate.py#11): [ios](#recipe_modules-ios), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/ios/tests/isolate.py#11): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/isolate.py#29)(api, expected_partial_tasks):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/isolate.py#30)(api, expected_partial_tasks):**
 ### *recipes* / [ios:tests/optional\_dimensions](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#7): [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+[DEPS](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#7): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#15)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#16)(api):**
 ### *recipes* / [ios:tests/swarming\_service\_acount](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#7): [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+[DEPS](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#7): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#15)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#16)(api):**
 ### *recipes* / [isolate:examples/compose](/scripts/slave/recipe_modules/isolate/examples/compose.py)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/examples/compose.py#7): [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client)

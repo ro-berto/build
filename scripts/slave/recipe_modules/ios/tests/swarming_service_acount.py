@@ -5,11 +5,12 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'ios',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
+    'chromium',
+    'ios',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):
@@ -25,7 +26,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.platform('mac', 64),
-      api.properties(mastername='chromium.fake'),
+      api.chromium.ci_build(mastername='chromium.fake', builder='ios-builder'),
       api.ios.make_test_build_config({
           'gn_args': [
               'is_debug=true',

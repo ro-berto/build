@@ -9,12 +9,13 @@ from recipe_engine import post_process
 from recipe_engine import recipe_api
 
 DEPS = [
-  'ios',
-  'recipe_engine/assertions',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
+    'chromium',
+    'ios',
+    'recipe_engine/assertions',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
 ]
 
 PROPERTIES = {
@@ -42,11 +43,13 @@ def GenTests(api):
   yield api.test(
       'builder_with_testers',
       api.platform('mac', 64),
-      api.properties(
-          buildername='ios-builder',
-          buildnumber='456',
+      api.chromium.ci_build(
           mastername='chromium.fake',
+          builder='ios-builder',
+          build_number=456,
           parent_buildername='ios-builder',
+      ),
+      api.properties(
           parent_buildnumber='456',
           parent_got_revision='fake revision',
           expected_partial_tasks=[
@@ -71,8 +74,7 @@ def GenTests(api):
           'triggered bots': ['ios-tester',],
       }),
       api.ios.make_test_build_configs_for_children([{
-          'xcode version':
-              '6.1.1',
+          'xcode version': '6.1.1',
           'tests': [{
               'app': 'fake test 1',
               'device type': 'fake device',
@@ -80,8 +82,7 @@ def GenTests(api):
               'xctest': True,
               'swarming tasks': 2
           },],
-          'triggered by':
-              'ios-builder',
+          'triggered by': 'ios-builder',
       }]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
