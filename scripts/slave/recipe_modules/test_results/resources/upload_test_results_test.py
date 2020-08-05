@@ -99,7 +99,7 @@ class UploadTestResultsTest(unittest.TestCase):
           '--input-json=%s' % input_json_file_path,
           '--results-directory=%s' % result_directory,
           '--test-results-server=foo',
-          '--master-name=sauron',
+          '--builder-group=sauron',
       ])
       files = [('full_results.json',
                 os.path.join(result_directory,
@@ -154,7 +154,7 @@ class UploadTestResultsTest(unittest.TestCase):
           '--build-number=1234',
           '--build-id=2345',
           '--chrome-revision=99999',
-          '--master-name=sauron',
+          '--builder-group=sauron',
       ])
       uploaded_json_result_path = os.path.join(
           result_directory, upload_test_results.FULL_RESULTS_FILENAME)

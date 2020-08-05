@@ -12,7 +12,7 @@ Example usage:
 
     ./upload_test_results.py
       --test-type=blink_web_tests --input-json=/tmp/gtest_input.json
-      --master-name=chromium.webkit --build-number=2257
+      --builder-group=chromium.webkit --build-number=2257
       --builder-name='WebKit Win7 (dbg)'
       --chrome-revision=344402
       --build-id=2345

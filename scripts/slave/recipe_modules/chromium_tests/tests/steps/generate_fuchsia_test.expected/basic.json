@@ -202,7 +202,7 @@
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{}",
-      "--master-name",
+      "--builder-group",
       "test_mastername",
       "--builder-name",
       "test_buildername",

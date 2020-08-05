@@ -91,7 +91,6 @@ class JSONResultsGenerator(object):
   def __init__(self, builder_name, build_number,
                results_file_base_path,
                test_results_map,
-               master_name='',
                path_delimiter='/',
                file_writer=None,
                test_locations=None,
@@ -107,7 +106,6 @@ class JSONResultsGenerator(object):
           results json file.
       test_results_map: A dictionary that maps test_name to a list of
           TestResult, one for each time the test was retried.
-      master_name: The name of the buildbot master.
       path_delimiter: The string separating test path parts.
       file_writer: If given, the parameter is used to write JSON data to a file.
           The parameter must be the function that takes two arguments,
@@ -123,7 +121,6 @@ class JSONResultsGenerator(object):
     self._test_locations = test_locations
     self._test_results_map = test_results_map
 
-    self._master_name = master_name
     self._file_writer = file_writer
 
   def generate_json_output(self):

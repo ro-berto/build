@@ -1528,7 +1528,7 @@
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"interrupted\": false, \"path_delimiter\": \"/\", \"tests\": {\"fast\": {\"dummy\": {\"test.html\": {\"actual\": \"FAIL PASS\", \"expected\": \"PASS\"}}}}, \"version\": 3}",
-      "--master-name",
+      "--builder-group",
       "tryserver.chromium.mac",
       "--builder-name",
       "findit_variable",

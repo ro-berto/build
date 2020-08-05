@@ -35,15 +35,22 @@ class TestResultsApi(recipe_api.RecipeApi):
     """
     if builder_name_suffix:
       builder_name_suffix = '-%s' % builder_name_suffix
+    builder_group = self.m.builder_group.for_current
+    assert builder_group
     try:
       upload_test_results_args = [
-          '--input-json', results_file,
-          '--master-name', self.m.properties['mastername'],
-          '--builder-name', '%s%s' % (
-              self.m.buildbucket.builder_name, builder_name_suffix),
-          '--build-number', self.m.buildbucket.build.number,
-          '--test-type', test_type,
-          '--chrome-revision', chrome_revision
+          '--input-json',
+          results_file,
+          '--builder-group',
+          builder_group,
+          '--builder-name',
+          '%s%s' % (self.m.buildbucket.builder_name, builder_name_suffix),
+          '--build-number',
+          self.m.buildbucket.build.number,
+          '--test-type',
+          test_type,
+          '--chrome-revision',
+          chrome_revision,
       ]
       if self.m.buildbucket.build_id is not None:
         upload_test_results_args.extend(['--build-id',

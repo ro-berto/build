@@ -47,9 +47,10 @@ def get_results_map_from(contents):
   return test_results_map
 
 
-def generate_json_results_file_for_json(
-    results_json, builder_name, build_number,
-    results_directory, chrome_revision, master_name, build_id):
+def generate_json_results_file_for_json(results_json, builder_name,
+                                        build_number, results_directory,
+                                        chrome_revision, builder_group,
+                                        build_id):
   """Generates JSON results file from the given |results_json|.
 
   Args:
@@ -68,15 +69,17 @@ def generate_json_results_file_for_json(
   results_json['build_number'] = build_number
   results_json['build_id'] = build_id
   results_json['chromium_revision'] = chrome_revision
-  results_json['master_name'] = master_name
+  # TODO(gbeaty) If test results isn't being turned down soon, this should be
+  # updated
+  results_json['master_name'] = builder_group
   with open(json_results_file_path, 'w') as f:
     json.dump(results_json, f)
   return [(FULL_RESULTS_FILENAME, json_results_file_path)]
 
 
-def generate_json_results_file_for_gtest(
-    gtest_json, builder_name, build_number, results_directory, chrome_revision,
-    master_name, build_id):
+def generate_json_results_file_for_gtest(gtest_json, builder_name, build_number,
+                                         results_directory, chrome_revision,
+                                         build_id):
   """Generates JSON results files from the given |gtest_json|.
 
   Args:
@@ -92,24 +95,19 @@ def generate_json_results_file_for_gtest(
   if not os.path.exists(results_directory):
     os.makedirs(results_directory)
 
-  logging.info(
-      'Generating json: '
-      'builder_name:%s, build_number:%s, '
-      'results_directory:%s, '
-      'chrome_revision:%s '
-      'master_name:%s '
-      'build_id: %s' %
-      (builder_name, build_number,
-       results_directory,
-       chrome_revision,
-       master_name, build_id))
+  logging.info('Generating json: '
+               'builder_name:%s, build_number:%s, '
+               'results_directory:%s, '
+               'chrome_revision:%s '
+               'build_id: %s' % (builder_name, build_number, results_directory,
+                                 chrome_revision, build_id))
 
   # TODO(estaab): This doesn't need to be an object. Make it a simple function.
   generator = JSONResultsGenerator(
-      builder_name, build_number,
+      builder_name,
+      build_number,
       results_directory,
       test_results_map,
-      master_name=master_name,
       test_locations=contents.get('test_locations'),
       build_id=build_id)
   generator.generate_json_output()
@@ -141,11 +139,12 @@ def main(args):
   option_parser.add_option('--test-results-server',
                            help='The test results server to upload the '
                                 'results.')
-  option_parser.add_option('--master-name',
-                           help='The name of the buildbot master. '
-                                'Both test-results-server and master-name '
-                                'need to be specified to upload the results '
-                                'to the server.')
+  option_parser.add_option(
+      '--builder-group',
+      help='The name of the group of the builder. '
+      'Both test-results-server and builder-group '
+      'need to be specified to upload the results '
+      'to the server.')
   option_parser.add_option('--chrome-revision', default='0',
                            help='The Chromium revision being tested. If not '
                                 'given, defaults to 0.')
@@ -163,9 +162,9 @@ def main(args):
     option_parser.error('--input-json needs to be specified.')
     return 1
 
-  if options.test_results_server and not options.master_name:
+  if options.test_results_server and not options.builder_group:
     logging.warn('--test-results-server is given but '
-                 '--master-name is not specified; the results won\'t be '
+                 '--builder-group is not specified; the results won\'t be '
                  'uploaded to the server.')
 
   with file(options.input_json) as json_file:
@@ -175,31 +174,36 @@ def main(args):
   if content.get('version', 0) >= 3:
     logging.info('Input JSON file probably has full json results format')
     files = generate_json_results_file_for_json(
-      content, builder_name=options.builder_name,
-      build_number=options.build_number,
-      results_directory=options.results_directory,
-      chrome_revision=options.chrome_revision,
-      master_name=options.master_name,
-      build_id=options.build_id)
+        content,
+        builder_name=options.builder_name,
+        build_number=options.build_number,
+        results_directory=options.results_directory,
+        chrome_revision=options.chrome_revision,
+        builder_group=options.builder_group,
+        build_id=options.build_id)
   else:
     logging.info(
         'Input JSON file probably has gtest format. Converting to full json'
         ' results format')
     files = generate_json_results_file_for_gtest(
-        results_json, builder_name=options.builder_name,
+        results_json,
+        builder_name=options.builder_name,
         build_number=options.build_number,
         results_directory=options.results_directory,
         chrome_revision=options.chrome_revision,
-        master_name=options.master_name,
         build_id=options.build_id)
 
   # Upload to a test results server if specified.
-  if options.test_results_server and options.master_name:
+  if options.test_results_server and options.builder_group:
     logging.info('Uploading JSON files for builder "%s" to server "%s"' % (
         options.builder_name, options.test_results_server))
-    attrs = [('builder', options.builder_name),
-             ('testtype', options.test_type),
-             ('master', options.master_name)]
+    attrs = [
+        ('builder', options.builder_name),
+        ('testtype', options.test_type),
+        # TODO(gbeaty) If test results isn't being turned down soon, this should
+        # be updated
+        ('master', options.builder_group)
+    ]
 
     # Set uploading timeout in case appengine server is having problem.
     # 120 seconds are more than enough to upload test results.

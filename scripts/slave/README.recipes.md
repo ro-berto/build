@@ -3309,7 +3309,7 @@ Args:
       of each untared file.
 ### *recipe_modules* / [test\_results](/scripts/slave/recipe_modules/test_results)
 
-[DEPS](/scripts/slave/recipe_modules/test_results/__init__.py#5): [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/test_results/__init__.py#5): [builder\_group](#recipe_modules-builder_group), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [TestResultsApi](/scripts/slave/recipe_modules/test_results/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5484,9 +5484,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/tar/examples/full.py#14)(api):**
 ### *recipes* / [test\_results:examples/full](/scripts/slave/recipe_modules/test_results/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [builder\_group](#recipe_modules-builder_group), [test\_results](#recipe_modules-test_results), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#24)(api, warning, server_config):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#25)(api, warning, server_config):**
 ### *recipes* / [test\_utils:tests/exonerate\_flaky\_failures](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/exonerate_flaky_failures.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

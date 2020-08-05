@@ -5,6 +5,7 @@
 from recipe_engine.recipe_api import Property
 
 DEPS = [
+    'builder_group',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -44,30 +45,34 @@ def RunSteps(api, warning, server_config):
 
 
 def GenTests(api):
-
-  def case(name, *test_data, **props):
-    props.setdefault('mastername', 'example.master')
-    return api.test(
-        name,
-        api.buildbucket.ci_build(builder='ExampleBuilder', build_number=123),
-        api.properties(**props), *test_data)
+  builder_data = sum([
+      api.buildbucket.ci_build(builder='ExampleBuilder', build_number=123),
+      api.builder_group.for_current('example.group'),
+  ], api.empty_test_data())
 
   for config in ('no_server', 'public_server', 'staging_server'):
-    yield case('upload_success_%s' % config, server_config=config)
+    yield api.test(
+        'upload_success_%s' % config,
+        builder_data,
+        api.properties(server_config=config),
+    )
 
-  yield case(
+  yield api.test(
       'upload_success_experimental',
+      builder_data,
       api.runtime(is_luci=True, is_experimental=True),
   )
 
-  yield case(
+  yield api.test(
       'upload_and_degrade_to_warning',
+      builder_data,
       api.step_data('Upload to test-results [example-test-type]', retcode=1),
-      warning=True,
+      api.properties(warning=True),
   )
 
-  yield case(
+  yield api.test(
       'upload_without_degrading_failures',
+      builder_data,
       api.step_data('Upload to test-results [example-test-type]', retcode=1),
-      warning=False,
+      api.properties(warning=False),
   )

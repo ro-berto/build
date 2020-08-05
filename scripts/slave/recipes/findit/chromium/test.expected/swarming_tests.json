@@ -1520,7 +1520,7 @@
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
+      "--builder-group",
       "tryserver.chromium.mac",
       "--builder-name",
       "findit_variable",

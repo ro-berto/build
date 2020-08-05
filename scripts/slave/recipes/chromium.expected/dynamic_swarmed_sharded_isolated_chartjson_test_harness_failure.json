@@ -881,7 +881,7 @@
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 2, \"PASS\": 0}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"FAIL FAIL TIMEOUT\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\", \"is_unexpected\": true}, \"Test2-2\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\", \"is_unexpected\": true}}}, \"version\": 3}",
-      "--master-name",
+      "--builder-group",
       "chromium.linux",
       "--builder-name",
       "Linux Tests",
