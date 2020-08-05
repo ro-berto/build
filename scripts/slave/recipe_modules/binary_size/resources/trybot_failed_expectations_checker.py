@@ -31,24 +31,6 @@ def _CheckExpectationsDir(dir_path):
   }
 
 
-def _GetExpectationsDir(build_vars_path):
-  with open(build_vars_path) as f:
-    build_vars = dict(l.rstrip().split('=', 1) for l in f)
-    return build_vars['android_configuration_failure_dir']
-
-
-def _RebasePath(path, new_cwd, old_cwd):
-  """Makes the given path(s) relative to new_cwd, or absolute if not specified.
-
-  If new_cwd is not specified, absolute paths are returned.
-  """
-  old_cwd = os.path.abspath(old_cwd)
-  if new_cwd:
-    new_cwd = os.path.abspath(new_cwd)
-    return os.path.relpath(os.path.join(old_cwd, path), new_cwd)
-  return os.path.abspath(os.path.join(old_cwd, path))
-
-
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument(
@@ -60,14 +42,12 @@ def main():
       action='store_true',
       help='Check for the existance of failed expecation files after a build.')
   parser.add_argument(
-      '--build-vars-path', required=True, help='Path to build_vars.txt.')
+      '--output-directory', required=True, help='E.g. out/Release')
   parser.add_argument(
       '--results-path', help='Output path for the trybot result .json file.')
   args = parser.parse_args()
 
-  expectations_dir = _GetExpectationsDir(args.build_vars_path)
-  expectations_dir = _RebasePath(expectations_dir, os.getcwd(),
-                                 os.path.dirname(args.build_vars_path))
+  expectations_dir = os.path.join(args.output_directory, 'failed_expectations')
 
   if args.check_expectations:
     if not args.results_path:

@@ -430,8 +430,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
   def _check_for_failed_expectation_files(self, results_path, suffix):
     with self.m.context(cwd=self.m.chromium.output_dir):
       checker_script = self.resource('trybot_failed_expectations_checker.py')
-      build_vars_path = self.m.chromium.output_dir.join(
-          constants.BUILD_VARS_PATH)
 
       TEST_DATA = lambda: self.m.json.test_api.output({
           'success': True,
@@ -443,8 +441,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
               '--check-expectations',
               '--results-path',
               self.m.json.output(),
-              '--build-vars-path',
-              build_vars_path,
+              '--output-directory',
+              self.m.chromium.output_dir,
               '--clear-expectations',
           ],
           step_test_data=TEST_DATA)
@@ -481,7 +479,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
     """Clear expectation files from a previous run of the bot"""
 
     checker_script = self.resource('trybot_failed_expectations_checker.py')
-    build_vars_path = self.m.chromium.output_dir.join(constants.BUILD_VARS_PATH)
 
     # This step needs to happen after gn gen but before compile since it
     # requires a var to be written to build_vars.txt. Otherwise, it raises an
@@ -495,7 +492,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
         'Clear Expectation Files',
         checker_script, [
             '--clear-expectations',
-            '--build-vars-path',
-            build_vars_path,
+            '--output-directory',
+            self.m.chromium.output_dir,
         ],
         ok_ret='any')

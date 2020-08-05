@@ -14,7 +14,6 @@ DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
 DEFAULT_MAPPING_FILE_NAME = 'MonochromePublic.aab.mapping'
 
 EXPECTATIONS_STEP_NAME = 'Checking for expectation failures'
-BUILD_VARS_PATH = 'build_vars.txt'
 
 PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')

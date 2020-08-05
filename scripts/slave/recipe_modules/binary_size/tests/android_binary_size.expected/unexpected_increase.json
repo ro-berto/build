@@ -336,8 +336,8 @@
       "-u",
       "RECIPE_MODULE[build::binary_size]/resources/trybot_failed_expectations_checker.py",
       "--clear-expectations",
-      "--build-vars-path",
-      "[CACHE]/builder/src/out/Release/build_vars.txt"
+      "--output-directory",
+      "[CACHE]/builder/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -997,8 +997,8 @@
       "--check-expectations",
       "--results-path",
       "/path/to/tmp/json",
-      "--build-vars-path",
-      "[CACHE]/builder/src/out/Release/build_vars.txt",
+      "--output-directory",
+      "[CACHE]/builder/src/out/Release",
       "--clear-expectations"
     ],
     "cwd": "[CACHE]/builder/src/out/Release",
