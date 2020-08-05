@@ -229,16 +229,14 @@ def GenTests(api):
   def test_defaults(name, platform, build_config, **kwargs):
     return api.test(
         api.v8.test_name('client.v8.official', 'V8 Foobar', name),
-        api.properties.generic(
+        api.chromium.ci_build(
             mastername='client.v8.official',
-            build_config=build_config,
-            **kwargs),
-        api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
-            builder='V8 Foobar',
             git_ref='refs/branch-heads/3.4',
+            builder='V8 Foobar',
             revision='a' * 40),
+        api.properties(build_config=build_config, **kwargs),
         api.platform(platform, 64),
         api.v8.version_file(17, 'head', prefix='sync.'),
         api.override_step_data('sync.git describe',
@@ -323,16 +321,13 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield api.test(
       api.v8.test_name(mastername, buildername, 'no_branch'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername=mastername,
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
-          revision='a' * 40,
-      ),
+          revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64),
       api.post_process(
           MustRun, 'initialization.Skipping due to missing release branch.'),
       api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
@@ -347,17 +342,14 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield api.test(
       api.v8.test_name(mastername, buildername, 'no_tag'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername=mastername,
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
           git_ref='refs/branch-heads/3.4',
-          revision='a' * 40,
-      ),
+          revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3.17-blabla')),
@@ -374,17 +366,14 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield api.test(
       api.v8.test_name(mastername, buildername, 'update_beta'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername=mastername,
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
           git_ref='refs/branch-heads/3.4',
-          revision='a' * 40,
-      ),
+          revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3')),
@@ -397,17 +386,14 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield api.test(
       api.v8.test_name(mastername, buildername, 'canary'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername=mastername,
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
           git_ref='refs/heads/3.4.3',
-          revision='a' * 40,
-      ),
+          revision='a' * 40),
+      api.properties.generic(build_config='Release', target_bits=64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3.1')),
@@ -423,16 +409,14 @@ def GenTests(api):
   yield api.test(
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'debug_compile_failure'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='client.v8.official',
-          build_config='Debug',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40),
+      api.properties(build_config='Debug', target_bits=64),
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
@@ -449,16 +433,14 @@ def GenTests(api):
   yield api.test(
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'release_compile_failure'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='client.v8.official',
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64),
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
@@ -475,16 +457,14 @@ def GenTests(api):
   yield api.test(
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'release_libs_compile_failure'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='client.v8.official',
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64),
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
@@ -501,17 +481,15 @@ def GenTests(api):
   yield api.test(
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'milestone_compile_failure'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername=mastername,
-          build_config='Release',
-          target_bits=64),
-      api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40,
       ),
+      api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3')),

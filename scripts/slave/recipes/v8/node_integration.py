@@ -311,28 +311,31 @@ def GenTests(api):
   for mastername, masterconf in BUILDERS.iteritems():
     for buildername, bot_config in masterconf['builders'].iteritems():
       buildbucket_kwargs = {
-          'project': 'v8',
-          'git_repo': 'https://chromium.googlesource.com/v8/v8',
-          'builder': buildername,
-          'build_number': 571,
-          'revision': 'a' * 40,
-          'tags': api.buildbucket.tags(
-              buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
-              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+          'mastername':
+              mastername,
+          'project':
+              'v8',
+          'git_repo':
+              'https://chromium.googlesource.com/v8/v8',
+          'builder':
+              buildername,
+          'build_number':
+              571,
+          'revision':
+              'a' * 40,
+          'tags':
+              api.buildbucket.tags(
+                  buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
+                  'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
       }
       if mastername.startswith('tryserver'):
-        properties_fn = api.properties.tryserver
-        buildbucket_fn = api.buildbucket.try_build
+        buildbucket_fn = api.chromium.try_build
         buildbucket_kwargs['change_number'] = 456789
         buildbucket_kwargs['patch_set'] = 12
       else:
-        properties_fn = api.properties.generic
-        buildbucket_fn = api.buildbucket.ci_build
+        buildbucket_fn = api.chromium.ci_build
       yield api.test(
           _sanitize_nonalpha('full', mastername, buildername),
-          properties_fn(
-              mastername=mastername,
-          ),
           buildbucket_fn(**buildbucket_kwargs),
           api.platform(bot_config['testing']['platform'], 64),
           api.runtime(is_luci=True, is_experimental=False),
