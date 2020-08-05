@@ -4,6 +4,7 @@
 
 DEPS = [
     'build',
+    'builder_group',
     'chromium',
     'chromium_checkout',
     'code_coverage',

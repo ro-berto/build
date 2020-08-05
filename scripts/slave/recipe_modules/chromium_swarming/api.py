@@ -30,8 +30,8 @@ PER_TARGET_SWARMING_DIMS.update({
 })
 
 
-MASTER_SWARMING_PRIORITIES = collections.defaultdict(lambda: 25)
-MASTER_SWARMING_PRIORITIES.update({
+BUILDER_GROUP_SWARMING_PRIORITIES = collections.defaultdict(lambda: 25)
+BUILDER_GROUP_SWARMING_PRIORITIES.update({
     'chromium.android.fyi': 35,
     'chromium.fyi': 35,
     'chromium.goma.fyi': 35,  # This should be lower than the CQ.
@@ -845,9 +845,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     tags.add('data:' + task_slice.isolated)
     tags.add('name:' + task_request.name.split(' ')[0])
-    mastername = self.m.properties.get('mastername')
-    if mastername:
-      tags.add('master:' + mastername)
+    builder_group = self.m.builder_group.for_current
+    if builder_group:
+      tags.add('builder_group:' + builder_group)
 
     if task.spec_name:
       tags.add('spec_name:' + task.spec_name)
@@ -1665,8 +1665,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       },
     })
 
-  def configure_swarming(self, project_name, precommit, mastername=None,
-                         default_priority=None, path_to_testing_dir=None):
+  def configure_swarming(
+      self,
+      project_name,
+      precommit,
+      builder_group=None,
+      # TODO(https://crbug.com/1109276) Remove mastername
+      mastername=None,
+      default_priority=None,
+      path_to_testing_dir=None):
     """Configures default swarming dimensions and tags.
 
     Uses the 'chromium' global config to determine target platform defaults,
@@ -1677,15 +1684,18 @@ class SwarmingApi(recipe_api.RecipeApi):
       project_name: Lowercase name of the project, e.g. "blink", "chromium".
       precommit: Boolean flag to indicate whether the tests are running before
           the changes are commited.
-      mastername: optional name of the mastername to use to configure the
+      builder_group: optional name of the builder group to use to configure the
           default priority of swarming tasks.
+      mastername: deprecated, use builder_group instead.
       default_priority: optional default_priority to use. Will override the
-          priority name inherited from the mastername (or the global default).
+          priority name inherited from builder_group (or the global default).
       path_to_testing_dir: The path to a local directory mirroring
           https://chromium.googlesource.com/chromium/src/+/master/testing. This
           is needed to access merge and trigger scripts. If unset, this module
           will look at self.m.chromium_checkout.working_dir.
     """
+    assert builder_group is None or mastername is None
+    builder_group = builder_group or mastername
 
     # Set platform-specific default dims.
     target_platform = self.m.chromium.c.TARGET_PLATFORM
@@ -1715,14 +1725,14 @@ class SwarmingApi(recipe_api.RecipeApi):
         self.add_default_tag(
             'patch_project:%s' % self.m.tryserver.gerrit_change.project)
     else:
-      self.default_priority = MASTER_SWARMING_PRIORITIES[mastername]
+      self.default_priority = BUILDER_GROUP_SWARMING_PRIORITIES[builder_group]
       self.add_default_tag('purpose:post-commit')
       self.add_default_tag('purpose:CI')
 
     if default_priority is not None:
       # TODO(crbug.com/876570): We should move the Mojo builders to a
-      # different "master" and get rid of this code path; we don't really want
-      # different builders on the same master to have different priorities,
+      # different builder group and get rid of this code path; we don't really
+      # want different builders in the same group to have different priorities,
       # it makes reasoning about builders harder for sheriffs and troopers.
       self.default_priority = default_priority
 

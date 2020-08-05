@@ -1204,7 +1204,7 @@ Args:
   name: The name of the step.
 ### *recipe_modules* / [chromium\_swarming](/scripts/slave/recipe_modules/chromium_swarming)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
+[DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#5): [build](#recipe_modules-build), [builder\_group](#recipe_modules-builder_group), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
 
 #### **class [SwarmingApi](/scripts/slave/recipe_modules/chromium_swarming/api.py#128)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1251,7 +1251,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1668)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1668)(self, project_name, precommit, builder_group=None, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1263,10 +1263,11 @@ Args:
   project_name: Lowercase name of the project, e.g. "blink", "chromium".
   precommit: Boolean flag to indicate whether the tests are running before
       the changes are commited.
-  mastername: optional name of the mastername to use to configure the
+  builder_group: optional name of the builder group to use to configure the
       default priority of swarming tasks.
+  mastername: deprecated, use builder_group instead.
   default_priority: optional default_priority to use. Will override the
-      priority name inherited from the mastername (or the global default).
+      priority name inherited from builder_group (or the global default).
   path_to_testing_dir: The path to a local directory mirroring
       https://chromium.googlesource.com/chromium/src/+/master/testing. This
       is needed to access merge and trigger scripts. If unset, this module
