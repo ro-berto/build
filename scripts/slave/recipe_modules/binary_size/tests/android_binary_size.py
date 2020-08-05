@@ -40,12 +40,16 @@ def GenTests(api):
                             if no_changes else constants.DEFAULT_COMPILE_TARGETS
         }))
 
-  def override_expectation():
+  def override_expectation_to_fail(with_patch=True, use_alternative=False):
+    suffix = ' (with patch)' if with_patch else ' (without patch)'
+    failed_messages = ['Failure Message A']
+    if use_alternative:
+      failed_messages += ['Failure Message B']
     return api.step_data(
-        'Run Expectations Script',
+        'Run Expectations Script' + suffix,
         api.json.output({
-            'success': True,
-            'failed_messages': []
+            'success': False,
+            'failed_messages': failed_messages,
         }))
 
   def has_binary_size_property(check, steps):
@@ -110,7 +114,7 @@ def GenTests(api):
 
   yield api.test(
       'normal_build', api.binary_size.build('normal_build'), override_analyze(),
-      override_expectation(), api.post_check(has_expected_supersize_link),
+      api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
@@ -128,7 +132,6 @@ def GenTests(api):
 
   yield api.test(
       'unexpected_increase', api.binary_size.build(), override_analyze(),
-      override_expectation(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -145,19 +148,28 @@ def GenTests(api):
           not None)
 
   yield api.test(
-      'expectations_file_failure',
-      api.binary_size.build('expectations_file_failure'), override_analyze(),
-      api.override_step_data(
-          'Run Expectations Script',
-          api.json.output({
-              'success':
-                  False,
-              'failed_messages': [
-                  'ProGuard flag expectations file needs updating. For details '
-                  'see:\nhttps://chromium.googlesource.com/chromium/src/+/HEAD/'
-                  'chrome/android/java/README.md\n',
-              ]
-          })),
+      'expectations_file_warning', api.binary_size.build(), override_analyze(),
+      api.override_step_data('bot_update', retcode=1),
+      override_expectation_to_fail(with_patch=True),
+      override_expectation_to_fail(with_patch=False),
+      api.post_process(post_process.StepWarning,
+                       constants.EXPECTATIONS_STEP_NAME),
+      api.post_check(has_failed_expectations),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'expectations_file_failure', api.binary_size.build(), override_analyze(),
+      override_expectation_to_fail(with_patch=True),
+      api.post_process(post_process.StepFailure,
+                       constants.EXPECTATIONS_STEP_NAME),
+      api.post_check(has_failed_expectations),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'expectations_file_failure_with_note', api.binary_size.build(),
+      override_analyze(), api.override_step_data('bot_update', retcode=1),
+      override_expectation_to_fail(with_patch=True),
+      override_expectation_to_fail(with_patch=False, use_alternative=True),
       api.post_process(post_process.StepFailure,
                        constants.EXPECTATIONS_STEP_NAME),
       api.post_check(has_failed_expectations),
@@ -165,14 +177,14 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation))
   yield api.test(
       'clear_expectation_files_ignores_failure', api.binary_size.build(),
-      override_analyze(), override_expectation(),
+      override_analyze(),
       api.override_step_data('Clear Expectation Files', retcode=1),
       api.post_process(post_process.StepSuccess, 'Clear Expectation Files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
   yield api.test(
       'pass_because_of_size_footer', api.binary_size.build(size_footer=True),
-      override_analyze(), override_expectation(),
+      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -186,7 +198,7 @@ def GenTests(api):
   yield api.test(
       'pass_because_of_revert',
       api.binary_size.build(commit_message='Revert some change'),
-      override_analyze(), override_expectation(),
+      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -201,7 +213,7 @@ def GenTests(api):
   yield api.test(
       'nondefault_results_bucket', api.binary_size.build(),
       api.binary_size.properties(results_bucket='fake-results-bucket'),
-      override_analyze(), override_expectation(),
+      override_analyze(),
       api.post_check(has_expected_supersize_link, bucket='fake-results-bucket'),
       api.post_check(
           has_expected_binary_size_url, bucket='fake-results-bucket'),
@@ -210,7 +222,6 @@ def GenTests(api):
 
   yield api.test(
       'valid_latest_file', api.binary_size.build(), override_analyze(),
-      override_expectation(),
       api.post_process(post_process.MustRun, 'gsutil Downloading zip'),
       api.post_process(post_process.DoesNotRun, 'compile (without patch)'),
       api.post_process(post_process.StatusSuccess),
@@ -218,8 +229,7 @@ def GenTests(api):
 
   yield api.test(
       'valid_latest_file_merge_conflict', api.binary_size.build(),
-      override_analyze(), override_expectation(),
-      api.override_step_data('bot_update', retcode=1),
+      override_analyze(), api.override_step_data('bot_update', retcode=1),
       api.post_process(post_process.MustRun, 'bot_update (2)'),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
@@ -228,7 +238,7 @@ def GenTests(api):
 
   yield api.test(
       'invalid_latest_file', api.binary_size.build(), override_analyze(),
-      override_expectation(), api.time.seed(constants.TEST_TIME + 7230),
+      api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_process(post_process.StatusSuccess),

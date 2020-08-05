@@ -70,15 +70,16 @@ def main():
   expectations_dir = _RebasePath(expectations_dir, os.getcwd(),
                                  os.path.dirname(args.build_vars_path))
 
-  if args.clear_expectations:
-    _ClearExpectationsDir(expectations_dir)
-  else:
-    result = _CheckExpectationsDir(expectations_dir)
+  if args.check_expectations:
     if not args.results_path:
-      raise Exception('--results-path is required when passing '
-                      '--check-expectations')
+      parser.error('--results-path is required when passing '
+                   '--check-expectations')
+    result = _CheckExpectationsDir(expectations_dir)
     with open(args.results_path, 'w') as f:
       json.dump(result, f)
+
+  if args.clear_expectations:
+    _ClearExpectationsDir(expectations_dir)
 
 
 if __name__ == '__main__':

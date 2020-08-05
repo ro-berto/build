@@ -998,13 +998,14 @@
       "--results-path",
       "/path/to/tmp/json",
       "--build-vars-path",
-      "[CACHE]/builder/src/out/Release/build_vars.txt"
+      "[CACHE]/builder/src/out/Release/build_vars.txt",
+      "--clear-expectations"
     ],
     "cwd": "[CACHE]/builder/src/out/Release",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Run Expectations Script",
+    "name": "Run Expectations Script (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failed_messages\": [], @@@",
@@ -1068,7 +1069,10 @@
   },
   {
     "cmd": [],
-    "name": "Checking for expectation failures"
+    "name": "Checking for expectation failures",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Expectations are up-to-date.@@@"
+    ]
   },
   {
     "cmd": [
