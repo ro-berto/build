@@ -129,21 +129,15 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
       self.m.chromium.ensure_goma()
       staging_dir = self.m.path.mkdtemp('binary-size-trybot')
-      expectations_result_path = staging_dir.join('expectations_result.json')
-
-      # expectations_without_patch_json is never set when using cached reference
-      # builds (via use_gs_analysis). This is fine since we expect
-      # expectations_without_patch_json to exist only when using base
-      # expectation files in different repositiories (e.g. //clank), and in this
-      # case use_gs_analysis == False.
-      expectations_without_patch_json = None
       with_results_dir, raw_result = self._build_and_measure(True, staging_dir)
 
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result
 
-      expectations_with_patch_json = self._check_for_failed_expectation_files(
-          expectations_result_path, suffix)
+      with self.m.context(cwd=self.m.chromium.output_dir):
+        expectations_result_path = staging_dir.join('expectations_result.json')
+        expectations_json = self._check_for_failed_expectation_files(
+            expectations_result_path)
 
       if use_gs_analysis and gs_zip_path:
         without_results_dir = self._download_recent_tot_analysis(
@@ -166,10 +160,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                           '')
             return raw_result
 
-        expectations_without_patch_json = (
-            self._check_for_failed_expectation_files(expectations_result_path,
-                                                     suffix))
-
         # Re-apply patch so that the diff scripts can be tested via tryjobs.
         # We could build without-patch first to avoid having to apply the patch
         # twice, but it's nicer to fail fast when the patch does not compile.
@@ -184,7 +174,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
         self._create_diffs(author, without_results_dir, with_results_dir,
                            size_results_path, staging_dir)
         expectation_success = self._maybe_fail_for_expectation_files(
-            expectations_with_patch_json, expectations_without_patch_json)
+            expectations_json)
         binary_size_success = self._check_for_undocumented_increase(
             size_results_path, staging_dir, allow_regressions)
         if not expectation_success or not binary_size_success:
@@ -427,55 +417,27 @@ class BinarySizeApi(recipe_api.RecipeApi):
     return constants.ARCHIVED_URL_FMT.format(
         bucket=self.results_bucket, dest=gs_dest)
 
-  def _check_for_failed_expectation_files(self, results_path, suffix):
-    with self.m.context(cwd=self.m.chromium.output_dir):
-      checker_script = self.resource('trybot_failed_expectations_checker.py')
-      build_vars_path = self.m.chromium.output_dir.join(
-          constants.BUILD_VARS_PATH)
+  def _check_for_failed_expectation_files(self, results_path):
+    checker_script = self.resource('trybot_failed_expectations_checker.py')
+    build_vars_path = self.m.chromium.output_dir.join(constants.BUILD_VARS_PATH)
 
-      TEST_DATA = lambda: self.m.json.test_api.output({
-          'success': True,
-          'failed_messages': [],
-      })
-      step_result = self.m.python(
-          'Run Expectations Script' + suffix,
-          checker_script, [
-              '--check-expectations',
-              '--results-path',
-              self.m.json.output(),
-              '--build-vars-path',
-              build_vars_path,
-              '--clear-expectations',
-          ],
-          step_test_data=TEST_DATA)
-      return step_result.json.output
+    step_result = self.m.python('Run Expectations Script', checker_script, [
+        '--check-expectations',
+        '--results-path',
+        self.m.json.output(),
+        '--build-vars-path',
+        build_vars_path,
+    ])
+    return step_result.json.output
 
-  def _maybe_fail_for_expectation_files(self, expectations_with_patch_json,
-                                        expectations_without_patch_json):
+  def _maybe_fail_for_expectation_files(self, expectations_json):
     with self.m.step.nest(constants.EXPECTATIONS_STEP_NAME) as presentation:
-      if expectations_with_patch_json['success']:
-        presentation.step_text += '<br/>Expectations are up-to-date.'
-      else:
-        presentation.logs['failed expectations'] = (
-            expectations_with_patch_json['failed_messages'])
-        # For android-internal-binary-size, expectations are diffs against base
-        # expectations in //src, and sometimes changes to the base files can
-        # cause the diffs to become stale. Don't fail trybots in this case.
-        if expectations_with_patch_json != expectations_without_patch_json:
-          presentation.step_text += (
-              '<br/>Expectations file need to be updated.')
-          if expectations_without_patch_json:
-            presentation.step_text += (
-                '<br/><b>Note:</b>Expectations did not match both with and '
-                'without patch. You should expect to see some lines in the '
-                'diff that do not relate to your change.')
-          presentation.status = self.m.step.FAILURE
-          return False
-        else:
-          presentation.status = self.m.step.WARNING
-          presentation.step_text += (
-              '<br/>Expectations did not match without patch either.')
-    return True
+      if not expectations_json['success']:
+        presentation.status = self.m.step.FAILURE
+        presentation.logs['failed expectations'] = expectations_json[
+            'failed_messages']
+        return False
+      return True
 
   def _clear_failed_expectation_files(self):
     """Clear expectation files from a previous run of the bot"""
