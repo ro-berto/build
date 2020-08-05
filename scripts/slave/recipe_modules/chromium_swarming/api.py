@@ -1304,7 +1304,17 @@ class SwarmingApi(recipe_api.RecipeApi):
             **kwargs)
     return step_result
 
-  def _check_for_missing_shard(self, merged_results_json, active_step, task):
+  def _task_has_all_shards(self, merged_results_json, active_step, task):
+    """Checks if a task has all of its shards present in its results.
+
+    Args:
+      merged_results_json: The merged result json of a test suite.
+      active_step: The active collection step. The presentation of this step
+      is modified.
+      task: The swarming task being collected.
+    Returns:
+      If the task has missing shards.
+    """
     if merged_results_json:
       missing_shards = merged_results_json.get('missing_shards') or []
       if missing_shards:
@@ -1312,6 +1322,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         for index in missing_shards:
           active_step.presentation.links['missing shard #%d' % index] = \
               task.get_shard_view_url(index)
+        return False
+
+    return True
 
   def _gtest_collect_step(self, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
@@ -1340,7 +1353,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     gtest_results = self.m.test_utils.present_gtest_failures(step_result)
     if gtest_results and gtest_results.valid:
-      self._check_for_missing_shard(gtest_results.raw, step_result, task)
+      has_valid_results = has_valid_results and self._task_has_all_shards(
+          gtest_results.raw, step_result, task)
 
     return step_result, has_valid_results
 
@@ -1420,7 +1434,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_result.presentation.logs['outdir_json'] = (
         outdir_json.splitlines())
 
-    self._check_for_missing_shard(step_result.json.output, step_result, task)
+    has_valid_results = has_valid_results and self._task_has_all_shards(
+        step_result.json.output, step_result, task)
 
     return step_result, has_valid_results
 

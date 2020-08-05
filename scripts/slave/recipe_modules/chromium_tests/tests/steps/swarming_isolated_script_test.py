@@ -41,7 +41,13 @@ def RunSteps(api):
   api.chromium_tests.prepare_checkout(bot_config_object)
 
   test_repeat_count = api.properties.get('repeat_count')
-  test_name = 'blink_web_tests' if test_repeat_count else 'base_unittests'
+  if api.properties.get('swarm_hashes'):
+    swarm_hashes = api.properties['swarm_hashes']
+    assert len(swarm_hashes) == 1
+    test_name = list(swarm_hashes.keys())[0]
+  else:
+    # Needed for a test
+    test_name = 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
   test = steps.SwarmingIsolatedScriptTest(
       name=test_name,
@@ -85,16 +91,17 @@ def RunSteps(api):
       test.pre_run(api, 'without patch')
       test.run(api, 'without patch')
 
-    api.step('details', [])
-    api.step.active_result.presentation.logs['details'] = [
-      'compile_targets: %r' % test.compile_targets(),
-      'uses_local_devices: %r' % test.uses_local_devices,
-      'uses_isolate: %r' % test.uses_isolate,
+    result = api.step('details', [])
+    result.presentation.logs['details'] = [
+        'compile_targets: %r' % test.compile_targets(),
+        'uses_local_devices: %r' % test.uses_local_devices,
+        'uses_isolate: %r' % test.uses_isolate,
     ]
-    if test_repeat_count:
-      api.step.active_result.presentation.logs['details'].append(
-        'pass_fail_counts: %r' % test.pass_fail_counts(suffix='with patch')
-      )
+    if test_name == 'blink_web_tests':
+      result.presentation.logs['details'].append(
+          'pass_fail_counts: %r' % test.pass_fail_counts(suffix='with patch'))
+      result.presentation.logs['details'].append(
+          'has_valid_results: %r' % test.has_valid_results('with patch'))
 
 
 def GenTests(api):
@@ -125,6 +132,27 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },),
+  )
+
+  yield api.test(
+      'missing_shards',
+      api.chromium.ci_build(
+          mastername='chromium.linux',
+          builder='Linux Tests',
+      ),
+      api.properties(
+          swarm_hashes={
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },),
+      api.override_step_data(
+          'blink_web_tests on Intel GPU on Linux (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.m.json.output({
+                  'missing_shards': [0],
+              }, 0),
+              shards=1)),
+      api.post_process(verify_log_fields, {'has_valid_results': False}),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
