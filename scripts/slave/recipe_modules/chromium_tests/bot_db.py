@@ -17,17 +17,22 @@ from RECIPE_MODULES.build.chromium.types import BuilderId
 
 @attrs()
 class BotDatabase(collections.Mapping):
-  """A database that provides information for multiple masters.
+  """A database that provides information for multiple groups.
 
-  BotDatabase provides access to the information contained in MasterSpec
-  instances for multiple masters. Individual builders can be looked up
+  BotDatabase provides access to the information contained in GroupSpec
+  instances for multiple groups. Individual builders can be looked up
   using mapping access with BuilderId as keys and BotSpec as values.
-  Information for an entire master can be accessed through the
-  master_specs field, which maps mastername to MasterSpec.
+  Information for an entire group can be accessed through the
+  group_specs field, which maps group to GroupSpec.
   """
 
   _db = mapping_attrib(BuilderId, bot_spec_module.BotSpec)
-  builders_by_master = mapping_attrib(str, FrozenDict)
+  builders_by_group = mapping_attrib(str, FrozenDict)
+
+  # TODO(https://crbug.com/1109276) Remove this
+  @property
+  def builders_by_master(self):
+    return self.builders_by_group  # pragma: no cover
 
   @classmethod
   def create(cls, bots_dict):
@@ -36,40 +41,40 @@ class BotDatabase(collections.Mapping):
     Args:
       bots_dict - The mapping containing the information to create the
         database from. The keys of the mapping are the names of the
-        masters. The values of the mapping provide the information for
-        the master and must be in a form that can be passed to
-        MasterSpec.normalize.
+        groups. The values of the mapping provide the information for
+        the group and must be in a form that can be passed to
+        GroupSpec.normalize.
 
     Returns:
     A new BotDatabase instance providing access to the information in
     bots_dict.
     """
     db = {}
-    builders_by_master = {}
+    builders_by_group = {}
 
-    for master_name, builders_for_master in bots_dict.iteritems():
-      assert builders_for_master.keys() != [
+    for group, builders_for_group in bots_dict.iteritems():
+      assert builders_for_group.keys() != [
           'builders'
       ], "Remove unnecessary 'builders' level"
 
-      builders_for_master = dict(builders_for_master)
-      for builder_name, builder_spec in builders_for_master.iteritems():
-        builder_id = BuilderId.create_for_master(master_name, builder_name)
+      builders_for_group = dict(builders_for_group)
+      for builder_name, builder_spec in builders_for_group.iteritems():
+        builder_id = BuilderId.create_for_group(group, builder_name)
         try:
           builder_spec = bot_spec_module.BotSpec.normalize(builder_spec)
         except Exception as e:
-          # Re-raise the exception with information that identifies the master
+          # Re-raise the exception with information that identifies the group
           # that is problematic
           message = '{} while creating spec for builder {!r}'.format(
               e.message, builder_id)
           raise type(e)(message), None, sys.exc_info()[2]
 
-        builders_for_master[builder_name] = builder_spec
+        builders_for_group[builder_name] = builder_spec
         db[builder_id] = builder_spec
 
-      builders_by_master[master_name] = builders_for_master
+      builders_by_group[group] = builders_for_group
 
-    return cls(db, builders_by_master)
+    return cls(db, builders_by_group)
 
   @classmethod
   def normalize(cls, bot_db):
@@ -77,9 +82,9 @@ class BotDatabase(collections.Mapping):
 
     The incoming representation can have one of the following forms:
     * BotDatabase - The input is returned.
-    * A mapping containing keys with master names and values
-      representing master specs that can be normalized via
-      MasterSpec.normalize - The input is passed to BotDatabase.create.
+    * A mapping containing keys with groups and values representing
+      group specs that can be normalized via GroupSpec.normalize - The
+      input is passed to BotDatabase.create.
     """
     if isinstance(bot_db, BotDatabase):
       return bot_db
@@ -121,8 +126,8 @@ class BotGraph(collections.Mapping):
       if builder_spec.parent_buildername is None:
         continue
 
-      parent_id = BuilderId.create_for_master(
-          builder_spec.parent_mastername or builder_id.master,
+      parent_id = BuilderId.create_for_group(
+          builder_spec.parent_builder_group or builder_id.group,
           builder_spec.parent_buildername)
       graph[parent_id].add(builder_id)
 

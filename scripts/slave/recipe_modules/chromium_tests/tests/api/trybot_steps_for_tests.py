@@ -32,7 +32,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux-rel',
       ),
       api.properties(tests=['base_unittests'],),

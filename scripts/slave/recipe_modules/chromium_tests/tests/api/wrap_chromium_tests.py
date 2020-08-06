@@ -93,7 +93,7 @@ def GenTests(api):
   yield api.test(
       'require_device_steps',
       api.chromium.ci_build(
-          mastername='chromium.example', builder='android-basic'),
+          builder_group='chromium.example', builder='android-basic'),
       api.chromium_tests.builders(test_builders),
       api.properties(local_gtest=True),
       api.post_process(post_process.MustRun, 'device_recovery'),
@@ -105,7 +105,7 @@ def GenTests(api):
   yield api.test(
       'use_clang_coverage',
       api.chromium.ci_build(
-          mastername='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -114,23 +114,26 @@ def GenTests(api):
       'win',
       api.platform.name('win'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.win', builder='win7-rel'),
+          builder_group='tryserver.chromium.win', builder='win7-rel'),
   )
 
   yield api.test(
       'isolated_targets',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
   )
 
   yield api.test(
       'local_isolated_script_test',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(local_isolated_script_test=True,),
   )
 
   yield api.test(
       'script_test',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(script_test=True),
   )

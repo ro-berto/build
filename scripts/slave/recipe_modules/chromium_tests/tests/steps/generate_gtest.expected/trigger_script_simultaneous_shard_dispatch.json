@@ -34,7 +34,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "builder_group:test_mastername",
+      "builder_group:test_group",
       "--tag",
       "buildername:test_buildername",
       "--tag",

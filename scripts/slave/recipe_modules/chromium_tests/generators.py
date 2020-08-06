@@ -72,8 +72,11 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       # repo is not Chromium and got_cr_revision is not defined.
       'got_src_revision':
           bot_update_step.presentation.properties.get('got_src_revision'),
+      'builder_group':
+          api.builder_group.for_current,
+      # TODO(https://crbug.com/1109276) Do not set mastername property
       'mastername':
-          api.properties.get('mastername'),
+          api.builder_group.for_current,
       'patch_issue':
           cl.change if cl else None,
       'patch_set':
@@ -248,7 +251,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
 
 def generate_gtest(api,
                    chromium_tests_api,
-                   mastername,
+                   builder_group,
                    buildername,
                    test_spec,
                    bot_update_step,
@@ -283,7 +286,7 @@ def generate_gtest(api,
     common_gtest_kwargs['override_compile_targets'] = spec.get(
         'override_compile_targets', None)
 
-    common_gtest_kwargs['waterfall_mastername'] = mastername
+    common_gtest_kwargs['waterfall_builder_group'] = builder_group
     common_gtest_kwargs['waterfall_buildername'] = buildername
 
     return common_gtest_kwargs
@@ -310,7 +313,7 @@ def generate_gtest(api,
 
 def generate_junit_test(api,
                         chromium_tests_api,
-                        mastername,
+                        builder_group,
                         buildername,
                         test_spec,
                         bot_update_step,
@@ -323,13 +326,13 @@ def generate_junit_test(api,
         test.get('name', test['test']),
         target_name=test['test'],
         additional_args=test.get('args'),
-        waterfall_mastername=mastername,
+        waterfall_builder_group=builder_group,
         waterfall_buildername=buildername)
 
 
 def generate_script(api,
                     chromium_tests_api,
-                    mastername,
+                    builder_group,
                     buildername,
                     test_spec,
                     bot_update_step,
@@ -345,13 +348,13 @@ def generate_script(api,
         scripts_compile_targets_fn(),
         script_spec.get('args', []),
         script_spec.get('override_compile_targets', []),
-        waterfall_mastername=mastername,
+        waterfall_builder_group=builder_group,
         waterfall_buildername=buildername)
 
 
 def generate_isolated_script(api,
                              chromium_tests_api,
-                             mastername,
+                             builder_group,
                              buildername,
                              test_spec,
                              bot_update_step,
@@ -406,7 +409,7 @@ def generate_isolated_script(api,
     kwargs['ignore_task_failure'] = swarming_spec.get(
         'ignore_task_failure', False)
     kwargs['waterfall_buildername'] = buildername
-    kwargs['waterfall_mastername'] = mastername
+    kwargs['waterfall_builder_group'] = builder_group
 
     return steps.SwarmingIsolatedScriptTest(**kwargs)
 

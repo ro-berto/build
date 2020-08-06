@@ -50,7 +50,7 @@ def GenTests(api):
   yield api.test(
       'experiment_on',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100'),
@@ -64,7 +64,7 @@ def GenTests(api):
   yield api.test(
       'experiment_off',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='0'),
@@ -78,7 +78,7 @@ def GenTests(api):
   yield api.test(
       'experiment_on_invalid_results',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100', has_valid_results=False),
@@ -92,7 +92,7 @@ def GenTests(api):
   yield api.test(
       'experiment_off_invalid_results',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='0', has_valid_results=False),
@@ -102,7 +102,7 @@ def GenTests(api):
   yield api.test(
       'experiment_on_valid_failures',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100', failures=['foo']),
@@ -112,7 +112,7 @@ def GenTests(api):
   yield api.test(
       'experiment_off_valid_failures',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='0', failures=['foo']),
@@ -122,7 +122,7 @@ def GenTests(api):
   yield api.test(
       'failure_in_pre_run',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100'),
@@ -136,7 +136,7 @@ def GenTests(api):
   yield api.test(
       'failure_in_run',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100'),
@@ -149,7 +149,7 @@ def GenTests(api):
   yield api.test(
       'abort_on_failure',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -162,7 +162,7 @@ def GenTests(api):
   yield api.test(
       'with_patch',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100', suffix='with patch'),

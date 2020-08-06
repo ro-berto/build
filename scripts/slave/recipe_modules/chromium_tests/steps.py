@@ -216,7 +216,7 @@ class Test(object):
                target_name=None,
                full_test_target=None,
                test_id_prefix=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None):
     """
     Args:
@@ -228,9 +228,9 @@ class Test(object):
         "//chrome/test:browser_tests".
       test_id_prefix: Test_id prefix used by ResultDB, e.g.
           "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
-      waterfall_mastername (str): Matching waterfall buildbot master name.
-        This value would be different from trybot master name.
-      waterfall_buildername (str): Matching waterfall buildbot builder name.
+      waterfall_builder_group (str): Matching waterfall builder group.
+        This value would be different from trybot group.
+      waterfall_buildername (str): Matching waterfall builder name.
         This value would be different from trybot builder name.
     """
     super(Test, self).__init__()
@@ -266,7 +266,7 @@ class Test(object):
     # Must be updated using update_test_run()
     self._test_runs = {}
 
-    self._waterfall_mastername = waterfall_mastername
+    self._waterfall_builder_group = waterfall_builder_group
     self._waterfall_buildername = waterfall_buildername
     self._test_options = TestOptions()
 
@@ -508,7 +508,7 @@ class Test(object):
 
   def step_metadata(self, suffix=None):
     data = {
-        'waterfall_mastername': self._waterfall_mastername,
+        'waterfall_builder_group': self._waterfall_builder_group,
         'waterfall_buildername': self._waterfall_buildername,
         'canonical_step_name': self.canonical_name,
         'isolate_target_name': self.isolate_target,
@@ -920,12 +920,12 @@ class ScriptTest(Test):  # pylint: disable=W0232
                all_compile_targets,
                script_args=None,
                override_compile_targets=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                **kwargs):
     super(ScriptTest, self).__init__(
         name,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername,
         **kwargs)
     self._script = script
@@ -1034,7 +1034,7 @@ class LocalGTestTest(Test):
                override_compile_targets=None,
                commit_position_property='got_revision_cp',
                use_xvfb=True,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                set_up=None,
                tear_down=None,
@@ -1069,7 +1069,7 @@ class LocalGTestTest(Test):
         target_name=target_name,
         full_test_target=full_test_target,
         test_id_prefix=test_id_prefix,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername)
     self._args = args or []
     self._target_name = target_name
@@ -1569,7 +1569,7 @@ class SwarmingTest(Test):
                expiration=None,
                hard_timeout=None,
                io_timeout=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                set_up=None,
                tear_down=None,
@@ -1601,7 +1601,7 @@ class SwarmingTest(Test):
       hard_timeout: Timeout of the test in Swarming, in seconds.
       io_timeout: Max amount of time in seconds Swarming will allow the task to
           be silent (no stdout or stderr).
-      waterfall_mastername: Waterfall/console name for the test's builder.
+      waterfall_builder_group: Waterfall/console name for the test's builder.
       waterfall_buildername: Builder name for the test's builder.
       set_up: Optional set up scripts.
       tear_down: Optional tear_down scripts.
@@ -1630,7 +1630,7 @@ class SwarmingTest(Test):
         target_name=target_name,
         full_test_target=full_test_target,
         test_id_prefix=test_id_prefix,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername,
         **kwargs)
     self._tasks = {}
@@ -2049,7 +2049,7 @@ class SwarmingGTestTest(SwarmingTest):
                hard_timeout=None,
                io_timeout=None,
                override_compile_targets=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                merge=None,
                trigger_script=None,
@@ -2072,7 +2072,7 @@ class SwarmingGTestTest(SwarmingTest):
         expiration,
         hard_timeout,
         io_timeout,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up,
         tear_down=tear_down,
@@ -2313,7 +2313,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                results_url=None,
                perf_dashboard_id=None,
                io_timeout=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                merge=None,
                trigger_script=None,
@@ -2335,7 +2335,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         expiration,
         hard_timeout,
         io_timeout,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up,
         tear_down=tear_down,
@@ -2496,11 +2496,11 @@ class AndroidTest(Test):
   def __init__(self,
                name,
                compile_targets,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None):
     super(AndroidTest, self).__init__(
         name,
-        waterfall_mastername=waterfall_mastername,
+        waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername)
     self._compile_targets = compile_targets
 
@@ -2554,13 +2554,13 @@ class AndroidJunitTest(AndroidTest):
                name,
                target_name=None,
                additional_args=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None):
     target_name = target_name or name
     super(AndroidJunitTest, self).__init__(
         name,
         compile_targets=[target_name],
-        waterfall_mastername=None,
+        waterfall_builder_group=None,
         waterfall_buildername=None)
     self._additional_args = additional_args
     self._target_name = target_name
@@ -2690,7 +2690,7 @@ class MockTest(Test):
                target_name=None,
                full_test_target=None,
                test_id_prefix=None,
-               waterfall_mastername=None,
+               waterfall_builder_group=None,
                waterfall_buildername=None,
                abort_on_failure=False,
                has_valid_results=True,
@@ -2699,7 +2699,8 @@ class MockTest(Test):
                per_suffix_failures=None,
                per_suffix_valid=None,
                api=None):
-    super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
+    super(MockTest, self).__init__(waterfall_builder_group,
+                                   waterfall_buildername)
     self._target_name = target_name
     self._full_test_target = full_test_target
     self._test_id_prefix = test_id_prefix

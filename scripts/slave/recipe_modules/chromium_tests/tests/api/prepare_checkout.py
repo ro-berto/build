@@ -14,7 +14,7 @@ from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DUMMY_BUILDERS = bot_db.BotDatabase.create({
     'chromium.fake': {
-        'cross-master-trigger-builder':
+        'cross-group-trigger-builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -24,11 +24,11 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
             ),
     },
     'chromium.fake.fyi': {
-        'cross-master-trigger-tester':
+        'cross-group-trigger-tester':
             bot_spec.BotSpec.create(
                 execution_mode=bot_spec.TEST,
-                parent_buildername='cross-master-trigger-builder',
-                parent_mastername='chromium.fake',
+                parent_buildername='cross-group-trigger-builder',
+                parent_builder_group='chromium.fake',
             ),
     },
 })
@@ -44,13 +44,13 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
   )
 
   yield api.test(
-      'cross_master_trigger',
+      'cross_group_trigger',
       api.chromium.ci_build(
-          mastername='chromium.fake', builder='cross-master-trigger-builder'),
+          builder_group='chromium.fake', builder='cross-group-trigger-builder'),
       api.chromium_tests.builders(DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
                        'read test spec (chromium.fake.fyi.json)'),
@@ -60,35 +60,35 @@ def GenTests(api):
   yield api.test(
       'mirror-with-non-child-tester',
       api.chromium.try_build(
-          mastername='fake-try-master',
+          builder_group='fake-try-group',
           builder='fake-try-builder',
       ),
       api.chromium_tests.builders({
-          'fake-master': {
+          'fake-group': {
               'fake-builder': {
                   'chromium_config': 'chromium',
                   'gclient_config': 'chromium',
               },
           },
-          'fake-tester-master': {
+          'fake-tester-group': {
               'fake-tester': {
                   'execution_mode': bot_spec.PROVIDE_TEST_SPEC,
               },
           },
       }),
       api.chromium_tests.trybots({
-          'fake-try-master': {
+          'fake-try-group': {
               'fake-try-builder': {
                   'mirrors': [{
-                      'mastername': 'fake-master',
+                      'builder_group': 'fake-group',
                       'buildername': 'fake-builder',
-                      'tester_mastername': 'fake-tester-master',
+                      'tester_group': 'fake-tester-group',
                       'tester': 'fake-tester',
                   }],
               },
           },
       }),
       api.post_process(post_process.MustRun,
-                       'read test spec (fake-tester-master.json)'),
+                       'read test spec (fake-tester-group.json)'),
       api.post_process(post_process.DropExpectation),
   )

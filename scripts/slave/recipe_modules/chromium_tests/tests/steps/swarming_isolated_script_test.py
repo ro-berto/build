@@ -125,7 +125,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -158,7 +158,7 @@ def GenTests(api):
   yield api.test(
       'isolate_coverage_data',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -174,7 +174,7 @@ def GenTests(api):
   yield api.test(
       'fail',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -191,7 +191,7 @@ def GenTests(api):
   yield api.test(
       'fail_many_failures',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -215,7 +215,7 @@ def GenTests(api):
   yield api.test(
       'fail_to_trigger',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.post_process(post_process.StatusFailure),
@@ -229,7 +229,7 @@ def GenTests(api):
   yield api.test(
       'without_patch_filter',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -285,7 +285,7 @@ def GenTests(api):
   yield api.test(
       'expected_failures',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -325,7 +325,7 @@ def GenTests(api):
   yield api.test(
       'customized_test_options',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -361,7 +361,7 @@ def GenTests(api):
   yield api.test(
       'override_compile_targets',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -374,7 +374,7 @@ def GenTests(api):
   yield api.test(
       'chartjson',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -401,7 +401,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_simplified_ignore_task_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -427,7 +427,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_ignore_task_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -455,7 +455,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_invalid',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -481,7 +481,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_max_failures',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -507,7 +507,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_no_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -521,7 +521,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_no_results_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -539,7 +539,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_not_uploading',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -565,7 +565,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_disabled',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -594,7 +594,7 @@ def GenTests(api):
   yield api.test(
       'chartjson_simplified_disabled',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -626,7 +626,7 @@ def GenTests(api):
   yield api.test(
       'histograms',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -647,7 +647,7 @@ def GenTests(api):
   yield api.test(
       'histograms_LUCI_missing_perf_dashboard_machine_group_property',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -676,7 +676,7 @@ def GenTests(api):
   yield api.test(
       'dimensions_windows',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -692,7 +692,7 @@ def GenTests(api):
   yield api.test(
       'dimensions_mac',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -708,7 +708,7 @@ def GenTests(api):
   yield api.test(
       'dimensions_mac_hidpi',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -725,7 +725,7 @@ def GenTests(api):
   yield api.test(
       'dimensions_mac_intel_stable',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -774,7 +774,7 @@ def GenTests(api):
   yield api.test(
       'dimensions_android',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Lollipop Phone Tester',
       ),
       api.properties(
@@ -791,7 +791,7 @@ def GenTests(api):
   yield api.test(
       'invalid_test_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -811,7 +811,7 @@ def GenTests(api):
   yield api.test(
       'unreliable_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(
@@ -823,9 +823,8 @@ def GenTests(api):
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.m.json.output({
-                  'global_tags': ['UNRELIABLE_RESULTS']
-              }, 0),
+              api.test_utils.m.json.output(
+                  {'global_tags': ['UNRELIABLE_RESULTS']}, 0),
               shards=2)),
       api.post_process(post_process.StepException,
                        'blink_web_tests on Intel GPU on Linux (with patch)'),

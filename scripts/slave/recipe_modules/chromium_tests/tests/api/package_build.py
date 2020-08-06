@@ -30,17 +30,18 @@ def RunSteps(api, builders):
 def GenTests(api):
   yield api.test(
       'standard',
-      api.chromium.ci_build(mastername='chromium.fake', builder='fake-builder'),
+      api.chromium.ci_build(
+          builder_group='chromium.fake', builder='fake-builder'),
       api.properties(
           builders={
               'chromium.fake': {
-                      'fake-builder': {
-                          'build_gs_bucket': 'sample-bucket',
-                          'chromium_config': 'chromium',
-                          'enable_package_transfer': True,
-                          'gclient_config': 'chromium',
-                      },
+                  'fake-builder': {
+                      'build_gs_bucket': 'sample-bucket',
+                      'chromium_config': 'chromium',
+                      'enable_package_transfer': True,
+                      'gclient_config': 'chromium',
                   },
+              },
           }),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
@@ -54,17 +55,17 @@ def GenTests(api):
   yield api.test(
       'perf-upload',
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='fake-perf-builder'),
+          builder_group='chromium.perf', builder='fake-perf-builder'),
       api.properties(
           builders={
               'chromium.perf': {
-                      'fake-perf-builder': {
-                          'build_gs_bucket': 'sample-bucket',
-                          'chromium_config': 'chromium',
-                          'enable_package_transfer': True,
-                          'gclient_config': 'chromium',
-                      },
+                  'fake-perf-builder': {
+                      'build_gs_bucket': 'sample-bucket',
+                      'chromium_config': 'chromium',
+                      'enable_package_transfer': True,
+                      'gclient_config': 'chromium',
                   },
+              },
           }),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
@@ -77,18 +78,18 @@ def GenTests(api):
   yield api.test(
       'bisect',
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='fake-bisect-builder'),
+          builder_group='chromium.perf', builder='fake-bisect-builder'),
       api.properties(
           builders={
               'chromium.perf': {
-                      'fake-bisect-builder': {
-                          'bisect_archive_build': True,
-                          'bisect_gs_bucket': 'sample-bisect-bucket',
-                          'chromium_config': 'chromium',
-                          'enable_package_transfer': True,
-                          'gclient_config': 'chromium',
-                      },
+                  'fake-bisect-builder': {
+                      'bisect_archive_build': True,
+                      'bisect_gs_bucket': 'sample-bisect-bucket',
+                      'chromium_config': 'chromium',
+                      'enable_package_transfer': True,
+                      'gclient_config': 'chromium',
                   },
+              },
           }),
       api.post_process(post_process.MustRun, 'package build for bisect'),
       api.post_process(post_process.DoesNotRun, 'package build'),

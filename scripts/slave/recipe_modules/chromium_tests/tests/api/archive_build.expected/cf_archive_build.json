@@ -284,13 +284,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/fake-master.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "read test spec (fake-master.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-master.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

@@ -21,10 +21,10 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'cf_archive_build',
-      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
@@ -40,5 +40,6 @@ def GenTests(api):
 
   yield api.test(
       'archive_build',
-      api.chromium.ci_build(mastername='chromium', builder='linux-archive-rel'),
+      api.chromium.ci_build(
+          builder_group='chromium', builder='linux-archive-rel'),
   )

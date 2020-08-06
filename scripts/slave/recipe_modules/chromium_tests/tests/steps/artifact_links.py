@@ -76,7 +76,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -109,7 +109,7 @@ def GenTests(api):
   yield api.test(
       'bulk_log',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -141,7 +141,7 @@ def GenTests(api):
   yield api.test(
       'filepath',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -176,7 +176,7 @@ def GenTests(api):
   yield api.test(
       'http',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -198,7 +198,7 @@ def GenTests(api):
   yield api.test(
       'corrupt_tests',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={

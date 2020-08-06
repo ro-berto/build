@@ -18,21 +18,21 @@ def RunSteps(api):
   api.assertions.maxDiff = None
 
   db = bot_db.BotDatabase.create({
-      'master-1': {
+      'group-1': {
           'builder-1-a': {},
           'builder-1-b': {
               'parent_buildername': 'builder-1-a',
               'execution_mode': bot_spec.TEST,
           },
       },
-      'master-2': {
+      'group-2': {
           'builder-2': {
-              'parent_mastername': 'master-1',
+              'parent_builder_group': 'group-1',
               'parent_buildername': 'builder-1-a',
               'execution_mode': bot_spec.TEST,
           },
       },
-      'master-3': {
+      'group-3': {
           'builder-3-a':
               bot_spec.BotSpec.create(
                   parent_buildername='builder-3-c',
@@ -42,12 +42,12 @@ def RunSteps(api):
       },
   })
 
-  key_1a = BuilderId.create_for_master('master-1', 'builder-1-a')
-  key_1b = BuilderId.create_for_master('master-1', 'builder-1-b')
-  key_2 = BuilderId.create_for_master('master-2', 'builder-2')
-  key_3a = BuilderId.create_for_master('master-3', 'builder-3-a')
-  key_3b = BuilderId.create_for_master('master-3', 'builder-3-b')
-  key_3c = BuilderId.create_for_master('master-3', 'builder-3-c')
+  key_1a = BuilderId.create_for_group('group-1', 'builder-1-a')
+  key_1b = BuilderId.create_for_group('group-1', 'builder-1-b')
+  key_2 = BuilderId.create_for_group('group-2', 'builder-2')
+  key_3a = BuilderId.create_for_group('group-3', 'builder-3-a')
+  key_3b = BuilderId.create_for_group('group-3', 'builder-3-b')
+  key_3c = BuilderId.create_for_group('group-3', 'builder-3-c')
 
   api.assertions.assertEqual(
       set(db.keys()), {key_1a, key_1b, key_2, key_3a, key_3b, key_3c})
@@ -59,7 +59,7 @@ def RunSteps(api):
   api.assertions.assertEqual(
       db[key_2],
       bot_spec.BotSpec.create(
-          parent_mastername='master-1',
+          parent_builder_group='group-1',
           parent_buildername='builder-1-a',
           execution_mode=bot_spec.TEST,
       ))

@@ -230,7 +230,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return update_step, build_config
 
   def generate_tests_from_source_side_spec(self, source_side_spec, bot_spec,
-                                           buildername, mastername,
+                                           buildername, builder_group,
                                            swarming_dimensions,
                                            scripts_compile_targets_fn,
                                            bot_update_step):
@@ -241,7 +241,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           generator(
               self.m,
               self,
-              mastername,
+              builder_group,
               buildername,
               source_side_spec,
               bot_update_step,
@@ -504,7 +504,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'Called package_build for %s:%s, which is has execution mode %r. '
         'Only %r is supported by package_build. '
         'This is a bug in your recipe.' %
-        (builder_id.master, builder_id.builder, bot_spec.execution_mode,
+        (builder_id.group, builder_id.builder, bot_spec.execution_mode,
          bot_spec_module.COMPILE_AND_TEST))
 
     if not bot_spec.cf_archive_build:
@@ -539,7 +539,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         package_step = self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
-            build_url=self._build_gs_archive_url(bot_spec, builder_id.master,
+            build_url=self._build_gs_archive_url(bot_spec, builder_id.group,
                                                  builder_id.builder),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
@@ -630,7 +630,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # LUCI-Scheduler-based triggering (required on luci stack).
     properties = {
-        'parent_mastername': builder_id.master,
+        'parent_builder_group': builder_id.group,
+        # TODO(https://crbug.com/1109276) Do not set the parent_mastername
+        # property
+        'parent_mastername': builder_id.group,
         'parent_buildername': builder_id.builder,
     }
     for name, value in update_step.presentation.properties.iteritems():
@@ -721,8 +724,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
     if not build_archive_url:
-      legacy_build_url = self._make_legacy_build_url(bot_spec,
-                                                     builder_id.master)
+      legacy_build_url = self._make_legacy_build_url(bot_spec, builder_id.group)
 
     self.m.archive.download_and_unzip_build(
         step_name='extract build',
@@ -735,18 +737,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gn.get_args(
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-  def _make_legacy_build_url(self, bot_spec, mastername):
-    # The master where the build was zipped and uploaded from.
-    source_master = self.m.properties.get('parent_mastername')
+  def _make_legacy_build_url(self, bot_spec, builder_group):
+    # The group where the build was zipped and uploaded from.
+    source_group = self.m.builder_group.for_parent
     # TODO(gbeaty) I think this can be removed, this method is only used when
     # downloading and unzipping a build, which should always be on a builder
-    # triggered, which will have the parent_mastername property set
-    if not source_master:
-      source_master = self.m.properties['mastername']  # pragma: no cover
+    # triggered, which will have the parent_builder_group property set
+    if not source_group:
+      source_group = self.m.builder_group.for_current  # pragma: no cover
     return self.m.archive.legacy_download_url(
         bot_spec.build_gs_bucket,
-        extra_url_components=(None if mastername.startswith('chromium.perf')
-                              else source_master))
+        extra_url_components=(None if builder_group.startswith('chromium.perf')
+                              else source_group))
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
@@ -960,26 +962,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_spec.bisect_gs_bucket,
         extra_url_components=bot_spec.bisect_gs_extra)
 
-  def _build_gs_archive_url(self, bot_spec, mastername, buildername):
+  def _build_gs_archive_url(self, bot_spec, builder_group, buildername):
     """Returns the archive URL to pass to self.m.archive.zip_and_upload_build.
 
-    Most builders on most masters use a standard format for the build archive
-    URL, but some builders on some masters may specify custom places to upload
+    Most builders on most groups use a standard format for the build archive
+    URL, but some builders on some groups may specify custom places to upload
     builds to. These special cases include:
       'chromium.perf' or 'chromium.perf.fyi':
-        Exclude the name of the master from the url.
+        Exclude the name of the group from the url.
       'tryserver.chromium.perf', or
           linux_full_bisect_builder on 'tryserver.chromium.linux':
         Return None so that the archive url specified in factory_properties
-        (as set on the master's configuration) is used instead.
+        (as set on the group's configuration) is used instead.
     """
-    if mastername.startswith('chromium.perf'):
+    if builder_group.startswith('chromium.perf'):
       return self.m.archive.legacy_upload_url(
           bot_spec.build_gs_bucket, extra_url_components=None)
     else:
       return self.m.archive.legacy_upload_url(
           bot_spec.build_gs_bucket,
-          extra_url_components=self.m.properties['mastername'])
+          extra_url_components=self.m.builder_group.for_current)
 
   def get_common_args_for_scripts(self, bot_config=None):
     args = []
@@ -996,17 +998,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties = {}
     # TODO(phajdan.jr): Remove buildnumber when no longer used.
 
-    mastername = self.m.properties.get('mastername')
+    builder_group = self.m.builder_group.for_current
     if not bot_config:
       buildername = self.m.buildbucket.builder_name
-      master_dict = self.builders.get(mastername, {})
-      bot_config = master_dict.get('builders', {}).get(buildername, {})
+      group_dict = self.builders.get(builder_group, {})
+      bot_config = group_dict.get('builders', {}).get(buildername, {})
 
     properties['buildername'] = self.m.buildbucket.builder_name
     properties['buildnumber'] = self.m.buildbucket.build.number
     properties['bot_id'] = self.m.swarming.bot_id
     properties['slavename'] = self.m.swarming.bot_id
-    properties['mastername'] = mastername
+    # TODO(gbeaty) Audit scripts and remove/update this as necessary
+    properties['mastername'] = builder_group
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
 
@@ -1220,8 +1223,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # you might hit limits on the length of properties).
       if (self.m.chromium.c.project_generator.tool == 'mb' and
           self.c.use_swarming_command_lines):
-        parent_builder_id = chromium.BuilderId.create_for_master(
-            bot.settings.parent_mastername or bot.builder_id.master,
+        parent_builder_id = chromium.BuilderId.create_for_group(
+            bot.settings.parent_builder_group or bot.builder_id.group,
             bot.settings.parent_buildername)
         use_goma = self._use_goma()
         android_version_name, android_version_code = (
@@ -1480,12 +1483,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def lookup_bot_metadata(self, builders=None, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
-    # This logic takes the <mastername, buildername> of the triggering trybot,
+    # This logic takes the <group, buildername> of the triggering trybot,
     # and looks up the configuration of the mirrored bot. For example,
     # <tryserver.chromium.mac, mac_chromium_dbg_ng> will return:
     # {
     #   'mirrors': {
-    #                'mastername': 'chromium.mac',
+    #                'builder_group': 'chromium.mac',
     #                'buildername': 'Mac Builder (dbg)',
     #                'tester': 'Mac10.13 Tests (dbg)',
     #              },
@@ -1499,7 +1502,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if not try_spec:
       # Some trybots do not mirror a CI bot. In this case, return a
-      # configuration that uses the same <mastername, buildername> of the
+      # configuration that uses the same <group, buildername> of the
       # triggering trybot.
       try_spec = {
           'mirrors': [builder_id],
@@ -1564,10 +1567,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Determines which tests need to be run.
 
     Args:
-      builders: An optional mapping from <mastername, buildername> to
+      builders: An optional mapping from <group, buildername> to
                 build/test settings. For an example of defaults for chromium,
                 see scripts/slave/recipe_modules/chromium_tests/chromium.py
-      mirrored_bots: An optional mapping from <mastername, buildername> of the
+      mirrored_bots: An optional mapping from <group, buildername> of the
                      trybot to configurations of the mirrored CI bot. Defaults
                      are in ChromiumTestsApi.
       tests_to_run: A list of test suites to run.
@@ -1690,14 +1693,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     def present_bot(bot_mirror):
       if bot_mirror.tester_id:
-        return ("running tester '%s' on master '%s'"
-                " against builder '%s' on master '%s'" %
-                (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
-                 bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
+        return ("running tester '%s' on group '%s'"
+                " against builder '%s' on group '%s'" %
+                (bot_mirror.tester_id.builder, bot_mirror.tester_id.group,
+                 bot_mirror.builder_id.builder, bot_mirror.builder_id.group))
       execution_mode = bot_config.bot_db[bot_mirror.builder_id].execution_mode
-      return ("running %s '%s' on master '%s'" %
+      return ("running %s '%s' on group '%s'" %
               (bot_type(execution_mode), bot_mirror.builder_id.builder,
-               bot_mirror.builder_id.master))
+               bot_mirror.builder_id.group))
 
     lines = [''] + [present_bot(m) for m in bot_config.bot_mirrors]
     result = self.m.python.succeeding_step('report builders',
@@ -1707,14 +1710,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if bot_mirror.tester_id:
         return {
             'execution_mode': bot_spec_module.COMPILE_AND_TEST,
-            'mastername': bot_mirror.builder_id.master,
+            'builder_group': bot_mirror.builder_id.group,
             'buildername': bot_mirror.builder_id.builder,
             'tester_buildername': bot_mirror.tester_id.builder,
-            'tester_mastername': bot_mirror.tester_id.master,
+            'tester_group': bot_mirror.tester_id.group,
         }
       return {
           'execution_mode': bot_config.execution_mode,
-          'mastername': bot_mirror.builder_id.master,
+          'builder_group': bot_mirror.builder_id.group,
           'buildername': bot_mirror.builder_id.builder,
       }
 
@@ -1724,7 +1727,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Links to upstreams help people figure out if upstreams are broken too
     # TODO(gbeaty): When we switch to using buckets to identify builders instead
-    # of master name, we can have an authoritative value for the bucket to use
+    # of group, we can have an authoritative value for the bucket to use
     # in these links, for now rely on convention:
     # try -> ci
     # try-beta -> ci-beta
@@ -1773,9 +1776,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              mb_phase=None,
                              builders=None):
     # Lookup GN args for the associated builder
-    parent_builder_id = chromium.BuilderId.create_for_master(
-        bot_meta_data.settings.parent_mastername or
-        bot_meta_data.builder_id.master,
+    parent_builder_id = chromium.BuilderId.create_for_group(
+        bot_meta_data.settings.parent_builder_group or
+        bot_meta_data.builder_id.group,
         bot_meta_data.settings.parent_buildername)
     parent_bot_config = self.create_bot_config_object([parent_builder_id],
                                                       builders=builders)
@@ -1799,7 +1802,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'chromium',
         precommit=False,
-        mastername=bot_meta_data.builder_id.master,
+        builder_group=bot_meta_data.builder_id.group,
         default_priority=bot_meta_data.settings.swarming_default_priority)
     test_runner = self.create_test_runner(
         tests,

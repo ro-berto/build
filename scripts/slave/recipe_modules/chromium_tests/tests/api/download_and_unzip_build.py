@@ -22,9 +22,10 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'read-gn-args',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(
-          parent_mastername='chromium.linux',
+          parent_builder_group='chromium.linux',
           parent_buildername='Linux Builder',
           kwargs=dict(read_gn_args=True)),
       api.post_process(post_process.MustRun, 'read GN args'),
@@ -33,9 +34,10 @@ def GenTests(api):
 
   yield api.test(
       'do-not-read-gn-args',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(
-          parent_mastername='chromium.linux',
+          parent_builder_group='chromium.linux',
           parent_buildername='Linux Builder',
           kwargs=dict(read_gn_args=False)),
       api.post_process(post_process.DoesNotRun, 'read GN args'),

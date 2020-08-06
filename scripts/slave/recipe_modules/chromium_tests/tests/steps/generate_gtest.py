@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_swarming',
     'chromium_tests',
@@ -41,9 +42,9 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_gtest(api, api.chromium_tests,
-                                        'test_mastername', 'test_buildername',
-                                        test_spec, update_step):
+  for test in generators.generate_gtest(api, api.chromium_tests, 'test_group',
+                                        'test_buildername', test_spec,
+                                        update_step):
     try:
       test.pre_run(api, '')
       test.run(api, '')
@@ -59,7 +60,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -72,7 +73,7 @@ def GenTests(api):
   yield api.test(
       'swarming',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -101,7 +102,7 @@ def GenTests(api):
   yield api.test(
       'service_account',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -127,7 +128,7 @@ def GenTests(api):
   yield api.test(
       'swarming_plus_optional_dimension',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -160,7 +161,7 @@ def GenTests(api):
   yield api.test(
       'swarming_with_named_caches',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -191,7 +192,7 @@ def GenTests(api):
   yield api.test(
       'merge',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -213,7 +214,7 @@ def GenTests(api):
   yield api.test(
       'merge_invalid',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -235,7 +236,7 @@ def GenTests(api):
   yield api.test(
       'set_up and tear down',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -258,7 +259,7 @@ def GenTests(api):
   yield api.test(
       'invalid set_up',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -281,7 +282,7 @@ def GenTests(api):
   yield api.test(
       'invalid tear down',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -304,7 +305,7 @@ def GenTests(api):
   yield api.test(
       'trigger_script',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -326,7 +327,7 @@ def GenTests(api):
   yield api.test(
       'trigger_script_simultaneous_shard_dispatch',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -353,7 +354,7 @@ def GenTests(api):
   yield api.test(
       'trigger_script_invalid',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -375,7 +376,7 @@ def GenTests(api):
   yield api.test(
       'experimental',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -404,7 +405,7 @@ def GenTests(api):
   yield api.test(
       'not_idempotent',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(

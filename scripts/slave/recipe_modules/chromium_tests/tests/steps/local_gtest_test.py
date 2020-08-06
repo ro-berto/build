@@ -49,7 +49,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(),
@@ -58,7 +58,7 @@ def GenTests(api):
   yield api.test(
       'retry',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(),
@@ -75,7 +75,7 @@ def GenTests(api):
   yield api.test(
       'android',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(target_platform='android',),

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
@@ -42,7 +43,7 @@ def GenTests(api):
   yield api.test(
       'buildbucket_string',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -59,7 +60,7 @@ def GenTests(api):
   yield api.test(
       'buildbucket_unicode',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -76,7 +77,7 @@ def GenTests(api):
   yield api.test(
       'buildbucket_dictionary',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(

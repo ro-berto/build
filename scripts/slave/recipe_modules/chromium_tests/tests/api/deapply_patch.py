@@ -25,5 +25,7 @@ def GenTests(api):
       'basic',
       api.platform.name('win'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.win', builder='win7-rel'),
+          builder_group='tryserver.chromium.win',
+          builder='win7-rel',
+      ),
   )

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_swarming',
     'chromium_tests',
@@ -200,9 +201,10 @@ def GenTests(api):
       'perf_results',
       api.step_data('dummy step name on iOS-dummy OS',
                     generate_perf_results_placeholder(api)),
-      api.properties(mastername='tryserver.fake',),
-      api.path.exists(api.path['cleanup'].join(
-          'dummy task id_tmp_1', '10000', 'Documents', 'perf_result.json')),
+      api.builder_group.for_current('tryserver.fake'),
+      api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '10000',
+                                               'Documents',
+                                               'perf_result.json')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -210,7 +212,7 @@ def GenTests(api):
   yield api.test(
       'upload_to_flakiness',
       generate_passing_test(api, simulator=False),
-      api.properties(mastername='tryserver.fake',),
+      api.builder_group.for_current('tryserver.fake'),
       api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '10000',
                                                'full_results.json')),
       api.post_process(post_process.StatusSuccess),
@@ -220,7 +222,8 @@ def GenTests(api):
   yield api.test(
       'host_os_rewritten',
       generate_passing_test(api, simulator=True),
-      api.properties(mastername='tryserver.fake', platform='simulator'),
+      api.builder_group.for_current('tryserver.fake'),
+      api.properties(platform='simulator'),
       api.post_process(post_process.StepCommandContains,
                        '[trigger] dummy step name on Mac',
                        ['--optional-dimension', 'os', 'other-dummy-OS', '60']),

@@ -21,9 +21,12 @@ def RunSteps(api):
     return api.chromium_tests.integration_steps()
 
 def GenTests(api):
-  def ci_props(config='Release', mastername='chromium.linux',
+
+  def ci_props(config='Release',
+               builder_group='chromium.linux',
                builder='Linux Builder',
-               extra_swarmed_tests=None, **kwargs):
+               extra_swarmed_tests=None,
+               **kwargs):
     swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
@@ -31,7 +34,7 @@ def GenTests(api):
 
     return sum([
         api.chromium.ci_build(
-            mastername=mastername,
+            builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
         ),

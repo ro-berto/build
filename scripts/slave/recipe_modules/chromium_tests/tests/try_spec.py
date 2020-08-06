@@ -17,72 +17,72 @@ def RunSteps(api):
 
   # TryMirror creation *********************************************************
 
-  # Ccreation of a TryMirror without tester
-  mirror = try_spec_module.TryMirror.create('fake-master', 'fake-builder')
+  # Creation of a TryMirror without tester
+  mirror = try_spec_module.TryMirror.create('fake-group', 'fake-builder')
   api.assertions.assertEqual(
       mirror.builder_id,
-      chromium.BuilderId.create_for_master('fake-master', 'fake-builder'))
+      chromium.BuilderId.create_for_group('fake-group', 'fake-builder'))
   api.assertions.assertIsNone(mirror.tester_id)
 
   # Creation of a TryMirror with tester
-  mirror = try_spec_module.TryMirror.create('fake-master', 'fake-builder',
-                                            'fake-tester', 'fake-tester-master')
+  mirror = try_spec_module.TryMirror.create('fake-group', 'fake-builder',
+                                            'fake-tester', 'fake-tester-group')
   api.assertions.assertEqual(
       mirror.builder_id,
-      chromium.BuilderId.create_for_master('fake-master', 'fake-builder'))
+      chromium.BuilderId.create_for_group('fake-group', 'fake-builder'))
   api.assertions.assertEqual(
       mirror.tester_id,
-      chromium.BuilderId.create_for_master('fake-tester-master', 'fake-tester'))
+      chromium.BuilderId.create_for_group('fake-tester-group', 'fake-tester'))
 
-  # Creation of a TryMirror with tester without tester mastername
-  mirror = try_spec_module.TryMirror.create('fake-master', 'fake-builder',
+  # Creation of a TryMirror with tester without tester group
+  mirror = try_spec_module.TryMirror.create('fake-group', 'fake-builder',
                                             'fake-tester')
   api.assertions.assertEqual(
       mirror.builder_id,
-      chromium.BuilderId.create_for_master('fake-master', 'fake-builder'))
+      chromium.BuilderId.create_for_group('fake-group', 'fake-builder'))
   api.assertions.assertEqual(
       mirror.tester_id,
-      chromium.BuilderId.create_for_master('fake-master', 'fake-tester'))
+      chromium.BuilderId.create_for_group('fake-group', 'fake-tester'))
 
   # Creation of a TryMirror with builder for tester
-  mirror = try_spec_module.TryMirror.create('fake-master', 'fake-builder',
+  mirror = try_spec_module.TryMirror.create('fake-group', 'fake-builder',
                                             'fake-builder')
   api.assertions.assertEqual(
       mirror.builder_id,
-      chromium.BuilderId.create_for_master('fake-master', 'fake-builder'))
+      chromium.BuilderId.create_for_group('fake-group', 'fake-builder'))
   api.assertions.assertIsNone(mirror.tester_id)
 
   # TryMirror normalization ****************************************************
 
   # Normalization of a TryMirror
-  mirror = try_spec_module.TryMirror.create('fake-master', 'fake-builder')
+  mirror = try_spec_module.TryMirror.create('fake-group', 'fake-builder')
   mirror2 = try_spec_module.TryMirror.normalize(mirror)
   api.assertions.assertIs(mirror2, mirror)
 
   # Normalization of a BuilderId
-  bot_id = chromium.BuilderId.create_for_master('fake-master', 'fake-builder')
+  bot_id = chromium.BuilderId.create_for_group('fake-group', 'fake-builder')
   mirror = try_spec_module.TryMirror.normalize(bot_id)
   api.assertions.assertEqual(
-      mirror, try_spec_module.TryMirror.create('fake-master', 'fake-builder'))
+      mirror, try_spec_module.TryMirror.create('fake-group', 'fake-builder'))
 
   # Normalization of a dictionary
   d = {
-      'mastername': 'fake-master',
+      'builder_group': 'fake-group',
       'buildername': 'fake-builder',
       'tester': 'fake-tester',
-      'tester_mastername': 'fake-tester-master',
+      'tester_group': 'fake-tester-group',
   }
   mirror = try_spec_module.TryMirror.normalize(d)
   api.assertions.assertEqual(
       mirror,
-      try_spec_module.TryMirror.create('fake-master', 'fake-builder',
-                                       'fake-tester', 'fake-tester-master'))
+      try_spec_module.TryMirror.create('fake-group', 'fake-builder',
+                                       'fake-tester', 'fake-tester-group'))
 
   # TrySpec normalization ******************************************************
 
   # Normalization of a TrySpec
   try_spec = try_spec_module.TrySpec.create(mirrors=[{
-      'mastername': 'fake-master',
+      'builder_group': 'fake-group',
       'buildername': 'fake-builder',
   }])
   try_spec2 = try_spec_module.TrySpec.normalize(try_spec)
@@ -91,7 +91,7 @@ def RunSteps(api):
   # Normalization of a dictionary
   d = {
       'mirrors': [{
-          'mastername': 'fake-master',
+          'builder_group': 'fake-group',
           'buildername': 'fake-builder',
       }],
   }
@@ -99,24 +99,24 @@ def RunSteps(api):
   api.assertions.assertEqual(
       try_spec,
       try_spec_module.TrySpec.create(mirrors=[{
-          'mastername': 'fake-master',
+          'builder_group': 'fake-group',
           'buildername': 'fake-builder',
       }]))
 
   # TryDatabase validation *****************************************************
   d = {
-      'fake-try-master': {
+      'fake-try-group': {
           'fake-try-builder': {
               'mirrors': [{
-                  'mastername': 'fake-master',
+                  'builder_group': 'fake-group',
                   'buildername': 'fake-builder',
               },],
               'foo': 'bar'
           },
       },
   }
-  builder_id = chromium.BuilderId.create_for_master('fake-try-master',
-                                                    'fake-try-builder')
+  builder_id = chromium.BuilderId.create_for_group('fake-try-group',
+                                                   'fake-try-builder')
   with api.assertions.assertRaises(TypeError) as caught:
     try_spec_module.TryDatabase.create(d)
   api.assertions.assertEqual(
@@ -126,51 +126,51 @@ def RunSteps(api):
 
   # TryDatabase mapping interface **********************************************
   db = try_spec_module.TryDatabase.create({
-      'fake-try-master-1': {
+      'fake-try-group-1': {
           'fake-try-builder-1': {
               'mirrors': [{
-                  'mastername': 'master-1',
+                  'builder_group': 'group-1',
                   'buildername': 'builder-1',
               }],
           },
       },
-      'fake-try-master-2': {
+      'fake-try-group-2': {
           'fake-try-builder-2': {
               'mirrors': [{
-                  'mastername': 'master-2',
+                  'builder_group': 'group-2',
                   'buildername': 'builder-2',
               }],
           },
       },
   })
 
-  try_key_1 = chromium.BuilderId.create_for_master('fake-try-master-1',
-                                                   'fake-try-builder-1')
-  try_key_2 = chromium.BuilderId.create_for_master('fake-try-master-2',
-                                                   'fake-try-builder-2')
+  try_key_1 = chromium.BuilderId.create_for_group('fake-try-group-1',
+                                                  'fake-try-builder-1')
+  try_key_2 = chromium.BuilderId.create_for_group('fake-try-group-2',
+                                                  'fake-try-builder-2')
 
   api.assertions.assertEqual(set(db.keys()), {try_key_1, try_key_2})
   api.assertions.assertEqual(
       db[try_key_1],
       try_spec_module.TrySpec.create(mirrors=[
           try_spec_module.TryMirror.create(
-              mastername='master-1', buildername='builder-1')
+              builder_group='group-1', buildername='builder-1')
       ]))
   api.assertions.assertEqual(
       db[try_key_2],
       try_spec_module.TrySpec.create(mirrors=[
           try_spec_module.TryMirror.create(
-              mastername='master-2', buildername='builder-2')
+              builder_group='group-2', buildername='builder-2')
       ]))
 
   # TryDatabase normalization **************************************************
 
   # Normalization of a TryDatabase
   try_db = try_spec_module.TryDatabase.create({
-      'fake-try-master': {
+      'fake-try-group': {
           'fake-try-builder': {
               'mirrors': [{
-                  'mastername': 'master',
+                  'builder_group': 'group',
                   'buildername': 'builder',
               }],
           },
@@ -181,10 +181,10 @@ def RunSteps(api):
 
   # Normalization of a dictionary
   d = {
-      'fake-try-master': {
+      'fake-try-group': {
           'fake-try-builder': {
               'mirrors': [{
-                  'mastername': 'master',
+                  'builder_group': 'group',
                   'buildername': 'builder',
               }],
           },

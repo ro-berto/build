@@ -38,7 +38,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  fake_master = 'fake-master'
+  fake_group = 'fake-group'
   fake_builder = 'fake-builder'
   fake_tester = 'fake-tester'
   fake_try_builder = 'fake-try-builder'
@@ -46,13 +46,13 @@ def GenTests(api):
 
   def fake_ci_builder(chromium_tests_apply_config):
     return sum([
-        api.chromium.ci_build(mastername=fake_master, builder=fake_builder),
+        api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
         api.properties(
             swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
         api.platform('linux', 64),
         api.chromium_tests.builders(
             bot_db.BotDatabase.create({
-                fake_master: {
+                fake_group: {
                     fake_builder:
                         bot_spec.BotSpec.create(
                             chromium_config='chromium',
@@ -63,7 +63,7 @@ def GenTests(api):
                 },
             })),
         api.chromium_tests.read_source_side_spec(
-            fake_master, {
+            fake_group, {
                 fake_builder: {
                     'isolated_scripts': [{
                         'name': fake_test,
@@ -111,13 +111,13 @@ def GenTests(api):
 
   yield api.test(
       'split_builder_tester_also_finds_command_lines',
-      api.chromium.ci_build(mastername=fake_master, builder=fake_tester),
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
       api.properties(
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
       api.platform('linux', 64),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_builder:
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
@@ -139,7 +139,7 @@ def GenTests(api):
               }
           })),
       api.chromium_tests.read_source_side_spec(
-          fake_master, {
+          fake_group, {
               fake_tester: {
                   'isolated_scripts': [{
                       'name': fake_test,
@@ -166,7 +166,8 @@ def GenTests(api):
 
   yield api.test(
       'trybot_with_test_failure',
-      api.chromium.try_build(mastername=fake_master, builder=fake_try_builder),
+      api.chromium.try_build(
+          builder_group=fake_group, builder=fake_try_builder),
       api.properties(
           config='Release',
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
@@ -174,11 +175,11 @@ def GenTests(api):
       api.platform('linux', 64),
       api.chromium_tests.trybots(
           try_spec.TryDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_try_builder:
                       try_spec.TrySpec.create(mirrors=[
                           try_spec.TryMirror.create(
-                              mastername=fake_master,
+                              builder_group=fake_group,
                               buildername=fake_builder,
                               tester=fake_tester,
                           )
@@ -187,7 +188,7 @@ def GenTests(api):
           })),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_builder:
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
@@ -207,7 +208,7 @@ def GenTests(api):
               }
           })),
       api.chromium_tests.read_source_side_spec(
-          fake_master, {
+          fake_group, {
               fake_tester: {
                   'isolated_scripts': [{
                       'name': fake_test,

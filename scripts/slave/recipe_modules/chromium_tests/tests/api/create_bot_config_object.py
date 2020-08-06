@@ -22,21 +22,24 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.ci_build(mastername='chromium.foo', builder='Foo Builder'),
+      api.chromium.ci_build(
+          builder_group='chromium.foo', builder='Foo Builder'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'missing_master_config',
-      api.chromium.ci_build(mastername='chromium.bar', builder='Bar Builder'),
+      'missing_group_config',
+      api.chromium.ci_build(
+          builder_group='chromium.bar', builder='Bar Builder'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'missing_builder_config',
-      api.chromium.ci_build(mastername='chromium.foo', builder='Bar Builder'),
+      api.chromium.ci_build(
+          builder_group='chromium.foo', builder='Bar Builder'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )

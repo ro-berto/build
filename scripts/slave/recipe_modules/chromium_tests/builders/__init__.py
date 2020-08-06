@@ -48,7 +48,8 @@ BUILDERS = bot_db.BotDatabase.create({
         chromium_clang.SPEC,
     'chromium.dawn':
         chromium_dawn.SPEC,
-    'chromium.devtools-frontend': (chromium_devtools_frontend.SPEC),
+    'chromium.devtools-frontend':
+        chromium_devtools_frontend.SPEC,
     'chromium.fuzz':
         chromium_fuzz.SPEC,
     'chromium.fyi':
@@ -83,8 +84,8 @@ BUILDERS = bot_db.BotDatabase.create({
         chromium_webrtc_fyi.SPEC,
     'chromium.win':
         chromium_win.SPEC,
-    'client.devtools-frontend.integration': (
-        client_devtools_frontend_integration.SPEC),
+    'client.devtools-frontend.integration':
+        client_devtools_frontend_integration.SPEC,
     'client.openscreen.chromium':
         client_openscreen_chromium.SPEC,
     'client.v8.chromium':
@@ -104,7 +105,7 @@ BUILDERS = bot_db.BotDatabase.create({
     # This is useful when adding configuration options
     # that will only be exercised in other repositories.
     #
-    # Note that this master is not real, and consequently
+    # Note that this group is not real, and consequently
     # this build configuration will never be used in production.
     'bot_update.always_on': {
         'coverage_clobber':
@@ -122,7 +123,7 @@ BUILDERS = bot_db.BotDatabase.create({
 
 # The compile_targets field is being removed, this check will prevent
 # back-sliding by only allowing files that haven't yet been migrated to use it
-COMPILE_TARGETS_MASTER_ALLOW_LIST = [
+COMPILE_TARGETS_GROUP_ALLOW_LIST = [
     'chromium.clang',
     'chromium.devtools-frontend',
     'chromium.fyi',
@@ -136,11 +137,11 @@ COMPILE_TARGETS_MASTER_ALLOW_LIST = [
     'client.v8.fyi',
 ]
 
-for master, builders in BUILDERS.builders_by_master.iteritems():
-  if master in COMPILE_TARGETS_MASTER_ALLOW_LIST:
+for group, builders in BUILDERS.builders_by_group.iteritems():
+  if group in COMPILE_TARGETS_GROUP_ALLOW_LIST:
     continue
   for builder, spec in builders.iteritems():
     assert not spec.compile_targets, (
         'Please do not add additional uses of the compile_targets field, '
         'compile targets should be specified in the source side spec file\n'
-        '  master: {}, builder: {}').format(master, builder)
+        '  group: {}, builder: {}').format(group, builder)

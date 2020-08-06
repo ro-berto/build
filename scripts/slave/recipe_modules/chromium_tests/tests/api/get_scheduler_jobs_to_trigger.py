@@ -32,7 +32,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Builder',
       ),
       api.properties(expected={
@@ -45,7 +45,7 @@ def GenTests(api):
   yield api.test(
       'bucketed-triggers',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Builder',
       ),
       api.properties(
@@ -64,12 +64,12 @@ def GenTests(api):
   yield api.test(
       'luci-project-overridden-for-tester',
       api.chromium.ci_build(
-          mastername='fake-master',
+          builder_group='fake-group',
           builder='fake-builder',
       ),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       bot_spec.BotSpec.create(),
                   'fake-tester':
@@ -91,12 +91,12 @@ def GenTests(api):
       'same-project-trigger-override',
       api.chromium.ci_build(
           project='bar-project',
-          mastername='fake-master',
+          builder_group='fake-group',
           builder='fake-builder',
       ),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       bot_spec.BotSpec.create(luci_project='foo-project'),
                   'fake-tester':

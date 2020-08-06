@@ -224,7 +224,7 @@
       "--input-json",
       "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
       "--builder-group",
-      "test_mastername",
+      "test_group",
       "--builder-name",
       "test_buildername",
       "--build-number",

@@ -20,16 +20,16 @@ from RECIPE_MODULES.build.chromium.types import BuilderId
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      [BuilderId.create_for_master('test_mastername', 'test_buildername')],
+      [BuilderId.create_for_group('test_group', 'test_buildername')],
       builders={
-          'test_mastername': {
-                  'test_buildername': {
-                      'isolate_server': 'https://example/isolate',
-                      'swarming_server': 'https://example/swarming',
-                      'swarming_dimensions': {
-                          'os': 'Ubuntu-14.04'
-                      },
+          'test_group': {
+              'test_buildername': {
+                  'isolate_server': 'https://example/isolate',
+                  'swarming_server': 'https://example/swarming',
+                  'swarming_dimensions': {
+                      'os': 'Ubuntu-14.04'
                   },
+              },
           },
       })
 

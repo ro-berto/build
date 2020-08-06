@@ -32,7 +32,7 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create(
                 mirrors=[
                     try_spec.TryMirror.create(
-                        mastername='chromium.test',
+                        builder_group='chromium.test',
                         buildername='chromium-rel',
                         tester='chromium-test-rel',
                     ),
@@ -65,7 +65,7 @@ def GenTests(api):
   yield api.test(
       'analyze deps autorolls success',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='chromium-rel'),
+          builder_group='tryserver.chromium.test', builder='chromium-rel'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.override_step_data('gerrit fetch current CL info', cl_info),
@@ -78,7 +78,7 @@ def GenTests(api):
   yield api.test(
       'analyze deps autorolls nothing',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='chromium-rel'),
+          builder_group='tryserver.chromium.test', builder='chromium-rel'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.override_step_data('gerrit fetch current CL info', cl_info),

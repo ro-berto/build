@@ -69,7 +69,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -84,7 +84,7 @@ def GenTests(api):
   yield api.test(
       'basic_ignore_task_failure',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -104,7 +104,7 @@ def GenTests(api):
   yield api.test(
       'android',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(
@@ -119,7 +119,7 @@ def GenTests(api):
       api.chromium.ci_build(builder='test_buildername',),
       api.properties(
           override_compile_targets=['base_unittests_run'],
-          mastername='test_mastername',
+          builder_group='test_group',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
@@ -128,7 +128,7 @@ def GenTests(api):
   yield api.test(
       'no_result_json',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -143,7 +143,7 @@ def GenTests(api):
   yield api.test(
       'invalid_test_result',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
@@ -160,7 +160,7 @@ def GenTests(api):
   yield api.test(
       'isolate_coverage_data',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(

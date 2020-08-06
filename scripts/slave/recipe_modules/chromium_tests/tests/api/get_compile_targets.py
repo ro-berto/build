@@ -30,75 +30,75 @@ def GenTests(api):
 
   yield api.test(
       'not-migrated',
-      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       spec(compile_targets=['foo', 'bar', 'baz', 'shaz']),
               },
           })),
-      api.chromium_tests.read_source_side_spec('fake-master', {
+      api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {},
       }),
       api.post_check(
           post_process.DoesNotRunRE, 'compile_targets migration\.migrated\.'
-          'fake-master%fake-builder%.*'),
+          'fake-group%fake-builder%.*'),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.needs migration.'
-          'fake-master%fake-builder%bar,baz,foo,shaz'),
+          'fake-group%fake-builder%bar,baz,foo,shaz'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'partially-migrated',
-      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       spec(compile_targets=['foo', 'bar', 'baz', 'shaz']),
               },
           })),
-      api.chromium_tests.read_source_side_spec('fake-master', {
+      api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {
               'additional_compile_targets': ['foo', 'baz'],
           },
       }),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.migrated.'
-          'fake-master%fake-builder%baz,foo'),
+          'fake-group%fake-builder%baz,foo'),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.needs migration.'
-          'fake-master%fake-builder%bar,shaz'),
+          'fake-group%fake-builder%bar,shaz'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'fully-migrated',
-      api.chromium.ci_build(mastername='fake-master', builder='fake-builder'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                       spec(compile_targets=['foo', 'bar', 'baz', 'shaz']),
               },
           })),
       api.chromium_tests.read_source_side_spec(
-          'fake-master', {
+          'fake-group', {
               'fake-builder': {
                   'additional_compile_targets': ['foo', 'bar', 'baz', 'shaz'],
               },
           }),
       api.post_check(
           post_process.MustRun, 'compile_targets migration.migrated.'
-          'fake-master%fake-builder%bar,baz,foo,shaz'),
+          'fake-group%fake-builder%bar,baz,foo,shaz'),
       api.post_check(
           post_process.DoesNotRunRE,
           'compile_targets migration\.needs migration\.'
-          'fake-master%fake-builder%.*'),
+          'fake-group%fake-builder%.*'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

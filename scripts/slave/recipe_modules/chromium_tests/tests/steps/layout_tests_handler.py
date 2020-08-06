@@ -35,11 +35,11 @@ def RunSteps(api):
 def GenTests(api):
 
   def boilerplate(**kwargs):
-    mastername = 'chromium.linux'
+    builder_group = 'chromium.linux'
     builder = 'Linux Tests'
     return sum([
         api.chromium.ci_build(
-            mastername=mastername,
+            builder_group=builder_group,
             builder=builder,
             parent_buildername='Linux Builder'),
         api.properties.generic(
@@ -47,7 +47,7 @@ def GenTests(api):
             **kwargs),
         api.platform('linux', 64),
         api.chromium_tests.read_source_side_spec(
-            mastername, {
+            builder_group, {
                 builder: {
                     'isolated_scripts': [{
                         'isolate_name': 'fake_test',

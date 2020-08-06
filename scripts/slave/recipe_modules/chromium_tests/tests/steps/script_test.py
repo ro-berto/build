@@ -40,7 +40,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
   )
@@ -48,7 +48,7 @@ def GenTests(api):
   yield api.test(
       'invalid_results',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.override_step_data('script_test', api.json.output({})),
@@ -57,7 +57,7 @@ def GenTests(api):
   yield api.test(
       'failure',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.override_step_data(

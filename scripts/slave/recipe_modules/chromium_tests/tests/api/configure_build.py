@@ -20,18 +20,16 @@ BASIC_CONFIG = {
 
 
 BUILDERS = {
-  'fake.master': {
-      'Android Apply Config Builder': dict(BASIC_CONFIG, **{
-        'android_apply_config': [
-          'use_devil_provision',
-        ],
-      }),
-      'Chromium Tests Apply Config Builder': dict(BASIC_CONFIG, **{
-        'chromium_tests_apply_config': [
-          'staging',
-        ],
-      }),
-  },
+    'fake.group': {
+        'Android Apply Config Builder':
+            dict(BASIC_CONFIG, **{
+                'android_apply_config': ['use_devil_provision',],
+            }),
+        'Chromium Tests Apply Config Builder':
+            dict(BASIC_CONFIG, **{
+                'chromium_tests_apply_config': ['staging',],
+            }),
+    },
 }
 
 
@@ -45,14 +43,14 @@ def GenTests(api):
   yield api.test(
       'android_apply_config',
       api.chromium.ci_build(
-          mastername='fake.master', builder='Android Apply Config Builder'),
+          builder_group='fake.group', builder='Android Apply Config Builder'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'chromium_tests_apply_config',
       api.chromium.ci_build(
-          mastername='fake.master',
+          builder_group='fake.group',
           builder='Chromium Tests Apply Config Builder'),
       api.post_process(post_process.DropExpectation),
   )

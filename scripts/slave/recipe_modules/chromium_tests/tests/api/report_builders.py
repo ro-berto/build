@@ -10,16 +10,16 @@ DEPS = [
 ]
 
 BUILDERS = {
-    'fake-master': {
-            'fake-builder': {}
+    'fake-group': {
+        'fake-builder': {}
     },
 }
 
 TRYBOTS = {
-    'fake-try-master': {
+    'fake-try-group': {
         'fake-try-builder': {
             'mirrors': [{
-                'mastername': 'fake-master',
+                'builder_group': 'fake-group',
                 'buildername': 'fake-builder',
             }],
         },
@@ -50,7 +50,7 @@ def GenTests(api):
         bucket,
         api.chromium.try_build(
             bucket=bucket,
-            mastername='fake-try-master',
+            builder_group='fake-try-group',
             builder='fake-try-builder',
         ),
         api.post_check(check_link, expected_link),

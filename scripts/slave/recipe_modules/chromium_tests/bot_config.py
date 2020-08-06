@@ -50,10 +50,10 @@ class BotConfig(object):
 
   def __attrs_post_init__(self):
     for mirror in self.bot_mirrors:
-      if not mirror.builder_id.master in self.bot_db.builders_by_master:
+      if not mirror.builder_id.group in self.bot_db.builders_by_group:
         raise BotConfigException(
-            'No configuration present for master {!r}'.format(
-                mirror.builder_id.master))
+            'No configuration present for group {!r}'.format(
+                mirror.builder_id.group))
       if not mirror.builder_id in self.bot_db:
         raise BotConfigException(
             'No configuration present for builder {}'.format(mirror.builder_id))
@@ -87,13 +87,12 @@ class BotConfig(object):
     return values[0]
 
   def _get_source_side_specs(self, chromium_tests_api):
-    masters = set(key.master for key in self.all_keys)
+    groups = set(key.group for key in self.all_keys)
     specs = {}
-    for master_name in sorted(masters):
-      source_side_spec_file = (
-          self.source_side_spec_file or '%s.json' % master_name)
+    for group in sorted(groups):
+      source_side_spec_file = self.source_side_spec_file or '%s.json' % group
       spec = chromium_tests_api.read_source_side_spec(source_side_spec_file)
-      specs[master_name] = spec
+      specs[group] = spec
     return specs
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
@@ -112,16 +111,15 @@ class BotConfig(object):
     source_side_specs = self._get_source_side_specs(chromium_tests_api)
     tests = {}
 
-    for master_name, source_side_spec in source_side_specs.iteritems():
-      builders_for_master = self.bot_db.builders_by_master[master_name]
-      for builder_name, builder_spec in builders_for_master.iteritems():
-        builder_id = chromium.BuilderId.create_for_master(
-            master_name, builder_name)
+    for group, source_side_spec in source_side_specs.iteritems():
+      builders_for_group = self.bot_db.builders_by_group[group]
+      for builder_name, builder_spec in builders_for_group.iteritems():
+        builder_id = chromium.BuilderId.create_for_group(group, builder_name)
         builder_tests = chromium_tests_api.generate_tests_from_source_side_spec(
             source_side_spec,
             builder_spec,
             builder_name,
-            master_name,
+            group,
             builder_spec.swarming_dimensions,
             scripts_compile_targets_fn,
             bot_update_step,
@@ -191,7 +189,7 @@ class BuildConfig(object):
       recipe_compile_targets = set(bot_spec.compile_targets)
       compile_targets.update(recipe_compile_targets)
 
-      source_side_spec = self._source_side_specs[builder_id.master].get(
+      source_side_spec = self._source_side_specs[builder_id.group].get(
           builder_id.builder, {})
       source_compile_targets = set(
           source_side_spec.get('additional_compile_targets', []))
@@ -207,7 +205,7 @@ class BuildConfig(object):
     if migrated or needs_migration:
 
       def step_name(builder_id, targets):
-        return '{}%{}%{}'.format(builder_id.master, builder_id.builder,
+        return '{}%{}%{}'.format(builder_id.group, builder_id.builder,
                                  ','.join(sorted(targets)))
 
       step_api = self._chromium_tests_api.m.step

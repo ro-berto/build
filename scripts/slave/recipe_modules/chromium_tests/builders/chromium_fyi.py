@@ -95,7 +95,7 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             test_results_config='staging_server',
-            parent_mastername='chromium.mac',
+            parent_builder_group='chromium.mac',
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
@@ -328,9 +328,9 @@ SPEC = {
             },
             android_config='arm64_builder_mb',
             # TODO(crbug.com/876570): Here and below, we should move the
-            # Mojo builders to a different "master" and get rid of this
+            # Mojo builders to a different group and get rid of this
             # property; we don't really want different builders on the same
-            # master to have different priorities, it makes reasoning about
+            # group to have different priorities, it makes reasoning about
             # builders harder for sheriffs and troopers.
             swarming_default_priority=25,
             simulation_platform='linux',
@@ -677,7 +677,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             execution_mode=bot_spec.TEST,
-            parent_mastername='chromium.win',
+            parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),
@@ -691,7 +691,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             execution_mode=bot_spec.TEST,
-            parent_mastername='chromium.win',
+            parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),

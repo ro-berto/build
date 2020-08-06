@@ -24,7 +24,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='chromium.perf',
+          builder_group='chromium.perf',
           builder='linux-perf',
       ),
   )

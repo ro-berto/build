@@ -28,18 +28,38 @@ class TryMirror(object):
         "'tester_id' should not be equal to 'builder_id',"
         " pass None for 'tester_id'")
 
+  # TODO(https://crbug.com/1109276) Remove _create_for_master, rename
+  # _create_for_group to create
   @classmethod
-  def create(cls, mastername, buildername, tester=None, tester_mastername=None):
+  def create(cls, *args, **kwargs):
+    """Create a TryMirror.
+
+    See _create_for_group for details on arguments. For backwards
+    compatibility, builder_group and tester_group can be replaced with
+    mastername and tester_mastername, respectively. This is deprecated
+    and all uses should switch to specifying group argunments. Group and
+    master arguments may not be mixed.
+    """
+    if 'mastername' in kwargs or 'tester_mastername' in kwargs:
+      return cls._create_for_master(*args, **kwargs)  # pragma: no cover
+    return cls._create_for_group(*args, **kwargs)
+
+  @classmethod
+  def _create_for_group(cls,
+                        builder_group,
+                        buildername,
+                        tester=None,
+                        tester_group=None):
     """Create a TryMirror.
 
     Args:
-      mastername - The name of the mirrored builder's master.
+      builder_group - The name of the mirrored builder's group.
       buildername - The name of the mirrored builder.
       tester - The name of the mirrored tester. If not provided, the
         returned TryMirror's tester_id field will be None.
-      tester_mastername - The name of the mirrored tester's master. If
-       not provided and tester is provided, then mastername will be
-       used. Has no effect if tester is not provided.
+      tester_group - The name of the mirrored tester's group. If not
+        provided and tester is provided, then builder_group will be
+        used. Has no effect if tester is not provided.
 
     Returns:
       A TryMirror object. builder_id will be set to a BuilderId that
@@ -48,14 +68,27 @@ class TryMirror(object):
       will be set to a BuilderId that identifies the mirrored tester.
       Otherwise, tester_id will be set to None.
     """
-    builder_id = chromium.BuilderId.create_for_master(mastername, buildername)
+    builder_id = chromium.BuilderId.create_for_group(builder_group, buildername)
     tester_id = None
     if tester is not None:
-      tester_id = chromium.BuilderId.create_for_master(
-          tester_mastername or mastername, tester)
+      tester_id = chromium.BuilderId.create_for_group(
+          tester_group or builder_group, tester)
       if tester_id == builder_id:
         tester_id = None
     return cls(builder_id, tester_id)
+
+  @classmethod
+  def _create_for_master(cls,
+                         mastername,
+                         buildername,
+                         tester=None,
+                         tester_mastername=None):
+    return cls.create(  # pragma: no cover
+        builder_group=mastername,
+        buildername=buildername,
+        tester=tester,
+        tester_group=tester_mastername,
+    )
 
   @classmethod
   def normalize(cls, mirror):
@@ -65,8 +98,8 @@ class TryMirror(object):
     * TryMirror - The input is returned.
     * BuilderId - A TryMirror with `builder_id` set to the input is
       returned.
-    * A mapping containing the keys 'mastername' and 'buildername' and
-      optionally 'tester' and 'tester_mastername' - The input is
+    * A mapping containing the keys 'builder_group' and 'buildername' and
+      optionally 'tester' and 'tester_group' - The input is
       expanded as keyword arguments to TryMirror.create.
     """
     if isinstance(mirror, chromium.BuilderId):
@@ -112,33 +145,63 @@ class TrySpec(object):
     mirrors = [TryMirror.normalize(m) for m in mirrors]
     return cls(mirrors=mirrors, **kwargs)
 
+  # TODO(https://crbug.com/1109276) Remove _create_for_single_mirror_master,
+  # rename _create_for_single_mirror_group to create
   @classmethod
-  def create_for_single_mirror(cls,
-                               mastername,
-                               buildername,
-                               tester=None,
-                               tester_mastername=None,
-                               **kwargs):
+  def create_for_single_mirror(cls, *args, **kwargs):
+    """Create a TrySpec with a single mirror.
+
+    See _create_for_single_mirror_group for details on arguments. For
+    backwards compatibility, builder_group and tester_group can be
+    replaced with mastername and tester_mastername, respectively. This
+    is deprecated and all uses should switch to specifying group
+    arguments. Group and master arguments may not be mixed.
+    """
+    if 'mastername' in kwargs or 'tester_mastername' in kwargs:
+      return cls._create_for_single_mirror_master(*args, \
+                                                  **kwargs)  # pragma: no cover
+    return cls._create_for_single_mirror_group(*args, **kwargs)
+
+  @classmethod
+  def _create_for_single_mirror_group(cls,
+                                      builder_group,
+                                      buildername,
+                                      tester=None,
+                                      tester_group=None,
+                                      **kwargs):
     """Create a TrySpec with a single mirror.
 
     Args:
-      mastername - The name of the mirrored builder's master.
+      builder_group - The name of the mirrored builder's group.
       buildername - The name of the mirrored builder.
       tester - The name of the mirrored tester. If not provided, the
         TrySpec's mirror's tester_id field will be None.
-      tester_mastername - The name of the mirrored tester's master. If
-       not provided and tester is provided, then mastername will be
-       used. Has no effect if tester is not provided.
+      tester_group - The name of the mirrored tester's group. If not
+        provided and tester is provided, then builder_group will be
+        used. Has no effect if tester is not provided.
       kwargs - Values to apply to additional fields of the TrySpec.
 
     Returns:
       A TrySpec where:
       * The mirrors field has a single TryMirror instance create by
-        calling TryMirror.create with mastername, buildername, tester
-        and tester_mastername.
+        calling TryMirror.create with builder_group, buildername, tester
+        and tester_group.
       * The remaining fields are initialized with the values passed in kwargs.
     """
     return cls.create(
+        mirrors=[
+            TryMirror.create(builder_group, buildername, tester, tester_group)
+        ],
+        **kwargs)
+
+  @classmethod
+  def _create_for_single_mirror_master(cls,
+                                       mastername,
+                                       buildername,
+                                       tester=None,
+                                       tester_mastername=None,
+                                       **kwargs):
+    return cls.create(  # pragma: no cover
         mirrors=[
             TryMirror.create(mastername, buildername, tester, tester_mastername)
         ],
@@ -160,10 +223,10 @@ class TrySpec(object):
 
 @attrs()
 class TryDatabase(collections.Mapping):
-  """A database that provides information for multiple try masters.
+  """A database that provides information for multiple try groups.
 
-  TryDatabase provides access to the information contained in TryMasterSpec
-  instances for multiple masters. Individual try builders can be looked up
+  TryDatabase provides access to the information contained in TryGroupSpec
+  instances for multiple groups. Individual try builders can be looked up
   using mapping access with BuilderId as keys and TrySpec as values.
   """
 
@@ -176,9 +239,9 @@ class TryDatabase(collections.Mapping):
     Args:
       trybots_dict - The mapping containing the information to create
         the database from. The keys of the mapping are the names of the
-        try masters. The values of the mapping provide the information
-        for the master and must be in a form that can be passed to
-        TryMasterSpec.normalize.
+        try groups. The values of the mapping provide the information
+        for the group and must be in a form that can be passed to
+        TryGroupSpec.normalize.
 
     Returns:
     A new BotDatabase instance providing access to the information in
@@ -186,18 +249,17 @@ class TryDatabase(collections.Mapping):
     """
     db = {}
 
-    for master_name, trybots_for_master in trybots_dict.iteritems():
-      assert trybots_for_master.keys() != [
+    for group, trybots_for_group in trybots_dict.iteritems():
+      assert trybots_for_group.keys() != [
           'builders'
       ], "Remove unnecessary 'builders' level"
 
-      for builder_name, try_spec in trybots_for_master.iteritems():
-        builder_id = chromium.BuilderId.create_for_master(
-            master_name, builder_name)
+      for builder_name, try_spec in trybots_for_group.iteritems():
+        builder_id = chromium.BuilderId.create_for_group(group, builder_name)
         try:
           try_spec = TrySpec.normalize(try_spec)
         except Exception as e:
-          # Re-raise the exception with information that identifies the master
+          # Re-raise the exception with information that identifies the group
           # that is problematic
           message = '{} while creating try spec for builder {!r}'.format(
               e.message, builder_id)
@@ -213,9 +275,9 @@ class TryDatabase(collections.Mapping):
 
     The incoming representation can have one of the following forms:
     * TryDatabase - The input is returned.
-    * A mapping containing keys with try master names and values
-      representing try master specs that can be normalized via
-      TryMasterSpec.normalize - The input is passed to
+    * A mapping containing keys with try group names and values
+      representing try group specs that can be normalized via
+      TryGroupSpec.normalize - The input is passed to
       TryDatabase.create.
     """
     if isinstance(try_db, TryDatabase):

@@ -67,7 +67,7 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                 retry_failed_shards=True,
                 mirrors=[
                     try_spec.TryMirror.create(
-                        mastername='chromium.test',
+                        builder_group='chromium.test',
                         buildername='retry-shards',
                         tester='retry-shards-test',
                     ),
@@ -76,7 +76,7 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
         'staging-chromium-rel':
             try_spec.TrySpec.create(mirrors=[
                 try_spec.TryMirror.create(
-                    mastername='chromium.test',
+                    builder_group='chromium.test',
                     buildername='staging-chromium-rel',
                     tester='staging-chromium-test-rel',
                 ),
@@ -98,7 +98,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
@@ -111,7 +111,8 @@ def GenTests(api):
   yield api.test(
       'staging',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='staging-chromium-rel'),
+          builder_group='tryserver.chromium.test',
+          builder='staging-chromium-rel'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.runtime(is_experimental=False, is_luci=True),
@@ -130,7 +131,7 @@ def GenTests(api):
   yield api.test(
       'analyze_compile_mode',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux_chromium_clobber_rel_ng'),
       api.runtime(is_experimental=False, is_luci=True),
   )
@@ -138,7 +139,7 @@ def GenTests(api):
   yield api.test(
       'analyze_names',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='fuchsia_x64'),
+          builder_group='tryserver.chromium.linux', builder='fuchsia_x64'),
       api.runtime(is_experimental=False, is_luci=True),
       api.override_step_data(
           'read filter exclusion spec',
@@ -162,14 +163,14 @@ def GenTests(api):
   yield api.test(
       'no_compile',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.runtime(is_experimental=False, is_luci=True),
   )
 
   yield api.test(
       'no_compile_no_source',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.runtime(is_experimental=False, is_luci=True),
       api.override_step_data('git diff to analyze patch',
                              api.raw_io.stream_output('OWNERS')),
@@ -178,7 +179,7 @@ def GenTests(api):
   yield api.test(
       'unmirrored',
       api.chromium.try_build(
-          mastername='tryserver.chromium.unmirrored',
+          builder_group='tryserver.chromium.unmirrored',
           builder='unmirrored-chromium-rel'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.runtime(is_experimental=False, is_luci=True),
@@ -196,14 +197,14 @@ def GenTests(api):
   yield api.test(
       'dummy-tester',
       api.chromium.try_build(
-          mastername='fake-master', builder='fake-try-builder'),
+          builder_group='fake-group', builder='fake-try-builder'),
       api.chromium_tests.trybots(
           try_spec.TryDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-try-builder':
                   try_spec.TrySpec.create(mirrors=[
                       try_spec.TryMirror.create(
-                          mastername='fake-master',
+                          builder_group='fake-group',
                           buildername='fake-builder',
                           tester='fake-dummy-tester',
                       )
@@ -212,7 +213,7 @@ def GenTests(api):
           })),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master': {
+              'fake-group': {
                   'fake-builder':
                   bot_spec.BotSpec.create(
                       chromium_config='chromium',
@@ -225,7 +226,7 @@ def GenTests(api):
           })),
       api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec(
-          'fake-master',
+          'fake-group',
           {
               'fake-dummy-tester': {
                   'gtest_tests': [{
@@ -244,7 +245,7 @@ def GenTests(api):
 
   CUSTOM_PROPS = sum([
       api.chromium.try_build(
-          mastername='tryserver.chromium.test',
+          builder_group='tryserver.chromium.test',
           builder='retry-shards',
       ),
       api.chromium_tests.builders(_TEST_BUILDERS),
@@ -319,7 +320,7 @@ def GenTests(api):
   yield api.test(
       'retry_shards_invalid',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='retry-shards'),
+          builder_group='tryserver.chromium.test', builder='retry-shards'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.properties(
@@ -353,7 +354,7 @@ def GenTests(api):
   yield api.test(
       'retry_shards_invalid_retry',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='retry-shards'),
+          builder_group='tryserver.chromium.test', builder='retry-shards'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.properties(
@@ -391,7 +392,7 @@ def GenTests(api):
   yield api.test(
       'retry_shards_all_invalid_results',
       api.chromium.try_build(
-          mastername='tryserver.chromium.test', builder='retry-shards'),
+          builder_group='tryserver.chromium.test', builder='retry-shards'),
       api.chromium_tests.builders(_TEST_BUILDERS),
       api.chromium_tests.trybots(_TEST_TRYBOTS),
       api.properties(
@@ -432,7 +433,7 @@ def GenTests(api):
       'code_coverage_trybot_with_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.runtime(is_experimental=False, is_luci=True),
@@ -467,7 +468,7 @@ def GenTests(api):
       'code_coverage_trybot_retry_shards_with_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.runtime(is_experimental=False, is_luci=True),
@@ -507,7 +508,7 @@ def GenTests(api):
       'code_coverage_trybot_without_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.runtime(is_experimental=False, is_luci=True),
@@ -561,7 +562,7 @@ def GenTests(api):
   yield api.test(
       'many_invalid_results',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.runtime(is_experimental=False, is_luci=True),
       multiple_base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(),

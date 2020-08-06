@@ -231,11 +231,11 @@ def GenTests(api):
   yield api.test(
       'builder',
       api.chromium_tests.platform([{
-          'mastername': 'chromium.linux',
+          'builder_group': 'chromium.linux',
           'buildername': 'Linux Builder'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'trigger',
@@ -262,11 +262,11 @@ def GenTests(api):
   yield api.test(
       'tester',
       api.chromium_tests.platform([{
-          'mastername': 'chromium.linux',
+          'builder_group': 'chromium.linux',
           'buildername': 'Linux Tests'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
@@ -279,7 +279,7 @@ def GenTests(api):
   yield api.test(
       'code_coverage_ci_bots',
       api.chromium.ci_build(
-          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.code_coverage(use_clang_coverage=True),
@@ -315,7 +315,7 @@ def GenTests(api):
   yield api.test(
       'pgo_ci_bots',
       api.chromium.ci_build(
-          mastername='chromium.fyi', builder='mac-code-coverage'),
+          builder_group='chromium.fyi', builder='mac-code-coverage'),
       api.properties(
           swarm_hashes={
               'performance_test_suite':
@@ -353,7 +353,7 @@ def GenTests(api):
   yield api.test(
       'java_code_coverage_ci_bots',
       api.chromium.ci_build(
-          mastername='chromium.fyi', builder='android-code-coverage'),
+          builder_group='chromium.fyi', builder='android-code-coverage'),
       api.properties(swarm_hashes={
           'chrome_public_test_apk': '[dummy hash for chrome_public_test_apk]'
       }),
@@ -401,7 +401,7 @@ def GenTests(api):
   yield api.test(
       'isolate_transfer_builder',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Isolated Transfer Builder',
           build_number=123,
           bot_id='isolated_transfer_builder_id'),
@@ -430,7 +430,7 @@ def GenTests(api):
   yield api.test(
       'isolate_transfer_tester',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Isolated Transfer Tester',
           parent_buildername='Isolated Transfer Builder',
           build_number=123,
@@ -459,7 +459,7 @@ def GenTests(api):
   yield api.test(
       'isolated_transfer__mixed_builder_isolated_tester',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder=(
               'Isolated Transfer: mixed builder, isolated tester (builder)'),
           build_number=123,
@@ -495,7 +495,7 @@ def GenTests(api):
   yield api.test(
       'isolated_transfer__mixed_bt_isolated_tester',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Isolated Transfer: mixed BT, isolated tester (BT)',
           build_number=123,
           bot_id='isolated_transfer_builder_tester_id'),
@@ -530,7 +530,7 @@ def GenTests(api):
   yield api.test(
       'package_transfer_builder',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Packaged Transfer Builder',
           build_number=123,
           bot_id='packaged_transfer_builder_id'),
@@ -554,7 +554,7 @@ def GenTests(api):
   yield api.test(
       'package_transfer_enabled_builder',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Packaged Transfer Enabled Builder',
           build_number=123,
           bot_id='packaged_transfer_builder_id'),
@@ -578,7 +578,7 @@ def GenTests(api):
   yield api.test(
       'package_transfer_tester',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Packaged Transfer Tester',
           parent_buildername='Packaged Transfer Builder',
           build_number=123,
@@ -606,7 +606,7 @@ def GenTests(api):
   yield api.test(
       'multiple_triggers',
       api.chromium.ci_build(
-          mastername='chromium.example',
+          builder_group='chromium.example',
           builder='Multiple Triggers: Builder',
           build_number=123,
           bot_id='multiple_triggers_builder_id'),
@@ -647,7 +647,7 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.properties(fail_compile=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason, 'Compile step failed.'),
@@ -666,11 +666,11 @@ def GenTests(api):
   yield api.test(
       'skip_retrying_logic_is_limited_to_try_jobs',
       api.chromium_tests.platform([{
-          'mastername': 'chromium.linux',
+          'builder_group': 'chromium.linux',
           'buildername': 'Linux Tests'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(**{
@@ -681,9 +681,8 @@ def GenTests(api):
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
-                  'gtest_tests': [
-                      'base_unittests', 'target1', 'target2', 'target3'
-                  ],
+                  'gtest_tests':
+                      ['base_unittests', 'target1', 'target2', 'target3'],
               },
           }),
       api.override_step_data(
@@ -701,18 +700,18 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=True),
-      # The above failure is for dispatched task, the collect step
-      # itself succeeds.
-      api.legacy_annotation.success_step),
+          # The above failure is for dispatched task, the collect step
+          # itself succeeds.
+          api.legacy_annotation.success_step),
       api.override_step_data(
           'target3',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=True),
-      # The above failure is for dispatched task, the collect step
-      # itself succeeds.
-      api.legacy_annotation.success_step),
+          # The above failure is for dispatched task, the collect step
+          # itself succeeds.
+          api.legacy_annotation.success_step),
       api.post_process(post_process.DoesNotRunRE, 'skip retrying'),
       api.post_process(post_process.DropExpectation),
   )

@@ -26,7 +26,7 @@ def RunSteps(api):
           'tryserver.chromium.foo': {
               'foo-rel': {
                   'mirrors': [{
-                      'mastername': 'chromium.foo',
+                      'builder_group': 'chromium.foo',
                       'buildername': 'foo-rel'
                   }],
               }
@@ -37,7 +37,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.ci_build(mastername='chromium.foo', builder='foo-rel'),
+      api.chromium.ci_build(builder_group='chromium.foo', builder='foo-rel'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -45,7 +45,7 @@ def GenTests(api):
   yield api.test(
       'trybot',
       api.chromium.try_build(
-          mastername='tryserver.chromium.foo', builder='foo-rel'),
+          builder_group='tryserver.chromium.foo', builder='foo-rel'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -53,7 +53,7 @@ def GenTests(api):
   yield api.test(
       'standalone-trybot',
       api.chromium.try_build(
-          mastername='tryserver.chromium.foo', builder='foo-dbg'),
+          builder_group='tryserver.chromium.foo', builder='foo-dbg'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -55,7 +55,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.post_process(post_process.MustRun, 'test_name'),
@@ -67,7 +67,7 @@ def GenTests(api):
   yield api.test(
       'different-target-name',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(target_name='target_name'),

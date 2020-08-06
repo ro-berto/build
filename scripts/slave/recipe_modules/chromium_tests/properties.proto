@@ -32,9 +32,9 @@ message InputProperties {
   // actual project to use.
   //
   // Example:
-  //   (mastername='chromium.linux', buildername='Linux Tests') sets its parent
-  //   to (mastername='chromium.linux', mastername='Linux Builder'). When
-  //   'Linux Builder' runs, it triggers 'Linux Tests'. The BotSpec for
+  //   (builder_group='chromium.linux', buildername='Linux Tests') sets its
+  //   parent to (builder_group='chromium.linux', buildername='Linux Builder').
+  //   When 'Linux Builder' runs, it triggers 'Linux Tests'. The BotSpec for
   //   'Linux Tests' has 'chromium' as the value of its luci_project attribute,
   //   so by default it triggers the 'Linux Tests' job in project 'chromium'.
   //   If the properties maps 'chromium' to 'chromium-m86', then instead the

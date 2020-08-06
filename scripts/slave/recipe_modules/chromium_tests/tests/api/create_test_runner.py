@@ -5,6 +5,7 @@
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
@@ -31,10 +32,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'failure',
+      api.builder_group.for_current('test_group'),
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          bot_id='test_bot_id',
+          buildername='test_buildername', bot_id='test_bot_id',
           buildnumber=123),
       api.override_step_data('base_unittests',
                              api.legacy_annotation.failure_step),
@@ -42,8 +42,8 @@ def GenTests(api):
 
   yield api.test(
       'serialize_tests',
+      api.builder_group.for_current('test_group'),
       api.properties(
-          mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
@@ -53,8 +53,8 @@ def GenTests(api):
   )
   yield api.test(
       'retry_failed_shards',
+      api.builder_group.for_current('test_group'),
       api.properties(
-          mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,

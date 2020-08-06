@@ -5,6 +5,7 @@
 from RECIPE_MODULES.build.chromium_tests import generators
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
@@ -35,9 +36,9 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_gtest(api, api.chromium_tests,
-                                        'test_mastername', 'test_buildername',
-                                        test_spec, update_step):
+  for test in generators.generate_gtest(api, api.chromium_tests, 'test_group',
+                                        'test_buildername', test_spec,
+                                        update_step):
     test.run(api, '')
 
 
@@ -45,7 +46,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(single_spec={

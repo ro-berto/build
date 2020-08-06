@@ -38,9 +38,9 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_junit_test(
-      api, api.chromium_tests, 'test_mastername', 'test_buildername', test_spec,
-      update_step):
+  for test in generators.generate_junit_test(api, api.chromium_tests,
+                                             'test_group', 'test_buildername',
+                                             test_spec, update_step):
     test.run(api, '')
 
 
@@ -48,7 +48,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(single_spec={
@@ -59,7 +59,7 @@ def GenTests(api):
   yield api.test(
       'different-name',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(single_spec={
@@ -76,7 +76,7 @@ def GenTests(api):
   yield api.test(
       'additional-args',
       api.chromium.ci_build(
-          mastername='test_mastername',
+          builder_group='test_group',
           builder='test_buildername',
       ),
       api.properties(single_spec={

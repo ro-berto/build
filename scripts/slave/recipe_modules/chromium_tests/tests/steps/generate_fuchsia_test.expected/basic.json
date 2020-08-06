@@ -203,7 +203,7 @@
       "--input-json",
       "{}",
       "--builder-group",
-      "test_mastername",
+      "test_group",
       "--builder-name",
       "test_buildername",
       "--build-number",

@@ -5,8 +5,8 @@
 """Test to ensure the validity of the entries within TRYBOTS.
 
 Each entry in the TRYBOTS dict will be checked to ensure
-chromium_tests.trybot_steps can be called with the mastername and buildername
-properties set for the entry.
+chromium_tests.trybot_steps can be called with the input set as it would
+be when the try builder runs.
 """
 
 from recipe_engine import post_process
@@ -28,14 +28,14 @@ def RunSteps(api):
 
 def GenTests(api):
   for builder_id in sorted(trybots.TRYBOTS):
-    mastername = builder_id.master
+    builder_group = builder_id.group
     buildername = builder_id.builder
     yield api.test(
-        ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
+        ('%s-%s' % (builder_group, buildername)).replace(' ', '_'),
         (api.properties(xcode_build_version='11c29')
          if 'ios' in buildername else api.properties()),
         api.chromium.try_build(
-            mastername=mastername,
+            builder_group=builder_group,
             builder=buildername,
         ),
         # Supress analysis so that all targets show up as affected and we run

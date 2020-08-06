@@ -7,7 +7,7 @@
       "--input-json",
       "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
       "--builder-group",
-      "test_mastername",
+      "test_group",
       "--builder-name",
       "test_buildername",
       "--build-number",

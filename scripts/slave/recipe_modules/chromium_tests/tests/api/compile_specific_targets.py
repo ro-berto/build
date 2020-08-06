@@ -22,11 +22,12 @@ BASIC_CONFIG = {
 }
 
 BUILDERS = {
-  'fake.master': {
-      'Test Version': dict(BASIC_CONFIG, **{
-        'android_version': 'chrome/Version',
-      }),
-  },
+    'fake.group': {
+        'Test Version':
+            dict(BASIC_CONFIG, **{
+                'android_version': 'chrome/Version',
+            }),
+    },
 }
 
 def RunSteps(api):
@@ -39,7 +40,7 @@ def RunSteps(api):
     try_spec = api.chromium_tests.trybots[builder_id]
     bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   else:
-    builders = BUILDERS if 'fake.master' in builder_id.master else None
+    builders = BUILDERS if 'fake.group' in builder_id.group else None
     bot_config = api.chromium_tests.create_bot_config_object(
         [api.chromium.get_builder_id()], builders=builders)
   api.chromium_tests.configure_build(bot_config)
@@ -56,13 +57,15 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'linux_tests',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
   )
 
   yield api.test(
       'failure',
-      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
       api.step_data('compile', retcode=1),
   )
@@ -70,14 +73,14 @@ def GenTests(api):
   yield api.test(
       'failure_tryserver',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.step_data('compile (with patch)', retcode=1),
   )
 
   yield api.test(
       'perf_isolate_lookup',
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='linux-builder-perf'),
+          builder_group='chromium.perf', builder='linux-builder-perf'),
       api.properties(swarming_gtest=True),
       api.post_process(Filter('pinpoint isolate upload')),
   )
@@ -85,7 +88,7 @@ def GenTests(api):
   yield api.test(
       'perf_isolate_lookup_tryserver',
       api.chromium.try_build(
-          mastername='tryserver.chromium.perf',
+          builder_group='tryserver.chromium.perf',
           builder='Mac Builder Perf',
           change_number=671632,
           patch_set=1),
@@ -98,11 +101,11 @@ def GenTests(api):
   yield api.test(
       'android',
       api.chromium.ci_build(
-          mastername='chromium.android', builder='android-cronet-arm-rel'),
+          builder_group='chromium.android', builder='android-cronet-arm-rel'),
   )
 
   yield api.test(
       'android_version',
-      api.chromium.ci_build(mastername='fake.master', builder='Test Version'),
+      api.chromium.ci_build(builder_group='fake.group', builder='Test Version'),
       api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
   )

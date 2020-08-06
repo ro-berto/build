@@ -17,12 +17,11 @@ def RunSteps(api):
   # Test failed normalization of bot specs
   spec = {'execution_mode': bot_spec.TEST}
   builders = {
-      'fake-master': {
-              'fake-builder': spec,
+      'fake-group': {
+          'fake-builder': spec,
       },
   }
-  builder_id = chromium.BuilderId.create_for_master('fake-master',
-                                                    'fake-builder')
+  builder_id = chromium.BuilderId.create_for_group('fake-group', 'fake-builder')
   with api.assertions.assertRaises(AssertionError) as caught:
     bot_config_module.BotConfig.create(builders, [builder_id])
   message = ('Test-only builder must specify a parent builder '
@@ -31,7 +30,7 @@ def RunSteps(api):
 
   # Set up data for testing bot_config methods
   builders = {
-      'fake-master': {
+      'fake-group': {
           'fake-builder':
               bot_spec.BotSpec.create(),
           'fake-tester':
@@ -40,7 +39,7 @@ def RunSteps(api):
                   parent_buildername='fake-builder',
               ),
       },
-      'fake-master2': {
+      'fake-group2': {
           'fake-builder2':
               bot_spec.BotSpec.create(),
           'fake-tester2':
@@ -54,19 +53,19 @@ def RunSteps(api):
   # Test builders_id method
   bot_config = bot_config_module.BotConfig.create(builders, [
       {
-          'mastername': 'fake-master',
+          'builder_group': 'fake-group',
           'buildername': 'fake-builder',
           'tester': 'fake-tester'
       },
       {
-          'mastername': 'fake-master2',
+          'builder_group': 'fake-group2',
           'buildername': 'fake-builder2',
           'tester': 'fake-tester2'
       },
   ])
   api.assertions.assertEqual(bot_config.builder_ids, (
-      chromium.BuilderId.create_for_master('fake-master', 'fake-builder'),
-      chromium.BuilderId.create_for_master('fake-master2', 'fake-builder2'),
+      chromium.BuilderId.create_for_group('fake-group', 'fake-builder'),
+      chromium.BuilderId.create_for_group('fake-group2', 'fake-builder2'),
   ))
 
 

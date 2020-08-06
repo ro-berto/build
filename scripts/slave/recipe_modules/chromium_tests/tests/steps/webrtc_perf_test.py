@@ -47,7 +47,7 @@ def RunSteps(api):
 def GenTests(api):
   typical_properties = api.properties(parent_got_revision='a' * 40)
   typical_ci_build = api.chromium.ci_build(
-      mastername='chromium.webrtc',
+      builder_group='chromium.webrtc',
       builder='WebRTC Chromium Linux Tester',
   )
 
