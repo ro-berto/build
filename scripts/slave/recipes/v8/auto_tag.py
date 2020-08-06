@@ -21,19 +21,20 @@ import re
 from recipe_engine.post_process import DropExpectation, MustRun
 
 DEPS = [
-  'depot_tools/gclient',
-  'depot_tools/git',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/service_account',
-  'recipe_engine/step',
-  'v8',
+    'builder_group',
+    'depot_tools/gclient',
+    'depot_tools/git',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/service_account',
+    'recipe_engine/step',
+    'v8',
 ]
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
@@ -249,7 +250,7 @@ def GenTests(api):
            commit_loop_test_data=True):
     test_data = api.test(
         name,
-        api.properties.generic(mastername='client.v8.branches'),
+        api.builder_group.for_current('client.v8.branches'),
         api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
@@ -341,7 +342,7 @@ def GenTests(api):
   # The bot was triggered without specifying a branch.
   yield api.test(
       'missing_branch',
-      api.properties.generic(mastername='client.v8.branches'),
+      api.builder_group.for_current('client.v8.branches'),
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',

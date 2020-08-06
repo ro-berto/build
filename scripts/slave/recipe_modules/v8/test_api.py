@@ -501,21 +501,28 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         for target in gen_isolate_targets(test_name)
     )
 
-  def test_name(self, mastername, buildername, suffix=''):
-    return '_'.join(filter(bool, [
-      'full',
-      _sanitize_nonalpha(mastername),
-      _sanitize_nonalpha(buildername),
-      suffix,
-    ]))
+  def test_name(self, builder_group, buildername, suffix=''):
+    return '_'.join(
+        filter(bool, [
+            'full',
+            _sanitize_nonalpha(builder_group),
+            _sanitize_nonalpha(buildername),
+            suffix,
+        ]))
 
-  def test(self, mastername, buildername, suffix='', parent_test_spec=None,
-           parent_buildername=None, parent_bot_config=None,
-           git_ref='refs/heads/master', **kwargs):
+  def test(self,
+           builder_group,
+           buildername,
+           suffix='',
+           parent_test_spec=None,
+           parent_buildername=None,
+           parent_bot_config=None,
+           git_ref='refs/heads/master',
+           **kwargs):
     """Convenience method to generate test data for V8 recipe runs.
 
     Args:
-      mastername: Mastername property as passed to the recipe.
+      builder_group: The group of the builder to run.
       buildername: Buildername property as passed to the recipe.
       suffix: Test name suffix.
       parent_test_spec: Test-spec property passed to testers.
@@ -536,25 +543,23 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       # prod.
       kwargs['triggers'] = list(kwargs['triggers'])
 
-    if mastername.startswith('tryserver'):
+    if builder_group.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver
     else:
       properties_fn = self.m.properties.generic
 
-    test = (
-        recipe_test_api.RecipeTestApi.test(
-            self.test_name(mastername, buildername, suffix)) +
+    test = recipe_test_api.RecipeTestApi.test(
+        self.test_name(builder_group, buildername, suffix),
         properties_fn(
-            mastername=mastername,
             parent_buildername=parent_buildername,
             gerrit_project='v8/v8',
             # TODO(sergiyb): Remove this property after archive module has been
             # migrated to new buildbucket properties.
             buildername=buildername,
-            **kwargs
-        ) +
-        self.m.platform('linux', 64) +
-        self.m.runtime(is_luci=True, is_experimental=False)
+            **kwargs),
+        self.m.builder_group.for_current(builder_group),
+        self.m.platform('linux', 64),
+        self.m.runtime(is_luci=True, is_experimental=False),
     )
     if parent_buildername:
       # The parent build config (Release or Debug) is either statically defined
@@ -592,7 +597,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.example_scheduler_gitiles_trigger('b'),
       ])
 
-    if mastername.startswith('tryserver'):
+    if builder_group.startswith('tryserver'):
       test += self.m.properties(
           category='cq',
           master='tryserver.v8',

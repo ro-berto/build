@@ -98,8 +98,8 @@ BUILDERS = freeze({
 # TODO(machenbach): Temporary code to migrate to flattened builder configs.
 # Clean up the config above and remove this after testing in prod.
 FLATTENED_BUILDERS = {}
-for _, master_config in BUILDERS.iteritems():
-  builders = master_config['builders']
+for _, group_config in BUILDERS.iteritems():
+  builders = group_config['builders']
   for _buildername, _bot_config in builders.iteritems():
     assert _buildername not in FLATTENED_BUILDERS, _buildername
     FLATTENED_BUILDERS[_buildername] = _bot_config
@@ -308,11 +308,11 @@ def _sanitize_nonalpha(*chunks):
 
 
 def GenTests(api):
-  for mastername, masterconf in BUILDERS.iteritems():
-    for buildername, bot_config in masterconf['builders'].iteritems():
+  for group, group_cfg in BUILDERS.iteritems():
+    for buildername, bot_config in group_cfg['builders'].iteritems():
       buildbucket_kwargs = {
-          'mastername':
-              mastername,
+          'builder_group':
+              group,
           'project':
               'v8',
           'git_repo':
@@ -328,14 +328,14 @@ def GenTests(api):
                   buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
                   'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
       }
-      if mastername.startswith('tryserver'):
+      if group.startswith('tryserver'):
         buildbucket_fn = api.chromium.try_build
         buildbucket_kwargs['change_number'] = 456789
         buildbucket_kwargs['patch_set'] = 12
       else:
         buildbucket_fn = api.chromium.ci_build
       yield api.test(
-          _sanitize_nonalpha('full', mastername, buildername),
+          _sanitize_nonalpha('full', group, buildername),
           buildbucket_fn(**buildbucket_kwargs),
           api.platform(bot_config['testing']['platform'], 64),
           api.runtime(is_luci=True, is_experimental=False),

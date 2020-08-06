@@ -1175,8 +1175,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@config@[@@@",
       "@@@STEP_LOG_LINE@config@  {@@@",
+      "@@@STEP_LOG_LINE@config@    \"bisect_builder_group\": \"foo.v8\",@@@",
       "@@@STEP_LOG_LINE@config@    \"bisect_buildername\": \"V8 Foobar\",@@@",
-      "@@@STEP_LOG_LINE@config@    \"bisect_mastername\": \"foo.v8\",@@@",
       "@@@STEP_LOG_LINE@config@    \"bug_url\": \"<bug-url>\",@@@",
       "@@@STEP_LOG_LINE@config@    \"build_config\": \"Debug\",@@@",
       "@@@STEP_LOG_LINE@config@    \"extra_args\": [@@@",

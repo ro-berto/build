@@ -40,3 +40,16 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     # TODO(https://crbug.com/1109276) Do not set the target_mastername property
     return self.m.properties(
         target_builder_group=group, target_mastername=group)
+
+  def for_bisect(self, group):
+    """Set the builder group for the bisect builder.
+
+    This is used by v8, which has a single builder that performs
+    bisection using the configuration of another builder.
+
+    This also sets the legacy bisect_mastername property so existing
+    code continues to work.
+    """
+    # TODO(https://crbug.com/1109276) Do not set the bisect_mastername property
+    return self.m.properties(
+        bisect_builder_group=group, bisect_mastername=group)

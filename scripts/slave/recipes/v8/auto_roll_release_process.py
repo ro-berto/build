@@ -3,17 +3,18 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'recipe_engine/buildbucket',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'v8',
+    'builder_group',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'v8',
 ]
 
 CLUSTERFUZZ = 'https://cluster-fuzz.appspot.com/testcase?key=%d'
@@ -53,7 +54,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'clusterfuzz_no_issues',
-      api.properties.generic(mastername='client.v8.fyi'),
+      api.builder_group.for_current('client.v8.fyi'),
       api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(
           project='v8',
@@ -65,7 +66,7 @@ def GenTests(api):
 
   yield api.test(
       'clusterfuzz_issues',
-      api.properties.generic(mastername='client.v8.fyi'),
+      api.builder_group.for_current('client.v8.fyi'),
       api.override_step_data('check clusterfuzz', api.json.output([1, 2])),
       api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(

@@ -29,69 +29,68 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-
-  'depot_tools/gitiles',
-  'depot_tools/gsutil',
-
-  'chromium_swarming',
-  'swarming_client',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'depot_tools/gitiles',
+    'depot_tools/gsutil',
+    'builder_group',
+    'chromium_swarming',
+    'swarming_client',
 ]
 
-
 PROPERTIES = {
-  # Master name of the builder that produced the builds for bisection.
-  'bisect_mastername': Property(kind=str),
-  # Name of the builder that produced the builds for bisection.
-  'bisect_buildername': Property(kind=str),
-  # Build config passed to V8's run-tests.py script (there it's parameter
-  # --mode, example: Release or Debug).
-  'build_config': Property(kind=str),
-  # Extra arguments to V8's run-tests.py script.
-  'extra_args': Property(default=None, kind=list),
-  # Number of commits, backwards bisection will initially leap over.
-  'initial_commit_offset': Property(default=1, kind=Single((int, float))),
-  # The maximum number of calibration attempts (safeguard to prevent infinite
-  # loops). Repetitions are doubled on each attempt until there's enough
-  # confidence.
-  'max_calibration_attempts': Property(default=5, kind=Single((int, float))),
-  # Name of the isolated file (e.g. bot_default, mjsunit).
-  'isolated_name': Property(kind=str),
-  # Initial number of swarming shards.
-  'num_shards': Property(default=2, kind=Single((int, float))),
-  # Initial number of test repetitions (passed to --random-seed-stress-count
-  # option).
-  'repetitions': Property(default=5000, kind=Single((int, float))),
-  # Switch to only attempt to reproduce with given revision. Skips bisection.
-  'repro_only': Property(default=False, kind=bool),
-  # Swarming dimensions classifying the type of bot the tests should run on.
-  # Passed as list of strings, each in the format name:value.
-  'swarming_dimensions': Property(default=None, kind=list),
-  # Swarming priority to be used for swarming tasks. The priority is lowered by
-  # 10 (actual numberic value increases) when using higher time than the one
-  # specified in the total_timeout_sec.
-  'swarming_priority': Property(default=25, kind=Single((int, float))),
-  # Expiration used for swarming tasks. Counted from the moment task is
-  # scheduled.
-  'swarming_expiration': Property(default=60 * 60, kind=Single((int, float))),
-  # Fully qualified test name passed to run-tests.py. E.g. mjsunit/foobar.
-  'test_name': Property(kind=str),
-  # Timeout parameter passed to run-tests.py. Keep small when bisecting
-  # fast-running tests that occasionally hang.
-  'timeout_sec': Property(default=60, kind=Single((int, float))),
-  # Initial total timeout for one entire bisect step. During calibration, this
-  # time might be increased for more confidence. Set to 0 to disable and specify
-  # the 'repetitions' property instead.
-  'total_timeout_sec': Property(default=120, kind=Single((int, float))),
-  # Revision known to be bad, where backwards bisection will start.
-  'to_revision': Property(kind=str),
-  # Name of the testing variant passed to run-tests.py.
-  'variant': Property(kind=str),
+    # Group of the builder that produced the builds for bisection.
+    # TODO(https://crbug.com/1109276) Remove the default
+    'bisect_builder_group': Property(default=None, kind=str),
+    # Name of the builder that produced the builds for bisection.
+    'bisect_buildername': Property(kind=str),
+    # Build config passed to V8's run-tests.py script (there it's parameter
+    # --mode, example: Release or Debug).
+    'build_config': Property(kind=str),
+    # Extra arguments to V8's run-tests.py script.
+    'extra_args': Property(default=None, kind=list),
+    # Number of commits, backwards bisection will initially leap over.
+    'initial_commit_offset': Property(default=1, kind=Single((int, float))),
+    # The maximum number of calibration attempts (safeguard to prevent infinite
+    # loops). Repetitions are doubled on each attempt until there's enough
+    # confidence.
+    'max_calibration_attempts': Property(default=5, kind=Single((int, float))),
+    # Name of the isolated file (e.g. bot_default, mjsunit).
+    'isolated_name': Property(kind=str),
+    # Initial number of swarming shards.
+    'num_shards': Property(default=2, kind=Single((int, float))),
+    # Initial number of test repetitions (passed to --random-seed-stress-count
+    # option).
+    'repetitions': Property(default=5000, kind=Single((int, float))),
+    # Switch to only attempt to reproduce with given revision. Skips bisection.
+    'repro_only': Property(default=False, kind=bool),
+    # Swarming dimensions classifying the type of bot the tests should run on.
+    # Passed as list of strings, each in the format name:value.
+    'swarming_dimensions': Property(default=None, kind=list),
+    # Swarming priority to be used for swarming tasks. The priority is lowered
+    # by 10 (actual numberic value increases) when using higher time than the
+    # one specified in the total_timeout_sec.
+    'swarming_priority': Property(default=25, kind=Single((int, float))),
+    # Expiration used for swarming tasks. Counted from the moment task is
+    # scheduled.
+    'swarming_expiration': Property(default=60 * 60, kind=Single((int, float))),
+    # Fully qualified test name passed to run-tests.py. E.g. mjsunit/foobar.
+    'test_name': Property(kind=str),
+    # Timeout parameter passed to run-tests.py. Keep small when bisecting
+    # fast-running tests that occasionally hang.
+    'timeout_sec': Property(default=60, kind=Single((int, float))),
+    # Initial total timeout for one entire bisect step. During calibration, this
+    # time might be increased for more confidence. Set to 0 to disable and
+    # specify the 'repetitions' property instead.
+    'total_timeout_sec': Property(default=120, kind=Single((int, float))),
+    # Revision known to be bad, where backwards bisection will start.
+    'to_revision': Property(kind=str),
+    # Name of the testing variant passed to run-tests.py.
+    'variant': Property(kind=str),
 }
 
 # The maximum number of steps for backwards and inwards bisection (safeguard to
@@ -181,10 +180,11 @@ class Command(object):
 
 class Depot(object):
   """Helper class for interacting with remote storage (GS bucket and git)."""
-  def __init__(self, api, mastername, buildername, isolated_name, revision):
+
+  def __init__(self, api, builder_group, buildername, isolated_name, revision):
     """
     Args:
-      mastername: Master name of the builder that produced the builds for
+      builder_group: Group name of the builder that produced the builds for
           bisection.
       buildername: Name of the builder that produced the builds for bisection.
       isolated_name: Name of the isolated file (e.g. bot_default, mjsunit).
@@ -193,8 +193,8 @@ class Depot(object):
           revision.
     """
     self.api = api
-    self.gs_url_template = (
-        'gs://chromium-v8/isolated/%s/%s/%%s.json' % (mastername, buildername))
+    self.gs_url_template = ('gs://chromium-v8/isolated/%s/%s/%%s.json' %
+                            (builder_group, buildername))
     self.isolated_name = isolated_name
     self.revision = revision
     # Cache for mapping offsets to real revisions.
@@ -543,7 +543,7 @@ def setup_swarming(
     api.chromium_swarming.set_default_dimension(k, v)
 
 
-def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
+def RunSteps(api, bisect_builder_group, bisect_buildername, build_config,
              extra_args, initial_commit_offset, max_calibration_attempts,
              isolated_name, num_shards, repetitions, repro_only,
              swarming_dimensions, swarming_priority, swarming_expiration,
@@ -562,8 +562,11 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
       api, swarming_dimensions, swarming_priority, swarming_expiration)
 
   # Set up bisection helpers.
-  depot = Depot(
-      api, bisect_mastername, bisect_buildername, isolated_name, to_revision)
+  # Get the builder group from the module to support backwards-compatibility
+  # TODO(https://crbug.com/1109276) Don't get builder group from the module
+  bisect_builder_group = api.builder_group.for_bisect
+  depot = Depot(api, bisect_builder_group, bisect_buildername, isolated_name,
+                to_revision)
   command = Command(
       test_name, build_config, variant, repetitions, repro_only,
       total_timeout_sec, timeout_sec, extra_args)
@@ -586,27 +589,31 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
 
   if could_reproduce:
     # Generate config for flakes.pyl.
-    config = api.json.dumps([{
-      'bisect_mastername': bisect_mastername,
-      'bisect_buildername': bisect_buildername,
-      'build_config': build_config,
-      'isolated_name': isolated_name,
-      'test_name': test_name,
-      'variant': variant,
-      'extra_args': extra_args,
-      'swarming_dimensions': swarming_dimensions,
-      'timeout_sec': timeout_sec,
-      'num_shards': runner.num_shards,
-      # TODO(sergiyb): Drop total_timeout_sec here and just rely on repetitions,
-      # which is more reliable on Windows. Right now, however, we can't use it
-      # as it's not correctly calibrated when total_timeout_sec is used. We
-      # should only implement this suggestion once we can extract the actual
-      # number of repetitions used from the test launcher after the calibration
-      # is done.
-      'total_timeout_sec': total_timeout_sec * runner.multiplier,
-      'repetitions': repetitions * runner.multiplier,
-      'bug_url': '<bug-url>',
-    }], indent=2, separators=(',', ': '), sort_keys=True)
+    config = api.json.dumps(
+        [{
+            'bisect_builder_group': bisect_builder_group,
+            'bisect_buildername': bisect_buildername,
+            'build_config': build_config,
+            'isolated_name': isolated_name,
+            'test_name': test_name,
+            'variant': variant,
+            'extra_args': extra_args,
+            'swarming_dimensions': swarming_dimensions,
+            'timeout_sec': timeout_sec,
+            'num_shards': runner.num_shards,
+            # TODO(sergiyb): Drop total_timeout_sec here and just rely on
+            # repetitions, which is more reliable on Windows. Right now,
+            # however, we can't use it as it's not correctly calibrated when
+            # total_timeout_sec is used. We should only implement this
+            # suggestion once we can extract the actual number of repetitions
+            # used from the test launcher after the calibration is done.
+            'total_timeout_sec': total_timeout_sec * runner.multiplier,
+            'repetitions': repetitions * runner.multiplier,
+            'bug_url': '<bug-url>',
+        }],
+        indent=2,
+        separators=(',', ': '),
+        sort_keys=True)
     log = re.sub(
         r'([^,])(?=\n\s*[\}\]])', r'\1,', config,  # add trailing commas
         flags=re.MULTILINE).splitlines()           # split by line
@@ -623,8 +630,8 @@ def GenTests(api):
   def test(name):
     return api.test(
         name,
+        api.builder_group.for_bisect('foo.v8'),
         api.properties(
-            bisect_mastername='foo.v8',
             bisect_buildername='V8 Foobar',
             extra_args=['--foo-flag', '--bar-flag'],
             isolated_name='foo_isolated',

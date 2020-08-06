@@ -208,20 +208,20 @@ def GenTests(api):
         api.v8.hide_infra_steps(),
     )
 
-  # Test CI builder on node-ci master.
+  # Test CI builder on node-ci group.
   yield test(
       'Node-CI Foobar',
       platform='linux',
   ) + api.post_process(Filter('initialization.bot_update'))
 
-  # Test try builder on node-ci master.
+  # Test try builder on node-ci group.
   yield test(
       'node_ci_foobar_rel',
       platform='linux',
       is_trybot=True,
   )
 
-  # Test CI builder on V8 master.
+  # Test CI builder on V8 group.
   yield test(
       'V8 Foobar',
       platform='linux',
@@ -229,7 +229,7 @@ def GenTests(api):
       v8_tot=True,
   )
 
-  # Test CI builder on V8 master.
+  # Test CI builder on V8 group.
   yield (
       test(
           'V8 Foobar',
@@ -249,7 +249,7 @@ def GenTests(api):
       api.post_process(Filter('trigger', '$result'))
   )
 
-  # Test CI builder on V8 master with consistent test failures.
+  # Test CI builder on V8 group with consistent test failures.
   yield (
       test(
           'V8 Foobar',
@@ -264,7 +264,7 @@ def GenTests(api):
       api.post_process(Filter('test default', 'test default (retry)'))
   )
 
-  # Test CI builder on V8 master with flakes.
+  # Test CI builder on V8 group with flakes.
   yield (
       test(
           'V8 Foobar',

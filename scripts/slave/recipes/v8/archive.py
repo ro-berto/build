@@ -230,7 +230,7 @@ def GenTests(api):
     return api.test(
         api.v8.test_name('client.v8.official', 'V8 Foobar', name),
         api.chromium.ci_build(
-            mastername='client.v8.official',
+            builder_group='client.v8.official',
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
             git_ref='refs/branch-heads/3.4',
@@ -317,12 +317,12 @@ def GenTests(api):
   )
 
   # Test bailout on missing branch.
-  mastername = 'client.v8.official'
+  builder_group = 'client.v8.official'
   buildername = 'V8 Foobar'
   yield api.test(
-      api.v8.test_name(mastername, buildername, 'no_branch'),
+      api.v8.test_name(builder_group, buildername, 'no_branch'),
       api.chromium.ci_build(
-          mastername=mastername,
+          builder_group=builder_group,
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
@@ -338,12 +338,12 @@ def GenTests(api):
   )
 
   # Test bailout on missing tag.
-  mastername = 'client.v8.official'
+  builder_group = 'client.v8.official'
   buildername = 'V8 Foobar'
   yield api.test(
-      api.v8.test_name(mastername, buildername, 'no_tag'),
+      api.v8.test_name(builder_group, buildername, 'no_tag'),
       api.chromium.ci_build(
-          mastername=mastername,
+          builder_group=builder_group,
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
@@ -362,12 +362,12 @@ def GenTests(api):
   )
 
   # Test refbuilds.
-  mastername = 'client.v8.official'
+  builder_group = 'client.v8.official'
   buildername = 'V8 Foobar'
   yield api.test(
-      api.v8.test_name(mastername, buildername, 'update_beta'),
+      api.v8.test_name(builder_group, buildername, 'update_beta'),
       api.chromium.ci_build(
-          mastername=mastername,
+          builder_group=builder_group,
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
@@ -382,12 +382,12 @@ def GenTests(api):
   )
 
   # Test canary upload.
-  mastername = 'client.v8.official'
+  builder_group = 'client.v8.official'
   buildername = 'V8 Foobar'
   yield api.test(
-      api.v8.test_name(mastername, buildername, 'canary'),
+      api.v8.test_name(builder_group, buildername, 'canary'),
       api.chromium.ci_build(
-          mastername=mastername,
+          builder_group=builder_group,
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
@@ -410,7 +410,7 @@ def GenTests(api):
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'debug_compile_failure'),
       api.chromium.ci_build(
-          mastername='client.v8.official',
+          builder_group='client.v8.official',
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
@@ -434,7 +434,7 @@ def GenTests(api):
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'release_compile_failure'),
       api.chromium.ci_build(
-          mastername='client.v8.official',
+          builder_group='client.v8.official',
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
@@ -458,7 +458,7 @@ def GenTests(api):
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'release_libs_compile_failure'),
       api.chromium.ci_build(
-          mastername='client.v8.official',
+          builder_group='client.v8.official',
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='V8 Foobar',
@@ -482,7 +482,7 @@ def GenTests(api):
       api.v8.test_name('client.v8.official', 'V8 Foobar',
                        'milestone_compile_failure'),
       api.chromium.ci_build(
-          mastername=mastername,
+          builder_group=builder_group,
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,

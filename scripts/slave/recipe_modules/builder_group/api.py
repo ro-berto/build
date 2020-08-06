@@ -17,6 +17,10 @@ Grouping can be retrieved for the following builders:
     This is used by findit, where a single builder performs bisection
     for other builders by building using the target builder's
     configuration.
+* bisect - The builder to run a bisection against.
+    This is used by v8, where a single builder performs bisection
+    for other builders by building using the bisect builder's
+    configuration.
 
 The interface also provides backwards compatibility for accessing the
 grouping by the legacy method of accessing mastername properties. These
@@ -52,3 +56,14 @@ class BuilderGroupApi(recipe_api.RecipeApi):
     # TODO(https://crbug.com/1109276) Do not read the target_mastername property
     return (self.m.properties.get('target_builder_group') or
             self.m.properties.get('target_mastername'))
+
+  @property
+  def for_bisect(self):
+    """Get the builder group for the bisect builder.
+
+    This is used by v8, which has a single builder that performs
+    bisection using the configuration of another builder.
+    """
+    # TODO(https://crbug.com/1109276) Do not read the bisect_mastername property
+    return (self.m.properties.get('bisect_builder_group') or
+            self.m.properties.get('bisect_mastername'))

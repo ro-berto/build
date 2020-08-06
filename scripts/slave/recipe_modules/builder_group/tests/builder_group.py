@@ -15,6 +15,7 @@ def RunSteps(api):
   api.assertions.assertEqual(api.builder_group.for_current, 'current-group')
   api.assertions.assertEqual(api.builder_group.for_parent, 'parent-group')
   api.assertions.assertEqual(api.builder_group.for_target, 'target-group')
+  api.assertions.assertEqual(api.builder_group.for_bisect, 'bisect-group')
 
   # TODO(https://crbug.com/1109276) Remove these assertions
   # Until all existing uses are gone, make sure that the legacy properties
@@ -24,6 +25,8 @@ def RunSteps(api):
                              'parent-group')
   api.assertions.assertEqual(api.properties['target_mastername'],
                              'target-group')
+  api.assertions.assertEqual(api.properties['bisect_mastername'],
+                             'bisect-group')
 
 
 def GenTests(api):
@@ -32,5 +35,6 @@ def GenTests(api):
       api.builder_group.for_current('current-group'),
       api.builder_group.for_parent('parent-group'),
       api.builder_group.for_target('target-group'),
+      api.builder_group.for_bisect('bisect-group'),
       api.post_process(post_process.DropExpectation),
   )

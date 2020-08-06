@@ -34,24 +34,23 @@ MAX_CONFIGS = 16
 URL_FORMAT_RE = re.compile(r'(?:https?://)?(.+)')
 
 TEST_CONFIG = [{
-  'bisect_buildername': 'V8 Linux64 - debug builder',
-  'bisect_mastername': 'client.v8',
-  'bug_url': 'https://crbug.com/v8/8744',
-  'build_config': 'Debug',
-  'extra_args': [],
-  'isolated_name': 'bot_default',
-  'num_shards': 2,
-  'repetitions': 5000,
-  'swarming_dimensions': [
-    'cpu:x86-64-avx2',
-    'gpu:none',
-    'os:Ubuntu-16.04',
-    'pool:Chrome'
-  ],
-  'test_name': 'cctest/test-cpu-profiler/FunctionCallSample',
-  'timeout_sec': 60,
-  'total_timeout_sec': 120,
-  'variant': 'interpreted_regexp'
+    'bisect_buildername': 'V8 Linux64 - debug builder',
+    'bisect_builder_group': 'client.v8',
+    # TODO(https://crbug.com/1109276) Don't set bisect_mastername
+    'bisect_mastername': 'client.v8',
+    'bug_url': 'https://crbug.com/v8/8744',
+    'build_config': 'Debug',
+    'extra_args': [],
+    'isolated_name': 'bot_default',
+    'num_shards': 2,
+    'repetitions': 5000,
+    'swarming_dimensions': [
+        'cpu:x86-64-avx2', 'gpu:none', 'os:Ubuntu-16.04', 'pool:Chrome'
+    ],
+    'test_name': 'cctest/test-cpu-profiler/FunctionCallSample',
+    'timeout_sec': 60,
+    'total_timeout_sec': 120,
+    'variant': 'interpreted_regexp'
 }]
 
 

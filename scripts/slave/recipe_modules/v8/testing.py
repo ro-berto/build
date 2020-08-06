@@ -891,32 +891,42 @@ class Failure(object):
       variant = self.results[0]['variant']
 
     properties = {
-      # This assumes the builder's master is the same as the tester.
-      'bisect_mastername': self.api.properties['mastername'],
-      # Use builds from parent builder to bisect if any.
-      'bisect_buildername': self.api.properties.get(
-          'parent_buildername') or self.api.buildbucket.builder_name,
-      # Start bisecting backwards at the revision that was tested.
-      'to_revision': self.api.buildbucket.gitiles_commit.id,
-      # Use the same dimensions as the swarming task that ran this test.
-      'swarming_dimensions': self._format_swarming_dimensions(
-          self.test.task.request[0].dimensions),
-      # The isolated name is either specified in the test configurations or
-      # corresponds to the name of the test suite.
-      'isolated_name': test_config.get('isolated_target') or
-                       test_config['tests'][0],
-      # Full qualified test name that failed (e.g. mjsunit/foo/bar).
-      'test_name': self.results[0]['name'],
-      # Release or Debug.
-      'build_config': self.api.chromium.c.build_config_fs,
-      # Add timeout default for convenience.
-      'timeout_sec': 60,
-      # Add total timeout default for convenience.
-      'total_timeout_sec': 120,
-      # The variant the failing test ran in.
-      'variant': variant,
-      # Extra arguments passed to the V8 test runner.
-      'extra_args': extra_args,
+        # This assumes the builder's group is the same as the tester.
+        'bisect_builder_group':
+            self.api.builder_group.for_current,
+        # Use builds from parent builder to bisect if any.
+        'bisect_buildername':
+            self.api.properties.get('parent_buildername')
+            or self.api.buildbucket.builder_name,
+        # Start bisecting backwards at the revision that was tested.
+        'to_revision':
+            self.api.buildbucket.gitiles_commit.id,
+        # Use the same dimensions as the swarming task that ran this test.
+        'swarming_dimensions':
+            self._format_swarming_dimensions(
+                self.test.task.request[0].dimensions),
+        # The isolated name is either specified in the test configurations or
+        # corresponds to the name of the test suite.
+        'isolated_name':
+            test_config.get('isolated_target') or test_config['tests'][0],
+        # Full qualified test name that failed (e.g. mjsunit/foo/bar).
+        'test_name':
+            self.results[0]['name'],
+        # Release or Debug.
+        'build_config':
+            self.api.chromium.c.build_config_fs,
+        # Add timeout default for convenience.
+        'timeout_sec':
+            60,
+        # Add total timeout default for convenience.
+        'total_timeout_sec':
+            120,
+        # The variant the failing test ran in.
+        'variant':
+            variant,
+        # Extra arguments passed to the V8 test runner.
+        'extra_args':
+            extra_args,
     }
     return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))

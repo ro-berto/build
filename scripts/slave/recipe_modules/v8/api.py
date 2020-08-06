@@ -266,7 +266,7 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.apply_config('default_target_v8_clusterfuzz')
 
   def _configure_perf_builders(self):
-    if self.m.properties.get('mastername') == 'client.v8.perf':
+    if self.m.builder_group.for_current == 'client.v8.perf':
       self.m.chromium.apply_config('default_target_d8')
 
   def apply_bot_config(self, bot_config):
@@ -452,7 +452,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium_swarming.default_idempotent = True
     self.m.chromium_swarming.task_output_stdout = 'all'
 
-    if self.m.properties['mastername'] == 'tryserver.v8':
+    if self.m.builder_group.for_current == 'tryserver.v8':
       self.m.chromium_swarming.add_default_tag('purpose:pre-commit')
       self.m.chromium_swarming.default_priority = 30
 
@@ -462,8 +462,9 @@ class V8Api(recipe_api.RecipeApi):
         self.m.chromium_swarming.add_default_tag(
             'patch_project:%s' % changes[0].project)
     else:
-      if self.m.properties['mastername'] in [
-          'client.v8', 'client.v8.branches', 'client.v8.ports']:
+      if self.m.builder_group.for_current in [
+          'client.v8', 'client.v8.branches', 'client.v8.ports'
+      ]:
         self.m.chromium_swarming.default_priority = 25
       else:
         # This should be lower than the CQ.
@@ -834,7 +835,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def _get_default_archive(self):
     return 'gs://chromium-v8/archives/%s/%s' % (
-        self.m.properties['mastername'],
+        self.m.builder_group.for_current,
         self.m.buildbucket.builder_name,
     )
 
@@ -842,8 +843,8 @@ class V8Api(recipe_api.RecipeApi):
   def isolated_archive_path(self):
     buildername = (self.m.properties.get('parent_buildername') or
                    self.m.buildbucket.builder_name)
-    return 'chromium-v8/isolated/%s/%s' % (
-        self.m.properties['mastername'], buildername)
+    return 'chromium-v8/isolated/%s/%s' % (self.m.builder_group.for_current,
+                                           buildername)
 
   def upload_isolated_json(self):
     self.m.gsutil.upload(
@@ -1064,7 +1065,7 @@ class V8Api(recipe_api.RecipeApi):
   def maybe_bisect(self, test_results, test_spec):
     """Build-local bisection for one failure."""
     # Don't activate for branch or fyi bots.
-    if self.m.properties['mastername'] not in ['client.v8', 'client.v8.ports']:
+    if self.m.builder_group.for_current not in ['client.v8', 'client.v8.ports']:
       return
 
     if self.bot_config.get('disable_auto_bisect'):  # pragma: no cover
@@ -1302,7 +1303,7 @@ class V8Api(recipe_api.RecipeApi):
 
     # TODO(machenbach): Remove exception for branches once tested on main
     # waterfall.
-    if self.m.properties['mastername'] == 'client.v8.branches':
+    if self.m.builder_group.for_current == 'client.v8.branches':
       full_args.append('--timeout=200')  # pragma: no cover
 
     # Add optional non-standard root directory for test suites.
@@ -1346,10 +1347,12 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): This is temporary code for rolling out the new test
     # runner. It should be removed after the roll-out. We skip the branches
     # waterfall, as it runs older versions of the V8 side.
-    if self.m.properties['mastername'] != 'client.v8.branches':
+    if self.m.builder_group.for_current != 'client.v8.branches':
       full_args += [
-        '--mastername', self.m.properties['mastername'],
-        '--buildername', self.m.buildbucket.builder_name,
+          '--mastername',
+          self.m.builder_group.for_current,
+          '--buildername',
+          self.m.buildbucket.builder_name,
       ]
 
     return full_args, env

@@ -91,6 +91,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@failed to execute@@@",
       "@@@STEP_LOG_LINE@flake config@{@@@",
+      "@@@STEP_LOG_LINE@flake config@  \"bisect_builder_group\": \"client.v8\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_buildername\": \"V8 Linux64 - debug builder\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_mastername\": \"client.v8\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bug_url\": \"https://crbug.com/v8/8744\", @@@",
