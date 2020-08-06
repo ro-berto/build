@@ -59,7 +59,7 @@ RECIPE_CONFIGS = freeze({
 BUILDERS = freeze({
     'luci.webrtc.ci': {
         'settings': {
-            'mastername': 'client.webrtc',
+            'builder_group': 'client.webrtc',
             'build_gs_bucket': 'chromium-webrtc',
         },
         'builders': {
@@ -685,7 +685,7 @@ BUILDERS = freeze({
     },
     'luci.webrtc.perf': {
         'settings': {
-            'mastername': 'client.webrtc.perf',
+            'builder_group': 'client.webrtc.perf',
             'build_gs_bucket': 'chromium-webrtc',
         },
         'builders': {
@@ -862,7 +862,7 @@ BUILDERS = freeze({
     },
     'luci.webrtc.try': {
         'settings': {
-            'mastername': 'tryserver.webrtc',
+            'builder_group': 'tryserver.webrtc',
             'build_gs_bucket': 'chromium-webrtc',
         },
         'builders': {

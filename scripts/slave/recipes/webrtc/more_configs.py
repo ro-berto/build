@@ -33,94 +33,106 @@ RECIPE_CONFIGS = freeze({
 })
 
 BUILDERS = freeze({
-  'luci.webrtc.ci': {
-    'settings': {
-      'mastername': 'client.webrtc',
+    'luci.webrtc.ci': {
+        'settings': {
+            'builder_group': 'client.webrtc',
+        },
+        'builders': {
+            'Linux (more configs)': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'swarming_dimensions': {
+                    'os': 'Ubuntu-16.04',
+                    'cpu': 'x86-64',
+                },
+            },
+            'Android32 (more configs)': {
+                'recipe_config': 'webrtc_android',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 32,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+            },
+            'Win (more configs)': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'win'
+                },
+                'swarming_dimensions': {
+                    'os': 'Windows-7-SP1',
+                    'cpu': 'x86-64',
+                },
+            },
+        },
     },
-    'builders': {
-      'Linux (more configs)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
+    'luci.webrtc.try': {
+        'settings': {
+            'builder_group': 'tryserver.webrtc',
         },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-16.04',
-          'cpu': 'x86-64',
+        'builders': {
+            'linux_more_configs': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'swarming_dimensions': {
+                    'os': 'Ubuntu-16.04',
+                    'cpu': 'x86-64',
+                },
+            },
+            'android_arm_more_configs': {
+                'recipe_config': 'webrtc_android',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 32,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+            },
+            'win_x86_more_configs': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'win'
+                },
+                'swarming_dimensions': {
+                    'os': 'Windows-7-SP1',
+                    'cpu': 'x86-64',
+                },
+            },
         },
-      },
-      'Android32 (more configs)': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Win (more configs)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-      },
     },
-  },
-  'luci.webrtc.try': {
-    'settings': {
-      'mastername': 'tryserver.webrtc',
-    },
-    'builders': {
-      'linux_more_configs': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-16.04',
-          'cpu': 'x86-64',
-        },
-      },
-      'android_arm_more_configs': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-      'win_x86_more_configs': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-      },
-    },
-  },
 })
 
 
@@ -164,8 +176,8 @@ def GenTests(api):
   ]
 
   for bucketname in builders.keys():
-    master_config = builders[bucketname]
-    for buildername in master_config['builders'].keys():
+    group_config = builders[bucketname]
+    for buildername in group_config['builders'].keys():
       yield generate_builder(
           bucketname, buildername, revision='a' * 40, phases=phases)
 

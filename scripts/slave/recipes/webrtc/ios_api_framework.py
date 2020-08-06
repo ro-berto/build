@@ -3,22 +3,23 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'archive',
-  'chromium_checkout',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'depot_tools/tryserver',
-  'ios',
-  'recipe_engine/commit_position',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'webrtc',
-  'zip',
+    'archive',
+    'builder_group',
+    'chromium_checkout',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'depot_tools/tryserver',
+    'ios',
+    'recipe_engine/commit_position',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'webrtc',
+    'zip',
 ]
 
 
@@ -70,21 +71,21 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'build_ok',
-      api.properties.generic(
-          mastername='client.webrtc', buildername='iOS API Framework Builder'),
+      api.builder_group.for_current('client.webrtc'),
+      api.properties.generic(buildername='iOS API Framework Builder'),
   )
 
   yield api.test(
       'build_failure',
-      api.properties.generic(
-          mastername='client.webrtc', buildername='iOS API Framework Builder'),
+      api.builder_group.for_current('client.webrtc'),
+      api.properties.generic(buildername='iOS API Framework Builder'),
       api.step_data('build', retcode=1),
   )
 
   yield api.test(
       'trybot_build',
+      api.builder_group.for_current('tryserver.webrtc'),
       api.properties.tryserver(
-          mastername='tryserver.webrtc',
           buildername='ios_api_framework',
           gerrit_url='https://webrtc-review.googlesource.com',
           gerrit_project='src'),

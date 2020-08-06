@@ -26,38 +26,42 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'luci.webrtc.ci': {
-    'settings': {
-      'mastername': 'client.webrtc',
-    },
-    'builders': {
-      'Linux64 Release (Libfuzzer)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
+    'luci.webrtc.ci': {
+        'settings': {
+            'builder_group': 'client.webrtc',
         },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
-    },
-  },
-  'luci.webrtc.try': {
-    'settings': {
-      'mastername': 'tryserver.webrtc',
-    },
-    'builders': {
-      'linux_libfuzzer_rel': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
+        'builders': {
+            'Linux64 Release (Libfuzzer)': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+            },
         },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
     },
-  },
+    'luci.webrtc.try': {
+        'settings': {
+            'builder_group': 'tryserver.webrtc',
+        },
+        'builders': {
+            'linux_libfuzzer_rel': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+            },
+        },
+    },
 })
 
 
@@ -95,8 +99,8 @@ def GenTests(api):
                                        recipe_configs)
 
   for bucketname in builders.keys():
-    master_config = builders[bucketname]
-    for buildername in master_config['builders'].keys():
+    group_config = builders[bucketname]
+    for buildername in group_config['builders'].keys():
       yield (generate_builder(bucketname, buildername, revision='a' * 40) +
              api.step_data('calculate targets',
                  stdout=api.raw_io.output_text('target1 target2 target3')))

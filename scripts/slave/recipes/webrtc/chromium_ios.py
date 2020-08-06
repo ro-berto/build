@@ -9,10 +9,11 @@ The changes are:
 """
 
 DEPS = [
-  'ios',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
+    'builder_group',
+    'ios',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
 ]
 
 def RunSteps(api):
@@ -25,10 +26,10 @@ def GenTests(api):
   yield api.test(
       'basic_goma_build',
       api.platform('mac', 64),
+      api.builder_group.for_current('chromium.fake'),
       api.properties(
           buildername='ios',
           buildnumber='0',
-          mastername='chromium.fake',
           bot_id='fake-vm',
       ),
       api.ios.make_test_build_config({

@@ -209,9 +209,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Make it read the actual config even in testing mode.
     if self._test_data.enabled:
       self.m.ios._test_data['build_config'] = ios_config
-    self.m.ios.read_build_config(build_config_base_dir=tmp_path,
-                                 master_name=self.bucketname,
-                                 buildername=buildername)
+    self.m.ios.read_build_config(
+        build_config_base_dir=tmp_path,
+        builder_group=self.bucketname,
+        buildername=buildername)
 
   @property
   def revision_number(self):
@@ -229,8 +230,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   @property
   def builder_id(self):
-    return chromium.BuilderId.create_for_master(self.mastername,
-                                                self.buildername)
+    return chromium.BuilderId.create_for_group(self.builder_group,
+                                               self.buildername)
 
   @property
   def build_url(self):
@@ -244,12 +245,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     return Bot(self._builders, self._recipe_configs, bucketname, buildername)
 
   @property
-  def master_config(self):
+  def group_config(self):
     return self._builders[self.bucketname].get('settings', {})
 
   @property
-  def mastername(self):
-    return self.master_config.get('mastername', self.bucketname)
+  def builder_group(self):
+    return self.group_config.get('builder_group', self.bucketname)
 
   def related_bots(self):
     yield self.bot
@@ -423,8 +424,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
-        mastername=self.mastername, path_to_testing_dir=self.m.path.join(
-            self._working_dir, 'src', 'testing'))
+        builder_group=self.builder_group,
+        path_to_testing_dir=self.m.path.join(self._working_dir, 'src',
+                                             'testing'))
     self.m.chromium_swarming.set_default_dimension(
         'os',
         self.m.chromium_swarming.prefered_os_dimension(

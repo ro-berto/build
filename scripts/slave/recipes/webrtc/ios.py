@@ -47,7 +47,7 @@ RECIPE_CONFIGS = freeze({
 BUILDERS = freeze({
     'luci.webrtc.ci': {
         'settings': {
-            'mastername': 'client.webrtc',
+            'builder_group': 'client.webrtc',
         },
         'builders': {
             'iOS32 Debug': {
@@ -179,7 +179,7 @@ BUILDERS = freeze({
     },
     'luci.webrtc.try': {
         'settings': {
-            'mastername': 'tryserver.webrtc',
+            'builder_group': 'tryserver.webrtc',
         },
         'builders': {
             'ios_compile_arm_dbg': {
@@ -311,7 +311,7 @@ BUILDERS = freeze({
     },
     'luci.webrtc-internal.ci': {
         'settings': {
-            'mastername': 'internal.client.webrtc',
+            'builder_group': 'internal.client.webrtc',
         },
         'builders': {
             'iOS64 Debug': {
@@ -396,7 +396,7 @@ BUILDERS = freeze({
     },
     'luci.webrtc-internal.try': {
         'settings': {
-            'mastername': 'internal.tryserver.webrtc',
+            'builder_group': 'internal.tryserver.webrtc',
         },
         'builders': {
             'ios_arm64_dbg': {
@@ -537,8 +537,8 @@ def GenTests(api):
                                        recipe_configs)
 
   for bucketname in builders.keys():
-    master_config = builders[bucketname]
-    for buildername in master_config['builders'].keys():
+    group_config = builders[bucketname]
+    for buildername in group_config['builders'].keys():
       yield (
           generate_builder(bucketname, buildername, revision='a' * 40) +
           # The version is just a placeholder, don't bother updating it:

@@ -42,7 +42,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        is_experimental=False,
                        gn_analyze_output=None,
                        phases=None):
-    mastername = builders[bucketname]['settings'].get('mastername', bucketname)
+    builder_group = builders[bucketname]['settings'].get(
+        'builder_group', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
 
@@ -58,8 +59,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     test = self.test(
         '%s_%s%s' % (_sanitize_builder_name(bucketname),
                      _sanitize_builder_name(buildername), suffix),
+        self.m.builder_group.for_current(builder_group),
         self.m.properties(
-            mastername=mastername,
             buildername=buildername,
             bot_id='bot_id',
             BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']),
