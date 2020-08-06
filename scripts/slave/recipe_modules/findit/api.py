@@ -30,13 +30,13 @@ class FinditApi(recipe_api.RecipeApi):
 
     if tester_spec.parent_buildername is None:
       return try_spec.TryMirror.create(
-          buildername=tester_id.builder, mastername=tester_id.master)
+          buildername=tester_id.builder, builder_group=tester_id.group)
 
     return try_spec.TryMirror.create(
-        mastername=tester_spec.parent_mastername or tester_id.master,
+        builder_group=tester_spec.parent_builder_group or tester_id.group,
         buildername=tester_spec.parent_buildername,
         tester=tester_id.builder,
-        tester_mastername=tester_id.master)
+        tester_group=tester_id.group)
 
   def _calculate_repo_dir(self, solution_name):
     """Returns the relative path of the solution checkout to the root one."""

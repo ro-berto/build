@@ -21,6 +21,7 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_tests',
     'findit',
@@ -35,8 +36,6 @@ DEPS = [
 
 
 PROPERTIES = {
-    'target_mastername': Property(
-        kind=str, help='The target master to match compile config to.'),
     'target_testername': Property(
         kind=str,
         help='The target tester to match test config to. If the tests are run '
@@ -49,10 +48,10 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, target_mastername, target_testername,
-             revision, isolated_targets):
-  target_tester_id = chromium.BuilderId.create_for_master(
-      target_mastername, target_testername)
+def RunSteps(api, target_testername, revision, isolated_targets):
+  target_builder_group = api.builder_group.for_target
+  target_tester_id = chromium.BuilderId.create_for_group(
+      target_builder_group, target_testername)
   bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(target_tester_id, revision))
 
@@ -167,11 +166,11 @@ def GenTests(api):
         api.chromium.ci_build(
             bucket='findit',
             builder='findit_variable',
-            mastername='chromium.findit',
+            builder_group='chromium.findit',
             bot_id='beefy_vm',
         ),
+        api.builder_group.for_target('chromium.findit'),
         api.properties(
-            target_mastername='chromium.findit',
             target_testername=tester_name,
             revision='r0',
             isolated_targets=isolated_targets,

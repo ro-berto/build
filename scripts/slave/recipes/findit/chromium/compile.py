@@ -14,6 +14,7 @@ from RECIPE_MODULES.build.chromium_tests import bot_spec
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_tests',
     'filter',
@@ -31,8 +32,6 @@ DEPS = [
 
 
 PROPERTIES = {
-    'target_mastername': Property(
-        kind=str, help='The target master to match compile config to.'),
     'target_buildername': Property(
         kind=str, help='The target builder to match compile config to.'),
     'good_revision': Property(
@@ -122,12 +121,12 @@ def _is_flaky_compile(compile_result, revision_being_checked, last_revision):
           revision_being_checked == last_revision)
 
 
-def RunSteps(api, target_mastername, target_buildername,
-             good_revision, bad_revision, compile_targets,
-             use_analyze, suspected_revisions, use_bisect,
+def RunSteps(api, target_buildername, good_revision, bad_revision,
+             compile_targets, use_analyze, suspected_revisions, use_bisect,
              compile_on_good_revision):
-  builder_id = chromium.BuilderId.create_for_master(target_mastername,
-                                                    target_buildername)
+  target_builder_group = api.builder_group.for_target
+  builder_id = chromium.BuilderId.create_for_group(target_builder_group,
+                                                   target_buildername)
   bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(bot_config)
 
@@ -345,9 +344,7 @@ def GenTests(api):
             good_revision=None, bad_revision=None,
             suspected_revisions=None, use_bisect=False):
     properties = {
-        'mastername': 'tryserver.chromium.linux',
         'bot_id': 'build1-a1',
-        'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',
         'good_revision': good_revision or 'r0',
         'bad_revision': bad_revision or 'r1',
@@ -364,6 +361,8 @@ def GenTests(api):
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
         ),
+        api.builder_group.for_current('tryserver.chromium.linux'),
+        api.builder_group.for_target('chromium.linux'),
         api.platform.name('linux'),
     ], api.empty_test_data())
 

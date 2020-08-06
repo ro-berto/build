@@ -14,7 +14,9 @@ message InputProperties {
   // May eventually be replaced with luci-style identifiers i.e.
   // project/bucket/builder.
   message BuilderId {
-    string master = 1;
+    string group = 3;
+    // TODO(https://crbug.com/109276) Remove the master field
+    string master = 1;  // deprecated, use group instead
     string builder = 2;
   }
 

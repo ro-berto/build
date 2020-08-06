@@ -29,7 +29,7 @@ def _bot_db_to_json(bot_db):
       return attr.asdict(obj, dict_factory=collections.OrderedDict)
     return None
 
-  return json.dumps(bot_db.builders_by_master, default=encode)
+  return json.dumps(bot_db.builders_by_group, default=encode)
 
 
 def RunSteps(api):
@@ -45,7 +45,7 @@ def GenTests(api):
       api.properties(gs_bucket='bucket', gs_object='data.json'),
       api.chromium_tests.builders(
           bot_db_module.BotDatabase.create({
-              'mockmaster': {
+              'mockgroup': {
                   'mockbuilder':
                       bot_spec.BotSpec.create(
                           compile_targets=['foo', 'bar'],

@@ -49,9 +49,11 @@ def RunSteps(api, properties):
                                target.hash, args)
     return
 
+  # TODO(https://crbug.com/109276) Don't use master
   # 0. Validate properties.
   assert (
-      properties.target_builder and properties.target_builder.master and
+      properties.target_builder and
+      (properties.target_builder.master or properties.target_builder.group) and
       properties.target_builder.builder), 'Target builder property is required'
 
   # 1. Configure the builder.
@@ -93,9 +95,10 @@ def RunSteps(api, properties):
 
 
 def _configure_builder(api, target_tester):
+  # TODO(https://crbug.com/109276) Don't use master
   bot_mirror = api.findit.get_bot_mirror_for_tester(
-      chromium.BuilderId.create_for_master(target_tester.master,
-                                           target_tester.builder))
+      chromium.BuilderId.create_for_group(
+          target_tester.master or target_tester.group, target_tester.builder))
   bot_config = api.chromium_tests.create_bot_config_object([bot_mirror])
   api.chromium_tests.configure_build(bot_config)
 
@@ -203,9 +206,15 @@ def GenTests(api):
     check('Step %s does not contain %s' % (step, arg),
           arg not in step_odict[step].cmd)
 
-  def _common(api, test_repeat_count=20, target_master='chromium.linux',
-              target_builder='Linux Builder', tests=None, compile_targets=None,
-              test_override_builders=False, spec=None, skip_analyze=False):
+  def _common(api,
+              test_repeat_count=20,
+              target_builder_group='chromium.linux',
+              target_builder='Linux Builder',
+              tests=None,
+              compile_targets=None,
+              test_override_builders=False,
+              spec=None,
+              skip_analyze=False):
     """Create test properties and other data for tests."""
     tests = tests or {}
     compile_targets = compile_targets or []
@@ -261,7 +270,9 @@ def GenTests(api):
     props_proto = InputProperties()
     props_proto.skip_analyze = skip_analyze
     props_proto.test_repeat_count = test_repeat_count
-    props_proto.target_builder.master = target_master
+    props_proto.target_builder.group = target_builder_group
+    # TODO(https://crbug.com/109276) Don't set master
+    props_proto.target_builder.master = target_builder_group
     props_proto.target_builder.builder = target_builder
     for t in compile_targets:
       props_proto.compile_targets.append(t)
@@ -272,7 +283,7 @@ def GenTests(api):
 
     t = sum([
         api.chromium.ci_build(
-            mastername=target_master,
+            builder_group=target_builder_group,
             builder=target_builder,
         ),
         api.properties(props_proto),

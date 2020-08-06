@@ -13,6 +13,7 @@ from datetime import datetime
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
+    'builder_group',
     'chromium_checkout',
     'chromium_tests',
     'depot_tools/gclient',
@@ -28,8 +29,8 @@ DEPS = [
     'recipe_engine/time',
 ]
 
-# Which master/builder config to use for the bot_update step based on the
-# current master/builder.
+# Which group/builder config to use for the bot_update step based on the
+# current group/builder.
 TARGET_MAPPING = {
     'tryserver.chromium.linux': {
         'linux_chromium_variable': [
@@ -64,15 +65,15 @@ TARGET_MAPPING = {
 NOT_FRESH = 600  # seconds
 
 
-def TargetMasterAndBuilder(api):
-  mastername = api.properties.get('mastername')
+def TargetGroupAndBuilder(api):
+  builder_group = api.builder_group.for_current
   buildername = api.buildbucket.builder_name
-  return TARGET_MAPPING[mastername][buildername]
+  return TARGET_MAPPING[builder_group][buildername]
 
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_master(*TargetMasterAndBuilder(api))])
+      [chromium.BuilderId.create_for_group(*TargetGroupAndBuilder(api))])
   api.chromium_tests.configure_build(bot_config)
 
   base_dir = api.chromium_checkout.get_checkout_dir(bot_config)
@@ -100,47 +101,47 @@ def GenTests(api):
   yield api.test(
       'linux',
       api.buildbucket.try_build(builder='linux_chromium_variable'),
+      api.builder_group.for_current('tryserver.chromium.linux'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
           api.path['cache'].join('builder', 'src')),
       api.properties(**{
-          'mastername': 'tryserver.chromium.linux',
           'bot_id': 'build1-a1',
       }),
   )
   yield api.test(
       'win',
       api.buildbucket.try_build(builder='win_chromium_variable'),
+      api.builder_group.for_current('tryserver.chromium.win'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
           api.path['cache'].join('builder', 'src')),
       api.properties(**{
-          'mastername': 'tryserver.chromium.win',
           'bot_id': 'build1-a1',
       }),
   )
   yield api.test(
       'mac',
       api.buildbucket.try_build(builder='mac_chromium_variable'),
+      api.builder_group.for_current('tryserver.chromium.mac'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
           api.path['cache'].join('builder', 'src')),
       api.properties(**{
-          'mastername': 'tryserver.chromium.mac',
           'bot_id': 'build1-a1',
       }),
   )
   yield api.test(
       'linux_new',
       api.buildbucket.try_build(builder='linux_chromium_variable'),
+      api.builder_group.for_current('tryserver.chromium.linux'),
       api.properties(**{
-          'mastername': 'tryserver.chromium.linux',
           'bot_id': 'build1-a1',
       }),
   )

@@ -14,6 +14,7 @@ from RECIPE_MODULES.build import chromium
 
 
 DEPS = [
+    'builder_group',
     'chromium_swarming',
     'chromium_tests',
     'findit',
@@ -34,8 +35,6 @@ from recipe_engine import post_process
 
 
 PROPERTIES = {
-    'target_mastername': Property(
-        kind=str, help='The target master to match compile config to.'),
     'target_testername': Property(
         kind=str,
         help='The target tester to match test config to. If the tests are run '
@@ -102,12 +101,13 @@ def _consolidate_flaky_tests(all_flakes, new_flakes):
     all_flakes[step] = list(set(all_flakes[step]) | set(tests))
 
 
-def RunSteps(api, target_mastername, target_testername, good_revision,
-             bad_revision, tests, use_analyze,
-             suspected_revisions, test_on_good_revision, test_repeat_count):
+def RunSteps(api, target_testername, good_revision, bad_revision, tests,
+             use_analyze, suspected_revisions, test_on_good_revision,
+             test_repeat_count):
   assert tests, 'No failed tests were specified.'
-  target_tester_id = chromium.BuilderId.create_for_master(
-      target_mastername, target_testername)
+  target_builder_group = api.builder_group.for_target
+  target_tester_id = chromium.BuilderId.create_for_group(
+      target_builder_group, target_testername)
   bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(target_tester_id, bad_revision))
 
@@ -291,9 +291,7 @@ def GenTests(api):
       bad_revision=None, suspected_revisions=None,
       test_on_good_revision=True, test_repeat_count=20):
     properties = {
-        'mastername': 'tryserver.chromium.%s' % platform_name,
         'bot_id': 'build1-a1',
-        'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
         'good_revision': good_revision or 'r0',
         'bad_revision': bad_revision or 'r1',
@@ -311,6 +309,8 @@ def GenTests(api):
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
         ),
+        api.builder_group.for_current('tryserver.chromium.%s' % platform_name),
+        api.builder_group.for_target('chromium.%s' % platform_name),
         api.platform.name(platform_name),
     ], api.empty_test_data())
 

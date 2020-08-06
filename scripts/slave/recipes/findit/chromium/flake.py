@@ -13,6 +13,7 @@ from RECIPE_MODULES.build import chromium
 
 
 DEPS = [
+    'builder_group',
     'chromium_swarming',
     'chromium_tests',
     'findit',
@@ -29,8 +30,6 @@ DEPS = [
 
 
 PROPERTIES = {
-    'target_mastername': Property(
-        kind=str, help='The target master to match compile config to.'),
     'target_testername': Property(
         kind=str,
         help='The target tester to match test config to. If the tests are run '
@@ -54,12 +53,13 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, target_mastername, target_testername,
-             test_revision, tests, test_repeat_count, skip_tests):
+def RunSteps(api, target_testername, test_revision, tests, test_repeat_count,
+             skip_tests):
   assert tests, 'No failed tests were specified.'
 
-  target_tester_id = chromium.BuilderId.create_for_master(
-      target_mastername, target_testername)
+  target_builder_group = api.builder_group.for_target
+  target_tester_id = chromium.BuilderId.create_for_group(
+      target_builder_group, target_testername)
   bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(target_tester_id, test_revision))
 
@@ -95,9 +95,7 @@ def GenTests(api):
       tests, platform_name, tester_name, use_analyze=False, revision=None,
       skip_tests=False):
     properties = {
-        'mastername': 'tryserver.chromium.%s' % platform_name,
         'bot_id': 'build1-a1',
-        'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
         'test_revision': revision or 'r0',
         'skip_tests': skip_tests,
@@ -110,6 +108,8 @@ def GenTests(api):
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
         ),
+        api.builder_group.for_current('tryserver.chromium.%s' % platform_name),
+        api.builder_group.for_target('chromium.%s' % platform_name),
         api.platform.name(platform_name),
     ], api.empty_test_data())
 
