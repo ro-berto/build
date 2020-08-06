@@ -1613,7 +1613,7 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1296)(self, bot_update_step):**
+&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1295)(self, bot_update_step):**
 
 &mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#803)(self, bot_update_step):**
 
@@ -1649,7 +1649,7 @@ TODO:
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#139)(self):**
 
-&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1177)(self, bot, bot_update_step, build_config, mb_config_path, mb_phase):**
+&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1176)(self, bot, bot_update_step, build_config, mb_config_path, mb_phase):**
 
 Handles the tester half of the builder->tester transfer flow.
 
@@ -1663,13 +1663,13 @@ Args:
   bot_update_step: the result of a previously executed bot_update step.
   build_config: a BuildConfig object.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1319)(self, builders=None, bots=None):**
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1318)(self, builders=None, bots=None):**
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#123)(self, message):**
 
-&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1483)(self, builders=None, mirrored_bots=None):**
+&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1482)(self, builders=None, mirrored_bots=None):**
 
-&mdash; **def [lookup\_builder\_gn\_args](/scripts/slave/recipe_modules/chromium_tests/api.py#1773)(self, bot_meta_data, mb_config_path=None, mb_phase=None, builders=None):**
+&mdash; **def [lookup\_builder\_gn\_args](/scripts/slave/recipe_modules/chromium_tests/api.py#1772)(self, bot_meta_data, mb_config_path=None, mb_phase=None, builders=None):**
 
 &mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1053)(self, mb_config_path=None, mb_phase=None, builders=None, root_solution_revision=None):**
 
@@ -1687,7 +1687,7 @@ Returns:
     and a failure message if a failure occurred.
   - None if no failures
 
-&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1123)(self, bot, bot_update_step, build_config):**
+&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1122)(self, bot, bot_update_step, build_config):**
 
 Handles the builder half of the builder->tester transfer flow.
 
@@ -1740,9 +1740,9 @@ Note that:
 
 &mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#657)(self, compile_targets, isolated_targets, name_suffix, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1798)(self, bot_meta_data, tests):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1797)(self, bot_meta_data, tests):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1360)(self, builders, mirrored_bots, deapply_changes, tests=None, root_solution_revision=None):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1359)(self, builders, mirrored_bots, deapply_changes, tests=None, root_solution_revision=None):**
 
 Compile and run tests for chromium_trybot recipe.
 
@@ -1767,7 +1767,7 @@ Returns:
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#624)(self, builder_id, update_step, bot_config, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1325)(self, builders=None, trybots=None, root_solution_revision=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1324)(self, builders=None, trybots=None, root_solution_revision=None):**
 
 Compiles and runs tests for chromium recipe.
 
@@ -1783,7 +1783,7 @@ Returns:
     and a failure message if a failure occurred.
   - None if no failures
 
-&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1349)(self, builders=None, trybots=None, tests=None):**
+&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1348)(self, builders=None, trybots=None, tests=None):**
 
 Similar to trybot_steps, but only runs certain tests.
 
