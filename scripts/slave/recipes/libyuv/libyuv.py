@@ -11,17 +11,18 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
-  'chromium',
-  'chromium_android',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/tryserver',
-  'libyuv',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
+    'builder_group',
+    'chromium',
+    'chromium_android',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/tryserver',
+    'libyuv',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
 ]
 
 
@@ -58,20 +59,20 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   builders = api.libyuv.BUILDERS
 
-  def generate_builder(mastername, buildername, revision, suffix=None):
+  def generate_builder(builder_group, buildername, revision, suffix=None):
     suffix = suffix or ''
-    bot_config = builders[mastername]['builders'][buildername]
+    bot_config = builders[builder_group]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
 
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
-    test = api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
+    test = api.test('%s_%s%s' % (_sanitize_nonalpha(builder_group),
                                  _sanitize_nonalpha(buildername), suffix))
 
-    if mastername.startswith('tryserver'):
+    if builder_group.startswith('tryserver'):
       test += api.properties.tryserver(gerrit_project='libyuv')
 
+    test += api.builder_group.for_current(builder_group)
     test += api.properties(
-        mastername=mastername,
         buildername=buildername,
         bot_id='bot_id',
         BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG'])
@@ -91,20 +92,23 @@ def GenTests(api):
     test += api.properties(buildnumber=1337)
     return test
 
-  for mastername, master_config in builders.iteritems():
-    for buildername in master_config['builders'].keys():
-      yield generate_builder(mastername, buildername, revision='a' * 40)
+  for builder_group, group_config in builders.iteritems():
+    for buildername in group_config['builders'].keys():
+      yield generate_builder(builder_group, buildername, revision='a' * 40)
 
   # Forced builds (not specifying any revision) and test failures.
-  mastername = 'client.libyuv'
-  yield generate_builder(mastername, 'Linux64 Debug', revision=None,
-                         suffix='_forced')
-  yield generate_builder(mastername, 'Android Debug', revision=None,
-                         suffix='_forced')
-  yield generate_builder(mastername, 'Android Tester ARM32 Debug (Nexus 5X)',
-                         revision=None, suffix='_forced_invalid')
-  yield generate_builder(mastername, 'iOS Debug', revision=None,
-                         suffix='_forced')
+  builder_group = 'client.libyuv'
+  yield generate_builder(
+      builder_group, 'Linux64 Debug', revision=None, suffix='_forced')
+  yield generate_builder(
+      builder_group, 'Android Debug', revision=None, suffix='_forced')
+  yield generate_builder(
+      builder_group,
+      'Android Tester ARM32 Debug (Nexus 5X)',
+      revision=None,
+      suffix='_forced_invalid')
+  yield generate_builder(
+      builder_group, 'iOS Debug', revision=None, suffix='_forced')
 
   yield generate_builder('tryserver.libyuv', 'linux', revision=None,
                          suffix='_forced')

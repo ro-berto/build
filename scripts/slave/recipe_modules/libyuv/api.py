@@ -14,21 +14,21 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(LibyuvApi, self).__init__(**kwargs)
-    self.master_config = None
+    self.group_config = None
     self.bot_config = None
     self.bot_type = None
     self.recipe_config = None
     self.revision = ''
 
   def apply_bot_config(self, builders, recipe_configs):
-    mastername = self.m.properties.get('mastername')
+    builder_group = self.m.builder_group.for_current
     buildername = self.m.buildbucket.builder_name
-    master_dict = builders.get(mastername, {})
-    self.master_config = master_dict.get('settings', {})
+    group_dict = builders.get(builder_group, {})
+    self.group_config = group_dict.get('settings', {})
 
-    self.bot_config = master_dict.get('builders', {}).get(buildername)
-    assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
-                             (buildername, mastername))
+    self.bot_config = group_dict.get('builders', {}).get(buildername)
+    assert self.bot_config, ('Unrecognized builder name "%r" for group "%r".' %
+                             (buildername, builder_group))
 
     self.bot_type = self.bot_config['bot_type']
     recipe_config_name = self.bot_config['recipe_config']
@@ -110,8 +110,8 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def package_build(self):
     upload_url = self.m.archive.legacy_upload_url(
-        self.master_config.get('build_gs_bucket'),
-        extra_url_components=self.m.properties['mastername'])
+        self.group_config.get('build_gs_bucket'),
+        extra_url_components=self.m.builder_group.for_current)
     self.m.archive.zip_and_upload_build(
         'package build',
         self.m.chromium.c.build_config_fs,
@@ -131,8 +131,8 @@ class LibyuvApi(recipe_api.RecipeApi):
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
     download_url = self.m.archive.legacy_download_url(
-       self.master_config.get('build_gs_bucket'),
-       extra_url_components=self.m.properties['mastername'])
+        self.group_config.get('build_gs_bucket'),
+        extra_url_components=self.m.builder_group.for_current)
     self.m.archive.download_and_unzip_build(
         'extract build',
         self.m.chromium.c.build_config_fs,
