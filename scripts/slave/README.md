@@ -37,3 +37,12 @@ Failing to train the expectations will cause the CQ to reject the patch; it will
 run the simulation tests in `test` mode, which checks to see that the
 expectation files match the current recipe code, but doesn't emit the new JSON
 files if it finds a descrepancy.
+
+## Recipes documentation
+The recipe code in this directory (modules in `recipe_modules` and recipes in
+`recipes`) have some documentation in them, in the standard Python docstring
+style. You can view this documentation by reading the files. The recipe system
+also has a way to generate documentation for a set of recipes. Running
+`./recipes.py doc` from this directory will generate a `README.recipes.md` file.
+This file may be easier to use than directly browsing the files themselves.
+
