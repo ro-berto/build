@@ -35,7 +35,7 @@ def RunSteps(api):
   # Fake path.
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
-  if 'tryserver' in builder_id.master:
+  if 'tryserver' in builder_id.group:
     api.code_coverage.instrument(api.properties['files_to_instrument'])
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
@@ -89,7 +89,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -139,7 +139,7 @@ def GenTests(api):
   yield api.test(
       'with_exclusions_module_property',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_exclude_sources='ios_test_files_and_test_utils'),
@@ -150,7 +150,7 @@ def GenTests(api):
   yield api.test(
       'with_exclusions',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True, coverage_exclude_sources='all_test_files'),
       api.post_process(post_process.StatusSuccess),
@@ -160,7 +160,7 @@ def GenTests(api):
   yield api.test(
       'tryserver',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -208,7 +208,7 @@ def GenTests(api):
   yield api.test(
       'tryserver skip instrumenting if there are too many files',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file%d.cc' % i for i in range(500)
@@ -220,7 +220,7 @@ def GenTests(api):
   yield api.test(
       'tryserver unsupported repo',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux-rel',
           git_repo='https://chromium.googlesource.com/v8/v8'),
       api.code_coverage(use_clang_coverage=True),
@@ -240,7 +240,7 @@ def GenTests(api):
   yield api.test(
       'merge errors',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.override_step_data(
           'process clang code coverage data for overall test coverage.Finding '
@@ -257,7 +257,7 @@ def GenTests(api):
   yield api.test(
       'skip collecting coverage data',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
       api.post_process(
@@ -269,7 +269,7 @@ def GenTests(api):
   yield api.test(
       'skip processing coverage data if not data is found',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -293,7 +293,7 @@ def GenTests(api):
   yield api.test(
       'raise failure for full-codebase coverage',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.step_data((
           'process clang code coverage data for overall test coverage.generate '
@@ -311,7 +311,7 @@ def GenTests(api):
   yield api.test(
       'do not raise failure for per-cl coverage',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -333,7 +333,7 @@ def GenTests(api):
   yield api.test(
       'merged profdata does not exist',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(mock_merged_profdata=False),
       api.post_process(
@@ -347,7 +347,7 @@ def GenTests(api):
   yield api.test(
       'process java coverage for full-codebase',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='android-code-coverage'),
+          builder_group='chromium.fyi', builder='android-code-coverage'),
       api.code_coverage(use_java_coverage=True),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'Extract directory metadata'),
@@ -372,7 +372,7 @@ def GenTests(api):
   yield api.test(
       'skip collecting coverage data for java',
       api.chromium.generic_build(
-          mastername='tryserver.chromium.android',
+          builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
@@ -387,7 +387,7 @@ def GenTests(api):
   yield api.test(
       'process java coverage for per-cl',
       api.chromium.try_build(
-          mastername='tryserver.chromium.android',
+          builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
@@ -419,7 +419,7 @@ def GenTests(api):
   yield api.test(
       'java metadata does not exist',
       api.chromium.try_build(
-          mastername='tryserver.chromium.android',
+          builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
@@ -443,7 +443,7 @@ def GenTests(api):
   yield api.test(
       'raise failure for java full-codebase coverage',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='android-code-coverage'),
+          builder_group='chromium.fyi', builder='android-code-coverage'),
       api.code_coverage(use_java_coverage=True),
       api.step_data(
           'process java coverage.Generate Java coverage metadata', retcode=1),
@@ -457,7 +457,7 @@ def GenTests(api):
   yield api.test(
       'do not raise failure for java per-cl coverage',
       api.chromium.try_build(
-          mastername='tryserver.chromium.android',
+          builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
@@ -476,7 +476,7 @@ def GenTests(api):
   yield api.test(
       'android native code coverage CI',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='android-code-coverage-native'),
+          builder_group='chromium.fyi', builder='android-code-coverage-native'),
       api.code_coverage(use_clang_coverage=True),
       api.step_data(
           'process clang code coverage data for overall test coverage.'
@@ -529,7 +529,7 @@ def GenTests(api):
   yield api.test(
       'iOS code coverage CI',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='ios-simulator-code-coverage'),
+          builder_group='chromium.fyi', builder='ios-simulator-code-coverage'),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -584,7 +584,7 @@ def GenTests(api):
   yield api.test(
       'iOS code coverage tryserver',
       api.chromium.try_build(
-          mastername='tryserver.chromium.mac',
+          builder_group='tryserver.chromium.mac',
           builder='ios-simulator-code-coverage'),
       api.code_coverage(use_clang_coverage=True, coverage_test_types=['unit']),
       api.properties(files_to_instrument=[
@@ -641,7 +641,7 @@ def GenTests(api):
   yield api.test(
       'raise failure for unsupported test type',
       api.chromium.generic_build(
-          mastername='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_test_types=['unsupportedtest', 'overall']),
@@ -656,7 +656,7 @@ def GenTests(api):
   yield api.test(
       'skip processing when more than one test type in per-cl coverage',
       api.chromium.try_build(
-          mastername='tryserver.chromium.mac',
+          builder_group='tryserver.chromium.mac',
           builder='ios-simulator-code-coverage'),
       api.code_coverage(
           use_clang_coverage=True, coverage_test_types=['unit', 'overall']),
