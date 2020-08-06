@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'builder_group',
     'chromium',
     'ios',
     'recipe_engine/buildbucket',
@@ -20,7 +21,7 @@ def RunSteps(api):
   # applied. Since the build config hasn't been checked out yet, it can't be
   # specified there.
   gclient_apply_config = []
-  if api.m.properties['mastername'] == 'chromium.clang':
+  if api.builder_group.for_current == 'chromium.clang':
     gclient_apply_config = ['clang_tot']
   elif api.m.buildbucket.builder_name == 'ios-webkit-tot':
     gclient_apply_config = ['ios_webkit_tot']
@@ -57,7 +58,7 @@ def GenTests(api):
   basic_common = sum([
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           change_number=123456,
@@ -127,7 +128,7 @@ def GenTests(api):
       'goma',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           change_number=123456,
@@ -152,7 +153,7 @@ def GenTests(api):
       'goma_canary',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           change_number=123456,
@@ -178,7 +179,7 @@ def GenTests(api):
       'goma_compilation_failure',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           change_number=123456,
@@ -209,7 +210,7 @@ def GenTests(api):
       'clang-tot',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.clang',
+          builder_group='chromium.clang',
           builder='ios',
       ),
       api.ios.make_test_build_config({
@@ -230,7 +231,7 @@ def GenTests(api):
       'ios-webkit-tot',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios-webkit-tot',
       ),
       api.ios.make_test_build_config({

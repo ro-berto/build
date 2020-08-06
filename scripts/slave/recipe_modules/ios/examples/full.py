@@ -45,7 +45,7 @@ def GenTests(api):
         'basic',
         api.platform('mac', 64),
         api.chromium.ci_build(
-            mastername='chromium.fake',
+            builder_group='chromium.fake',
             builder='ios',
             build_number=1,
             revision='HEAD',
@@ -169,7 +169,7 @@ def GenTests(api):
       'errors',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -223,7 +223,7 @@ def GenTests(api):
       'test_failure',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -254,7 +254,7 @@ def GenTests(api):
       'test_swarming_failure',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -291,7 +291,7 @@ def GenTests(api):
       'test_failure_str_exit_code',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -329,7 +329,7 @@ def GenTests(api):
       'infra_failure',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -365,7 +365,7 @@ def GenTests(api):
       'timed_out',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -400,7 +400,7 @@ def GenTests(api):
       'expired',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -435,7 +435,7 @@ def GenTests(api):
       'no_exit_code',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -470,7 +470,7 @@ def GenTests(api):
       'is_debug_missing',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -486,7 +486,7 @@ def GenTests(api):
       'target_cpu_missing',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -502,7 +502,7 @@ def GenTests(api):
       'clobber_checkout',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -526,7 +526,7 @@ def GenTests(api):
       'clobber_build',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -550,7 +550,7 @@ def GenTests(api):
       'fyi',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -579,7 +579,7 @@ def GenTests(api):
       'expiration_test',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -610,7 +610,7 @@ def GenTests(api):
       'max_runtime_test',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -640,7 +640,7 @@ def GenTests(api):
   xcode_build_version = sum([
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -688,7 +688,7 @@ def GenTests(api):
       'device_check_false',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -718,7 +718,7 @@ def GenTests(api):
       'deprecate_xcode_version',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -756,7 +756,7 @@ def GenTests(api):
       'use_wpr_tools',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -795,7 +795,7 @@ def GenTests(api):
       'xparallel_run_and_skip',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -833,7 +833,7 @@ def GenTests(api):
       'xcodebuild_device_runner',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -870,7 +870,7 @@ def GenTests(api):
       'use_trusted_cert',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -899,7 +899,7 @@ def GenTests(api):
       'host_app_path',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -928,7 +928,7 @@ def GenTests(api):
       'swarming_shards_for_EG2_tests',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',
@@ -962,7 +962,7 @@ def GenTests(api):
       'swarming_shards_for_EG_release_app',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ios',
           build_number=1,
           revision='HEAD',

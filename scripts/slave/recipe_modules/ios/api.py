@@ -55,8 +55,8 @@ class iOSApi(recipe_api.RecipeApi):
 
   @property
   def builder_id(self):
-    return chromium.BuilderId.create_for_master(self.__config['mastername'],
-                                                self.m.buildbucket.builder_name)
+    return chromium.BuilderId.create_for_group(self.__config['builder_group'],
+                                               self.m.buildbucket.builder_name)
 
   @property
   def configuration(self):
@@ -203,24 +203,30 @@ class iOSApi(recipe_api.RecipeApi):
     return expanded_tests_list
 
   def read_build_config(
-    self,
-    master_name=None,
-    build_config_base_dir=None,
-    buildername=None,
+      self,
+      builder_group=None,
+      # TODO(https://crbug.com/1109276) Remove master_name
+      master_name=None,
+      build_config_base_dir=None,
+      buildername=None,
   ):
     """Reads the iOS build config for this bot.
 
     Args:
-      master_name: Name of a master to read the build config from, or None
-        to read from buildbot properties at run-time.
-      build_config_base_dir: Directory to search for build config master and
+      builder_group: Name of a builder group to read the build config from,
+        or None to read from properties at run-time.
+      master_name: deprecated, use builder_group instead
+      build_config_base_dir: Directory to search for build config group and
         test include directories.
     """
+    assert builder_group is None or master_name is None
+    builder_group = (
+        builder_group or master_name or self.m.builder_group.for_current)
     buildername = buildername or self.m.buildbucket.builder_name
-    master_name = master_name or self.m.properties['mastername']
+
     build_config_base_dir = build_config_base_dir or (
         self.m.path['checkout'].join('ios', 'build', 'bots'))
-    build_config_dir = build_config_base_dir.join(master_name)
+    build_config_dir = build_config_base_dir.join(builder_group)
     include_dir = build_config_base_dir.join('tests')
 
     self.__config = self.m.json.read(
@@ -265,7 +271,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('triggered bots', {})
     self.__config.setdefault('upload', [])
 
-    self.__config['mastername'] = master_name
+    self.__config['builder_group'] = builder_group
 
     self.__config['tests'] = self.parse_tests(
         self.__config['tests'], include_dir)

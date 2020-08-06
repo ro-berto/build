@@ -21,7 +21,7 @@ DEPS = [
 def RunSteps(api):
   api.ios.checkout()
   # Ensure try bots mirror configs from chromium.mac.
-  api.ios.read_build_config(master_name='chromium.mac')
+  api.ios.read_build_config(builder_group='chromium.mac')
   api.ios.build(analyze=True, suffix='with patch')
   api.ios.test_swarming(retry_failed_shards=True)
 
@@ -48,7 +48,7 @@ def GenTests(api):
       'basic_success',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
       ),
       api.ios.make_test_build_config({
@@ -80,7 +80,7 @@ def GenTests(api):
       'failure_retry_still_failure',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
       ),
       api.ios.make_test_build_config({
@@ -121,7 +121,7 @@ def GenTests(api):
       'failure_retry_success',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
       ),
       api.ios.make_test_build_config({
@@ -161,7 +161,7 @@ def GenTests(api):
       'no_compilation',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
           change_number=123456,
           patch_set=7,
@@ -190,7 +190,7 @@ def GenTests(api):
       'no_tests',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
           change_number=123456,
           patch_set=7,
@@ -215,7 +215,7 @@ def GenTests(api):
       'icu_patch',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
           build_number=1,
           change_number=123456,
@@ -245,7 +245,7 @@ def GenTests(api):
       'parent',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios',
           build_number=1,
           change_number=123456,
@@ -278,7 +278,7 @@ def GenTests(api):
       'gn',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator-gn',
           build_number=1,
           change_number=123456,
@@ -315,7 +315,7 @@ def GenTests(api):
       'goma_compilation_failure',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator-gn',
           build_number=1,
           change_number=123456,
@@ -349,7 +349,7 @@ def GenTests(api):
       'additional_compile_targets',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
           change_number=123456,
           patch_set=7,
@@ -374,7 +374,7 @@ def GenTests(api):
       'patch_failure',
       api.platform('mac', 64),
       api.chromium.try_build(
-          mastername='tryserver.fake',
+          builder_group='tryserver.fake',
           builder='ios-simulator',
           change_number=123456,
           patch_set=7,

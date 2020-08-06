@@ -27,7 +27,7 @@ def GenTests(api):
       'basic',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios',
           build_number=0,
           bot_id='fake-vm',

@@ -26,7 +26,8 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.platform('mac', 64),
-      api.chromium.ci_build(mastername='chromium.fake', builder='ios-builder'),
+      api.chromium.ci_build(
+          builder_group='chromium.fake', builder='ios-builder'),
       api.ios.make_test_build_config({
           'gn_args': [
               'is_debug=true',

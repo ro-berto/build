@@ -19,7 +19,7 @@ during this step.
 ### read\_build\_config
 
 Reads the builder's own config from the [configs directory]. The configs dir
-contains master-specific directories which contain builder-specific JSON files
+contains group-specific directories which contain builder-specific JSON files
 containing the configuration. Typically a builder will only read its own config,
 but the try bots on [tryserver.chromium.mac] read their configs from the
 [chromium.mac] directory which ensures that try bots match main waterfall bots.

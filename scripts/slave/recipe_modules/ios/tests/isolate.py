@@ -44,7 +44,7 @@ def GenTests(api):
       'builder_with_testers',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          mastername='chromium.fake',
+          builder_group='chromium.fake',
           builder='ios-builder',
           build_number=456,
           parent_buildername='ios-builder',
