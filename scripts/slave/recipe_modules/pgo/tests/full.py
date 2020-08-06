@@ -26,8 +26,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  builder_id = chromium.BuilderId.create_for_master(
-      api.properties['mastername'], api.properties['buildername'])
+  builder_id = api.chromium.get_builder_id()
   try_spec = api.chromium_tests.trybots.get(builder_id)
   if try_spec is None:
     try_spec = try_spec_module.TrySpec.create(mirrors=[builder_id])
@@ -67,10 +66,8 @@ def GenTests(api):
 
   yield api.test(
       'merged profdata does not exist',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='mac-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.perf', builder='mac-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('mac', 64),
       api.properties(mock_merged_profdata=False),
@@ -89,10 +86,8 @@ def GenTests(api):
 
   yield api.test(
       'basic windows',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='win64-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.perf', builder='win64-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('win', 64),
       api.properties(mock_merged_profdata=True),
@@ -131,10 +126,8 @@ def GenTests(api):
 
   yield api.test(
       'merge errors',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='mac-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.perf', builder='mac-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('mac', 64),
       api.properties(mock_merged_profdata=True),
@@ -162,10 +155,8 @@ def GenTests(api):
 
   yield api.test(
       'missing profdata file',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='win64-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.perf', builder='win64-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False),
@@ -182,10 +173,8 @@ def GenTests(api):
 
   yield api.test(
       'one test missing profdata file',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='win64-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          mastername='chromium.perf', builder='win64-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False),
