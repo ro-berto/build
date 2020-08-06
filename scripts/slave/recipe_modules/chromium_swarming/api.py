@@ -932,12 +932,15 @@ class SwarmingApi(recipe_api.RecipeApi):
         'The list of shards being dispatched should be the enumeration of '
         'task.shards.'
     )
+    uses_trigger_script = bool(task.trigger_script)
     if task.shards > 1:
+      assert uses_trigger_script, ('--shard won\'t be supported on the default '
+                                   'swarming client (crbug.com/894045)')
       pre_trigger_args += ['--shards', str(task.shards)]
     args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
-    step_name_suffix = ' (custom trigger script)' if task.trigger_script else ''
+    step_name_suffix = ' (custom trigger script)' if uses_trigger_script else ''
     step_result = self.m.python(
         name=self.get_step_name('trigger' + step_name_suffix, task),
         script=script,
