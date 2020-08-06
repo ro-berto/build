@@ -61,7 +61,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "[trigger] base_unittests",
+    "name": "[trigger (custom trigger script)] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

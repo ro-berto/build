@@ -213,11 +213,14 @@ def GenTests(api):
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
       api.properties(platforms=('mac',), custom_trigger_script=True),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] hello_world on Mac-10.13',
-                       ['--shard-index', '1']),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] hello_world on Mac-10.13', ['--shards', '3']),
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger (custom trigger script)] hello_world on Mac-10.13',
+          ['--shard-index', '1']),
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger (custom trigger script)] hello_world on Mac-10.13',
+          ['--shards', '3']),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -543,9 +546,8 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data)
-              }) + api.json.output(json_results), summary_data)),
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
+              + api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
           trigger_script={
@@ -553,7 +555,9 @@ def GenTests(api):
               'args': ['foo', 'bar'],
           }),
       api.post_process(
-          post_process.Filter('[trigger] hello_world on Windows-7-SP1')),
+          post_process.Filter(
+              '[trigger (custom trigger script)] hello_world on Windows-7-SP1')
+      ),
   )
 
   summary_data = {

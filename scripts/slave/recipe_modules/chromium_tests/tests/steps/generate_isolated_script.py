@@ -453,7 +453,8 @@ def GenTests(api):
           },
       ),
       api.post_process(
-          post_process.StepCommandContains, '[trigger] base_unittests', [
+          post_process.StepCommandContains,
+          '[trigger (custom trigger script)] base_unittests', [
               '--cipd-package',
               '../../cipd/package/location:cipd/package/name:version:1.0',
           ]),

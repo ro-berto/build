@@ -937,11 +937,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
+    step_name_suffix = ' (custom trigger script)' if task.trigger_script else ''
     step_result = self.m.python(
-        name=self.get_step_name('trigger', task),
-        script=script, args=args,
-        step_test_data=functools.partial(
-            self._gen_trigger_step_test_data, task, shard_indices),
+        name=self.get_step_name('trigger' + step_name_suffix, task),
+        script=script,
+        args=args,
+        step_test_data=functools.partial(self._gen_trigger_step_test_data, task,
+                                         shard_indices),
         infra_step=True,
         **kwargs)
     step_result.presentation.step_text += text_for_task(task)
@@ -968,9 +970,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, **kwargs))
 
+    uses_trigger_script = bool(task.trigger_script)
     if task.shards > 1:
       # We must use different logic for swarming.py vs. custom trigger script.
-      if task.trigger_script:
+      if uses_trigger_script:
         pre_trigger_args += ['--shard-index', str(shard_index)]
         pre_trigger_args += ['--shards', str(task.shards)]
       else:
@@ -980,11 +983,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
+    step_name_suffix = ' (custom trigger script)' if uses_trigger_script else ''
     step_result = self.m.python(
-        name=self.get_step_name('trigger', task),
-        script=script, args=args,
-        step_test_data=functools.partial(
-            self._gen_trigger_step_test_data, task, [shard_index]),
+        name=self.get_step_name('trigger' + step_name_suffix, task),
+        script=script,
+        args=args,
+        step_test_data=functools.partial(self._gen_trigger_step_test_data, task,
+                                         [shard_index]),
         infra_step=True,
         **kwargs)
     step_result.presentation.step_text += text_for_task(task)

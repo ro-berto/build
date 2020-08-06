@@ -345,7 +345,9 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
       ),
-      api.post_process(post_process.Filter('[trigger] base_unittests')),
+      api.post_process(
+          post_process.Filter(
+              '[trigger (custom trigger script)] base_unittests')),
   )
 
   yield api.test(

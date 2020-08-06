@@ -244,7 +244,7 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
-    "name": "[trigger] base_unittests",
+    "name": "[trigger (custom trigger script)] base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
