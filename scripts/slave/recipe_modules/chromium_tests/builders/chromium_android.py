@@ -352,11 +352,13 @@ SPEC = {
 def stock_config(name,
                  config='Release',
                  chromium_apply_config=None,
+                 chromium_tests_apply_config=None,
                  chromium_config_kwargs=None,
                  **kwargs):
   bot_config = {
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],
+      'chromium_tests_apply_config': chromium_tests_apply_config or [],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -405,6 +407,7 @@ SPEC.update([
             # is one of the slowest builder in CQ (crbug.com/804251).
             'goma_high_parallel'
         ],
+        chromium_tests_apply_config=['use_swarming_command_lines'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',

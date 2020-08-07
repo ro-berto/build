@@ -303,6 +303,7 @@ SPEC = {
                 'goma_high_parallel',
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
