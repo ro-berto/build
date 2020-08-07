@@ -124,36 +124,29 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield api.test(
         '%s_test_basic' % sanitize(buildername),
-        api.properties.generic(
-            mastername='chromium.infra.codesearch', buildername=buildername),
+        api.chromium.generic_build(
+            mastername='chromium.infra.codesearch', builder=buildername),
         api.runtime(is_luci=True, is_experimental=False),
     )
     yield api.test(
         '%s_test_experimental' % sanitize(buildername),
-        api.properties.generic(
-            mastername='chromium.infra.codesearch', buildername=buildername),
+        api.chromium.generic_build(
+            mastername='chromium.infra.codesearch', builder=buildername),
         api.runtime(is_luci=True, is_experimental=True),
     )
 
   yield api.test(
       '%s_test_with_patch' % sanitize('codesearch-gen-chromium-linux'),
-      api.buildbucket.try_build(
-          project='chromium',
-          bucket='try',
-          builder='codesearch-gen-chromium-linux',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          change_number=91827,
-          patch_set=1),
-      api.properties.generic(
+      api.chromium.try_build(
           mastername='tryserver.chromium.codesearch',
-          buildername='codesearch-gen-chromium-linux'),
+          builder='codesearch-gen-chromium-linux'),
       api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
       '%s_delete_generated_files_fail' %
       sanitize('codesearch-gen-chromium-win'),
+      api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
-      api.properties.generic(buildername='codesearch-gen-chromium-win'),
       api.runtime(is_luci=True, is_experimental=False),
   )
