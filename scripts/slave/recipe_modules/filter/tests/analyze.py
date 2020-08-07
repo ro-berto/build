@@ -28,8 +28,8 @@ def RunSteps(api):
       api.properties.get('affected_files', ['file1', 'file2']),
       ['test1', 'test2'], ['compile1', 'compile2'],
       'config.json',
-      builder_id=chromium.BuilderId.create_for_master('test_mastername',
-                                                      'test_buildername'),
+      builder_id=chromium.BuilderId.create_for_group('test_group',
+                                                     'test_buildername'),
       mb_config_path='path/to/custom_mb_config.pyl')
 
 

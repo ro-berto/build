@@ -30,7 +30,7 @@
       "None/tools/mb/mb.py",
       "analyze",
       "-m",
-      "test_mastername",
+      "test_group",
       "-b",
       "test_buildername",
       "--config-file",

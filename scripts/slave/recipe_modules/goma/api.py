@@ -604,8 +604,8 @@ class GomaApi(recipe_api.RecipeApi):
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     if self.m.buildbucket.builder_name:
       args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
-    if 'mastername' in self.m.properties:
-      args.extend(['--buildbot-mastername', self.m.properties['mastername']])
+    if self.m.builder_group.for_current:
+      args.extend(['--buildbot-mastername', self.m.builder_group.for_current])
     if self.m.swarming.bot_id:
       args.extend(['--buildbot-slavename', self.m.swarming.bot_id])
 

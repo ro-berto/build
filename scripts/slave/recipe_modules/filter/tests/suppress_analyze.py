@@ -23,6 +23,6 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.generic_build(
-          mastername='test_mastername', builder='test_buildername'),
+          builder_group='test_group', builder='test_buildername'),
       api.filter.suppress_analyze(),
   )

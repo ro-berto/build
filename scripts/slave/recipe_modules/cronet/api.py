@@ -126,8 +126,8 @@ class CronetApi(recipe_api.RecipeApi):
         ])
     raw_result = self.build(
         targets=['quic_server'],
-        builder_id=chromium.BuilderId.create_for_master('chromium.linux',
-                                                        'Linux Builder'))
+        builder_id=chromium.BuilderId.create_for_group('chromium.linux',
+                                                       'Linux Builder'))
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 

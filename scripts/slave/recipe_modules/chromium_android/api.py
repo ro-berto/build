@@ -597,7 +597,7 @@ class AndroidApi(recipe_api.RecipeApi):
       params = {
           'summary':
               ('Device Offline on %s %s' %
-               (self.m.properties['mastername'], self.m.properties['bot_id'])),
+               (self.m.builder_group.for_current, self.m.properties['bot_id'])),
           'comment': ('Buildbot: %s\n(Please do not change any labels)' %
                       self.m.buildbucket.builder_name),
           'labels': 'Restrict-View-Google,OS-Android,Infra,Infra-Labs',

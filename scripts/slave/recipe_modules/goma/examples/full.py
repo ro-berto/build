@@ -43,7 +43,7 @@ def RunSteps(api):
 
 def GenTests(api):
   common_test_data = sum([
-      api.chromium.ci_build(mastername='test_master'),
+      api.chromium.ci_build(builder_group='test_group'),
       api.properties(
           build_command=['ninja', '-C', 'out/Release'],
           ninja_log_outdir='out/Release',

@@ -1,5 +1,6 @@
 DEPS = [
     'build',
+    'builder_group',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'puppet_service_account',

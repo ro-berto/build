@@ -3,9 +3,10 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'archive',
-  'recipe_engine/path',
-  'recipe_engine/properties',
+    'archive',
+    'builder_group',
+    'recipe_engine/path',
+    'recipe_engine/properties',
 ]
 
 
@@ -22,6 +23,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
+      api.builder_group.for_current('test_group'),
       api.properties(
           parent_buildername='example_buildername',
           parent_buildnumber=1.0,
@@ -31,6 +33,7 @@ def GenTests(api):
 
   yield api.test(
       'build_archive_url',
+      api.builder_group.for_current('test_group'),
       api.properties(
           parent_buildername='example_buildername',
           parentname='example_buildername',

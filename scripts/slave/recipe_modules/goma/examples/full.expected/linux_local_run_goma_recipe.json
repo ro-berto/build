@@ -188,7 +188,7 @@
       "--buildbot-buildername",
       "Linux Builder",
       "--buildbot-mastername",
-      "test_master",
+      "test_group",
       "--buildbot-slavename",
       "fake-bot-id"
     ],

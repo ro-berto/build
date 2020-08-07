@@ -26,19 +26,22 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
     footer_json = {}
     if size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
-    return (self.m.buildbucket.try_build(
-        project='chromium',
-        builder=constants.TEST_BUILDER,
-        build_number=constants.TEST_BUILDNUMBER,
-        git_repo='https://chromium.googlesource.com/chromium/src',
-        patch_set=1,
-        **kwargs) + self.m.properties(mastername='tryserver.chromium.android') +
-            self.m.platform('linux', 64) + self.override_step_data(
-                'gerrit changes',
-                self.m.json.output([{
-                    'revisions': {
-                        kwargs['revision']: revision_info
-                    }
-                }])) + self.override_step_data(
-                    'parse description', self.m.json.output(footer_json)) +
-            self.m.time.seed(constants.TEST_TIME))
+    return sum([
+        self.m.chromium.try_build(
+            builder_group='tryserver.chromium.android',
+            builder=constants.TEST_BUILDER,
+            build_number=constants.TEST_BUILDNUMBER,
+            patch_set=1,
+            **kwargs),
+        self.m.platform('linux', 64),
+        self.override_step_data(
+            'gerrit changes',
+            self.m.json.output([{
+                'revisions': {
+                    kwargs['revision']: revision_info
+                }
+            }])),
+        self.override_step_data('parse description',
+                                self.m.json.output(footer_json)),
+        self.m.time.seed(constants.TEST_TIME),
+    ], self.empty_test_data())

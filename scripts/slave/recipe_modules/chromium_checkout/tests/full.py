@@ -18,7 +18,7 @@ DEPS = [
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_master('chromium.linux', 'Linux Builder')])
+      [chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder')])
 
   api.chromium_tests.configure_build(bot_config)
 
