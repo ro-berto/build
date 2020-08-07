@@ -1064,7 +1064,7 @@ TRYBOTS = try_spec.TryDatabase.create({
         'mac-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
-                buildername='mac-arm64',
+                buildername='mac-arm64-rel',
             ),
         'mac-coverage-rel':
             try_spec.TrySpec.create([
