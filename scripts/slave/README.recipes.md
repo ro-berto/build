@@ -412,7 +412,7 @@ Args:
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#525)(self, build_dir, update_properties, config):**
+&mdash; **def [generic\_archive](/scripts/slave/recipe_modules/archive/api.py#553)(self, build_dir, update_properties, config):**
 
 Archives one or multiple packages to google cloud storage.
 

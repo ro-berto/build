@@ -230,6 +230,52 @@ def GenTests(api):
   archive_data = properties.ArchiveData()
   archive_data.dirs.extend(['anydir'])
   archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%position%}_{%commit%}_{%timestamp%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
+  archive_data.latest_upload.gcs_file_content = \
+      '{%position%}_{%commit%}_{%timestamp%}'
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_{}_with_update_latest',
+      api.properties(
+          generic_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%position%}_{%commit%}_{%timestamp%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_{}_no_latest_gcs_content',
+      api.properties(
+          generic_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
   archive_data.gcs_path = 'dest_dir/'
   archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_FILES
   input_properties.archive_datas.extend([archive_data])

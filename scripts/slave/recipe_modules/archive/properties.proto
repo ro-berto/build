@@ -5,7 +5,16 @@
 syntax = "proto3";
 package recipe_modules.build.archive;
 
-// Next id: 7
+// Next id: 3
+message LatestFile {
+  // The file for the latest file. Format is the same as |ArchiveData.gcs_path|.
+  string gcs_path = 1;
+  // The content of the latest file. It supports the same string
+  // substitutions as |ArchiveData.gcs_path|.
+  string gcs_file_content = 2;
+}
+
+// Next id: 8
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -48,6 +57,14 @@ message ArchiveData {
     ARCHIVE_TYPE_TAR_GZ = 3;
   }
   ArchiveType archive_type = 5;
+  // When set, system will update the latest file.
+  // Example:
+  //   gcs_path = "x86/{%position%}/chrome.zip"
+  //   latest_upload['gcs_path'] = "x86/latest/chrome.txt"
+  //   latest_upload['gcs_file_content'] = "{%position%}"
+  // In this way, the "x86/latest/chrome.txt" will include the latest
+  // version info.
+  LatestFile latest_upload = 7;
 }
 
 // Next id: 2

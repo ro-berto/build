@@ -525,6 +525,34 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return output_path
 
+  def _replace_placeholders(self, update_properties, input_str):
+    position_placeholder = '{%position%}'
+    if position_placeholder in input_str:
+      commit_position = self._get_commit_position(update_properties, None)
+      if not commit_position:
+        self.m.python.failing_step(
+            'Missing position placeholder',
+            'got_revision_cp or got_src_revision_cp is needed to populate '
+            'the {%position%} placeholder')
+      _, position = self.m.commit_position.parse(commit_position)
+      input_str = input_str.replace(position_placeholder, str(position))
+
+    commit_placeholder = '{%commit%}'
+    if commit_placeholder in input_str:
+      commit = self._get_git_commit(update_properties, None)
+      if not commit:
+        self.m.python.failing_step(
+            'Missing commit placeholder',
+            'got_revision is needed to populate the {%commit%} placeholder')
+      input_str = input_str.replace(commit_placeholder, commit)
+
+    timestamp_placeholder = '{%timestamp%}'
+    if timestamp_placeholder in input_str:
+      timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
+      input_str = input_str.replace(timestamp_placeholder, timestamp)
+
+    return input_str
+
   def generic_archive(self, build_dir, update_properties, config):
     """Archives one or multiple packages to google cloud storage.
 
@@ -550,32 +578,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       for archive_data in config.archive_datas:
 
         # Perform dynamic configuration from placeholders, if necessary.
-        gcs_path = archive_data.gcs_path
-
-        position_placeholder = '{%position%}'
-        if position_placeholder in gcs_path:
-          commit_position = self._get_commit_position(update_properties, None)
-          if not commit_position:
-            self.m.python.failing_step(
-                'Missing position placeholder',
-                'got_revision_cp or got_src_revision_cp is needed to populate '
-                'the {%position%} placeholder')
-          _, position = self.m.commit_position.parse(commit_position)
-          gcs_path = gcs_path.replace(position_placeholder, str(position))
-
-        commit_placeholder = '{%commit%}'
-        if commit_placeholder in gcs_path:
-          commit = self._get_git_commit(update_properties, None)
-          if not commit:
-            self.m.python.failing_step(
-                'Missing commit placeholder',
-                'got_revision is needed to populate the {%commit%} placeholder')
-          gcs_path = gcs_path.replace(commit_placeholder, commit)
-
-        timestamp_placeholder = '{%timestamp%}'
-        if timestamp_placeholder in gcs_path:
-          timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
-          gcs_path = gcs_path.replace(timestamp_placeholder, timestamp)
+        gcs_path = self._replace_placeholders(update_properties,
+                                              archive_data.gcs_path)
 
         expanded_files = set(archive_data.files)
         for filename in archive_data.file_globs:
@@ -616,3 +620,22 @@ class ArchiveApi(recipe_api.RecipeApi):
               file_path,
               bucket=archive_data.gcs_bucket,
               dest=uploads[file_path])
+
+        if archive_data.HasField('latest_upload'):
+          if (not archive_data.latest_upload.gcs_file_content or
+              not archive_data.latest_upload.gcs_path):
+            self.m.python.failing_step(
+                'latest_upload.gcs_path or latest_upload.gcs_file_content'
+                ' not declared', 'Both latest_gcs_path and '
+                'latest_gcs_file_content must be non-empty.')
+          content = self._replace_placeholders(
+              update_properties, archive_data.latest_upload.gcs_file_content)
+          content_ascii = content.encode('ascii', 'ignore')
+          temp_dir = self.m.path.mkdtemp()
+          output_file = temp_dir.join('latest.txt')
+          self.m.file.write_text('Write latest file', output_file,
+                                 content_ascii)
+          self.m.gsutil.upload(
+              output_file,
+              bucket=archive_data.gcs_bucket,
+              dest=archive_data.latest_upload.gcs_path)
