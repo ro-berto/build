@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/src/builders/ci/Lollipop Phone Tester@@@"
+      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/builders/ci/Lollipop Phone Tester@@@"
     ]
   },
   {
@@ -453,7 +453,7 @@
       "--master-name",
       "chromium.android",
       "--build-number",
-      "0"
+      "571"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -764,7 +764,7 @@
       "--builder-name",
       "Lollipop Phone Tester",
       "--build-number",
-      "0",
+      "571",
       "--test-type",
       "base_unittests",
       "--chrome-revision",
@@ -780,6 +780,14 @@
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
   },
   {
     "cmd": [
@@ -833,7 +841,7 @@
       "----",
       "cp",
       "[CACHE]/builder/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/Lollipop Phone Tester/0"
+      "gs://chromium-android/logcat_dumps/Lollipop Phone Tester/571"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -843,7 +851,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop Phone Tester/0@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop Phone Tester/571@@@"
     ]
   },
   {

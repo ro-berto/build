@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/src/builders/ci/Win7 Tests (1)@@@"
+      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7 Tests (1)@@@"
     ]
   },
   {
@@ -428,7 +428,7 @@
       "--master-name",
       "chromium.win",
       "--build-number",
-      "0"
+      "571"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -536,9 +536,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.win\", \"mastername\": \"chromium.win\", \"parent_builder_group\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"parent_mastername\": \"chromium.win\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.win\", \"mastername\": \"chromium.win\", \"parent_builder_group\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"parent_mastername\": \"chromium.win\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=aura_unittests",
       "--step-name=aura_unittests",
@@ -546,7 +546,7 @@
       "/path/to/tmp/json",
       "--builder-name=Win7 Tests (1)",
       "--slave-name=test_bot",
-      "--build-number=0",
+      "--build-number=571",
       "aura_unittests.exe"
     ],
     "cwd": "[CACHE]\\builder",
@@ -573,7 +573,7 @@
       "--builder-name",
       "Win7 Tests (1)",
       "--build-number",
-      "0",
+      "571",
       "--test-type",
       "aura_unittests",
       "--chrome-revision",
@@ -606,9 +606,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.win\", \"mastername\": \"chromium.win\", \"parent_builder_group\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"parent_mastername\": \"chromium.win\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.win\", \"mastername\": \"chromium.win\", \"parent_builder_group\": \"chromium.win\", \"parent_buildername\": \"Win Builder\", \"parent_mastername\": \"chromium.win\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=browser_tests",
       "--step-name=browser_tests",
@@ -616,7 +616,7 @@
       "/path/to/tmp/json",
       "--builder-name=Win7 Tests (1)",
       "--slave-name=test_bot",
-      "--build-number=0",
+      "--build-number=571",
       "browser_tests.exe",
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"
@@ -645,7 +645,7 @@
       "--builder-name",
       "Win7 Tests (1)",
       "--build-number",
-      "0",
+      "571",
       "--test-type",
       "browser_tests",
       "--chrome-revision",
@@ -660,6 +660,14 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "Upload to test-results [browser_tests]"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
   },
   {
     "cmd": [

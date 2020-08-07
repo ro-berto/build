@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/src/builders/ci/Linux Tests@@@"
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux Tests@@@"
     ]
   },
   {
@@ -429,6 +429,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
     ]
   },
   {

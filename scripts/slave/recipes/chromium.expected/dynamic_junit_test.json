@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@android-marshmallow-arm64-rel@https://ci.chromium.org/p/chromium/src/builders/ci/android-marshmallow-arm64-rel@@@"
+      "@@@STEP_LINK@android-marshmallow-arm64-rel@https://ci.chromium.org/p/chromium/builders/ci/android-marshmallow-arm64-rel@@@"
     ]
   },
   {
@@ -746,7 +746,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"android-marshmallow-arm64-rel\", \"project\": \"chromium/src\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"android-marshmallow-arm64-rel\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
       "android-marshmallow-arm64-rel",
@@ -871,7 +871,7 @@
       "--builder-name",
       "android-marshmallow-arm64-rel",
       "--build-number",
-      "0",
+      "571",
       "--test-type",
       "base_junit_tests",
       "--chrome-revision",
@@ -887,6 +887,14 @@
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "Upload to test-results [base_junit_tests]"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
   },
   {
     "cmd": [

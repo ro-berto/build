@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux TSan Tests@https://ci.chromium.org/p/chromium/src/builders/ci/Linux TSan Tests@@@"
+      "@@@STEP_LINK@Linux TSan Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux TSan Tests@@@"
     ]
   },
   {
@@ -409,7 +409,7 @@
       "--master-name",
       "chromium.memory",
       "--build-number",
-      "0"
+      "571"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -517,9 +517,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": \"Linux TSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Linux TSan Builder\", \"parent_mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"parent_buildername\": \"Linux TSan Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Linux TSan Builder\", \"parent_mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests",
@@ -527,7 +527,7 @@
       "/path/to/tmp/json",
       "--builder-name=Linux TSan Tests",
       "--slave-name=test_bot",
-      "--build-number=0",
+      "--build-number=571",
       "--enable-tsan",
       "base_unittests"
     ],
@@ -555,7 +555,7 @@
       "--builder-name",
       "Linux TSan Tests",
       "--build-number",
-      "0",
+      "571",
       "--test-type",
       "base_unittests",
       "--chrome-revision",
@@ -570,6 +570,14 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
   },
   {
     "name": "$result"

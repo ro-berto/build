@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@fuchsia-fyi-x64-rel@https://ci.chromium.org/p/chromium/src/builders/ci/fuchsia-fyi-x64-rel@@@"
+      "@@@STEP_LINK@fuchsia-fyi-x64-rel@https://ci.chromium.org/p/chromium/builders/ci/fuchsia-fyi-x64-rel@@@"
     ]
   },
   {
@@ -695,7 +695,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"fuchsia-fyi-x64-rel\", \"project\": \"chromium/src\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"fuchsia-fyi-x64-rel\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
       "fuchsia-fyi-x64-rel",
