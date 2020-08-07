@@ -331,7 +331,6 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
     tracker_obj = log_processor_class(
         revision=revision,
         build_properties=options.build_properties,
-        factory_properties=options.factory_properties
     )
 
   return tracker_obj
@@ -465,7 +464,7 @@ def _SendResultsToDashboard(log_processor, args):
     True if no errors occurred.
   """
   if args['system'] is None:
-    # perf_id not specified in factory properties.
+    # perf_id not specified in build properties.
     print 'Error: No system name (perf_id) specified when sending to dashboard.'
     return True
 
@@ -787,7 +786,7 @@ def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
       '--checkout_dir',
       os.path.dirname(os.path.dirname(build_dir)),
   ]
-  if options.factory_properties.get('force_isolated'):
+  if options.build_properties.get('force_isolated'):
     isolate_command += ['--force-isolated']
   isolate_command += [test_exe_path, '--'] + command
 
@@ -798,8 +797,8 @@ def _GetPerfID(options):
   if options.perf_id:
     perf_id = options.perf_id
   else:
-    perf_id = options.factory_properties.get('perf_id')
-    if options.factory_properties.get('add_perf_id_suffix'):
+    perf_id = options.build_properties.get('perf_id')
+    if options.build_properties.get('add_perf_id_suffix'):
       perf_id += options.build_properties.get('perf_id_suffix')
   return perf_id
 
@@ -1082,7 +1081,7 @@ def _MainLinux(options, args, extra_env):
 
   # Figure out what we want for a special frame buffer directory.
   special_xvfb_dir = None
-  if options.factory_properties.get('chromeos'):
+  if options.build_properties.get('chromeos'):
     special_xvfb_dir = xvfb_path
 
   telemetry_info = _UpdateRunBenchmarkArgs(args, options)
@@ -1092,7 +1091,7 @@ def _MainLinux(options, args, extra_env):
   else:
     test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
-    if options.factory_properties.get('succeed_on_missing_exe', False):
+    if options.build_properties.get('succeed_on_missing_exe', False):
       print '%s missing but succeed_on_missing_exe used, exiting' % (
           test_exe_path
       )
@@ -1159,7 +1158,7 @@ def _MainLinux(options, args, extra_env):
           slave_name,
           bin_dir,
           with_wm=(
-              options.factory_properties.get('window_manager', 'True') == 'True'
+              options.build_properties.get('window_manager', 'True') == 'True'
           ),
           server_dir=special_xvfb_dir
       )
@@ -1251,7 +1250,7 @@ def _MainWin(options, args, extra_env):
     test_exe_path = os.path.join(build_dir, options.target, test_exe)
 
   if not os.path.exists(test_exe_path):
-    if options.factory_properties.get('succeed_on_missing_exe', False):
+    if options.build_properties.get('succeed_on_missing_exe', False):
       print '%s missing but succeed_on_missing_exe used, exiting' % (
           test_exe_path
       )
@@ -1742,9 +1741,9 @@ def main():
   logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
   if not options.perf_dashboard_id:
-    options.perf_dashboard_id = options.factory_properties.get('test_name')
+    options.perf_dashboard_id = options.build_properties.get('test_name')
 
-  options.test_type = options.test_type or options.factory_properties.get(
+  options.test_type = options.test_type or options.build_properties.get(
       'step_name', ''
   )
 
@@ -1805,9 +1804,9 @@ def main():
         )
         return 1
 
-    # Allow factory property 'perf_config' as well during a transition period.
+    # Allow build property 'perf_config' as well during a transition period.
     options.perf_config = (
-        options.perf_config or options.factory_properties.get('perf_config')
+        options.perf_config or options.build_properties.get('perf_config')
     )
 
     if options.results_directory:
@@ -1820,14 +1819,14 @@ def main():
       )
       args.append('--gtest_output=xml:' + options.test_output_xml)
 
-    if options.factory_properties.get('coverage_gtest_exclusions', False):
+    if options.build_properties.get('coverage_gtest_exclusions', False):
       _BuildCoverageGtestExclusions(options, args)
 
     temp_files = _GetTempCount()
     if options.parse_input:
       result = _MainParse(options, args)
     elif sys.platform.startswith('darwin'):
-      test_platform = options.factory_properties.get(
+      test_platform = options.build_properties.get(
           'test_platform', options.test_platform
       )
       if test_platform in ('ios-simulator',):
@@ -1837,8 +1836,8 @@ def main():
     elif sys.platform == 'win32':
       result = _MainWin(options, args, extra_env)
     elif sys.platform == 'linux2':
-      if options.factory_properties.get('test_platform',
-                                        options.test_platform) == 'android':
+      if options.build_properties.get('test_platform',
+                                      options.test_platform) == 'android':
         result = _MainAndroid(options, args, extra_env)
       else:
         result = _MainLinux(options, args, extra_env)

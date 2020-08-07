@@ -177,11 +177,10 @@ def main():
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
-  fp = options.factory_properties
-  options.tests = fp.get('tests')
-  options.sharded_tests = fp.get('sharded_tests')
-  options.browser_total_shards = fp.get('browser_total_shards')
-  del options.factory_properties
+  bp = options.build_properties
+  options.tests = bp.get('tests')
+  options.sharded_tests = bp.get('sharded_tests')
+  options.browser_total_shards = bp.get('browser_total_shards')
   del options.build_properties
 
   if options.platform not in platforms:

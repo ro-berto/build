@@ -548,8 +548,6 @@
       "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"parent_mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"parent_mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",

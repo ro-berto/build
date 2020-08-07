@@ -66,7 +66,7 @@ def GetBuildUrl(options, build_revision):
      string, in order of preference:
      0) options.build_archive_url
      1) options.build_url
-     2) options.factory_properties.build_url
+     2) options.build_properties.build_url
      3) build url constructed from build_properties.  This last type of
         construction is not compatible with the 'force build' button.
 
@@ -291,13 +291,13 @@ def main():
         options.build_properties.get('parent_buildnumber')
     )
   if not options.build_url:
-    options.build_url = options.factory_properties.get('build_url')
+    options.build_url = options.build_properties.get('build_url')
   if not options.target:
-    options.target = options.factory_properties.get('target', 'Release')
+    options.target = options.build_properties.get('target', 'Release')
   if not options.revision_dir:
-    options.revision_dir = options.factory_properties.get('revision_dir')
+    options.revision_dir = options.build_properties.get('revision_dir')
   options.src_dir = (
-      options.factory_properties.get('extract_build_src_dir') or options.src_dir
+      options.build_properties.get('extract_build_src_dir') or options.src_dir
   )
 
   return real_main(options)

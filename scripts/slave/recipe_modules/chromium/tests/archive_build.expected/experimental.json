@@ -199,7 +199,7 @@
       "[CACHE]/chrome_staging",
       "--target",
       "Release",
-      "--factory-properties",
+      "--build-properties",
       "{\"gclient_env\": {\"GYP_DEFINES\": \"target_arch=x64\"}, \"gs_acl\": \"public\", \"gs_bucket\": \"gs://sample-bucket/experimental\", \"target_os\": \"android\"}",
       "--slave-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",

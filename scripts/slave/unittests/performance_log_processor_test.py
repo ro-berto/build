@@ -32,27 +32,25 @@ class LogProcessorTest(unittest.TestCase):
   def _ConstructDefaultProcessor(
       self,
       log_processor_class,
-      factory_properties=None,
+      build_properties=None,
       perf_expectations_path=None
   ):
     """Creates a log processor instance.
 
     Args:
       log_processor_class: A sub-class of PerformanceLogProcessor.
-      factory_properties: A dictionary of properties (optional).
+      build_properties: A dictionary of properties (optional).
       perf_expectations_path: Expectations file path (optional).
 
     Returns:
       An instance of the given log processor class.
     """
-    factory_properties = factory_properties or {}
-    factory_properties['perf_filename'] = perf_expectations_path
-    factory_properties['perf_name'] = 'test-system'
-    factory_properties['test_name'] = 'test-name'
+    build_properties = build_properties or {}
+    build_properties['perf_filename'] = perf_expectations_path
+    build_properties['perf_name'] = 'test-system'
+    build_properties['test_name'] = 'test-name'
     processor = log_processor_class(
-        revision=self._revision,
-        build_properties={},
-        factory_properties=factory_properties
+        revision=self._revision, build_properties=build_properties
     )
 
     # Set custom percentiles. This will be used by GraphingLogProcessor, which
@@ -231,7 +229,7 @@ class GraphingLogProcessorPerfTest(LogProcessorTest):
 
     parser = self._ConstructDefaultProcessor(
         performance_log_processor.GraphingLogProcessor,
-        factory_properties={'expectations': True, 'perf_id': 'tester'},
+        build_properties={'expectations': True, 'perf_id': 'tester'},
         perf_expectations_path=perf_expectations_path
     )
 

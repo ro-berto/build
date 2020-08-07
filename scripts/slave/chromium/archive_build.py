@@ -8,7 +8,7 @@
   This script is used for developer builds.
 
   To archive files on Google Storage, set the 'gs_bucket' key in the
-  --factory-properties to 'gs://<bucket-name>'. To control access to archives,
+  --build-properties to 'gs://<bucket-name>'. To control access to archives,
   set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
   https://developers.google.com/storage/docs/accesscontrol#extension for other
   supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
@@ -70,12 +70,12 @@ class StagerBase(object):
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
     elif chromium_utils.IsLinux():
       # On Linux, we might have built for chromeos.  Archive the same.
-      if options.factory_properties.get('target_os') == 'chromeos':
+      if options.build_properties.get('target_os') == 'chromeos':
         self._tool_dir = os.path.join(
             self._chrome_dir, 'tools', 'build', 'chromeos'
         )
       # Or, we might have built for Android.
-      elif options.factory_properties.get('target_os') == 'android':
+      elif options.build_properties.get('target_os') == 'android':
         self._tool_dir = os.path.join(
             self._chrome_dir, 'tools', 'build', 'android'
         )
@@ -131,7 +131,7 @@ class StagerBase(object):
     )
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
 
-    self._dual_upload = options.factory_properties.get('dual_upload', False)
+    self._dual_upload = options.build_properties.get('dual_upload', False)
     self._archive_files = None
 
   def CopyFileToGS(
@@ -174,7 +174,7 @@ class StagerBase(object):
       )
 
   def TargetPlatformName(self):
-    return self.options.factory_properties.get(
+    return self.options.build_properties.get(
         'target_os', chromium_utils.PlatformName()
     )
 
@@ -549,8 +549,8 @@ class StagerBase(object):
     self.GenerateRevisionFile()
 
     www_dir = os.path.join(self._www_dir_base, self._build_path_component)
-    gs_bucket = self.options.factory_properties.get('gs_bucket', None)
-    gs_acl = self.options.factory_properties.get('gs_acl', None)
+    gs_bucket = self.options.build_properties.get('gs_bucket', None)
+    gs_acl = self.options.build_properties.get('gs_acl', None)
     gs_base = None
     if gs_bucket:
       gs_base = '/'.join([

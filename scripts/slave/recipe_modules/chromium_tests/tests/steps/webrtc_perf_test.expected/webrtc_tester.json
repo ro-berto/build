@@ -277,8 +277,6 @@
       "--target",
       "Release",
       "--xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.webrtc\", \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.webrtc\", \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot\"}",
       "--annotate=graphing",

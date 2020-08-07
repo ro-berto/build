@@ -532,8 +532,6 @@
       "RECIPE_REPO[build]\\scripts\\slave\\runtest.py",
       "--target",
       "Release",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"win_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"win_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=libyuv_unittest",

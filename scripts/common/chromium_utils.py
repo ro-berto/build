@@ -1698,25 +1698,21 @@ def GetCommitPosition(options, project=None):
 
 
 def AddPropertiesOptions(option_parser):
-  """Registers command line options for parsing build and factory properties.
+  """Registers command line options for parsing build properties.
 
-  After parsing, the options object will have the 'build_properties' and
-  'factory_properties' attributes. The corresponding values will be python
-  dictionaries containing the properties. If the options are not given on
-  the command line, the dictionaries will be empty.
+  After parsing, the options object will have the 'build_properties'
+  attribute. The corresponding values will be python dictionaries
+  containing the properties. If the options are not given on the command
+  line, the dictionaries will be empty.
 
   Args:
     option_parser: An optparse.OptionParser to register command line options
-                   for build and factory properties.
+                   for build properties.
   """
   option_parser.add_option('--build-properties', action='callback',
                            callback=convert_json, type='string',
                            nargs=1, default={},
                            help='build properties in JSON format')
-  option_parser.add_option('--factory-properties', action='callback',
-                           callback=convert_json, type='string',
-                           nargs=1, default={},
-                           help='factory properties in JSON format')
 
 
 def AddThirdPartyLibToPath(lib, override=False):
@@ -2091,7 +2087,7 @@ def _ApplyMixin(builders, mixin_name, vals, errors):
   # specified in the mixin take precedence over any sub-mixins.
   mixin_data = builders['mixins'][mixin_name]
   for submixin in mixin_data.get('mixins', []):
-     _ApplyMixin(builders, submixin, vals, errors)
+    _ApplyMixin(builders, submixin, vals, errors)
   for key in mixin_data:
     # Any of the bot keys will override all existing keys.
     if key in BOT_KEYS:
@@ -2189,9 +2185,9 @@ def GetBotsFromBuilders(builders):
   for builder_name, builder_vals in builders['builders'].items():
     pool_names = builder_vals['bot_pools']
     for pool_name in pool_names:
-     if pool_name not in builders_in_pool:
-       builders_in_pool[pool_name] = set()
-     builders_in_pool[pool_name].add(builder_name)
+      if pool_name not in builders_in_pool:
+        builders_in_pool[pool_name] = set()
+      builders_in_pool[pool_name].add(builder_name)
 
   # Now we can generate the list of bots using the above lookup table.
   bots = []

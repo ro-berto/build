@@ -8,7 +8,7 @@
 This will be used by the ASAN security tests.
 
 To archive files on Google Storage, set the 'gs_bucket' key in the
---factory-properties to 'gs://<bucket-name>'. To control access to archives,
+--build-properties to 'gs://<bucket-name>'. To control access to archives,
 set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
 https://developers.google.com/storage/docs/accesscontrol#extension for other
 supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
@@ -75,7 +75,7 @@ def archive(options, args):
   if chromium_utils.IsMac():
     subdir = '%s-%s' % (chromium_utils.PlatformName(), options.target.lower())
 
-  prefix = options.factory_properties.get('asan_archive_name', 'asan')
+  prefix = options.build_properties.get('asan_archive_name', 'asan')
   zip_file_name = '%s-%s-%s-%d' % (
       prefix, chromium_utils.PlatformName(), options.target.lower(),
       build_revision
@@ -93,8 +93,8 @@ def archive(options, args):
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
   print 'Zip file is %ld bytes' % zip_size
 
-  gs_bucket = options.factory_properties.get('gs_bucket', None)
-  gs_acl = options.factory_properties.get('gs_acl', None)
+  gs_bucket = options.build_properties.get('gs_bucket', None)
+  gs_acl = options.build_properties.get('gs_acl', None)
   status = slave_utils.GSUtilCopyFile(
       zip_file, gs_bucket, subdir=subdir, gs_acl=gs_acl
   )
