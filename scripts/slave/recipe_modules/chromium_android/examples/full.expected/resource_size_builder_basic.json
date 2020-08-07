@@ -1054,6 +1054,8 @@
       "--test-platform",
       "android",
       "--no-xvfb",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"tehslave\", \"buildername\": \"resource_size_builder\", \"buildnumber\": 571, \"internal\": true, \"issue\": \"123456789\", \"mastername\": \"chromium.testing.master\", \"patchset\": \"1\", \"recipe\": \"chromium_android:examples/full\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"rietveld\": \"http://rietveld.example.com\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"tehslave\", \"buildername\": \"resource_size_builder\", \"buildnumber\": 571, \"internal\": true, \"issue\": \"123456789\", \"mastername\": \"chromium.testing.master\", \"patchset\": \"1\", \"recipe\": \"chromium_android:examples/full\", \"repo_name\": \"src/repo\", \"repo_url\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"rietveld\": \"http://rietveld.example.com\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",

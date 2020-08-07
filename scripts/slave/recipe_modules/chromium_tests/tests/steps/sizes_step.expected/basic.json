@@ -12,6 +12,8 @@
       "--target",
       "Release",
       "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"mastername\": \"chromium.linux\", \"recipe\": \"chromium_tests:tests/steps/sizes_step\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"mastername\": \"chromium.linux\", \"recipe\": \"chromium_tests:tests/steps/sizes_step\", \"slavename\": \"test_bot\"}",
       "--test-type=sizes",

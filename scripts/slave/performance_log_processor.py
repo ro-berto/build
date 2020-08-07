@@ -42,24 +42,26 @@ class PerformanceLogProcessor(object):
   # For more info, see: http://goo.gl/BhYvDa
   PERF_EXPECTATIONS_PATH = 'src/tools/perf_expectations/'
 
-  def __init__(self, revision=None, build_properties=None):
+  def __init__(self, revision=None, factory_properties=None,
+      build_properties=None):
     """Initializes the log processor.
 
     Args:
       revision: Revision number; this currently could also be a git number.
           It is sent to the perf dashboard to be used as the x-value.
+      factory_properties: Factory properties dict.
       build_properties: Build properties dict.
     """
-    if build_properties is None:
-      build_properties = {}
+    if factory_properties is None:
+      factory_properties = {}
 
     # Performance regression/speedup alerts.
     self._read_expectations = False
 
-    self._perf_id = build_properties.get('perf_id')
-    self._perf_name = build_properties.get('perf_name')
-    self._perf_filename = build_properties.get('perf_filename')
-    self._test_name = build_properties.get('test_name')
+    self._perf_id = factory_properties.get('perf_id')
+    self._perf_name = factory_properties.get('perf_name')
+    self._perf_filename = factory_properties.get('perf_filename')
+    self._test_name = factory_properties.get('test_name')
 
     self._perf_data = {}
     self._perf_test_keys = {}
@@ -79,10 +81,8 @@ class PerformanceLogProcessor(object):
     self._text_summary = []
 
     # Enable expectations if the local configuration supports it.
-    self._expectations = (
-        build_properties.get('expectations') and self._perf_id and
-        self._perf_name
-    )
+    self._expectations = (factory_properties.get('expectations')
+                          and self._perf_id and self._perf_name)
     if self._expectations and not self._perf_filename:
       self._perf_filename = os.path.join(self.PERF_EXPECTATIONS_PATH,
                                          'perf_expectations.json')
@@ -101,7 +101,7 @@ class PerformanceLogProcessor(object):
                                                  'undefined')
 
     self._v8_revision = 'undefined'
-    if build_properties.get('show_v8_revision'):
+    if factory_properties.get('show_v8_revision'):
       self._v8_revision = build_properties.get('got_v8_revision', 'undefined')
 
     self._percentiles = [.1, .25, .5, .75, .90, .95, .99]
@@ -194,7 +194,7 @@ class PerformanceLogProcessor(object):
 
   def LoadPerformanceExpectations(self):
     if not self._expectations:
-      # self._expectations is false when a given build doesn't enable
+      # self._expectations is false when a given factory doesn't enable
       # expectations, or doesn't have both perf_id and perf_name set.
       return
     try:

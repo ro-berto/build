@@ -990,7 +990,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         Exclude the name of the group from the url.
       'tryserver.chromium.perf', or
           linux_full_bisect_builder on 'tryserver.chromium.linux':
-        Return None so that the archive url specified in build_properties
+        Return None so that the archive url specified in factory_properties
         (as set on the group's configuration) is used instead.
     """
     if builder_group.startswith('chromium.perf'):

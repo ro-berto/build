@@ -791,6 +791,8 @@
       "gs://chromium-linux-archive/chromium.linux/Linux Builder",
       "--build_revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"mastername\": \"chromium.linux\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--json-urls",

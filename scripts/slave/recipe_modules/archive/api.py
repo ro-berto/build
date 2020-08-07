@@ -106,7 +106,10 @@ class ArchiveApi(recipe_api.RecipeApi):
         args.extend(['--build_revision', cp_number])
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    args.extend(['--build-properties', properties_json])
+    args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
     args.extend(['--json-urls', self.m.json.output()])
 
     kwargs['step_test_data'] = lambda: self.test_api.m.json.output({

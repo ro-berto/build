@@ -501,6 +501,8 @@
       "gs://chromium-libyuv/client.libyuv/Android Debug",
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--json-urls",

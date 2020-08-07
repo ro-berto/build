@@ -138,7 +138,7 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
     if not perf_dashboard_id:
       raise Exception(
           'runtest.py error: perf step specified but'
-          'no test_id in build_properties!'
+          'no test_id in factory_properties!'
       )
     for logname, log in log_processor.PerformanceLogs().iteritems():
       lines = [str(l).rstrip() for l in log]

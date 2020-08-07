@@ -803,7 +803,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    full_args.extend(['--build-properties', properties_json])
+    full_args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
 
     if annotate:
       full_args.append('--annotate=%s' % annotate)
@@ -817,6 +820,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--perf-id=%s' % perf_id)
     if perf_config:
       full_args.extend(['--perf-config', self.m.json.dumps(perf_config)])
+    # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)
     step_name = name or t_name
@@ -907,7 +911,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     run_tests_args = ['--target', self.c.build_config_fs, '--no-xvfb']
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    run_tests_args.extend(['--build-properties', properties_json])
+    run_tests_args.extend([
+        '--factory-properties', properties_json, '--build-properties',
+        properties_json
+    ])
     run_tests_args.extend([
         '--test-type=sizes',
         '--builder-name=%s' % self.m.buildbucket.builder_name,
@@ -1575,16 +1582,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.m.runtime.is_experimental:
       gs_bucket += "/experimental"
 
-    # archive_build.py insists on inspecting build properties. For now just
+    # archive_build.py insists on inspecting factory properties. For now just
     # provide these options in the format it expects.
-    fake_build_properties = {
+    fake_factory_properties = {
         'gclient_env': self.c.gyp_env.as_jsonish(),
         'gs_bucket': 'gs://%s' % gs_bucket,
     }
     if gs_acl is not None:
-      fake_build_properties['gs_acl'] = gs_acl
+      fake_factory_properties['gs_acl'] = gs_acl
     if self.c.TARGET_PLATFORM:
-      fake_build_properties['target_os'] = self.c.TARGET_PLATFORM
+      fake_factory_properties['target_os'] = self.c.TARGET_PLATFORM
 
     sanitized_buildername = ''.join(
         c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
@@ -1598,8 +1605,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.path['cache'].join('chrome_staging'),
         '--target',
         self.c.build_config_fs,
-        '--build-properties',
-        self.m.json.dumps(fake_build_properties),
+        '--factory-properties',
+        self.m.json.dumps(fake_factory_properties),
     ]
     args += self.m.build.slave_utils_args
     if self.build_properties:

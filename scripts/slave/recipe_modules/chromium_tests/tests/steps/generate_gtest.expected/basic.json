@@ -262,6 +262,8 @@
       "--target",
       "Release",
       "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"base_unittests\", \"total_shards\": 2}, \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"test\": \"base_unittests\", \"total_shards\": 2}, \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
