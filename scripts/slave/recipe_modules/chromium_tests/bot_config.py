@@ -154,6 +154,9 @@ class BuildConfig(object):
   _source_side_specs = mapping_attrib(str, FrozenDict)
   _tests = mapping_attrib(chromium.BuilderId, tuple)
 
+  # NOTE: All of the tests_in methods are returning mutable objects
+  # (and we expect them to be mutated, e.g., to update the swarming
+  # command lines to use when we determine what they are).
   def _get_tests_for(self, keys):
     tests = []
     for k in keys:

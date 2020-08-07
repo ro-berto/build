@@ -43,6 +43,13 @@ RECIPE_CONFIG_PATHS = [
 AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
 
 
+def replace_string_in_dict(dict_input, old, new):
+  dict_output = {}
+  for key, values in dict_input.items():
+    dict_output[key] = [value.replace(old, new) for value in values]
+  return dict_output
+
+
 class BotMetadata(object):
 
   def __init__(self, builder_id, config, settings):
@@ -111,6 +118,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._builders = self._test_data['builders']
       if 'trybots' in self._test_data:
         self._trybots = self._test_data['trybots']
+
+
+    # TODO(crbug.com/1108005), TODO(crbug.com/816629): Figure out
+    # if we can set this to be a proper field in the `properties.proto`
+    # message; This turns out to be tricky since we need this to be
+    # map of `str -> [str]` and that seems to be hard to synthesize and
+    # serialize properly. Alternatively, if we can switch to the
+    # generic_wrappers approach in crbug.com/816629, we should be able
+    # to derive the command line from the target_name and not need to send
+    # this across at all.
+    self._swarming_command_lines = {}
 
   @property
   def builders(self):
@@ -476,10 +494,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         ],
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
-    command_lines = step_result.json.output
+    self._swarming_command_lines = step_result.json.output
     for test in tests:
       if test.runs_on_swarming:
-        command_line = command_lines.get(test.target_name, [])
+        command_line = self._swarming_command_lines.get(test.target_name, [])
         if command_line:
           test.raw_cmd = command_line
           test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
@@ -1164,6 +1182,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
+      # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
+      # the variable from being expanded on the tester bot rather than
+      # by the swarming bot.
+      additional_trigger_properties['swarming_command_lines'] = (
+          replace_string_in_dict(self._swarming_command_lines,
+                                 'ISOLATED_OUTDIR', 'WILL_BE_ISOLATED_OUTDIR'))
     if (package_transfer and
         bot.settings.execution_mode == bot_spec_module.COMPILE_AND_TEST):
       self.package_build(
@@ -1209,40 +1233,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-      # In order to figure out what command lines to pass to swarming tasks,
-      # we call the `set_swarming_command_lines` method below, which reads
-      # the command lines out of the *.isolate files that MB generates
-      # during the `generate_build_files` step. However, on an isolate_transfer
-      # test-only bot, those isolate files don't exist (they do on exist
-      # on a package_transfer bot, since they are part of the packaged build),
-      # and so we need to re-run MB. This makes the build slightly slower,
-      # but the alternative would be to transfer the command lines from builder
-      # to tester some other way, which is more complicated and potentially
-      # somewhat fragile (e.g., if you tried to pass them via build properties
-      # you might hit limits on the length of properties).
-      if (self.m.chromium.c.project_generator.tool == 'mb' and
-          self.c.use_swarming_command_lines):
-        parent_builder_id = chromium.BuilderId.create_for_group(
-            bot.settings.parent_builder_group or bot.builder_id.group,
-            bot.settings.parent_buildername)
-        use_goma = self._use_goma()
-        android_version_name, android_version_code = (
-            self.get_android_version_details(bot.settings, log_details=True))
-        isolated_targets = [
-            t.name
-            for t in build_config.tests_on(bot.builder_id)
-            if t.uses_isolate
-        ]
-        self.m.chromium.mb_gen(
-            parent_builder_id,
-            phase=mb_phase,
-            mb_config_path=mb_config_path,
-            use_goma=use_goma,
-            isolated_targets=isolated_targets,
-            name='generate_build_files',
-            android_version_code=android_version_code,
-            android_version_name=android_version_name)
-
     if package_transfer:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
@@ -1255,9 +1245,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self._explain_package_transfer(bot, non_isolated_tests),
           as_log='why is this running?')
 
-    if self.c.use_swarming_command_lines:
-      self.set_swarming_command_lines(
-          build_config.tests_on(bot.builder_id), suffix='')
+    if (self.m.chromium.c.project_generator.tool == 'mb' and
+        self.c.use_swarming_command_lines):
+      self._swarming_command_lines = replace_string_in_dict(
+          self.m.properties.get('swarming_command_lines', {}),
+          'WILL_BE_ISOLATED_OUTDIR', 'ISOLATED_OUTDIR')
+      for test in build_config.tests_on(bot.builder_id):
+        if test.runs_on_swarming:
+          command_line = self._swarming_command_lines.get(test.target_name, [])
+          if command_line:
+            # lists come back from properties as tuples, but the swarming
+            # api expects this to be an actual list.
+            test.raw_cmd = list(command_line)
+            test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
+                                                    self.m.path['checkout'])
 
   def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
     self.m.python.succeeding_step(
