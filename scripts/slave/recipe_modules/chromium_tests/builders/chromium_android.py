@@ -35,6 +35,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -109,6 +110,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android', 'enable_wpr_tests'],
             chromium_config_kwargs={
@@ -204,6 +206,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -222,6 +225,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -240,6 +244,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -276,6 +281,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -295,6 +301,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -314,6 +321,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -333,6 +341,7 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
