@@ -306,11 +306,6 @@ def GenTests(api):
                   'dimension_sets': [{
                       'os': 'Linux'
                   },],
-                  'optional_dimensions': {
-                      60: [{
-                          'os': 'Ubuntu-14.04'
-                      }],
-                  },
               },
           },
           swarm_hashes={

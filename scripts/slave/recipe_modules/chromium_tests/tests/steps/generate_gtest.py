@@ -140,11 +140,6 @@ def GenTests(api):
                   'dimension_sets': [{
                       'os': 'Linux',
                   },],
-                  'optional_dimensions': {
-                      60: [{
-                          'os': 'Ubuntu-14.04'
-                      }],
-                  },
                   'cipd_packages': [{
                       'location': '{$HOME}/logdog',
                       'cipd_package': 'infra/logdog/linux-386',
