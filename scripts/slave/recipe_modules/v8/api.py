@@ -344,6 +344,11 @@ class V8Api(recipe_api.RecipeApi):
     if var_name:
       self.m.gclient.c.solutions[0].custom_vars[var_name] = 'True'
 
+  def set_gclient_custom_vars(self, gclient_vars):
+    """Sets additional gclient custom variables."""
+    for key, value in (gclient_vars or {}).iteritems():
+      self.m.gclient.c.solutions[0].custom_vars[key] = value
+
   def set_gclient_custom_deps(self, custom_deps):
     """Configures additional gclient custom_deps to be synced."""
     for name, path in (custom_deps or {}).iteritems():

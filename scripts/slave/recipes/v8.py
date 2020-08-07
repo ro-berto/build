@@ -56,10 +56,13 @@ PROPERTIES = {
   'default_targets': Property(default=None, kind=list),
   # Switch to enable/disable swarming.
   'enable_swarming': Property(default=None, kind=bool),
+  # Mapping of additional gclient variables to set (map name -> value).
+  'gclient_vars': Property(default=None, kind=dict),
   # Optional path to a different MB config. The path must be relative to the
   # V8 checkout and using forward slashes.
   'mb_config_path': Property(default=None, kind=str),
   # Name of a gclient custom_var to set to 'True'.
+  # TODO(machenbach): Deprecate single boolean variables and use gclient_vars.
   'set_gclient_var': Property(default=None, kind=str),
   # One of intel|arm|mips.
   'target_arch': Property(default=None, kind=str),
@@ -78,8 +81,8 @@ PROPERTIES = {
 
 def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
-             enable_swarming, mb_config_path, set_gclient_var, target_arch,
-             target_platform, track_build_dependencies, triggers,
+             enable_swarming, gclient_vars, mb_config_path, set_gclient_var,
+             target_arch, target_platform, track_build_dependencies, triggers,
              triggers_proxy, use_goma):
   v8 = api.v8
   v8.load_static_test_configs()
@@ -91,6 +94,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
+  v8.set_gclient_custom_vars(gclient_vars)
   v8.set_gclient_custom_deps(custom_deps)
   v8.set_chromium_configs(clobber, default_targets)
 
@@ -892,15 +896,18 @@ def GenTests(api):
     )
   )
 
-  # Test using custom_deps, set_gclient_var and mb_config_path property.
+  # Test using custom_deps, gclient_vars and mb_config_path property.
   yield (
-      api.v8.test('client.v8', 'V8 Foobar - builder', 'set_gclient_var',
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'custom_properties',
                   custom_deps={'v8/foo': 'bar'},
+                  gclient_vars={'mac_xcode_version': 'xcode_42_alpha'},
                   mb_config_path='somewhere/else/mb_config.pyl',
                   set_gclient_var='download_gcmole') +
       api.v8.check_in_param(
           'initialization.bot_update',
-          '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
+          '--spec-path', '\'custom_vars\': '
+                         '{\'download_gcmole\': \'True\', '
+                         '\'mac_xcode_version\': \'xcode_42_alpha\'}') +
       api.v8.check_in_param(
           'initialization.bot_update',
           '--spec-path', '\'custom_deps\': {\'v8/foo\': \'bar\'}') +
