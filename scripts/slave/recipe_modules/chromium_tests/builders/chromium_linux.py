@@ -15,6 +15,7 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64'],
             chromium_config_kwargs={
@@ -28,6 +29,7 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -137,6 +139,7 @@ SPEC = {
                 # is one of the slowest builder in CQ (crbug.com/804251).
                 'goma_high_parallel',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -165,6 +168,7 @@ SPEC = {
                 'mb',
                 'goma_high_parallel',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -234,6 +238,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             simulation_platform='linux',
         ),
     'Fuchsia ARM64 Cast Audio':
@@ -253,6 +258,7 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
@@ -279,6 +285,7 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
