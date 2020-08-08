@@ -95,7 +95,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'android-bfcache-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
+                builder_group='chromium.android',
                 buildername='android-bfcache-rel',
             ),
         'android-cronet-arm-dbg':
@@ -589,7 +589,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'linux-bfcache-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.linux',
                 buildername='linux-bfcache-rel',
             ),
         'linux-blink-heap-concurrent-marking-tsan-rel':

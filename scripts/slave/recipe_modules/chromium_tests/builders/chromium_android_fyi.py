@@ -124,6 +124,8 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1031391): Remove this config when the builder moves
+    # to the main waterfall.
     'android-bfcache-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
