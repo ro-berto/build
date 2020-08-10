@@ -535,6 +535,10 @@ class IosTest(object):
       self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True
+      # TODO(crbug.com/1006881): "xctest" indicates how to run the targets but
+      # not how to parse test outputs since recent iOS test runner changes.
+      # This arg is needed for outputs to be parsed correctly.
+      self.config['xcode parallelization'] = True
 
   @property
   def name(self):
