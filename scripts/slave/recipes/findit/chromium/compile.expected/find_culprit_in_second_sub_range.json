@@ -803,6 +803,24 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r7.read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r7.preprocess_for_goma",
     "~followup_annotations": [
@@ -1596,6 +1614,24 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r3.read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
     ]
   },
   {
@@ -2414,6 +2450,24 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r4.read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
     ]
   },
   {

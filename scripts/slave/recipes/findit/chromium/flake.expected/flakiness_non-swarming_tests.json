@@ -807,6 +807,24 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r0.read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",

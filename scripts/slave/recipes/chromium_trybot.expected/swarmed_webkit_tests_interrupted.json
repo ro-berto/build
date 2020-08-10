@@ -661,6 +661,26 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
