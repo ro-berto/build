@@ -81,7 +81,7 @@ MOCK_PROR_JSON_STRING = """
                         """
 
 def GenTests(api):
-  yield (api.test(
+  yield api.test(
       'recipe-coverage',
       api.chromium_tests.platform([{
           'mastername': 'chromium.perf',
@@ -91,20 +91,22 @@ def GenTests(api):
           mastername='chromium.perf',
           builder='linux-perf',
           parent_buildername='linux-builder-perf'),
-  ) + api.properties(
-      InputProperties(
-          tasks_groups=MOCK_TASK_GROUPS,
-          tester_properties=MOCK_PROR_JSON_STRING)) + api.post_process(
-              post_process.StatusSuccess) + api.post_process(
-                  post_process.DropExpectation))
+      api.properties(
+          InputProperties(
+              tasks_groups=MOCK_TASK_GROUPS,
+              tester_properties=MOCK_PROR_JSON_STRING)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (api.test(
+  yield api.test(
       'builder-coverage',
       api.chromium_tests.platform([{
           'mastername': 'chromium.perf',
           'buildername': 'linux-builder-perf'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='linux-builder-perf')) +
-         api.post_process(post_process.StatusException) + api.post_process(
-             post_process.DropExpectation))
+          mastername='chromium.perf', builder='linux-builder-perf'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
