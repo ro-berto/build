@@ -249,11 +249,10 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True since disabled run is successful.
     self.assertTrue(result)
 
-  @mock.patch('common.chromium_utils.GetActiveMaster')
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
   def test_SendResultsToDashboard_NoTelemetryOutput(
-      self, SendResults, MakeDashboardJsonV1, GetActiveMaster
+      self, SendResults, MakeDashboardJsonV1
   ):
     """Tests that the right methods get called in _SendResultsToDashboard."""
     fake_results_tracker = mock.Mock()
@@ -261,8 +260,6 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_results_tracker.ChartJson = mock.MagicMock(return_value=None)
     fake_results_tracker.IsReferenceBuild = mock.MagicMock(return_value=False)
     fake_results_tracker.Cleanup = mock.MagicMock()
-
-    GetActiveMaster.return_value = 'Foo'
 
     runtest._SendResultsToDashboard(
         fake_results_tracker, {

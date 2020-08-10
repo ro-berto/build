@@ -1,6 +1,5 @@
 /__init__.py                      recipes
 /annotation_utils.py              recipes
-/bootstrap.py                     recipes
 /build_directory.py               recipes
 /clang_revision.py                recipes
 /crash_utils.py                   recipes

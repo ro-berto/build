@@ -82,10 +82,6 @@ def _GetMachineGroup(options):
         "Luci builder must set 'perf_dashboard_machine_group'. See "
         'bit.ly/perf-dashboard-machine-group for more details'
     )
-  elif not options.is_luci_builder:
-    # TODO(crbug.com/801289):
-    # Remove this code path once all builders are converted to LUCI.
-    perf_dashboard_machine_group = chromium_utils.GetActiveMaster()
   return perf_dashboard_machine_group
 
 

@@ -195,16 +195,6 @@ def _RunGTestCommand(
   return result
 
 
-def _GetMaster():
-  """Return the master name for the current host."""
-  return chromium_utils.GetActiveMaster()
-
-
-def _GetMasterString(master):
-  """Returns a message describing what the master is."""
-  return '[Running for master: "%s"]' % master
-
-
 def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
   """Builds a command to run a test binary.
 
@@ -378,8 +368,6 @@ def _ResultsDashboardDict(options):
   perf_dashboard_machine_group = options.build_properties.get(
       'perf_dashboard_machine_group'
   )
-  if not perf_dashboard_machine_group:
-    perf_dashboard_machine_group = chromium_utils.GetActiveMaster()
   assert perf_dashboard_machine_group, (
       'This field must be set for uploading to perf dashboard'
   )
