@@ -69,11 +69,11 @@ def GenTests(api):
   yield api.test(
       'tester-coverage',
       api.chromium_tests.platform([{
-          'mastername': 'chromium.perf',
+          'builder_group': 'chromium.perf',
           'buildername': 'linux-perf'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.perf',
+          builder_group='chromium.perf',
           builder='linux-perf',
           parent_buildername='linux-builder-perf'),
       api.post_process(post_process.StatusSuccess),
@@ -83,11 +83,11 @@ def GenTests(api):
   yield api.test(
       'builder-coverage',
       api.chromium_tests.platform([{
-          'mastername': 'chromium.perf',
+          'builder_group': 'chromium.perf',
           'buildername': 'linux-builder-perf'
       }]),
       api.chromium.ci_build(
-          mastername='chromium.perf', builder='linux-builder-perf'),
+          builder_group='chromium.perf', builder='linux-builder-perf'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )

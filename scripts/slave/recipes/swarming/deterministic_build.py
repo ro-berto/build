@@ -15,17 +15,18 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
-  'chromium',
-  'chromium_android',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'isolate',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
+    'builder_group',
+    'chromium',
+    'chromium_android',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'isolate',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
 ]
 
 DETERMINISTIC_BUILDERS = freeze({
@@ -205,8 +206,8 @@ def RunSteps(api, buildername):
   compare_local = recipe_config.get('compare_local', False)
 
   # Do a first build and move the build artifact to the temp directory.
-  builder_id = chromium.BuilderId.create_for_master(
-      api.properties.get('mastername'), buildername)
+  builder_id = chromium.BuilderId.create_for_group(
+      api.builder_group.for_current, buildername)
   api.chromium.mb_gen(builder_id, phase='local' if compare_local else None)
   api.chromium.mb_isolate_everything(
       builder_id, phase='local' if compare_local else None)
@@ -255,33 +256,36 @@ def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
 def GenTests(api):
-  mastername = 'chromium.swarm'
+  builder_group = 'chromium.swarm'
   for buildername in DETERMINISTIC_BUILDERS:
-    test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+    test_name = 'full_%s_%s' % (_sanitize_nonalpha(builder_group),
                                 _sanitize_nonalpha(buildername))
     yield api.test(
         test_name,
         api.properties.scheduled(),
-        api.properties.generic(buildername=buildername, mastername=mastername),
+        api.properties.generic(buildername=buildername),
+        api.builder_group.for_current(builder_group),
         api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
         api.properties(configuration='Release'),
     )
     yield api.test(
         test_name + '_fail',
         api.properties.scheduled(),
-        api.properties.generic(buildername=buildername, mastername=mastername),
+        api.properties.generic(buildername=buildername),
+        api.builder_group.for_current(builder_group),
         api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
         api.properties(configuration='Release'),
         api.step_data('compare_build_artifacts', retcode=1),
     )
 
   for trybotname in DETERMINISTIC_TRYBOTS:
-    test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+    test_name = 'full_%s_%s' % (_sanitize_nonalpha(builder_group),
                                 _sanitize_nonalpha(trybotname))
     yield api.test(
         test_name,
         api.properties.scheduled(),
-        api.properties.generic(buildername=trybotname, mastername=mastername),
+        api.properties.generic(buildername=trybotname),
+        api.builder_group.for_current(builder_group),
         api.platform(
             DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
             ['platform'], 64),
@@ -290,7 +294,8 @@ def GenTests(api):
     yield api.test(
         test_name + '_fail',
         api.properties.scheduled(),
-        api.properties.generic(buildername=trybotname, mastername=mastername),
+        api.properties.generic(buildername=trybotname),
+        api.builder_group.for_current(builder_group),
         api.platform(
             DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
             ['platform'], 64),
@@ -301,8 +306,8 @@ def GenTests(api):
   yield api.test(
       'first_build_compile_fail',
       api.properties.scheduled(),
-      api.properties.generic(
-          buildername='android-deterministic-dbg', mastername=mastername),
+      api.properties.generic(buildername='android-deterministic-dbg'),
+      api.builder_group.for_current(builder_group),
       api.platform(
           DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
           64),
@@ -315,8 +320,8 @@ def GenTests(api):
   yield api.test(
       'second_build_compile_fail',
       api.properties.scheduled(),
-      api.properties.generic(
-          buildername='android-deterministic-dbg', mastername=mastername),
+      api.properties.generic(buildername='android-deterministic-dbg'),
+      api.builder_group.for_current(builder_group),
       api.platform(
           DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
           64),

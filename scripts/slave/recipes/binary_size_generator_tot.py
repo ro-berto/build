@@ -8,6 +8,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
     'binary_size',
+    'builder_group',
     'chromium',
     'chromium_android',
     'chromium_checkout',
@@ -111,33 +112,47 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic') + api.properties(mastername='chromium.android',) +
-         api.post_check(lambda check, steps: check('gsutil Uploading zip file'
-                                                   in steps)) +
-         api.post_check(lambda check, steps: check(
-             'gsutil Uploading LATEST file' in steps)) +
-         api.post_process(post_process.StatusSuccess) +
-         api.post_process(post_process.DropExpectation))
-  yield (api.test('failed_generate_analysis_files') +
-         api.properties(mastername='chromium.android') + api.override_step_data(
-             'Generate commit size analysis files',
-             retcode=1,
-         ) + api.post_process(
-             post_process.StepFailure,
-             'Generate commit size analysis files',
-         ) + api.post_check(lambda check, steps: check(
-             'gsutil Uploading zip file' not in steps)) +
-         api.post_check(lambda check, steps: check(
-             'gsutil Uploading LATEST file' not in steps)) +
-         api.post_process(post_process.StatusFailure) +
-         api.post_process(post_process.DropExpectation))
-  yield (api.test('compile failed') +
-         api.properties(mastername='chromium.android') + api.override_step_data(
-             'compile',
-             retcode=1,
-         ) + api.post_check(lambda check, steps: check(
-             'gsutil Uploading zip file' not in steps)) +
-         api.post_check(lambda check, steps: check(
-             'gsutil Uploading LATEST file' not in steps)) +
-         api.post_process(post_process.StatusFailure) +
-         api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'basic',
+      api.builder_group.for_current('chromium.android'),
+      api.post_check(lambda check, steps: check('gsutil Uploading zip file' in
+                                                steps)),
+      api.post_check(lambda check, steps: check('gsutil Uploading LATEST file'
+                                                in steps)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_generate_analysis_files',
+      api.builder_group.for_current('chromium.android'),
+      api.override_step_data(
+          'Generate commit size analysis files',
+          retcode=1,
+      ),
+      api.post_process(
+          post_process.StepFailure,
+          'Generate commit size analysis files',
+      ),
+      api.post_check(lambda check, steps: check('gsutil Uploading zip file'
+                                                not in steps)),
+      api.post_check(lambda check, steps: check('gsutil Uploading LATEST file'
+                                                not in steps)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'compile failed',
+      api.builder_group.for_current('chromium.android'),
+      api.override_step_data(
+          'compile',
+          retcode=1,
+      ),
+      api.post_check(lambda check, steps: check('gsutil Uploading zip file'
+                                                not in steps)),
+      api.post_check(lambda check, steps: check('gsutil Uploading LATEST file'
+                                                not in steps)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )

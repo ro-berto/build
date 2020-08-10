@@ -18,6 +18,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_checkout',
     'chromium_swarming',
@@ -37,12 +38,7 @@ DEPS = [
 ]
 
 
-PROPERTIES = {
-    'mastername': Property(default=''),
-}
-
-
-def RunSteps(api, mastername):
+def RunSteps(api):
   # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.chromium_swarming.verbose = True
@@ -68,8 +64,7 @@ def RunSteps(api, mastername):
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_master(
-          mastername, api.buildbucket.builder_name)])
+      [api.chromium.get_builder_id()])
   api.chromium_swarming.swarming_server = (
       bot_config.swarming_server or 'https://chromium-swarm-dev.appspot.com')
 
@@ -119,7 +114,7 @@ def GenTests(api):
         git_repo='https://chromium.googlesource.com/chromium/src',
     )
     ret = api.buildbucket.build(build)
-    ret += api.properties(mastername='chromium.dev')
+    ret += api.builder_group.for_current('chromium.dev')
     if config:
       ret += api.chromium_tests.read_source_side_spec(
           'chromium.dev', {buildername: config})
