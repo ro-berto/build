@@ -1875,7 +1875,7 @@ Checks if the current build is running coverage-instrumented targets.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [add\_kythe\_metadata](/scripts/slave/recipe_modules/codesearch/api.py#87)(self):**
+&mdash; **def [add\_kythe\_metadata](/scripts/slave/recipe_modules/codesearch/api.py#91)(self):**
 
 Adds inline Kythe metadata to Mojom generated files.
 
@@ -1883,7 +1883,7 @@ This metadata is used to connect things in the generated file to the thing
 in the Mojom file which generated it. This is made possible by annotations
 added to the generated file by the Mojo compiler.
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#242)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#246)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1895,7 +1895,7 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#148)(self, commit_hash, commit_timestamp):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#152)(self, commit_hash, commit_timestamp):**
 
 Create the kythe index pack and upload it to google storage.
 
@@ -1905,13 +1905,13 @@ Args:
   commit_timestamp: Timestamp of the commit at which we're creating the
     index pack, in integer seconds since the UNIX epoch.
 
-&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#55)(self, targets, mastername, buildername, output_file=None, mb_config_path=None):**
+&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#55)(self, targets, builder_group, buildername, output_file=None, mb_config_path=None):**
 
-&mdash; **def [generate\_gn\_target\_list](/scripts/slave/recipe_modules/codesearch/api.py#77)(self, output_file=None):**
+&mdash; **def [generate\_gn\_target\_list](/scripts/slave/recipe_modules/codesearch/api.py#81)(self, output_file=None):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/codesearch/api.py#15)(self):**
 
-&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#102)(self):**
+&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#106)(self):**
 
 Download and run the clang tool.
 ### *recipe_modules* / [cronet](/scripts/slave/recipe_modules/cronet)

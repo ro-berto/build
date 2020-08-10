@@ -34,7 +34,7 @@ DEPS = [
 # The trybot will use the parameters from the mirrored CI builder.
 # It has the following strcture:
 # {
-#   <mastername which contains the trybots>: {
+#   <group which contains the trybots>: {
 #     <trybot name>: <mirred CI builder name, which should be one of builders
 #                     from SPEC['builders']>,
 #   }
@@ -264,7 +264,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   api.codesearch.cleanup_old_generated()
 
   api.codesearch.generate_compilation_database(
-      targets, mastername=builder_id.master, buildername=builder_id.builder)
+      targets, builder_group=builder_id.group, buildername=builder_id.builder)
   api.codesearch.generate_gn_target_list()
 
   # Prepare Java Kythe output directory

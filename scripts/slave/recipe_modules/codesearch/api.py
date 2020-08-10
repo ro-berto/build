@@ -52,10 +52,14 @@ class CodesearchApi(recipe_api.RecipeApi):
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
       self.m.step('delete old generated files', delete_command)
 
-  def generate_compilation_database(self, targets, mastername, buildername,
-                                    output_file=None, mb_config_path=None):
+  def generate_compilation_database(self,
+                                    targets,
+                                    builder_group,
+                                    buildername,
+                                    output_file=None,
+                                    mb_config_path=None):
     self.m.chromium.mb_gen(
-        chromium.BuilderId.create_for_master(mastername, buildername),
+        chromium.BuilderId.create_for_group(builder_group, buildername),
         build_dir=self.c.debug_path,
         name='generate build files',
         mb_config_path=mb_config_path)

@@ -91,7 +91,7 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   api.codesearch.generate_compilation_database(
-      targets, mastername=builder_id.master, buildername=builder_id.builder)
+      targets, builder_group=builder_id.group, buildername=builder_id.builder)
   api.codesearch.generate_gn_target_list()
 
   api.codesearch.cleanup_old_generated()
@@ -125,20 +125,20 @@ def GenTests(api):
     yield api.test(
         '%s_test_basic' % sanitize(buildername),
         api.chromium.generic_build(
-            mastername='chromium.infra.codesearch', builder=buildername),
+            builder_group='chromium.infra.codesearch', builder=buildername),
         api.runtime(is_luci=True, is_experimental=False),
     )
     yield api.test(
         '%s_test_experimental' % sanitize(buildername),
         api.chromium.generic_build(
-            mastername='chromium.infra.codesearch', builder=buildername),
+            builder_group='chromium.infra.codesearch', builder=buildername),
         api.runtime(is_luci=True, is_experimental=True),
     )
 
   yield api.test(
       '%s_test_with_patch' % sanitize('codesearch-gen-chromium-linux'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.codesearch',
+          builder_group='tryserver.chromium.codesearch',
           builder='codesearch-gen-chromium-linux'),
       api.runtime(is_luci=True, is_experimental=False),
   )
