@@ -760,9 +760,6 @@ SPEC.update([
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
         gclient_apply_config=['chromeos']),
-    # TODO(crbug.com/1031391): Remove this config when the builder moves
-    # to the main waterfall.
-    stock_config('linux-bfcache-rel', config='Release'),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config('linux-blink-heap-verification'),
