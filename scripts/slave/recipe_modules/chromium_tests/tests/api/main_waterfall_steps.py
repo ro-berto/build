@@ -337,7 +337,8 @@ def GenTests(api):
               },
           }),
       api.override_step_data(
-          'Ensure .profdata for each test.searching for profdata files',
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
           api.file.listdir(
               ['/performance_test_suite/performance_test_suite.profdata'])),
       api.post_process(

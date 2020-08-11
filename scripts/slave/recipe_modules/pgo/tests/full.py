@@ -53,6 +53,13 @@ def RunSteps(api):
 
   for test in tests:
     step = test.name
+    # Preprocessing for test
+    test._test_runs = {
+        '': {
+            'valid': api.properties.get('benchmark_result', True),
+            'failures': api.properties.get('benchmark_failures', []),
+        }
+    }
     # shard_merge already ensures the profile_subdir is generated w/ step_name
     api.code_coverage.shard_merge(
         step, test.target_name, additional_merge=getattr(test, '_merge', None))
@@ -75,7 +82,8 @@ def GenTests(api):
       api.platform('mac', 64),
       api.properties(mock_merged_profdata=False),
       api.override_step_data(
-          'Ensure .profdata for each test.searching for profdata files',
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
           api.file.listdir([
               '/performance_test_suite/performance_test_suite.profdata',
               '/different_test_suite/different_test_suite.profdata'
@@ -97,7 +105,8 @@ def GenTests(api):
       api.platform('win', 64),
       api.properties(mock_merged_profdata=True),
       api.override_step_data(
-          'Ensure .profdata for each test.searching for profdata files',
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
           api.file.listdir([
               '\\\\performance_test_suite\\\\performance_test_suite.profdata',
               '\\\\different_test_suite\\\\different_test_suite.profdata'
@@ -139,7 +148,8 @@ def GenTests(api):
       api.platform('mac', 64),
       api.properties(mock_merged_profdata=True),
       api.override_step_data(
-          'Ensure .profdata for each test.searching for profdata files',
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
           api.file.listdir([
               '/performance_test_suite/performance_test_suite.profdata',
               '/different_test_suite/different_test_suite.profdata'
@@ -170,12 +180,8 @@ def GenTests(api):
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False),
       api.post_process(
-          post_process.MustRun,
-          'Ensure .profdata for each test.searching for profdata files'),
-      api.post_process(
-          post_process.MustRun,
-          'Ensure .profdata for each test.Expected .profdata files are missing'
-      ),
+          post_process.MustRun, 'validate benchmark results and profile data.'
+          'searching for profdata files'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -190,16 +196,55 @@ def GenTests(api):
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False),
       api.override_step_data(
-          'Ensure .profdata for each test.searching for profdata files',
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
           api.file.listdir(
               ['/performance_test_suite/performance_test_suite.profdata'])),
       api.post_process(
-          post_process.MustRun,
-          'Ensure .profdata for each test.searching for profdata files'),
+          post_process.MustRun, 'validate benchmark results and profile data.'
+          'searching for profdata files'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'invalid benchmark test',
+      api.properties.generic(
+          mastername='chromium.perf',
+          buildername='win64-builder-perf',
+          buildnumber=54),
+      api.pgo(use_pgo=True),
+      api.platform('win', 64),
+      api.properties(mock_merged_profdata=False, benchmark_result=False),
+      api.override_step_data(
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
+          api.file.listdir(
+              ['/performance_test_suite/performance_test_suite.profdata'])),
       api.post_process(
-          post_process.MustRun,
-          'Ensure .profdata for each test.Expected .profdata files are missing'
-      ),
+          post_process.MustRun, 'validate benchmark results and profile data.'
+          'searching for profdata files'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed benchmark test',
+      api.properties.generic(
+          mastername='chromium.perf',
+          buildername='win64-builder-perf',
+          buildnumber=54),
+      api.pgo(use_pgo=True),
+      api.platform('win', 64),
+      api.properties(mock_merged_profdata=False, benchmark_failures=['test1']),
+      api.override_step_data(
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
+          api.file.listdir(
+              ['/performance_test_suite/performance_test_suite.profdata'])),
+      api.post_process(
+          post_process.MustRun, 'validate benchmark results and profile data.'
+          'searching for profdata files'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
