@@ -12,11 +12,9 @@ from recipe_engine import recipe_test_api, post_process
 
 
 def RunSteps(api):
-  opt_dims = {60: [{'os': 'Ubuntu-14.04'}]}
   task = api.chromium_swarming.task(
       name=api.properties.get('task_name', 'sample_task'),
       isolated='0123456789012345678901234567890123456789',
-      optional_dimensions=opt_dims,
       env_prefixes={'FOO': ['some/path']})
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
@@ -56,16 +54,6 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        '[trigger] windows gpu task',
                        ['--containment-type', 'AUTO']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'optional_dimensions',
-      api.properties(
-          task_name='optional-dimension task', wait_for_capacity=True),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] optional-dimension task',
-                       ['--optional-dimension', 'os', 'Ubuntu-14.04', '60']),
       api.post_process(post_process.DropExpectation),
   )
 

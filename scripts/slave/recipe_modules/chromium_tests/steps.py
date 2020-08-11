@@ -1573,7 +1573,6 @@ class SwarmingTest(Test):
                waterfall_buildername=None,
                set_up=None,
                tear_down=None,
-               optional_dimensions=None,
                service_account=None,
                isolate_coverage_data=None,
                isolate_profile_data=None,
@@ -1605,8 +1604,6 @@ class SwarmingTest(Test):
       waterfall_buildername: Builder name for the test's builder.
       set_up: Optional set up scripts.
       tear_down: Optional tear_down scripts.
-      optional_dimensions: (dict of expiration: [{dimension(str): val(str)]}:
-          Optional dimensions that create additional fallback task slices.
       service_account: Service account to run the test as.
       isolate_coverage_data: Bool indicating wether to isolate coverage profile
           data during the task.
@@ -1637,7 +1634,6 @@ class SwarmingTest(Test):
     self._cipd_packages = cipd_packages or []
     self._containment_type = containment_type
     self._dimensions = dimensions
-    self._optional_dimensions = optional_dimensions
     self._extra_suffix = extra_suffix
     self._expiration = expiration
     self._hard_timeout = hard_timeout
@@ -1930,9 +1926,6 @@ class SwarmingTest(Test):
           api.platform.name)
     task_slice = task_slice.with_dimensions(**task_dimensions)
 
-    # Add optional dimensions.
-    task.optional_dimensions = self._optional_dimensions or None
-
     # Add tags.
     tags = {
         'ninja_target': [self.full_test_target or ''],
@@ -2057,7 +2050,6 @@ class SwarmingGTestTest(SwarmingTest):
                tear_down=None,
                isolate_coverage_data=False,
                isolate_profile_data=False,
-               optional_dimensions=None,
                service_account=None,
                containment_type=None,
                ignore_task_failure=False,
@@ -2081,7 +2073,6 @@ class SwarmingGTestTest(SwarmingTest):
         merge=merge,
         shards=shards,
         ignore_task_failure=ignore_task_failure,
-        optional_dimensions=optional_dimensions,
         service_account=service_account,
         containment_type=containment_type,
         **kw)
@@ -2322,7 +2313,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                tear_down=None,
                isolate_coverage_data=False,
                isolate_profile_data=False,
-               optional_dimensions=None,
                service_account=None,
                **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
@@ -2344,7 +2334,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         merge=merge,
         shards=shards,
         ignore_task_failure=ignore_task_failure,
-        optional_dimensions=optional_dimensions,
         service_account=service_account,
         **kw)
     self._args = args or []
@@ -2837,8 +2826,6 @@ class SwarmingIosTest(SwarmingTest):
 
     self._hard_timeout = self._task['test'].get(
         'max runtime seconds') or self._config.get('max runtime seconds')
-
-    self._optional_dimensions = task['test'].get('optional_dimensions')
 
     self._dimensions = {
         'pool': 'chromium.tests',

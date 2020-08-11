@@ -447,7 +447,6 @@ class SwarmingApi(recipe_api.RecipeApi):
            isolated=None,
            merge=None,
            named_caches=None,
-           optional_dimensions=None,
            raw_cmd=None,
            service_account=None,
            shards=1,
@@ -528,10 +527,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       * env: a dict {ENVVAR: ENVVALUE} which instructs swarming to set the
           environment variables before invoking the command. These are applied
           on top of the default environment variables.
-      * optional_dimensions: {expiration: [{key: value]} mapping with swarming
-          dimensions that specify on what Swarming slaves tasks can run.  These
-          are similar to what is specified in dimensions but will create
-          additional 'fallback' task slice(s) with the optional dimensions.
       * task_to_retry: Task object. If set, indicates that this task is a
           (potentially partial) retry of another task. When collecting, the
           successful shards from 'task_to_retry' will be merged with the new
@@ -560,10 +555,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     init_env = self.default_env.copy()
     init_env.update(env or {})
-
-    optional_dimensions_var = None
-    if optional_dimensions:
-      optional_dimensions_var = optional_dimensions.copy()
 
     shard_indices = shard_indices or range(shards)
 
@@ -607,7 +598,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       extra_args=extra_args,
       ignore_task_failure=ignore_task_failure,
       named_caches=named_caches,
-      optional_dimensions=optional_dimensions_var,
       shard_indices=shard_indices,
       shards=shards,
       spec_name=spec_name,
@@ -809,14 +799,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       assert isinstance(value, basestring), \
         'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
-
-    if task.optional_dimensions:
-      for exp, dimensions in task.optional_dimensions.iteritems():
-        for d in dimensions:
-          for name, value in d.iteritems():
-            assert isinstance(value, basestring), \
-                'optional-dimension %s is not a string: %s' % (name, value)
-            args.extend(['--optional-dimension', name, value, exp])
 
     for name, value in sorted(task_slice.env_vars.iteritems()):
       assert isinstance(value, basestring), \
@@ -1776,11 +1758,22 @@ class SwarmingApi(recipe_api.RecipeApi):
 class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
-  def __init__(self, request, collect_step, extra_args, ignore_task_failure,
-               shards, shard_indices, spec_name, task_output_dir,
-               build_properties=None, builder_info=None, containment_type=None,
-               merge=None, named_caches=None, optional_dimensions=None,
-               task_to_retry=None, trigger_script=None):
+  def __init__(self,
+               request,
+               collect_step,
+               extra_args,
+               ignore_task_failure,
+               shards,
+               shard_indices,
+               spec_name,
+               task_output_dir,
+               build_properties=None,
+               builder_info=None,
+               containment_type=None,
+               merge=None,
+               named_caches=None,
+               task_to_retry=None,
+               trigger_script=None):
 
     """Configuration of a swarming task.
 
@@ -1847,7 +1840,6 @@ class SwarmingTask(object):
     self.ignore_task_failure = ignore_task_failure
     self.merge = merge or {}
     self.named_caches = named_caches or {}
-    self.optional_dimensions = optional_dimensions
     self.request = request
     self.shards = shards
     self.shard_indices = shard_indices
