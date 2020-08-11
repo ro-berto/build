@@ -2839,18 +2839,6 @@ class SwarmingIosTest(SwarmingTest):
         'max runtime seconds') or self._config.get('max runtime seconds')
 
     self._optional_dimensions = task['test'].get('optional_dimensions')
-    if self._optional_dimensions:
-      for dimension_list in self._optional_dimensions.values():
-        for dimension_set in dimension_list:
-          if self._platform == 'simulator' and 'host os' in dimension_set:
-            # We don't want both values to be set, as the syntax for
-            # this won't work quite right in the swarming task api, we have
-            # no good way to specify the value twice. And, there should
-            # be no need for this.
-            # TODO(crbug.com/955856): we should just move away from 'host os'.
-            assert 'os' not in dimension_set
-            dimension_set['os'] = dimension_set['host os']
-            dimension_set.pop('host os')
 
     self._dimensions = {
         'pool': 'chromium.tests',

@@ -51,13 +51,7 @@ def RunSteps(api):
           'pool': 'dummy pool',
           }
   if platform == 'simulator':
-    task['test']['optional_dimensions'] = {
-        '60': [
-            {
-              'host os': 'other-dummy-OS',
-            }
-          ]
-        }
+    task['test']['host os'] = 'other-dummy-OS'
   test = steps.SwarmingIosTest(
       'swarming_service_account',
       platform,
@@ -89,7 +83,7 @@ def GenTests(api):
   def generate_passing_test(api, simulator):
     step_name = 'dummy step name on iOS-dummy OS'
     if simulator:
-      step_name = 'dummy step name on Mac'
+      step_name = 'dummy step name on other-dummy-OS'
     return api.step_data(
         step_name, generate_test_results_placeholder(api, failing_test=False))
 
@@ -225,8 +219,7 @@ def GenTests(api):
       api.builder_group.for_current('tryserver.fake'),
       api.properties(platform='simulator'),
       api.post_process(post_process.StepCommandContains,
-                       '[trigger] dummy step name on Mac',
-                       ['--optional-dimension', 'os', 'other-dummy-OS', '60']),
+                       '[trigger] dummy step name on other-dummy-OS', []),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
