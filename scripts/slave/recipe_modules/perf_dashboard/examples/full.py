@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'perf_dashboard',
     'recipe_engine/path',
     'recipe_engine/json',
@@ -14,7 +15,7 @@ DEPS = [
 # To run, pass these options into properties:
 # bot_id="multivm-windows-release",
 # buildername="multivm-windows-perf-be",
-# mastername="client.dart.fyi", buildnumber=75
+# builder_group="client.dart.fyi", buildnumber=75
 
 
 def RunSteps(api):
@@ -45,9 +46,9 @@ def GenTests(api):
     yield api.test(
         platform,
         api.platform.name(platform),
+        api.builder_group.for_current('client.dart.fyi'),
         api.properties(
             bot_id='multivm-windows-release',
             buildername='multivm-windows-perf-be',
-            buildnumber=75,
-            mastername='client.dart.fyi'),
+            buildnumber=75),
     )

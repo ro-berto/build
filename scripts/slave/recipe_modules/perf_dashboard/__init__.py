@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/python',

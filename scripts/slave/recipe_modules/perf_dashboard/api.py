@@ -15,20 +15,22 @@ _PINPOINT_BASE_URL = 'https://pinpoint-dot-chromeperf.appspot.com'
 
 class PerfDashboardApi(recipe_api.RecipeApi):
   """Provides steps to take a list of perf points and post them to the
-  Chromium Perf Dashboard.  Can also use the test url for testing purposes."""
+  Chrome Perf Dashboard.  Can also use the test url for testing purposes."""
 
   def get_skeleton_point(self, test, revision, value, bot=None):
+    # TODO(https://crbug.com/1113290) Update the dashboard to refer to groups
+    # instead of masters
     # TODO: masterid is really mastername
     assert (test != '')
     assert (revision != '')
     assert (value != '')
     return {
-        'master': self.m.properties['mastername'],
+        'master': self.m.builder_group.for_current,
         'bot': bot or self.m.buildbucket.builder_name,
         'test': test,
         'revision': revision,
         'value': value,
-        'masterid': self.m.properties['mastername'],
+        'masterid': self.m.builder_group.for_current,
         'buildername': self.m.buildbucket.builder_name,
         'buildnumber': self.m.buildbucket.build.number,
     }
@@ -50,8 +52,10 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     assert presentation
     assert test
     assert revision
+    # TODO(https://crbug.com/1113290) Update the dashboard to refer to groups
+    # instead of masters
     params = urllib.urlencode({
-        'masters': self.m.properties['mastername'],
+        'masters': self.m.builder_group.for_current,
         'bots': bot or self.m.buildbucket.builder_name,
         'tests': test,
         'rev': revision,
