@@ -18,13 +18,12 @@ def _ClearExpectationsDir(dir_path):
 
 def _CheckExpectationsDir(dir_path):
   failed_expectations = []
-  try:
+  if os.path.exists(dir_path):
     for failed_expectation_file in os.listdir(dir_path):
       with open(os.path.join(dir_path, failed_expectation_file)) as f:
-        failed_expectations.append(f.read())
-  except OSError:
-    # if there is no failure directory created, then everything passed.
-    pass
+        fail_msg = f.read()
+      if fail_msg:
+        failed_expectations.append(fail_msg)
   return {
       'success': len(failed_expectations) == 0,
       'failed_messages': failed_expectations,
