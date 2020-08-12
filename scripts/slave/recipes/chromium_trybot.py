@@ -657,6 +657,9 @@ def GenTests(api):
                   'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
+                      'resultdb': {
+                          'enable': True
+                      },
                       'swarming': {
                           'can_use_on_swarming_builders': True
                       },

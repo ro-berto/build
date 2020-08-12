@@ -61,7 +61,8 @@ def RunSteps(api):
       expiration=7200,
       shards=int(api.properties.get('shards', '1')) or 1,
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}),
-      isolate_coverage_data=isolate_coverage_data)
+      isolate_coverage_data=isolate_coverage_data,
+      resultdb={'enable': True})
   assert test.runs_on_swarming and not test.is_gtest
   assert test.shards > 0
 

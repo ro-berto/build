@@ -15,6 +15,7 @@ import urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine.types import freeze
+from recipe_engine.types import FrozenDict
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -217,7 +218,8 @@ class Test(object):
                full_test_target=None,
                test_id_prefix=None,
                waterfall_builder_group=None,
-               waterfall_buildername=None):
+               waterfall_buildername=None,
+               resultdb=None):
     """
     Args:
       name: Displayed name of the test.
@@ -232,6 +234,9 @@ class Test(object):
         This value would be different from trybot group.
       waterfall_buildername (str): Matching waterfall builder name.
         This value would be different from trybot builder name.
+      resultdb (dict): Configuration of the ResultDB integration for the test.
+        If the value is None or the dict is missing an entry with "enable",
+        ResultDB integration is disabled by default.
     """
     super(Test, self).__init__()
 
@@ -274,6 +279,7 @@ class Test(object):
     self._target_name = target_name
     self._full_test_target = full_test_target
     self._test_id_prefix = test_id_prefix
+    self._resultdb = resultdb
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -324,6 +330,17 @@ class Test(object):
     "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/"
     """
     return self._test_id_prefix
+
+  @property
+  def resultdb(self):
+    """Configuration of ResultDB integration in the test.
+
+    May return None if ResultDB integration is not enabled in the test.
+    Otherwise, this returns a dict, where each entry corresponds to
+    the configuration of ResultDB integration in the test.
+    e.g., {'enable': True}
+    """
+    return self._resultdb
 
   @property
   def canonical_name(self):
@@ -1038,6 +1055,7 @@ class LocalGTestTest(Test):
                waterfall_buildername=None,
                set_up=None,
                tear_down=None,
+               resultdb=None,
                **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
@@ -1060,6 +1078,7 @@ class LocalGTestTest(Test):
           specify this, except on GPU bots.
       set_up: Optional setup scripts.
       tear_down: Optional teardown script.
+      resultdb: Configuration of the ResultDB integration for the test.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
 
 
@@ -1070,7 +1089,8 @@ class LocalGTestTest(Test):
         full_test_target=full_test_target,
         test_id_prefix=test_id_prefix,
         waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername)
+        waterfall_buildername=waterfall_buildername,
+        resultdb=resultdb)
     self._args = args or []
     self._target_name = target_name
     self._revision = revision
@@ -1583,6 +1603,7 @@ class SwarmingTest(Test):
                shards=1,
                cipd_packages=None,
                named_caches=None,
+               resultdb=None,
                **kwargs):
     """Constructs an instance of SwarmingTest.
 
@@ -1621,6 +1642,7 @@ class SwarmingTest(Test):
           package root, package name, and package version.
       named_caches: {str: str} dict mapping named cache name to named cache
           path.
+      resultdb: Configuration of ResultDB integration.
     """
     super(SwarmingTest, self).__init__(
         name,
@@ -1629,6 +1651,7 @@ class SwarmingTest(Test):
         test_id_prefix=test_id_prefix,
         waterfall_builder_group=waterfall_builder_group,
         waterfall_buildername=waterfall_buildername,
+        resultdb=resultdb,
         **kwargs)
     self._tasks = {}
     self._cipd_packages = cipd_packages or []
@@ -2096,7 +2119,9 @@ class SwarmingGTestTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.gtest_task(
-        raw_cmd=self._raw_cmd, relative_cwd=self.relative_cwd)
+        raw_cmd=self._raw_cmd,
+        relative_cwd=self.relative_cwd,
+        resultdb=self.resultdb)
     self._apply_swarming_task_config(task, api, suffix, isolated,
                                      '--gtest_filter', ':')
     return task
@@ -2314,6 +2339,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                isolate_coverage_data=False,
                isolate_profile_data=False,
                service_account=None,
+               resultdb=None,
                **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name,
@@ -2335,6 +2361,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         shards=shards,
         ignore_task_failure=ignore_task_failure,
         service_account=service_account,
+        resultdb=resultdb,
         **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
@@ -2365,7 +2392,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.isolated_script_task(
-        raw_cmd=self.raw_cmd, relative_cwd=self.relative_cwd)
+        raw_cmd=self.raw_cmd,
+        relative_cwd=self.relative_cwd,
+        resultdb=self.resultdb)
 
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)
@@ -2687,7 +2716,8 @@ class MockTest(Test):
                runs_on_swarming=False,
                per_suffix_failures=None,
                per_suffix_valid=None,
-               api=None):
+               api=None,
+               resultdb=None):
     super(MockTest, self).__init__(waterfall_builder_group,
                                    waterfall_buildername)
     self._target_name = target_name
@@ -2701,6 +2731,7 @@ class MockTest(Test):
     self._name = name
     self._runs_on_swarming = runs_on_swarming
     self._api = api
+    self._resultdb = FrozenDict(resultdb or {})
 
   @property
   def name(self):

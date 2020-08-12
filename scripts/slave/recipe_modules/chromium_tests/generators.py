@@ -110,6 +110,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   # TODO(crbug.com/1074033): Remove full_test_target.
   kwargs['full_test_target'] = spec.get('test_target')
   kwargs['test_id_prefix'] = spec.get('test_id_prefix')
+  kwargs['resultdb'] = spec.get('resultdb')
   kwargs['name'] = name
 
   set_up = list(spec.get('setup', []))

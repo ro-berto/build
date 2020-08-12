@@ -73,6 +73,9 @@ def GenTests(api):
               'Linux Tests': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
+                      'resultdb': {
+                          'enable': True
+                      },
                       'swarming': {
                           'can_use_on_swarming_builders': True
                       }

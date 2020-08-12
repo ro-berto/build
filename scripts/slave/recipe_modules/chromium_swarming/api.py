@@ -454,7 +454,8 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None,
            task_to_retry=None,
            trigger_script=None,
-           relative_cwd=None):
+           relative_cwd=None,
+           resultdb=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -536,6 +537,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       * relative_cwd: An optional string indicating the working directory
         relative to the task root where `raw_cmd` (or the command specified
         in the isolate, if raw_cmd is empty) will run.
+      * resultdb: An optional dict with ResultDB-integration configurations. To
+        enable ResultDB-intergation, the dict must have key "enable" with True
+        in value. That is, {'enable': True}
     """
 
     if not collect_step:
@@ -574,6 +578,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_priority(self.default_priority).
       with_service_account(service_account or '').
       with_user(self.default_user or ''))
+
+    if resultdb and resultdb.get('enable'):
+      request = request.with_resultdb()
+      # TODO(crbug.com/1017288): wrap raw_cmd with api.resultdb.wrap().
 
     request = (request.with_slice(0, request[0].
       with_cipd_ensure_file(ensure_file).
@@ -616,6 +624,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                  merge=None,
                  raw_cmd=None,
                  relative_cwd=None,
+                 resultdb=None,
                  **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -650,10 +659,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge=merge,
         raw_cmd=raw_cmd,
         relative_cwd=relative_cwd,
+        resultdb=resultdb,
         **kwargs)
     return task
 
-  def isolated_script_task(self, raw_cmd=None, relative_cwd=None):
+  def isolated_script_task(self, raw_cmd=None, relative_cwd=None,
+                           resultdb=None):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
     At the time of this writting, this code is used by WebRTC and
@@ -681,7 +692,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       'script': self.merge_script_path('standard_isolated_script_merge.py')
     }
 
-    task = self.task(raw_cmd=raw_cmd, relative_cwd=relative_cwd)
+    task = self.task(
+        raw_cmd=raw_cmd, relative_cwd=relative_cwd, resultdb=resultdb)
     task.extra_args = extra_args
     task.merge = merge
     task.collect_step = self._isolated_script_collect_step
