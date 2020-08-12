@@ -3,37 +3,36 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromite',
-  'depot_tools/gitiles',
-  'recipe_engine/buildbucket',
-  'recipe_engine/properties',
+    'builder_group',
+    'chromite',
+    'depot_tools/gitiles',
+    'recipe_engine/buildbucket',
+    'recipe_engine/properties',
 ]
 
-
-# Map master name to 'chromite' configuration name.
-_MASTER_CONFIG_MAP = {
-  'chromiumos': {
-    'master_config': 'master_chromiumos',
-  },
-  'chromiumos.chromium': {
-    'master_config': 'master_chromiumos_chromium',
-    # per-builder settings
-    'builder_config': {
-      'amd64-generic-goma-canary-chromium-pfq-informational': 'use_goma_canary',
+# Map group name to 'chromite' configuration name.
+_GROUP_CONFIG_MAP = {
+    'chromiumos': {
+        'group_config': 'master_chromiumos',
     },
-  },
+    'chromiumos.chromium': {
+        'group_config': 'master_chromiumos_chromium',
+        # per-builder settings
+        'builder_config': {
+            'amd64-generic-goma-canary-chromium-pfq-informational':
+                'use_goma_canary',
+        },
+    },
 
-  # Fake master name for Coverage.
-  'chromiumos.coverage': {
-    'master_config': 'chromiumos_coverage',
-  },
+    # Fake group name for Coverage.
+    'chromiumos.coverage': {
+        'group_config': 'chromiumos_coverage',
+    },
 }
 
 def RunSteps(api):
-  # Load the appropriate configuration based on the master.
-  api.chromite.configure(
-      api.properties,
-      _MASTER_CONFIG_MAP)
+  # Load the appropriate configuration based on the group.
+  api.chromite.configure(api.properties, _GROUP_CONFIG_MAP)
 
   # Run 'cbuildbot' common recipe.
   api.chromite.run_cbuildbot(args=['--buildbot'],
@@ -64,8 +63,8 @@ def GenTests(api):
   # Test a standard CrOS build triggered by a Chromium commit.
   yield api.test(
       'chromiumos_chromium_builder',
+      api.builder_group.for_current('chromiumos.chromium'),
       api.properties(
-          mastername='chromiumos.chromium',
           cbb_config='x86-generic-tot-chrome-pfq-informational',
           **common_properties),
       api.buildbucket.try_build(
@@ -82,10 +81,8 @@ def GenTests(api):
   # Test a ChromiumOS Paladin build.
   yield api.test(
       'chromiumos_paladin',
-      api.properties(
-          mastername='chromiumos',
-          cbb_config='x86-generic-paladin',
-          **common_properties),
+      api.builder_group.for_current('chromiumos'),
+      api.properties(cbb_config='x86-generic-paladin', **common_properties),
       api.buildbucket.try_build(
           builder='chromiumos',
           build_number=12345,
@@ -108,10 +105,8 @@ def GenTests(api):
   # Test a ChromiumOS Paladin build whose manifest is not parsable.
   yield api.test(
       'chromiumos_paladin_manifest_failure',
-      api.properties(
-          mastername='chromiumos',
-          cbb_config='x86-generic-paladin',
-          **common_properties),
+      api.builder_group.for_current('chromiumos'),
+      api.properties(cbb_config='x86-generic-paladin', **common_properties),
       api.buildbucket.try_build(
           builder='chromiumos',
           build_number=12345,
@@ -126,8 +121,8 @@ def GenTests(api):
   # instead of a manifest.
   yield api.test(
       'chromiumos_paladin_buildbucket',
+      api.builder_group.for_current('chromiumos'),
       api.properties(
-          mastername='chromiumos',
           buildnumber='12345',
           cbb_config='auron-paladin',
           cbb_branch='master',
@@ -146,8 +141,8 @@ def GenTests(api):
   # Test with a property use_goma_canary=True.
   yield api.test(
       'chromiumos_goma_canary',
+      api.builder_group.for_current('chromiumos.chromium'),
       api.properties(
-          mastername='chromiumos.chromium',
           buildername='amd64-generic-goma-canary-chromium-pfq-informational',
           buildnumber='12345',
           cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
@@ -172,8 +167,8 @@ def GenTests(api):
   # Coverage builders for a bunch of options used in other repositories.
   yield api.test(
       'chromiumos_coverage',
+      api.builder_group.for_current('chromiumos.coverage'),
       api.properties(
-          mastername='chromiumos.coverage',
           clobber=None,
           cbb_config='x86-generic-full',
           cbb_branch='firmware-uboot_v2-1299.B',
@@ -195,8 +190,8 @@ def GenTests(api):
   # TODO(dnj): Remove this once variant support is deleted.
   yield api.test(
       'chromiumos_coverage_variant',
+      api.builder_group.for_current('chromiumos.coverage'),
       api.properties(
-          mastername='chromiumos.coverage',
           clobber=None,
           cbb_variant='coverage',
           cbb_config='x86-generic-full',

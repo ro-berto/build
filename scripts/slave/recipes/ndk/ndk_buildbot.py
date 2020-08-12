@@ -3,30 +3,30 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromite',
     'ndk',
     'recipe_engine/properties',
 ]
 
-
-# Map master name to 'chromite' configuration name.
-_MASTER_CONFIG_MAP = {
-  'client.ndk': {
-    'master_config': 'chromite_config',
-  },
+# Map group name to 'chromite' configuration name.
+_GROUP_CONFIG_MAP = {
+    'client.ndk': {
+        'group_config': 'chromite_config',
+    },
 }
 
 
 def RunSteps(api):
-  api.chromite.configure(api.properties, _MASTER_CONFIG_MAP)
+  api.chromite.configure(api.properties, _GROUP_CONFIG_MAP)
   api.chromite.run_cbuildbot(args=['--buildbot'])
 
 
 def GenTests(api):
   yield api.test(
       'basic',
+      api.builder_group.for_current('client.ndk'),
       api.properties.generic(
-          mastername='client.ndk',
           branch='master',
           cbb_config='ndk-linux-arm64-v8a',
       ),

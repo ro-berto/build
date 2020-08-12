@@ -208,19 +208,21 @@ class ChromiteApi(recipe_api.RecipeApi):
       config_map (dict): The configuration map to use.
       KWARGS: Additional keyword arguments to forward to the configuration.
     """
-    master = properties.get('mastername')
+    builder_group = self.m.builder_group.for_current
     builder = self.m.buildbucket.builder_name
 
-    if master is None:
+    if builder_group is None:
       self.set_config('master_swarming', **KWARGS)
       return
 
-    # Set the master's base configuration.
-    config_map = config_map.get(master, {})
-    master_config = config_map.get('master_config')
-    assert master_config, (
-        "No 'master_config' configuration for '%s'" % (master,))
-    self.set_config(master_config, **KWARGS)
+    # Set the groups's base configuration.
+    config_map = config_map.get(builder_group, {})
+    # TODO(https://crbug.com/1109276) Don't read master_config key
+    group_config = (
+        config_map.get('group_config') or config_map.get('master_config'))
+    assert group_config, ("No 'group_config' configuration for '%s'" %
+                          (builder_group,))
+    self.set_config(group_config, **KWARGS)
 
     # Set per-builder configuration if any.
     builder_config = config_map.get('builder_config', {}).get(builder, None)
@@ -287,7 +289,7 @@ class ChromiteApi(recipe_api.RecipeApi):
   def run(self, args=None, goma_dir=None):
     """Runs the configured 'cbuildbot' build.
 
-    This workflow uses the registered configuration dictionary to make master-
+    This workflow uses the registered configuration dictionary to make group-
     and builder-specific changes to the standard workflow.
 
     The specific workflow paths that are taken are also influenced by several

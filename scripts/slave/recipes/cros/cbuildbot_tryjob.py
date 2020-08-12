@@ -8,16 +8,17 @@ import zlib
 
 
 DEPS = [
-  'chromite',
-  'depot_tools/gitiles',
-  'recipe_engine/json',
-  'recipe_engine/properties',
+    'builder_group',
+    'chromite',
+    'depot_tools/gitiles',
+    'recipe_engine/json',
+    'recipe_engine/properties',
 ]
 
-# Map master name to 'chromite' configuration name.
-_MASTER_CONFIG_MAP = {
+# Map group name to 'chromite' configuration name.
+_GROUP_CONFIG_MAP = {
     'chromiumos.tryserver': {
-      'master_config': 'master_chromiumos_tryserver',
+        'group_config': 'master_chromiumos_tryserver',
     },
 }
 
@@ -81,9 +82,7 @@ def RunSteps(api):
 
   # Apply our generic configuration.
   api.chromite.configure(
-      api.properties,
-      _MASTER_CONFIG_MAP,
-      CBB_EXTRA_ARGS=tryjob_args)
+      api.properties, _GROUP_CONFIG_MAP, CBB_EXTRA_ARGS=tryjob_args)
   api.chromite.c.cbb.config = cbb_config_name
 
   # Load the Chromite configuration for our target.
@@ -97,13 +96,14 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  common_properties = {
-      'mastername': 'chromiumos.tryserver',
-      'repository': 'https://chromium.googlesource.com/chromiumos/tryjobs.git',
-      'revision': api.gitiles.make_hash('test'),
-      'slave_name': 'test',
-  }
-
+  common_test_data = sum([
+      api.builder_group.for_current('chromiumos.tryserver'),
+      api.properties(
+          repository='https://chromium.googlesource.com/chromiumos/tryjobs.git',
+          revision=api.gitiles.make_hash('test'),
+          slave_name='test',
+      ),
+  ], api.empty_test_data())
 
   # Test a CrOS tryjob.
   yield api.test(
@@ -112,8 +112,8 @@ def GenTests(api):
           buildername='full',
           cbb_config='x86-generic-full',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-          '"--remote-version=4"]',
-          **common_properties),
+          '"--remote-version=4"]'),
+      common_test_data,
   )
 
   yield api.test(
@@ -122,8 +122,8 @@ def GenTests(api):
           buildername='paladin',
           cbb_config='internal-paladin',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-          '"--remote-version=4"]',
-          **common_properties),
+          '"--remote-version=4"]'),
+      common_test_data,
   )
 
   yield api.test(
@@ -133,8 +133,8 @@ def GenTests(api):
           cbb_config='internal-paladin',
           cbb_extra_args=[
               "--timeout", "14400", "--remote-trybot", "--remote-version=4"
-          ],
-          **common_properties),
+          ]),
+      common_test_data,
   )
 
   yield api.test(
@@ -144,8 +144,8 @@ def GenTests(api):
           cbb_config='x86-generic-full',
           cbb_branch='release-R55-9999.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-          '"--remote-version=4"]',
-          **common_properties),
+          '"--remote-version=4"]'),
+      common_test_data,
   )
 
   yield api.test(
@@ -157,8 +157,8 @@ def GenTests(api):
           cbb_extra_args=json.dumps([
               '--timeout', '14400', '--remote-trybot', '--remote-version=4',
               '--branch=release-R00-0000.B'
-          ]),
-          **common_properties),
+          ])),
+      common_test_data,
   )
 
   yield api.test(
@@ -170,8 +170,8 @@ def GenTests(api):
           cbb_extra_args=json.dumps([
               '--timeout', '14400', '--remote-trybot', '--remote-version=4',
               '--branch', 'release-R00-0000.B'
-          ]),
-          **common_properties),
+          ])),
+      common_test_data,
   )
 
   yield api.test(
@@ -181,8 +181,8 @@ def GenTests(api):
           cbb_config='x86-generic-full',
           cbb_branch='release-R54-8743.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-          '"--remote-version=4"]',
-          **common_properties),
+          '"--remote-version=4"]'),
+      common_test_data,
   )
 
   # Test a CrOS tryjob with compressed "cbb_extra_args".
@@ -193,8 +193,8 @@ def GenTests(api):
           cbb_config='x86-generic-full',
           cbb_extra_args=(
               'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
-              '/PzbE2UYgFJaBNI'),
-          **common_properties),
+              '/PzbE2UYgFJaBNI')),
+      common_test_data,
   )
 
   # Test a config that is not registered in Chromite.
@@ -204,8 +204,8 @@ def GenTests(api):
           buildername='etc',
           cbb_config='xxx-fakeboard-fakebuild',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-          '"--remote-version=4"]',
-          **common_properties),
+          '"--remote-version=4"]'),
+      common_test_data,
   )
 
   # Test a config with buildbucket properties
@@ -216,10 +216,8 @@ def GenTests(api):
           cbb_config='binhost-pre-cq',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
           '"--remote-version=4"]',
-          buildbucket=json.dumps({
-              'build': {
-                  'id': '12345'
-              }
-          }),
-          **common_properties),
+          buildbucket=json.dumps({'build': {
+              'id': '12345'
+          }})),
+      common_test_data,
   )
