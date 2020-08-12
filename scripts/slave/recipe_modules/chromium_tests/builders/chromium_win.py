@@ -47,6 +47,8 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -108,6 +110,8 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -131,6 +135,8 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
