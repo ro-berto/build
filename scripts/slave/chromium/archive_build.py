@@ -7,12 +7,12 @@
 
   This script is used for developer builds.
 
-  To archive files on Google Storage, set the --gs-bucket flag to
-  'gs://<bucket-name>'. To control access to archives, set the --gs-acl flag to
-  the desired canned-acl (e.g. 'public-read', see
+  To archive files on Google Storage, set the 'gs_bucket' key in the
+  --factory-properties to 'gs://<bucket-name>'. To control access to archives,
+  set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
   https://developers.google.com/storage/docs/accesscontrol#extension for other
-  supported canned-acl values). If the --gs-acl flag is not set, the bucket's
-  default object ACL will be applied (see
+  supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
+  object ACL will be applied (see
   https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
 
   When this is run, the current directory (cwd) should be the outer build
@@ -70,12 +70,12 @@ class StagerBase(object):
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
     elif chromium_utils.IsLinux():
       # On Linux, we might have built for chromeos.  Archive the same.
-      if options.target_os == 'chromeos':
+      if options.factory_properties.get('target_os') == 'chromeos':
         self._tool_dir = os.path.join(
             self._chrome_dir, 'tools', 'build', 'chromeos'
         )
       # Or, we might have built for Android.
-      elif options.target_os == 'android':
+      elif options.factory_properties.get('target_os') == 'android':
         self._tool_dir = os.path.join(
             self._chrome_dir, 'tools', 'build', 'android'
         )
@@ -131,6 +131,7 @@ class StagerBase(object):
     )
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
 
+    self._dual_upload = options.factory_properties.get('dual_upload', False)
     self._archive_files = None
 
   def CopyFileToGS(
@@ -173,7 +174,9 @@ class StagerBase(object):
       )
 
   def TargetPlatformName(self):
-    return self.options.target_os or chromium_utils.PlatformName()
+    return self.options.factory_properties.get(
+        'target_os', chromium_utils.PlatformName()
+    )
 
   def BuildOldFilesList(self, source_file_name):
     """Build list of files from the old "file of paths" style input.
@@ -210,19 +213,19 @@ class StagerBase(object):
           filename, gs_base, gs_subdir, mimetype=mimetype, gs_acl=gs_acl
       )
 
-    if not gs_base:
+    if not gs_base or self._dual_upload:
       chromium_utils.CopyFileToDir(filename, destination)
 
   def MyMaybeMakeDirectory(self, destination, gs_base):
-    if not gs_base:
+    if not gs_base or self._dual_upload:
       chromium_utils.MaybeMakeDirectory(destination)
 
   def MyMakeWorldReadable(self, destination, gs_base):
-    if not gs_base:
+    if not gs_base or self._dual_upload:
       chromium_utils.MakeWorldReadable(destination)
 
   def MySshMakeDirectory(self, host, destination, gs_base):
-    if not gs_base:
+    if not gs_base or self._dual_upload:
       chromium_utils.SshMakeDirectory(host, destination)
 
   def MySshCopyFiles(
@@ -240,7 +243,7 @@ class StagerBase(object):
           filename, gs_base, gs_subdir, mimetype=mimetype, gs_acl=gs_acl
       )
 
-    if not gs_base:
+    if not gs_base or self._dual_upload:
       chromium_utils.SshCopyFiles(filename, host, destination)
 
   def GetExtraFiles(self, extra_archive_paths, source_file_name):
@@ -546,8 +549,8 @@ class StagerBase(object):
     self.GenerateRevisionFile()
 
     www_dir = os.path.join(self._www_dir_base, self._build_path_component)
-    gs_bucket = self.options.gs_bucket
-    gs_acl = self.options.gs_acl
+    gs_bucket = self.options.factory_properties.get('gs_bucket', None)
+    gs_acl = self.options.factory_properties.get('gs_acl', None)
     gs_base = None
     if gs_bucket:
       gs_base = '/'.join([
@@ -613,7 +616,7 @@ class StagerBase(object):
               mimetype='text/plain',
               gs_acl=gs_acl
           )
-        if not gs_base:
+        if not gs_base or self._dual_upload:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
@@ -689,7 +692,6 @@ def main():
       default='Release',
       help='build target to archive (Debug or Release)'
   )
-  option_parser.add_option('-target-os', help='os target to archive')
   option_parser.add_option(
       '--arch',
       default=archive_utils.BuildArch(),
@@ -727,12 +729,6 @@ def main():
   )
   option_parser.add_option(
       '--archive_host', default=archive_utils.Config.archive_host
-  )
-  option_parser.add_option(
-      '--gs-bucket', help='The Google Storage bucket to archive the build to'
-  )
-  option_parser.add_option(
-      '--gs-acl', help='The Google Storage ACL to apply to the archived build'
   )
   option_parser.add_option(
       '--build-name',

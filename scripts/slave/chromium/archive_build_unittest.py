@@ -55,6 +55,7 @@ class MockOptions(object):
         'got_revision': default_chromium_revision,
         'got_revision_v8': default_v8_revision,
     }
+    self.factory_properties = {}
 
 
 class PlatformError(Exception):
