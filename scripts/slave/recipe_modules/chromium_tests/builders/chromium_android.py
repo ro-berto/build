@@ -36,7 +36,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -112,7 +111,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android', 'enable_wpr_tests'],
             chromium_config_kwargs={
@@ -209,7 +207,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -229,7 +226,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -249,7 +245,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -287,7 +282,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -308,7 +302,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -329,7 +322,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -350,7 +342,6 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -428,7 +419,6 @@ SPEC.update([
             'goma_high_parallel'
         ],
         chromium_tests_apply_config=['use_swarming_command_lines'],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',

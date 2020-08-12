@@ -15,7 +15,6 @@ DEPS = [
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
-    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -54,14 +53,6 @@ def GenTests(api):
           }],
       }
   })
-  fake_swarm_hashes = {fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}
-  fake_command_lines_hash = 'ffffffffffffffffffffffffffffffff'
-  fake_command_lines = {
-      fake_test: [
-          './%s' % fake_test, '--fake-flag', '--fake-log-file',
-          '$ISOLATED_OUTDIR/fake.log'
-      ],
-  }
 
   def fake_bot_db(chromium_tests_apply_config):
     return bot_db.BotDatabase.create({
@@ -84,7 +75,8 @@ def GenTests(api):
   def fake_ci_builder(chromium_tests_apply_config):
     return sum([
         api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-        api.properties(swarm_hashes=fake_swarm_hashes),
+        api.properties(
+            swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
         api.platform('linux', 64),
         api.chromium_tests.builders(
             bot_db.BotDatabase.create({
@@ -94,8 +86,7 @@ def GenTests(api):
                             chromium_config='chromium',
                             gclient_config='chromium',
                             chromium_tests_apply_config=\
-                                chromium_tests_apply_config,
-                            isolate_server='https://isolateserver.appspot.com',
+                                chromium_tests_apply_config
                         ),
                 },
             })),
@@ -106,11 +97,18 @@ def GenTests(api):
       'use_swarming_command_lines',
       fake_ci_builder(
           chromium_tests_apply_config=['use_swarming_command_lines']),
-      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.step_data(
+          'find command lines',
+          api.json.output({fake_test: ['./%s' % fake_test, '--fake-flag']})),
       api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] %s' % fake_test,
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
+                       'test_pre_run.[trigger] %s' % fake_test, [
+                           '--relative-cwd',
+                           'out/Release',
+                           '--raw-cmd',
+                           '--',
+                           './%s' % fake_test,
+                           '--fake-flag',
+                       ]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -132,17 +130,23 @@ def GenTests(api):
   yield api.test(
       'builder_sets_command_lines_in_trigger',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
-      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.properties(
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}),
       api.platform('linux', 64),
       api.chromium_tests.builders(
           fake_bot_db(
               chromium_tests_apply_config=['use_swarming_command_lines'])),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-      api.step_data('find command lines', api.json.output(fake_command_lines)),
-      api.step_data('archive command lines',
-                    api.raw_io.output_text(fake_command_lines_hash)),
+      api.step_data(
+          'find command lines',
+          api.json.output({
+              fake_test: [
+                  './%s' % fake_test, '--fake-flag', '--log-file',
+                  'ISOLATED_OUTDIR/fake.log'
+              ]
+          })),
       api.post_process(post_process.LogContains, 'trigger', 'input',
-                       [fake_command_lines_hash]),
+                       ['--log-file', 'WILL_BE_ISOLATED_OUTDIR/fake.log']),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -150,19 +154,27 @@ def GenTests(api):
       'test_only_builder_gets_command_lines_from_properties',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
       api.properties(
-          swarm_hashes=fake_swarm_hashes,
-          swarming_command_lines_hash=fake_command_lines_hash),
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
+          swarming_command_lines={
+              fake_test: [
+                  './%s' % fake_test, '--fake-flag', '--log-file',
+                  'WILL_BE_ISOLATED_OUTDIR/fake.log'
+              ]
+          }),
       api.platform('linux', 64),
       api.chromium_tests.builders(
           fake_bot_db(
               chromium_tests_apply_config=['use_swarming_command_lines'])),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-      api.step_data('read command lines',
-                    api.file.read_json(fake_command_lines)),
       api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] fake_test',
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
+                       'test_pre_run.[trigger] fake_test', [
+                           '--relative-cwd',
+                           'out/Release',
+                           '--raw-cmd',
+                           '--',
+                           './fake_test',
+                           '--fake-flag',
+                       ]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -172,7 +184,7 @@ def GenTests(api):
           builder_group=fake_group, builder=fake_try_builder),
       api.properties(
           config='Release',
-          swarm_hashes=fake_swarm_hashes,
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
       api.platform('linux', 64),
       api.chromium_tests.trybots(
