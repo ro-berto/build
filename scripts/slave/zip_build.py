@@ -615,7 +615,11 @@ def main(argv):
   slave_utils_callback(options)
 
   if not options.master_name:
-    options.master_name = options.build_properties.get('mastername', '')
+    options.master_name = (
+        # TODO(https://crbug.com/1109276) Don't look at mastername property
+        options.build_properties.get('mastername') or
+        options.build_properties.get('builder_group', '')
+    )
   if not options.slave_name:
     options.slave_name = options.build_properties.get('slavename')
   if not options.build_number:
