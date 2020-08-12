@@ -10,5 +10,5 @@ The preferred style is PEP8 with two-space indent; that is, the [Chromium
 Python
 style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/python/python.md).
 Functions use `lowercase_with_underscores`, with the exception of the special
-functions `RunSteps` and `RunTests` in recipes. Use yapf (`git cl format`) to
-autoformat new code.
+functions `RunSteps` and `RunTests` in recipes. Use yapf
+(`git cl format --no-clang-format`) to autoformat new code.
