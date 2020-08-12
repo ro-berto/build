@@ -195,8 +195,11 @@ class BotSpec(object):
   # The name of the config to use for the test_results recipe module
   test_results_config = attrib(str, default=None)
 
-  # URL to override the isolate server to use
+  # URL to specify the isolate server to use. This is explicitly set to
+  # `None` rather than something like the public server to avoid accidentally
+  # uploading private isolates to the public server.
   isolate_server = attrib(str, default=None)
+
   # Override for the default priority used when creating swarming tasks
   swarming_default_priority = attrib(int, default=None)
   # Dimensions to apply to all created swarming tasks
