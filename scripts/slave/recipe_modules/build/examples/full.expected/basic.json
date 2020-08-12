@@ -8,7 +8,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/runtest.py",
+      "foo.py",
       "--foo",
       "--bar"
     ],
@@ -26,7 +26,7 @@
       "--show-path",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "foo.py"
     ],
     "env": {
       "PYTHONUNBUFFERED": null
@@ -98,7 +98,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/runtest.py"
+      "foo.py"
     ],
     "env": {
       "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",

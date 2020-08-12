@@ -13,21 +13,18 @@ def RunSteps(api):
   assert api.build.slave_utils_args
 
   with api.build.gsutil_py_env():
-    api.build.python(
-        'runtest',
-        api.build.repo_resource('scripts', 'slave', 'runtest.py'),
-        args=['--foo', '--bar'])
+    api.build.python('runtest', 'foo.py', args=['--foo', '--bar'])
 
   api.build.python(
       'unbuffered vpython',
-      api.build.repo_resource('scripts', 'slave', 'runtest.py'),
+      'foo.py',
       unbuffered=False,
       venv=api.path['cache'].join('path', 'to', 'venv'),
   )
 
   api.build.python(
       'legacy annotation',
-      api.build.repo_resource('scripts', 'slave', 'runtest.py'),
+      'foo.py',
       legacy_annotation=True,
   )
 
