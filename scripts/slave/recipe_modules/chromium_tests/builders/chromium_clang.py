@@ -22,6 +22,7 @@ def config(name,
   cfg = {
       'chromium_config': chromium_config,
       'chromium_apply_config': ['mb'],
+      'chromium_tests_apply_config': ['use_swarming_command_lines'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
@@ -51,6 +52,8 @@ def config(name,
         'pool': 'chrome.tests',
         'os': 'Ubuntu-14.04',
     }
+  else:
+    cfg['isolate_server'] = 'https://isolateserver.appspot.com'
 
   return name, _chromium_clang_spec(**cfg)
 
@@ -60,6 +63,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_linux',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -73,6 +78,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
@@ -91,6 +98,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
@@ -104,6 +113,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'win'],
             chromium_config_kwargs={
@@ -124,7 +135,8 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            chromium_tests_apply_config=[],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -141,7 +153,8 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            chromium_tests_apply_config=[],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -155,6 +168,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -171,6 +186,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -187,6 +204,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -215,6 +233,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -243,6 +262,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -257,6 +278,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -271,6 +294,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_android_asan',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
@@ -290,6 +315,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_android_dbg',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
@@ -310,6 +337,8 @@ SPEC = {
             chromium_config='clang_tot_android',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_apply_config=['clang_tot', 'android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -327,6 +356,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -346,6 +377,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -376,6 +408,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -396,6 +430,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac_asan',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -412,6 +448,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_official_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -440,6 +477,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -460,6 +499,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -480,6 +521,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_official_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
@@ -508,6 +550,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -524,6 +568,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -544,6 +590,8 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
