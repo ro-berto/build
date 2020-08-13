@@ -130,7 +130,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'builder_sets_command_line_hash_in_trigger',
+      'builder_sets_command_line_hash_and_cwd_in_trigger',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.platform('linux', 64),
@@ -143,11 +143,57 @@ def GenTests(api):
                     api.raw_io.output_text(fake_command_lines_hash)),
       api.post_process(post_process.LogContains, 'trigger', 'input',
                        [fake_command_lines_hash]),
+      api.post_process(post_process.LogContains, 'trigger', 'input',
+                       ['swarming_command_lines_cwd', 'out/Release']),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'test_only_builder_gets_command_lines_hash_from_trigger',
+      'test_only_builder_gets_command_lines_hash_and_cwd_from_trigger',
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(
+          swarm_hashes=fake_swarm_hashes,
+          swarming_command_lines_hash=fake_command_lines_hash,
+          swarming_command_lines_cwd='out/Release_x64'),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          fake_bot_db(
+              chromium_tests_apply_config=['use_swarming_command_lines'])),
+      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
+      api.step_data('read command lines',
+                    api.file.read_json(fake_command_lines)),
+      api.post_process(
+          post_process.StepCommandContains, 'test_pre_run.[trigger] fake_test',
+          ['--relative-cwd', 'out/Release_x64', '--raw-cmd', '--'] +
+          fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # This can happen if the tester picks up the config but the builder
+  # does not, either due to misconfiguration or timing issues.
+  # It should be safe to remove this test once everything is flipped to
+  # always send the cmd line and cwd.
+  yield api.test(
+      'test_only_builder_does_not_get_command_line_hash_or_cwd_from_trigger',
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(
+          swarm_hashes=fake_swarm_hashes, swarming_command_lines_hash=''),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          fake_bot_db(
+              chromium_tests_apply_config=['use_swarming_command_lines'])),
+      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
+      api.post_process(post_process.DoesNotRun, 'download command lines'),
+      api.post_process(post_process.DoesNotRun, 'read command lines'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # This can happen if the tester picks up the config but the builder
+  # does not, either due to misconfiguration or timing issues.
+  # It should be safe to remove this test once everything is flipped to
+  # always send the cmd line and cwd.
+  yield api.test(
+      'test_only_builder_does_not_get_cwd_from_trigger',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
       api.properties(
           swarm_hashes=fake_swarm_hashes,
@@ -161,25 +207,7 @@ def GenTests(api):
                     api.file.read_json(fake_command_lines)),
       api.post_process(post_process.StepCommandContains,
                        'test_pre_run.[trigger] fake_test',
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # This can happen if the tester picks up the config but the builder
-  # does not, either due to misconfiguration or timing issues.
-  yield api.test(
-      'test_only_builder_does_not_get_command_line_hash_from_trigger',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(
-          swarm_hashes=fake_swarm_hashes, swarming_command_lines_hash=''),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
-      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-      api.post_process(post_process.DoesNotRun, 'download command lines'),
-      api.post_process(post_process.DoesNotRun, 'read command lines'),
+                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--']),
       api.post_process(post_process.DropExpectation),
   )
 

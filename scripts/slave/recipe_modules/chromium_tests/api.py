@@ -1180,6 +1180,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_trigger_properties['swarming_command_lines_hash'] = (
             self._archive_command_lines(self._swarming_command_lines,
                                         bot.settings.isolate_server))
+        additional_trigger_properties['swarming_command_lines_cwd'] = (
+            self.m.path.relpath(self.m.chromium.output_dir,
+                                self.m.path['checkout']))
 
     if (package_transfer and
         bot.settings.execution_mode == bot_spec_module.COMPILE_AND_TEST):
@@ -1239,6 +1242,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           as_log='why is this running?')
 
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
+    cwd = self.m.properties.get('swarming_command_lines_cwd', '')
     if (self.m.chromium.c.project_generator.tool == 'mb' and
         self.c.use_swarming_command_lines and hsh):
       self._swarming_command_lines = self._download_command_lines(
@@ -1250,8 +1254,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             # lists come back from properties as tuples, but the swarming
             # api expects this to be an actual list.
             test.raw_cmd = list(command_line)
-            test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
-                                                    self.m.path['checkout'])
+            if cwd:
+              test.relative_cwd = cwd
+            else:
+              test.relative_cwd = self.m.path.relpath(
+                  self.m.chromium.output_dir, self.m.path['checkout'])
 
   def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
     self.m.python.succeeding_step(
