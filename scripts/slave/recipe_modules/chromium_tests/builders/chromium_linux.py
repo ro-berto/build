@@ -45,6 +45,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -58,6 +60,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -71,6 +75,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -84,6 +90,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -95,6 +103,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -107,6 +117,8 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -120,6 +132,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -133,6 +147,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -168,6 +184,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -200,6 +218,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -213,6 +233,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -224,6 +246,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -237,6 +261,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -248,19 +274,21 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'Fuchsia ARM64 Cast Audio':
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64'],
             chromium_config_kwargs={
@@ -289,6 +317,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -320,11 +350,15 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=[
+                'staging',
+                'use_swarming_command_lines',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_tests_apply_config=['staging'],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -332,6 +366,8 @@ SPEC = {
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
