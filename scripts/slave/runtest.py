@@ -312,11 +312,9 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
   elif log_processor_class.__name__ == 'GTestLogParser':
     tracker_obj = log_processor_class()
   elif log_processor_class.__name__ == 'GTestJSONParser':
-    tracker_obj = log_processor_class((
-        # TODO(https://crbug.com/1109276) Don't look at mastername property
-        options.build_properties.get('mastername') or
-        options.build_properties.get('builder_group', '')
-    ))
+    tracker_obj = log_processor_class(
+        options.build_properties.get('mastername')
+    )
   else:
     revision = _GetMainRevision(options) or 'undefined'
 
@@ -379,12 +377,7 @@ def _ResultsDashboardDict(options):
       'test': options.test_type,
       'url': options.results_url,
       'perf_dashboard_machine_group': perf_dashboard_machine_group,
-      # TODO(gbeaty) The perf dashboard should be updated to use a different key
-      'mastername': (
-          # TODO(https://crbug.com/1109276) Don't look at mastername property
-          options.build_properties.get('mastername') or
-          options.build_properties.get('builder_group')
-      ),
+      'mastername': options.build_properties.get('mastername'),
       'buildername': options.build_properties.get('buildername'),
       'buildnumber': options.build_properties.get('buildnumber'),
       'build_dir': build_dir,
@@ -595,9 +588,7 @@ def _UploadProfilingData(options, args):
   builder_name = options.build_properties.get('buildername')
   if ((builder_name != 'XP Perf (dbg) (2)' and
        builder_name != 'Linux Perf (lowmem)') or
-      # TODO(https://crbug.com/1109276) Don't look at mastername property
-      (options.build_properties.get('mastername') or
-       options.build_properties.get('builder_group')) != 'chromium.perf' or
+      options.build_properties.get('mastername') != 'chromium.perf' or
       not options.build_properties.get('got_revision')):
     return 0
 
@@ -680,21 +671,17 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe, step_name):
   )
 
   # Use a directory structure so that the json results could be indexed by
-  # builder_group/builder_name/build_number/step_name.
-  builder_group = (
-      # TODO(https://crbug.com/1109276) Don't look at mastername property
-      build_properties.get('mastername') or
-      build_properties.get('builder_group')
-  )
+  # master_name/builder_name/build_number/step_name.
+  master_name = build_properties.get('mastername')
   builder_name = build_properties.get('buildername')
   build_number = build_properties.get('buildnumber')
   buildbot_json_gs_path = ''
-  if (builder_group and builder_name and
+  if (master_name and builder_name and
       (build_number is not None and build_number != '') and step_name):
     # build_number could be zero.
     buildbot_json_gs_path = (
         'gs://chrome-gtest-results/buildbot/%s/%s/%d/%s.json.gz' %
-        (builder_group, builder_name, build_number, step_name)
+        (master_name, builder_name, build_number, step_name)
     )
 
   fd, target_json_path = tempfile.mkstemp()
@@ -744,40 +731,25 @@ def _UploadGtestJsonSummary(json_path, build_properties, test_exe, step_name):
             for run_index, run_data in enumerate(test_runs):
               row = {
                   'test_name':
-                      test_name,
-                  'run_index':
-                      run_index,
-                  'elapsed_time_ms':
-                      run_data['elapsed_time_ms'],
-                  'status':
-                      run_data['status'],
-                  'test_exe':
-                      target_json['test_exe'],
+                      test_name, 'run_index':
+                          run_index, 'elapsed_time_ms':
+                              run_data['elapsed_time_ms'], 'status':
+                                  run_data['status'], 'test_exe':
+                                      target_json['test_exe'],
                   'global_tags':
-                      target_json['gtest_results']['global_tags'],
-                  'slavename':
-                      target_json['build_properties'].get('slavename', ''),
+                      target_json['gtest_results']['global_tags'], 'slavename':
+                          target_json['build_properties'].get('slavename', ''),
                   'buildername':
                       target_json['build_properties'].get('buildername', ''),
-                  # TODO(gbeaty) If test-results doesn't get turned down soon,
-                  # update they key
-                  'mastername': (
-                      # TODO(https://crbug.com/1109276) Don't look at mastername
-                      # property
-                      target_json['builder_properties'].get('mastername') or
-                      target_json['builder_properties']
-                      .get('builder_group', '')
-                  ),
+                  'mastername':
+                      target_json['build_properties'].get('mastername', ''),
                   'raw_json_gs_path':
-                      date_json_gs_path,
-                  'timestamp':
-                      now.strftime('%Y-%m-%d %H:%M:%S.%f'),
+                      date_json_gs_path, 'timestamp':
+                          now.strftime('%Y-%m-%d %H:%M:%S.%f'),
                   'flaky_failures':
-                      flaky_failures,
-                  'num_successes':
-                      num_successes,
-                  'num_failures':
-                      num_failures,
+                      flaky_failures, 'num_successes':
+                          num_successes, 'num_failures':
+                              num_failures
               }
               gzipf.write(json.dumps(row) + '\n')
 

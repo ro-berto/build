@@ -90,16 +90,11 @@ def GetBuildRevisions(src_dir, revision_dir=None):
 
 
 def GetZipFileNames(
-    builder_group,
-    buildnumber,
-    parent_buildnumber,
-    build_revision,
-    extract=False,
-    use_try_buildnumber=True
-):
+    mastername, buildnumber, parent_buildnumber, build_revision,
+    extract=False, use_try_buildnumber=True):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
-  if 'try' in builder_group and use_try_buildnumber:
+  if 'try' in mastername and use_try_buildnumber:
     if extract:
       if not parent_buildnumber:
         raise Exception('missing parent_buildnumber')
