@@ -64,7 +64,7 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='ClangToTLinuxASanLibfuzzer',
       ),
       api.step_data('compile', retcode=1),

@@ -100,7 +100,7 @@ def GenTests(api):
   yield api.test(
       'basic_linux_tryjob',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
@@ -114,7 +114,7 @@ def GenTests(api):
   yield api.test(
       'basic_linux_tryjob_with_compile',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
@@ -138,7 +138,7 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
+          builder_group='tryserver.chromium.linux',
           builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
