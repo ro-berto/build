@@ -32,7 +32,8 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.generic_build(
-          mastername='tryserver.chromium.perf', builder='Android Compile Perf'),
+          builder_group='tryserver.chromium.perf',
+          builder='Android Compile Perf'),
       api.chromium_tests.read_source_side_spec(
           'chromium.perf', {
               'Android One Perf': {
@@ -47,7 +48,8 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.chromium.generic_build(
-          mastername='tryserver.chromium.perf', builder='Android Compile Perf'),
+          builder_group='tryserver.chromium.perf',
+          builder='Android Compile Perf'),
       api.chromium_tests.read_source_side_spec(
           'chromium.perf', {
               'Android One Perf': {
