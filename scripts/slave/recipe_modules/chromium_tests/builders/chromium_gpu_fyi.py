@@ -7,7 +7,10 @@ from .. import bot_spec
 
 def _chromium_gpu_fyi_spec(**kwargs):
   if kwargs.get('execution_mode') != bot_spec.PROVIDE_TEST_SPEC:
-    kwargs['build_gs_bucket'] = 'chromium-gpu-fyi-archive'
+    kwargs.setdefault('build_gs_bucket', 'chromium-gpu-fyi-archive')
+    kwargs.setdefault('chromium_tests_apply_config',
+                      []).append('use_swarming_command_lines')
+    kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
   return bot_spec.BotSpec.create(**kwargs)
 
 
@@ -438,6 +441,8 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
