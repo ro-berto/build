@@ -174,7 +174,7 @@ HOST_XML = (
     '<counter type="CLASS" missed="0" covered="1"/>'
     '</sourcefile>'
     # This source file is not found in DEVICE_XML. We'll want to make
-    # sure it's in the combined report, and that it's coverage
+    # sure it's in the combined report, and that its coverage
     # numbers are included.
     '<sourcefile name="new sourcefile.java">'
     '<line nr="1" mi="5" ci="6" mb="2" cb="3"/>'
@@ -291,7 +291,6 @@ class GenerateJacocoReportTest(unittest.TestCase):
   def testCombineXmlFiles(self):
     try:
       temp_dir = tempfile.mkdtemp()
-      #with tempfile.mkdtemp() as temp_dir:
       temp_device_f = os.path.join(temp_dir, 'temp_device')
       temp_host_f = os.path.join(temp_dir, 'temp_host')
       temp_result_f = os.path.join(temp_dir, 'temp_result')
