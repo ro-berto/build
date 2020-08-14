@@ -88,27 +88,30 @@ def GenTests(api):
                       author='gbiv@google.com'):
     commit_message = 'Revert foo' if is_revert else 'foo'
     commit_message += '\nTriciumTest'
-    test = (
-        api.test(name) + api.properties.tryserver(
-            build_config='Release',
+    test = api.test(
+        name,
+        api.chromium.try_build(
             mastername='tryserver.chromium.linux',
-            buildername='linux_chromium_compile_rel_ng',
-            buildnumber='1234',
-            patch_set=1) + api.platform('linux', 64) + api.override_step_data(
-                'gerrit changes',
-                api.json.output([{
-                    'revisions': {
-                        'a' * 40: {
-                            '_number': 1,
-                            'commit': {
-                                'author': {
-                                    'email': author,
-                                },
-                                'message': commit_message,
-                            }
+            builder='linux_chromium_compile_rel_ng',
+            build_number=1234,
+            patch_set=1),
+        api.platform('linux', 64),
+        api.override_step_data(
+            'gerrit changes',
+            api.json.output([{
+                'revisions': {
+                    'a' * 40: {
+                        '_number': 1,
+                        'commit': {
+                            'author': {
+                                'email': author,
+                            },
+                            'message': commit_message,
                         }
                     }
-                }])))
+                }
+            }])),
+    )
 
     existing_files = [
         api.path['cache'].join('builder', 'src', x) for x in affected_files

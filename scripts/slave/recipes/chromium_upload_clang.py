@@ -93,12 +93,8 @@ def GenTests(api):
   yield api.test(
       'mac',
       api.platform.name('mac'),
-      api.properties.tryserver(
-          buildername='mac_upload_clang', mastername='tryserver.chromium.mac'),
-      api.buildbucket.try_build(
-          project='chromium',
-          builder='mac_upload_clang',
-          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.mac', builder='mac_upload_clang'),
       api.post_process(post_process.MustRun, 'install xcode'),
       api.post_process(post_process.MustRun, 'select XCode'),
       api.post_process(post_process.StatusSuccess),
@@ -108,13 +104,8 @@ def GenTests(api):
   yield api.test(
       'linux',
       api.platform.name('linux'),
-      api.properties.tryserver(
-          buildername='linux_upload_clang',
-          mastername='tryserver.chromium.linux'),
-      api.buildbucket.try_build(
-          project='chromium',
-          builder='linux_upload_clang',
-          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux_upload_clang'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

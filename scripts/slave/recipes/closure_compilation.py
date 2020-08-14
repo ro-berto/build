@@ -44,7 +44,7 @@ def GenTests(api):
   for mastername, config in MASTERS.iteritems():
     yield api.test(
         config['testname'],
-        api.properties.generic(
+        api.properties(
             buildername=config['buildername'],
             mastername=mastername,
         ),
