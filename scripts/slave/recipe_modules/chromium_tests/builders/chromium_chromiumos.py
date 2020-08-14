@@ -87,6 +87,11 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     _config(
+        'linux-lacros-rel',
+        chromium_tests_apply_config=['use_swarming_command_lines'],
+        isolate_server='https://isolateserver.appspot.com',
+        gclient_apply_config=['checkout_prebuilt_ash_chrome']),
+    _config(
         'linux-lacros-tester-rel',
         chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',

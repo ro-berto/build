@@ -965,6 +965,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-lacros-builder-rel',
                 execution_mode=try_spec.COMPILE,
             ),
+       'linux-lacros-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-lacros-rel',
+            ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-chromeos-amd64-generic':
             try_spec.TrySpec.create_for_single_mirror(
