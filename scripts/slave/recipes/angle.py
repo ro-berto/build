@@ -3,21 +3,22 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/osx_sdk',
-  'goma',
-  'depot_tools/gsutil',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'recipe_engine/time',
+    'builder_group',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/osx_sdk',
+    'goma',
+    'depot_tools/gsutil',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'recipe_engine/time',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -142,18 +143,16 @@ def GenTests(api):
   yield api.test(
       'linux',
       api.platform('linux', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
-          mastername='client.angle',
-          buildername='linux',
-          buildnumber='1234',
-          bot_id='test_slave'),
+          buildername='linux', buildnumber='1234', bot_id='test_slave'),
   )
   yield api.test(
       'linux_gcc',
       api.platform('linux', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
           clang=False,
-          mastername='client.angle',
           buildername='linux-gcc',
           buildnumber='1234',
           bot_id='test_slave'),
@@ -161,18 +160,16 @@ def GenTests(api):
   yield api.test(
       'win',
       api.platform('win', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
-          mastername='client.angle',
-          buildername='windows',
-          buildnumber='1234',
-          bot_id='test_slave'),
+          buildername='windows', buildnumber='1234', bot_id='test_slave'),
   )
   yield api.test(
       'win_clang',
       api.platform('win', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
           clang=True,
-          mastername='client.angle',
           buildername='windows',
           buildnumber='1234',
           bot_id='test_slave'),
@@ -180,11 +177,11 @@ def GenTests(api):
   yield api.test(
       'win_rel_msvc_x86',
       api.platform('win', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
           clang=False,
           debug=False,
           target_cpu='x86',
-          mastername='client.angle',
           buildername='windows',
           buildnumber='1234',
           bot_id='test_slave'),
@@ -192,11 +189,11 @@ def GenTests(api):
   yield api.test(
       'winuwp_dbg_msvc_x64',
       api.platform('win', 64),
+      api.builder_group.for_current('client.angle'),
       api.properties(
           clang=False,
           debug=True,
           uwp=True,
-          mastername='client.angle',
           buildername='windows',
           buildnumber='1234',
           bot_id='test_slave'),
