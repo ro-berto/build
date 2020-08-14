@@ -91,7 +91,7 @@ def GenTests(api):
     test = api.test(
         name,
         api.chromium.try_build(
-            mastername='tryserver.chromium.linux',
+            builder_group='tryserver.chromium.linux',
             builder='linux_chromium_compile_rel_ng',
             build_number=1234,
             patch_set=1),

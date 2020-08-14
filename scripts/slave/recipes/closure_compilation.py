@@ -5,25 +5,25 @@
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
-  'chromium',
-  'depot_tools/gclient',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
+    'builder_group',
+    'chromium',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
-
-MASTERS = freeze({
-  'chromium.fyi': {
-    'buildername': 'Closure Compilation Linux',
-    'testname': 'closure_compilation_fyi',
-  },
-  'tryserver.chromium.linux': {
-    'buildername': 'closure_compilation',
-    'testname': 'closure_compilation_try',
-  },
+BUILDER_GROUPS = freeze({
+    'chromium.fyi': {
+        'buildername': 'Closure Compilation Linux',
+        'testname': 'closure_compilation_fyi',
+    },
+    'tryserver.chromium.linux': {
+        'buildername': 'closure_compilation',
+        'testname': 'closure_compilation_try',
+    },
 })
 
 
@@ -41,11 +41,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for mastername, config in MASTERS.iteritems():
+  for group, config in BUILDER_GROUPS.iteritems():
     yield api.test(
         config['testname'],
-        api.properties(
-            buildername=config['buildername'],
-            mastername=mastername,
-        ),
+        api.builder_group.for_current(group),
+        api.properties(buildername=config['buildername']),
     )

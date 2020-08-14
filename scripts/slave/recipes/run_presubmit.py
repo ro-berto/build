@@ -330,7 +330,6 @@ def GenTests(api):
     yield api.test(
         repo_name,
         api.properties.tryserver(
-            mastername='tryserver.chromium.linux',
             buildername='%s_presubmit' % repo_name,
             repo_name=repo_name,
             gerrit_project=repo_name),
@@ -346,7 +345,6 @@ def GenTests(api):
   yield api.test(
       'chromium_timeout',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -367,7 +365,6 @@ def GenTests(api):
   yield api.test(
       'chromium_timeout_with_error',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -407,7 +404,6 @@ def GenTests(api):
       'chromium_dry_run',
       api.cq(dry_run=True),
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src',
@@ -424,7 +420,6 @@ def GenTests(api):
   yield api.test(
       'infra_with_runhooks',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='infra_presubmit',
           repo_name='infra',
           gerrit_project='infra/infra',
@@ -441,7 +436,6 @@ def GenTests(api):
   yield api.test(
       'recipes-py',
       api.properties.tryserver(
-          mastername='tryserver.infra',
           buildername='infra_presubmit',
           repo_name='recipes_py',
           gerrit_project='infra/luci/recipes-py',
@@ -458,7 +452,6 @@ def GenTests(api):
   yield api.test(
       'recipes-py-windows',
       api.properties.tryserver(
-          mastername='tryserver.infra',
           buildername='infra_presubmit',
           repo_name='recipes_py',
           gerrit_project='infra/luci/recipes-py',
@@ -476,7 +469,6 @@ def GenTests(api):
   yield api.test(
       'luci-py',
       api.properties.tryserver(
-          mastername='luci.infra.try',
           buildername='Luci-py Presubmit',
           repo_name='luci_py',
           gerrit_project='infra/luci/luci-py'),
@@ -492,7 +484,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-failure',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -557,7 +548,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-failure-long-message',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -616,7 +606,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-infra-failure',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -657,7 +646,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-failure-no-json',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -670,7 +658,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-infra-failure-no-json',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -683,7 +670,6 @@ def GenTests(api):
   yield api.test(
       'presubmit-failure-message-with-underscores',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repo_name='chromium',
           gerrit_project='chromium/src'),
@@ -721,7 +707,6 @@ def GenTests(api):
   yield api.test(
       'repository_url_with_solution_name',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
           buildername='chromium_presubmit',
           repository_url='https://skia.googlesource.com/skia.git',
           gerrit_project='skia',
@@ -738,7 +723,6 @@ def GenTests(api):
   yield api.test(
       'v8_with_cache',
       api.properties.tryserver(
-          mastername='tryserver.v8',
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',
@@ -748,7 +732,6 @@ def GenTests(api):
   yield api.test(
       'v8_with_cache_infra_config_branch',
       api.properties.tryserver(
-          mastername='tryserver.v8',
           buildername='v8_presubmit',
           repo_name='v8',
           gerrit_project='v8/v8',

@@ -3,9 +3,10 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'recipe_engine/properties',
+    'builder_group',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'recipe_engine/properties',
 ]
 
 
@@ -24,8 +25,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          mastername='master.tryserver.client.custom_tabs_client',
-          buildername='linux',
-          bot_id='linux_slave'),
+      api.builder_group.for_current(
+          'master.tryserver.client.custom_tabs_client'),
+      api.properties(buildername='linux', bot_id='linux_slave'),
   )

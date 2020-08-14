@@ -39,7 +39,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.platform('linux', 64),
@@ -66,7 +66,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_gtest',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -89,7 +89,7 @@ def GenTests(api):
       # The chromium.gpu.fyi bots use serialize_tests in order to reduce
       # load on the GPU bots in the Swarming pool.
       api.chromium.ci_build(
-          mastername='chromium.gpu.fyi',
+          builder_group='chromium.gpu.fyi',
           builder='Linux FYI Release (NVIDIA)',
           parent_buildername='GPU FYI Linux Builder'),
       api.properties(
@@ -144,7 +144,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_gtest_mac_gpu',
       api.chromium.ci_build(
-          mastername='chromium.mac',
+          builder_group='chromium.mac',
           builder='Mac10.13 Tests',
           parent_buildername='Mac Builder',
       ),
@@ -185,7 +185,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_gtest_override_compile_targets',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.properties(swarm_hashes={
           'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       }),
@@ -208,7 +208,7 @@ def GenTests(api):
   yield api.test(
       'build_dynamic_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -224,7 +224,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -255,7 +255,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_local_isolated_script_test_with_failed_json_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -285,7 +285,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_local_isolated_script_test_with_unknown_json_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -316,7 +316,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_local_isolated_script_test_with_corrupt_json_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -347,7 +347,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_local_isolated_script_test_with_passed_json_results',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -377,7 +377,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_local_isolated_script_test_with_custom_results_handler',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -408,7 +408,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_isolated_script_test_harness_failure_zero_retcode',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -438,7 +438,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_isolated_script_test_harness_failure_no_json',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -461,7 +461,7 @@ def GenTests(api):
   yield api.test(
       'build_dynamic_isolated_script_test_compile_target_overriden',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -481,7 +481,7 @@ def GenTests(api):
   yield api.test(
       'build_dynamic_swarmed_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -500,7 +500,7 @@ def GenTests(api):
   yield api.test(
       'build_dynamic_swarmed_isolated_script_test_compile_target_overidden',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -523,7 +523,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_passed_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -547,7 +547,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_passed_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           build_number=1234,
           parent_buildername='Linux Builder',
@@ -589,7 +589,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_corrupt_json_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -627,7 +627,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_invalid_json_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -656,7 +656,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_failed_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -693,7 +693,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_script_test_missing_shard',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -730,7 +730,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_script_test_harness_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -767,7 +767,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_harness_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -805,7 +805,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_disabled',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -844,7 +844,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_missing_all_shards',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -886,7 +886,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_missing_shard',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -925,7 +925,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_isolated_script_test_linux_gpu',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -960,7 +960,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_isolated_script_test_mac_gpu',
       api.chromium.ci_build(
-          mastername='chromium.mac',
+          builder_group='chromium.mac',
           builder='Mac10.13 Tests',
           parent_buildername='Mac Builder'),
       api.properties(swarm_hashes={
@@ -1001,7 +1001,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_isolated_script_test_win_gpu',
       api.chromium.ci_build(
-          mastername='chromium.win',
+          builder_group='chromium.win',
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder'),
       api.properties(swarm_hashes={
@@ -1046,7 +1046,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_isolated_script_test_win_non_gpu',
       api.chromium.ci_build(
-          mastername='chromium.win',
+          builder_group='chromium.win',
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder'),
       api.properties(swarm_hashes={
@@ -1073,7 +1073,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_failed_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1107,7 +1107,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_passed_with_bad_retcode_isolated_script_test',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1141,7 +1141,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_passed_isolated_script_test_with_swarming_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1178,7 +1178,7 @@ def GenTests(api):
       'dynamic_swarmed_passed_isolated_script_test'
       '_with_swarming_failure_invalid',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1214,7 +1214,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_swarmed_isolated_script_test_failure_no_result_json',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1242,7 +1242,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_junit_test',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.chromium_tests.read_source_side_spec(
           'chromium.android', {
@@ -1257,7 +1257,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_on_builder',
       api.chromium.ci_build(
-          mastername='chromium.linux', builder='Linux Builder'),
+          builder_group='chromium.linux', builder='Linux Builder'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1277,7 +1277,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_win',
       api.chromium.ci_build(
-          mastername='chromium.win',
+          builder_group='chromium.win',
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder'),
       api.platform('win', 64),
@@ -1299,7 +1299,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_android',
       api.chromium.ci_build(
-          mastername='chromium.android',
+          builder_group='chromium.android',
           builder='Lollipop Phone Tester',
           parent_buildername='Android arm Builder (dbg)'),
       api.chromium_tests.read_source_side_spec('chromium.android', {
@@ -1314,7 +1314,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_fuchsia',
       api.chromium.ci_build(
-          mastername='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
       api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec('chromium.fyi', {
           'Fuchsia': {
@@ -1329,7 +1329,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_memory_asan_no_lsan',
       api.chromium.ci_build(
-          mastername='chromium.memory',
+          builder_group='chromium.memory',
           builder='Linux ASan Tests (sandboxed)',
           parent_buildername='Linux ASan LSan Builder'),
       api.platform('linux', 64),
@@ -1344,7 +1344,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_memory_builder',
       api.chromium.ci_build(
-          mastername='chromium.memory',
+          builder_group='chromium.memory',
           builder='Linux ASan LSan Builder',
           parent_buildername=None,
           revision='a' * 40),
@@ -1362,7 +1362,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_gtest_memory_mac64',
       api.chromium.ci_build(
-          mastername='chromium.memory',
+          builder_group='chromium.memory',
           builder='Mac ASan 64 Tests (1)',
           parent_buildername='Mac ASan 64 Builder'),
       api.platform('mac', 64),
@@ -1376,7 +1376,7 @@ def GenTests(api):
   yield api.test(
       'tsan',
       api.chromium.ci_build(
-          mastername='chromium.memory',
+          builder_group='chromium.memory',
           builder='Linux TSan Tests',
           parent_buildername='Linux TSan Builder'),
       api.platform('linux', 64),
@@ -1392,7 +1392,7 @@ def GenTests(api):
   yield api.test(
       'msan',
       api.chromium.ci_build(
-          mastername='chromium.memory',
+          builder_group='chromium.memory',
           builder='Linux MSan Tests',
           parent_buildername='Linux MSan Builder'),
       api.platform('linux', 64),
@@ -1408,7 +1408,7 @@ def GenTests(api):
   yield api.test(
       'buildnumber_zero',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder',
           build_number=0),
@@ -1431,7 +1431,7 @@ def GenTests(api):
   yield api.test(
       'one_failure_keeps_going_dynamic_tests',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.platform('linux', 64),
@@ -1455,7 +1455,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_script_test_with_args',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.platform('linux', 64),
@@ -1474,7 +1474,7 @@ def GenTests(api):
   yield api.test(
       'dynamic_script_test_failure',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.platform('linux', 64),
@@ -1498,7 +1498,7 @@ def GenTests(api):
   yield api.test(
       'ensure_goma_fail',
       api.chromium.ci_build(
-          mastername='chromium.fyi',
+          builder_group='chromium.fyi',
           builder='Linux remote_run Builder',
           build_number=77457),
       api.override_step_data(
@@ -1522,7 +1522,7 @@ def GenTests(api):
   yield api.test(
       'gtest_custom_merge_script',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1549,7 +1549,7 @@ def GenTests(api):
   yield api.test(
       'gtest_bad_custom_merge_script',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1575,7 +1575,7 @@ def GenTests(api):
   yield api.test(
       'isolated_script_test_custom_merge_script',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1604,7 +1604,7 @@ def GenTests(api):
   yield api.test(
       'isolated_script_test_bad_custom_merge_script',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1631,7 +1631,7 @@ def GenTests(api):
   yield api.test(
       'isolated_script_test_custom_merge_script_with_args',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1664,7 +1664,7 @@ def GenTests(api):
   yield api.test(
       'isolated_script_test_custom_results_handler',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1691,7 +1691,7 @@ def GenTests(api):
   yield api.test(
       'isolated_script_test_invalid_results_handler',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
@@ -1713,7 +1713,7 @@ def GenTests(api):
   yield api.test(
       'webrtc_chromium_mac_tester',
       api.chromium.ci_build(
-          mastername='chromium.webrtc',
+          builder_group='chromium.webrtc',
           builder='WebRTC Chromium Mac Tester',
           parent_buildername='WebRTC Chromium Mac Builder'),
       api.platform('mac', 64),
@@ -1728,7 +1728,7 @@ def GenTests(api):
   yield api.test(
       'webrtc_chromium_mac_tester_failure',
       api.chromium.ci_build(
-          mastername='chromium.webrtc',
+          builder_group='chromium.webrtc',
           builder='WebRTC Chromium Mac Tester',
           parent_buildername='WebRTC Chromium Mac Builder'),
       api.platform('mac', 64),

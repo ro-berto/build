@@ -129,7 +129,6 @@ def GenTests(api):
     test = (
         api.test(name) + api.properties.tryserver(
             build_config='Release',
-            mastername='tryserver.chromium.linux',
             buildername='tricium-metrics-analysis',
             buildnumber='1234',
             patch_set=1))

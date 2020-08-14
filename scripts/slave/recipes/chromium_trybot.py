@@ -80,7 +80,7 @@ def GenTests(api):
   yield api.test(
       'process_dumps_failure',
       api.chromium.try_build(
-          mastername='tryserver.chromium.win', builder='win7-rel'),
+          builder_group='tryserver.chromium.win', builder='win7-rel'),
       api.platform.name('win'),
       api.chromium_tests.read_source_side_spec('chromium.win', {
           'Win7 Tests (1)': {
@@ -406,7 +406,7 @@ def GenTests(api):
   yield api.test(
       'runhooks_failure',
       api.chromium.try_build(
-          builder='win7-rel', mastername='tryserver.chromium.win'),
+          builder='win7-rel', builder_group='tryserver.chromium.win'),
       api.platform.name('win'),
       api.step_data('gclient runhooks (with patch)', retcode=1),
       api.step_data('gclient runhooks (without patch)', retcode=1),
@@ -434,7 +434,7 @@ def GenTests(api):
       'compile_failure_with_component_rev',
       api.chromium.try_build(
           project='v8',
-          mastername='tryserver.v8',
+          builder_group='tryserver.v8',
           builder='v8_linux_chromium_gn_rel',
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
@@ -606,7 +606,7 @@ def GenTests(api):
       'use_v8_patch_on_chromium_trybot',
       api.chromium.try_build(
           builder='win7-rel',
-          mastername='tryserver.chromium.win',
+          builder_group='tryserver.chromium.win',
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
       api.platform.name('win'),
@@ -642,7 +642,7 @@ def GenTests(api):
       'use_skia_patch_on_chromium_trybot',
       api.chromium.try_build(
           builder='win7-rel',
-          mastername='tryserver.chromium.win',
+          builder_group='tryserver.chromium.win',
           git_repo='https://skia.googlesource.com/skia'),
       api.platform.name('win'),
   )
@@ -743,7 +743,7 @@ def GenTests(api):
   yield api.test(
       'use_skia_patch_on_blink_trybot',
       api.chromium.try_build(
-          mastername='tryserver.blink',
+          builder_group='tryserver.blink',
           builder='mac10.12-blink-rel',
           git_repo='https://skia.googlesource.com/skia'),
       api.platform.name('mac'),
@@ -752,7 +752,7 @@ def GenTests(api):
   yield api.test(
       'use_v8_patch_on_blink_trybot',
       api.chromium.try_build(
-          mastername='tryserver.blink',
+          builder_group='tryserver.blink',
           builder='mac10.12-blink-rel',
           git_repo='https://chromium.googlesource.com/v8/v8'),
       api.platform.name('mac'),

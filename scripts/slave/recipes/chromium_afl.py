@@ -123,7 +123,7 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.chromium.ci_build(
-          mastername='chromium.fuzz', builder='Afl Upload Linux ASan'),
+          builder_group='chromium.fuzz', builder='Afl Upload Linux ASan'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

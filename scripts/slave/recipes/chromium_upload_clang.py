@@ -94,7 +94,7 @@ def GenTests(api):
       'mac',
       api.platform.name('mac'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.mac', builder='mac_upload_clang'),
+          builder_group='tryserver.chromium.mac', builder='mac_upload_clang'),
       api.post_process(post_process.MustRun, 'install xcode'),
       api.post_process(post_process.MustRun, 'select XCode'),
       api.post_process(post_process.StatusSuccess),
@@ -105,7 +105,8 @@ def GenTests(api):
       'linux',
       api.platform.name('linux'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux', builder='linux_upload_clang'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux_upload_clang'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
