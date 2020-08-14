@@ -29,39 +29,35 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties.generic(mastername='tryserver.chromium.perf',
-                           buildername='Android Compile Perf') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.perf', {
-            'Android One Perf': {
-                'isolated_scripts': [
-                    {
-                        'isolate_name': 'telemetry_perf_tests',
-                        'name': 'benchmark',
-                    },
-                ],
-            },
-        })
+  yield api.test(
+      'basic',
+      api.chromium.generic_build(
+          mastername='tryserver.chromium.perf', builder='Android Compile Perf'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.perf', {
+              'Android One Perf': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_perf_tests',
+                      'name': 'benchmark',
+                  },],
+              },
+          }),
   )
 
-  yield (
-    api.test('compile_failure') +
-    api.properties.generic(mastername='tryserver.chromium.perf',
-                           buildername='Android Compile Perf') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.perf', {
-            'Android One Perf': {
-                'isolated_scripts': [
-                    {
-                        'isolate_name': 'telemetry_perf_tests',
-                        'name': 'benchmark',
-                    },
-                ],
-            },
-        }) +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.chromium.generic_build(
+          mastername='tryserver.chromium.perf', builder='Android Compile Perf'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.perf', {
+              'Android One Perf': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_perf_tests',
+                      'name': 'benchmark',
+                  },],
+              },
+          }),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
