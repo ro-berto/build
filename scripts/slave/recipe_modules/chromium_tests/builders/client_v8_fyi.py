@@ -20,6 +20,8 @@ SPEC = {
                 'show_v8_revision',
             ],
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -36,6 +38,8 @@ SPEC = {
                 'show_v8_revision',
             ],
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -56,6 +60,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -80,6 +86,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -97,6 +105,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -114,6 +124,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -131,6 +143,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -148,6 +162,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -165,6 +181,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'show_v8_revision',
@@ -182,6 +200,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'chromium_lkgr',
@@ -206,6 +226,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'chromium_lkgr',
@@ -225,6 +247,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'chromium_lkgr',
@@ -244,6 +268,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'chromium_lkgr',
@@ -263,6 +289,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'chromium_lkgr',
@@ -280,6 +308,8 @@ SPEC = {
         _client_v8_fyi_spec(
             chromium_config='android',
             chromium_apply_config=[],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com/',
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
