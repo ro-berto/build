@@ -165,9 +165,8 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    step_results = api.chromium_swarming.trigger_task(task)
-    for step_result in step_results:
-      assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
+    api.chromium_swarming.trigger_task(task)
+    assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
 
   # Recipe can do something useful here locally while tasks are
   # running on swarming.

@@ -1981,7 +1981,7 @@ class SwarmingTest(Test):
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated)
 
-    return api.chromium_swarming.trigger_task(self._tasks[suffix])
+    api.chromium_swarming.trigger_task(self._tasks[suffix])
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).

@@ -778,8 +778,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     }
     task._trigger_output = trigger_output
 
-    return step_results
-
   def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
