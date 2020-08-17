@@ -69,21 +69,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'linux-blink-cors-rel':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'linux-gcc-rel':
         _chromium_linux_spec(
             chromium_config='chromium_no_goma',
