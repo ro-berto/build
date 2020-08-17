@@ -216,9 +216,9 @@ SPEC = {
     'Android Builder (dbg)':
         bot_spec.BotSpec.create(
             chromium_config='android',
-            chromium_apply_config=[
-                'mb', 'download_vr_test_apks'
-            ],
+            chromium_apply_config=['mb', 'download_vr_test_apks'],
+            chromium_tests_apply_config=['use_swarming_command_lines'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
