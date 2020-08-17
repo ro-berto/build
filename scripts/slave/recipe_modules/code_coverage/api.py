@@ -492,13 +492,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             'Generate JaCoCo HTML report',
             self.m.path['checkout'].join('build', 'android',
                                          'generate_jacoco_report.py'),
-            # TODO(crbug/1116208): Remove --device-or-host option after creating
-            # both reports.
             args=[
                 '--format', 'html', '--coverage-dir', coverage_dir,
                 '--sources-json-dir', self.m.chromium.output_dir,
-                '--output-dir', jacoco_html_report_dir, '--cleanup',
-                '--device-or-host', 'device'
+                '--output-dir', jacoco_html_report_dir, '--cleanup'
             ],
             **kwargs)
         # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
