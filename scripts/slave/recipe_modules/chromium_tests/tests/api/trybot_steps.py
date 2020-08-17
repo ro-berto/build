@@ -588,7 +588,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  fake_master = 'fake_master'
+  fake_group = 'fake_group'
   fake_builder = 'fake-builder'
   fake_test = 'fake_test'
   fake_try_builder = 'fake-try-builder'
@@ -600,14 +600,15 @@ def GenTests(api):
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
       api.platform('linux', 64),
-      api.chromium.try_build(mastername=fake_master, builder=fake_try_builder),
+      api.chromium.try_build(
+          builder_group=fake_group, builder=fake_try_builder),
       api.chromium_tests.trybots(
           try_spec.TryDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_try_builder:
                       try_spec.TrySpec.create(mirrors=[
                           try_spec.TryMirror.create(
-                              mastername=fake_master,
+                              builder_group=fake_group,
                               buildername=fake_builder,
                           )
                       ])
@@ -615,7 +616,7 @@ def GenTests(api):
           })),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_builder:
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
@@ -625,7 +626,7 @@ def GenTests(api):
               }
           })),
       api.chromium_tests.read_source_side_spec(
-          fake_master, {
+          fake_group, {
               fake_builder: {
                   'isolated_scripts': [{
                       'name': fake_test,

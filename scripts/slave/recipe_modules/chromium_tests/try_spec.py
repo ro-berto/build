@@ -28,28 +28,8 @@ class TryMirror(object):
         "'tester_id' should not be equal to 'builder_id',"
         " pass None for 'tester_id'")
 
-  # TODO(https://crbug.com/1109276) Remove _create_for_master, rename
-  # _create_for_group to create
   @classmethod
-  def create(cls, *args, **kwargs):
-    """Create a TryMirror.
-
-    See _create_for_group for details on arguments. For backwards
-    compatibility, builder_group and tester_group can be replaced with
-    mastername and tester_mastername, respectively. This is deprecated
-    and all uses should switch to specifying group argunments. Group and
-    master arguments may not be mixed.
-    """
-    if 'mastername' in kwargs or 'tester_mastername' in kwargs:
-      return cls._create_for_master(*args, **kwargs)  # pragma: no cover
-    return cls._create_for_group(*args, **kwargs)
-
-  @classmethod
-  def _create_for_group(cls,
-                        builder_group,
-                        buildername,
-                        tester=None,
-                        tester_group=None):
+  def create(cls, builder_group, buildername, tester=None, tester_group=None):
     """Create a TryMirror.
 
     Args:
@@ -76,19 +56,6 @@ class TryMirror(object):
       if tester_id == builder_id:
         tester_id = None
     return cls(builder_id, tester_id)
-
-  @classmethod
-  def _create_for_master(cls,
-                         mastername,
-                         buildername,
-                         tester=None,
-                         tester_mastername=None):
-    return cls.create(  # pragma: no cover
-        builder_group=mastername,
-        buildername=buildername,
-        tester=tester,
-        tester_group=tester_mastername,
-    )
 
   @classmethod
   def normalize(cls, mirror):
@@ -145,30 +112,13 @@ class TrySpec(object):
     mirrors = [TryMirror.normalize(m) for m in mirrors]
     return cls(mirrors=mirrors, **kwargs)
 
-  # TODO(https://crbug.com/1109276) Remove _create_for_single_mirror_master,
-  # rename _create_for_single_mirror_group to create
   @classmethod
-  def create_for_single_mirror(cls, *args, **kwargs):
-    """Create a TrySpec with a single mirror.
-
-    See _create_for_single_mirror_group for details on arguments. For
-    backwards compatibility, builder_group and tester_group can be
-    replaced with mastername and tester_mastername, respectively. This
-    is deprecated and all uses should switch to specifying group
-    arguments. Group and master arguments may not be mixed.
-    """
-    if 'mastername' in kwargs or 'tester_mastername' in kwargs:
-      return cls._create_for_single_mirror_master(*args, \
-                                                  **kwargs)  # pragma: no cover
-    return cls._create_for_single_mirror_group(*args, **kwargs)
-
-  @classmethod
-  def _create_for_single_mirror_group(cls,
-                                      builder_group,
-                                      buildername,
-                                      tester=None,
-                                      tester_group=None,
-                                      **kwargs):
+  def create_for_single_mirror(cls,
+                               builder_group,
+                               buildername,
+                               tester=None,
+                               tester_group=None,
+                               **kwargs):
     """Create a TrySpec with a single mirror.
 
     Args:
@@ -191,19 +141,6 @@ class TrySpec(object):
     return cls.create(
         mirrors=[
             TryMirror.create(builder_group, buildername, tester, tester_group)
-        ],
-        **kwargs)
-
-  @classmethod
-  def _create_for_single_mirror_master(cls,
-                                       mastername,
-                                       buildername,
-                                       tester=None,
-                                       tester_mastername=None,
-                                       **kwargs):
-    return cls.create(  # pragma: no cover
-        mirrors=[
-            TryMirror.create(mastername, buildername, tester, tester_mastername)
         ],
         **kwargs)
 

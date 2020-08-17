@@ -29,11 +29,6 @@ class BotDatabase(collections.Mapping):
   _db = mapping_attrib(BuilderId, bot_spec_module.BotSpec)
   builders_by_group = mapping_attrib(str, FrozenDict)
 
-  # TODO(https://crbug.com/1109276) Remove this
-  @property
-  def builders_by_master(self):
-    return self.builders_by_group  # pragma: no cover
-
   @classmethod
   def create(cls, bots_dict):
     """Create a BotDatabase from a dict.

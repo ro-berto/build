@@ -62,9 +62,8 @@ class BotSpec(object):
       return spec
     return cls.create(**spec)
 
-  # TODO(https://crbug.com/1109276) Remove the parent_mastername argument
   @classmethod
-  def create(cls, parent_builder_group=None, parent_mastername=None, **kwargs):
+  def create(cls, **kwargs):
     """Create a BotSpec.
 
     Arguments:
@@ -74,11 +73,6 @@ class BotSpec(object):
       A new BotSpec instance with fields set to the values passed in kwargs and
       all other fields set to their defaults.
     """
-    assert parent_builder_group is None or parent_mastername is None
-    parent_builder_group = parent_builder_group or parent_mastername
-    if parent_builder_group is not None:
-      kwargs['parent_builder_group'] = parent_builder_group
-
     def get_filtered_attrs(*attributes):
       return [a for a in attributes if a in kwargs]
 
@@ -167,11 +161,6 @@ class BotSpec(object):
   parent_builder_group = attrib(str, default=None)
   # An optional buildername of the bot's parent builder
   parent_buildername = attrib(str, default=None)
-
-  # TODO(https://crbug.com/1109276) Remove this
-  @property
-  def parent_mastername(self):
-    return self.parent_builder_group  # pragma: no cover
 
   # The name of the config to use for the chromium recipe module
   chromium_config = attrib(str, default=None)
