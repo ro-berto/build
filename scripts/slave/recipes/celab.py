@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'builder_group',
     'chromium',
     'chromium_checkout',
     'chromium_tests',
@@ -530,11 +531,11 @@ def GenTests(api):
   )
   yield api.test(
       'chromium_try',
+      api.builder_group.for_current('tryserver.chromium.win'),
       api.properties(
           tests='chromium.test',
           pool_name='chromium-try',
           pool_size=5,
-          mastername='tryserver.chromium.win',
           bot_id='test_bot'),
       api.platform('win', 64),
       api.buildbucket.try_build(
@@ -550,16 +551,15 @@ def GenTests(api):
             >''')),
       api.step_data(
           'test summary.parse summary',
-          api.json.output({
-              '1st test': {
-                  'success': False,
-                  'output': '/file'
-              }
-          })),
+          api.json.output({'1st test': {
+              'success': False,
+              'output': '/file'
+          }})),
   )
   yield api.test(
       'chromium_no_tests',
-      api.properties(mastername='tryserver.chromium.win', bot_id='test_bot'),
+      api.builder_group.for_current('tryserver.chromium.win'),
+      api.properties(bot_id='test_bot'),
       api.platform('win', 64),
       api.buildbucket.try_build(
           project='chromium',
@@ -570,10 +570,8 @@ def GenTests(api):
   )
   yield api.test(
       'chromium_no_celab_package',
-      api.properties(
-          tests='chromium.test',
-          mastername='tryserver.chromium.win',
-          bot_id='test_bot'),
+      api.builder_group.for_current('tryserver.chromium.win'),
+      api.properties(tests='chromium.test', bot_id='test_bot'),
       api.platform('win', 64),
       api.buildbucket.try_build(
           project='chromium',
@@ -595,11 +593,11 @@ def GenTests(api):
   )
   yield api.test(
       'compile_failure',
+      api.builder_group.for_current('tryserver.chromium.win'),
       api.properties(
           tests='chromium.test',
           pool_name='chromium-try',
           pool_size=5,
-          mastername='tryserver.chromium.win',
           bot_id='test_bot'),
       api.platform('win', 64),
       api.buildbucket.try_build(
@@ -613,11 +611,11 @@ def GenTests(api):
   )
   yield api.test(
       'chrome_try',
+      api.builder_group.for_current('tryserver.chrome.win'),
       api.properties(
           tests='chrome.test',
           pool_name='chrome-try',
           pool_size=5,
-          mastername='tryserver.chrome.win',
           bot_id='test_bot'),
       api.platform('win', 64),
       api.buildbucket.try_build(
@@ -633,10 +631,8 @@ def GenTests(api):
             >''')),
       api.step_data(
           'test summary.parse summary',
-          api.json.output({
-              '1st test': {
-                  'success': False,
-                  'output': '/file'
-              }
-          })),
+          api.json.output({'1st test': {
+              'success': False,
+              'output': '/file'
+          }})),
   )
