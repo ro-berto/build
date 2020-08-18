@@ -21,30 +21,24 @@ def RunSteps(api):
     return api.chromium_tests.integration_steps()
 
 def GenTests(api):
-  def ci_props(config='Release', mastername='chromium.linux',
+
+  def ci_props(mastername='chromium.linux',
                builder='Linux Builder',
-               extra_swarmed_tests=None, **kwargs):
+               extra_swarmed_tests=None):
     swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
 
-    return (
-      api.properties.generic(
-        build_config=config,
-        mastername=mastername,
-        swarm_hashes=swarm_hashes,
-        **kwargs
-      ) +
-      api.buildbucket.ci_build(
-        builder=builder,
-        git_repo='https://chromium.googlesource.com/v8/v8.git',
-      ) +
-      api.runtime(
-        is_luci=True,
-        is_experimental=False
-      )
-    )
+    return sum([
+        api.properties(swarm_hashes=swarm_hashes),
+        api.chromium.ci_build(
+            project='project',
+            mastername=mastername,
+            builder=builder,
+            git_repo='https://chromium.googlesource.com/v8/v8.git',
+        ),
+    ], api.empty_test_data())
 
   def blink_test_setup():
     return (
