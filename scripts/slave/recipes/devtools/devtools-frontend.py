@@ -8,6 +8,7 @@ from recipe_engine.post_process import (DropExpectation, StatusFailure)
 import json
 
 DEPS = [
+    'builder_group',
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
@@ -193,28 +194,44 @@ def _point(api, dimension, totals):
 
 
 def GenTests(api):
-  yield api.test('basic try') + api.properties(
-      mastername='tryserver.devtools-frontend',
-  ) + api.buildbucket.try_build(
-      'devtools',
-      'linux',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-      change_number=91827,
-      patch_set=1)
-  yield api.test('basic no cov') + api.properties(
-      mastername='tryserver.devtools-frontend',
+  yield api.test(
+      'basic try',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.buildbucket.try_build(
+          'devtools',
+          'linux',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
   )
-  yield api.test('basic with cov') + api.properties(
-      mastername='tryserver.devtools-frontend') + api.path.exists(
-          api.path['checkout'].join('karma-coverage', 'coverage-summary.json'))
+
+  yield api.test(
+      'basic no cov',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+  )
+
+  yield api.test(
+      'basic with cov',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.path.exists(api.path['checkout'].join('karma-coverage',
+                                                'coverage-summary.json')),
+  )
+
   yield api.test(
       'experimental',
-  ) + api.buildbucket.try_build(
-      tags=api.buildbucket.tags(cq_experimental='true'))
-  yield api.test('compile failure') + api.properties(
-      mastername='tryserver.devtools-frontend',
-  ) + api.step_data(
-      'compile', retcode=1) + api.post_process(StatusFailure)
-  yield api.test('basic win') + api.properties(
-      mastername='tryserver.devtools-frontend',
-  ) + api.platform('win', 64)
+      api.buildbucket.try_build(
+          tags=api.buildbucket.tags(cq_experimental='true')),
+  )
+
+  yield api.test(
+      'compile failure',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.step_data('compile', retcode=1),
+      api.post_process(StatusFailure),
+  )
+
+  yield api.test(
+      'basic win',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.platform('win', 64),
+  )

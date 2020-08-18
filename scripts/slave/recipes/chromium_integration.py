@@ -22,7 +22,7 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  def ci_props(mastername='chromium.linux',
+  def ci_props(builder_group='chromium.linux',
                builder='Linux Builder',
                extra_swarmed_tests=None):
     swarm_hashes = {}
@@ -34,7 +34,7 @@ def GenTests(api):
         api.properties(swarm_hashes=swarm_hashes),
         api.chromium.ci_build(
             project='project',
-            mastername=mastername,
+            builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
         ),

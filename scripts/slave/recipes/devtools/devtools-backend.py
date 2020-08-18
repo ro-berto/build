@@ -9,6 +9,7 @@ import json
 import re
 
 DEPS = [
+    'builder_group',
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
@@ -135,12 +136,13 @@ def _depot_on_path(api):
 
 
 def GenTests(api):
-  yield api.test('basic try') + api.properties(
-      path_config='generic',
-      mastername='tryserver.devtools-frontend',
-  ) + api.buildbucket.try_build(
-      'devtools',
-      'linux',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-      change_number=91827,
-      patch_set=1)
+  yield api.test(
+      'basic try',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.buildbucket.try_build(
+          'devtools',
+          'linux',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+  )
