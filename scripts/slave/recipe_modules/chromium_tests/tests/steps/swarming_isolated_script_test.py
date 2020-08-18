@@ -138,7 +138,7 @@ def GenTests(api):
   yield api.test(
       'missing_shards',
       api.chromium.ci_build(
-          mastername='chromium.linux',
+          builder_group='chromium.linux',
           builder='Linux Tests',
       ),
       api.properties(

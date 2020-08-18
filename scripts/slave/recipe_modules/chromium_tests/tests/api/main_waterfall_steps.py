@@ -717,7 +717,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  fake_master = 'fake_master'
+  fake_group = 'fake-group'
   fake_builder = 'fake-builder'
   fake_test = 'fake_test'
 
@@ -728,10 +728,10 @@ def GenTests(api):
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
       api.platform('linux', 64),
-      api.chromium.ci_build(mastername=fake_master, builder=fake_builder),
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              fake_master: {
+              fake_group: {
                   fake_builder:
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
@@ -741,7 +741,7 @@ def GenTests(api):
               }
           })),
       api.chromium_tests.read_source_side_spec(
-          fake_master, {
+          fake_group, {
               fake_builder: {
                   'isolated_scripts': [{
                       'name': fake_test,

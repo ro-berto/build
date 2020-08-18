@@ -23,16 +23,6 @@ class BuilderId(object):
   def create_for_group(cls, group, builder):
     return cls(group, builder)
 
-  # TODO(https://crbug.com/1109276): remove this
-  @classmethod
-  def create_for_master(cls, mastername, builder):
-    return cls(mastername, builder)  # pragma: no cover
-
-  # TODO(https://crbug.com/1109276): remove this
-  @property
-  def master(self):
-    return self.group  # pragma: no cover
-
 
 @attrs()
 class BuilderSpec(FieldMapping):

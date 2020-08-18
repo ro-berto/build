@@ -31,20 +31,14 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
       bot_id,
       default_builder_group,
       builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      mastername=None,
       parent_builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      parent_mastername=None,
       parent_buildername=None):
     test_data = self.m.properties(bot_id=bot_id)
-    assert builder_group is None or mastername is None
-    builder_group = builder_group or mastername or default_builder_group
+    builder_group = builder_group or default_builder_group
     if builder_group is not None:
       test_data += self.m.builder_group.for_current(builder_group)
     if parent_buildername is not None:
-      parent_builder_group = (
-          parent_builder_group or parent_mastername or builder_group)
+      parent_builder_group = parent_builder_group or builder_group
       test_data += self.m.builder_group.for_parent(parent_builder_group)
       test_data += self.m.properties(parent_buildername=parent_buildername)
     return test_data
@@ -54,12 +48,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
       project='chromium',
       bucket='ci',
       builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      mastername=None,
       builder='Linux Builder',
       parent_builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      parent_mastername=None,
       parent_buildername=None,
       bot_id='test_bot',
       git_repo='https://chromium.googlesource.com/chromium/src',
@@ -79,9 +69,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         bot_id=bot_id,
         default_builder_group='chromium.linux',
         builder_group=builder_group,
-        mastername=mastername,
         parent_builder_group=parent_builder_group,
-        parent_mastername=parent_mastername,
         parent_buildername=parent_buildername,
     )
     return test_data + self.m.buildbucket.ci_build(
@@ -99,12 +87,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
       project='chromium',
       bucket='ci',
       builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      mastername=None,
       builder='Linux Builder',
       parent_builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      parent_mastername=None,
       parent_buildername=None,
       bot_id='test_bot',
       build_number=571,
@@ -121,9 +105,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         bot_id=bot_id,
         default_builder_group='chromium.linux',
         builder_group=builder_group,
-        mastername=mastername,
         parent_builder_group=parent_builder_group,
-        parent_mastername=parent_mastername,
         parent_buildername=parent_buildername,
     )
     return test_data + self.m.buildbucket.generic_build(
@@ -139,8 +121,6 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
       project='chromium',
       bucket='try',
       builder_group=None,
-      # TODO(https://crbug.com/1109276): remove this
-      mastername=None,
       builder='linux-rel',
       bot_id='test_bot',
       git_repo='https://chromium.googlesource.com/chromium/src',
@@ -159,7 +139,6 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         bot_id=bot_id,
         default_builder_group='tryserver.chromium.linux',
         builder_group=builder_group,
-        mastername=mastername,
     )
     return test_data + self.m.buildbucket.try_build(
         project=project,

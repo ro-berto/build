@@ -199,9 +199,9 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   builder_id = api.chromium.get_builder_id()
   if api.tryserver.is_tryserver:
     name_suffix = ' (with patch)'
-    builder = TRYBOT_SPEC.get(builder_id.master, {}).get(builder_id.builder)
+    builder = TRYBOT_SPEC.get(builder_id.group, {}).get(builder_id.builder)
     assert builder is not None, ('Could not find trybot %s:%s in TRYBOT_SPEC' %
-                                 (builder_id.master, builder_id.builder))
+                                 (builder_id.group, builder_id.builder))
   else:
     builder = builder_id.builder
   bot_config = SPEC.get('builders', {}).get(builder)
@@ -371,7 +371,8 @@ def GenTests(api):
   yield api.test(
       'full_%s_with_patch' % _sanitize_nonalpha('gen-linux-try'),
       api.chromium.try_build(
-          mastername='tryserver.chromium.codesearch', builder='gen-linux-try'),
+          builder_group='tryserver.chromium.codesearch',
+          builder='gen-linux-try'),
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
