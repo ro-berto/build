@@ -168,15 +168,14 @@ def _SendResultsFromCache(cache_file_name, url, oauth_token):
     data_type = ('histogram' if is_histogramset else 'chartjson')
 
     try:
+      if oauth_token is None:
+        oauth_token = LuciAuthTokenGeneratorCallback(None)
       if is_histogramset:
         # TODO(eakuefner): Remove this discard logic once all bots use
         # histograms.
-        if oauth_token is None:
-          oauth_token = LuciAuthTokenGeneratorCallback(None)
-
         _SendHistogramJson(url, json.dumps(data), oauth_token)
       else:
-        _SendResultsJson(url, json.dumps(data))
+        _SendResultsJson(url, json.dumps(data), oauth_token)
     except SendResultsRetryException as e:
       error = 'Error while uploading %s data: %s' % (data_type, str(e))
       if index != len(cache_lines) - 1:
@@ -491,7 +490,7 @@ def _TestPath(test_name, chart_name, trace_name):
   return test_path
 
 
-def _SendResultsJson(url, results_json):
+def _SendResultsJson(url, results_json, oauth_token):
   """Make a HTTP POST with the given JSON to the Performance Dashboard.
 
   Args:
@@ -506,6 +505,7 @@ def _SendResultsJson(url, results_json):
   # The data must be in the application/x-www-form-urlencoded format.
   data = urllib.urlencode({'data': results_json})
   req = urllib2.Request(url + SEND_RESULTS_PATH, data)
+  req.headers['Authorization'] = 'Bearer %s' % oauth_token
   try:
     urllib2.urlopen(req)
   except (urllib2.HTTPError, urllib2.URLError, httplib.HTTPException):
