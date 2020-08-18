@@ -1154,6 +1154,28 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'Mac FYI arm64 Release (Apple DTK)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'chrome_internal',
+                'angle_internal',
+                'angle_top_of_tree',
+                'no_kaleidoscope',
+                'use_xcode_12_beta',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+            serialize_tests=True,
+        ),
     'Mac FYI dEQP Release AMD':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',

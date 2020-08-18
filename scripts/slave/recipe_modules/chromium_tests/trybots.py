@@ -1195,6 +1195,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Mac Builder',
                 tester='Mac FYI Retina Release (AMD)',
             ),
+        'gpu-fyi-try-mac-arm64-apple-dtk-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='Mac FYI arm64 Release (Apple DTK)',
+            ),
         'gpu-fyi-try-mac-asan':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
