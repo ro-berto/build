@@ -1057,6 +1057,11 @@ class ChromiumApi(recipe_api.RecipeApi):
           'select xcode', ['sudo', 'xcode-select', '-switch', xcode_app_path],
           infra_step=True)
 
+      # (crbug.com/1115022) - When the last running simulator is from XCode
+      # version n-1, XCode version n throws a failure message. Running simctl
+      # w/ to do something as simple as listing devices helps work around this.
+      self.m.step('reload simctl', ['xcrun', 'simctl', 'list'], infra_step=True)
+
   def ensure_toolchains(self):
     if self.c.HOST_PLATFORM == 'mac':
       self.ensure_mac_toolchain()

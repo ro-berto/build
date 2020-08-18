@@ -351,6 +351,21 @@
   },
   {
     "cmd": [
+      "xcrun",
+      "simctl",
+      "list"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure xcode.reload simctl",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools/swarming_client/swarming.py",
