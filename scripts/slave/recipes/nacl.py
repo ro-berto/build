@@ -5,6 +5,7 @@
 from contextlib import contextmanager
 
 DEPS = [
+    'builder_group',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
@@ -96,7 +97,7 @@ def AnnotatedStepsSteps(api, got_revision, checkout_path,
       'BOT_TYPE':
           'builder_bot',
       'BUILDBOT_MASTERNAME':
-          api.properties['mastername'],
+          api.builder_group.for_current,
       'BUILDBOT_BUILDERNAME':
           api.buildbucket.builder_name,
       'BUILDBOT_REVISION':
@@ -212,7 +213,7 @@ def TriggerHardwareTests(api, got_revision, checkout_path,
 
   environment_vars = {
       'BUILDBOT_MASTERNAME':
-          api.properties['mastername'],
+          api.builder_group.for_current,
       'BUILDBOT_BUILDERNAME':
           dimensions['builder'],
       'BUILDBOT_SLAVE_TYPE':
@@ -266,8 +267,8 @@ def GenTests(api):
   yield api.test(
       'win',
       api.platform('win', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername='win7-64-glibc-dbg',
           revision='a' * 40,
           bot_id='TestSlave',
@@ -279,8 +280,8 @@ def GenTests(api):
   yield api.test(
       'mac',
       api.platform('mac', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername='mac-newlib-dbg-asan',
           revision='a' * 40,
           bot_id='TestSlave',
@@ -293,8 +294,8 @@ def GenTests(api):
   yield api.test(
       'linux_triggering_arm',
       api.platform('linux', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername=triggering_builder_name,
           revision='a' * 40,
           bot_id='TestSlave',
@@ -306,8 +307,8 @@ def GenTests(api):
   yield api.test(
       'linux_triggering_failed',
       api.platform('linux', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername=triggering_builder_name,
           revision='a' * 40,
           bot_id='TestSlave',
@@ -327,8 +328,8 @@ def GenTests(api):
   yield api.test(
       'linux_triggering_arm_with_collect_COMPLETED_and_failed',
       api.platform('linux', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername=triggering_builder_name,
           revision='a' * 40,
           bot_id='TestSlave',
@@ -336,7 +337,8 @@ def GenTests(api):
           slavetype='BuilderTester',
       ),
       api.override_step_data(swarming_collection_step_name,
-                             api.swarming.collect([failed_result])))
+                             api.swarming.collect([failed_result])),
+  )
 
   timeout_result = api.swarming.task_result(
       id='0',
@@ -344,8 +346,8 @@ def GenTests(api):
       state=api.swarming.TaskState.TIMED_OUT)
   yield api.test(
       'linux_triggering_arm_with_collect_TIMED_OUT', api.platform('linux', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername=triggering_builder_name,
           revision='a' * 40,
           bot_id='TestSlave',
@@ -361,8 +363,8 @@ def GenTests(api):
       state=api.swarming.TaskState.BOT_DIED)
   yield api.test(
       'linux_triggering_arm_with_collect_BOT_DIED', api.platform('linux', 64),
+      api.builder_group.for_current('client.nacl'),
       api.properties(
-          mastername='client.nacl',
           buildername=triggering_builder_name,
           revision='a' * 40,
           bot_id='TestSlave',
