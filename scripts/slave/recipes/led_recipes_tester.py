@@ -44,13 +44,10 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
 DEFAULT_BUILDERS = (
-    'luci.chromium.try:chromium_presubmit',
     'luci.chromium.try:linux-rel',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium.try-m84:chromium_presubmit',
     'luci.chromium.try-m84:linux-rel',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
-    'luci.chromium.try-m85:chromium_presubmit',
     'luci.chromium.try-m85:linux-rel',
     'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
 )
