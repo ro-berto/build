@@ -462,11 +462,13 @@ class BinarySizeApi(recipe_api.RecipeApi):
         if expectations_with_patch_json != expectations_without_patch_json:
           presentation.step_text += (
               '<br/>Expectations file need to be updated.')
-          if expectations_without_patch_json:
+          if (expectations_without_patch_json and
+              not expectations_without_patch_json['success']):
             presentation.step_text += (
-                '<br/><b>Note:</b>Expectations did not match both with and '
-                'without patch. You should expect to see some lines in the '
-                'diff that do not relate to your change.')
+                '<br/>Note: Expectations did not match both with and '
+                'without patch. You need to update the expecations to '
+                'account for your change as well as some unrelated changes '
+                '(this is fine / normal).')
           presentation.status = self.m.step.FAILURE
           return False
         else:
