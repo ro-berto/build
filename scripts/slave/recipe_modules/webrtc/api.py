@@ -16,7 +16,7 @@ from . import builders as webrtc_builders
 from . import steps
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests.steps import SwarmingTest
+from RECIPE_MODULES.build.chromium_tests import steps as c_steps
 
 
 CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
@@ -293,7 +293,8 @@ class WebRTCApi(recipe_api.RecipeApi):
             checkout_path=self.m.path['checkout'],
             is_tryserver=self.m.tryserver.is_tryserver):
           if isinstance(
-              test, (SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
+              test,
+              (c_steps.SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
             test_targets.add(test.name)
           if isinstance(test, (steps.AndroidJunitTest, steps.PythonTest)):
             non_isolated_test_targets.add(test.name)
@@ -524,6 +525,39 @@ class WebRTCApi(recipe_api.RecipeApi):
   def ensure_sdk(self):
     with self.m.osx_sdk(self.bot.config['ensure_sdk']):
       yield
+
+  def get_mac_toolchain_cmd(self):
+    cipd_root = self.m.path['start_dir']
+    ensure_file = self.m.cipd.EnsureFile().add_package(
+        c_steps.MAC_TOOLCHAIN_PACKAGE, c_steps.MAC_TOOLCHAIN_VERSION)
+    self.m.cipd.ensure(cipd_root, ensure_file)
+    return cipd_root.join('mac_toolchain')
+
+  def ensure_xcode(self, xcode_build_version):
+    # TODO(sergeyberezin): for LUCI migration, this must be a requested named
+    # cache. Make sure it exists, to avoid installing Xcode on every build.
+    xcode_app_path = self.m.path['cache'].join('xcode_ios_%s.app' %
+                                               xcode_build_version)
+    with self.m.step.nest('ensure xcode') as step_result:
+      step_result.presentation.step_text = (
+          'Ensuring Xcode version %s in %s' %
+          (xcode_build_version, xcode_app_path))
+
+      mac_toolchain_cmd = self.get_mac_toolchain_cmd()
+      install_xcode_cmd = [
+          mac_toolchain_cmd,
+          'install',
+          '-kind',
+          'ios',
+          '-xcode-version',
+          xcode_build_version,
+          '-output-dir',
+          xcode_app_path,
+      ]
+      self.m.step('install xcode', install_xcode_cmd, infra_step=True)
+      self.m.step(
+          'select xcode', ['sudo', 'xcode-select', '-switch', xcode_app_path],
+          infra_step=True)
 
   def run_mb(self, phase=None):
     if phase:

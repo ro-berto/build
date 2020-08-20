@@ -5,6 +5,7 @@
 DEPS = [
     'archive',
     'builder_group',
+    'chromium',
     'chromium_checkout',
     'depot_tools/bot_update',
     'depot_tools/gclient',
@@ -29,7 +30,7 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  api.ios.ensure_xcode("11c29")
+  api.webrtc.ensure_xcode("11c29")
 
   build_script = api.path['checkout'].join('tools_webrtc', 'ios',
                                            'build_ios_libs.py')

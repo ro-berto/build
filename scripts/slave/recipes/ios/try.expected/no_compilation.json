@@ -275,6 +275,22 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/build/mac_files"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.delete deprecated Xcode cache",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "cipd",
       "ensure",
       "-root",
@@ -328,6 +344,18 @@
     ],
     "infra_step": true,
     "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "xcrun",
+      "simctl",
+      "list"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.reload simctl",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
