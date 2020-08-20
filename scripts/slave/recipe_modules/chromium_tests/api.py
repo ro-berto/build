@@ -633,9 +633,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # LUCI-Scheduler-based triggering (required on luci stack).
     properties = {
         'parent_builder_group': builder_id.group,
-        # TODO(https://crbug.com/1109276) Do not set the parent_mastername
-        # property
-        'parent_mastername': builder_id.group,
         'parent_buildername': builder_id.builder,
     }
     for name, value in update_step.presentation.properties.iteritems():

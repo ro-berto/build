@@ -42,9 +42,7 @@ class BuilderGroupApi(recipe_api.RecipeApi):
   @property
   def for_parent(self):
     """Get the builder group for the parent builder."""
-    # TODO(https://crbug.com/1109276) Do not read the parent_mastername property
-    return (self.m.properties.get('parent_builder_group') or
-            self.m.properties.get('parent_mastername'))
+    return self.m.properties.get('parent_builder_group')
 
   @property
   def for_target(self):

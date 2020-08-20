@@ -19,14 +19,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     return self.m.properties(builder_group=group, mastername=group)
 
   def for_parent(self, group):
-    """Set the builder group for the parent builder.
-
-    This also sets the legacy parent_mastername property so existing
-    code continues to work.
-    """
-    # TODO(https://crbug.com/1109276) Do not set the parent_mastername property
-    return self.m.properties(
-        parent_builder_group=group, parent_mastername=group)
+    """Set the builder group for the parent builder."""
+    return self.m.properties(parent_builder_group=group)
 
   def for_target(self, group):
     """Set the builder group for the target builder.
