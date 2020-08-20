@@ -336,7 +336,13 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot_launch [x86-generic-paladin]"
+    "name": "cbuildbot_launch [x86-generic-paladin]",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
   },
   {
     "name": "$result"

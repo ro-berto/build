@@ -308,7 +308,13 @@
       "TMP": "[CLEANUP]/tmp_tmp_2",
       "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
-    "name": "test_name"
+    "name": "test_name",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
   },
   {
     "cmd": [

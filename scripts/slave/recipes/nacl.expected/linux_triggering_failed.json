@@ -374,6 +374,10 @@
     },
     "name": "annotated steps",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"FAILURE\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

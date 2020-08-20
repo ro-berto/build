@@ -543,7 +543,13 @@
       "TMP": "[CLEANUP]/tmp_tmp_2",
       "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
-    "name": "base_unittests"
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
   },
   {
     "cmd": [
@@ -616,7 +622,13 @@
       "TMP": "[CLEANUP]/tmp_tmp_4",
       "TMPDIR": "[CLEANUP]/tmp_tmp_4"
     },
-    "name": "browser_tests"
+    "name": "browser_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
   },
   {
     "cmd": [

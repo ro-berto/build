@@ -1051,7 +1051,13 @@
       "TMP": "[CLEANUP]/tmp_tmp_3",
       "TMPDIR": "[CLEANUP]/tmp_tmp_3"
     },
-    "name": "base_unittests (with patch)"
+    "name": "base_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
   },
   {
     "cmd": [
