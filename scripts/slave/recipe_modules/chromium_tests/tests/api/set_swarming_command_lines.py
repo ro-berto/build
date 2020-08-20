@@ -279,3 +279,42 @@ def GenTests(api):
                        'find command lines (without patch)'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      "ci_bot_with_experimental_test",
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          chromium_tests_apply_config=[
+                              'use_swarming_command_lines'
+                          ],
+                          isolate_server='https://isolateserver.appspot.com',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'isolated_scripts': [{
+                      'name': fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                      'experiment_percentage': 100
+                  }],
+              }
+          }),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(post_process.StepCommandContains,
+                       'test_pre_run.[trigger] %s (experimental)' % fake_test,
+                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
+                       fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )

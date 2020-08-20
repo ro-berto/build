@@ -718,8 +718,28 @@ class TestWrapper(Test):  # pragma: no cover
     return self._test.name
 
   @property
+  def full_test_target(self):
+    return self._test.full_test_target
+
+  @property
+  def test_id_prefix(self):
+    return self._test.test_id_prefix
+
+  @property
+  def result_db(self):
+    return self._test.result_db
+
+  @property
+  def canonical_name(self):
+    return self._test.canonical_name
+
+  @property
   def isolate_target(self):
     return self._test.isolate_target
+
+  @property
+  def is_gtest(self):
+    return self._test.is_gtest
 
   def compile_targets(self):
     return self._test.compile_targets()
@@ -756,6 +776,38 @@ class TestWrapper(Test):  # pragma: no cover
 
   def step_metadata(self, suffix=None):
     return self._test.step_metadata(suffix=suffix)
+
+  @property
+  def target_name(self):
+    return self._test.target_name
+
+  @property
+  def raw_cmd(self):
+    return self._test.raw_cmd
+
+  @raw_cmd.setter
+  def raw_cmd(self, value):
+    self._test.raw_cmd = value
+
+  @property
+  def relative_cwd(self):
+    return self._test.relative_cwd
+
+  @raw_cmd.setter
+  def relative_cwd(self, value):
+    self._test.relative_cwd = value
+
+  @property
+  def runs_on_swarming(self):
+    return self._test.runs_on_swarming
+
+  @property
+  def isolate_coverage_data(self):
+    return self._test.isolate_coverage_data
+
+  @property
+  def isolate_profile_data(self):
+    return self._test.isolate_profile_data
 
 
 class ExperimentalTest(TestWrapper):
