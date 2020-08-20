@@ -15,6 +15,34 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
 from RECIPE_MODULES.build.chromium.types import BuilderId
 
 
+def _migration_validation(builder_id, builder_spec):
+  """Validate that back-sliding of BotSpec migrations does not occur."""
+  if builder_spec.compile_targets:
+    assert builder_id.group in (
+        'chrome.pgo',
+        'chromium.clang',
+        'chromium.devtools-frontend',
+        'chromium.fyi',
+        'chromium.goma.fyi',
+        'chromium.memory',
+        'chromium.perf',
+        'chromium.perf.fyi',
+        'client.devtools-frontend.integration',
+        'client.openscreen.chromium',
+        'client.v8.chromium',
+        'client.v8.fyi',
+        'official.chrome',
+        'official.chrome.continuous',
+        'official.chromeos.continuous',
+
+        # Used in recipe tests
+        'fake-group',
+    ), ('Builder: {!r}\nUse of the compile_targets field is deprecated,'
+        ' instead update the source side spec file for builder group {!r}.'
+        ' Contact gbeaty@ if you need assistance.').format(
+            builder_id, builder_id.group)
+
+
 @attrs()
 class BotDatabase(collections.Mapping):
   """A database that provides information for multiple groups.
@@ -63,6 +91,8 @@ class BotDatabase(collections.Mapping):
           message = '{} while creating spec for builder {!r}'.format(
               e.message, builder_id)
           raise type(e)(message), None, sys.exc_info()[2]
+
+        _migration_validation(builder_id, builder_spec)
 
         builders_for_group[builder_name] = builder_spec
         db[builder_id] = builder_spec

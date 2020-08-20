@@ -48,7 +48,8 @@ def GenTests(api):
               'mockgroup': {
                   'mockbuilder':
                       bot_spec.BotSpec.create(
-                          compile_targets=['foo', 'bar'],
+                          chromium_config='chromium',
+                          chromium_apply_config=['foo', 'bar'],
                           test_specs=[
                               bot_spec.TestSpec.create(steps.SizesStep,
                                                        'fake-url',
