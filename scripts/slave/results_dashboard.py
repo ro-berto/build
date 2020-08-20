@@ -490,6 +490,15 @@ def _TestPath(test_name, chart_name, trace_name):
   return test_path
 
 
+def _Httplib2PostRequest(url, data, oauth_token):
+  headers = {
+      'Authorization': 'Bearer %s' % oauth_token,
+      'User-Agent': 'perf-uploader/1.0'
+  }
+  http = httplib2.Http()
+  return http.request(url, method='POST', body=data, headers=headers)
+
+
 def _SendResultsJson(url, results_json, oauth_token):
   """Make a HTTP POST with the given JSON to the Performance Dashboard.
 
@@ -504,29 +513,23 @@ def _SendResultsJson(url, results_json, oauth_token):
   # When data is provided to urllib2.Request, a POST is sent instead of GET.
   # The data must be in the application/x-www-form-urlencoded format.
   data = urllib.urlencode({'data': results_json})
-  req = urllib2.Request(url + SEND_RESULTS_PATH, data)
-  req.headers['Authorization'] = 'Bearer %s' % oauth_token
+  request_url = url + SEND_RESULTS_PATH
   try:
-    urllib2.urlopen(req)
-  except (urllib2.HTTPError, urllib2.URLError, httplib.HTTPException):
-    error = traceback.format_exc()
+    response, _ = _Httplib2PostRequest(request_url, data, oauth_token)
 
-    if 'HTTPError: 400' in error or 'HTTP Error 400' in error:
-      # If the remote app rejects the JSON, it's probably malformed,
-      # so we don't want to retry it.
-      raise SendResultsFatalException('Discarding JSON, error:\n%s' % error)
-    raise SendResultsRetryException(error)
+    # A 500 is presented on an exception on the dashboard side, timeout,
+    # exception, etc. The dashboard can also send back 400 and 403, we could
+    # recover from 403 (auth error), but 400 is generally malformed data.
+    if response.status == 403:
+      raise SendResultsRetryException(traceback.format_exc())
 
-def _Httplib2Request(url, data, oauth_token):
-  data = zlib.compress(data)
-  headers = {
-      'Authorization': 'Bearer %s' % oauth_token,
-      'User-Agent': 'perf-uploader/1.0'
-  }
+    if response.status != 200:
+      raise SendResultsFatalException(
+          'HTTP Response %d: %s' % (response.status, response.reason)
+      )
+  except httplib2.HttpLib2Error:
+    raise SendResultsRetryException(traceback.format_exc())
 
-  http = httplib2.Http()
-  return http.request(
-      url + SEND_HISTOGRAMS_PATH, method='POST', body=data, headers=headers)
 
 def _SendHistogramJson(url, histogramset_json, oauth_token):
   """POST a HistogramSet JSON to the Performance Dashboard.
@@ -540,8 +543,10 @@ def _SendHistogramJson(url, histogramset_json, oauth_token):
   Returns:
     None if successful, or an error string if there were errors.
   """
+  data = zlib.compress(histogramset_json)
+  request_url = url + SEND_HISTOGRAMS_PATH
   try:
-    response, _ = _Httplib2Request(url, histogramset_json, oauth_token)
+    response, _ = _Httplib2PostRequest(request_url, data, oauth_token)
 
     # A 500 is presented on an exception on the dashboard side, timeout,
     # exception, etc. The dashboard can also send back 400 and 403, we could

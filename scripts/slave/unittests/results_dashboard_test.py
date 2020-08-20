@@ -17,6 +17,7 @@ import time
 import unittest
 import urllib
 import urllib2
+import zlib
 
 import mock
 
@@ -320,7 +321,15 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
   def tearDown(self):
     shutil.rmtree(self.build_dir)
 
-  def _TestSendResults(self, new_data, expected_json, errors, expected_result):
+  def _TestSendJsonResults(
+      self,
+      new_data,
+      expected_json,
+      errors,
+      status_codes,
+      expected_result,
+      oauth_token=''
+  ):
     """Test one call of SendResults with the given set of arguments.
 
     This method will fail a test case if the JSON that gets sent and the
@@ -331,88 +340,124 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       new_data: The new (not cached) data to send.
       expected_json_sent: A list of JSON string expected to be sent.
       errors: A list of corresponding errors expected to be received.
-      expected_result: Expected return value of SendResults
+      expected_result: Expected return value of SendResults.
+      oauth_token: An oauth token to be used for upload.
     """
     idx = [0]  # ref
 
-    def _mock_urlopen(url):
+    def _fake_httplib2_req(url, data, token):
       i = idx[0]
       idx[0] += 1
-      data, err = expected_json[i], errors[i]
-      rhs_json = urllib.unquote_plus(url.data.replace('data=', ''))
-      self.assertEqual(sorted(json.loads(data)), sorted(json.loads(rhs_json)))
+      exp_data, err = expected_json[i], errors[i],
+      urllib.urlencode({'data': json.dumps(exp_data)})
+      self.assertEqual(url, 'https://x.com/add_point')
+      self.assertEqual(data, urllib.urlencode({'data': json.dumps(exp_data)}))
+      self.assertEqual(token, oauth_token)
+
       if err:
         raise err
 
-    with mock.patch('urllib2.urlopen', side_effect=_mock_urlopen):
+      return httplib2.Response({'status': status_codes[i], 'reason': 'foo'}), ''
+
+    with mock.patch('slave.results_dashboard._Httplib2PostRequest',
+                    side_effect=_fake_httplib2_req):
       result = results_dashboard.SendResults(
-          new_data, 'https:/x.com', self.build_dir
+          new_data, 'https://x.com', self.build_dir, oauth_token=oauth_token
       )
       self.assertEqual(expected_result, result)
 
-  def test_FailureRetried(self):
+  def test_Json_500_Fatal(self):
+    """500 responses are fatal."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendJsonResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [None], [500],
+                              False,
+                              oauth_token='fake')
+
+  def test_Json_403_Retried(self):
     """After failing once, the same JSON is sent the next time."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendResults({
+    self._TestSendJsonResults({
         'sample': 1, 'master': 'm', 'bot': 'b',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 1, "master": "m", "bot": "b", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    )], [urllib2.URLError('some reason')], True)
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [None], [403],
+                              True,
+                              oauth_token='fake')
 
     # The next time, the old data is sent with the new data.
-    self._TestSendResults({
+    self._TestSendJsonResults({
         'sample': 2, 'master': 'm2', 'bot': 'b2',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 1, "master": "m", "bot": "b", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    ),
-        (
-            '{"sample": 2, "master": "m2", "bot": "b2", '
-            '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-        )], [None, None], True)
-
-  def test_SuccessNotRetried(self):
-    """After being successfully sent, data is not re-sent."""
-    # First, some data is sent.
-    self._TestSendResults({
-        'sample': 1, 'master': 'm', 'bot': 'b',
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 1, "master": "m", "bot": "b", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    )], [None], True)
-
-    # The next time, the old data is not sent with the new data.
-    self._TestSendResults({
-        'sample': 2, 'master': 'm2', 'bot': 'b2',
+    }, {
+        'sample': 2, 'bot': 'b2', 'master': 'm2',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 2, "master": "m2", "bot": "b2", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    )], [None], True)
+    }], [None, None], [200, 200],
+                              True,
+                              oauth_token='fake')
 
-  def test_DoubleFailureFatal(self):
-    """After two failures, SendResults should return False."""
+  def test_Json_UnexpectedException_Fatal(self):
+    """Unexpected exceptions are fatal."""
     # First, some data is sent but it fails for some reason.
-    self._TestSendResults({
+    self._TestSendJsonResults({
         'sample': 1, 'master': 'm', 'bot': 'b',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 1, "master": "m", "bot": "b", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    )], [urllib2.URLError('some reason')], True)
-    # Next, data is sent again, another failure.
-    self._TestSendResults({
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [ValueError('foo')], [200],
+                              False,
+                              oauth_token='fake')
+
+  def test_Json_UnexpectedException_Fatal(self):
+    """Unexpected exceptions are fatal."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendJsonResults({
         'sample': 1, 'master': 'm', 'bot': 'b',
         'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
-    }, [(
-        '{"sample": 1, "master": "m", "bot": "b", '
-        '"chart_data": {"benchmark_name": "b"}, "point_id": 1234}'
-    )], [urllib2.URLError('some reason'),
-         urllib2.URLError('some reason')], False)
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [ValueError('foo')], [200],
+                              False,
+                              oauth_token='fake')
+
+  def test_Json_TransientFailure_Retried(self):
+    """After failing once, the same JSON is sent the next time."""
+    # First, some data is sent but it fails for some reason.
+    self._TestSendJsonResults({
+        'sample': 1, 'master': 'm', 'bot': 'b',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [httplib2.HttpLib2Error('some reason')], [200],
+                              True,
+                              oauth_token='fake')
+
+    # The next time, the old data is sent with the new data.
+    self._TestSendJsonResults({
+        'sample': 2, 'master': 'm2', 'bot': 'b2',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, [{
+        'sample': 1, 'bot': 'b', 'master': 'm',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }, {
+        'sample': 2, 'bot': 'b2', 'master': 'm2',
+        'chart_data': {'benchmark_name': 'b'}, 'point_id': 1234
+    }], [None, None], [200, 200],
+                              True,
+                              oauth_token='fake')
 
   def _TestSendHistogramResults(
       self,
@@ -435,7 +480,9 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       expected_data: A list of data expected to be sent.
       errors: A list of corresponding errors expected to be received.
       status_codes: A list of corresponding status_codes for responses.
-      expected_result: Expected return value of SendResults
+      expected_result: Expected return value of SendResults.
+      send_as_histograms: True if result is to be sent to /add_histograms.
+      oauth_token: An oauth token to be used for upload.
     """
     idx = [0]
 
@@ -443,8 +490,8 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
       i = idx[0]
       idx[0] += 1
       exp_data, err = expected_data[i], errors[i],
-      self.assertEqual(url, 'https://fake.dashboard')
-      self.assertEqual(data, json.dumps(exp_data))
+      self.assertEqual(url, 'https://fake.dashboard/add_histograms')
+      self.assertEqual(data, zlib.compress(json.dumps(exp_data)))
       self.assertEqual(token, oauth_token)
 
       if err:
@@ -452,7 +499,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
 
       return httplib2.Response({'status': status_codes[i], 'reason': 'foo'}), ''
 
-    with mock.patch('slave.results_dashboard._Httplib2Request',
+    with mock.patch('slave.results_dashboard._Httplib2PostRequest',
                     side_effect=_fake_httplib2_req):
       result = results_dashboard.SendResults(
           new_data,
