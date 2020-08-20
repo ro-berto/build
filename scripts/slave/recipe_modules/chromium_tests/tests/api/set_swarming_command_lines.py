@@ -109,6 +109,9 @@ def GenTests(api):
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(post_process.StepCommandContains,
                        'test_pre_run.[trigger] %s' % fake_test,
+                       ['--env', 'ISOLATED_OUTDIR', '${ISOLATED_OUTDIR}']),
+      api.post_process(post_process.StepCommandContains,
+                       'test_pre_run.[trigger] %s' % fake_test,
                        ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
                        fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),

@@ -559,6 +559,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     init_env = self.default_env.copy()
     init_env.update(env or {})
+    init_env.setdefault('ISOLATED_OUTDIR', '${ISOLATED_OUTDIR}')
 
     shard_indices = shard_indices or range(shards)
 
