@@ -217,9 +217,7 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     # Set the groups's base configuration.
     config_map = config_map.get(builder_group, {})
-    # TODO(https://crbug.com/1109276) Don't read master_config key
-    group_config = (
-        config_map.get('group_config') or config_map.get('master_config'))
+    group_config = config_map.get('group_config')
     assert group_config, ("No 'group_config' configuration for '%s'" %
                           (builder_group,))
     self.set_config(group_config, **KWARGS)

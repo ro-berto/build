@@ -1685,8 +1685,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       project_name,
       precommit,
       builder_group=None,
-      # TODO(https://crbug.com/1109276) Remove mastername
-      mastername=None,
       default_priority=None,
       path_to_testing_dir=None):
     """Configures default swarming dimensions and tags.
@@ -1701,7 +1699,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           the changes are commited.
       builder_group: optional name of the builder group to use to configure the
           default priority of swarming tasks.
-      mastername: deprecated, use builder_group instead.
       default_priority: optional default_priority to use. Will override the
           priority name inherited from builder_group (or the global default).
       path_to_testing_dir: The path to a local directory mirroring
@@ -1709,9 +1706,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           is needed to access merge and trigger scripts. If unset, this module
           will look at self.m.chromium_checkout.working_dir.
     """
-    assert builder_group is None or mastername is None
-    builder_group = builder_group or mastername
-
     # Set platform-specific default dims.
     target_platform = self.m.chromium.c.TARGET_PLATFORM
     swarming_dims = PER_TARGET_SWARMING_DIMS[target_platform]

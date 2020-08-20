@@ -205,8 +205,6 @@ class iOSApi(recipe_api.RecipeApi):
   def read_build_config(
       self,
       builder_group=None,
-      # TODO(https://crbug.com/1109276) Remove master_name
-      master_name=None,
       build_config_base_dir=None,
       buildername=None,
   ):
@@ -215,13 +213,10 @@ class iOSApi(recipe_api.RecipeApi):
     Args:
       builder_group: Name of a builder group to read the build config from,
         or None to read from properties at run-time.
-      master_name: deprecated, use builder_group instead
       build_config_base_dir: Directory to search for build config group and
         test include directories.
     """
-    assert builder_group is None or master_name is None
-    builder_group = (
-        builder_group or master_name or self.m.builder_group.for_current)
+    builder_group = builder_group or self.m.builder_group.for_current
     buildername = buildername or self.m.buildbucket.builder_name
 
     build_config_base_dir = build_config_base_dir or (
