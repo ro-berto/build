@@ -39,6 +39,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='mac10.15-blink-rel-dummy',
             ),
+        'mac11.0-blink-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='mac11.0-blink-rel-dummy',
+            ),
         'win7-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -1120,6 +1125,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.mac',
                 buildername='Mac Builder',
                 tester='Mac10.15 Tests',
+            ),
+        'mac_chromium_11.0_rel_ng':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='Mac Builder Next',
+                tester='Mac11.0 Tests',
             ),
         'mac_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(

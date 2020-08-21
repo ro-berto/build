@@ -78,10 +78,26 @@ SPEC = {
             chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
+            gclient_apply_config=['use_xcode_12_beta'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            simulation_platform='mac',
+        ),
+    'Mac11.0 Tests':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='Mac Builder Next',
             simulation_platform='mac',
         ),
     'mac-osxbeta-rel':
@@ -833,6 +849,7 @@ SPEC.update([
     stock_config('mac10.13-blink-rel-dummy', staging=False),
     stock_config('mac10.14-blink-rel-dummy', staging=False),
     stock_config('mac10.15-blink-rel-dummy', staging=False),
+    stock_config('mac11.0-blink-rel-dummy', staging=False),
     stock_config('win7-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win10-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('VR Linux'),
