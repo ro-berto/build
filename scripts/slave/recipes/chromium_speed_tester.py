@@ -32,6 +32,7 @@ def RunSteps(api, properties):
         bot.settings, timeout=3600, no_fetch_tags=True)
     api.chromium_tests.lookup_builder_gn_args(bot)
     tests = build_config.tests_on(bot.builder_id)
+    api.chromium_tests.download_command_lines_for_tests(tests, bot.settings)
     test_failure_summary = api.chromium_tests.run_tests(bot, tests)
 
     task_groups = {

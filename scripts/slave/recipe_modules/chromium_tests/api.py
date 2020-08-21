@@ -1238,13 +1238,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self._explain_package_transfer(bot, non_isolated_tests),
           as_log='why is this running?')
 
+    self.download_command_lines_for_tests(
+        build_config.tests_on(bot.builder_id), bot.settings)
+
+  def download_command_lines_for_tests(self, tests, bot_settings):
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
     cwd = self.m.properties.get('swarming_command_lines_cwd', '')
     if (self.m.chromium.c.project_generator.tool == 'mb' and
         self.c.use_swarming_command_lines and hsh):
-      self._swarming_command_lines = self._download_command_lines(
-          hsh, bot.settings.isolate_server) or {}
-      for test in build_config.tests_on(bot.builder_id):
+      self._swarming_command_lines = self.download_command_lines(
+          hsh, bot_settings.isolate_server) or {}
+      for test in tests:
         if test.runs_on_swarming and self._swarming_command_lines:
           command_line = self._swarming_command_lines.get(test.target_name, [])
           if command_line:
@@ -1286,7 +1290,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return isolate.archive(
         'archive command lines', isolate_server=isolate_server)
 
-  def _download_command_lines(self, command_lines_hash, isolate_server):
+  def download_command_lines(self, command_lines_hash, isolate_server):
     self.m.isolated.download(
         'download command lines',
         command_lines_hash,
