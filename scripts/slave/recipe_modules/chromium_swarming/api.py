@@ -1308,6 +1308,9 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _task_has_all_shards(self, merged_results_json, active_step, task):
     """Checks if a task has all of its shards present in its results.
 
+    The 'failed_shards' property on the task is mutated to include the
+    relevant missing shards present in the merged_results_json.
+
     Args:
       merged_results_json: The merged result json of a test suite.
       active_step: The active collection step. The presentation of this step
@@ -1323,6 +1326,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         for index in missing_shards:
           active_step.presentation.links['missing shard #%d' % index] = \
               task.get_shard_view_url(index)
+        task.failed_shards = list(set(task.failed_shards + missing_shards))
         return False
 
     return True
