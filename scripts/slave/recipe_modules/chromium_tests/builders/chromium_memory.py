@@ -274,9 +274,6 @@ SPEC = {
             chromium_apply_config=['mb'],
             chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
     'android-asan':

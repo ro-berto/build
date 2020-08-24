@@ -20,11 +20,9 @@ def _migration_validation(builder_id, builder_spec):
   if builder_spec.compile_targets:
     assert builder_id.group in (
         'chrome.pgo',
-        'chromium.clang',
         'chromium.devtools-frontend',
         'chromium.fyi',
         'chromium.goma.fyi',
-        'chromium.memory',
         'chromium.perf',
         'chromium.perf.fyi',
         'client.devtools-frontend.integration',

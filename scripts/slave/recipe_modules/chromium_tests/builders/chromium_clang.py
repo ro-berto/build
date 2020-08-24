@@ -86,7 +86,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=['chromium_builder_asan'],
             cf_archive_build=True,
             cf_gs_bucket='chromium-browser-cfi',
             cf_gs_acl='public-read',
@@ -122,9 +121,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'win',
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -176,9 +172,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -194,9 +187,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -213,9 +203,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -242,9 +229,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -272,7 +256,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            compile_targets=['chromium_builder_asan'],
         ),
     'CrWinAsan(dll)':
         _chromium_clang_spec(
@@ -288,7 +271,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            compile_targets=['chromium_builder_asan'],
         ),
     'ToTAndroidASan':
         _chromium_clang_spec(
@@ -304,9 +286,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             android_config='clang_asan_tot_release_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -325,9 +304,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             android_config='clang_tot_debug_builder',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -345,9 +321,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            compile_targets=[
-                'all',
-            ],
             android_config='clang_builder_mb_x64',
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -364,9 +337,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -394,9 +364,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -416,9 +383,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
@@ -438,9 +402,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='mac',
         ),
@@ -457,9 +418,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -485,9 +443,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -507,9 +462,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -530,9 +482,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -558,9 +507,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
         ),
@@ -576,9 +522,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
@@ -598,9 +541,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
