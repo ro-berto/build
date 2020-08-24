@@ -153,11 +153,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       patterns = [
           # Following are scripts based tests that don't build any binaries.
           ['blink_python_tests', None],
+          ['extension_docserver_python_unittests', None],
           ['grit_python_unittests', None],
           ['metrics_python_tests', None],
           ['mojo_python_unittests', None],
-          ['telemetry_gpu_unittests', None],
           ['python3_smoketest', None],
+          ['telemetry_gpu_unittests', None],
 
           # Following are mappings from isolate target names to binary names.
           ['telemetry_gpu_integration_test', 'chrome'],
