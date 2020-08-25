@@ -54,14 +54,3 @@ class BuilderGroupApi(recipe_api.RecipeApi):
     # TODO(https://crbug.com/1109276) Do not read the target_mastername property
     return (self.m.properties.get('target_builder_group') or
             self.m.properties.get('target_mastername'))
-
-  @property
-  def for_bisect(self):
-    """Get the builder group for the bisect builder.
-
-    This is used by v8, which has a single builder that performs
-    bisection using the configuration of another builder.
-    """
-    # TODO(https://crbug.com/1109276) Do not read the bisect_mastername property
-    return (self.m.properties.get('bisect_builder_group') or
-            self.m.properties.get('bisect_mastername'))

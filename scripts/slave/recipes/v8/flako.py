@@ -37,15 +37,13 @@ DEPS = [
     'recipe_engine/step',
     'depot_tools/gitiles',
     'depot_tools/gsutil',
-    'builder_group',
     'chromium_swarming',
     'swarming_client',
 ]
 
 PROPERTIES = {
     # Group of the builder that produced the builds for bisection.
-    # TODO(https://crbug.com/1109276) Remove the default
-    'bisect_builder_group': Property(default=None, kind=str),
+    'bisect_builder_group': Property(kind=str),
     # Name of the builder that produced the builds for bisection.
     'bisect_buildername': Property(kind=str),
     # Build config passed to V8's run-tests.py script (there it's parameter
@@ -562,9 +560,6 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, build_config,
       api, swarming_dimensions, swarming_priority, swarming_expiration)
 
   # Set up bisection helpers.
-  # Get the builder group from the module to support backwards-compatibility
-  # TODO(https://crbug.com/1109276) Don't get builder group from the module
-  bisect_builder_group = api.builder_group.for_bisect
   depot = Depot(api, bisect_builder_group, bisect_buildername, isolated_name,
                 to_revision)
   command = Command(
@@ -630,8 +625,8 @@ def GenTests(api):
   def test(name):
     return api.test(
         name,
-        api.builder_group.for_bisect('foo.v8'),
         api.properties(
+            bisect_builder_group='foo.v8',
             bisect_buildername='V8 Foobar',
             extra_args=['--foo-flag', '--bar-flag'],
             isolated_name='foo_isolated',
