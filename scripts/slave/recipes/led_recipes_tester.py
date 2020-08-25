@@ -50,6 +50,8 @@ DEFAULT_BUILDERS = (
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m85:linux-rel',
     'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
+    'luci.chromium-m86.try:linux-rel',
+    'luci.chromium-m86.try:win10_chromium_x64_rel_ng',
 )
 
 
@@ -65,6 +67,7 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
         'luci.chromium.try:ios-simulator',
         'luci.chromium.try-m84:ios-simulator',
         'luci.chromium.try-m85:ios-simulator',
+        'luci.chromium-m86.try:ios-simulator',
     ],
     files=[
         'scripts/slave/recipes/ios/try.py',
@@ -81,6 +84,7 @@ FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m84:win10_chromium_x64_rel_ng',
     'luci.chromium.try-m85:win10_chromium_x64_rel_ng',
+    'luci.chromium-m86.try:win10_chromium_x64_rel_ng',
 )
 
 # CL to use when testing a recipe which touches chromium source.
@@ -113,6 +117,12 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/2270351',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2270701',
+    },
+    'luci.chromium-m86.try': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2376025',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2375689',
     },
 }
 
@@ -540,7 +550,7 @@ def GenTests(api):
     # Set the default recipe for all chromium builders
     build = job_pb2.Definition()
     build.buildbucket.bbagent_args.build.input.properties['recipe'] = RECIPE
-    return api.led.mock_get_builder(build, 'chromium')
+    return api.led.mock_get_builder(build)
 
   yield api.test(
       'basic',
@@ -724,8 +734,9 @@ def GenTests(api):
       affected_recipes('ios/try'),
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium.try-81:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium.try-83:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-m84:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-m85:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m86.try:ios-simulator', 'ios/try'),
   )
 
   yield api.test(
@@ -736,6 +747,7 @@ def GenTests(api):
       affected_recipes('ios/try'),
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium.try-81:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium.try-83:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-m84:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium.try-m85:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m86.try:ios-simulator', 'ios/try'),
   )

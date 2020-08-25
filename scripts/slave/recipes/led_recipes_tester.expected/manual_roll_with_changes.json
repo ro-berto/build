@@ -448,6 +448,80 @@
   },
   {
     "cmd": [],
+    "name": "get led builders.get luci.chromium-m86.try:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium-m86.try:linux-rel"
+    ],
+    "name": "get led builders.get luci.chromium-m86.try:linux-rel.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium-m86.try:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium-m86.try:win10_chromium_x64_rel_ng"
+    ],
+    "name": "get led builders.get luci.chromium-m86.try:win10_chromium_x64_rel_ng.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "install infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py"
   },
   {
@@ -1813,6 +1887,416 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try-m85:win10_chromium_x64_rel_ng.collect",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-task-id\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"my_task_0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"fake-task-id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@task stdout+stderr: my_task_0@hello world!@@@",
+      "@@@STEP_LOG_END@task stdout+stderr: my_task_0@@@",
+      "@@@STEP_LINK@task isolated outputs: my_task_0@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium-m86.try:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2375689@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium-m86.try:linux-rel.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2375689"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:linux-rel.trigger.led edit-cr-cl",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2375689@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-rbh",
+      "00e60f50c2c6204d0a20e3f88851d5fd80ba602c"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:linux-rel.trigger.led edit",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:linux-rel.trigger.led edit (2)",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:linux-rel.trigger.led launch",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "collect",
+      "-server",
+      "chromium-swarm.appspot.com",
+      "-task-summary-json",
+      "/path/to/tmp/json",
+      "-task-output-stdout",
+      "none",
+      "fake-task-id"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:linux-rel.collect",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-task-id\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"my_task_0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"fake-task-id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@task stdout+stderr: my_task_0@hello world!@@@",
+      "@@@STEP_LOG_END@task stdout+stderr: my_task_0@@@",
+      "@@@STEP_LINK@task isolated outputs: my_task_0@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2375689@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/2375689"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"win10_chromium_x64_rel_ng\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2375689@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-rbh",
+      "00e60f50c2c6204d0a20e3f88851d5fd80ba602c"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger.led edit",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"win10_chromium_x64_rel_ng\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "edit",
+      "-exp",
+      "false"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"win10_chromium_x64_rel_ng\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m86\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@            {@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2375689\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\", @@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            }@@@",
+      "@@@STEP_LOG_LINE@proto.output@          ], @@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }, @@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "launch"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger.led launch",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"win10_chromium_x64_rel_ng\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2375689\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "collect",
+      "-server",
+      "chromium-swarm.appspot.com",
+      "-task-summary-json",
+      "/path/to/tmp/json",
+      "-task-output-stdout",
+      "none",
+      "fake-task-id"
+    ],
+    "infra_step": true,
+    "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.collect",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
