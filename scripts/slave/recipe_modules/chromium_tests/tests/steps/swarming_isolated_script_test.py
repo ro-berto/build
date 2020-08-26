@@ -60,9 +60,12 @@ def RunSteps(api):
       hard_timeout=360,
       expiration=7200,
       shards=int(api.properties.get('shards', '1')) or 1,
-      dimensions=api.properties.get('dimensions', {'gpu': '8086'}),
+      dimensions=api.properties.get('dimensions', {
+          'gpu': '8086',
+      }),
       isolate_coverage_data=isolate_coverage_data,
       resultdb={'enable': True})
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
   assert test.runs_on_swarming and not test.is_gtest
   assert test.shards > 0
 
@@ -686,7 +689,7 @@ def GenTests(api):
           },
           dimensions={
               'gpu': '8086',
-              'os': 'Windows'
+              'os': 'Windows',
           }),
   )
 
@@ -702,7 +705,7 @@ def GenTests(api):
           },
           dimensions={
               'gpu': '8086',
-              'os': 'Mac'
+              'os': 'Mac',
           }),
   )
 
@@ -719,7 +722,7 @@ def GenTests(api):
           dimensions={
               'gpu': '8086',
               'os': 'Mac',
-              'hidpi': '1'
+              'hidpi': '1',
           }),
   )
 
@@ -735,7 +738,7 @@ def GenTests(api):
           },
           dimensions={
               'gpu': '8086',
-              'os': 'mac-intel-stable'
+              'os': 'mac-intel-stable',
           }),
       api.override_step_data(
           'base_unittests on Intel GPU on Mac (with patch) '
@@ -785,7 +788,7 @@ def GenTests(api):
           dimensions={
               'device_type': 'hammerhead',
               'device_os': 'LOL123',
-              'os': 'Android'
+              'os': 'Android',
           }),
   )
 

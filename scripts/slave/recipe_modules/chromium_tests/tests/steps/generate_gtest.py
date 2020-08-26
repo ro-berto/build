@@ -31,6 +31,7 @@ from RECIPE_MODULES.build.chromium_tests import generators
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
   api.test_results.set_config('public_server')
 
   update_step = api.bot_update.ensure_checkout()
@@ -334,7 +335,7 @@ def GenTests(api):
               },
               'swarming': {
                   'can_use_on_swarming_builders': True,
-                  'shards': 5
+                  'shards': 5,
               },
           },
           swarm_hashes={
