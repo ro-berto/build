@@ -236,6 +236,9 @@ _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
 _AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
                      'android_arm64-builder-perf')
 
+_AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
+                     'android_arm64-builder-perf')
+
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
                      'android_arm64-builder-perf')
 
