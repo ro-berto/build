@@ -9,11 +9,13 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
+    'depot_tools/osx_sdk',
     'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/runtime',
@@ -73,22 +75,23 @@ def RunSteps(api, archive):
                '--install-dir=%s' % install_dir]
   build_only_flags = dir_flags + ['--no-sync', '--no-test']
 
-  api.file.ensure_directory('Ensure install dir', install_dir)
-  with api.context(cwd=cache_dir):
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
+  with api.osx_sdk('mac'):
+    api.file.ensure_directory('Ensure install dir', install_dir)
+    with api.context(cwd=cache_dir):
+      api.bot_update.ensure_checkout()
+      api.gclient.runhooks()
 
-  # Get list of build.py build and test steps
-  bot_steps = api.file.read_json('Read steps from JSON',
-                                 sync_dir.join('bots.json'),
-                                 test_data=step_test_data)
+    # Get list of build.py build and test steps
+    bot_steps = api.file.read_json(
+        'Read steps from JSON',
+        sync_dir.join('bots.json'),
+        test_data=step_test_data)
 
-  builder = api.buildbucket.builder_name
-  assert builder in ('linux', 'mac', 'win', 'linux-test-suites')
+    builder = api.buildbucket.builder_name
+    assert builder in ('linux', 'mac', 'win', 'linux-test-suites')
 
-  # Depot tools on path is for ninja
-  with api.depot_tools.on_path():
-    with api.context(env=env):
+    # Depot tools on path is for ninja
+    with api.depot_tools.on_path(), api.context(env=env):
       try:
         for step in bot_steps[builder]['build_steps']:
           script = sync_dir.join(step['command'][0])
@@ -149,4 +152,8 @@ def GenTests(api):
       api.properties(archive=False) +
       api.post_process(DoesNotRun, 'Upload archive') +
       api.post_process(DropExpectation)
+  )
+
+  yield (
+      test('mac') + api.platform.name('mac')
   )
