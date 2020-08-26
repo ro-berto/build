@@ -341,7 +341,8 @@ SPEC = {
             chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            # TODO(crbug/1060399): temporary add enable_wpr_tests to help debug
+            gclient_apply_config=['android', 'enable_wpr_tests'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
