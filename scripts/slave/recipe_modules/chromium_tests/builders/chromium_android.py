@@ -465,8 +465,6 @@ SPEC.update([
         ],
         chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
-        # TODO(crbug/1096656): Temporary set to help debug issue
-        gclient_apply_config=['android', 'enable_wpr_tests'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',
