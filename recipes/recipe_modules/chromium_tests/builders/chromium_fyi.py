@@ -91,6 +91,7 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

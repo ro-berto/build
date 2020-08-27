@@ -16,7 +16,7 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 
       # TODO(crbug.com/816629): Flip all bots to True and then remove
       # this option.
-      use_swarming_command_lines=Single(bool, empty_val=False, required=False),
+      use_swarming_command_lines=Single(bool, empty_val=True, required=False),
   )
 
 config_ctx = config_item_context(BaseConfig)

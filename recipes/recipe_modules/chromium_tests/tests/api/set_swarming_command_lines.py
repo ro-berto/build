@@ -126,9 +126,13 @@ def GenTests(api):
   )
 
   yield api.test(
-      'default_is_to_not_use_swarming_command_lines',
+      'default_is_to_use_swarming_command_lines',
       fake_ci_builder(chromium_tests_apply_config=[]),
-      api.post_process(post_process.DoesNotRun, 'find command lines'),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(post_process.StepCommandContains,
+                       'test_pre_run.[trigger] %s' % fake_test,
+                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
+                       fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )
 
