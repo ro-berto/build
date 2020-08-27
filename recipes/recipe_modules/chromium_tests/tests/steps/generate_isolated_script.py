@@ -34,6 +34,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
 
   update_step = api.bot_update.ensure_checkout()
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   single_spec = api.properties.get('single_spec')
   test_spec = {

@@ -33,6 +33,7 @@ def RunSteps(api):
 
   # Fake path, as the real one depends on having done a chromium checkout.
   api.profiles._merge_scripts_dir = api.path['start_dir']
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   test = steps.SwarmingGTestTest(
       'base_unittests',

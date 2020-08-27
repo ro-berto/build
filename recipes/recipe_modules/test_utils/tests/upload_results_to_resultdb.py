@@ -40,6 +40,7 @@ def RunSteps(api, is_swarming_test=True):
     tests = [
         steps.SwarmingGTestTest('base_unittests', shards=2),
     ]
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   api.test_utils.run_tests(
       api.chromium_tests.m,

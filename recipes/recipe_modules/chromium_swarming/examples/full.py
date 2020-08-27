@@ -87,6 +87,9 @@ def RunSteps(api, platforms, custom_trigger_script,
   # Create a temp dir to put *.isolated files into.
   temp_dir = api.path.mkdtemp('hello_isolated_world')
 
+  # Make sure the created Swarming requests all have `pool` in its dimension
+  api.chromium_swarming.set_default_dimension('pool', 'foo')
+
   # Prepare a bunch of swarming tasks to run hello_world on multiple platforms.
   tasks = []
   for platform in platforms:
