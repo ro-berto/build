@@ -1,0 +1,230 @@
+[
+  {
+    "cmd": [],
+    "name": "install infra/tools/run_annotations"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest",
+      "-ensure-file",
+      "infra/tools/run_annotations/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
+      "--",
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (with patch)",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot",
+      "--build-number=571",
+      "base_unittests",
+      "--gtest_filter=foo.bar",
+      "--test-launcher-retry-limit=3",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TEMP": "[CLEANUP]/tmp_tmp_2",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TMP": "[CLEANUP]/tmp_tmp_2",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
+    },
+    "name": "base_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--builder-group",
+      "test_group",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--chrome-revision",
+      "refs/x@{#0}",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
+      "@@@STEP_LOG_LINE@details@step_metadata: {'patched': False, 'canonical_step_name': 'base_unittests', 'waterfall_builder_group': None, 'waterfall_buildername': None, 'isolate_target_name': 'base_unittests'}@@@",
+      "@@@STEP_LOG_LINE@details@pass_fail_counts: {}@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
+      "--",
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (without patch)",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot",
+      "--build-number=571",
+      "base_unittests",
+      "--gtest_filter=foo.bar",
+      "--test-launcher-retry-limit=3",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TEMP": "[CLEANUP]/tmp_tmp_4",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TMP": "[CLEANUP]/tmp_tmp_4",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
+    },
+    "name": "base_unittests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--builder-group",
+      "test_group",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--chrome-revision",
+      "refs/x@{#0}",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "Upload to test-results [base_unittests] (2)"
+  },
+  {
+    "name": "$result"
+  }
+]

@@ -1,0 +1,63 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
+      "--builder-group",
+      "test_group",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "571",
+      "--test-type",
+      "blink_web_tests on Intel GPU on Mac",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "Upload to test-results [blink_web_tests on Intel GPU on Mac]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/chromium/archive_layout_test_results.py",
+      "--results-dir",
+      "[START_DIR]/layout-test-results",
+      "--build-dir",
+      "[START_DIR]/src/out",
+      "--build-number",
+      "571",
+      "--builder-name",
+      "test_buildername",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--store-latest",
+      "--step-name",
+      "blink_web_tests",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py"
+    ],
+    "name": "archive results for blink_web_tests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/extract_build.py",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--target",
+      "None/Release/out",
+      "--src-dir",
+      "None",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://bucket_name/example_buildername/full-build-linux.zip",
+      "--build_revision",
+      "example_sha",
+      "--master-name",
+      "test_group",
+      "--parent-build-number",
+      "1",
+      "--build-number",
+      "123"
+    ],
+    "infra_step": true,
+    "name": "extract build"
+  },
+  {
+    "name": "$result"
+  }
+]

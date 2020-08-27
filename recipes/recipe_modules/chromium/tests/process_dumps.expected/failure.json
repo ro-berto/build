@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/process_dumps.py",
+      "--target",
+      "Release"
+    ],
+    "infra_step": true,
+    "name": "process_dumps",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]

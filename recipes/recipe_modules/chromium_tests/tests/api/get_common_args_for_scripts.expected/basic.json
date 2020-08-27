@@ -1,0 +1,19 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/testing/scripts/example.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/recipes/runtest.py\"}",
+      "--properties",
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"linux-perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}"
+    ],
+    "name": "sample script"
+  },
+  {
+    "name": "$result"
+  }
+]

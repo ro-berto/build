@@ -1,0 +1,136 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
+      "--src-dir",
+      "None",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "None/out/Release"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "None/out/Release",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile confirm no-op"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "None/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\"]",
+      "--build-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma-clang"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
+      "--test-type=sizes",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--run-python-script",
+      "--annotate=graphing",
+      "--results-url=https://example/url",
+      "--perf-dashboard-id=sizes",
+      "--perf-id=test-perf-id",
+      "--use-histograms",
+      "--perf-config={'r_clang_rev': '123456-7'}",
+      "None/infra/scripts/legacy/recipes/chromium/sizes.py",
+      "--target",
+      "Release",
+      "--platform",
+      "linux"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "sizes"
+  },
+  {
+    "name": "$result"
+  }
+]

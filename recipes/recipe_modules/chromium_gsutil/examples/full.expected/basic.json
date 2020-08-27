@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/gsutil_download.py",
+      "--url",
+      "https://example/url",
+      "--dst",
+      "None/destination",
+      "--partial-name",
+      "example_name"
+    ],
+    "name": "Download latest file from GS"
+  },
+  {
+    "name": "$result"
+  }
+]

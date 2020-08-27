@@ -1,0 +1,1284 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['ios', 'mac']",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"src\"}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/client",
+      "-ensure-file",
+      "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/bqupload",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} git_revision:643892f957c8e106dff793468101f2ecfc31abb7",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:643\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=arm64 use_goma=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "apply build config"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci"
+    ],
+    "infra_step": true,
+    "name": "apply build config.create temp directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"bucket\": \"chromium-webrtc\",\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"tests\": [\n    {\n      \"app\": \"webrtc_perf_tests\",\n      \"bot id\": \"build15-a7\",\n      \"device type\": \"iPhone 7\",\n      \"max runtime seconds\": 7200,\n      \"os\": \"12.4.1\",\n      \"pool\": \"WebRTC\",\n      \"priority\": 30,\n      \"test args\": [\n        \"--write_perf_output_on_ios\",\n        \"--nologs\"\n      ]\n    }\n  ],\n  \"xcode build version\": \"10l232m\"\n}",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci/iOS64_Perf.json"
+    ],
+    "infra_step": true,
+    "name": "apply build config.generate iOS64_Perf.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@{@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"bucket\": \"chromium-webrtc\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"configuration\": \"Release\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"is_debug=false\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"target_cpu=\\\"arm\\\"\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  ],@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@    {@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"app\": \"webrtc_perf_tests\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"bot id\": \"build15-a7\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"device type\": \"iPhone 7\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"max runtime seconds\": 7200,@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"os\": \"12.4.1\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"pool\": \"WebRTC\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"priority\": 30,@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"test args\": [@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@        \"--write_perf_output_on_ios\",@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@        \"--nologs\"@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@      ]@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@    }@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  ],@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@iOS64_Perf.json@}@@@",
+      "@@@STEP_LOG_END@iOS64_Perf.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci/iOS64_Perf.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "apply build config.read build config",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"chromium-webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"bot id\": \"build15-a7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"iPhone 7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"max runtime seconds\": 7200, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"pool\": \"WebRTC\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"priority\": 30, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"test args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"--write_perf_output_on_ios\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"--nologs\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "apply build config.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/client",
+      "-ensure-file",
+      "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "apply build config.ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/bqupload",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} git_revision:643892f957c8e106dff793468101f2ecfc31abb7",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "apply build config.ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:643\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:9a1adc55bf4a1173784da3ba2f8cb06421606748",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:9a1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "10l232m",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "install xcode"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "select XCode"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "lookup",
+      "-m",
+      "internal.client.webrtc",
+      "-b",
+      "iOS64 Perf",
+      "--config-file",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--quiet"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "gen",
+      "-m",
+      "internal.client.webrtc",
+      "-b",
+      "iOS64 Perf",
+      "--config-file",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
+      "//out/Release-iphoneos"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
+      "--src-dir",
+      "[CACHE]/builder/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/iOS64_Perf"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Perf",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release-iphoneos",
+      "-j",
+      "80",
+      "default",
+      "webrtc_perf_tests"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release-iphoneos",
+      "-j",
+      "80",
+      "default",
+      "webrtc_perf_tests",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bqupload-path",
+      "[CACHE]/goma/bqupload/bqupload",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-outdir",
+      "[CACHE]/builder/src/out/Release-iphoneos",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", 80, \"default\", \"webrtc_perf_tests\"]",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "compile",
+      "--ninja-log-compiler",
+      "goma-clang",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"ci\", \"builder\": \"iOS64 Perf\", \"project\": \"webrtc-internal\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "iOS64 Perf",
+      "--buildbot-mastername",
+      "internal.client.webrtc",
+      "--buildbot-slavename",
+      "fake-bot-id"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--reset"
+    ],
+    "infra_step": true,
+    "name": "reset XCode"
+  },
+  {
+    "cmd": [],
+    "name": "isolate"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest), \"test_cases\": <(test_cases), \"restart\": <(restart), \"xcode_parallelization\": <(xcode_parallelization), \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--xcode-build-version', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)']}}",
+      "[CACHE]/builder/template.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.generate template.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@template.isolate@{@@@",
+      "@@@STEP_LOG_LINE@template.isolate@  \"variables\": {@@@",
+      "@@@STEP_LOG_LINE@template.isolate@    \"command\": [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/run.py\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--app\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--host-app\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(host_app_path)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--args-json\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--out-dir\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--retries\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"3\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--shards\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(shards)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-build-version\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(xcode_version)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--mac-toolchain-cmd\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"./mac_toolchain\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-path\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"Xcode.app\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--wpr-tools-path\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(wpr_tools_path)\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"--replay-path\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(replay_path)\"@@@",
+      "@@@STEP_LOG_LINE@template.isolate@    ], @@@",
+      "@@@STEP_LOG_LINE@template.isolate@    \"files\": [@@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)/\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"<(additional_app_path)/\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@      \"src/.vpython\"@@@",
+      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
+      "@@@STEP_LOG_LINE@template.isolate@  }@@@",
+      "@@@STEP_LOG_LINE@template.isolate@}@@@",
+      "@@@STEP_LOG_END@template.isolate@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_2/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CLEANUP]/isolate_tmp_2/0.isolated.gen.json"
+    ],
+    "infra_step": true,
+    "name": "isolate.generate 0.isolated.gen.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@webrtc_perf_tests (iPhone 7 iOS 12.4.1)@@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"restart\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"shards\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"1\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_args\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_parallelization\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcodebuild_device_runner\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_cases\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"use_trusted_cert\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_2/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"host_app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"additional_app_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"wpr_tools_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"replay_path\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[CACHE]/builder\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
+      "@@@STEP_LOG_END@0.isolated.gen.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/src/tools/luci-go/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://chrome-isolated.appspot.com",
+      "--verbose",
+      "[CLEANUP]/isolate_tmp_2/0.isolated.gen.json"
+    ],
+    "name": "isolate.isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"0\": \"[dummy hash for 0]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://chrome-isolated.appspot.com\"@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0\": \"[dummy hash for 0]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chrome-swarming.appspot.com",
+      "--isolate-server",
+      "https://chrome-isolated.appspot.com",
+      "--priority",
+      "30",
+      "--task-name",
+      "webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "7200",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "device",
+      "iPhone9,1",
+      "--dimension",
+      "device_status",
+      "available",
+      "--dimension",
+      "id",
+      "build15-a7",
+      "--dimension",
+      "os",
+      "iOS-12.4.1",
+      "--dimension",
+      "pool",
+      "WebRTC",
+      "--env",
+      "ISOLATED_OUTDIR",
+      "${ISOLATED_OUTDIR}",
+      "--named-cache",
+      "xcode_ios_10l232m",
+      "Xcode.app",
+      "--service-account",
+      "chrome-tester@chops-service-accounts.iam.gserviceaccount.com",
+      "--wait-for-capacity",
+      "--tag",
+      "bucket:ci",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "builder_group:internal.client.webrtc",
+      "--tag",
+      "buildername:iOS64 Perf",
+      "--tag",
+      "data:[dummy hash for 0]",
+      "--tag",
+      "device_type:iPhone 7",
+      "--tag",
+      "ios_version:12.4.1",
+      "--tag",
+      "name:webrtc_perf_tests",
+      "--tag",
+      "ninja_target:",
+      "--tag",
+      "platform:device",
+      "--tag",
+      "project:webrtc",
+      "--tag",
+      "purpose:CI",
+      "--tag",
+      "purpose:post-commit",
+      "--tag",
+      "slavename:fake-bot-id",
+      "--tag",
+      "spec_name:webrtc-internal.ci:iOS64 Perf",
+      "--tag",
+      "stepname:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
+      "--tag",
+      "test:webrtc_perf_tests",
+      "--tag",
+      "test_id_prefix:",
+      "--tag",
+      "test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)",
+      "--idempotent",
+      "--cipd-package",
+      ".:infra/tools/mac_toolchain/${platform}:git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "--isolated",
+      "[dummy hash for 0]"
+    ],
+    "infra_step": true,
+    "name": "trigger.[trigger] webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Bot id: 'build15-a7'<br/>Run on OS: 'iOS-12.4.1'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chrome-swarming.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "install infra/tools/luci/swarming"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+    ],
+    "infra_step": true,
+    "name": "install infra/tools/luci/swarming.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} swarming_module_pin",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "install infra/tools/luci/swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-swarming_module_\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/0_tmp_3",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chrome-swarming.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "name": "webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Bot id: 'build15-a7'<br/>Run on OS: 'iOS-12.4.1'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
+      "--build-page-url",
+      "https://ci.chromium.org/p/webrtc-internal/builders/luci.webrtc-internal.ci/iOS64%20Perf/0",
+      "--test-suite",
+      "webrtc_perf_tests",
+      "--bot",
+      "webrtc-ios-tests",
+      "--output-json-file",
+      "/path/to/tmp/json",
+      "--input-results-file",
+      "\nx\n\rwebrtc metric\u0012\u0002\b\r*c\n.\n\u0004bots\u0012&:$f7f17394-fa4a-481e-86bd-a82cd55935a7\n1\n\u0007pointId\u0012&:$88ea36c7-6dcb-4ba8-ba56-1979de05e16f\u0012?\n$f7f17394-fa4a-481e-86bd-a82cd55935a7\u0012\u0017\u001a\u0015\n\u0013\"webrtc_perf_tests\"\u00122\n$88ea36c7-6dcb-4ba8-ba56-1979de05e16f\u0012\n\u001a\b\n\u0006123456\u0012\u0011\n\bwhatever\u0012\u0005\u001a\u0003\n\u00012",
+      "--dashboard-url",
+      "https://chromeperf.appspot.com",
+      "--commit-position",
+      "170242",
+      "--webrtc-git-hash",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--perf-dashboard-machine-group",
+      "WebRTCPerf",
+      "--outdir",
+      "[CACHE]/builder/src/out/Release-iphoneos"
+    ],
+    "infra_step": true,
+    "name": "webrtc_perf_tests Dashboard Upload",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
+    "failure": {
+      "humanReason": "Failed webrtc_perf_tests (iPhone 7 iOS 12.4.1)."
+    },
+    "name": "$result"
+  }
+]

@@ -14,6 +14,9 @@ def Extend(pythonpath, cwd, with_third_party):
   In this invocation, 'cwd' is the <build> directory.
   """
   build_path = [
+      # This will allow scripts to import 'recipes'. You shouldn't add a
+      # dependency on this.
+      cwd,
       os.path.join(cwd, 'scripts'),
       os.path.join(cwd, 'site_config'),
   ]

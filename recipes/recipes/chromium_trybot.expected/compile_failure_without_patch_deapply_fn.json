@@ -1,0 +1,1848 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'<br/>running tester 'Linux Release (NVIDIA)' on group 'chromium.gpu' against builder 'GPU Linux Builder' on group 'chromium.gpu'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.linux\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Tests\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_group\": \"chromium.linux\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }, @@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.gpu\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"GPU Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Release (NVIDIA)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_group\": \"chromium.gpu\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux Tests@@@",
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux Builder@@@",
+      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux Release (NVIDIA)@@@",
+      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/GPU Linux Builder@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit fetch current CL info",
+    "timeout": 600,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"owner\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"John Doe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "--patch_root",
+      "src",
+      "--revision_mapping_file",
+      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--patch_ref",
+      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "--revision",
+      "src@HEAD",
+      "--no_fetch_tags"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "timeout": 3600,
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/buildtools\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/buildtools.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/dawn\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/dawn.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/swiftshader\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/buildtools\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/buildtools.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/native_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/native_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/angle\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/angle.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/dawn\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/dawn.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/swiftshader\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/webrtc\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/tools/swarming_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_angle_revision@\"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_angle_revision_cp@\"refs/heads/master@{#297276}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_buildtools_revision@\"f0319a328b2809876916353cb994259692140934\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_buildtools_revision_cp@\"refs/heads/master@{#182578}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_dawn_revision@\"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_dawn_revision_cp@\"refs/heads/master@{#51819}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/master@{#274981}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#276089}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision@\"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision_cp@\"refs/heads/master@{#202157}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#43426}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision_cp@\"refs/heads/master@{#120644}\"@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/client",
+      "-ensure-file",
+      "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/bqupload",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} git_revision:643892f957c8e106dff793468101f2ecfc31abb7",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:643\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "swarming.py --version",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gclient runhooks (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/testing/buildbot/chromium.gpu.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read test spec (chromium.gpu.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.gpu.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read test spec (chromium.linux.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "git diff to analyze patch",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: Path([CHECKOUT], 'testing', 'buildbot', 'trybot_analyze_config.json')@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux-rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--luci-auth",
+      "-v",
+      "//out/Release",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "/path/to/tmp/json",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "analyze_matched_exclusion",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure output directory (with patch)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "create compile guard (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
+      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux-rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--luci-auth",
+      "--recursive"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux-rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--luci-auth",
+      "--json-output",
+      "/path/to/tmp/json",
+      "//out/Release"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/linux_rel"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_rel",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "-j",
+      "80",
+      "base_unittests"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "-j",
+      "80",
+      "base_unittests",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile (with patch) confirm no-op"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bqupload-path",
+      "[CACHE]/goma/bqupload/bqupload",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-outdir",
+      "[CACHE]/builder/src/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"base_unittests\"]",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "compile (with patch)",
+      "--ninja-log-compiler",
+      "goma",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "linux-rel",
+      "--buildbot-mastername",
+      "tryserver.chromium.linux",
+      "--buildbot-slavename",
+      "fake-bot-id"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "remove compile guard (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "mark: before_tests"
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
+    "cmd": [],
+    "name": "install infra/tools/run_annotations"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest",
+      "-ensure-file",
+      "infra/tools/run_annotations/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/run_annotations.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
+      "--",
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"mastername\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"mastername\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (with patch)",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=linux-rel",
+      "--slave-name=test_bot",
+      "--build-number=571",
+      "base_unittests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TEMP": "[CLEANUP]/tmp_tmp_2",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TMP": "[CLEANUP]/tmp_tmp_2",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
+    },
+    "name": "base_unittests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"FAILURE\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@:(@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_END@Deterministic failure: Test.Two (status FAILURE)@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "--builder-group",
+      "tryserver.chromium.linux",
+      "--builder-name",
+      "linux-rel",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
+      "--input-path",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.Two\"}]}",
+      "--output-path",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "query known flaky failures on CQ",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@input@{@@@",
+      "@@@STEP_LOG_LINE@input@    \"project\": \"chromium\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@input@        {@@@",
+      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"base_unittests (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@input@            \"test_name\": \"Test.Two\"@@@",
+      "@@@STEP_LOG_LINE@input@        }@@@",
+      "@@@STEP_LOG_LINE@input@    ]@@@",
+      "@@@STEP_LOG_LINE@input@}@@@",
+      "@@@STEP_LOG_END@input@@@",
+      "@@@STEP_LOG_LINE@output@null@@@",
+      "@@@STEP_LOG_END@output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "--patch_root",
+      "src",
+      "--revision_mapping_file",
+      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--no_fetch_tags"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/buildtools\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/buildtools.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/dawn\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/dawn.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/swiftshader\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/buildtools\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/buildtools.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/native_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/native_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/angle\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/angle.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/dawn\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/dawn.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/swiftshader\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/webrtc\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/tools/swarming_client\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/tools/swarming_client.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gclient runhooks (without patch)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure output directory (without patch)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "create compile guard (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
+      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux-rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--luci-auth",
+      "--quiet"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.linux",
+      "-b",
+      "linux-rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--luci-auth",
+      "--json-output",
+      "/path/to/tmp/json",
+      "//out/Release"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read gn_logs.txt (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (2)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/linux_rel"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (2).goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_rel",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (2).start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (2).goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (2).start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "-j",
+      "80",
+      "base_unittests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
+      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma (2).goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma (2).goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "name": "postprocess_for_goma (2).stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bqupload-path",
+      "[CACHE]/goma/bqupload/bqupload",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-outdir",
+      "[CACHE]/builder/src/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"base_unittests\"]",
+      "--build-exit-status",
+      "1",
+      "--build-step-name",
+      "compile (without patch)",
+      "--ninja-log-compiler",
+      "goma",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "linux-rel",
+      "--buildbot-mastername",
+      "tryserver.chromium.linux",
+      "--buildbot-slavename",
+      "fake-bot-id"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "postprocess_for_goma (2).upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma (2).stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "remove compile guard (without patch)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "clobber"
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "#### Step _compile (without patch)_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+    },
+    "name": "$result"
+  }
+]

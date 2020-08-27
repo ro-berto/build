@@ -13,13 +13,13 @@ import re
 
 def GetFilesToSkip(input_api):
   return list(input_api.DEFAULT_FILES_TO_SKIP) + [
-      r'.*slave/.*/build.*/.*',
-      r'.*slave/.*/isolate.*/.*',
+      r'.*recipes/.*/build.*/.',
+      r'.*recipes/.*/isolate.*/.',
       r'.*depot_tools/.*',
       r'.*goma/.*',
       r'.*scripts/release/.*',
-      r'.*scripts/slave/recipes.py$',
-      r'.*scripts/slave/recipes/.*_autogen.py$',
+      r'.*recipes/recipes.py$',
+      r'.*recipes/recipes/.*_autogen.py$',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
@@ -59,7 +59,7 @@ def CommitChecks(input_api, output_api):
         # pylint is fetched in memory with setuptools, it seems it caches
         # sys.path so modifications to sys.path aren't kept.
         join('scripts', 'master', 'unittests'),
-        join('scripts', 'slave', 'unittests'),
+        join('recipes', 'unittests'),
         join('tests'),
       ]))
 
@@ -69,7 +69,7 @@ def CommitChecks(input_api, output_api):
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
-      input_api.os_path.join('scripts', 'slave', 'unittests'),
+      input_api.os_path.join('recipes', 'unittests'),
       files_to_check=files_to_check))
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
@@ -79,9 +79,9 @@ def CommitChecks(input_api, output_api):
 
   recipe_modules_tests = (
       input_api.glob(
-          join('scripts', 'slave', 'recipe_modules', '*', 'unittests')
+          join('recipes', 'recipe_modules', '*', 'unittests')
       ) + input_api.glob(
-          join('scripts', 'slave', 'recipe_modules', '*', 'resources')
+          join('recipes', 'recipe_modules', '*', 'resources')
       )
   )
   for path in recipe_modules_tests:
@@ -92,8 +92,8 @@ def CommitChecks(input_api, output_api):
         files_to_check=files_to_check))
 
   recipes_resources = (
-      input_api.glob(join('scripts', 'slave', 'recipes', '*.resources')) +
-      input_api.glob(join('scripts', 'slave', 'recipes', '*', '*.resources')))
+      input_api.glob(join('recipes', 'recipes', '*.resources')) +
+      input_api.glob(join('recipes', 'recipes', '*', '*.resources')))
   for path in recipes_resources:
     tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
         input_api,
@@ -106,7 +106,7 @@ def CommitChecks(input_api, output_api):
   output.extend(input_api.RunTests([input_api.Command(
       name='recipes fetch',
       cmd=[input_api.python_executable,
-           input_api.os_path.join('scripts', 'slave', 'recipes.py'), 'fetch'],
+           input_api.os_path.join('recipes', 'recipes.py'), 'fetch'],
       kwargs={},
       message=output_api.PresubmitError,
   )]))

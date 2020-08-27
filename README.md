@@ -2,7 +2,7 @@
 
 If you're here to make a change to 'recipes' (the code located in
 `scripts/slave/recipes*`), please take a look at the
-[README](./scripts/slave/README.md) for more information pertaining to recipes.
+[README](./recipes/README.md) for more information pertaining to recipes.
 
 ### Style
 
