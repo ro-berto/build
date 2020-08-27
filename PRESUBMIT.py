@@ -46,8 +46,9 @@ def CommitChecks(input_api, output_api):
   infra_path = input_api.subprocess.check_output(
       [vpython, 'scripts/common/env.py', 'print']).split()
   disabled_warnings = [
-    'C0321',  # More than one statement on a single line
-    'W0613',  # Unused argument
+      'C0321',  # More than one statement on a single line
+      'W0613',  # Unused argument
+      'W0403',  # Relative import. TODO(crbug.com/1095510): remove this
   ]
   output.extend(input_api.canned_checks.RunPylint(
       input_api,

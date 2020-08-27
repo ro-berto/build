@@ -11,7 +11,7 @@ TODO(stip): Move the perf dashboard code from runtest.py to here.
 
 import re
 
-from recipes import slave_utils
+import slave_utils
 
 # Status codes that can be returned by the evaluateCommand method.
 # From buildbot.status.builder.

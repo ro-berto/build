@@ -14,8 +14,8 @@ import traceback
 import urllib
 
 from common import chromium_utils
-from recipes import build_directory
-from recipes import slave_utils
+import build_directory
+import slave_utils
 
 
 class ExtractHandler(object):

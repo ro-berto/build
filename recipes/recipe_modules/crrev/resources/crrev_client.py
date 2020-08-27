@@ -20,8 +20,9 @@ import sys
 import time
 import urllib
 
-sys.path.insert(0, os.path.join(
-    os.path.dirname(__file__), '..', '..', '..', '..'))
+sys.path.insert(
+    0,
+    os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'scripts'))
 import common.env
 common.env.Install()
 

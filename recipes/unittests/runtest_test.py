@@ -5,13 +5,18 @@
 
 """Unit tests for functions in runtest.py."""
 
+import os
 import unittest
+import sys
 
 import mock
 
 import test_env  # pylint: disable=relative-import
 
-from recipes import runtest
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import runtest
 
 
 class FakeLogProcessor(object):
@@ -71,9 +76,9 @@ class SendResultsToDashboardTest(unittest.TestCase):
   # Testing private method _GetDataFromLogProcessor.
   # Also, this test method doesn't reference self.
   # pylint: disable=W0212,R0201
-  @mock.patch('slave.runtest._GetDataFromLogProcessor')
-  @mock.patch('slave.results_dashboard.MakeListOfPoints')
-  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('runtest._GetDataFromLogProcessor')
+  @mock.patch('results_dashboard.MakeListOfPoints')
+  @mock.patch('results_dashboard.SendResults')
   def test_SendResultsToDashboard_SimpleCase(
       self, SendResults, MakeListOfPoints, GetDataFromLogProcessor
   ):
@@ -114,8 +119,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True.
     self.assertTrue(result)
 
-  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
-  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('results_dashboard.MakeDashboardJsonV1')
+  @mock.patch('results_dashboard.SendResults')
   def test_SendResultsToDashboard_Telemetry(
       self, SendResults, MakeDashboardJsonV1
   ):
@@ -157,8 +162,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True.
     self.assertTrue(result)
 
-  @mock.patch('slave.results_dashboard.MakeHistogramSetWithDiagnostics')
-  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('results_dashboard.MakeHistogramSetWithDiagnostics')
+  @mock.patch('results_dashboard.SendResults')
   @mock.patch('os.getcwd')
   def test_SendResultsToDashboard_Histograms(
       self, getcwd, SendResults, MakeHistogramSetWithDiagnostics
@@ -209,8 +214,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True.
     self.assertTrue(result)
 
-  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
-  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('results_dashboard.MakeDashboardJsonV1')
+  @mock.patch('results_dashboard.SendResults')
   def test_SendResultsToDashboard_DisabledBenchmark(
       self, SendResults, MakeDashboardJsonV1
   ):
@@ -249,8 +254,8 @@ class SendResultsToDashboardTest(unittest.TestCase):
     # No errors, should return True since disabled run is successful.
     self.assertTrue(result)
 
-  @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
-  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('results_dashboard.MakeDashboardJsonV1')
+  @mock.patch('results_dashboard.SendResults')
   def test_SendResultsToDashboard_NoTelemetryOutput(
       self, SendResults, MakeDashboardJsonV1
   ):

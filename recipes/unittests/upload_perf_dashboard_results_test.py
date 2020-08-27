@@ -5,15 +5,20 @@
 
 """Test cases for upload_perf_dashboard_results_test.py"""
 
-import unittest
+import os
+import sys
 import tempfile
+import unittest
 
 import mock
 
 import test_env  # pylint: disable=relative-import
 
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
 from common import chromium_utils
-from recipes import upload_perf_dashboard_results
+import upload_perf_dashboard_results
 
 
 class UploadPerfDashboardResultsTest(unittest.TestCase):

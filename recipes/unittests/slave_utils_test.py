@@ -11,7 +11,11 @@ import mock
 
 import test_env  # pylint: disable=relative-import
 
-import slave.slave_utils as slave_utils
+# build/recipes/unittests
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import slave_utils
 from common import chromium_utils
 
 # build/scripts/slave/unittests

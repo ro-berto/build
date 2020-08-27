@@ -44,16 +44,16 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 from common import chromium_utils
 from common import gtest_utils
 
-from recipes import annotation_utils
-from recipes import build_directory
-from recipes import crash_utils
-from recipes import histogram_results_parser
-from recipes import gtest_slave_utils
-from recipes import performance_log_processor
-from recipes import results_dashboard
-from recipes import slave_utils
-from recipes import telemetry_utils
-from recipes import xvfb
+import annotation_utils
+import build_directory
+import crash_utils
+import histogram_results_parser
+import gtest_slave_utils
+import performance_log_processor
+import results_dashboard
+import slave_utils
+import telemetry_utils
+import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 

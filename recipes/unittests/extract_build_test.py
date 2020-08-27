@@ -5,15 +5,16 @@
 
 import os
 import unittest
+import sys
 
 import test_env  # pylint: disable=relative-import
 
-from recipes import extract_build
-from recipes import slave_utils
-
-# build/scripts/slave/unittests
+# build/recipes/unittests
 _SCRIPT_DIR = os.path.dirname(__file__)
-_BUILD_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir, os.pardir))
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import extract_build
+import slave_utils
 
 
 class MockOptions(object):

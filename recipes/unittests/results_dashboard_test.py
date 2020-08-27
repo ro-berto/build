@@ -23,7 +23,10 @@ import mock
 
 import test_env  # pylint: disable=relative-import
 
-from recipes import results_dashboard
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import results_dashboard
 from common import chromium_utils
 
 
@@ -54,7 +57,7 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     self.internal_Test_MakeDashboardJsonV1(enabled=False)
 
   def internal_Test_MakeDashboardJsonV1(self, enabled=True):
-    with mock.patch('slave.results_dashboard._GetTimestamp') as getTS:
+    with mock.patch('results_dashboard._GetTimestamp') as getTS:
       getTS.side_effect = [307226, 307226]
 
       v1json = results_dashboard.MakeDashboardJsonV1({
@@ -359,7 +362,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
 
       return httplib2.Response({'status': status_codes[i], 'reason': 'foo'}), ''
 
-    with mock.patch('slave.results_dashboard._Httplib2PostRequest',
+    with mock.patch('results_dashboard._Httplib2PostRequest',
                     side_effect=_fake_httplib2_req):
       result = results_dashboard.SendResults(
           new_data, 'https://x.com', self.build_dir, oauth_token=oauth_token
@@ -499,7 +502,7 @@ class ResultsDashboardSendDataTest(unittest.TestCase):
 
       return httplib2.Response({'status': status_codes[i], 'reason': 'foo'}), ''
 
-    with mock.patch('slave.results_dashboard._Httplib2PostRequest',
+    with mock.patch('results_dashboard._Httplib2PostRequest',
                     side_effect=_fake_httplib2_req):
       result = results_dashboard.SendResults(
           new_data,

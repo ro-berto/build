@@ -11,9 +11,9 @@ import sys
 
 from common import gtest_utils
 from xml.dom import minidom
-from recipes.gtest.json_results_generator import JSONResultsGenerator
-from recipes.gtest.test_result import canonical_name
-from recipes.gtest.test_result import TestResult
+from gtest.json_results_generator import JSONResultsGenerator
+from gtest.test_result import canonical_name
+from gtest.test_result import TestResult
 
 GENERATE_JSON_RESULTS_OPTIONS = [
     'builder_name', 'build_name', 'build_number', 'results_directory',

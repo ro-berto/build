@@ -15,8 +15,8 @@ import logging
 import os
 import time
 
-from recipes.gtest.test_result import TestResult
-from recipes.gtest.test_results_uploader import TestResultsUploader
+from gtest.test_result import TestResult
+from gtest.test_results_uploader import TestResultsUploader
 
 # A JSON results generator for generic tests.
 

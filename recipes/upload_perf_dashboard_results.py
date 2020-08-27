@@ -16,8 +16,8 @@ import os
 import re
 import sys
 
-from recipes import results_dashboard
-from recipes import slave_utils
+import results_dashboard
+import slave_utils
 
 from common import chromium_utils  # pylint: disable=W0611
 

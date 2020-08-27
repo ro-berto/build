@@ -20,8 +20,8 @@ import sys
 import tempfile
 
 from common import chromium_utils
-from recipes import build_directory
-from recipes import slave_utils
+import build_directory
+import slave_utils
 
 # Mojo JS bindings path relative to the build directory.
 MOJO_BINDINGS_PATH = 'gen/mojo/public/js/mojo_bindings.js'

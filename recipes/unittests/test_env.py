@@ -24,10 +24,10 @@ if not os.getenv('VIRTUAL_ENV'):
 
 RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
-BASE_DIR = os.path.abspath(
-    os.path.join(RUNTESTS_DIR, os.pardir, os.pardir, os.pardir))
+BASE_DIR = os.path.abspath(os.path.join(RUNTESTS_DIR, os.pardir, os.pardir))
 
 # Load our common Infra environment.
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'recipes'))
 import common.env
 common.env.Install(with_third_party=True)

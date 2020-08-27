@@ -6,7 +6,7 @@ import codecs
 import socket
 
 from common import url_helper
-from recipes.gtest.networktransaction import NetworkTransaction
+from gtest.networktransaction import NetworkTransaction
 
 
 class TestResultsUploader(object):

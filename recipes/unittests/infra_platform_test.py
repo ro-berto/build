@@ -6,6 +6,7 @@
 
 """Tests that the tools/build annotated_run wrapper actually runs."""
 
+import os
 import sys
 import unittest
 
@@ -13,12 +14,15 @@ import mock
 
 import test_env  # pylint: disable=relative-import
 
-from recipes import infra_platform
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import infra_platform
 
 
 class TestGet(unittest.TestCase):
 
-  @mock.patch('slave.infra_platform.sys')
+  @mock.patch('infra_platform.sys')
   @mock.patch('platform.machine')
   @mock.patch('platform.architecture')
   def test_get(self, plat_arch, plat_machine, sys_platform):

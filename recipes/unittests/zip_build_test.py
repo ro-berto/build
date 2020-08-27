@@ -6,12 +6,16 @@
 import optparse
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 
 import test_env  # pylint: disable=relative-import
 
-import slave.zip_build as zip_build
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+
+import zip_build
 from common import chromium_utils
 
 def _build_dir(options):

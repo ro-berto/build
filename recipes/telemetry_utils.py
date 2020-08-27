@@ -15,7 +15,7 @@ import json
 import logging
 import os
 
-from recipes.performance_log_processor import _FormatHumanReadable
+from performance_log_processor import _FormatHumanReadable
 
 
 class TelemetryResultsProcessor(object):
