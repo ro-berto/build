@@ -1,4 +1,4 @@
-file://scripts/slave/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
+file://recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
 
 # Waterfall owners should be able to update trybots.py.
 per-file trybots.py=kbr@chromium.org

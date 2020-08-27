@@ -1,8 +1,8 @@
 # README.recipes.md is auto-generated, so all owners of recipes need access.
 per-file README.recipes.md=*
 
-per-file goma_utils.py=file://scripts/slave/goma/GOMA_OWNERS
-per-file upload_goma_logs.py=file://scripts/slave/goma/GOMA_OWNERS
+per-file goma_utils.py=file://recipes/goma/GOMA_OWNERS
+per-file upload_goma_logs.py=file://recipes/goma/GOMA_OWNERS
 
 per-file chromium_export_metadata*=ehmaldonado@chromium.org
 per-file chromium_export_metadata*=nodir@chromium.org
