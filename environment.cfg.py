@@ -18,6 +18,7 @@ def Extend(pythonpath, cwd, with_third_party):
       # dependency on this.
       cwd,
       os.path.join(cwd, 'scripts'),
+      os.path.join(cwd, 'recipes'),
       os.path.join(cwd, 'site_config'),
   ]
   if not with_third_party:
