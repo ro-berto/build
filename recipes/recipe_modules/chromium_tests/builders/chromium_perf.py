@@ -214,6 +214,33 @@ _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
 
+# Adapted from 'chromeos-amd64-generic-lacros-internal' to measure binary size.
+SPEC.update({
+    'chromeos-amd64-generic-lacros-builder-perf':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium_perf',
+            chromium_apply_config=[
+                'mb_luci_auth',
+            ],
+            gclient_config='chromium_perf',
+            gclient_apply_config=['chromeos'],
+            compile_targets=['chrome'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            isolate_server='https://chrome-isolated.appspot.com',
+            swarming_server='https://chrome-swarming.appspot.com',
+            bisect_archive_build=True,
+            bisect_gs_bucket='chrome-test-builds',
+            bisect_gs_extra='official-by-commit',
+        ),
+})
+
 _AddBuildSpec('linux-builder-perf', 'linux', bisect_archive_build=True)
 
 # Android: Clank, Webview, WebLayer
