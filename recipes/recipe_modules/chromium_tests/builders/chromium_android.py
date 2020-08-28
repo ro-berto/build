@@ -456,6 +456,10 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
+        'android-pie-arm64-wpt-rel-non-cq',
+        isolate_server='https://isolateserver.appspot.com',
+        chromium_config_kwargs={'TARGET_BITS': 64}),
+    stock_config(
         'android-pie-x86-rel',
         isolate_server='https://isolateserver.appspot.com',
         android_config='x86_builder'),
