@@ -8,11 +8,12 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
-  'chromium',
-  'cronet',
-  'recipe_engine/buildbucket',
-  'recipe_engine/runtime',
-  'recipe_engine/properties',
+    'chromium',
+    'cronet',
+    'depot_tools/bot_update',
+    'recipe_engine/buildbucket',
+    'recipe_engine/runtime',
+    'recipe_engine/properties',
 ]
 
 BUILDERS = freeze({
@@ -63,40 +64,40 @@ def RunSteps(api):
   return cronet.run_perf_tests('sample-perf-id')
 
 def GenTests(api):
-  for bot_id in BUILDERS.iterkeys():
-    props = api.properties.generic(
-      buildername=bot_id,
-      revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-      repository='https://chromium.googlesource.com/chromium/src',
-      branch='master',
-      project='src',
-      got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-      got_revision_cp='refs/heads/master@{#291141}',
-      git_revision='a' * 40
-    )
-    # Test regular bot.
-    yield api.test(
-        bot_id,
-        props,
-    )
-    # Test experimental bot.
-    yield (
-        api.runtime(is_luci=True, is_experimental=True) +
-        api.test(bot_id + "_experimental") +
-        props
-    )
+  for builder in BUILDERS.iterkeys():
+    for is_experimental in (False, True):
+      test_name = builder
+      if is_experimental:
+        test_name += '_experimental'
+      yield api.test(
+          test_name,
+          api.chromium.ci_build(
+              builder_group='fake-group',
+              builder=builder,
+          ),
+          api.runtime(is_luci=True, is_experimental=is_experimental),
+      )
+
+  # Do these proerties actually ever get set anymore?
+  yield api.test(
+      'optional_properties',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='local_test',
+          revision='a' * 40,
+      ),
+      api.properties(
+          git_revision='a' * 40,
+          got_revision_cp=api.bot_update.gen_commit_position('src'),
+      ),
+  )
 
   yield api.test(
       'compile_failure',
-      api.properties.generic(
-          buildername='local_test',
-          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-          repository='https://chromium.googlesource.com/chromium/src',
-          branch='master',
-          project='src',
-          got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-          got_revision_cp='refs/heads/master@{#291141}',
-          git_revision='a' * 40),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='local_test',
+      ),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
