@@ -11,7 +11,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
@@ -27,7 +26,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -44,7 +42,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -62,7 +59,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
@@ -78,7 +74,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -94,7 +89,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -113,7 +107,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
@@ -129,7 +122,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -146,7 +138,6 @@ SPEC = {
                 'mb',
                 'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -165,7 +156,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
@@ -181,7 +171,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -196,7 +185,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -212,7 +200,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -231,7 +218,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -249,7 +235,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -268,7 +253,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],

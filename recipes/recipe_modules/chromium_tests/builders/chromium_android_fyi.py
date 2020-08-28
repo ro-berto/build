@@ -17,7 +17,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -33,7 +32,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -48,7 +46,6 @@ SPEC = {
     'Memory Infra Tester':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -64,7 +61,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -80,7 +76,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -96,7 +91,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -112,7 +106,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],

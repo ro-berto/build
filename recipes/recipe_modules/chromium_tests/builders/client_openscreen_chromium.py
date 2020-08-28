@@ -29,7 +29,6 @@ SPEC = {
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],
@@ -44,7 +43,6 @@ SPEC = {
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],

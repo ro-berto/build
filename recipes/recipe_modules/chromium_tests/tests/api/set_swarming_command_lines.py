@@ -63,49 +63,23 @@ def GenTests(api):
       ],
   }
 
-  def fake_bot_db(chromium_tests_apply_config):
-    return bot_db.BotDatabase.create({
-        fake_group: {
-            fake_builder:
-                bot_spec.BotSpec.create(
-                    chromium_config='chromium',
-                    gclient_config='chromium',
-                    chromium_tests_apply_config=chromium_tests_apply_config),
-            fake_tester:
-                bot_spec.BotSpec.create(
-                    execution_mode=bot_spec.TEST,
-                    parent_buildername=fake_builder,
-                    chromium_config='chromium',
-                    gclient_config='chromium',
-                    chromium_tests_apply_config=chromium_tests_apply_config)
-        }
-    })
-
-  def fake_ci_builder(chromium_tests_apply_config):
-    return sum([
-        api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-        api.properties(swarm_hashes=fake_swarm_hashes),
-        api.platform('linux', 64),
-        api.chromium_tests.builders(
-            bot_db.BotDatabase.create({
-                fake_group: {
-                    fake_tester:
-                        bot_spec.BotSpec.create(
-                            chromium_config='chromium',
-                            gclient_config='chromium',
-                            chromium_tests_apply_config=\
-                                chromium_tests_apply_config,
-                            isolate_server='https://isolateserver.appspot.com',
-                        ),
-                },
-            })),
-        api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-    ], api.empty_test_data())
-
   yield api.test(
-      'use_swarming_command_lines',
-      fake_ci_builder(
-          chromium_tests_apply_config=['use_swarming_command_lines']),
+      'combined_builder_tester',
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(post_process.StepCommandContains,
                        'test_pre_run.[trigger] %s' % fake_test,
@@ -117,33 +91,26 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test(
-      'do_not_use_swarming_command_lines',
-      fake_ci_builder(
-          chromium_tests_apply_config=['do_not_use_swarming_command_lines']),
-      api.post_process(post_process.DoesNotRun, 'find command lines'),
-      api.post_process(post_process.DropExpectation),
-  )
+  fake_bot_db = bot_db.BotDatabase.create({
+      fake_group: {
+          fake_builder:
+              bot_spec.BotSpec.create(
+                  chromium_config='chromium', gclient_config='chromium'),
+          fake_tester:
+              bot_spec.BotSpec.create(
+                  execution_mode=bot_spec.TEST,
+                  parent_buildername=fake_builder,
+                  chromium_config='chromium',
+                  gclient_config='chromium'),
+      }
+  })
 
   yield api.test(
-      'default_is_to_use_swarming_command_lines',
-      fake_ci_builder(chromium_tests_apply_config=[]),
-      api.step_data('find command lines', api.json.output(fake_command_lines)),
-      api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] %s' % fake_test,
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'builder_sets_command_line_hash_and_cwd_in_trigger',
+      'build_only_builder_sets_command_line_hash_and_cwd_in_trigger',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.platform('linux', 64),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
+      api.chromium_tests.builders(fake_bot_db),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.step_data('archive command lines',
@@ -163,9 +130,7 @@ def GenTests(api):
           swarming_command_lines_hash=fake_command_lines_hash,
           swarming_command_lines_cwd='out/Release_x64'),
       api.platform('linux', 64),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
+      api.chromium_tests.builders(fake_bot_db),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('read command lines',
                     api.file.read_json(fake_command_lines)),
@@ -173,48 +138,6 @@ def GenTests(api):
           post_process.StepCommandContains, 'test_pre_run.[trigger] fake_test',
           ['--relative-cwd', 'out/Release_x64', '--raw-cmd', '--'] +
           fake_command_lines[fake_test]),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # This can happen if the tester picks up the config but the builder
-  # does not, either due to misconfiguration or timing issues.
-  # It should be safe to remove this test once everything is flipped to
-  # always send the cmd line and cwd.
-  yield api.test(
-      'test_only_builder_does_not_get_command_line_hash_or_cwd_from_trigger',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(
-          swarm_hashes=fake_swarm_hashes, swarming_command_lines_hash=''),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
-      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-      api.post_process(post_process.DoesNotRun, 'download command lines'),
-      api.post_process(post_process.DoesNotRun, 'read command lines'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # This can happen if the tester picks up the config but the builder
-  # does not, either due to misconfiguration or timing issues.
-  # It should be safe to remove this test once everything is flipped to
-  # always send the cmd line and cwd.
-  yield api.test(
-      'test_only_builder_does_not_get_cwd_from_trigger',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(
-          swarm_hashes=fake_swarm_hashes,
-          swarming_command_lines_hash=fake_command_lines_hash),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
-      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
-      api.step_data('read command lines',
-                    api.file.read_json(fake_command_lines)),
-      api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] fake_test',
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--']),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -240,9 +163,7 @@ def GenTests(api):
                       ])
               }
           })),
-      api.chromium_tests.builders(
-          fake_bot_db(
-              chromium_tests_apply_config=['use_swarming_command_lines'])),
+      api.chromium_tests.builders(fake_bot_db),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.override_step_data(
           'read filter exclusion spec',
@@ -299,9 +220,6 @@ def GenTests(api):
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          chromium_tests_apply_config=[
-                              'use_swarming_command_lines'
-                          ],
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },

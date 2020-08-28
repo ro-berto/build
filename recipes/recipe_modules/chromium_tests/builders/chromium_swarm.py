@@ -8,7 +8,6 @@ SPEC = {
     'android-lollipop-arm-rel-swarming':
         bot_spec.BotSpec.create(
             chromium_config='android',
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -24,7 +23,6 @@ SPEC = {
     'android-marshmallow-arm64-rel-swarming':
         bot_spec.BotSpec.create(
             chromium_config='android',
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
@@ -41,7 +39,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -53,7 +50,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -65,7 +61,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={

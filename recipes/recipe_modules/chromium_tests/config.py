@@ -13,10 +13,6 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 
       # TODO(martiniss): Remove this and all uses
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
-
-      # TODO(crbug.com/816629): Flip all bots to True and then remove
-      # this option.
-      use_swarming_command_lines=Single(bool, empty_val=True, required=False),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -30,13 +26,3 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
-
-
-@config_ctx()
-def use_swarming_command_lines(c):
-  c.use_swarming_command_lines = True
-
-
-@config_ctx()
-def do_not_use_swarming_command_lines(c):
-  c.use_swarming_command_lines = False

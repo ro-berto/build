@@ -454,9 +454,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
-        if self.c.use_swarming_command_lines:
-          self.set_swarming_command_lines(tests_including_triggered,
-                                          name_suffix)
+        self.set_swarming_command_lines(tests_including_triggered, name_suffix)
 
         if bot_config.perf_isolate_upload:
           self.m.perf_dashboard.upload_isolate(
@@ -869,9 +867,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
-        if self.c.use_swarming_command_lines:
-          self.set_swarming_command_lines(
-              failing_tests, suffix=' (%s)' % suffix)
+        self.set_swarming_command_lines(failing_tests, suffix=' (%s)' % suffix)
 
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
@@ -998,7 +994,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     paths = {
         'checkout': self.m.path['checkout'],
         'runit.py': self.repo_resource('scripts', 'tools', 'runit.py'),
-        'runtest.py': self.repo_resource('recipes', 'runtest.py'),
+        'runtest.py': self.repo_resource('scripts', 'slave', 'runtest.py'),
     }
     args.extend(['--paths', self.m.json.input(paths)])
 
@@ -1172,8 +1168,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
 
-      if (self.m.chromium.c.project_generator.tool == 'mb' and
-          self.c.use_swarming_command_lines):
+      if self.m.chromium.c.project_generator.tool == 'mb':
         additional_trigger_properties['swarming_command_lines_hash'] = (
             self._archive_command_lines(self._swarming_command_lines,
                                         bot.settings.isolate_server))
@@ -1244,22 +1239,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def download_command_lines_for_tests(self, tests, bot_settings):
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
     cwd = self.m.properties.get('swarming_command_lines_cwd', '')
-    if (self.m.chromium.c.project_generator.tool == 'mb' and
-        self.c.use_swarming_command_lines and hsh):
-      self._swarming_command_lines = self.download_command_lines(
-          hsh, bot_settings.isolate_server) or {}
-      for test in tests:
-        if test.runs_on_swarming and self._swarming_command_lines:
-          command_line = self._swarming_command_lines.get(test.target_name, [])
-          if command_line:
-            # lists come back from properties as tuples, but the swarming
-            # api expects this to be an actual list.
-            test.raw_cmd = list(command_line)
-            if cwd:
-              test.relative_cwd = cwd
-            else:
-              test.relative_cwd = self.m.path.relpath(
-                  self.m.chromium.output_dir, self.m.path['checkout'])
+    self._swarming_command_lines = self.download_command_lines(
+        hsh, bot_settings.isolate_server)
+    for test in tests:
+      if test.runs_on_swarming:
+        command_line = self._swarming_command_lines.get(test.target_name, [])
+        if command_line:
+          # lists come back from properties as tuples, but the swarming
+          # api expects this to be an actual list.
+          test.raw_cmd = list(command_line)
+          test.relative_cwd = cwd
 
   def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
     self.m.python.succeeding_step(
@@ -1297,7 +1286,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.path['cleanup'],
         isolate_server=isolate_server)
     command_lines_file = self.m.path['cleanup'].join('command_lines.json')
-    return self.m.file.read_json('read command lines', command_lines_file)
+    return self.m.file.read_json(
+        'read command lines', command_lines_file, test_data={})
 
   def _contains_invalid_results(self, unrecoverable_test_suites):
     for test_suite in unrecoverable_test_suites:

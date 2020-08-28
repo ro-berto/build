@@ -11,7 +11,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_win_clang_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -31,7 +30,6 @@ SPEC = {
                 'mb',
                 'clobber',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -48,7 +46,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -68,7 +65,6 @@ SPEC = {
                 'mb',
                 'clobber',
             ],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -85,7 +81,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -102,7 +97,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -121,7 +115,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -140,7 +133,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
@@ -163,7 +155,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -181,7 +172,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -199,7 +189,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -219,7 +208,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -236,7 +224,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -255,7 +242,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -272,7 +258,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -289,7 +274,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_linux_ubsan',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -308,7 +292,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium_linux_ubsan_vptr',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={

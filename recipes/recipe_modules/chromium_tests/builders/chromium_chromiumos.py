@@ -15,7 +15,6 @@ SPEC = {
         _chromium_chromiumos_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
@@ -75,56 +74,46 @@ def _config(name,
 SPEC.update([
     _config(
         'linux-chromeos-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['use_clang_coverage']),
     _config(
         'linux-chromeos-dbg',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
     ),
     _config(
         'linux-lacros-builder-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     _config(
         'linux-lacros-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     _config(
         'linux-lacros-tester-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         execution_mode=bot_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
     _config(
         'chromeos-amd64-generic-asan-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic',
         checkout_qemu_image=True),
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic',
         checkout_qemu_image=True),
     _config(
         'chromeos-amd64-generic-dbg',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
         cros_board='amd64-generic',
         checkout_qemu_image=True,
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-arm-generic-dbg',
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='arm-generic',
         target_arch='arm',
@@ -134,7 +123,6 @@ SPEC.update([
         cros_board='arm-generic',
         target_arch='arm',
         target_bits=32,
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-kevin-rel',
@@ -147,6 +135,5 @@ SPEC.update([
         # BOTO config setup for the task's service account.
         # TODO(crbug.com/1057152): Fix this.
         chromium_apply_config=['mb_no_luci_auth'],
-        chromium_tests_apply_config=['use_swarming_command_lines'],
         isolate_server='https://isolateserver.appspot.com'),
 ])

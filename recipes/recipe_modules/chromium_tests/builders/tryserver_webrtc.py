@@ -14,7 +14,6 @@ SPEC = {
         _tryserver_webrtc_spec(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -30,7 +29,6 @@ SPEC = {
     'linux_chromium_compile':
         _tryserver_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -44,7 +42,6 @@ SPEC = {
     'linux_chromium_compile_dbg':
         _tryserver_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -58,7 +55,6 @@ SPEC = {
     'mac_chromium_compile':
         _tryserver_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -72,7 +68,6 @@ SPEC = {
     'win_chromium_compile':
         _tryserver_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -86,7 +81,6 @@ SPEC = {
     'win_chromium_compile_dbg':
         _tryserver_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            chromium_tests_apply_config=['use_swarming_command_lines'],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={

@@ -39,7 +39,6 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
           execution_mode,
       'chromium_config':
           config_name,
-      'chromium_tests_apply_config': ['use_swarming_command_lines'],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
