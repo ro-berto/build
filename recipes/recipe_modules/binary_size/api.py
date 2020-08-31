@@ -67,9 +67,11 @@ class BinarySizeApi(recipe_api.RecipeApi):
     """
     assert self.m.tryserver.is_tryserver
 
-    # Don't want milestone try builds to use gs analysis. The bucket for those
-    # looks like `try-m84`
-    is_trunk_builder = self.m.buildbucket.build.builder.bucket == 'try'
+    # Don't want milestone try builds to use gs analysis. The 'project' field
+    # looks like 'chromium-m86'
+    is_trunk_builder = (
+        self.m.buildbucket.build.builder.project == 'chromium' and
+        self.m.buildbucket.build.builder.bucket == 'try')
     use_gs_analysis = gclient_config == 'chromium' and is_trunk_builder
 
     with self.m.chromium.chromium_layout():
@@ -243,53 +245,22 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_dir = staging_dir.join(results_basename)
     self.m.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
-    # TODO: Take this if statment out once m83 and m84 builders are gone
-    if self.m.buildbucket.build.builder.bucket in ['try', 'try-m85']:
-      generator_script = self.m.path['checkout'].join(
-          'tools', 'binary_size', 'generate_commit_size_analysis.py')
+    generator_script = self.m.path['checkout'].join(
+        'tools', 'binary_size', 'generate_commit_size_analysis.py')
 
-      self.m.step(
-          name='Generate commit size analysis files',
-          cmd=[
-              generator_script,
-              '--apk-name',
-              self.apk_name,
-              '--mapping-name',
-              self.mapping_name,
-              '--staging-dir',
-              results_dir,
-              '--chromium-output-directory',
-              self.m.chromium.output_dir,
-          ])
-
-    # TODO: Take this out once m83 and m84 builders are gone
-    else:  # pragma: no cover
-      apk_path = self.m.chromium_android.apk_path(self.apk_name)
-      mapping_path = self.m.chromium_android.apk_path(self.mapping_name)
-
-      self.m.file.copy(
-          'Extracting Proguard Mapping ({}){}'.format(self.mapping_name,
-                                                      suffix), mapping_path,
-          results_dir.join(self.apk_name + '.mapping'))
-      # Can't use self.m.chromium_android.resource_sizes() without it trying to
-      # upload the results.
-      self.m.python(
-          'resource_sizes ({}){}'.format(
-              self.m.path.basename(apk_path), suffix),
-          self.m.chromium_android.c.resource_sizes, [
-              str(apk_path),
-              '--output-format=chartjson',
-              '--output-dir',
-              results_dir,
-              '--chromium-output-directory',
-              self.m.chromium.output_dir,
-          ])
-      self.m.json.read('resource_sizes result{}'.format(suffix),
-                       results_dir.join('results-chart.json'))
-
-      size_path = results_dir.join(self.apk_name + '.size')
-      self.m.chromium_android.supersize_archive(
-          apk_path, size_path, step_suffix=suffix)
+    self.m.step(
+        name='Generate commit size analysis files',
+        cmd=[
+            generator_script,
+            '--apk-name',
+            self.apk_name,
+            '--mapping-name',
+            self.mapping_name,
+            '--staging-dir',
+            results_dir,
+            '--chromium-output-directory',
+            self.m.chromium.output_dir,
+        ])
 
     return results_dir, None
 
