@@ -467,6 +467,7 @@ SPEC.update([
         'android-10-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
         isolate_server='https://isolateserver.appspot.com',
+        gclient_apply_config=['android', 'enable_wpr_tests'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),
