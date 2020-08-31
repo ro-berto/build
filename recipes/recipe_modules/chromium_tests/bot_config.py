@@ -86,14 +86,19 @@ class BotConfig(object):
                           for k, v in per_builder_values.iteritems()))
     return values[0]
 
-  def _get_source_side_specs(self, chromium_tests_api):
+  @cached_property
+  def source_side_spec_files(self):
     groups = set(key.group for key in self.all_keys)
-    specs = {}
-    for group in sorted(groups):
-      source_side_spec_file = self.source_side_spec_file or '%s.json' % group
-      spec = chromium_tests_api.read_source_side_spec(source_side_spec_file)
-      specs[group] = spec
-    return specs
+    spec_files = {}
+    for group in groups:
+      spec_files[group] = self.source_side_spec_file or '{}.json'.format(group)
+    return spec_files
+
+  def _get_source_side_specs(self, chromium_tests_api):
+    return {
+        group: chromium_tests_api.read_source_side_spec(spec_file)
+        for group, spec_file in sorted(self.source_side_spec_files.iteritems())
+    }
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
     # The scripts_compile_targets is indirected through a function so that we

@@ -1541,6 +1541,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Use analyze to determine the compile targets that are affected by the CL.
     # Use this to prune the relevant compile targets and test targets.
     if self.m.tryserver.is_tryserver:
+      absolute_affected_files = set(
+          str(self.m.chromium.c.CHECKOUT_PATH.join(f)) for f in affected_files)
+      absolute_spec_files = set(
+          str(self.m.chromium.c.source_side_spec_dir.join(f))
+          for f in bot.settings.source_side_spec_files.itervalues())
+      affected_spec_files = absolute_spec_files & absolute_affected_files
+      # If any of the spec files that we used for determining the targets/tests
+      # is affected, skip doing analysis, just build/test all of them
+      if affected_spec_files:
+        step_result = self.m.step('analyze', [])
+        text = [
+            'skipping analyze, '
+            'the following source test specs are consumed by the builder '
+            'and affected by the CL:'
+        ]
+        text.extend(sorted(affected_spec_files))
+        step_result.presentation.step_text = '\n'.join(text)
+        return test_targets, compile_targets
+
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
       analyze_names = ['chromium'] + list(bot.config.analyze_names)
