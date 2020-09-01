@@ -66,41 +66,19 @@ def CommitChecks(input_api, output_api):
 
   tests = []
 
-  files_to_check = [r'.+_test\.py$']
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join('recipes', 'unittests'),
-      files_to_check=files_to_check))
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join('scripts', 'common', 'unittests'),
-      files_to_check=files_to_check))
-
-  recipe_modules_tests = (
-      input_api.glob(
-          join('recipes', 'recipe_modules', '*', 'unittests')
-      ) + input_api.glob(
-          join('recipes', 'recipe_modules', '*', 'resources')
-      )
-  )
-  for path in recipe_modules_tests:
-    tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-        input_api,
-        output_api,
-        path,
-        files_to_check=files_to_check))
-
-  recipes_resources = (
-      input_api.glob(join('recipes', 'recipes', '*.resources')) +
-      input_api.glob(join('recipes', 'recipes', '*', '*.resources')))
-  for path in recipes_resources:
-    tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-        input_api,
-        output_api,
-        path,
-        files_to_check=files_to_check))
+  for dir_glob in (
+      ('recipes', 'unittests'),
+      ('scripts', 'common', 'unittests'),
+      ('recipes', 'recipe_modules', '*', 'unittests'),
+      ('recipes', 'recipe_modules', '*', 'resources'),
+      ('recipes', 'recipes', '*.resources'),
+      ('recipes', 'recipes', '*', '*.resources'),
+  ):
+    glob = dir_glob + ('*_test.py',)
+    test_files = input_api.glob(join(*glob))
+    tests.extend(
+        input_api.canned_checks.GetUnitTests(input_api, output_api, test_files)
+    )
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
   # condition where multiple tests are trying to fetch at once.
