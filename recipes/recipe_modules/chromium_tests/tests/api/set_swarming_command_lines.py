@@ -24,6 +24,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_results',
     'test_utils',
 ]
@@ -63,6 +64,14 @@ def GenTests(api):
       ],
   }
 
+  def is_subsequence(containing, contained):
+    result = False
+    for i in range(len(containing) - len(contained) + 1):
+      if containing[i:i + len(contained)] == contained:
+        result = True
+        break
+    return result
+
   yield api.test(
       'combined_builder_tester',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
@@ -88,6 +97,37 @@ def GenTests(api):
                        'test_pre_run.[trigger] %s' % fake_test,
                        ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
                        fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'combined_builder_tester_use_swarming',
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                          chromium_tests_apply_config=[
+                              'use_swarming_recipe_to_trigger'
+                          ],
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] %s' % fake_test, lambda check, req: check(req[
+              0].relative_cwd == 'out/Release'), lambda check, req: check(
+                  is_subsequence(req[0].command, fake_command_lines[fake_test])
+              ), lambda check, req: check(req[0].env_vars['ISOLATED_OUTDIR'] ==
+                                          '${ISOLATED_OUTDIR}')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -241,5 +281,45 @@ def GenTests(api):
                        'test_pre_run.[trigger] %s (experimental)' % fake_test,
                        ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
                        fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      "ci_bot_with_experimental_test_use_swarming",
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                          chromium_tests_apply_config=[
+                              'use_swarming_recipe_to_trigger'
+                          ],
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'isolated_scripts': [{
+                      'name': fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                      'experiment_percentage': 100
+                  }],
+              }
+          }),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] %s (experimental)' % fake_test, lambda check,
+          req: check(req[0].relative_cwd == 'out/Release'), lambda check, req:
+          check(is_subsequence(req[0].command, fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )

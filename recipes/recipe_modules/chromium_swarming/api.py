@@ -719,8 +719,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     Args:
       task: SwarmingTask instance.
       kwargs: passed to recipe step constructor as-is.
-    Returns:
-      A list of StepResults, one for each shard triggered.
     """
     assert isinstance(task, SwarmingTask)
     assert task.task_name not in self._pending_tasks, (
@@ -731,10 +729,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # triggered.
     self._pending_tasks.add(task.task_name)
 
-    step_results = []
-
     base_task_name = None
     tasks = {}
+    use_swarming_recipe_to_trigger = kwargs.pop(
+        'use_swarming_recipe_to_trigger', False)
 
     # The public interface for perf_device_trigger.py and the default trigger
     # script are starting to diverge. The former requires that all shard indices
@@ -746,32 +744,44 @@ class SwarmingApi(recipe_api.RecipeApi):
       assert not script.endswith('swarming.py'), (
           'trigger_script[\'script\'] must be a custom script, as %s no longer '
           'supports \'--shards\'.' % script)
-      return [self._trigger_all_task_shards(task, task.shard_indices, **kwargs)]
+      self._trigger_all_task_shards(task, task.shard_indices, **kwargs)
+      return
 
-    for shard_index in task.shard_indices:
-      step_result, json_output = (
-          self._trigger_task_shard(task, shard_index, **kwargs))
-      step_results.append(step_result)
+    if task.trigger_script or not use_swarming_recipe_to_trigger:
+      for shard_index in task.shard_indices:
+        step_result, json_output = (
+            self._trigger_task_shard_legacy(task, shard_index, **kwargs))
 
-      # Merge the JSON outputs. There should be two fields: base_task_name,
-      # which should be identical from all outputs. And tasks, a dictionary of
-      # dictionaries. Each of the keys in tasks should be unique.
-      new_base_task_name = json_output['base_task_name']
-      if (base_task_name and base_task_name
-          != new_base_task_name): # pragma: no cover
+        # Merge the JSON outputs. There should be two fields: base_task_name,
+        # which should be identical from all outputs. And tasks, a dictionary of
+        # dictionaries. Each of the keys in tasks should be unique.
+        new_base_task_name = json_output['base_task_name']
+        if (base_task_name and
+            base_task_name != new_base_task_name):  # pragma: no cover
+          raise recipe_api.StepFailure(
+              'Triggered shards for a single swarming task had different base '
+              'names: {} and {}'.format(base_task_name, new_base_task_name),
+              result=step_result)
+
+        base_task_name = new_base_task_name
+        for key, value in json_output['tasks'].iteritems():
+          tasks[key] = value
+
+      if len(tasks) != len(task.shard_indices):  # pragma: no cover
         raise recipe_api.StepFailure(
-            'Triggered shards for a single swarming task had different base '
-            'names: {} and {}'.format(base_task_name, new_base_task_name),
+            'Wrong number of triggered tasks. Expected: {}. Actual: {}.'.format(
+                len(task.shard_indices), len(tasks)),
             result=step_result)
-
-      base_task_name = new_base_task_name
-      for key,value in json_output['tasks'].iteritems():
-        tasks[key] = value
-
-    if len(tasks) != len(task.shard_indices): # pragma: no cover
-      raise recipe_api.StepFailure(
-          'Wrong number of triggered tasks. Expected: {}. Actual: {}.'.format(
-              len(task.shard_indices), len(tasks)), result=step_result)
+    else:
+      for shard_index in task.shard_indices:
+        metas = self._trigger_task_shard_default(task, shard_index)
+        for meta in metas:
+          tasks[meta.name] = {
+              'task_id': str(meta.id),
+              'shard_index': shard_index,
+              'view_url': meta.task_ui_link,
+          }
+      base_task_name = task.task_name
 
     trigger_output = {
         'base_task_name' : base_task_name,
@@ -953,8 +963,11 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def _trigger_task_shard(self, task, shard_index, **kwargs):
+  def _trigger_task_shard_legacy(self, task, shard_index, **kwargs):
     """Triggers a single shard for a task.
+
+    This is the legacy way for triggering a task. It uses `swarming.py` and
+    manually constructs a command line.
 
     Returns: (step_result, json_output)
       step_result: The step representing the triggered shard.
@@ -1001,6 +1014,32 @@ class SwarmingApi(recipe_api.RecipeApi):
         links['shard #%d' % shard_index] = url
 
     return step_result, step_result.json.output
+
+  def _trigger_task_shard_default(self, task, shard_index):
+    """Triggers a single shard for a task using the `swarming` recipe module.
+
+    Returns:
+      metas: A list of swarming.TaskRequestMetadata objects.
+    """
+    req = task.request.with_name('%s:%d:%d' %
+                                 (task.request.name, shard_index, task.shards))
+    req_slice = req[0]
+    if task.named_caches:
+      req_slice = req_slice.with_named_caches(task.named_caches)
+    if task.containment_type:
+      req_slice = req_slice.with_containment_type(task.containment_type)
+    if task.wait_for_capacity:
+      req_slice = req_slice.with_wait_for_capacity(True)
+    if task.shards > 1:
+      req_slice = req_slice.with_env_vars(
+          GTEST_SHARD_INDEX=str(shard_index),
+          GTEST_TOTAL_SHARDS=str(task.shards),
+      )
+    if task.extra_args:
+      req_slice.with_command(req_slice.command + task.extra_args)
+    req = req.with_slice(0, req_slice)
+    metas = self.m.swarming.trigger(self.get_step_name('trigger', task), [req])
+    return metas
 
   def collect_task(self, task, **kwargs):
     """Waits for a single triggered task to finish.

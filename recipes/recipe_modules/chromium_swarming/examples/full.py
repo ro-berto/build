@@ -19,6 +19,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'swarming_client',
     'test_utils',
 ]
@@ -27,22 +28,24 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 PROPERTIES = {
-  'platforms': Property(default=('win',)),
-  'custom_trigger_script': Property(default=False),
-  'show_outputs_ref_in_collect_step': Property(default=True),
-  'gtest_task': Property(default=False),
-  'isolated_script_task': Property(default=False),
-  'merge': Property(default=None),
-  'trigger_script': Property(default=None),
-  'named_caches': Property(default=None),
-  'service_account': Property(default=None),
-  'wait_for_tasks': Property(default=None),
+    'platforms': Property(default=('win',)),
+    'custom_trigger_script': Property(default=False),
+    'show_outputs_ref_in_collect_step': Property(default=True),
+    'gtest_task': Property(default=False),
+    'isolated_script_task': Property(default=False),
+    'merge': Property(default=None),
+    'trigger_script': Property(default=None),
+    'named_caches': Property(default=None),
+    'service_account': Property(default=None),
+    'wait_for_tasks': Property(default=None),
+    'use_swarming_recipe_to_trigger': Property(default=False),
 }
+
 
 def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks):
+             wait_for_tasks, use_swarming_recipe_to_trigger):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -168,7 +171,8 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    api.chromium_swarming.trigger_task(task)
+    api.chromium_swarming.trigger_task(
+        task, use_swarming_recipe_to_trigger=use_swarming_recipe_to_trigger)
     assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
 
   # Recipe can do something useful here locally while tasks are
@@ -238,6 +242,23 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        '[trigger] hello_world on Mac-10.13',
                        ['--env', 'GTEST_TOTAL_SHARDS', '3']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'default_trigger_script_use_swarming',
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(
+          platforms=('mac',),
+          custom_trigger_script=False,
+          use_swarming_recipe_to_trigger=True),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] hello_world on Mac-10.13', lambda check, req: check(req[
+              0].env_vars['GTEST_SHARD_INDEX'] == '1'), lambda check, req:
+          check(req[0].env_vars['GTEST_TOTAL_SHARDS'] == '3')),
       api.post_process(post_process.DropExpectation),
   )
 

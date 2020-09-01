@@ -3,9 +3,10 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium_swarming',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
+    'chromium_swarming',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/swarming',
 ]
 
 from recipe_engine import recipe_test_api, post_process
@@ -25,11 +26,15 @@ def RunSteps(api):
       api.platform.name)
   task_dimensions['pool'] = api.properties.get('pool', 'chromium.tests')
   task_slice = task_slice.with_dimensions(**task_dimensions)
+  task.named_caches = dict(api.properties.get('named_caches', {}))
   task.request = task.request.with_slice(0, task_slice)
 
   if api.properties.get('containment_type'):
     task.containment_type = api.properties['containment_type']
-  api.chromium_swarming.trigger_task(task)
+  api.chromium_swarming.trigger_task(
+      task,
+      use_swarming_recipe_to_trigger=api.properties.get(
+          'use_swarming_recipe_to_trigger', False))
   kwargs = {}
   if api.properties.get('allow_missing_json'):
     kwargs['allow_missing_json'] = True
@@ -49,12 +54,49 @@ def GenTests(api):
   )
 
   yield api.test(
+      'wait_for_capacity_use_swarming',
+      api.properties(
+          task_name='capacity-constrained task',
+          wait_for_capacity=True,
+          use_swarming_recipe_to_trigger=True),
+      api.post_check(api.swarming.check_triggered_request,
+                     '[trigger] capacity-constrained task', lambda check, req:
+                     check(req[0].wait_for_capacity)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'containment_type',
       api.properties(task_name='windows gpu task', containment_type='AUTO'),
       api.post_process(post_process.StepCommandContains,
                        '[trigger] windows gpu task',
                        ['--containment-type', 'AUTO']),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'containment_type_use_swarming',
+      api.properties(
+          task_name='windows gpu task',
+          containment_type='AUTO',
+          use_swarming_recipe_to_trigger=True),
+      api.post_check(
+          api.swarming.check_triggered_request, '[trigger] windows gpu task',
+          lambda check, req: check(req[0].containment_type == 'AUTO')),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'named_caches_use_swarming',
+      api.properties(
+          task_name='windows gpu task',
+          named_caches={
+              'foo': 'cache/foo',
+          },
+          use_swarming_recipe_to_trigger=True),
+      api.post_check(
+          api.swarming.check_triggered_request, '[trigger] windows gpu task',
+          lambda check, req: check(req[0].named_caches['foo'] == 'cache/foo')),
   )
 
   yield api.test(

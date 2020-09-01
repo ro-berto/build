@@ -2033,7 +2033,10 @@ class SwarmingTest(Test):
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated)
 
-    api.chromium_swarming.trigger_task(self._tasks[suffix])
+    api.chromium_swarming.trigger_task(
+        self._tasks[suffix],
+        use_swarming_recipe_to_trigger=api.chromium_tests
+        .use_swarming_recipe_to_trigger)
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
@@ -2976,7 +2979,10 @@ class SwarmingIosTest(SwarmingTest):
     swarming_task.tags.add('platform:%s' % self._platform)
     swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
-    api.chromium_swarming.trigger_task(swarming_task)
+    api.chromium_swarming.trigger_task(
+        swarming_task,
+        use_swarming_recipe_to_trigger=api.chromium_tests
+        .use_swarming_recipe_to_trigger)
     task['task'] = swarming_task
     self._tasks[suffix] = swarming_task
 

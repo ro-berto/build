@@ -13,6 +13,9 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 
       # TODO(martiniss): Remove this and all uses
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
+      # TODO(894045): Remove once all tasks are switched to `swarming`
+      use_swarming_recipe_to_trigger=Single(
+          bool, empty_val=False, required=False),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -26,3 +29,8 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
+
+
+@config_ctx()
+def use_swarming_recipe_to_trigger(c):
+  c.use_swarming_recipe_to_trigger = True
