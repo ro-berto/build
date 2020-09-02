@@ -131,9 +131,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -147,9 +144,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -244,10 +238,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            compile_targets=[
-                'content_unittests',
-                'content_browsertests',
-            ],
             android_config='arm64_builder_mb',
             test_results_config='staging_server',
             simulation_platform='linux',

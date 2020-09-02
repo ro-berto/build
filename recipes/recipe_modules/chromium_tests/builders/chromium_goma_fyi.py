@@ -38,18 +38,6 @@ def no_archive(base_config):
       archive_build=None, gs_bucket=None, gs_acl=None, gs_build_name=None)
 
 
-def override_compile_targets(base_config, compile_targets):
-  """Overrides compile_targets.
-
-  Args:
-    base_config: config obj in SPEC[x].
-    compile_targets: new compile targets.
-  Returns:
-    new config obj.
-  """
-  return base_config.evolve(compile_targets=compile_targets)
-
-
 SPEC = {
     'Win Builder Goma Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
@@ -114,8 +102,7 @@ SPEC = {
     # See crbug.com/825536
     'mac-archive-rel-goma-canary-localoutputcache':
         chromium_apply_configs(
-            override_compile_targets(
-                no_archive(chromium.SPEC['mac-archive-rel']), ['chrome']),
+            no_archive(chromium.SPEC['mac-archive-rel']),
             ['goma_canary', 'goma_localoutputcache_small']),
     # RBE
     'mac-archive-rel-goma-rbe-canary':
@@ -200,8 +187,7 @@ SPEC = {
     # See crbug.com/825536
     'mac-archive-rel-goma-latest-localoutputcache':
         chromium_apply_configs(
-            override_compile_targets(
-                no_archive(chromium.SPEC['mac-archive-rel']), ['chrome']),
+            no_archive(chromium.SPEC['mac-archive-rel']),
             ['goma_latest_client', 'goma_localoutputcache_small']),
     # RBE
     'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
@@ -226,9 +212,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            compile_targets=[
-                'chromedriver_webview_shell_apk',
-            ],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
