@@ -819,7 +819,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--perf-id=%s' % perf_id)
     if perf_config:
       full_args.extend(['--perf-config', self.m.json.dumps(perf_config)])
-    # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)
     step_name = name or t_name
@@ -1586,17 +1585,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.m.runtime.is_experimental:
       gs_bucket += "/experimental"
 
-    # archive_build.py insists on inspecting factory properties. For now just
-    # provide these options in the format it expects.
-    fake_factory_properties = {
-        'gclient_env': self.c.gyp_env.as_jsonish(),
-        'gs_bucket': 'gs://%s' % gs_bucket,
-    }
-    if gs_acl is not None:
-      fake_factory_properties['gs_acl'] = gs_acl
-    if self.c.TARGET_PLATFORM:
-      fake_factory_properties['target_os'] = self.c.TARGET_PLATFORM
-
     sanitized_buildername = ''.join(
         c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
 
@@ -1607,11 +1595,16 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_name or sanitized_buildername,
         '--staging-dir',
         self.m.path['cache'].join('chrome_staging'),
+        '--gs-bucket',
+        'gs://%s' % gs_bucket,
         '--target',
         self.c.build_config_fs,
-        '--factory-properties',
-        self.m.json.dumps(fake_factory_properties),
     ]
+    if gs_acl is not None:
+      args += ['--gs-acl', gs_acl]
+    if self.c.TARGET_PLATFORM:
+      args += ['--target-os', self.c.TARGET_PLATFORM]
+
     args += self.m.build.slave_utils_args
     if self.build_properties:
       args += [
