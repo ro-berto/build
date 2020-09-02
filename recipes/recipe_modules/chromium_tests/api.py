@@ -1089,7 +1089,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step, build_config = self.prepare_checkout(
         bot.settings,
         timeout=3600,
-        root_solution_revision=root_solution_revision)
+        root_solution_revision=root_solution_revision,
+        add_blamelists=True)
     if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(
           bot,
