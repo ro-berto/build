@@ -1219,6 +1219,7 @@
       "TMPDIR": "[CLEANUP]\\tmp_tmp_2"
     },
     "name": "test r1.gl_tests (r1)",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.One<br/>Test.Two<br/>@@@",

@@ -684,6 +684,7 @@
     },
     "infra_step": true,
     "name": "Check",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
@@ -800,6 +801,7 @@
     },
     "infra_step": true,
     "name": "Test262",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
       "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
@@ -1291,6 +1293,7 @@
     },
     "infra_step": true,
     "name": "Bisect a0.Retry",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
@@ -1750,6 +1753,7 @@
     },
     "infra_step": true,
     "name": "Bisect a2.Retry",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -2247,6 +2251,7 @@
     },
     "infra_step": true,
     "name": "Bisect a1.Retry",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",

@@ -1096,6 +1096,7 @@
       "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
     "name": "base_unittests (with patch)",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
@@ -1871,6 +1872,7 @@
       "TMPDIR": "[CLEANUP]/tmp_tmp_4"
     },
     "name": "base_unittests (without patch)",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
       "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"FAILURE\"@@@",

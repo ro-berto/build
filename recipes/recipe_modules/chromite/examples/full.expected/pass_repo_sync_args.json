@@ -130,6 +130,7 @@
       "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
     "name": "cbuildbot",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
       "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
@@ -363,6 +364,7 @@
       ]
     },
     "name": "cbuildbot_launch [auron-paladin]",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
       "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
