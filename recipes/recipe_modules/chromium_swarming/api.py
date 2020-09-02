@@ -1038,8 +1038,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.extra_args:
       req_slice.with_command(req_slice.command + task.extra_args)
     req = req.with_slice(0, req_slice)
-    metas = self.m.swarming.trigger(self.get_step_name('trigger', task), [req])
-    return metas
+    with self.m.swarming.with_server(self.swarming_server):
+      metas = self.m.swarming.trigger(
+          self.get_step_name('trigger', task), [req])
+      return metas
 
   def collect_task(self, task, **kwargs):
     """Waits for a single triggered task to finish.

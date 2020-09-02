@@ -892,7 +892,7 @@
       "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin\\swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm-dev.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests:0:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"ninja_target:\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"deadbeef\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -914,7 +914,7 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: browser_tests:0:2@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests:0:2@https://chromium-swarm-dev.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -922,7 +922,7 @@
       "[CACHE]\\cipd\\infra\\tools\\luci\\swarming\\swarming_module_pin\\swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm-dev.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests:1:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"ninja_target:\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"deadbeef\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -944,7 +944,7 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: browser_tests:1:2@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests:1:2@https://chromium-swarm-dev.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1060,9 +1060,9 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-dev.appspot.com/task?id=0@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-dev.appspot.com/task?id=0@@@"
     ]
   },
   {
