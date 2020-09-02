@@ -824,6 +824,12 @@ SPEC.update([
     stock_config('linux-perfetto-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
+    # For testing impact of builderful: https://crbug.com/1123673
+    # remove by 2020-10-05 gatong
+    stock_config('linux-builderful-fast-fyi-rel'),
+    stock_config('linux-builderful-slow-fyi-rel'),
+    stock_config('linux-builderless-fast-fyi-rel'),
+    stock_config('linux-builderless-slow-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
     stock_config('win-pixel-builder-rel'),
