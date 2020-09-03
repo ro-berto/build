@@ -16,8 +16,6 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"python_mode\": true, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"python_mode\": true, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--results-url=https://example/url",

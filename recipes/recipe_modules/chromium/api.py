@@ -802,10 +802,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    full_args.extend([
-        '--factory-properties', properties_json, '--build-properties',
-        properties_json
-    ])
+    full_args.extend(['--build-properties', properties_json])
 
     if annotate:
       full_args.append('--annotate=%s' % annotate)
@@ -909,10 +906,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     run_tests_args = ['--target', self.c.build_config_fs, '--no-xvfb']
     properties_json = self.m.json.dumps(self.m.properties.legacy())
-    run_tests_args.extend([
-        '--factory-properties', properties_json, '--build-properties',
-        properties_json
-    ])
+    run_tests_args.extend(['--build-properties', properties_json])
     run_tests_args.extend([
         '--test-type=sizes',
         '--builder-name=%s' % self.m.buildbucket.builder_name,

@@ -104,8 +104,6 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"platform\": \"linux\", \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"platform\": \"linux\", \"recipe\": \"chromium:tests/sizes\", \"slavename\": \"test_bot_id\"}",
       "--test-type=sizes",

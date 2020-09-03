@@ -552,7 +552,7 @@ def AddOptions(option_parser):
       default='',
       help=(
           'Optional URL to which to upload build '
-          '(overrides build_url factory property)'
+          '(overrides build_url build property)'
       )
   )
   option_parser.add_option(
@@ -629,15 +629,15 @@ def main(argv):
         'parent_buildumber'
     )
   if not options.target:
-    options.target = options.factory_properties.get('target', 'Release')
+    options.target = options.build_properties.get('target', 'Release')
   if not options.build_url:
-    options.build_url = options.factory_properties.get('build_url', '')
+    options.build_url = options.build_properties.get('build_url', '')
   if not options.append_deps_patch_sha:
-    options.append_deps_patch_sha = options.factory_properties.get(
+    options.append_deps_patch_sha = options.build_properties.get(
         'append_deps_patch_sha'
     )
   if not options.gs_acl:
-    options.gs_acl = options.factory_properties.get('gs_acl')
+    options.gs_acl = options.build_properties.get('gs_acl')
   if options.strip_files:
     options.strip_files = options.strip_files.split(',')
   # When option_parser is passed argv as a list, it can return the caller as

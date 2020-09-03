@@ -37,8 +37,6 @@
       "--exclude-extra",
       "--build_revision",
       "170242",
-      "--factory-properties",
-      "{\"buildername\": \"example_buildername\", \"gs_acl\": \"public\", \"platform\": \"linux\", \"recipe\": \"archive:tests/zip_and_upload_build\"}",
       "--build-properties",
       "{\"buildername\": \"example_buildername\", \"gs_acl\": \"public\", \"platform\": \"linux\", \"recipe\": \"archive:tests/zip_and_upload_build\"}",
       "--json-urls",

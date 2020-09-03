@@ -1027,8 +1027,6 @@
       "--target",
       "Release",
       "--xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"mastername\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"mastername\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",

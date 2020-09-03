@@ -18,8 +18,6 @@
       "--test-platform",
       "android",
       "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
       "--results-url=https://example/url",

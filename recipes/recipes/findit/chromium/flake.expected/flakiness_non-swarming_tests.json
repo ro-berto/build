@@ -1279,8 +1279,6 @@
       "RECIPE_REPO[build]/recipes/runtest.py",
       "--target",
       "Release",
-      "--factory-properties",
-      "{\"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.mac\", \"mastername\": \"tryserver.chromium.mac\", \"recipe\": \"findit/chromium/flake\", \"skip_tests\": false, \"slavename\": \"build1-a1\", \"target_builder_group\": \"chromium.mac\", \"target_mastername\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_revision\": \"r0\", \"tests\": {\"gl_tests\": [\"Test.One\"]}}",
       "--build-properties",
       "{\"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.mac\", \"mastername\": \"tryserver.chromium.mac\", \"recipe\": \"findit/chromium/flake\", \"skip_tests\": false, \"slavename\": \"build1-a1\", \"target_builder_group\": \"chromium.mac\", \"target_mastername\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_revision\": \"r0\", \"tests\": {\"gl_tests\": [\"Test.One\"]}}",
       "--annotate=gtest",

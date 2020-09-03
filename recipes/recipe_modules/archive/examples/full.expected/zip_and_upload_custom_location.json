@@ -22,8 +22,6 @@
       "--use-build-url-name",
       "--build-url",
       "gs://dummy-bucket/Linux Release/full-build.zip",
-      "--factory-properties",
-      "{\"build_archive_url\": \"gs://dummy-bucket/Linux Release/full-build.zip\", \"recipe\": \"archive:examples/full\"}",
       "--build-properties",
       "{\"build_archive_url\": \"gs://dummy-bucket/Linux Release/full-build.zip\", \"recipe\": \"archive:examples/full\"}",
       "--json-urls",

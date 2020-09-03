@@ -82,8 +82,6 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--factory-properties",
-      "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--build-properties",
       "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--annotate=gtest",

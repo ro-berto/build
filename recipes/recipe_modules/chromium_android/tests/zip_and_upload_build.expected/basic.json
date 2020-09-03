@@ -21,8 +21,6 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--exclude-files",
       "lib.target,gen,android_webview,jingle_unittests",
-      "--factory-properties",
-      "{\"recipe\": \"chromium_android:tests/zip_and_upload_build\"}",
       "--build-properties",
       "{\"recipe\": \"chromium_android:tests/zip_and_upload_build\"}",
       "--json-urls",

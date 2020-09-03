@@ -1491,25 +1491,21 @@ def GetCommitPosition(options, project=None):
 
 
 def AddPropertiesOptions(option_parser):
-  """Registers command line options for parsing build and factory properties.
+  """Registers command line options for parsing build properties.
 
-  After parsing, the options object will have the 'build_properties' and
-  'factory_properties' attributes. The corresponding values will be python
-  dictionaries containing the properties. If the options are not given on
-  the command line, the dictionaries will be empty.
+  After parsing, the options object will have the 'build_properties'
+  attribute. The corresponding values will be python dictionaries
+  containing the properties. If the options are not given on the command
+  line, the dictionaries will be empty.
 
   Args:
     option_parser: An optparse.OptionParser to register command line options
-                   for build and factory properties.
+                   for build properties.
   """
   option_parser.add_option('--build-properties', action='callback',
                            callback=convert_json, type='string',
                            nargs=1, default={},
                            help='build properties in JSON format')
-  option_parser.add_option('--factory-properties', action='callback',
-                           callback=convert_json, type='string',
-                           nargs=1, default={},
-                           help='factory properties in JSON format')
 
 
 def AddThirdPartyLibToPath(lib, override=False):

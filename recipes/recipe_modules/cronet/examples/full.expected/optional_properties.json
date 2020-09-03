@@ -476,8 +476,6 @@
       "--target",
       "Debug",
       "--no-xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": 170242, \"mastername\": \"fake-group\", \"recipe\": \"cronet:examples/full\", \"slavename\": \"test_bot\"}",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": 170242, \"mastername\": \"fake-group\", \"recipe\": \"cronet:examples/full\", \"slavename\": \"test_bot\"}",
       "--test-type=sizes",

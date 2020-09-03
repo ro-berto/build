@@ -312,7 +312,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.archive.zip_and_upload_build(
         'zip_build',
         target=self.m.chromium.c.BUILD_CONFIG,
-        # We send None as the path so that zip_build.py gets it from factory
+        # We send None as the path so that zip_build.py gets it from build
         # properties.
         build_url=None,
         src_dir=self.m.path['start_dir'].join('src'),
