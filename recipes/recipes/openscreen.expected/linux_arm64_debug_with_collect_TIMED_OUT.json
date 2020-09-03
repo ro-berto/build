@@ -728,12 +728,12 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"e2e_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: e2e_tests@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: e2e_tests@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {

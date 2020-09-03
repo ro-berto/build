@@ -925,12 +925,12 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests:1:2\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: browser_tests:1:2@https://chromium-swarm-staging.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests:1:2@https://chromium-swarm-staging.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -970,7 +970,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"0\"}, {\"task_id\": \"0\"}]}"
+      "{\"tasks\": [{\"task_id\": \"0\"}, {\"task_id\": \"1\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -1039,7 +1039,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.dev\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"linux-rel-swarming-staging\"@@@",
@@ -1048,7 +1048,7 @@
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-staging.appspot.com/task?id=0@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-staging.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-staging.appspot.com/task?id=1@@@"
     ]
   },
   {
