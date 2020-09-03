@@ -1036,7 +1036,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           GTEST_TOTAL_SHARDS=str(task.shards),
       )
     if task.extra_args:
-      req_slice.with_command(req_slice.command + task.extra_args)
+      req_slice = req_slice.with_command(req_slice.command + task.extra_args)
     req = req.with_slice(0, req_slice)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
