@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from .. import bot_spec
+from . import chromium_chromiumos
 
 
 def CreateStandardConfig(platform, apply_configs=None):
@@ -125,6 +126,11 @@ SPEC = {
         _LINUX_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg) (clobber)':
         _LINUX_CLOBBER_CONFIG,
+    'chromeos-amd64-generic-rel-goma-rbe-tot':
+        chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'].extend(
+            chromium_apply_config=['goma_client_candidate']),
+    'chromeos-amd64-generic-rel-goma-rbe-staging':
+        chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
 
     # Mac RBE
     'Chromium Mac Goma RBE ToT':
