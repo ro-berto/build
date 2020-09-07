@@ -789,6 +789,38 @@ class SwarmingApi(recipe_api.RecipeApi):
     }
     task._trigger_output = trigger_output
 
+  def _generate_trigger_task_tags(self, task, task_slice):
+    """Generates the tags for the triggered task.
+
+    Returns:
+      tags: A list of tag key:value pairs
+    """
+    tags = set(task.tags)
+    task_request = task.request
+    tags.update(task_request.tags or ())
+    tags.update(self._default_tags)
+
+    tags.add('data:' + task_slice.isolated)
+    tags.add('name:' + task_request.name.split(' ')[0])
+    builder_group = self.m.builder_group.for_current
+    if builder_group:
+      tags.add('builder_group:' + builder_group)
+
+    if task.spec_name:
+      tags.add('spec_name:' + task.spec_name)
+
+    if task.builder_info:
+      tags.add('buildername:' + task.builder_info[0])
+      if not task.builder_info[1] == -1:
+        tags.add('buildnumber:%s' % task.builder_info[1])
+
+    tags.add('slavename:%s' % self.m.swarming.bot_id)
+
+    tags.add('stepname:%s' % self.get_step_name('', task))
+    for cl in self.m.buildbucket.build.input.gerrit_changes:
+      tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
+    return tags
+
   def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
@@ -841,31 +873,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.containment_type:
       args.extend(['--containment-type', task.containment_type])
 
-    # Default tags.
-    tags = set(task.tags)
-    tags.update(task.request.tags or ())
-    tags.update(self._default_tags)
-
-    tags.add('data:' + task_slice.isolated)
-    tags.add('name:' + task_request.name.split(' ')[0])
-    builder_group = self.m.builder_group.for_current
-    if builder_group:
-      tags.add('builder_group:' + builder_group)
-
-    if task.spec_name:
-      tags.add('spec_name:' + task.spec_name)
-
-    if task.builder_info:
-      tags.add('buildername:' + task.builder_info[0])
-      if not task.builder_info[1] == -1:
-        tags.add('buildnumber:%s' % task.builder_info[1])
-
-    tags.add('slavename:%s' % self.m.swarming.bot_id)
-
-    tags.add('stepname:%s' % self.get_step_name('', task))
-    for cl in self.m.buildbucket.build.input.gerrit_changes:
-      tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
-    for tag in sorted(tags):
+    for tag in sorted(self._generate_trigger_task_tags(task, task_slice)):
       assert ':' in tag, tag
       args.extend(['--tag', tag])
 
@@ -1041,7 +1049,14 @@ class SwarmingApi(recipe_api.RecipeApi):
       )
     if task.extra_args:
       req_slice = req_slice.with_command(req_slice.command + task.extra_args)
-    req = req.with_slice(0, req_slice)
+
+    tags_dict = collections.defaultdict(list)
+    for t in self._generate_trigger_task_tags(task, req_slice):
+      kv = t.split(':', 1)
+      assert len(kv) == 2
+      tags_dict[kv[0]].append(kv[1])
+
+    req = req.with_slice(0, req_slice).with_tags(tags_dict)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
           self.get_step_name('trigger', task), [req])
