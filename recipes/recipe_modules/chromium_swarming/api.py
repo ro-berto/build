@@ -1021,8 +1021,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     Returns:
       metas: A list of swarming.TaskRequestMetadata objects.
     """
-    req = task.request.with_name('%s:%d:%d' %
-                                 (task.request.name, shard_index, task.shards))
+    req_name = task.task_name
+    if task.shards > 1:
+      # This is to imitate
+      # https://source.chromium.org/chromium/chromium/src/+/master:tools/swarming_client/swarming.py;l=256-260;drc=ae767b34c311b4efe7e007856bf5a98b44cd0134
+      req_name = '%s:%d:%d' % (req_name, shard_index, task.shards)
+    req = task.request.with_name(req_name)
     req_slice = req[0]
     if task.named_caches:
       req_slice = req_slice.with_named_caches(task.named_caches)
