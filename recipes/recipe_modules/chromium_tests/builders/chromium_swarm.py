@@ -18,6 +18,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android-marshmallow-arm64-rel-swarming':
         bot_spec.BotSpec.create(
@@ -32,6 +33,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-rel-swarming':
         bot_spec.BotSpec.create(
@@ -53,6 +55,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win-rel-swarming':
         bot_spec.BotSpec.create(
@@ -63,6 +66,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
 }
 
