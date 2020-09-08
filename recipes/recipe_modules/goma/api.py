@@ -614,6 +614,7 @@ class GomaApi(recipe_api.RecipeApi):
         script=self.repo_resource('recipes', 'upload_goma_logs.py'),
         args=args,
         venv=True,
+        timeout=300,  # 5 min
         step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
     for log in ('compiler_proxy_log', 'ninja_log'):

@@ -442,6 +442,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

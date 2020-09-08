@@ -1032,6 +1032,7 @@
     },
     "infra_step": true,
     "name": "test r0.preprocess_for_goma.upload_goma_start_failed_logs",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

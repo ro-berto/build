@@ -1179,6 +1179,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "test r4.postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2415,6 +2416,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "test r5.postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3588,6 +3590,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "test r6.postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4758,6 +4761,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "test r2.postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5920,6 +5924,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "test r3.postprocess_for_goma.upload_log",
+    "timeout": 300,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
