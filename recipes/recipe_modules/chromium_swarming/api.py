@@ -1059,7 +1059,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     req = req.with_slice(0, req_slice).with_tags(tags_dict)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
-          self.get_step_name('trigger', task), [req])
+          self.get_step_name('trigger', task), [req], self.verbose)
       return metas
 
   def collect_task(self, task, **kwargs):
