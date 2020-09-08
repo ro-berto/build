@@ -141,7 +141,8 @@ def GenTests(api):
                   execution_mode=bot_spec.TEST,
                   parent_buildername=fake_builder,
                   chromium_config='chromium',
-                  gclient_config='chromium'),
+                  gclient_config='chromium',
+                  build_gs_bucket='chromium-example-archive'),
       }
   })
 
@@ -178,6 +179,30 @@ def GenTests(api):
           post_process.StepCommandContains, 'test_pre_run.[trigger] fake_test',
           ['--relative-cwd', 'out/Release_x64', '--raw-cmd', '--'] +
           fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'test_only_builder_with_no_isolates',
+      api.chromium.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          parent_buildername=fake_builder),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(fake_bot_db),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'gtest_tests': [{
+                      'name': fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
+                      }
+                  }],
+              }
+          }),
+      api.post_process(post_process.DoesNotRun, 'read command lines'),
+      api.post_process(post_process.MustRun, 'extract build'),
       api.post_process(post_process.DropExpectation),
   )
 

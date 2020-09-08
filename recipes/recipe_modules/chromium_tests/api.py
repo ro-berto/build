@@ -1230,6 +1230,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
+      self.download_command_lines_for_tests(
+          build_config.tests_on(bot.builder_id), bot.settings)
+
     if package_transfer:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
@@ -1242,22 +1245,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self._explain_package_transfer(bot, non_isolated_tests),
           as_log='why is this running?')
 
-    self.download_command_lines_for_tests(
-        build_config.tests_on(bot.builder_id), bot.settings)
 
   def download_command_lines_for_tests(self, tests, bot_settings):
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
     cwd = self.m.properties.get('swarming_command_lines_cwd', '')
-    self._swarming_command_lines = self.download_command_lines(
-        hsh, bot_settings.isolate_server)
-    for test in tests:
-      if test.runs_on_swarming:
-        command_line = self._swarming_command_lines.get(test.target_name, [])
-        if command_line:
-          # lists come back from properties as tuples, but the swarming
-          # api expects this to be an actual list.
-          test.raw_cmd = list(command_line)
-          test.relative_cwd = cwd
+    if hsh:
+      self._swarming_command_lines = self.download_command_lines(
+          hsh, bot_settings.isolate_server)
+      for test in tests:
+        if test.runs_on_swarming:
+          command_line = self._swarming_command_lines.get(test.target_name, [])
+          if command_line:
+            # lists come back from properties as tuples, but the swarming
+            # api expects this to be an actual list.
+            test.raw_cmd = list(command_line)
+            test.relative_cwd = cwd
 
   def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
     self.m.python.succeeding_step(
