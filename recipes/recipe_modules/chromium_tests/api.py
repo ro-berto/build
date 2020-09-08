@@ -1553,7 +1553,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Use this to prune the relevant compile targets and test targets.
     if self.m.tryserver.is_tryserver:
       absolute_affected_files = set(
-          str(self.m.chromium.c.CHECKOUT_PATH.join(f)) for f in affected_files)
+          str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
+              '/', self.m.path.sep) for f in affected_files)
       absolute_spec_files = set(
           str(self.m.chromium.c.source_side_spec_dir.join(f))
           for f in bot.settings.source_side_spec_files.itervalues())
