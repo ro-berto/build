@@ -109,6 +109,10 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic'),
     _config(
+        'chromeos-amd64-generic-lacros-dbg',
+        isolate_server='https://isolateserver.appspot.com',
+        cros_board='amd64-generic'),
+    _config(
         'chromeos-amd64-generic-rel',
         cros_board='amd64-generic',
         checkout_qemu_image=True,
