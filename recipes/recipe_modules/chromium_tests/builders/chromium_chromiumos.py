@@ -74,7 +74,6 @@ def _config(name,
 SPEC.update([
     _config(
         'linux-chromeos-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['use_clang_coverage']),
     _config(
