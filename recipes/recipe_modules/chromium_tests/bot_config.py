@@ -89,10 +89,7 @@ class BotConfig(object):
   @cached_property
   def source_side_spec_files(self):
     groups = set(key.group for key in self.all_keys)
-    spec_files = {}
-    for group in groups:
-      spec_files[group] = self.source_side_spec_file or '{}.json'.format(group)
-    return spec_files
+    return {g: '{}.json'.format(g) for g in groups}
 
   def _get_source_side_specs(self, chromium_tests_api):
     return {

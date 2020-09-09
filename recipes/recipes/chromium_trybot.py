@@ -439,7 +439,7 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
       api.platform('linux', 64),
-      api.chromium_tests.read_source_side_spec('chromium.linux', {
+      api.chromium_tests.read_source_side_spec('client.v8.fyi', {
           'V8 Linux GN': {
               'additional_compile_targets': ['base_unittests'],
           },

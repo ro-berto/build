@@ -369,16 +369,16 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
+      "[CACHE]/builder/src/testing/buildbot/client.v8.fyi.json",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "read test spec (chromium.linux.json)",
+    "name": "read test spec (client.v8.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/client.v8.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"V8 Linux GN\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"additional_compile_targets\": [@@@",

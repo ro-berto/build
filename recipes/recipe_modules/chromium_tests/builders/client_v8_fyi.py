@@ -25,7 +25,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
     'V8 Linux GN':
@@ -51,7 +50,6 @@ SPEC = {
                 'net_unittests',
                 'unit_tests',
             ],
-            source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
     'V8 Android GN (dbg)':
@@ -76,7 +74,6 @@ SPEC = {
                 'gin_unittests',
                 'net_unittests',
             ],
-            source_side_spec_file='chromium.linux.json',
             simulation_platform='linux',
         ),
     'V8 Blink Linux':
@@ -206,7 +203,6 @@ SPEC = {
                 'net_unittests',
                 'unit_tests',
             ],
-            source_side_spec_file='chromium.memory.json',
             simulation_platform='linux',
         ),
     # GPU bots.

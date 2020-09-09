@@ -81,12 +81,8 @@ class BotSpec(object):
     if execution_mode == PROVIDE_TEST_SPEC:
       # Builders with execution mode PROVIDE_TEST_SPEC should never be executed,
       # so most fields are invalid
-      # The source_side_spec_file field overrides the location of the src-side
-      # spec, which is the point of PROVIDE_TEST_SPEC, so it is valid to set
-      invalid_attrs = get_filtered_attrs(*[
-          a for a in attr.fields_dict(cls)
-          if a not in ('execution_mode', 'source_side_spec_file')
-      ])
+      invalid_attrs = get_filtered_attrs(
+          *[a for a in attr.fields_dict(cls) if a != 'execution_mode'])
       assert not invalid_attrs, (
           "The following fields are ignored when 'execution_mode' is {!r}: {}"
           .format(PROVIDE_TEST_SPEC, invalid_attrs))
@@ -225,10 +221,6 @@ class BotSpec(object):
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity
   serialize_tests = attrib(bool, default=False)
-
-  # A path relative to chromium.c.source_side_spec_dir containing the
-  # information describing the tests to be run for this builder
-  source_side_spec_file = attrib(str, default=None)
 
   # A bool controlling whether an isolate is uploaded to the perf dashboard
   perf_isolate_upload = attrib(bool, default=False)
