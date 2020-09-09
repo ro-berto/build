@@ -1905,9 +1905,17 @@ class SwarmingTest(Test):
       # determine where to write the profile dumps. The %Nm syntax is understood
       # by this instrumentation, see:
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      task_slice = task_slice.with_env_vars(**{
+      env_vars = {
           'LLVM_PROFILE_FILE': '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
-      })
+      }
+
+      # crbug.com/1124774 - For PGO, we're increasing the shutdown timeout to
+      # 300 seconds to allow sufficient time for all processes to finish writing
+      # profiles.
+      if using_pgo:
+        env_vars['CHROME_SHUTDOWN_TIMEOUT'] = '300'
+
+      task_slice = task_slice.with_env_vars(**env_vars)
 
       sparse = True
       skip_validation = False
