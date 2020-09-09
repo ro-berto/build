@@ -20,8 +20,6 @@ def RunSteps(api):
   # Until all existing uses are gone, make sure that the legacy properties
   # are still set
   api.assertions.assertEqual(api.properties['mastername'], 'current-group')
-  api.assertions.assertEqual(api.properties['target_mastername'],
-                             'target-group')
 
 
 def GenTests(api):

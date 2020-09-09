@@ -51,6 +51,4 @@ class BuilderGroupApi(recipe_api.RecipeApi):
     This is used by findit, which has a single builder that performs
     bisection using the configuration of another builder.
     """
-    # TODO(https://crbug.com/1109276) Do not read the target_mastername property
-    return (self.m.properties.get('target_builder_group') or
-            self.m.properties.get('target_mastername'))
+    return self.m.properties.get('target_builder_group')

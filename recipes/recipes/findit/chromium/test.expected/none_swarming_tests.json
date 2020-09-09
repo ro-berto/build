@@ -1192,7 +1192,7 @@
       "--target",
       "Release",
       "--build-properties",
-      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.win\", \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_builder_group\": \"chromium.win\", \"target_mastername\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": false, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
+      "{\"bad_revision\": \"r1\", \"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.win\", \"good_revision\": \"r0\", \"mastername\": \"tryserver.chromium.win\", \"recipe\": \"findit/chromium/test\", \"slavename\": \"build1-a1\", \"target_builder_group\": \"chromium.win\", \"target_testername\": \"Win7 Tests (1)\", \"test_on_good_revision\": false, \"test_repeat_count\": 20, \"tests\": {\"gl_tests\": [\"Test.One\", \"Test.Two\", \"Test.Three\"]}, \"use_analyze\": false}",
       "--annotate=gtest",
       "--test-type=gl_tests",
       "--step-name=gl_tests (r1)",

@@ -27,10 +27,5 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
 
     This is used by findit, which has a single builder that performs
     bisection using the configuration of another builder.
-
-    This also sets the legacy target_mastername property so existing
-    code continues to work.
     """
-    # TODO(https://crbug.com/1109276) Do not set the target_mastername property
-    return self.m.properties(
-        target_builder_group=group, target_mastername=group)
+    return self.m.properties(target_builder_group=group)
