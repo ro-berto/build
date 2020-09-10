@@ -28,6 +28,7 @@ def tar_with_subprocess(root, output, entries, compression):
   """
   # Collect paths relative to |root| of all items we'd like to tar.
   items_to_tar = []
+
   for entry in entries:
     tp = entry['type']
     path = entry['path']
@@ -46,16 +47,24 @@ def tar_with_subprocess(root, output, entries, compression):
     else:
       raise AssertionError('Invalid entry type: %s' % (tp,))
 
-  # Invoke 'tar' in |root| directory, passing all relative paths via stdin.
-  args = ['tar', '-cf']
+  # Invoke 'tar' in |root| directory.
+  args = ['tar']
+  options = '-cv'
   if compression in ['gz', 'bz2']:
-    args += [{'gz': '-z', 'bz2': '-j'}[compression]]
-  args += [output]
+    options += {'gz': 'z', 'bz2': 'j'}[compression]
+
+  # Sequence of options must have f at the end to define the output.
+  # -cv[z/j]f
+  args += [options + 'f', output]
+  args += items_to_tar
+  print('Executing command: {}'.format(args))
   proc = subprocess.Popen(
       args=args,
-      stdin=subprocess.PIPE,
       cwd=root)
-  proc.communicate('\n'.join(items_to_tar))
+  proc.communicate()
+  if proc.stderr:
+    print('Error: {}'.format(proc.stderr))
+  print('Ret code: {}'.format(proc.returncode))
   return proc.returncode
 
 
