@@ -582,7 +582,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if resultdb and resultdb.get('enable'):
       request = request.with_resultdb()
-      # TODO(crbug.com/1017288): wrap raw_cmd with api.resultdb.wrap().
 
     request = (request.with_slice(0, request[0].
       with_cipd_ensure_file(ensure_file).

@@ -51,7 +51,7 @@ def GenTests(api):
               'name': fake_test,
               'swarming': {
                   'can_use_on_swarming_builders': True,
-              }
+              },
           }],
       }
   })
@@ -346,5 +346,46 @@ def GenTests(api):
           'test_pre_run.[trigger] %s (experimental)' % fake_test, lambda check,
           req: check(req[0].relative_cwd == 'out/Release'), lambda check, req:
           check(is_subsequence(req[0].command, fake_command_lines[fake_test]))),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      "ci_bot_with_rdb_enabled_swarming_test",
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'isolated_scripts': [{
+                      'name': fake_test,
+                      'resultdb': {
+                          'enable': True
+                      },
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                      'test_id_prefix': 'ninja://:fake_test/',
+                  }],
+              }
+          }),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.[trigger] %s' % fake_test, [
+              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
+              'stream', '-test-id-prefix', 'ninja://:fake_test/', '--'
+          ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )

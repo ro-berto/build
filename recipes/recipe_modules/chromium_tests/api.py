@@ -489,6 +489,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if test.runs_on_swarming:
         command_line = self._swarming_command_lines.get(test.target_name, [])
         if command_line:
+          if (test.resultdb or {}).get('enable'):
+            command_line = self.m.resultdb.wrap(command_line,
+                                                test.test_id_prefix)
+
           test.raw_cmd = command_line
           test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
                                                   self.m.path['checkout'])
