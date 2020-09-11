@@ -38,7 +38,6 @@ def GenTests(api):
                   'fake-builder': {
                       'build_gs_bucket': 'sample-bucket',
                       'chromium_config': 'chromium',
-                      'enable_package_transfer': True,
                       'gclient_config': 'chromium',
                   },
               },
@@ -62,7 +61,6 @@ def GenTests(api):
                   'fake-perf-builder': {
                       'build_gs_bucket': 'sample-bucket',
                       'chromium_config': 'chromium',
-                      'enable_package_transfer': True,
                       'gclient_config': 'chromium',
                   },
               },
@@ -86,7 +84,6 @@ def GenTests(api):
                       'bisect_archive_build': True,
                       'bisect_gs_bucket': 'sample-bisect-bucket',
                       'chromium_config': 'chromium',
-                      'enable_package_transfer': True,
                       'gclient_config': 'chromium',
                   },
               },

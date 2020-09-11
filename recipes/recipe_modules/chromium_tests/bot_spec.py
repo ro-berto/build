@@ -209,11 +209,6 @@ class BotSpec(object):
   # This must be set for builders with the BUILDER bot type that trigger testers
   # that will run non-isolated tests
   build_gs_bucket = attrib(str, default=None)
-  # A bool controlling whether the legacy package transfer mechanism should be
-  # used for all tests, even those that are isolated
-  # Don't use this unless you know what you're doing, there's little reason to
-  # use this for new builders
-  enable_package_transfer = attrib(bool, default=False)
 
   # Specs for tests to be run for this builder
   test_specs = sequence_attrib(TestSpec, default=())

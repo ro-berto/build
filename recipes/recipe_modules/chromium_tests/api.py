@@ -1170,7 +1170,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not t.uses_isolate
     ]
     package_transfer = (
-        bool(non_isolated_tests) or bot.settings.enable_package_transfer)
+        bool(non_isolated_tests) or bot.settings.bisect_archive_build)
 
     additional_trigger_properties = {}
     if isolate_transfer:
@@ -1276,9 +1276,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     ]
     for t in non_isolated_tests:
       package_transfer_reasons.append(" - %s doesn't use isolate" % t.name)
-    if bot.settings.enable_package_transfer:
-      package_transfer_reasons.append(
-          " - package transfer is explicitly enabled")
     return package_transfer_reasons
 
   def _archive_command_lines(self, command_lines, isolate_server):

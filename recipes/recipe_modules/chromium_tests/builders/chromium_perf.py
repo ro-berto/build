@@ -43,8 +43,6 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
       },
-      'enable_package_transfer':
-          True,
       'gclient_config':
           config_name,
       'gclient_apply_config': [],

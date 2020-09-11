@@ -129,18 +129,6 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 gclient_config='chromium',
                 simulation_platform='linux',
             ),
-        'Packaged Transfer Enabled Builder':
-            _builder_spec(
-                enable_package_transfer=True,
-                chromium_apply_config=['mb'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                gclient_config='chromium',
-                simulation_platform='linux',
-            ),
         'Packaged Transfer Tester':
             _builder_spec(
                 execution_mode=bot_spec.TEST,
@@ -533,30 +521,6 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='chromium.example',
           builder='Packaged Transfer Builder',
-          build_number=123,
-          bot_id='packaged_transfer_builder_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.example', {
-              'Packaged Transfer Tester': {
-                  'gtest_tests': [{
-                      'args': ['--sample-argument'],
-                      'swarming': {
-                          'can_use_on_swarming_builders': False,
-                      },
-                      'test': 'base_unittests',
-                  },],
-              },
-          }),
-      api.post_process(post_process.MustRun, 'package build'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'package_transfer_enabled_builder',
-      api.chromium.ci_build(
-          builder_group='chromium.example',
-          builder='Packaged Transfer Enabled Builder',
           build_number=123,
           bot_id='packaged_transfer_builder_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
