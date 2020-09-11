@@ -87,6 +87,21 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
+    'android-pie-arm64-wpt-rel-non-cq':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='main_builder',
+            simulation_platform='linux',
+        ),
     'android-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
