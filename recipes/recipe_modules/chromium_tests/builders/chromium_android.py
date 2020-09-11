@@ -447,6 +447,11 @@ SPEC.update([
         gclient_apply_config=['android', 'enable_wpr_tests'],
         android_config='x86_builder'),
     stock_config(
+        'android-marshmallow-x86-rel-non-cq',
+        isolate_server='https://isolateserver.appspot.com',
+        gclient_apply_config=['android', 'enable_wpr_tests'],
+        android_config='x86_builder'),
+    stock_config(
         'android-nougat-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
         isolate_server='https://isolateserver.appspot.com',
