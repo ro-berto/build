@@ -4,11 +4,13 @@
 
 DEFAULT_ANALYZE_TARGETS = [
     '//chrome/android:monochrome_public_minimal_apks',
+    '//chrome/android:trichrome_minimal_apks',
     '//tools/binary_size:binary_size_trybot_py',
 ]
 DEFAULT_COMPILE_TARGETS = [
     'monochrome_public_minimal_apks',
     'monochrome_static_initializers',
+    'trichrome_minimal_apks',
 ]
 DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
 DEFAULT_MAPPING_FILE_NAME = 'MonochromePublic.aab.mapping'
