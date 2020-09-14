@@ -99,6 +99,27 @@ SPEC = {
             parent_buildername='Mac Builder Next',
             simulation_platform='mac',
         ),
+    'mac-arm64-rel-tests':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            },
+            swarming_dimensions={
+                'cpu': 'arm',
+            },
+            execution_mode=bot_spec.TEST,
+            parent_builder_group='chromium.mac',
+            parent_buildername='mac-arm64-rel',
+            simulation_platform='mac',
+        ),
     'mac-osxbeta-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
