@@ -637,6 +637,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='linux-gcc-rel',
             ),
+        'linux-inverse-fieldtrials-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-inverse-fieldtrials-fyi-rel',
+            ),
         'linux-ozone-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(

@@ -835,6 +835,7 @@ SPEC.update([
         parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
+    stock_config('linux-inverse-fieldtrials-fyi-rel'),
     stock_config(
         'linux-lacros-builder-fyi-rel',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
