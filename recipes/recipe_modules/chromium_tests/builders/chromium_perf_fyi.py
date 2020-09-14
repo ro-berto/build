@@ -148,21 +148,3 @@ _AddIsolatedTestSpec(
     target_bits=32,
     target_arch='arm',
     cros_board='kevin')
-
-_AddIsolatedTestSpec(
-    'linux-processor-perf-fyi',
-    'linux',
-    parent_buildername='linux-perf-fyi',
-    parent_builder_group='chromium.perf.fyi')
-
-_AddIsolatedTestSpec(
-    'android-pixel2-processor-perf-fyi',
-    'android',
-    parent_buildername='android-pixel2-perf-fyi',
-    parent_builder_group='chromium.perf.fyi')
-
-_AddIsolatedTestSpec(
-    'win-10_laptop_low_end-perf_HP-Candidate-processor',
-    'win',
-    parent_buildername='win-10_laptop_low_end-perf_HP-Candidate',
-    parent_builder_group='chromium.perf.fyi')
