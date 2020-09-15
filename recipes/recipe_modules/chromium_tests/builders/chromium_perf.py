@@ -71,16 +71,11 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
 def BuildSpec(config_name,
               platform,
               target_bits,
-              compile_targets=None,
-              extra_compile_targets=None,
               bisect_archive_build=False,
               run_sizes=True,
               cros_board=None,
               target_arch=None,
               extra_gclient_apply_config=None):
-  if not compile_targets:
-    compile_targets = ['chromium_builder_perf']
-
   test_specs = []
   # TODO: Run sizes on Android.
   # TODO (crbug.com/953108): do not run test for chromeos for now
@@ -99,10 +94,6 @@ def BuildSpec(config_name,
   )
 
   kwargs['perf_isolate_upload'] = True
-
-  kwargs['compile_targets'] = compile_targets
-  if extra_compile_targets:
-    kwargs['compile_targets'] += extra_compile_targets
 
   if cros_board:
     kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
@@ -159,18 +150,13 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
   SPEC[name] = spec
 
 
-def _AddBuildSpec(name,
-                  platform,
-                  target_bits=64,
-                  bisect_archive_build=False,
-                  extra_compile_targets=None):
+def _AddBuildSpec(name, platform, target_bits=64, bisect_archive_build=False):
 
   SPEC[name] = BuildSpec(
       'chromium_perf',
       platform,
       target_bits,
-      bisect_archive_build=bisect_archive_build,
-      extra_compile_targets=extra_compile_targets)
+      bisect_archive_build=bisect_archive_build)
 
 
 # LUCI builder
@@ -178,35 +164,14 @@ _AddBuildSpec(
     'android-builder-perf',
     'android',
     target_bits=32,
-    bisect_archive_build=True,
-    extra_compile_targets=[
-        'android_tools',
-        'cc_perftests',
-        'chrome_public_apk',
-        'dump_syms',
-        'gpu_perftests',
-        'microdump_stackwalk',
-        'push_apps_to_background_apk',
-        'system_webview_apk',
-        'system_webview_shell_apk',
-    ])
+    bisect_archive_build=True)
 
 # LUCI builder
 _AddBuildSpec(
     'android_arm64-builder-perf',
     'android',
     target_bits=64,
-    bisect_archive_build=True,
-    extra_compile_targets=[
-        'android_tools',
-        'cc_perftests',
-        'chrome_public_apk',
-        'gpu_perftests',
-        'push_apps_to_background_apk',
-        'system_webview_apk',
-        'system_webview_shell_apk',
-        'telemetry_weblayer_apks',
-    ])
+    bisect_archive_build=True)
 
 _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
@@ -222,7 +187,6 @@ SPEC.update({
             ],
             gclient_config='chromium_perf',
             gclient_apply_config=['chromeos'],
-            compile_targets=['chrome'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',

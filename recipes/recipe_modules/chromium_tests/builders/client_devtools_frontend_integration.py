@@ -23,9 +23,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
 }

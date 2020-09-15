@@ -23,9 +23,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             simulation_platform='linux',
         ),
     'Linux - Future (dbg)':
@@ -51,9 +48,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'all',
-            ],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),

@@ -410,27 +410,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "compile_targets migration",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>This is an informational step for infra maintainers@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "compile_targets migration.needs migration",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "compile_targets migration.needs migration.client.v8.fyi%V8 Linux GN%blink_tests,extensions_browsertests,gin_unittests,net_unittests,pdfium_test,postmortem-metadata,unit_tests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -475,7 +454,7 @@
       "--luci-auth",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"], \"files\": [\"v8/foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"base_unittests\"], \"files\": [\"v8/foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -513,34 +492,13 @@
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"extensions_browsertests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gin_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"pdfium_test\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"postmortem-metadata\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"unit_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"extensions_browsertests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gin_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"pdfium_test\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"postmortem-metadata\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"unit_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"blink_tests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"extensions_browsertests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"gin_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"net_unittests\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"pdfium_test\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"postmortem-metadata\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"unit_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
@@ -774,14 +732,7 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "base_unittests",
-      "blink_tests",
-      "extensions_browsertests",
-      "gin_unittests",
-      "net_unittests",
-      "pdfium_test",
-      "postmortem-metadata",
-      "unit_tests"
+      "base_unittests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -916,7 +867,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"base_unittests\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

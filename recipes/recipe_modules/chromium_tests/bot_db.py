@@ -19,13 +19,7 @@ def _migration_validation(builder_id, builder_spec):
   """Validate that back-sliding of BotSpec migrations does not occur."""
   if builder_spec.compile_targets:
     assert builder_id.group in (
-        'chromium.devtools-frontend',
-        'chromium.perf',
-        'chromium.perf.fyi',
-        'client.devtools-frontend.integration',
         'client.openscreen.chromium',
-        'client.v8.chromium',
-        'client.v8.fyi',
 
         # Used in recipe tests
         'fake-group',

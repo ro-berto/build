@@ -41,15 +41,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-                'extensions_browsertests',
-                'gin_unittests',
-                'pdfium_test',
-                'postmortem-metadata',
-                'net_unittests',
-                'unit_tests',
-            ],
             simulation_platform='linux',
         ),
     'V8 Android GN (dbg)':
@@ -69,11 +60,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
             },
             android_config='main_builder',
-            compile_targets=[
-                'blink_tests',
-                'gin_unittests',
-                'net_unittests',
-            ],
             simulation_platform='linux',
         ),
     'V8 Blink Linux':
@@ -89,9 +75,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
     'V8 Blink Linux Debug':
@@ -107,9 +90,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
     'V8 Blink Mac':
@@ -125,9 +105,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='mac',
         ),
     'V8 Blink Win':
@@ -143,9 +120,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='win',
         ),
     'V8 Blink Linux Future':
@@ -161,9 +135,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
     'V8 Blink Linux Layout NG':
@@ -179,9 +150,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'blink_tests',
-            ],
             simulation_platform='linux',
         ),
     'Linux ASAN Builder':
@@ -198,11 +166,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[
-                'extensions_browsertests',
-                'net_unittests',
-                'unit_tests',
-            ],
             simulation_platform='linux',
         ),
     # GPU bots.
@@ -222,7 +185,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            compile_targets=[],
             simulation_platform='win',
             serialize_tests=True,
         ),
@@ -242,7 +204,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[],
             simulation_platform='mac',
             serialize_tests=True,
         ),
@@ -262,7 +223,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[],
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -282,7 +242,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[],
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -301,7 +260,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_rel_mb',
-            compile_targets=[],
             simulation_platform='linux',
         ),
 }
