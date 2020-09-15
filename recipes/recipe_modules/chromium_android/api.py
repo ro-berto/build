@@ -452,7 +452,7 @@ class AndroidApi(recipe_api.RecipeApi):
                           'python_path',
                       'devices': [{
                           "usb_status": True,
-                          "blacklisted": None,
+                          "denylisted": None,
                           "ro.build.fingerprint": "fingerprint",
                           "battery": {
                               "status": "5",
@@ -550,23 +550,23 @@ class AndroidApi(recipe_api.RecipeApi):
                     "07a00ca4",
                 "adb_status":
                     "device",
-                "blacklisted":
+                "denylisted":
                     False,
                 "usb_status":
                     True,
             }, {
                 "adb_status": "offline",
-                "blacklisted": True,
+                "denylisted": True,
                 "serial": "03e0363a003c6ad4",
                 "usb_status": False,
             }, {
                 "adb_status": "unauthorized",
-                "blacklisted": True,
+                "denylisted": True,
                 "serial": "03e0363a003c6ad5",
                 "usb_status": True,
             }, {
                 "adb_status": "device",
-                "blacklisted": True,
+                "denylisted": True,
                 "serial": "03e0363a003c6ad6",
                 "usb_status": True,
             }]),
@@ -580,8 +580,8 @@ class AndroidApi(recipe_api.RecipeApi):
             key = '%s: missing' % d['serial']
           elif d['adb_status'] != 'device':
             key = '%s: adb status %s' % (d['serial'], d['adb_status'])
-          elif d['blacklisted']:
-            key = '%s: blacklisted' % d['serial']
+          elif d['denylisted']:
+            key = '%s: denylisted' % d['serial']
           else:
             key = '%s %s %s' % (d['ro.build.product'], d['ro.build.id'],
                                 d['serial'])

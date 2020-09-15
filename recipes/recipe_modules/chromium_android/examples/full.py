@@ -268,7 +268,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'tester_blacklisted_devices',
+      'tester_denylisted_devices',
       properties_for('tester'),
       api.override_step_data('provision_devices',
                              api.json.output(['abc123', 'def456'])),

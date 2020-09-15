@@ -266,7 +266,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"temperature\": \"240\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"voltage\": \"4302\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"blacklisted\": null, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"denylisted\": null, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"imei_slice\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ro.build.fingerprint\": \"fingerprint\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ro.build.id\": \"MDB08Q\", @@@",
