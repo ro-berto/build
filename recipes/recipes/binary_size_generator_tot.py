@@ -48,8 +48,6 @@ def RunSteps(api):
 
     api.chromium.ensure_goma()
 
-    staging_dir = api.path.mkdtemp('binary-size-generator-tot')
-
     raw_result = api.chromium_tests.run_mb_and_compile(
         api.binary_size.compile_targets,
         None,
@@ -59,21 +57,10 @@ def RunSteps(api):
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 
-    generator_script = api.path['checkout'].join(
-        'tools', 'binary_size', 'generate_commit_size_analysis.py')
-
+    staging_dir = api.path.mkdtemp('binary-size-generator-tot')
     api.step(
         name='Generate commit size analysis files',
-        cmd=[generator_script] + [
-            '--apk-name',
-            api.binary_size.apk_name,
-            '--mapping-name',
-            api.binary_size.mapping_name,
-            '--staging-dir',
-            staging_dir,
-            '--chromium-output-directory',
-            api.chromium.output_dir,
-        ])
+        cmd=api.binary_size.get_size_analysis_command(staging_dir))
 
     zip_path = staging_dir.join('analysis_files.zip')
     api.zip.directory(

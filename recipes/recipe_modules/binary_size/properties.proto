@@ -28,7 +28,12 @@ message AndroidProperties {
   // Defaults to MonochromePublic.minimal.apks.
   string apk_name = 1;
 
+  // Deprecated.
   // Filename of the proguard mapping file.
-  // Defaults to MonochromePublic.aab.maaping.
+  // Defaults to MonochromePublic.aab.mapping.
   string mapping_name = 2;
+
+  // List of filenames of proguard mapping files.
+  // Defaults to [MonochromePublic.aab.mapping].
+  repeated string mapping_names = 3;
 }

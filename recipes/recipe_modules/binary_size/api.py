@@ -28,9 +28,13 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                 constants.DEFAULT_COMPILE_TARGETS)
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
-    self.apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
-    self.mapping_name = (
-        properties.android.mapping_name or constants.DEFAULT_MAPPING_FILE_NAME)
+    self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
+    # Deprecated.
+    self._mapping_names = ([properties.android.mapping_name]
+                           if properties.android.mapping_name else [])
+    self._mapping_names = (
+        self._mapping_names or properties.android.mapping_names or
+        constants.DEFAULT_MAPPING_FILE_NAMES)
 
   def android_binary_size(self,
                           chromium_config,
@@ -193,6 +197,26 @@ class BinarySizeApi(recipe_api.RecipeApi):
           raise self.m.step.StepFailure(
               'Failed Checks. See Failing steps for details')
 
+  def get_size_analysis_command(self, staging_dir):
+    """Returns the command to compute size analysis files.
+
+    Args:
+      staging_dir: Staging directory to pass input files and and retrieve output
+        size analysis files (e.g., .size and size JSON files).
+    """
+    generator_script = self.m.path['checkout'].join(
+        'tools', 'binary_size', 'generate_commit_size_analysis.py')
+    cmd = [generator_script, '--apk-name', self._apk_name]
+    for mapping_name in self._mapping_names:
+      cmd += ['--mapping-name', mapping_name]
+    cmd += [
+        '--staging-dir',
+        staging_dir,
+        '--chromium-output-directory',
+        self.m.chromium.output_dir,
+    ]
+    return cmd
+
   def _parse_gs_zip_path(self, gs_zip_path):
     # Returns (timestamp, revision sha)
     # Example path: 'android-binary-size/commit_size_analysis/
@@ -245,22 +269,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_dir = staging_dir.join(results_basename)
     self.m.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
-    generator_script = self.m.path['checkout'].join(
-        'tools', 'binary_size', 'generate_commit_size_analysis.py')
-
     self.m.step(
         name='Generate commit size analysis files',
-        cmd=[
-            generator_script,
-            '--apk-name',
-            self.apk_name,
-            '--mapping-name',
-            self.mapping_name,
-            '--staging-dir',
-            results_dir,
-            '--chromium-output-directory',
-            self.m.chromium.output_dir,
-        ])
+        cmd=self.get_size_analysis_command(results_dir))
 
     return results_dir, None
 
@@ -373,7 +384,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
               '--author',
               author,
               '--apk-name',
-              self.apk_name,
+              self._apk_name,
               '--before-dir',
               before_dir,
               '--after-dir',

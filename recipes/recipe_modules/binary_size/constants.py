@@ -13,7 +13,7 @@ DEFAULT_COMPILE_TARGETS = [
     'trichrome_minimal_apks',
 ]
 DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
-DEFAULT_MAPPING_FILE_NAME = 'MonochromePublic.aab.mapping'
+DEFAULT_MAPPING_FILE_NAMES = ['MonochromePublic.aab.mapping']
 
 EXPECTATIONS_STEP_NAME = 'Checking for expectation failures'
 
