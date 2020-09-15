@@ -39,13 +39,16 @@ PROPERTIES = {
     'service_account': Property(default=None),
     'wait_for_tasks': Property(default=None),
     'use_swarming_recipe_to_trigger': Property(default=False),
+    'realm': Property(default=None),
+    'resultdb_enabled': Property(default=False),
 }
 
 
 def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks, use_swarming_recipe_to_trigger):
+             wait_for_tasks, use_swarming_recipe_to_trigger, realm,
+             resultdb_enabled):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -124,8 +127,13 @@ def RunSteps(api, platforms, custom_trigger_script,
 
       task_slice = (task_slice.with_isolated(isolated).
                     with_env_vars(**{'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}))
-      task.request = (task_request.with_slice(0, task_slice).
-                                  with_name('hello_world'))
+      task.request = (
+          task_request.with_slice(0, task_slice).with_name('hello_world'))
+
+      if realm:
+        task.request = task.request.with_realm(realm)
+      if resultdb_enabled:
+        task.request = task.request.with_resultdb()
 
       task.task_output_dir = temp_dir.join('task_output_dir')
       if merge:
@@ -579,6 +587,41 @@ def GenTests(api):
           post_process.Filter(
               '[trigger (custom trigger script)] hello_world on Windows-7-SP1')
       ),
+  )
+
+  yield api.test(
+      'isolated_script_with_realm',
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(
+          platforms=('win', 'linux', 'mac'),
+          realm="test:task_realm",
+          isolated_script_task=True),
+  )
+
+  yield api.test(
+      'isolated_script_with_realm_and_resultdb',
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(
+          platforms=('win', 'linux', 'mac'),
+          isolated_script_task=True,
+          realm="test:task_realm",
+          resultdb_enabled=True),
   )
 
   summary_data = {

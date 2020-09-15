@@ -868,6 +868,17 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.append('--idempotent')
     if task_request.user:
       args.extend(['--user', task_request.user])
+    if task_request.realm:
+      args.extend(['--realm', task_request.realm])
+    if task_request.resultdb and task_request.resultdb.enable:
+      # If resultdb was enabled without realm, then use the builder realm.
+      # This is needed to allow experimenting with ResultDB-enabled tests
+      # before realms are available everywhere.
+      #
+      # TODO(crbug.com/1122808): Remove this fallback.
+      if not task_request.realm:
+        args.extend(['--realm', self.m.buildbucket.builder_realm])
+      args.extend(['--resultdb'])
 
     for path, package_list in sorted(
         task_slice.cipd_ensure_file.packages.iteritems()):
