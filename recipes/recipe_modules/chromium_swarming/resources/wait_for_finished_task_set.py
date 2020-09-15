@@ -80,7 +80,6 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--swarming-server', required=True)
   parser.add_argument('--swarming-py-path', required=True)
-  parser.add_argument('--auth-service-account-json')
   parser.add_argument('--verbose', action='store_true')
   parser.add_argument('--output-json', required=True,
                       help='Where to output information about the results of '
@@ -104,9 +103,8 @@ def main(argv):
 
   tasks = TasksToCollect.read_from_file(args.input_json)
 
-  retcode, output_json = real_main(
-      tasks, args.attempts, args.swarming_py_path, args.swarming_server,
-      args.auth_service_account_json)
+  retcode, output_json = real_main(tasks, args.attempts, args.swarming_py_path,
+                                   args.swarming_server)
 
   if output_json:
     with open(args.output_json, 'w') as f:
@@ -114,8 +112,8 @@ def main(argv):
 
   return retcode
 
-def real_main(tasks, attempts, swarming_py_path, swarming_server,
-              auth_service_account_json):
+
+def real_main(tasks, attempts, swarming_py_path, swarming_server):
   fd, tmpfile = tempfile.mkstemp()
   os.close(fd)
 
@@ -131,9 +129,6 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server,
             '-S', swarming_server,
             '--json=%s' % tmpfile
         ]
-        if auth_service_account_json:
-          cmd.extend([
-              '--auth-service-account-json', auth_service_account_json])
 
         cmd.append(url)
 
