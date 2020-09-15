@@ -69,8 +69,6 @@ def RunSteps(api, platforms, custom_trigger_script,
   api.chromium_swarming.set_default_env('TESTING', '1')
   api.chromium_swarming.verbose = True
   api.chromium_swarming.task_output_stdout = 'json'
-  api.chromium_swarming.service_account_json = (
-      '/creds/service_accounts/service-account-chromium-builder.json')
 
   api.chromium_swarming.set_default_dimension('inexistent', None)
 

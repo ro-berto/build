@@ -175,7 +175,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags = set()
     self._default_user = None
     self._pending_tasks = set()
-    self._service_account_json = None
     self._show_outputs_ref_in_collect_step = True
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
@@ -201,16 +200,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   @recipe_util.returns_placeholder
   def summary(self):
     return self.m.json.output()
-
-  @property
-  def service_account_json(self):
-    """Service account json to use for swarming."""
-    return self._service_account_json
-
-  @service_account_json.setter
-  def service_account_json(self, value):
-    """Service account json to use for swarming."""
-    self._service_account_json = value
 
   @property
   def swarming_server(self):
@@ -863,9 +852,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_request.service_account:
       args.extend(['--service-account', task_request.service_account])
 
-    if self.service_account_json:
-      args.extend(['--auth-service-account-json', self.service_account_json])
-
     if task.wait_for_capacity:
       args.append('--wait-for-capacity')
 
@@ -1448,9 +1434,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--verbose',
     ]
 
-    if self.service_account_json:
-      args.extend(['--auth-service-account-json', self.service_account_json])
-
     result = self.m.python(
         'wait for tasks%s' % (suffix or ''),
         self.resource('wait_for_finished_task_set.py'),
@@ -1714,8 +1697,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     ]
 
     args.extend(('-requests-json', self.m.json.input(requests_json)))
-    if self.service_account_json:
-      args.extend(['-service-account-json', self.service_account_json])
     return args
 
   def _gen_trigger_step_test_data(self, task, shard_indices):

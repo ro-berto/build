@@ -44,8 +44,6 @@
       "--env",
       "TESTING",
       "1",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",

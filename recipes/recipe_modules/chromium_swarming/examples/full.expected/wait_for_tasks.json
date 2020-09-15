@@ -14,9 +14,7 @@
       "[[\"10000\"], [\"110000\", \"120100\"], [\"130100\"]]",
       "--attempts",
       "0",
-      "--verbose",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "--verbose"
     ],
     "name": "wait for tasks",
     "~followup_annotations": [
@@ -47,9 +45,7 @@
       "[[\"10000\"], [\"110000\", \"120100\"], [\"130100\"]]",
       "--attempts",
       "0",
-      "--verbose",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "--verbose"
     ],
     "name": "wait for tasks (2)",
     "~followup_annotations": [

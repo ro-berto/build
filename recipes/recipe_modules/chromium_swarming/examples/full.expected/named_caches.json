@@ -338,8 +338,6 @@
       "--named-cache",
       "foo",
       "cache/foo",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -477,9 +475,7 @@
       "json",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10100\"}]}",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "{\"tasks\": [{\"task_id\": \"10100\"}]}"
     ],
     "env_prefixes": {
       "PATH": [

@@ -346,8 +346,6 @@
       "--env",
       "TESTING",
       "1",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -434,8 +432,6 @@
       "--env",
       "TESTING",
       "1",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -522,8 +518,6 @@
       "--env",
       "TESTING",
       "1",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -610,8 +604,6 @@
       "--env",
       "TESTING",
       "1",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -749,9 +741,7 @@
       "json",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}]}",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -829,9 +819,7 @@
       "json",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"110000\"}, {\"task_id\": \"120100\"}]}",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "{\"tasks\": [{\"task_id\": \"110000\"}, {\"task_id\": \"120100\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -931,9 +919,7 @@
       "json",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"130100\"}]}",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "{\"tasks\": [{\"task_id\": \"130100\"}]}"
     ],
     "env_prefixes": {
       "PATH": [

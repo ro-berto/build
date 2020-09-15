@@ -36,9 +36,6 @@ def RunSteps(api):
   api.chromium_tests.set_up_swarming(bot_config)
   api.assertions.assertEqual(api.chromium_swarming.swarming_server,
                              api.properties.get('expected_swarming_server'))
-  api.assertions.assertEqual(
-      api.chromium_swarming.service_account_json,
-      api.properties.get('expected_swarming_service_account'))
   api.assertions.assertEqual(api.chromium_swarming.default_dimensions,
                              api.properties.get('expected_swarming_dimensions'))
   api.assertions.assertEqual(api.isolate.isolate_server,
@@ -54,7 +51,6 @@ def GenTests(api):
       api.platform.name('linux'),
       api.properties(
           expected_swarming_server='https://example/swarming',
-          expected_swarming_service_account=None,
           expected_swarming_dimensions={
               'cpu': 'x86-64',
               'gpu': None,
