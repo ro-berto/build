@@ -95,6 +95,12 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'enable_soda',
+      api.properties(apply_gclient_config='enable_soda'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'android_prebuilts_build_tools',
       api.properties(apply_gclient_config='android_prebuilts_build_tools'),
       api.post_process(post_process.DropExpectation),

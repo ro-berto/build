@@ -378,3 +378,8 @@ def no_checkout_flash(c):
 @CONFIG_CTX()
 def no_kaleidoscope(c):
   c.solutions[0].custom_vars['checkout_kaleidoscope'] = 'False'
+
+
+@CONFIG_CTX()
+def enable_soda(c):
+  c.solutions[0].custom_vars['checkout_soda'] = 'True'
