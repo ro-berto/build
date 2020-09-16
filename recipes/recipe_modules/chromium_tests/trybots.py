@@ -130,11 +130,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='Android Release (Nexus 5X)',
                 ),
             ]),
-        'android-marshmallow-x86-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-marshmallow-x86-fyi-rel',
-            ),
         'android-marshmallow-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
