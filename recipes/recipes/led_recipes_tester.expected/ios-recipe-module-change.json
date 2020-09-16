@@ -49,11 +49,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'baz', 'url': 'https://chromium.googlesource.com/foo/bar/baz'}]",
       "--patch_root",
-      "build",
+      "baz",
       "--revision_mapping_file",
-      "{\"got_revision\": \"build\"}",
+      "{\"got_revision\": \"baz\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--cleanup-dir",
@@ -61,9 +61,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/foo/bar/baz@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "build@HEAD"
+      "baz@HEAD"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -85,27 +85,27 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"baz\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/build.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"80754af91bfb6d1073585b046fe0a474ce868509\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"baz\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/baz.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"bbe960a25ea311d21d40669e93df2003ba9b90a2\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"baz\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"80754af91bfb6d1073585b046fe0a474ce868509\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#270553}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"bbe960a25ea311d21d40669e93df2003ba9b90a2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#234018}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"root\": \"build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"baz\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"baz\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/build.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"80754af91bfb6d1073585b046fe0a474ce868509\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/baz.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"bbe960a25ea311d21d40669e93df2003ba9b90a2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -114,8 +114,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"80754af91bfb6d1073585b046fe0a474ce868509\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#270553}\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@\"bbe960a25ea311d21d40669e93df2003ba9b90a2\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#234018}\"@@@"
     ]
   },
   {
@@ -127,11 +127,11 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[CACHE]/builder/build",
+    "cwd": "[CACHE]/builder/baz",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@[CACHE]/builder/build/scripts/slave/recipe_modules/ios/api.py@@@",
+      "@@@STEP_LOG_LINE@files@[CACHE]/builder/baz/scripts/slave/recipe_modules/ios/api.py@@@",
       "@@@STEP_LOG_END@files@@@"
     ]
   },
@@ -614,9 +614,9 @@
       "-u",
       "[CACHE]/cipd/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/master/recipe_engine/recipes.py",
       "--package",
-      "[CACHE]/builder/build/infra/config/recipes.cfg",
+      "[CACHE]/builder/baz/infra/config/recipes.cfg",
       "analyze",
-      "{\"files\": [\"[CACHE]/builder/build/scripts/slave/recipe_modules/ios/api.py\"], \"recipes\": [\"foo_recipe\", \"ios/try\"]}",
+      "{\"files\": [\"[CACHE]/builder/baz/scripts/slave/recipe_modules/ios/api.py\"], \"recipes\": [\"foo_recipe\", \"ios/try\"]}",
       "/path/to/tmp/json"
     ],
     "name": "determine affected recipes",
@@ -640,7 +640,7 @@
       "[CACHE]/led/led",
       "edit-recipe-bundle"
     ],
-    "cwd": "[CACHE]/builder/build",
+    "cwd": "[CACHE]/builder/baz",
     "infra_step": true,
     "name": "bundle recipes.led edit-recipe-bundle",
     "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux-rel\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"properties\": {\n\"recipe\": \"foo_recipe\"\n}\n}\n}\n}\n}\n}",
@@ -664,7 +664,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -825,7 +825,7 @@
       "[CACHE]/led/led",
       "edit",
       "-rbh",
-      "00e60f50c2c6204d0a20e3f88851d5fd80ba602c"
+      "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit",
@@ -858,7 +858,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -873,7 +873,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led edit (2)",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -902,7 +902,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -915,7 +915,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led launch",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"1286761\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1030,7 +1030,7 @@
       "[CACHE]/led/led",
       "edit",
       "-rbh",
-      "00e60f50c2c6204d0a20e3f88851d5fd80ba602c"
+      "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try-m85:ios-simulator.trigger.led edit",
@@ -1063,7 +1063,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -1078,7 +1078,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try-m85:ios-simulator.trigger.led edit (2)",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try-m85\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2270351\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try-m85\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2270351\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -1107,7 +1107,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -1120,7 +1120,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium.try-m85:ios-simulator.trigger.led launch",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try-m85\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2270351\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try-m85\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2270351\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1235,7 +1235,7 @@
       "[CACHE]/led/led",
       "edit",
       "-rbh",
-      "00e60f50c2c6204d0a20e3f88851d5fd80ba602c"
+      "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:ios-simulator.trigger.led edit",
@@ -1268,7 +1268,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -1283,7 +1283,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:ios-simulator.trigger.led edit (2)",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2376025\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2376025\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -1312,7 +1312,7 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }, @@@",
       "@@@STEP_LOG_LINE@proto.output@  \"user_payload\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
       "@@@STEP_LOG_END@proto.output@@@"
@@ -1325,7 +1325,7 @@
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:ios-simulator.trigger.led launch",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2376025\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"00e60f50c2c6204d0a20e3f88851d5fd80ba602c\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"ios-simulator\", \n\"project\": \"chromium-m86\"\n}, \n\"input\": {\n\"gerrit_changes\": [\n{\n\"change\": \"2376025\", \n\"host\": \"chromium-review.googlesource.com\", \n\"patchset\": \"1337\", \n\"project\": \"chromium/src\"\n}\n], \n\"properties\": {\n\"recipe\": \"ios/try\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"8dac89c4e74d7bce5da3a69b642283fa7fca0958\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

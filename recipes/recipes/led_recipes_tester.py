@@ -14,6 +14,7 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.led.job import job as job_pb2
 
 DEPS = [
+    'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -30,12 +31,6 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/tryserver',
 ]
-
-
-PROPERTIES = {
-  # This is set by CQ when triggering a job.
-  'repo_name': Property(kind=str),
-}
 
 
 # If present in a CL description, will override the existing default builders
@@ -418,11 +413,16 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
         result.analyze()
 
 
-# TODO(martiniss): make this work if repo_name != 'build'
-def RunSteps(api, repo_name):
+def RunSteps(api):
+  gclient_config = api.gclient.make_config()
+  s = gclient_config.solutions.add()
+  s.url = api.tryserver.gerrit_change_repo_url
+  s.name = s.url.rsplit('/', 1)[-1]
+  gclient_config.got_revision_mapping[s.name] = 'got_revision'
+
   with api.context(cwd=api.path['cache'].join('builder')):
     update_result = api.bot_update.ensure_checkout(
-        patch=True, gclient_config=api.gclient.set_config(repo_name))
+        patch=True, gclient_config=gclient_config)
 
   repo_path = api.path['cache'].join('builder',
                                      update_result.json.output['root'])
@@ -485,18 +485,24 @@ def GenTests(api):
   RECIPE = 'foo_recipe'
 
   def gerrit_change(footer_builder=None):
+    patch_set = 12
+    t = api.buildbucket.try_build(
+        git_repo='https://chromium.googlesource.com/foo/bar/baz',
+        change_number=456789,
+        patch_set=patch_set)
+
     message = 'nothing important'
     parse_description_json = {}
     if footer_builder:
       message = '{}: {}'.format(BUILDER_FOOTER, footer_builder)
       parse_description_json = {BUILDER_FOOTER: [footer_builder]}
 
-    t = api.override_step_data(
+    t += api.override_step_data(
         'gerrit changes',
         api.json.output([{
             'revisions': {
                 1: {
-                    '_number': 12,
+                    '_number': patch_set,
                     'commit': {
                         'message': message,
                     }
@@ -544,7 +550,6 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(RECIPE),
       default_builders(),
@@ -552,7 +557,6 @@ def GenTests(api):
 
   yield api.test(
       'expired_tryjob',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(RECIPE),
       default_builders(),
@@ -573,7 +577,6 @@ def GenTests(api):
 
   yield api.test(
       'no_jobs_to_run',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       default_builders(),
       api.post_check(post_process.DoesNotRunRE, 'test .*\.trigger'),
@@ -583,7 +586,6 @@ def GenTests(api):
 
   yield api.test(
       'recipe_roller',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_files(
           'random/file.py',
@@ -594,7 +596,6 @@ def GenTests(api):
 
   yield api.test(
       'manual_roll_with_changes',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_files(
           'random/file.py',
@@ -605,7 +606,6 @@ def GenTests(api):
 
   yield api.test(
       'analyze_missing_json',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       default_builders(),
       api.override_step_data('determine affected recipes', retcode=1),
@@ -616,7 +616,6 @@ def GenTests(api):
 
   yield api.test(
       'analyze_failure',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       default_builders(),
       api.step_data(
@@ -641,7 +640,6 @@ def GenTests(api):
 
   yield api.test(
       'footer_builder_with_invalid_format',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='bad-builder'),
       api.post_check(post_process.StepFailure, 'bad builders'),
       api.post_check(
@@ -654,7 +652,6 @@ def GenTests(api):
 
   yield api.test(
       'footer_builder_with_unknown_bucket',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='arbitrary-bucket:arbitrary-builder'),
       api.post_check(post_process.StepFailure, 'unknown buckets'),
       api.post_check(
@@ -667,7 +664,6 @@ def GenTests(api):
 
   yield api.test(
       'footer_builder',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
       default_builders(),
@@ -678,7 +674,6 @@ def GenTests(api):
 
   yield api.test(
       'footer_builder_not_on_all_branches',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
       default_builders(),
@@ -692,7 +687,6 @@ def GenTests(api):
 
   yield api.test(
       'footer_builder_does_not_exist',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       non_existent_builder('luci.chromium.try:arbitrary-builder'),
       api.post_check(
@@ -704,7 +698,6 @@ def GenTests(api):
 
   yield api.test(
       'cl_indirectly_affects_ios',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_recipes(),
       default_builders(),
@@ -718,7 +711,6 @@ def GenTests(api):
 
   yield api.test(
       'ios-recipe-module-change',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_files('scripts/slave/recipe_modules/ios/api.py',),
       affected_recipes('ios/try'),
@@ -730,7 +722,6 @@ def GenTests(api):
 
   yield api.test(
       'ios-try-recipe-change',
-      api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       affected_files('scripts/slave/recipes/ios/try.py',),
       affected_recipes('ios/try'),
