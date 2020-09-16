@@ -29,11 +29,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
     self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
-    # Deprecated.
-    self._mapping_names = ([properties.android.mapping_name]
-                           if properties.android.mapping_name else [])
     self._mapping_names = (
-        self._mapping_names or properties.android.mapping_names or
+        properties.android.mapping_names or
         constants.DEFAULT_MAPPING_FILE_NAMES)
 
   def android_binary_size(self,
