@@ -480,15 +480,15 @@ SPEC.update([
     stock_cronet_config('android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-asan-arm-rel'),
     stock_cronet_config(
-        'android-cronet-kitkat-arm-rel',
+        'android-cronet-arm-rel-kitkat-tests',
         execution_mode=bot_spec.TEST,
         parent_buildername='android-cronet-arm-rel'),
     stock_cronet_config(
-        'android-cronet-lollipop-arm-rel',
+        'android-cronet-arm-rel-lollipop-tests',
         execution_mode=bot_spec.TEST,
         parent_buildername='android-cronet-arm-rel'),
     stock_cronet_config(
-        'android-cronet-marshmallow-arm64-rel',
+        'android-cronet-arm64-rel-marshmallow-tests',
         execution_mode=bot_spec.TEST,
         parent_buildername='android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-x86-dbg', config='Debug'),
