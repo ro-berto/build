@@ -1215,9 +1215,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot.settings.execution_mode != bot_spec_module.TEST:
       return
 
-    non_isolated_tests = [
-        t for t in build_config.tests_on(bot.builder_id) if not t.uses_isolate
-    ]
+    tests = build_config.tests_on(bot.builder_id)
+
+    tests_using_isolates = [t for t in tests if t.uses_isolate]
+
+    non_isolated_tests = [t for t in tests if not t.uses_isolate]
+
     isolate_transfer = not non_isolated_tests
     # The inbound portion of the isolate transfer is a strict subset of the
     # inbound portion of the package transfer. A builder that has to handle
@@ -1234,9 +1237,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-      self.download_command_lines_for_tests(
-          build_config.tests_on(bot.builder_id), bot.settings)
-
     if package_transfer:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
@@ -1249,6 +1249,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self._explain_package_transfer(bot, non_isolated_tests),
           as_log='why is this running?')
 
+    self.download_command_lines_for_tests(tests_using_isolates, bot.settings)
 
   def download_command_lines_for_tests(self, tests, bot_settings):
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
