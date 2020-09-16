@@ -532,7 +532,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Win7\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Perf Win7",
       "--buildbot-mastername",

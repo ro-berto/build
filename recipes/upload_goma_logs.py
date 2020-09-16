@@ -140,9 +140,6 @@ def main():
 
   # From Runtime API.
   parser.add_argument(
-      '--is-luci', action='store_true', help='True if this runs on LUCI'
-  )
-  parser.add_argument(
       '--is-experimental', action='store_true', help='True if experimental'
   )
 
@@ -167,7 +164,6 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci,
         is_experimental=args.is_experimental,
         override_gsutil=override_gsutil
     )
@@ -214,7 +210,6 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)
@@ -232,7 +227,6 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)
@@ -244,7 +238,6 @@ def main():
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)

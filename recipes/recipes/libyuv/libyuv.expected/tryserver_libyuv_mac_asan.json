@@ -537,7 +537,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.libyuv\", \"builder\": \"mac_asan\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "mac_asan",
       "--buildbot-mastername",

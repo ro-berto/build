@@ -1095,7 +1095,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS64 Sim Debug (iOS 12)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "iOS64 Sim Debug (iOS 12)",
       "--buildbot-mastername",

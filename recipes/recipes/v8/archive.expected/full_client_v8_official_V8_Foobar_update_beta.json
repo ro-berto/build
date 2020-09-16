@@ -512,7 +512,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"V8 Foobar\", \"project\": \"v8\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "V8 Foobar",
       "--buildbot-mastername",

@@ -451,7 +451,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Linux UBSan\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Linux UBSan",
       "--buildbot-mastername",

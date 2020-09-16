@@ -596,8 +596,6 @@ class GomaApi(recipe_api.RecipeApi):
             'builder': builder_id.builder,
         })
     ])
-    args.append('--is-luci')
-
     if self.m.runtime.is_experimental:
       args.append('--is-experimental')
 

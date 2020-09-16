@@ -489,7 +489,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Mac64 Debug\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Mac64 Debug",
       "--buildbot-mastername",

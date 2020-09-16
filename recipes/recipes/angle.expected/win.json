@@ -410,7 +410,6 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.angle\", \"builder\": \"windows\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "windows",
       "--buildbot-mastername",

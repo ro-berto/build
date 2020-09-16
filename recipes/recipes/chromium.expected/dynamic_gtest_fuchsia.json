@@ -723,7 +723,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"fuchsia-fyi-x64-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "fuchsia-fyi-x64-rel",
       "--buildbot-mastername",

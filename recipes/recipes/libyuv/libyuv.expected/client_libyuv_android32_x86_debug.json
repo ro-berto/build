@@ -429,7 +429,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Android32 x86 Debug\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Android32 x86 Debug",
       "--buildbot-mastername",

@@ -716,7 +716,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.fake\", \"builder\": \"ios\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "ios",
       "--buildbot-mastername",

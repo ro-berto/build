@@ -439,7 +439,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"mac_skia\", \"project\": \"pdfium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "mac_skia",
       "--buildbot-mastername",

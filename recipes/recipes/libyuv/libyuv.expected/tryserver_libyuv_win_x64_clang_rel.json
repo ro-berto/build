@@ -499,7 +499,6 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.libyuv\", \"builder\": \"win_x64_clang_rel\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "win_x64_clang_rel",
       "--buildbot-mastername",

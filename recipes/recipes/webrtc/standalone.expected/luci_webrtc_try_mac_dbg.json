@@ -755,7 +755,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"mac_dbg\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "mac_dbg",
       "--buildbot-mastername",

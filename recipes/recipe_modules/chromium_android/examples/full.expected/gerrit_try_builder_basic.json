@@ -611,7 +611,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.testing.master\", \"builder\": \"gerrit_try_builder\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "gerrit_try_builder",
       "--buildbot-mastername",

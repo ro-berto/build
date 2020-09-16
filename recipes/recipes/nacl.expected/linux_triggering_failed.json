@@ -494,7 +494,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.nacl\", \"builder\": \"linux_64-newlib-arm_qemu-pnacl-dbg\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "linux_64-newlib-arm_qemu-pnacl-dbg",
       "--buildbot-mastername",

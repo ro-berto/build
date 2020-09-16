@@ -429,7 +429,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Android Release\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Android Release",
       "--buildbot-mastername",

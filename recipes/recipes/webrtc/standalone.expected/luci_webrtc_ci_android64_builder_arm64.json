@@ -566,7 +566,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android64 Builder arm64\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Android64 Builder arm64",
       "--buildbot-mastername",

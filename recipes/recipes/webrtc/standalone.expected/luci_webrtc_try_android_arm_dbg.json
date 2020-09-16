@@ -698,7 +698,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_arm_dbg\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "android_arm_dbg",
       "--buildbot-mastername",

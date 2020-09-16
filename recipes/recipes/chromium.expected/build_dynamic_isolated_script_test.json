@@ -744,7 +744,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Linux Builder",
       "--buildbot-mastername",

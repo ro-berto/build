@@ -718,7 +718,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"luci.chromium.try\", \"builder\": \"win-celab-try-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "win-celab-try-rel",
       "--buildbot-mastername",

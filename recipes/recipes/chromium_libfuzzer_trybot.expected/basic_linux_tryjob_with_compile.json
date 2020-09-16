@@ -872,7 +872,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux-libfuzzer-asan-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "linux-libfuzzer-asan-rel",
       "--buildbot-mastername",

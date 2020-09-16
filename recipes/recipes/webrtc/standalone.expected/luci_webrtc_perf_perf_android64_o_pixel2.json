@@ -572,7 +572,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Android64 (O Pixel2)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Perf Android64 (O Pixel2)",
       "--buildbot-mastername",

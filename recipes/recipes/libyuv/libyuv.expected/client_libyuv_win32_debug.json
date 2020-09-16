@@ -424,7 +424,6 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Win32 Debug\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Win32 Debug",
       "--buildbot-mastername",

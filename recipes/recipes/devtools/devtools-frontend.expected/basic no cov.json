@@ -487,7 +487,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-mastername",
       "tryserver.devtools-frontend",
       "--buildbot-slavename",

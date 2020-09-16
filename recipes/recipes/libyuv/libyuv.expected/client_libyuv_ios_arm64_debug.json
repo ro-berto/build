@@ -536,7 +536,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"iOS ARM64 Debug\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "iOS ARM64 Debug",
       "--buildbot-mastername",

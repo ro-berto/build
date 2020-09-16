@@ -518,7 +518,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Linux Xenial\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Perf Linux Xenial",
       "--buildbot-mastername",

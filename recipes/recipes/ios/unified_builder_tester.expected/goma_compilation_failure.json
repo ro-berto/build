@@ -751,7 +751,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "ios",
       "--buildbot-mastername",

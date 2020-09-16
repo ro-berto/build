@@ -1145,7 +1145,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"findit_variable\", \"project\": \"project\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "findit_variable",
       "--buildbot-mastername",

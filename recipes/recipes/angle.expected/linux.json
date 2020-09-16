@@ -381,7 +381,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.angle\", \"builder\": \"linux\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",

@@ -424,7 +424,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Linux GCC\", \"project\": \"\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Linux GCC",
       "--buildbot-mastername",

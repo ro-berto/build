@@ -733,7 +733,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"codesearch-gen-chromium-fuchsia\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-fuchsia",
       "--buildbot-mastername",
