@@ -1909,11 +1909,11 @@ class SwarmingTest(Test):
           'LLVM_PROFILE_FILE': '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       }
 
-      # crbug.com/1124774 - For PGO, we need to ensure that Chrome shutdow
-      # cleanly to allow sufficient time for all processes to finish writing
+      # crbug.com/1124774 - For PGO, we're increasing the shutdown timeout to
+      # 300 seconds to allow sufficient time for all processes to finish writing
       # profiles.
       if using_pgo:
-        env_vars['ENSURE_CLEAN_CHROME_SHUTDOWN'] = '1'
+        env_vars['CHROME_SHUTDOWN_TIMEOUT'] = '300'
 
       task_slice = task_slice.with_env_vars(**env_vars)
 
