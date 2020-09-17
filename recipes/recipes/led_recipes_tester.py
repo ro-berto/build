@@ -7,6 +7,7 @@
 import attr
 import collections
 import contextlib
+import re
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
@@ -112,6 +113,19 @@ CHROMIUM_SRC_TEST_CLS = {
 }
 
 
+# The builders and trybots files affect specific builders, so when changes only
+# affect these files, launching the default set of builders will only provide a
+# useful signal in the small percentage of CLs that affect those default
+# builders and unnecesarily consume resources and time in the rest of the CLs
+PER_BUILDER_CONFIG_PATTERNS = [
+    r'recipes/recipe_modules/chromium_tests/builders/.*\.py',
+    r'recipes/recipe_modules/chromium_tests/trybots\.py',
+]
+
+PER_BUILDER_CONFIG_REGEX = re.compile('^({})$'.format('|'.join(
+    '({})'.format(p) for p in PER_BUILDER_CONFIG_PATTERNS)))
+
+
 @attr.s(frozen=True)
 class RelatedBuilder(object):
   """Type to record a related builder.
@@ -180,18 +194,22 @@ def _get_builders_to_check(api, affected_files, repo_path):
       against.
 
   Returns:
-    An OrderedDict mapping builder name to None or a RelatedBuilder
-    instance. If the value is None, the associated builder should exist
-    and it will be considered an error if it does not. If the value is
-    not None, the associated builder may or may not exist and the value
-    identifies the related builder and the alternative bucket that the
-    builder was based on.
+    A 2-element tuple:
+      * A bool indicating whether or not the per-builder config files
+        should be ignored for the purposes of analyzing whether a recipe
+        is affected.
+      * An OrderedDict mapping builder name to None or a RelatedBuilder
+        instance. If the value is None, the associated builder should
+        exist and it will be considered an error if it does not. If the
+        value is not None, the associated builder may or may not exist
+        and the value identifies the related builder and the alternative
+        bucket that the builder was based on.
   """
   cl_footers = api.tryserver.get_footers() or {}
   footer_builders = cl_footers.get(BUILDER_FOOTER)
 
   if footer_builders is not None:
-    return _process_footer_builders(api, footer_builders)
+    return False, _process_footer_builders(api, footer_builders)
 
   prefix = str(repo_path) + '/'
 
@@ -204,7 +222,7 @@ def _get_builders_to_check(api, affected_files, repo_path):
   for builder_set in PATH_BASED_BUILDER_SETS:
     if any(f in affected_files for f in builder_set.files):
       builders.extend(builder_set.builders)
-  return collections.OrderedDict.fromkeys(builders)
+  return True, collections.OrderedDict.fromkeys(builders)
 
 
 def _get_led_builders(api, builders):
@@ -430,7 +448,30 @@ def RunSteps(api):
   with api.context(cwd=repo_path):
     affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
 
-  builders = _get_builders_to_check(api, affected_files, repo_path)
+  ignore_per_builder_config, builders = _get_builders_to_check(
+      api, affected_files, repo_path)
+
+  if ignore_per_builder_config:
+    ignored_files = []
+    new_affected_files = []
+    for f in affected_files:
+      rel_path = api.path.relpath(f, repo_path)
+      if PER_BUILDER_CONFIG_REGEX.match(rel_path):
+        ignored_files.append(f)
+      else:
+        new_affected_files.append(f)
+
+    if ignored_files:
+      step_result = api.step('ignoring affected files', [])
+      message = [
+          '\nThe following affected files are being ignored because '
+          'they contain per-builder config that is unlikely to affect the '
+          'default builders:'
+      ]
+      message.extend(sorted(ignored_files))
+      step_result.presentation.step_text = '\n  '.join(message)
+
+    affected_files = new_affected_files
 
   led_builders = _get_led_builders(api, builders)
   recipes = set(
@@ -548,11 +589,43 @@ def GenTests(api):
     build.buildbucket.bbagent_args.build.input.properties['recipe'] = RECIPE
     return api.led.mock_get_builder(build)
 
+  def affected_recipes_input_files(steps):
+    json_input = steps['determine affected recipes'].cmd[-2]
+    return api.json.loads(json_input)['files']
+
+  def affected_recipes_input_files_does_not_contain(check, steps, *rel_paths):
+    input_files = affected_recipes_input_files(steps)
+    for rel_path in rel_paths:
+      path = str(api.path['cache'].join('builder', 'baz', *rel_path.split('/')))
+      check(path not in input_files)
+
+  def affected_recipes_input_files_contains(check, steps, *rel_paths):
+    input_files = affected_recipes_input_files(steps)
+    for rel_path in rel_paths:
+      path = str(api.path['cache'].join('builder', 'baz', *rel_path.split('/')))
+      check(path in input_files)
+
   yield api.test(
       'basic',
       gerrit_change(),
       affected_recipes(RECIPE),
       default_builders(),
+  )
+
+  yield api.test(
+      'per_builder_config_ignored',
+      gerrit_change(),
+      affected_recipes(RECIPE),
+      affected_files(
+          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
+          'recipes/recipe_modules/chromium_tests/trybots.py'),
+      default_builders(),
+      api.post_check(post_process.MustRun, 'ignoring affected files'),
+      api.post_check(
+          affected_recipes_input_files_does_not_contain,
+          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
+          'recipes/recipe_modules/chromium_tests/trybots.py'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -669,6 +742,22 @@ def GenTests(api):
       default_builders(),
       api.post_check(post_process.DoesNotRun,
                      *[led_get_builder_name(b) for b in DEFAULT_BUILDERS]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'per_builder_config_not_ignored_for_footer_builders',
+      gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
+      affected_recipes(RECIPE),
+      affected_files(
+          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
+          'recipes/recipe_modules/chromium_tests/trybots.py'),
+      default_builders(),
+      api.post_check(post_process.DoesNotRun, 'ignoring affected files'),
+      api.post_check(
+          affected_recipes_input_files_contains,
+          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
+          'recipes/recipe_modules/chromium_tests/trybots.py'),
       api.post_process(post_process.DropExpectation),
   )
 
