@@ -243,6 +243,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:base_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--isolated",
       "deadbeef",
       "--",

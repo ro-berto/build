@@ -352,6 +352,8 @@
       "slavename:fake-bot-id",
       "--tag",
       "stepname:hello_world on Mac-10.13",
+      "--tag",
+      "triggered_by:swarming_py",
       "--verbose",
       "--idempotent",
       "--user",

@@ -1153,6 +1153,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:gl_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for gl_tests]",

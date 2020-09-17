@@ -1592,6 +1592,8 @@
       "spec_name:webrtc.try:linux_more_configs",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"

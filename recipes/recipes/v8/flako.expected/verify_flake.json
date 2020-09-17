@@ -48,6 +48,8 @@
       "slavename:fake-bot-id",
       "--tag",
       "stepname:check mjsunit/foobar at #0 - shard 1",
+      "--tag",
+      "triggered_by:swarming_py",
       "--user",
       "v8-flake-bisect",
       "--isolated",

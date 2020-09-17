@@ -340,6 +340,8 @@
       "slavename:fake-bot-id",
       "--tag",
       "stepname:hello_world on Windows-7-SP1",
+      "--tag",
+      "triggered_by:swarming_py",
       "--verbose",
       "--idempotent",
       "--user",

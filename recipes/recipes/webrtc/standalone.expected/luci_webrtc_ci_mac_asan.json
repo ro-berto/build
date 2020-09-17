@@ -791,6 +791,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:audio_decoder_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for audio_decoder_unittests]"
@@ -872,6 +874,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:common_audio_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_audio_unittests]"
@@ -953,6 +957,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:common_video_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_video_unittests]"
@@ -1034,6 +1040,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:low_bandwidth_audio_test on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for low_bandwidth_audio_test]"
@@ -1121,6 +1129,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1208,6 +1218,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1295,6 +1307,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1382,6 +1396,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1469,6 +1485,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1556,6 +1574,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1643,6 +1663,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1730,6 +1752,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:modules_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1817,6 +1841,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:peerconnection_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -1904,6 +1930,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:peerconnection_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -1991,6 +2019,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:peerconnection_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2078,6 +2108,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:peerconnection_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2159,6 +2191,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_media_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_media_unittests]"
@@ -2240,6 +2274,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_pc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_pc_unittests]"
@@ -2321,6 +2357,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_stats_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_stats_unittests]"
@@ -2408,6 +2446,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2495,6 +2535,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2582,6 +2624,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2669,6 +2713,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2756,6 +2802,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2843,6 +2891,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:rtc_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2924,6 +2974,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:slow_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for slow_tests]"
@@ -3005,6 +3057,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:system_wrappers_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for system_wrappers_unittests]"
@@ -3086,6 +3140,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:test_support_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for test_support_unittests]"
@@ -3167,6 +3223,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:tools_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for tools_unittests]"
@@ -3254,6 +3312,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:video_engine_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3341,6 +3401,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:video_engine_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3428,6 +3490,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:video_engine_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3515,6 +3579,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:video_engine_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3596,6 +3662,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:voip_unittests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for voip_unittests]"
@@ -3677,6 +3745,8 @@
       "spec_name:webrtc.ci:Mac Asan",
       "--tag",
       "stepname:webrtc_nonparallel_tests on Mac-10.11",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for webrtc_nonparallel_tests]"

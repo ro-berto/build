@@ -1362,6 +1362,8 @@
       "spec_name:webrtc.ci:Win (more configs)",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"

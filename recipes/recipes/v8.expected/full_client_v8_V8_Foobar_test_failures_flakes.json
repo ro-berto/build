@@ -62,6 +62,8 @@
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
       "stepname:Check",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for bot_default]",

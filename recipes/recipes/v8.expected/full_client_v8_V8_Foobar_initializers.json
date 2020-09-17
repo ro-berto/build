@@ -134,6 +134,8 @@
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
       "stepname:Static-Initializers",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for check-static-initializers]",

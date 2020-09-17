@@ -819,6 +819,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       pre_trigger_args: All arguments up to and including 'trigger'
       post_triggers_args: All arguments following 'trigger'
     """
+    # TODO(crbug.com/894045): Remove this method once we have fully migrated
+    # to use swarming recipe module to trigger tasks.
     task_request = task.request
     task_slice = task_request[0].with_named_caches(task.named_caches)
 
@@ -861,6 +863,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     for tag in sorted(self._generate_trigger_task_tags(task, task_slice)):
       assert ':' in tag, tag
       args.extend(['--tag', tag])
+    args.extend(['--tag', 'triggered_by:swarming_py'])
 
     if self.verbose:
       args.append('--verbose')
@@ -980,6 +983,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     Raises:
       InfraFailure if shard cannot be triggered.
     """
+    # TODO(crbug.com/894045): Remove this method once we have fully migrated
+    # to use swarming recipe module to trigger tasks.
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, **kwargs))
 
@@ -1051,6 +1056,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       kv = t.split(':', 1)
       assert len(kv) == 2
       tags_dict[kv[0]].append(kv[1])
+    # TODO(crbug.com/894045): Remove this method once we have fully migrated
+    # to use swarming recipe module to trigger tasks.
+    tags_dict['triggered_by'].append('recipe_modules/swarming')
 
     req = req.with_slice(0, req_slice).with_tags(tags_dict)
     with self.m.swarming.with_server(self.swarming_server):

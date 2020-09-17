@@ -896,6 +896,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:audio_decoder_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for audio_decoder_unittests]"
@@ -981,6 +983,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:common_audio_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_audio_unittests]"
@@ -1066,6 +1070,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:common_video_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_video_unittests]"
@@ -1151,6 +1157,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:low_bandwidth_audio_test",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for low_bandwidth_audio_test]"
@@ -1242,6 +1250,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1333,6 +1343,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1424,6 +1436,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1515,6 +1529,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1606,6 +1622,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1697,6 +1715,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1788,6 +1808,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1879,6 +1901,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:modules_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1970,6 +1994,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2061,6 +2087,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2152,6 +2180,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2243,6 +2273,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:peerconnection_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2328,6 +2360,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_media_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_media_unittests]"
@@ -2413,6 +2447,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_pc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_pc_unittests]"
@@ -2498,6 +2534,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_stats_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_stats_unittests]"
@@ -2589,6 +2627,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2680,6 +2720,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2771,6 +2813,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2862,6 +2906,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2953,6 +2999,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -3044,6 +3092,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:rtc_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -3129,6 +3179,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:slow_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for slow_tests]"
@@ -3214,6 +3266,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:system_wrappers_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for system_wrappers_unittests]"
@@ -3299,6 +3353,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:test_support_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for test_support_unittests]"
@@ -3384,6 +3440,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:tools_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for tools_unittests]"
@@ -3475,6 +3533,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:video_engine_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3566,6 +3626,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:video_engine_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3657,6 +3719,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:video_engine_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3748,6 +3812,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:video_engine_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3833,6 +3899,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:voip_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for voip_unittests]"
@@ -3918,6 +3986,8 @@
       "spec_name:webrtc.try:linux_asan",
       "--tag",
       "stepname:webrtc_nonparallel_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for webrtc_nonparallel_tests]"

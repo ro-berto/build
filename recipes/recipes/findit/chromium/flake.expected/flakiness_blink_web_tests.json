@@ -1343,6 +1343,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:blink_web_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for blink_web_tests]",

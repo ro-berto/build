@@ -883,6 +883,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:audio_decoder_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for audio_decoder_unittests]"
@@ -968,6 +970,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:common_audio_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_audio_unittests]"
@@ -1053,6 +1057,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:common_video_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for common_video_unittests]"
@@ -1138,6 +1144,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:low_bandwidth_audio_test on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for low_bandwidth_audio_test]"
@@ -1229,6 +1237,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1320,6 +1330,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_tests]"
@@ -1411,6 +1423,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1502,6 +1516,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1593,6 +1609,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1684,6 +1702,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1775,6 +1795,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1866,6 +1888,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:modules_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for modules_unittests]"
@@ -1957,6 +1981,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:peerconnection_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2048,6 +2074,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:peerconnection_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2139,6 +2167,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:peerconnection_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2230,6 +2260,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:peerconnection_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for peerconnection_unittests]"
@@ -2315,6 +2347,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_media_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_media_unittests]"
@@ -2400,6 +2434,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_pc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_pc_unittests]"
@@ -2485,6 +2521,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_stats_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_stats_unittests]"
@@ -2576,6 +2614,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2667,6 +2707,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2758,6 +2800,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2849,6 +2893,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -2940,6 +2986,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -3031,6 +3079,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:rtc_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for rtc_unittests]"
@@ -3116,6 +3166,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:slow_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for slow_tests]"
@@ -3201,6 +3253,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:system_wrappers_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for system_wrappers_unittests]"
@@ -3286,6 +3340,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:test_support_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for test_support_unittests]"
@@ -3371,6 +3427,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:tools_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for tools_unittests]"
@@ -3462,6 +3520,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:video_engine_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3553,6 +3613,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:video_engine_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3644,6 +3706,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:video_engine_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3735,6 +3799,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:video_engine_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for video_engine_tests]"
@@ -3820,6 +3886,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:voip_unittests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for voip_unittests]"
@@ -3905,6 +3973,8 @@
       "spec_name:webrtc.try:win_x64_clang_dbg_win10",
       "--tag",
       "stepname:webrtc_nonparallel_tests on Windows-10-15063",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for webrtc_nonparallel_tests]"

@@ -1152,6 +1152,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:telemetry_gpu_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for telemetry_gpu_unittests]",

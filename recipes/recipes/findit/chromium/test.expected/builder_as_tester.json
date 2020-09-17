@@ -1219,6 +1219,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:services_unittests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--idempotent",
       "--isolated",
       "[dummy hash for services_unittests]",

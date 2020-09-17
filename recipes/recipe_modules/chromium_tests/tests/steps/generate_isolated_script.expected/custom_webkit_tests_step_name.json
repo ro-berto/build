@@ -243,6 +243,8 @@
       "test_id_prefix:",
       "--tag",
       "test_suite:custom_webkit_tests",
+      "--tag",
+      "triggered_by:swarming_py",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
