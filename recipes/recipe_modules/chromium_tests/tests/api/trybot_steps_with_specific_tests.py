@@ -45,7 +45,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
       # Fake path to make tests pass.
       path_to_testing_dir=api.path['start_dir'].join('checkout'))
 
-  update_step, _build_config = api.chromium_tests.prepare_checkout(bot.settings)
+  update_step, build_config = api.chromium_tests.prepare_checkout(bot.settings)
 
   kwargs = {}
   if api.properties.get('shards'):
@@ -74,7 +74,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
       raw_result.summary_markdown = (
           'Compile step failed from "_calculate_tests_to_run".')
       raw_result.status = common_pb.FAILURE
-    return raw_result, task
+    return raw_result, task, build_config
 
   api.chromium_tests._calculate_tests_to_run = config_override
 
