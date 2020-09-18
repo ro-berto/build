@@ -1814,6 +1814,10 @@ class SwarmingTest(Test):
     return self._name
 
   @property
+  def dimensions(self):
+    return self._dimensions
+
+  @property
   def target_name(self):
     return self._target_name or self._name
 

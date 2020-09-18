@@ -385,7 +385,8 @@ def GenTests(api):
           post_process.StepCommandContains,
           'test_pre_run.[trigger] %s' % fake_test, [
               '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
-              'stream', '-test-id-prefix', 'ninja://:fake_test/', '--'
+              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
+              'buildername=fake-tester', '-var', 'test_suite=fake_test', '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )

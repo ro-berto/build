@@ -475,6 +475,50 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
       return raw_result
 
+  def maybe_enable_resultdb_for_test(self, test, cmd):
+    """Enables resultdb for a given test.
+
+    This function enables resultdb for a given test by wrapping the command
+    with result-sink and result-adapter, so that the results of the test
+    are uploaded to ResultDB.
+
+    Note that the test should be configured to enable ResultDB and be
+    an instance of steps.SwarmingTest or its derived classes. Otherwise,
+    the given command will be returned without changes.
+
+    Args:
+      test: an instance of steps.SwarmingTest or its derived classes.
+      cmd (list): a Swarming raw_cmd to wrap with result sink and adapter.
+    Returns:
+      The given Swarming raw_cmd, possibly wrapped with result sink and adapter.
+    """
+    if not test.runs_on_swarming:  # pragma: no cover
+      return cmd
+
+    if not cmd:
+      return cmd
+
+    # The test spec should be explicitly set to enable resultdb.
+    if not (test.resultdb or {}).get('enable'):
+      return cmd
+
+    variants = [
+        ('buildername', self.m.buildbucket.builder_name),
+        ('device_type', test.dimensions.get('device_type')),
+        ('device_os', test.dimensions.get('device_os')),
+        ('device_type', test.dimensions.get('gpu')),
+        ('os', test.dimensions.get('os')),
+        ('test_suite', test.canonical_name),
+    ]
+    # TODO(crbug.com/1108016): add the result adapter command, specified in
+    # test.resultdb['result_adapter'].
+    # TODO(crbug.com/1099573): set the location prefix, if test_suite is
+    # "blink_web_tests" or ends with "webgl".
+    return self.m.resultdb.wrap(
+        cmd,
+        test_id_prefix=test.test_id_prefix,
+        base_variant={k: v for k, v in variants if v})
+
   def set_swarming_command_lines(self, tests, suffix):
     step_result = self.m.python(
         'find command lines%s' % suffix,
@@ -487,12 +531,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._swarming_command_lines = step_result.json.output
     for test in tests:
       if test.runs_on_swarming:
-        command_line = self._swarming_command_lines.get(test.target_name, [])
-        if command_line:
-          if (test.resultdb or {}).get('enable'):
-            command_line = self.m.resultdb.wrap(command_line,
-                                                test.test_id_prefix)
+        command_line = self.maybe_enable_resultdb_for_test(
+            test, self._swarming_command_lines.get(test.target_name, []))
 
+        if command_line:
           test.raw_cmd = command_line
           test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
                                                   self.m.path['checkout'])
