@@ -200,9 +200,6 @@ class BotSpec(object):
   # pre-existing build outputs
   clobber = attrib(bool, default=False)
 
-  # The names of targets to compile
-  compile_targets = sequence_attrib(str, default=())
-
   # Name of a Google Storage bucket to use when using the legacy package
   # transfer where build outputs are uploaded to Google Storage and then
   # downloaded by the tester

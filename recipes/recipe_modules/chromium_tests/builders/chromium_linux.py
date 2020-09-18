@@ -89,7 +89,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            compile_targets=[],
             simulation_platform='linux',
         ),
     'Linux Ozone Tester (Headless)':

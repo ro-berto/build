@@ -184,47 +184,11 @@ class BuildConfig(object):
   def get_compile_targets(self, tests):
     compile_targets = set()
 
-    # Track the migration of compile_targets to source side specs
-    migrated = {}
-    needs_migration = {}
-
     for builder_id in self.bot_config.builder_ids:
-      bot_spec = self.bot_config.bot_db[builder_id]
-
-      recipe_compile_targets = set(bot_spec.compile_targets)
-      compile_targets.update(recipe_compile_targets)
-
       source_side_spec = self._source_side_specs[builder_id.group].get(
           builder_id.builder, {})
-      source_compile_targets = set(
+      compile_targets.update(
           source_side_spec.get('additional_compile_targets', []))
-      compile_targets.update(source_compile_targets)
-
-      migrated[builder_id] = recipe_compile_targets & source_compile_targets
-      needs_migration[builder_id] = (
-          recipe_compile_targets - source_compile_targets)
-
-    migrated = {k: v for k, v in migrated.iteritems() if v}
-    needs_migration = {k: v for k, v in needs_migration.iteritems() if v}
-
-    if migrated or needs_migration:
-
-      def step_name(builder_id, targets):
-        return '{}%{}%{}'.format(builder_id.group, builder_id.builder,
-                                 ','.join(sorted(targets)))
-
-      step_api = self._chromium_tests_api.m.step
-      with step_api.nest('compile_targets migration') as presentation:
-        presentation.step_text = (
-            '\nThis is an informational step for infra maintainers')
-        if migrated:
-          with step_api.nest('migrated'):
-            for builder_id, targets in sorted(migrated.iteritems()):
-              step_api(step_name(builder_id, targets), [])
-        if needs_migration:
-          with step_api.nest('needs migration'):
-            for builder_id, targets in sorted(needs_migration.iteritems()):
-              step_api(step_name(builder_id, targets), [])
 
     for t in tests:
       compile_targets.update(t.compile_targets())

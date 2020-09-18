@@ -4,22 +4,6 @@
 
 from .. import bot_spec
 
-COMPILE_TARGETS = [
-    'chrome/browser/media/router',
-    'chrome/browser/media/router:openscreen_unittests',
-    'chrome/browser/media/router:unittests',
-    'components/cast_certificate',
-    'components/cast_certificate:unit_tests',
-    'components/cast_channel',
-    'components/cast_channel:unit_tests',
-    'components/mirroring/browser',
-    'components/mirroring/service:mirroring_service',
-    'components/mirroring:mirroring_tests',
-    'components/mirroring:mirroring_unittests',
-    'components/openscreen_platform',
-]
-
-
 def _client_openscreen_chromium_spec(**kwargs):
   return bot_spec.BotSpec.create(luci_project='openscreen', **kwargs)
 
@@ -36,7 +20,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            compile_targets=COMPILE_TARGETS,
             simulation_platform='linux',
         ),
     'chromium_mac_debug':
@@ -50,7 +33,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            compile_targets=COMPILE_TARGETS,
             simulation_platform='mac',
         ),
 }
