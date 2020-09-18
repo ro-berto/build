@@ -351,7 +351,11 @@ def RunSteps(api):
 
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
-  api.goma.ensure_goma()
+
+  is_gcc = api.properties.get('is_gcc', False)
+  should_use_goma = not is_gcc
+  if should_use_goma:
+    api.goma.ensure_goma()
 
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
@@ -412,12 +416,17 @@ def RunSteps(api):
     # if this is being run on a non-Mac platform.
     with api.osx_sdk('mac'):
       ninja_cmd = [api.depot_tools.ninja_path, '-C', output_path]
-      ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
+      if should_use_goma:
+        ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
       ninja_cmd.extend(BUILD_TARGETS)
-      api.goma.build_with_goma(
-          name='compile',
-          ninja_command=ninja_cmd,
-          ninja_log_outdir=output_path)
+
+      if should_use_goma:
+        api.goma.build_with_goma(
+            name='compile',
+            ninja_command=ninja_cmd,
+            ninja_log_outdir=output_path)
+      else:
+        api.step('compile with ninja', ninja_cmd)
 
     # ARM64 tests cannot be run on the building bot, since they must be
     # cross-compiled from x86-64.
