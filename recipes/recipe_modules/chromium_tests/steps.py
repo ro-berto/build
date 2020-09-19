@@ -2270,6 +2270,24 @@ class LocalIsolatedScriptTest(Test):
     self.results_handler = results_handler or JSONResultsHandler()
     self._isolate_coverage_data = isolate_coverage_data
     self._isolate_profile_data = isolate_profile_data
+    self._raw_cmd = []
+    self._relative_cwd = None
+
+  @property
+  def raw_cmd(self):
+    return self._raw_cmd
+
+  @raw_cmd.setter
+  def raw_cmd(self, value):
+    self._raw_cmd = value
+
+  @property
+  def relative_cwd(self):
+    return self._relative_cwd
+
+  @relative_cwd.setter
+  def relative_cwd(self, value):
+    self._relative_cwd = value
 
   @property
   def set_up(self):
@@ -2314,8 +2332,15 @@ class LocalIsolatedScriptTest(Test):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    pre_args = []
+    if self.relative_cwd:
+      pre_args += ['--relative-cwd', self.relative_cwd]
 
+    if self.raw_cmd:
+      pre_args += ['--raw-cmd']
+
+    args = _merge_args_and_test_options(self, self.raw_cmd + self._args,
+                                        test_options)
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 
@@ -2351,6 +2376,7 @@ class LocalIsolatedScriptTest(Test):
           self.name,
           api.isolate.isolated_tests[self.target_name],
           args,
+          pre_args=pre_args,
           step_test_data=step_test_data,
           **kwargs)
     finally:

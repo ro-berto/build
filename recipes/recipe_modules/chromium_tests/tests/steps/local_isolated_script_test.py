@@ -36,6 +36,14 @@ def RunSteps(api):
         retry_limit=0,
         run_disabled=bool(test_repeat_count))
 
+  raw_cmd = api.properties.get('raw_cmd') or []
+  if raw_cmd:
+    test.raw_cmd = list(raw_cmd)
+
+  relative_cwd = api.properties.get('relative_cwd') or None
+  if relative_cwd:
+    test.relative_cwd = relative_cwd
+
   try:
     test.pre_run(api, '')
     test.run(api, '')
@@ -74,6 +82,21 @@ def GenTests(api):
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
+  )
+
+  yield api.test(
+      'raw_cmd',
+      api.properties(
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          raw_cmd=['./base_unittests', '--bar'],
+          relative_cwd='out/Release'),
+      api.post_process(post_process.StepCommandContains, 'base_unittests', [
+          '--relative-cwd', 'out/Release', '--raw-cmd', '--',
+          './base_unittests', '--bar', '--isolated-script-test-output'
+      ]),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

@@ -462,7 +462,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
-        self.set_swarming_command_lines(tests_including_triggered, name_suffix)
+        self.set_test_command_lines(tests_including_triggered, name_suffix)
 
         if bot_config.perf_isolate_upload:
           self.m.perf_dashboard.upload_isolate(
@@ -519,7 +519,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         test_id_prefix=test.test_id_prefix,
         base_variant={k: v for k, v in variants if v})
 
-  def set_swarming_command_lines(self, tests, suffix):
+  def set_test_command_lines(self, tests, suffix):
     step_result = self.m.python(
         'find command lines%s' % suffix,
         self.resource('find_command_lines.py'), [
@@ -530,7 +530,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     assert isinstance(step_result.json.output, dict)
     self._swarming_command_lines = step_result.json.output
     for test in tests:
-      if test.runs_on_swarming:
+      if test.runs_on_swarming or test.uses_isolate:
         command_line = self.maybe_enable_resultdb_for_test(
             test, self._swarming_command_lines.get(test.target_name, []))
 
@@ -921,7 +921,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
-        self.set_swarming_command_lines(failing_tests, suffix=' (%s)' % suffix)
+        self.set_test_command_lines(failing_tests, suffix=' (%s)' % suffix)
 
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
