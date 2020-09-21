@@ -480,7 +480,7 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?comment=Buildbot%3A+tester%0A%28Please+do+not+change+any+labels%29&labels=Restrict-View-Google%2COS-Android%2CInfra%2CInfra-Labs&summary=Device+Offline+on+chromium.testing.master+tehslave@@@",
+      "@@@STEP_LINK@report a bug@https://code.google.com/p/chromium/issues/entry?comment=Buildbot%3A+tester%0A%28Please+do+not+change+any+labels%29&labels=Restrict-View-Google%2COS-Android%2CInfra%2CInfra-Labs&summary=Device+Offline+on+chromium.android+test_bot@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

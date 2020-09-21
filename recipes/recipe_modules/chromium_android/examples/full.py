@@ -11,6 +11,7 @@ DEPS = [
     'build',
     'chromium',
     'chromium_android',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -84,14 +85,9 @@ BUILDERS = freeze({
     },
 })
 
-from recipe_engine.recipe_api import Property
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-def RunSteps(api, buildername):
-  config = BUILDERS[buildername]
+def RunSteps(api):
+  config = BUILDERS[api.buildbucket.builder_name]
 
   api.chromium_android.configure_from_properties(
       'base_config',
@@ -211,16 +207,14 @@ def RunSteps(api, buildername):
 
 def GenTests(api):
   def properties_for(buildername):
-    return api.properties.generic(
-        buildername=buildername,
-        bot_id='tehslave',
-        repo_name='src/repo',
-        issue='123456789',
-        patchset='1',
-        rietveld='http://rietveld.example.com',
-        repo_url='svn://svn.chromium.org/chrome/trunk/src',
-        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        internal=True)
+    return sum([
+        api.chromium.ci_build(
+            builder=buildername,
+            builder_group='chromium.android',
+            revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+        ),
+        api.properties(internal=True),
+    ], api.empty_test_data())
 
   for buildername in BUILDERS:
     yield api.test(
@@ -282,17 +276,13 @@ def GenTests(api):
 
   yield api.test(
       'gerrit_refs',
-      api.properties.generic(
-          buildername='gerrit_try_builder',
-          bot_id='testslave',
-          repo_name='src/repo',
-          issue='123456789',
-          patchset='1',
-          rietveld='http://rietveld.example.com',
-          repo_url='svn://svn.chromium.org/chrome/trunk/src',
-          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-          internal=True,
-          **({
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.android',
+          builder='gerrit_try_builder',
+          change_number=123456789,
+          patch_set=1),
+      api.properties(
+          internal=True, **({
               'event.patchSet.ref': 'refs/changes/50/176150/1'
           })),
   )
