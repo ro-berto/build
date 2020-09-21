@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
@@ -422,8 +424,10 @@
       "[TMP_BASE]\\goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Win32 Release\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Win32 Release\", \"project\": \"libyuv\"}",
       "--buildbot-buildername",
       "Win32 Release",
       "--buildbot-mastername",
@@ -485,7 +489,7 @@
       "--target",
       "Release",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Win32 Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Win32 Release",
       "--slave-name=bot_id",

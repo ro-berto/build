@@ -18,6 +18,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/tryserver',
     'libyuv',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -69,7 +70,21 @@ def GenTests(api):
                                  _sanitize_nonalpha(buildername), suffix))
 
     if builder_group.startswith('tryserver'):
-      test += api.properties.tryserver(gerrit_project='libyuv')
+      test += api.buildbucket.try_build(
+          project='libyuv',
+          builder=buildername,
+          build_number=1337,
+          git_repo='https://chromium.googlesource.com/libyuv/libyuv',
+          revision=revision,
+          change_number=456789,
+          patch_set=12)
+    else:
+      test += api.buildbucket.ci_build(
+          project='libyuv',
+          builder=buildername,
+          build_number=1337,
+          git_repo='https://chromium.googlesource.com/libyuv/libyuv',
+          revision=revision)
 
     test += api.builder_group.for_current(builder_group)
     test += api.properties(
@@ -84,8 +99,6 @@ def GenTests(api):
       test += api.properties(
           parent_buildername=bot_config['parent_buildername'])
 
-    if revision:
-      test += api.properties(revision=revision)
     if bot_type == 'tester':
       test += api.properties(parent_got_revision=revision)
 

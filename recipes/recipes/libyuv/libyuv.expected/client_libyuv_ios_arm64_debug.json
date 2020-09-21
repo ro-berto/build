@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -534,8 +536,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.libyuv\", \"builder\": \"iOS ARM64 Debug\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"iOS ARM64 Debug\", \"project\": \"libyuv\"}",
       "--buildbot-buildername",
       "iOS ARM64 Debug",
       "--buildbot-mastername",

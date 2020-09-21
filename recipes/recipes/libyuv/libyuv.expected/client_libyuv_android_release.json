@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -427,8 +429,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.libyuv\", \"builder\": \"Android Release\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android Release\", \"project\": \"libyuv\"}",
       "--buildbot-buildername",
       "Android Release",
       "--buildbot-mastername",
@@ -502,7 +506,7 @@
       "--build_revision",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Release\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--json-urls",
       "/path/to/tmp/json"
     ],
@@ -528,7 +532,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM32 Release (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"Android Release\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"tags\": [\"parent_buildername:Android Release\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android Release/1337\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM32 Release (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"Android Release\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/libyuv/libyuv/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android Release\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android Release/1337\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -547,6 +551,8 @@
       "@@@STEP_LOG_LINE@input@                        \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@input@                    }, @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@input@                        \"buildset:commit/gitiles/chromium.googlesource.com/libyuv/libyuv/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"gitiles_ref:refs/heads/master\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_buildername:Android Release\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_buildnumber:1337\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"user_agent:recipe\"@@@",
