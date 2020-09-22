@@ -198,10 +198,8 @@ def GenTests(api):
 
   yield api.test(
       'invalid benchmark test',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='win64-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          builder_group='chromium.perf', builder='win64-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False, benchmark_result=False),
@@ -219,10 +217,8 @@ def GenTests(api):
 
   yield api.test(
       'failed benchmark test',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='win64-builder-perf',
-          buildnumber=54),
+      api.chromium.generic_build(
+          builder_group='chromium.perf', builder='win64-builder-perf'),
       api.pgo(use_pgo=True),
       api.platform('win', 64),
       api.properties(mock_merged_profdata=False, benchmark_failures=['test1']),
