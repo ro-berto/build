@@ -11,6 +11,7 @@ The changes are:
 DEPS = [
     'builder_group',
     'ios',
+    'recipe_engine/buildbucket',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -26,12 +27,10 @@ def GenTests(api):
   yield api.test(
       'basic_goma_build',
       api.platform('mac', 64),
+      api.buildbucket.ci_build(
+          builder='ios',
+          git_repo='https://chromium.googlesource.com/chromium/src.git'),
       api.builder_group.for_current('chromium.fake'),
-      api.properties(
-          buildername='ios',
-          buildnumber='0',
-          bot_id='fake-vm',
-      ),
       api.ios.make_test_build_config({
           'xcode version':
               'fake xcode version',
