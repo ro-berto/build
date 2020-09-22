@@ -694,6 +694,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 analyze_deps_autorolls=True,
             ),
+        'linux-rel-builderful':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.linux',
+                        buildername='Linux Builder',
+                        tester='Linux Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Linux Builder',
+                        tester='Linux Release (NVIDIA)',
+                    ),
+                ],
+                analyze_deps_autorolls=True,
+            ),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
