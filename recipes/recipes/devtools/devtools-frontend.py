@@ -39,10 +39,13 @@ def RunSteps(api):
 
   with _depot_on_path(api):
     api.chromium.ensure_goma()
+    _clean_debug(api)
     api.chromium.run_gn(use_goma=True)
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
+    if is_debug(api):
+      return
     run_unit_tests(api)
     run_type_check(api)
     run_lint_check(api)
@@ -55,6 +58,14 @@ def RunSteps(api):
       # Place here any unstable steps that you want to be performed on
       # bots with property experiment_percentage != 0
       pass
+
+
+def builder_config(api):
+  return api.properties.get('builder_config', 'Release')
+
+
+def is_debug(api):
+  return builder_config(api) == 'Debug'
 
 
 def _configure(api):
@@ -73,8 +84,9 @@ def _configure_source(api):
 
 
 def _configure_build(api):
-  build_cfg = api.chromium.make_config()
-  build_cfg.build_config_fs = 'Release'
+  config_name = builder_config(api)
+  build_cfg = api.chromium.make_config(BUILD_CONFIG=config_name)
+  build_cfg.build_config_fs = config_name
   build_cfg.compile_py.use_autoninja = True
   build_cfg.compile_py.compiler = 'goma'
   api.chromium.c = build_cfg
@@ -117,6 +129,13 @@ def run_e2e(api):
 def _git_clean(api):
   with api.context(cwd=api.path['checkout']):
     api.git('clean', '-xf', '--', 'front_end')
+
+def _clean_debug(api):
+  if is_debug(api):
+    api.step(
+      'clean debug',
+      ['rm', '-rf', api.path['checkout'].join('out', 'Debug')]
+    )
 
 
 @contextmanager
@@ -249,4 +268,10 @@ def GenTests(api):
       api.builder_group.for_current('devtools-frontend'),
       ci_build(builder='win'),
       api.platform('win', 64),
+  )
+
+  yield api.test(
+      'basic debug',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.properties(builder_config='Debug'),
   )
