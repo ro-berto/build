@@ -21,6 +21,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
@@ -150,12 +151,8 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.bot_update.ensure_checkout()
 
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-
-def RunSteps(api, buildername):
+def RunSteps(api):
+  buildername = api.buildbucket.builder_name
   if buildername in DETERMINISTIC_BUILDERS:
     recipe_config = DETERMINISTIC_BUILDERS[buildername]
   else:
@@ -262,19 +259,17 @@ def GenTests(api):
                                 _sanitize_nonalpha(buildername))
     yield api.test(
         test_name,
-        api.properties.scheduled(),
-        api.properties.generic(buildername=buildername),
-        api.builder_group.for_current(builder_group),
+        api.chromium.ci_build(builder_group=builder_group, builder=buildername),
         api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
-        api.properties(configuration='Release'),
+        api.properties(
+            buildername=buildername, buildnumber=571, configuration='Release'),
     )
     yield api.test(
         test_name + '_fail',
-        api.properties.scheduled(),
-        api.properties.generic(buildername=buildername),
-        api.builder_group.for_current(builder_group),
+        api.chromium.ci_build(builder_group=builder_group, builder=buildername),
         api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
-        api.properties(configuration='Release'),
+        api.properties(
+            buildername=buildername, buildnumber=571, configuration='Release'),
         api.step_data('compare_build_artifacts', retcode=1),
     )
 
@@ -283,9 +278,8 @@ def GenTests(api):
                                 _sanitize_nonalpha(trybotname))
     yield api.test(
         test_name,
-        api.properties.scheduled(),
-        api.properties.generic(buildername=trybotname),
-        api.builder_group.for_current(builder_group),
+        api.chromium.try_build(builder_group=builder_group, builder=trybotname),
+        api.properties(buildername=trybotname, buildnumber=571),
         api.platform(
             DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
             ['platform'], 64),
@@ -293,9 +287,8 @@ def GenTests(api):
     )
     yield api.test(
         test_name + '_fail',
-        api.properties.scheduled(),
-        api.properties.generic(buildername=trybotname),
-        api.builder_group.for_current(builder_group),
+        api.chromium.try_build(builder_group=builder_group, builder=trybotname),
+        api.properties(buildername=trybotname, buildnumber=571),
         api.platform(
             DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
             ['platform'], 64),
@@ -305,9 +298,9 @@ def GenTests(api):
 
   yield api.test(
       'first_build_compile_fail',
-      api.properties.scheduled(),
-      api.properties.generic(buildername='android-deterministic-dbg'),
-      api.builder_group.for_current(builder_group),
+      api.chromium.ci_build(
+          builder_group=builder_group, builder='android-deterministic-dbg'),
+      api.properties(buildername='android-deterministic-dbg', buildnumber=571),
       api.platform(
           DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
           64),
@@ -319,9 +312,9 @@ def GenTests(api):
 
   yield api.test(
       'second_build_compile_fail',
-      api.properties.scheduled(),
-      api.properties.generic(buildername='android-deterministic-dbg'),
-      api.builder_group.for_current(builder_group),
+      api.chromium.ci_build(
+          builder_group=builder_group, builder='android-deterministic-dbg'),
+      api.properties(buildername='android-deterministic-dbg', buildnumber=571),
       api.platform(
           DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
           64),
