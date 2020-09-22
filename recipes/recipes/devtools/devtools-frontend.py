@@ -194,44 +194,59 @@ def _point(api, dimension, totals):
 
 
 def GenTests(api):
+  git_repo = 'https://chromium.googlesource.com/devtools/devtools-frontend'
+
+  def ci_build(builder):
+    return api.buildbucket.ci_build(
+        project='devtools', builder=builder, git_repo=git_repo)
+
+  def try_build(builder, **kwargs):
+    return api.buildbucket.try_build(
+        project='devtools',
+        builder=builder,
+        git_repo=git_repo,
+        change_number=91827,
+        patch_set=1,
+        **kwargs)
+
   yield api.test(
       'basic try',
       api.builder_group.for_current('tryserver.devtools-frontend'),
-      api.buildbucket.try_build(
-          'devtools',
-          'linux',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          change_number=91827,
-          patch_set=1),
+      try_build(builder='linux'),
   )
 
   yield api.test(
       'basic no cov',
-      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.builder_group.for_current('devtools-frontend'),
+      ci_build(builder='linux'),
   )
 
   yield api.test(
       'basic with cov',
-      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.builder_group.for_current('devtools-frontend'),
+      ci_build(builder='linux'),
       api.path.exists(api.path['checkout'].join('karma-coverage',
                                                 'coverage-summary.json')),
   )
 
   yield api.test(
       'experimental',
-      api.buildbucket.try_build(
-          tags=api.buildbucket.tags(cq_experimental='true')),
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      try_build(
+          builder='linux', tags=api.buildbucket.tags(cq_experimental='true')),
   )
 
   yield api.test(
       'compile failure',
-      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.builder_group.for_current('devtools-frontend'),
+      ci_build(builder='linux'),
       api.step_data('compile', retcode=1),
       api.post_process(StatusFailure),
   )
 
   yield api.test(
       'basic win',
-      api.builder_group.for_current('tryserver.devtools-frontend'),
+      api.builder_group.for_current('devtools-frontend'),
+      ci_build(builder='win'),
       api.platform('win', 64),
   )

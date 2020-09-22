@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "devtools-frontend@HEAD"
+      "devtools-frontend@HEAD",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -207,7 +209,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data"
+      "[CACHE]/goma/data/linux"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
@@ -236,7 +238,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -485,10 +487,14 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"devtools\"}",
+      "--buildbot-buildername",
+      "linux",
       "--buildbot-mastername",
-      "tryserver.devtools-frontend",
+      "devtools-frontend",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
@@ -658,7 +664,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/add_point",
       "-i",
-      "{\"data\": \"[{\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"\\\", \\\"test\\\": \\\"devtools.infra/coverage/lines\\\", \\\"bot\\\": \\\"\\\", \\\"value\\\": 11.11, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"\\\", \\\"test\\\": \\\"devtools.infra/coverage/statements\\\", \\\"bot\\\": \\\"\\\", \\\"value\\\": 11.12, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"\\\", \\\"test\\\": \\\"devtools.infra/coverage/functions\\\", \\\"bot\\\": \\\"\\\", \\\"value\\\": 11.13, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"\\\", \\\"test\\\": \\\"devtools.infra/coverage/branches\\\", \\\"bot\\\": \\\"\\\", \\\"value\\\": 11.14, \\\"revision\\\": 0}]\"}",
+      "{\"data\": \"[{\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"devtools-frontend\\\", \\\"master\\\": \\\"devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/lines\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.11, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"devtools-frontend\\\", \\\"master\\\": \\\"devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/statements\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.12, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"devtools-frontend\\\", \\\"master\\\": \\\"devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/functions\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.13, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"devtools-frontend\\\", \\\"master\\\": \\\"devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/branches\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.14, \\\"revision\\\": 0}]\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",

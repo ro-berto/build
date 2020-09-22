@@ -12,7 +12,7 @@
       "--limit",
       "1",
       "-p",
-      "change=123456",
+      "change=91827",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -34,8 +34,8 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/27/91827/1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -61,7 +61,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/project@refs/heads/master:refs/changes/56/123456/7",
+      "https://chromium.googlesource.com/devtools/devtools-frontend@refs/heads/master:refs/changes/27/91827/1",
       "--revision",
       "devtools-frontend@HEAD"
     ],
@@ -255,7 +255,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/builder"
+      "[CACHE]/goma/data/linux"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
@@ -283,7 +283,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -536,9 +536,11 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"builder\", \"project\": \"project\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux\", \"project\": \"devtools\"}",
       "--buildbot-buildername",
-      "builder",
+      "linux",
+      "--buildbot-mastername",
+      "tryserver.devtools-frontend",
       "--buildbot-slavename",
       "fake-bot-id"
     ],

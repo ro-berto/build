@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "devtools-frontend@HEAD"
+      "devtools-frontend@HEAD",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -207,7 +209,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data"
+      "[CACHE]/goma/data/linux"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
@@ -236,7 +238,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -481,10 +483,14 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"devtools\"}",
+      "--buildbot-buildername",
+      "linux",
       "--buildbot-mastername",
-      "tryserver.devtools-frontend",
+      "devtools-frontend",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
