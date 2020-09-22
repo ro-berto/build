@@ -264,30 +264,33 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  git_repo = (
+      'https://chromium.googlesource.com/native_client/src/native_client.git')
+
   yield api.test(
       'win',
       api.platform('win', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername='win7-64-glibc-dbg',
+      api.buildbucket.ci_build(
+          builder='win7-64-glibc-dbg',
+          build_number=1234,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
       ),
+      api.properties(slavetype='BuilderTester'),
   )
 
   yield api.test(
       'mac',
       api.platform('mac', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername='mac-newlib-dbg-asan',
+      api.buildbucket.ci_build(
+          builder='mac-newlib-dbg-asan',
+          build_number=1234,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
       ),
+      api.properties(slavetype='BuilderTester'),
   )
 
   triggering_builder_name = 'linux_64-newlib-arm_qemu-pnacl-dbg'
@@ -295,26 +298,26 @@ def GenTests(api):
       'linux_triggering_arm',
       api.platform('linux', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername=triggering_builder_name,
+      api.buildbucket.ci_build(
+          builder=triggering_builder_name,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
+          build_number=1234,
       ),
+      api.properties(slavetype='BuilderTester'),
   )
 
   yield api.test(
       'linux_triggering_failed',
       api.platform('linux', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername=triggering_builder_name,
+      api.buildbucket.ci_build(
+          builder=triggering_builder_name,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
+          build_number=1234,
       ),
+      api.properties(slavetype='BuilderTester'),
       api.step_data('annotated steps', api.legacy_annotation.failure_step),
   )
 
@@ -329,13 +332,13 @@ def GenTests(api):
       'linux_triggering_arm_with_collect_COMPLETED_and_failed',
       api.platform('linux', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername=triggering_builder_name,
+      api.buildbucket.ci_build(
+          builder=triggering_builder_name,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
+          build_number=1234,
       ),
+      api.properties(slavetype='BuilderTester'),
       api.override_step_data(swarming_collection_step_name,
                              api.swarming.collect([failed_result])),
   )
@@ -347,13 +350,12 @@ def GenTests(api):
   yield api.test(
       'linux_triggering_arm_with_collect_TIMED_OUT', api.platform('linux', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername=triggering_builder_name,
+      api.buildbucket.ci_build(
+          builder=triggering_builder_name,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
-      ),
+          build_number=1234,
+      ), api.properties(slavetype='BuilderTester'),
       api.override_step_data(swarming_collection_step_name,
                              api.swarming.collect([timeout_result])))
 
@@ -364,12 +366,11 @@ def GenTests(api):
   yield api.test(
       'linux_triggering_arm_with_collect_BOT_DIED', api.platform('linux', 64),
       api.builder_group.for_current('client.nacl'),
-      api.properties(
-          buildername=triggering_builder_name,
+      api.buildbucket.ci_build(
+          builder=triggering_builder_name,
+          git_repo=git_repo,
           revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
-      ),
+          build_number=1234,
+      ), api.properties(slavetype='BuilderTester'),
       api.override_step_data(swarming_collection_step_name,
                              api.swarming.collect([died_result])))

@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -649,8 +651,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.nacl\", \"builder\": \"mac-newlib-dbg-asan\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"mac-newlib-dbg-asan\", \"project\": \"project\"}",
       "--buildbot-buildername",
       "mac-newlib-dbg-asan",
       "--buildbot-mastername",

@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
@@ -491,8 +493,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.nacl\", \"builder\": \"linux_64-newlib-arm_qemu-pnacl-dbg\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux_64-newlib-arm_qemu-pnacl-dbg\", \"project\": \"project\"}",
       "--buildbot-buildername",
       "linux_64-newlib-arm_qemu-pnacl-dbg",
       "--buildbot-mastername",
