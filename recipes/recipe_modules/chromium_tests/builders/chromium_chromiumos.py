@@ -79,17 +79,14 @@ SPEC.update([
         gclient_apply_config=['use_clang_coverage']),
     _config(
         'linux-chromeos-dbg',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
     ),
     _config(
         'linux-lacros-builder-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     _config(
         'linux-lacros-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
     _config(
@@ -109,7 +106,6 @@ SPEC.update([
         checkout_qemu_image=True),
     _config(
         'chromeos-amd64-generic-dbg',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic'),
     _config(
@@ -118,20 +114,17 @@ SPEC.update([
         cros_board='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         cros_board='amd64-generic',
         checkout_qemu_image=True,
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-arm-generic-dbg',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         cros_board='arm-generic',
         target_arch='arm',
         target_bits=32),
     _config(
         'chromeos-arm-generic-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         cros_board='arm-generic',
         target_arch='arm',
         target_bits=32,
