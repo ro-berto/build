@@ -846,6 +846,7 @@ SPEC.update([
     stock_config('linux-perfetto-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
+    stock_config('linux-wpt-identity-fyi-rel'),
     # For testing impact of builderful: https://crbug.com/1123673
     # remove by 2020-10-05 gatong
     stock_config('linux-builderful-fast-fyi-rel'),
