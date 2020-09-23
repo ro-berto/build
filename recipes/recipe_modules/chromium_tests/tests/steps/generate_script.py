@@ -33,7 +33,7 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_script(
+  for test in generators.generate_script_tests(
       api,
       api.chromium_tests,
       'test_group',

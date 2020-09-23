@@ -43,9 +43,9 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_gtest(api, api.chromium_tests, 'test_group',
-                                        'test_buildername', test_spec,
-                                        update_step):
+  for test in generators.generate_gtests(api, api.chromium_tests, 'test_group',
+                                         'test_buildername', test_spec,
+                                         update_step):
     try:
       test.pre_run(api, '')
       test.run(api, '')

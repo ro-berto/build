@@ -248,14 +248,14 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
       yield t
 
 
-def generate_gtest(api,
-                   chromium_tests_api,
-                   builder_group,
-                   buildername,
-                   test_spec,
-                   bot_update_step,
-                   swarming_dimensions=None,
-                   scripts_compile_targets_fn=None):
+def generate_gtests(api,
+                    chromium_tests_api,
+                    builder_group,
+                    buildername,
+                    test_spec,
+                    bot_update_step,
+                    swarming_dimensions=None,
+                    scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
   def canonicalize_test(test):
@@ -274,6 +274,18 @@ def generate_gtest(api,
         canonicalize_test(t)
         for t in test_spec.get(buildername, {}).get('gtest_tests', [])
     ]
+
+  for spec in get_tests(api):
+    for test in generate_gtests_from_one_spec(api, chromium_tests_api,
+                                              builder_group, buildername, spec,
+                                              bot_update_step,
+                                              swarming_dimensions):
+      yield test
+
+
+def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
+                                  buildername, spec, bot_update_step,
+                                  swarming_dimensions):
 
   def gtest_delegate_common(spec, **kwargs):
     del kwargs
@@ -306,20 +318,19 @@ def generate_gtest(api,
     kwargs['use_xvfb'] = spec.get('use_xvfb', True)
     return steps.LocalGTestTest(**kwargs)
 
-  for spec in get_tests(api):
-    for t in generator_common(api, spec, gtest_swarming_delegate,
-                              gtest_local_delegate, swarming_dimensions):
-      yield t
+  for t in generator_common(api, spec, gtest_swarming_delegate,
+                            gtest_local_delegate, swarming_dimensions):
+    yield t
 
 
-def generate_junit_test(api,
-                        chromium_tests_api,
-                        builder_group,
-                        buildername,
-                        test_spec,
-                        bot_update_step,
-                        swarming_dimensions=None,
-                        scripts_compile_targets_fn=None):
+def generate_junit_tests(api,
+                         chromium_tests_api,
+                         builder_group,
+                         buildername,
+                         test_spec,
+                         bot_update_step,
+                         swarming_dimensions=None,
+                         scripts_compile_targets_fn=None):
   del api, chromium_tests_api, bot_update_step
   del swarming_dimensions, scripts_compile_targets_fn
   for test in test_spec.get(buildername, {}).get('junit_tests', []):
@@ -331,14 +342,14 @@ def generate_junit_test(api,
         waterfall_buildername=buildername)
 
 
-def generate_script(api,
-                    chromium_tests_api,
-                    builder_group,
-                    buildername,
-                    test_spec,
-                    bot_update_step,
-                    swarming_dimensions=None,
-                    scripts_compile_targets_fn=None):
+def generate_script_tests(api,
+                          chromium_tests_api,
+                          builder_group,
+                          buildername,
+                          test_spec,
+                          bot_update_step,
+                          swarming_dimensions=None,
+                          scripts_compile_targets_fn=None):
   # Unused arguments
   del api, chromium_tests_api, bot_update_step, swarming_dimensions
 
@@ -353,15 +364,27 @@ def generate_script(api,
         waterfall_buildername=buildername)
 
 
-def generate_isolated_script(api,
-                             chromium_tests_api,
-                             builder_group,
-                             buildername,
-                             test_spec,
-                             bot_update_step,
-                             swarming_dimensions=None,
-                             scripts_compile_targets_fn=None):
+def generate_isolated_script_tests(api,
+                                   chromium_tests_api,
+                                   builder_group,
+                                   buildername,
+                                   test_spec,
+                                   bot_update_step,
+                                   swarming_dimensions=None,
+                                   scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
+
+  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
+    for test in generate_isolated_script_tests_from_one_spec(
+        api, chromium_tests_api, builder_group, buildername, spec,
+        bot_update_step, swarming_dimensions):
+      yield test
+
+
+def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
+                                                 builder_group, buildername,
+                                                 spec, bot_update_step,
+                                                 swarming_dimensions):
 
   def isolated_script_delegate_common(test, name=None, **kwargs):
     del kwargs
@@ -419,16 +442,15 @@ def generate_isolated_script(api,
     kwargs.update(isolated_script_delegate_common(spec, **kwargs))
     return steps.LocalIsolatedScriptTest(**kwargs)
 
-  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
-    for t in generator_common(api, spec, isolated_script_swarming_delegate,
-                              isolated_script_local_delegate,
-                              swarming_dimensions):
-      yield t
+  for t in generator_common(api, spec, isolated_script_swarming_delegate,
+                            isolated_script_local_delegate,
+                            swarming_dimensions):
+    yield t
 
 
 ALL_GENERATORS = [
-    generate_isolated_script,
-    generate_gtest,
-    generate_junit_test,
-    generate_script,
+    generate_isolated_script_tests,
+    generate_gtests,
+    generate_junit_tests,
+    generate_script_tests,
 ]

@@ -38,9 +38,9 @@ def RunSteps(api):
       }
   }
 
-  for test in generators.generate_junit_test(api, api.chromium_tests,
-                                             'test_group', 'test_buildername',
-                                             test_spec, update_step):
+  for test in generators.generate_junit_tests(api, api.chromium_tests,
+                                              'test_group', 'test_buildername',
+                                              test_spec, update_step):
     test.run(api, '')
 
 
