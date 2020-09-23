@@ -366,8 +366,7 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
     "name": "[trigger] base_unittests on Intel GPU on Windows (with patch)",

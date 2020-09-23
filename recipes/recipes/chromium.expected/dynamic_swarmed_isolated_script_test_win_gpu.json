@@ -504,8 +504,7 @@
       "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
@@ -605,8 +604,7 @@
       "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
@@ -706,8 +704,7 @@
       "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
