@@ -125,14 +125,15 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
         processed_set_up.append(set_up_step_new)
       else:
         api.python.failing_step(
-          'test spec format error',
-          textwrap.wrap(textwrap.dedent("""\
-              The test target "%s" contains a custom set up script "%s"
-              that doesn't match the expected format. Custom set up script
-              entries should be a path relative to the top-level chromium src
-              directory and should start with "//".""" %
-              (name, set_up_step_script))),
-          as_log='details')
+            'test spec format error',
+            textwrap.wrap(
+                textwrap.dedent("""\
+                    The test target "%s" contains a custom set up script "%s"
+                    that doesn't match the expected format. Custom set up script
+                    entries should be a path relative to the top-level chromium
+                    src directory and should start with "//".
+                    """ % (name, set_up_step_script))),
+            as_log='details')
   kwargs['set_up'] = processed_set_up
 
   tear_down = list(spec.get('teardown', []))
@@ -147,14 +148,15 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
         processed_tear_down.append(tear_down_step_new)
       else:
         api.python.failing_step(
-          'test spec format error',
-          textwrap.wrap(textwrap.dedent("""\
-              The test target "%s" contains a custom tear down script "%s"
-              that doesn't match the expected format. Custom tear down script
-              entries should be a path relative to the top-level chromium src
-              directory and should start with "//".""" %
-              (name, tear_down_step_script))),
-          as_log='details')
+            'test spec format error',
+            textwrap.wrap(
+                textwrap.dedent("""\
+                    The test target "%s" contains a custom tear down script "%s"
+                    that doesn't match the expected format. Custom tear down
+                    script entries should be a path relative to the top-level
+                    chromium src directory and should start with "//".
+                    """ % (name, tear_down_step_script))),
+            as_log='details')
   kwargs['tear_down'] = processed_tear_down
 
   swarming_spec = spec.get('swarming', {})
@@ -177,8 +179,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     packages = swarming_spec.get('cipd_packages')
     if packages:
       kwargs['cipd_packages'] = [
-          (p['location'], p['cipd_package'], p['revision'])
-          for p in packages
+          (p['location'], p['cipd_package'], p['revision']) for p in packages
       ]
 
     service_account = swarming_spec.get('service_account')
@@ -190,17 +191,19 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
       merge_script = merge.get('script')
       if merge_script:
         if merge_script.startswith('//'):
-          merge['script'] = api.path['checkout'].join(
-              merge_script[2:].replace('/', api.path.sep))
+          merge['script'] = api.path['checkout'].join(merge_script[2:].replace(
+              '/', api.path.sep))
         else:
           api.python.failing_step(
               'test spec format error',
-              textwrap.wrap(textwrap.dedent("""\
-                  The test target "%s" contains a custom merge_script "%s"
-                  that doesn't match the expected format. Custom merge_script
-                  entries should be a path relative to the top-level chromium
-                  src directory and should start with "//".""" %
-                  (name, merge_script))),
+              textwrap.wrap(
+                  textwrap.dedent("""\
+                      The test target "%s" contains a custom merge_script "%s"
+                      that doesn't match the expected format. Custom
+                      merge_script entries should be a path relative to the
+                      top-level chromium src directory and should start with
+                      "//".
+                      """ % (name, merge_script))),
               as_log='details')
     kwargs['merge'] = merge
 
@@ -267,16 +270,20 @@ def generate_gtest(api,
 
   def get_tests(api):
     del api
-    return [canonicalize_test(t) for t in
-            test_spec.get(buildername, {}).get('gtest_tests', [])]
+    return [
+        canonicalize_test(t)
+        for t in test_spec.get(buildername, {}).get('gtest_tests', [])
+    ]
 
   def gtest_delegate_common(spec, **kwargs):
     del kwargs
     common_gtest_kwargs = {}
     args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
     if spec['shard_index'] != 0 or spec['total_shards'] != 1:
-      args.extend(['--test-launcher-shard-index=%d' % spec['shard_index'],
-                   '--test-launcher-total-shards=%d' % spec['total_shards']])
+      args.extend([
+          '--test-launcher-shard-index=%d' % spec['shard_index'],
+          '--test-launcher-total-shards=%d' % spec['total_shards']
+      ])
     common_gtest_kwargs['args'] = args
 
     common_gtest_kwargs['override_compile_targets'] = spec.get(
@@ -291,8 +298,7 @@ def generate_gtest(api,
     kwargs.update(gtest_delegate_common(spec, **kwargs))
     kwargs['isolate_profile_data'] = (
         spec.get('isolate_coverage_data') or spec.get('isolate_profile_data'))
-    kwargs['ignore_task_failure'] = spec.get(
-        'ignore_task_failure', False)
+    kwargs['ignore_task_failure'] = spec.get('ignore_task_failure', False)
     return steps.SwarmingGTestTest(**kwargs)
 
   def gtest_local_delegate(spec, **kwargs):
@@ -301,9 +307,8 @@ def generate_gtest(api,
     return steps.LocalGTestTest(**kwargs)
 
   for spec in get_tests(api):
-    for t in generator_common(
-        api, spec, gtest_swarming_delegate, gtest_local_delegate,
-        swarming_dimensions):
+    for t in generator_common(api, spec, gtest_swarming_delegate,
+                              gtest_local_delegate, swarming_dimensions):
       yield t
 
 
@@ -366,8 +371,8 @@ def generate_isolated_script(api,
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
-    common_kwargs['args'] = get_args_for_test(
-        api, chromium_tests_api, test, bot_update_step)
+    common_kwargs['args'] = get_args_for_test(api, chromium_tests_api, test,
+                                              bot_update_step)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
@@ -389,10 +394,11 @@ def generate_isolated_script(api,
     except KeyError:
       api.python.failing_step(
           'isolated_scripts spec format error',
-          textwrap.wrap(textwrap.dedent("""\
-              The isolated_scripts target "%s" contains a custom results_handler
-              "%s" but that result handler was not found.
-              """ % (name, results_handler_name))),
+          textwrap.wrap(
+              textwrap.dedent("""\
+                  The isolated_scripts target "%s" contains a custom
+                  results_handler "%s" but that result handler was not found.
+                  """ % (name, results_handler_name))),
           as_log='details')
 
     return common_kwargs
@@ -402,8 +408,8 @@ def generate_isolated_script(api,
 
     swarming_spec = spec.get('swarming', {})
 
-    kwargs['ignore_task_failure'] = swarming_spec.get(
-        'ignore_task_failure', False)
+    kwargs['ignore_task_failure'] = swarming_spec.get('ignore_task_failure',
+                                                      False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_builder_group'] = builder_group
 
@@ -414,9 +420,9 @@ def generate_isolated_script(api,
     return steps.LocalIsolatedScriptTest(**kwargs)
 
   for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
-    for t in generator_common(
-        api, spec, isolated_script_swarming_delegate,
-        isolated_script_local_delegate, swarming_dimensions):
+    for t in generator_common(api, spec, isolated_script_swarming_delegate,
+                              isolated_script_local_delegate,
+                              swarming_dimensions):
       yield t
 
 
