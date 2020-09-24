@@ -213,7 +213,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'android_mojo':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.mojo',
                 buildername='Mojo Android',
             ),
         'android_n5x_swarming_dbg':
@@ -791,12 +791,12 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'linux_mojo':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.mojo',
                 buildername='Mojo Linux',
             ),
         'linux_mojo_chromeos':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.mojo',
                 buildername='Mojo ChromiumOS',
             ),
         'linux-perfetto-rel':
@@ -1416,7 +1416,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'win_mojo':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.mojo',
                 buildername='Mojo Windows',
             ),
         # Optional GPU bots.
