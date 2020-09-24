@@ -380,7 +380,8 @@
       "--isolated",
       "hash_for_win",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",
@@ -477,7 +478,8 @@
       "--isolated",
       "hash_for_linux",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world",
@@ -574,7 +576,8 @@
       "--isolated",
       "hash_for_linux",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world (2)",
@@ -671,7 +674,8 @@
       "--isolated",
       "hash_for_mac",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Mac-10.13",

@@ -960,7 +960,8 @@
       "--isolated",
       "[dummy hash for blink_web_tests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1299,7 +1300,8 @@
       "--isolated",
       "[dummy hash for blink_web_tests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2260,6 +2262,7 @@
       "[dummy hash for blink_web_tests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
       "--isolated-script-test-filter=test1.Test1::test2.Test2"
