@@ -273,5 +273,6 @@ def GenTests(api):
   yield api.test(
       'basic debug',
       api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
       api.properties(builder_config='Debug'),
   )
