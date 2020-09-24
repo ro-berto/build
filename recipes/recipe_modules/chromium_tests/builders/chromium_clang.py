@@ -336,10 +336,9 @@ SPEC = {
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
-            # Run with lower priority; see https://crbug.com/937297#c26
-            swarming_default_priority=210,
             swarming_dimensions={
-                'gpu': None,
+                'gpu': 'none',
+                'os': 'Mac-10.15',
                 'pool': 'chrome.tests',
             },
             chromium_config_kwargs={
