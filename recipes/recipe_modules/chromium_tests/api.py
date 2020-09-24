@@ -503,10 +503,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return cmd
 
     variants = [
-        ('buildername', self.m.buildbucket.builder_name),
+        ('builder', self.m.buildbucket.builder_name),
         ('device_type', test.dimensions.get('device_type')),
         ('device_os', test.dimensions.get('device_os')),
-        ('device_type', test.dimensions.get('gpu')),
+        ('gpu', test.dimensions.get('gpu')),
         ('os', test.dimensions.get('os')),
         ('test_suite', test.canonical_name),
     ]

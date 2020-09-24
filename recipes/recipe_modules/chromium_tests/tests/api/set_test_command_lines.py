@@ -362,6 +362,12 @@ def GenTests(api):
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
+                          swarming_dimensions={
+                              'device_type': 'phone',
+                              'device_os': 'android',
+                              'gpu': 'nv',
+                              'os': 'Linux',
+                          },
                       ),
               },
           })),
@@ -383,10 +389,12 @@ def GenTests(api):
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
           post_process.StepCommandContains,
-          'test_pre_run.[trigger] %s' % fake_test, [
+          'test_pre_run.[trigger] %s on (nv) GPU on Linux' % fake_test, [
               '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
               'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
-              'buildername=fake-tester', '-var', 'test_suite=fake_test', '--'
+              'builder=fake-tester', '-var', 'device_os=android', '-var',
+              'device_type=phone', '-var', 'gpu=nv', '-var', 'os=Linux', '-var',
+              'test_suite=fake_test', '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )
