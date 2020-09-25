@@ -27,7 +27,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'zip',
@@ -244,7 +243,6 @@ def GenTests(api):
         api.v8.check_param_equals(
             'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
             '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-        api.runtime(is_luci=True, is_experimental=False),
         api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
                          'build.gn', 'build.compile', 'make archive.zipping',
                          'make archive.gsutil upload'),
@@ -333,7 +331,6 @@ def GenTests(api):
       api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
                        'build.compile', 'make archive.zipping',
                        'make archive.gsutil upload'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(DropExpectation),
   )
 
@@ -357,7 +354,6 @@ def GenTests(api):
       api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
                        'build.compile', 'make archive.zipping',
                        'make archive.gsutil upload'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(DropExpectation),
   )
 
@@ -377,7 +373,6 @@ def GenTests(api):
       api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3')),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(Filter().include_re('.*ref.*')),
   )
 
@@ -397,7 +392,6 @@ def GenTests(api):
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3.1')),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(
           Filter(
               'make archive.gsutil upload',
@@ -424,7 +418,6 @@ def GenTests(api):
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.step_data('build.compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
@@ -448,7 +441,6 @@ def GenTests(api):
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.step_data('build.compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
@@ -472,7 +464,6 @@ def GenTests(api):
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.step_data('build (libs).compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),

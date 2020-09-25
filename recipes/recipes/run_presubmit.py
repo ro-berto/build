@@ -22,7 +22,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'depot_tools/tryserver',
     # The following three recipe modules are not used here,
@@ -295,7 +294,6 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'expected_tryjob',
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',

@@ -28,7 +28,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'test_utils',
 ]
 
@@ -224,7 +223,6 @@ def GenTests(api):
       }]),
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'trigger',
           stdout=api.raw_io.output_text("""
@@ -395,7 +393,6 @@ def GenTests(api):
           build_number=123,
           bot_id='isolated_transfer_builder_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
@@ -428,7 +425,6 @@ def GenTests(api):
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
-      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
@@ -454,7 +450,6 @@ def GenTests(api):
           build_number=123,
           bot_id='isolated_transfer_builder_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer: mixed builder, isolated tester (builder)': {
@@ -489,7 +484,6 @@ def GenTests(api):
           build_number=123,
           bot_id='isolated_transfer_builder_tester_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'read test spec (chromium.example.json)',
           api.json.output({
@@ -576,7 +570,6 @@ def GenTests(api):
           build_number=123,
           bot_id='multiple_triggers_builder_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Multiple Triggers: Mixed': {

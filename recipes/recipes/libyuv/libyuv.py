@@ -22,7 +22,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -93,7 +92,6 @@ def GenTests(api):
         BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG'])
     test += api.platform(bot_config['testing']['platform'],
                          chromium_kwargs.get('TARGET_BITS', 64))
-    test += api.runtime(is_experimental=False, is_luci=True)
 
     if bot_config.get('parent_buildername'):
       test += api.properties(

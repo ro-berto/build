@@ -7,7 +7,6 @@ DEPS = [
   'goma',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
   'recipe_engine/raw_io',
   'recipe_engine/json',
 ]
@@ -101,7 +100,6 @@ def GenTests(api):
       api.properties(
           target_platform='win',
           chromium_apply_config=['official']),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -141,7 +139,6 @@ def GenTests(api):
   yield api.test(
       'goma_custom_jobs_debug',
       api.goma(jobs=500, debug=True),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(

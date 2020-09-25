@@ -295,7 +295,7 @@ def GenTests(api):
   for exp in [True, False]:
     yield api.test(
         'basic_luci' + ('_experimental' if exp else ''),
-        api.runtime(is_luci=True, is_experimental=exp),
+        api.runtime(is_experimental=exp),
         api.step_data(
             'archive for win',
             stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),

@@ -24,7 +24,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'zip',
@@ -338,6 +337,5 @@ def GenTests(api):
           _sanitize_nonalpha('full', group, buildername),
           buildbucket_fn(**buildbucket_kwargs),
           api.platform(bot_config['testing']['platform'], 64),
-          api.runtime(is_luci=True, is_experimental=False),
           api.v8.hide_infra_steps(),
       )

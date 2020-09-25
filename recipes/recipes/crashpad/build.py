@@ -19,7 +19,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
@@ -272,7 +271,7 @@ def GenTests(api):
   ]
   for t, os, cpu in tests:
     yield api.test(
-        t, api.runtime(is_luci=True, is_experimental=False),
+        t,
         api.properties(
             config='Debug' if '_dbg' in t else 'Release',
             target_os=os,

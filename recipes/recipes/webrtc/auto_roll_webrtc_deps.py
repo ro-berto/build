@@ -4,21 +4,21 @@
 
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/gerrit',
-  'depot_tools/git',
-  'recipe_engine/context',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'recipe_engine/url',
-  'webrtc',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/gerrit',
+    'depot_tools/git',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'recipe_engine/url',
+    'webrtc',
 ]
 
 
@@ -103,10 +103,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  base = (
-      api.properties.generic() +
-      api.runtime(is_luci=True, is_experimental=False)
-  )
+  base = api.buildbucket.generic_build()
+
   yield api.test(
       'rolling_activated',
       base,
@@ -116,7 +114,7 @@ def GenTests(api):
       'rolling_activated_experimental',
       base,
       api.override_step_data('gerrit changes', api.json.output([])),
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_experimental=True),
   )
   yield api.test(
       'rolling_deactivated',

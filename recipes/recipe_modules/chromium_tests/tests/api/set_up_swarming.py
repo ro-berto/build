@@ -10,7 +10,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/runtime',
 ]
 
 from recipe_engine import post_process
@@ -58,7 +57,6 @@ def GenTests(api):
           },
           expected_isolate_server='https://example/isolate',
           expected_isolate_service_account=None),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

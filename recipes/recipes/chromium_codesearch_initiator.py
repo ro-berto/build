@@ -23,7 +23,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/scheduler',
     'recipe_engine/step',
     'recipe_engine/time',
@@ -113,7 +112,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic', api.runtime(is_luci=True, is_experimental=False)) +
+  yield (api.test('basic') +
          api.step_data('fetch mirror hash',
                        api.raw_io.stream_output('a' * 40, stream='stdout')) +
          api.step_data('fetch mirror timestamp',

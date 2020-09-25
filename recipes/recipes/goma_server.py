@@ -21,7 +21,6 @@ def GenTests(api):
   yield api.test(
       'goma_server_presubmit',
       api.platform('linux', 64),
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.try_build(
           builder='Goma Server Presubmit', change_number=4840, patch_set=2),
   )

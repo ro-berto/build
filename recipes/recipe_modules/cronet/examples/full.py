@@ -75,7 +75,7 @@ def GenTests(api):
               builder_group='fake-group',
               builder=builder,
           ),
-          api.runtime(is_luci=True, is_experimental=is_experimental),
+          api.runtime(is_experimental=is_experimental),
       )
 
   # Do these proerties actually ever get set anymore?

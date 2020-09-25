@@ -79,10 +79,8 @@ def GenTests(api):
       api.test('normal_roll') +
       api.override_step_data('gerrit changes', api.json.output([]))
   )
-  yield (
-      api.test('normal_roll_experimental') +
-      api.runtime(is_luci=True, is_experimental=True)
-  )
+  yield (api.test('normal_roll_experimental') +
+         api.runtime(is_experimental=True))
   yield (
       api.test('stale_roll') +
       api.override_step_data(

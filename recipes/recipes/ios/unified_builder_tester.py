@@ -121,7 +121,7 @@ def GenTests(api):
   yield api.test(
       'basic_experimental',
       basic_common,
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_experimental=True),
   )
 
   yield api.test(

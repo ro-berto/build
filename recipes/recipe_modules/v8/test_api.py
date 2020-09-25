@@ -559,7 +559,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             **kwargs),
         self.m.builder_group.for_current(builder_group),
         self.m.platform('linux', 64),
-        self.m.runtime(is_luci=True, is_experimental=False),
     )
     if parent_buildername:
       # The parent build config (Release or Debug) is either statically defined

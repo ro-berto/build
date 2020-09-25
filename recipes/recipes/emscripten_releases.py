@@ -18,7 +18,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/runtime',
     'recipe_engine/step'
 ]
 
@@ -127,7 +126,6 @@ def GenTests(api):
             builder='linux',
             build_number=42,
         ),
-        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield test('linux')

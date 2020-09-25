@@ -12,7 +12,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
@@ -38,7 +37,7 @@ def RunSteps(api):
   with api.context(cwd=api.path['checkout']):
     safe_buildername = ''.join(
       c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
-    push_arg = [] if api.runtime.is_experimental else ['--push']
+    push_arg = ['--push']
     push_account = (
         # TODO(sergiyb): Replace with api.service_account.default().get_email()
         # when https://crbug.com/846923 is resolved.
@@ -56,11 +55,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'standard',
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
       'rolling_deactivated',
-      api.runtime(is_luci=True, is_experimental=False),
       api.url.text('check roll status', '0'),
   )

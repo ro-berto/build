@@ -20,7 +20,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
@@ -465,7 +464,6 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
             'git diff',
             api.raw_io.stream_output('some difference', stream='stdout'),
         ),
-        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield (
@@ -496,7 +494,6 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           'gclient get src deps',
           api.raw_io.stream_output(bad_cr_deps_info, stream='stdout'),
       ),
-      api.runtime(is_luci=True, is_experimental=False),
       api.expect_exception("Exception"),
   )
 
@@ -551,7 +548,6 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
               '_number': '123',
               'subject': 'Update V8 DEPS.'
           }])),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(MustRun, 'gerrit abandon'),
       api.post_process(DropExpectation),
   )

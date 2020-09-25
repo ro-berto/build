@@ -15,7 +15,6 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/runtime',
   'v8',
 ]
 
@@ -37,6 +36,5 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(Filter('Presubmit')),
   )

@@ -15,7 +15,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
 ]
 
 PROPERTIES = {
@@ -63,7 +62,6 @@ def GenTests(api):
               },
           ],
       ),
-      api.runtime(is_experimental=False, is_luci=True),
       api.ios.make_test_build_config({
           'xcode version': '6.1.1',
           'gn_args': [

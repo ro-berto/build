@@ -12,7 +12,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'v8',
 ]
@@ -55,7 +54,6 @@ def GenTests(api):
   yield api.test(
       'clusterfuzz_no_issues',
       api.builder_group.for_current('client.v8.fyi'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
@@ -68,7 +66,6 @@ def GenTests(api):
       'clusterfuzz_issues',
       api.builder_group.for_current('client.v8.fyi'),
       api.override_step_data('check clusterfuzz', api.json.output([1, 2])),
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',

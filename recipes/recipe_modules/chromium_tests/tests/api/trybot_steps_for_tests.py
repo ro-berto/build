@@ -15,7 +15,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/buildbucket',
-    'recipe_engine/runtime',
     'test_utils',
 ]
 
@@ -36,7 +35,6 @@ def GenTests(api):
           builder='linux-rel',
       ),
       api.properties(tests=['base_unittests'],),
-      api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],

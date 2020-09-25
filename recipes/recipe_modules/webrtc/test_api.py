@@ -66,7 +66,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
             BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']),
         self.m.platform(bot_config['testing']['platform'],
                         chromium_kwargs.get('TARGET_BITS', 64)),
-        self.m.runtime(is_luci=True, is_experimental=is_experimental),
+        self.m.runtime(is_experimental=is_experimental),
     )
 
     if bot_config.get('parent_buildername'):

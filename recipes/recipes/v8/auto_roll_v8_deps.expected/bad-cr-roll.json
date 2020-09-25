@@ -326,9 +326,9 @@
       "The recipe has crashed at point 'Uncaught exception'!",
       "",
       "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 308, in RunSteps",
+      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 307, in RunSteps",
       "    api, 'src', CR_PROJECT_NAME)",
-      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 160, in GetDEPS",
+      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 159, in GetDEPS",
       "    raise Exception(\"malformatted DEPS entry '%s'\" % tokens)",
       "Exception: malformatted DEPS entry '['src/buildtools:', '', 'https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762']'"
     ]

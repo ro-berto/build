@@ -25,7 +25,6 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/time',
 ]
@@ -352,7 +351,6 @@ def GenTests(api):
         api.step_data(
             'generate gn target list',
             api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-        api.runtime(is_luci=True, is_experimental=False),
     )
 
   for buildername, _ in SPEC['builders'].iteritems():
@@ -365,7 +363,6 @@ def GenTests(api):
         api.properties(
             root_solution_revision='a' * 40,
             root_solution_revision_timestamp=1531887759),
-        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield api.test(
@@ -376,7 +373,6 @@ def GenTests(api):
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -387,7 +383,6 @@ def GenTests(api):
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -395,7 +390,6 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.step_data('compile', retcode=1),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -406,7 +400,6 @@ def GenTests(api):
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -414,7 +407,6 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-chromiumos'),
       api.step_data('generate compilation database', retcode=1),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -425,7 +417,6 @@ def GenTests(api):
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -436,5 +427,4 @@ def GenTests(api):
       api.step_data(
           'generate gn target list',
           api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
-      api.runtime(is_luci=True, is_experimental=False),
   )

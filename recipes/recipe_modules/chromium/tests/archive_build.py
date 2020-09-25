@@ -35,5 +35,5 @@ def GenTests(api):
   yield api.test(
       'experimental',
       api.properties(buildername='test_buildername'),
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_experimental=True),
   )

@@ -103,7 +103,7 @@ def GenTests(api):
           use_legacy=False,
       ),
       api.override_step_data('filter build_dir', api.json.output(['chrome'])),
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_experimental=True),
   )
 
   # A component build with git.

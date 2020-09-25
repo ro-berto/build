@@ -60,7 +60,7 @@ def GenTests(api):
   yield api.test(
       'upload_success_experimental',
       builder_data,
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_experimental=True),
   )
 
   yield api.test(

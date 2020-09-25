@@ -350,24 +350,18 @@ def GenTests(api):
       ),
   )
   # Experimental mode.
-  yield (
-      test(
-        'experimental',
-        patch_level_previous=2,
-        patch_level_latest=2,
-        patch_level_after_commit=3,
-        current_lkgr=hsh_old,
-        head=hsh_new,
-        head_tag='3.4.3.2-sometext',
-        wait_count=2,
-        commit_found_count=2,
-        commit_loop_test_data=False
-      ) +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.post_process(
-        MustRun,
-        'Dry-run commit',
-        'Dry-run tag 3.4.3.3',
-        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6') +
-      api.post_process(DropExpectation)
-  )
+  yield (test(
+      'experimental',
+      patch_level_previous=2,
+      patch_level_latest=2,
+      patch_level_after_commit=3,
+      current_lkgr=hsh_old,
+      head=hsh_new,
+      head_tag='3.4.3.2-sometext',
+      wait_count=2,
+      commit_found_count=2,
+      commit_loop_test_data=False) + api.runtime(is_experimental=True) +
+         api.post_process(
+             MustRun, 'Dry-run commit', 'Dry-run tag 3.4.3.3',
+             'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6') +
+         api.post_process(DropExpectation))

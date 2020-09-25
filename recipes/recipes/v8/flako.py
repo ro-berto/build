@@ -33,7 +33,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'depot_tools/gitiles',
     'depot_tools/gsutil',
@@ -638,7 +637,6 @@ def GenTests(api):
             to_revision='a0',
             variant='stress_foo',
         ),
-        api.runtime(is_luci=True, is_experimental=False),
     )
 
   def isolated_lookup(offset, exists):

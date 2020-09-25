@@ -22,7 +22,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -142,7 +141,6 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src',
           builder='android-sdk-packager'),
       emulator_package_properties,
-      api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(
           api.path['checkout'].join(
               'third_party', 'android_sdk', 'public', 'cmdline-tools', 'latest',
@@ -162,7 +160,6 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src',
           builder='android-sdk-packager'),
       emulator_package_properties,
-      api.runtime(is_experimental=False, is_luci=True),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -174,7 +171,6 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src',
           builder='android-sdk-packager'),
       emulator_package_properties,
-      api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
                                                 'public', 'cmdline-tools',
                                                 'latest', 'bin', 'sdkmanager')),
@@ -195,7 +191,6 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src',
           builder='android-sdk-packager'),
       emulator_package_properties,
-      api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
                                                 'public', 'cmdline-tools',
                                                 'latest', 'bin', 'sdkmanager')),

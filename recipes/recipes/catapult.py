@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/runtime',
 ]
 
 from PB.recipes.build.catapult import InputProperties
@@ -109,7 +108,6 @@ def GenTests(api):
       'android',
       api.properties(
           platform='android'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.generator_script(
           'build_steps.py',
           {
@@ -126,7 +124,6 @@ def GenTests(api):
         platform='linux',
         dashboard_only=True,
     ),
-    api.runtime(is_luci=True, is_experimental=False),
     api.generator_script(
         'build_steps.py',
         {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},

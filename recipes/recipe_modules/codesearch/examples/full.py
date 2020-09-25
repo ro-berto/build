@@ -126,13 +126,12 @@ def GenTests(api):
         '%s_test_basic' % sanitize(buildername),
         api.chromium.generic_build(
             builder_group='chromium.infra.codesearch', builder=buildername),
-        api.runtime(is_luci=True, is_experimental=False),
     )
     yield api.test(
         '%s_test_experimental' % sanitize(buildername),
         api.chromium.generic_build(
             builder_group='chromium.infra.codesearch', builder=buildername),
-        api.runtime(is_luci=True, is_experimental=True),
+        api.runtime(is_experimental=True),
     )
 
   yield api.test(
@@ -140,7 +139,6 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.codesearch',
           builder='codesearch-gen-chromium-linux'),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -148,5 +146,4 @@ def GenTests(api):
       sanitize('codesearch-gen-chromium-win'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
-      api.runtime(is_luci=True, is_experimental=False),
   )

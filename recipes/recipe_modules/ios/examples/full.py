@@ -15,7 +15,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'chromium_swarming',
 ]
 
@@ -680,7 +679,6 @@ def GenTests(api):
 
   yield api.test(
       'xcode_build_version',
-      api.runtime(is_luci=True, is_experimental=False),
       xcode_build_version,
   )
 

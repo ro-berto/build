@@ -11,7 +11,6 @@ DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
   'test_utils',
 ]
 
@@ -40,7 +39,6 @@ def GenTests(api):
         ),
         api.properties(
             build_config=config, swarm_hashes=swarm_hashes, **kwargs),
-        api.runtime(is_luci=True, is_experimental=False),
     ], api.empty_test_data())
 
   yield api.test(

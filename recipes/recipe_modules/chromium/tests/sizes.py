@@ -9,7 +9,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 DEPS = [
   'chromium',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
 ]
 
 
@@ -39,7 +38,6 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername', buildnumber=123,
           bot_id='test_bot_id'),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(post_process.StepCommandContains, 'sizes',
                        ['--use-histograms']),
       api.post_process(post_process.DropExpectation),

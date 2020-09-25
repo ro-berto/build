@@ -17,7 +17,6 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
   'depot_tools/tryserver',
   # The following two recipe modules are not used here,
   # but apparently set spooky gclient configs,
@@ -70,7 +69,6 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'expected_tryjob',
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
@@ -164,7 +162,6 @@ def GenTests(api):
 
   yield api.test(
       'branch_presubmit',
-      api.runtime(is_luci=True, is_experimental=False),
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
