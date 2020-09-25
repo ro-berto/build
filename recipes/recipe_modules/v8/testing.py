@@ -930,7 +930,7 @@ class Failure(object):
     }
     return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
-        for k, v in properties.iteritems())
+        for k, v in sorted(properties.iteritems()))
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
