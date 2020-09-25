@@ -377,7 +377,8 @@ def GenTests(api):
                   'isolated_scripts': [{
                       'name': fake_test,
                       'resultdb': {
-                          'enable': True
+                          'enable': True,
+                          'test_location_base': '//test/location',
                       },
                       'swarming': {
                           'can_use_on_swarming_builders': True,
@@ -394,7 +395,8 @@ def GenTests(api):
               'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
               'builder=fake-tester', '-var', 'device_os=android', '-var',
               'device_type=phone', '-var', 'gpu=nv', '-var', 'os=Linux', '-var',
-              'test_suite=fake_test', '--'
+              'test_suite=fake_test', '-test-location-base', '//test/location',
+              '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )

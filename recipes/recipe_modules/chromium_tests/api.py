@@ -502,22 +502,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not (test.resultdb or {}).get('enable'):
       return cmd
 
-    variants = [
-        ('builder', self.m.buildbucket.builder_name),
-        ('device_type', test.dimensions.get('device_type')),
-        ('device_os', test.dimensions.get('device_os')),
-        ('gpu', test.dimensions.get('gpu')),
-        ('os', test.dimensions.get('os')),
-        ('test_suite', test.canonical_name),
-    ]
+    variants = {
+        k: v for k, v in [
+            ('builder', self.m.buildbucket.builder_name),
+            ('device_type', test.dimensions.get('device_type')),
+            ('device_os', test.dimensions.get('device_os')),
+            ('gpu', test.dimensions.get('gpu')),
+            ('os', test.dimensions.get('os')),
+            ('test_suite', test.canonical_name),
+        ] if v
+    }
+
     # TODO(crbug.com/1108016): add the result adapter command, specified in
     # test.resultdb['result_adapter'].
-    # TODO(crbug.com/1099573): set the location prefix, if test_suite is
-    # "blink_web_tests" or ends with "webgl".
     return self.m.resultdb.wrap(
         cmd,
         test_id_prefix=test.test_id_prefix,
-        base_variant={k: v for k, v in variants if v})
+        base_variant=variants,
+        test_location_base=test.resultdb.get('test_location_base', ''))
 
   def set_test_command_lines(self, tests, suffix):
     step_result = self.m.python(
