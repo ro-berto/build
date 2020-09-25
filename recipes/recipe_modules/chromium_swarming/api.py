@@ -433,7 +433,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            failure_as_exception=True,
            idempotent=None,
            ignore_task_failure=False,
-           isolated=None,
+           isolated='',
            merge=None,
            named_caches=None,
            raw_cmd=None,
@@ -581,7 +581,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_execution_timeout_secs(self.default_hard_timeout).
       with_expiration_secs(self.default_expiration).
       with_io_timeout_secs(self.default_io_timeout).
-      with_isolated(isolated or ('0' * 40)).
+      with_isolated(isolated).
       with_idempotent(idempotent)))
 
     if relative_cwd:
@@ -607,7 +607,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def gtest_task(self,
                  name=None,
-                 isolated=None,
+                 isolated='',
                  extra_args=None,
                  cipd_packages=None,
                  merge=None,
@@ -897,7 +897,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           args.extend(('--env-prefix', key, path))
 
     # What isolated command to trigger.
-    if not task_slice.isolated == '0' * 40:
+    if task_slice.isolated:
       args.extend(('--isolated', task_slice.isolated))
 
     if task_slice.relative_cwd:
