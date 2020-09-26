@@ -61,6 +61,13 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
           build.builder.builder,
       'buildnumber':
           build.number,
+      # This is only set on Chromium when using ANGLE as a component. We
+      # use the parent revision when available.
+      'got_angle_revision':
+          bot_update_step.presentation.properties.get(
+              'parent_got_angle_revision',
+              bot_update_step.presentation.properties.get('got_angle_revision')
+          ),
       # This is only ever set on builders where the primary repo is not
       # Chromium, such as V8 or WebRTC.
       'got_cr_revision':
