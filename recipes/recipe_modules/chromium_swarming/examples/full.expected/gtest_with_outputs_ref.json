@@ -351,7 +351,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_win"
+      "hash_for_win",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",

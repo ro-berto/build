@@ -140,13 +140,16 @@ def RunSteps(api, platforms, custom_trigger_script,
         task.merge = merge
       task.trigger_script = trigger_script
     else:
-      task = api.chromium_swarming.task(name='hello_world', isolated=isolated,
-                              task_output_dir=temp_dir.join('task_output_dir'),
-                              named_caches=named_caches,
-                              service_account=service_account,
-                              cipd_packages=[
-                                ('', 'cool/package', 'vers'),
-                              ])
+      task = api.chromium_swarming.task(
+          name='hello_world',
+          isolated=isolated,
+          extra_args=['--foo', '42'],
+          task_output_dir=temp_dir.join('task_output_dir'),
+          named_caches=named_caches,
+          service_account=service_account,
+          cipd_packages=[
+              ('', 'cool/package', 'vers'),
+          ])
 
     if platform == 'linux':
       task.shards = 2
@@ -254,17 +257,24 @@ def GenTests(api):
   yield api.test(
       'default_trigger_script_use_swarming',
       api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          'archive for linux',
+          stdout=api.raw_io.output_text('hash hello_world.isolated')),
       api.properties(
-          platforms=('mac',),
+          platforms=('linux',),
           custom_trigger_script=False,
           use_swarming_recipe_to_trigger=True),
       api.post_check(
           api.swarming.check_triggered_request,
-          '[trigger] hello_world on Mac-10.13', lambda check, req: check(req[
-              0].env_vars['GTEST_SHARD_INDEX'] == '1'), lambda check, req:
-          check(req[0].env_vars['GTEST_TOTAL_SHARDS'] == '3')),
+          '[trigger] hello_world', lambda check, req: check(req[0].env_vars[
+              'GTEST_SHARD_INDEX'] == '0'), lambda check, req: check(req[
+                  0].env_vars['GTEST_TOTAL_SHARDS'] == '2'), lambda check, req:
+          check(req[0].command == ['--foo', '42'])),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] hello_world (2)', lambda check, req: check(req[0].env_vars[
+              'GTEST_SHARD_INDEX'] == '1'), lambda check, req: check(req[
+                  0].env_vars['GTEST_TOTAL_SHARDS'] == '2'), lambda check, req:
+          check(req[0].command == ['--foo', '42'])),
       api.post_process(post_process.DropExpectation),
   )
 

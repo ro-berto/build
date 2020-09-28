@@ -363,7 +363,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_mac"
+      "hash_for_mac",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Mac-10.13",

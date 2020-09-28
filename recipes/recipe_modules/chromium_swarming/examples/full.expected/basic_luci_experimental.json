@@ -371,7 +371,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_win"
+      "hash_for_win",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Windows-7-SP1",
@@ -459,7 +462,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_linux"
+      "hash_for_linux",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world",
@@ -547,7 +553,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_linux"
+      "hash_for_linux",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world (2)",
@@ -635,7 +644,10 @@
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
-      "hash_for_mac"
+      "hash_for_mac",
+      "--",
+      "--foo",
+      "42"
     ],
     "infra_step": true,
     "name": "[trigger] hello_world on Mac-10.13",
