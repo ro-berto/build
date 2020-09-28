@@ -1967,8 +1967,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'chromium',
         precommit=False,
-        builder_group=bot_meta_data.builder_id.group,
-        default_priority=bot_meta_data.settings.swarming_default_priority)
+        builder_group=bot_meta_data.builder_id.group)
     test_runner = self.create_test_runner(
         tests,
         serialize_tests=bot_meta_data.settings.serialize_tests,

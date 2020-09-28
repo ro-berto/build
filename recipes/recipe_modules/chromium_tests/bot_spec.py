@@ -185,8 +185,6 @@ class BotSpec(object):
   # uploading private isolates to the public server.
   isolate_server = attrib(str, default=None)
 
-  # Override for the default priority used when creating swarming tasks
-  swarming_default_priority = attrib(int, default=None)
   # Dimensions to apply to all created swarming tasks
   swarming_dimensions = mapping_attrib(str, default={})
   # URL to override the swarming server to use
