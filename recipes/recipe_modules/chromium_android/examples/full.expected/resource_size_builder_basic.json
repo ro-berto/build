@@ -1055,7 +1055,7 @@
       "android",
       "--no-xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.android\", \"internal\": true, \"mastername\": \"chromium.android\", \"recipe\": \"chromium_android:examples/full\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.android\", \"internal\": true, \"recipe\": \"chromium_android:examples/full\", \"slavename\": \"test_bot\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (Example.apk)",

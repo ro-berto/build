@@ -4,19 +4,11 @@
 
 from recipe_engine import recipe_test_api
 
-
-# TODO(https://crbug.com/1109276) Remove the *mastername properties, update
-# docstrings
 class ChromiumTestApi(recipe_test_api.RecipeTestApi):
 
   def for_current(self, group):
-    """Set the builder group for the currently running builder.
-
-    This also sets the legacy mastername property so existing code
-    continues to work.
-    """
-    # TODO(https://crbug.com/1109276) Do not set the mastername property
-    return self.m.properties(builder_group=group, mastername=group)
+    """Set the builder group for the currently running builder."""
+    return self.m.properties(builder_group=group)
 
   def for_parent(self, group):
     """Set the builder group for the parent builder."""

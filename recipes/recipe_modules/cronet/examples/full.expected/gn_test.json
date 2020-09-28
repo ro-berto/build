@@ -747,7 +747,7 @@
       "Debug",
       "--no-xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"mastername\": \"fake-group\", \"recipe\": \"cronet:examples/full\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"recipe\": \"cronet:examples/full\", \"slavename\": \"test_bot\"}",
       "--test-type=sizes",
       "--builder-name=gn_test",
       "--slave-name=test_bot",

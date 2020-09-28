@@ -518,7 +518,7 @@
       "Release",
       "--no-xvfb",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Linux UBSan\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Linux UBSan\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Linux UBSan",
       "--slave-name=bot_id",

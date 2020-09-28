@@ -507,7 +507,7 @@
       "--build_revision",
       "27026a4dabce15f06daff3f1f31dc175662aa133",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--json-urls",
       "/path/to/tmp/json"
     ],

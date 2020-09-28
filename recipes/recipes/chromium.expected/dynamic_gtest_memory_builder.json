@@ -840,7 +840,7 @@
       "--build_revision",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--json-urls",
       "/path/to/tmp/json"
     ],

@@ -16,11 +16,6 @@ def RunSteps(api):
   api.assertions.assertEqual(api.builder_group.for_parent, 'parent-group')
   api.assertions.assertEqual(api.builder_group.for_target, 'target-group')
 
-  # TODO(https://crbug.com/1109276) Remove these assertions
-  # Until all existing uses are gone, make sure that the legacy properties
-  # are still set
-  api.assertions.assertEqual(api.properties['mastername'], 'current-group')
-
 
 def GenTests(api):
   yield api.test(

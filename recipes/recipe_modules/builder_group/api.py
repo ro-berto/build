@@ -35,9 +35,7 @@ class BuilderGroupApi(recipe_api.RecipeApi):
   @property
   def for_current(self):
     """Get the builder group for the currently running builder."""
-    # TODO(https://crbug.com/1109276) Do not read the mastername property
-    return (self.m.properties.get('builder_group') or
-            self.m.properties.get('mastername'))
+    return self.m.properties.get('builder_group')
 
   @property
   def for_parent(self):

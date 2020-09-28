@@ -556,7 +556,7 @@
       "--target",
       "Release",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"mastername\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.memory\", \"parent_builder_group\": \"chromium.memory\", \"parent_buildername\": \"Mac ASan 64 Builder\", \"recipe\": \"chromium\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=browser_tests",
       "--step-name=browser_tests",

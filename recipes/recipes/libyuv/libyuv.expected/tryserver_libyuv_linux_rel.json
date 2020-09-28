@@ -537,7 +537,7 @@
       "Release",
       "--no-xvfb",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"linux_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"linux_rel\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=linux_rel",
       "--slave-name=bot_id",

@@ -263,7 +263,7 @@
       "Release",
       "--xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"mastername\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"setup\": [{\"script\": \"//set_up_script1.py\"}, {\"script\": \"//set_up_script2.py\"}], \"teardown\": [{\"script\": \"//tear_down_script1.py\"}, {\"script\": \"//tear_down_script2.py\"}], \"test\": \"base_unittests\"}, \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"test_group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"single_spec\": {\"setup\": [{\"script\": \"//set_up_script1.py\"}, {\"script\": \"//set_up_script2.py\"}], \"teardown\": [{\"script\": \"//tear_down_script1.py\"}, {\"script\": \"//tear_down_script2.py\"}], \"test\": \"base_unittests\"}, \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests",
