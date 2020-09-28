@@ -344,11 +344,6 @@ class AndroidApi(recipe_api.RecipeApi):
          os.path.join('~', 'adb')],
         infra_step=True)
 
-  @property
-  def denylist_flag(self):
-    return ('--blacklist-file'
-            if self.c.deprecated_blacklist else '--denylist-file')
-
   def spawn_logcat_monitor(self):
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.build.python(
@@ -368,7 +363,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '--', self.m.path['checkout'].join('third_party', 'catapult', 'devil',
                                            'devil', 'android', 'tools',
                                            'device_monitor.py'), '--adb-path',
-        self.m.adb.adb_path(), self.denylist_flag, self.denylist_file
+        self.m.adb.adb_path(), '--denylist-file', self.denylist_file
     ]
     self.m.build.python('spawn_device_monitor', script, args, infra_step=True)
 
@@ -401,15 +396,6 @@ class AndroidApi(recipe_api.RecipeApi):
     step_result = self.m.json.read('read_denylist_file', self.denylist_file)
     denylisted_devices = step_result.json.output
     return [s for s in self.devices if s not in denylisted_devices]
-
-  # TODO(crbug.com/1097306): Remove these two functions once all
-  # references have been switched.
-  @property
-  def blacklist_file(self):  # pragma: no cover
-    return self.denylist_file
-
-  def non_blacklisted_devices(self):  # pragma: no cover
-    return self.non_denylisted_devices()
 
   def device_status_check(self):
     self.device_recovery()
@@ -489,7 +475,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                           'devil', 'android', 'tools',
                                           'device_recovery.py')
     args = [
-        self.denylist_flag, self.denylist_file, '--known-devices-file',
+        '--denylist-file', self.denylist_file, '--known-devices-file',
         self.known_devices_file, '--adb-path',
         self.m.adb.adb_path(), '-v'
     ]
@@ -502,7 +488,7 @@ class AndroidApi(recipe_api.RecipeApi):
     args = [
         '--json-output',
         self.m.json.output(),
-        self.denylist_flag,
+        '--denylist-file',
         self.denylist_file,
         '--known-devices-file',
         self.known_devices_file,
@@ -616,10 +602,9 @@ class AndroidApi(recipe_api.RecipeApi):
     args = [
         '--adb-path',
         self.m.adb.adb_path(),
-        self.denylist_flag,
+        '--denylist-file',
         self.denylist_file,
-        '--output-device-blacklist'
-        if self.c.deprecated_blacklist else '--output-device-denylist',
+        '--output-device-denylist',
         self.m.json.output(add_json_log=False),
         '-t',
         self.m.chromium.c.BUILD_CONFIG,
@@ -669,7 +654,7 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout'].join('build', 'android', 'adb_install_apk.py'),
         apk,
         '-v',
-        self.denylist_flag,
+        '--denylist-file',
         self.denylist_file,
     ]
     if int(self.m.chromium.get_version().get('MAJOR', 0)) > 50:
@@ -693,7 +678,7 @@ class AndroidApi(recipe_api.RecipeApi):
         '-v',
         '--browser=%s' % self.c.channel,
         '--event-count=50000',
-        self.denylist_flag,
+        '--denylist-file',
         self.denylist_file,
     ]
     with self.m.context(env={'BUILDTYPE': self.c.BUILD_CONFIG}):
@@ -960,7 +945,7 @@ class AndroidApi(recipe_api.RecipeApi):
                      args=None,
                      **kwargs):
     args = args or []
-    args.extend([self.denylist_flag, self.denylist_file])
+    args.extend(['--denylist-file', self.denylist_file])
     if verbose:
       args.append('--verbose')
     if result_details and not json_results_file:

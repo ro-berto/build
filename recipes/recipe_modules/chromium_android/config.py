@@ -52,8 +52,6 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
       logcat_bucket=Single((basestring, types.NoneType),
                            required=False,
                            empty_val='chromium-android'),
-      # TODO(crbug.com/1097306): Remove this once libyuv updates.
-      deprecated_blacklist=Single(bool, required=False, empty_val=False),
   )
 
 
@@ -270,9 +268,3 @@ def remove_all_system_webviews(_):
 @config_ctx()
 def asan_symbolize(c):  # pragma: no cover
   c.asan_symbolize = True
-
-
-# TODO(crbug.com/1097306): Remove this once libyuv updates.
-@config_ctx()
-def deprecated_blacklist(c):  # pragma: no cover
-  c.deprecated_blacklist = True
