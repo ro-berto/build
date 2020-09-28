@@ -455,6 +455,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Asan\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Asan",
       "--buildbot-mastername",

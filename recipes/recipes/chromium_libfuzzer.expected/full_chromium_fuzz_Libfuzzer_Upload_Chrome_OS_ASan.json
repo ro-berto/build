@@ -678,6 +678,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Chrome OS ASan\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Libfuzzer Upload Chrome OS ASan",
       "--buildbot-mastername",

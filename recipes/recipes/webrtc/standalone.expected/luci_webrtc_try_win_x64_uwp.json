@@ -685,6 +685,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_x64_uwp\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_x64_uwp",
       "--buildbot-mastername",

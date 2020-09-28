@@ -468,6 +468,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux64 Release (ARM)\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux64 Release (ARM)",
       "--buildbot-mastername",

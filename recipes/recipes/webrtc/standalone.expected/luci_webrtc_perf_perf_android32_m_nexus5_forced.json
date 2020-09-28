@@ -572,6 +572,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Android32 (M Nexus5)\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Perf Android32 (M Nexus5)",
       "--buildbot-mastername",

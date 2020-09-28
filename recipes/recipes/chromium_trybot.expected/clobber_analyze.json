@@ -881,6 +881,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux_chromium_clobber_rel_ng\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux_chromium_clobber_rel_ng",
       "--buildbot-mastername",

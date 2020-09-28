@@ -539,6 +539,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"mac_rel\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_rel",
       "--buildbot-mastername",

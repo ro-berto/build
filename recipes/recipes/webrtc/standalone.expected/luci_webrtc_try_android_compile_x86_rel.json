@@ -655,6 +655,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_compile_x86_rel\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "android_compile_x86_rel",
       "--buildbot-mastername",

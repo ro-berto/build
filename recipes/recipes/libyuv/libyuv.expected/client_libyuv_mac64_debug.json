@@ -493,6 +493,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac64 Debug\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac64 Debug",
       "--buildbot-mastername",

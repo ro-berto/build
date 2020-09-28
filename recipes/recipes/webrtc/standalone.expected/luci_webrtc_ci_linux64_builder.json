@@ -508,6 +508,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux64 Builder\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux64 Builder",
       "--buildbot-mastername",

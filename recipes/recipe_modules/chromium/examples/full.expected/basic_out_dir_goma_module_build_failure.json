@@ -633,6 +633,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android arm Builder (dbg)\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android arm Builder (dbg)",
       "--buildbot-mastername",

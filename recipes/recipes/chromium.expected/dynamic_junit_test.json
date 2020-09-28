@@ -774,6 +774,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android-marshmallow-arm64-rel\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "android-marshmallow-arm64-rel",
       "--buildbot-mastername",

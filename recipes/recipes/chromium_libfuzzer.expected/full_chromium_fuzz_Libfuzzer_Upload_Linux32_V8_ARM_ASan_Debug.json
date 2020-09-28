@@ -693,6 +693,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Linux32 V8-ARM ASan Debug\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Libfuzzer Upload Linux32 V8-ARM ASan Debug",
       "--buildbot-mastername",

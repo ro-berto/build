@@ -575,6 +575,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux UBSan\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux UBSan",
       "--buildbot-mastername",

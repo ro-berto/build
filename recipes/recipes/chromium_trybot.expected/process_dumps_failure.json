@@ -903,6 +903,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win7-rel\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win7-rel",
       "--buildbot-mastername",

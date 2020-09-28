@@ -1046,6 +1046,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios_arm64_rel\", \"project\": \"webrtc-internal\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios_arm64_rel",
       "--buildbot-mastername",

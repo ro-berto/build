@@ -707,6 +707,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"dev\", \"builder\": \"android-lollipop-arm-rel-swarming\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "android-lollipop-arm-rel-swarming",
       "--buildbot-mastername",

@@ -552,6 +552,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android64 (M Nexus5X)(dbg)\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android64 (M Nexus5X)(dbg)",
       "--buildbot-mastername",

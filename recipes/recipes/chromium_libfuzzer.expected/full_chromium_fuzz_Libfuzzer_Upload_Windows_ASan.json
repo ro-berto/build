@@ -692,6 +692,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Windows ASan\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Libfuzzer Upload Windows ASan",
       "--buildbot-mastername",

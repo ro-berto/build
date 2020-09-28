@@ -479,6 +479,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_rel\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "android_rel",
       "--buildbot-mastername",

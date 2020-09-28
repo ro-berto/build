@@ -694,6 +694,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"dev\", \"builder\": \"linux-rel-swarming-staging\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux-rel-swarming-staging",
       "--buildbot-mastername",

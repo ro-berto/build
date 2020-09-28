@@ -685,6 +685,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_compile_x64_clang_dbg\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_compile_x64_clang_dbg",
       "--buildbot-mastername",

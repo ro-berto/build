@@ -494,6 +494,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux64 Release (Libfuzzer)\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux64 Release (Libfuzzer)",
       "--buildbot-mastername",

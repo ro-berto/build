@@ -729,6 +729,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS32 Release\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "iOS32 Release",
       "--buildbot-mastername",

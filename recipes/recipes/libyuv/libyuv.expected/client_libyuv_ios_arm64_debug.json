@@ -540,6 +540,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS ARM64 Debug\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "iOS ARM64 Debug",
       "--buildbot-mastername",

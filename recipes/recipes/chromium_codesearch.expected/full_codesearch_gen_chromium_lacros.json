@@ -735,6 +735,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"codesearch-gen-chromium-lacros\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-lacros",
       "--buildbot-mastername",

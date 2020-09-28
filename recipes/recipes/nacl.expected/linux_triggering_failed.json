@@ -498,6 +498,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux_64-newlib-arm_qemu-pnacl-dbg\", \"project\": \"project\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux_64-newlib-arm_qemu-pnacl-dbg",
       "--buildbot-mastername",

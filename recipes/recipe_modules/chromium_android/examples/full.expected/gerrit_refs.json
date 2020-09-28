@@ -611,6 +611,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"gerrit_try_builder\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "gerrit_try_builder",
       "--buildbot-mastername",

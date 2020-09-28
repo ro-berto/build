@@ -31,6 +31,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"emscripten-releases\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux",
       "--buildbot-slavename",

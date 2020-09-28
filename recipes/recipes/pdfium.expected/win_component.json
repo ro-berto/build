@@ -386,6 +386,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"win_component\", \"project\": \"pdfium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_component",
       "--buildbot-mastername",

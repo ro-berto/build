@@ -866,6 +866,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios-simulator-gn\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios-simulator-gn",
       "--buildbot-mastername",

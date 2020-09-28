@@ -735,6 +735,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Test Version\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Test Version",
       "--buildbot-mastername",

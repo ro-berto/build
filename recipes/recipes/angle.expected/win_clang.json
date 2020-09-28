@@ -414,6 +414,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"windows\", \"project\": \"angle\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "windows",
       "--buildbot-mastername",

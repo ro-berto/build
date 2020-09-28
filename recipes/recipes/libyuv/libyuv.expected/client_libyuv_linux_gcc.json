@@ -428,6 +428,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux GCC\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux GCC",
       "--buildbot-mastername",

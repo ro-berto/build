@@ -919,6 +919,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS64 Debug\", \"project\": \"webrtc-internal\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "iOS64 Debug",
       "--buildbot-mastername",

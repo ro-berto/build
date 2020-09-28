@@ -669,6 +669,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"mb_test\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--is-experimental",
       "--buildbot-buildername",
       "mb_test",

@@ -562,6 +562,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win64 Debug\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win64 Debug",
       "--buildbot-mastername",

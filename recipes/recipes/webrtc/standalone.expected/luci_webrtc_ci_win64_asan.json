@@ -589,6 +589,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win64 ASan\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win64 ASan",
       "--buildbot-mastername",

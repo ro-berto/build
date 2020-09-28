@@ -474,6 +474,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win\", \"project\": \"libyuv\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win",
       "--buildbot-mastername",

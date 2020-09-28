@@ -644,6 +644,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux_compile_arm_rel\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux_compile_arm_rel",
       "--buildbot-mastername",

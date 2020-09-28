@@ -750,6 +750,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux ASan LSan Builder\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux ASan LSan Builder",
       "--buildbot-mastername",

@@ -711,6 +711,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"mac_compile_rel\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_compile_rel",
       "--buildbot-mastername",

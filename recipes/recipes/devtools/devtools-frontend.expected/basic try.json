@@ -537,6 +537,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux\", \"project\": \"devtools\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",

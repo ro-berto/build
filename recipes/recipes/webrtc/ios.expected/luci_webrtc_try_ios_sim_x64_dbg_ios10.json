@@ -1238,6 +1238,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios_sim_x64_dbg_ios10\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios_sim_x64_dbg_ios10",
       "--buildbot-mastername",
