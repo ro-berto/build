@@ -114,6 +114,7 @@ SPEC.update([
         cros_board='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
+        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         cros_board='amd64-generic',
         checkout_qemu_image=True,
         isolate_server='https://isolateserver.appspot.com'),
