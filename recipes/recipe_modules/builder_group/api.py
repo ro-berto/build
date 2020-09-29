@@ -17,14 +17,6 @@ Grouping can be retrieved for the following builders:
     This is used by findit, where a single builder performs bisection
     for other builders by building using the target builder's
     configuration.
-* bisect - The builder to run a bisection against.
-    This is used by v8, where a single builder performs bisection
-    for other builders by building using the bisect builder's
-    configuration.
-
-The interface also provides backwards compatibility for accessing the
-grouping by the legacy method of accessing mastername properties. These
-properties use names with non-inclusive language.
 """
 
 from recipe_engine import recipe_api
