@@ -151,6 +151,13 @@ def fuchsia_arm64_host(c):  #pragma: no cover
 
   c.solutions[0].custom_vars['checkout_fuchsia_for_arm64_host'] = 'True'
 
+
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_internal(c):  #pragma: no cover
+
+  c.solutions[0].custom_vars['checkout_fuchsia_internal'] = 'True'
+
+
 @CONFIG_CTX()
 def win(c):
   c.target_os.add('win')
