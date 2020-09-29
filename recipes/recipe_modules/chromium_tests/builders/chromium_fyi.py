@@ -82,6 +82,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Mac11.0 Tests':
         bot_spec.BotSpec.create(
@@ -98,6 +99,7 @@ SPEC = {
             execution_mode=bot_spec.TEST,
             parent_buildername='Mac Builder Next',
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-arm64-rel-tests':
         bot_spec.BotSpec.create(
@@ -119,6 +121,7 @@ SPEC = {
             parent_builder_group='chromium.mac',
             parent_buildername='mac-arm64-rel',
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-osxbeta-rel':
         bot_spec.BotSpec.create(
@@ -154,6 +157,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'WebKit Linux layout_ng_disabled Builder':
         bot_spec.BotSpec.create(
@@ -167,6 +171,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-arm64-dbg':
         bot_spec.BotSpec.create(
@@ -184,6 +189,7 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-arm64-rel':
         bot_spec.BotSpec.create(
@@ -201,6 +207,7 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-x64-dbg':
         bot_spec.BotSpec.create(
@@ -218,6 +225,7 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-x64-rel':
         bot_spec.BotSpec.create(
@@ -235,6 +243,7 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Mac OpenSSL':
         bot_spec.BotSpec.create(
@@ -283,6 +292,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-code-coverage':
         bot_spec.BotSpec.create(
@@ -296,6 +306,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win32-arm64-rel':
         bot_spec.BotSpec.create(
@@ -309,6 +320,7 @@ SPEC = {
                 'TARGET_ARCH': 'arm'
             },
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win 10 Fast Ring':
         bot_spec.BotSpec.create(
