@@ -369,8 +369,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         args.extend(['--build_revision', build_revision])
 
     if self.m.builder_group.for_current:
-      # TODO(https://crbug.com/1109276) Change the flag name
-      args.extend(['--master-name', self.m.builder_group.for_current])
+      args.extend(['--builder-group', self.m.builder_group.for_current])
 
     properties = (
         ('parent_builddir', '--parent-build-dir'),

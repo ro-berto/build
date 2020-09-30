@@ -437,7 +437,7 @@
       "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
       "--build_revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--master-name",
+      "--builder-group",
       "chromium.linux",
       "--build-number",
       "571"

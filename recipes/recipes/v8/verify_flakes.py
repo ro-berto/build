@@ -35,8 +35,6 @@ URL_FORMAT_RE = re.compile(r'(?:https?://)?(.+)')
 TEST_CONFIG = [{
     'bisect_buildername': 'V8 Linux64 - debug builder',
     'bisect_builder_group': 'client.v8',
-    # TODO(https://crbug.com/1109276) Don't set bisect_mastername
-    'bisect_mastername': 'client.v8',
     'bug_url': 'https://crbug.com/v8/8744',
     'build_config': 'Debug',
     'extra_args': [],
