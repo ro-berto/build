@@ -208,18 +208,17 @@ def GenTests(api):
 
   def _common(api,
               test_repeat_count=20,
-              target_builder_group='chromium.linux',
-              target_builder='Linux Builder',
+              target_builder_group='chromium.findit',
+              target_builder='fake-builder',
               tests=None,
               compile_targets=None,
-              test_override_builders=False,
               spec=None,
               skip_analyze=False):
     """Create test properties and other data for tests."""
     tests = tests or {}
     compile_targets = compile_targets or []
-    _default_spec = 'chromium.linux', {
-        'Linux Builder': {
+    _default_spec = 'chromium.findit', {
+        'fake-builder': {
             'isolated_scripts': [{
                 'isolate_name': 'blink_web_tests',
                 'name': 'blink_web_tests',
@@ -237,10 +236,10 @@ def GenTests(api):
         }
     }
     _default_builders = bot_db.BotDatabase.create({
-        'chromium.linux': {
-            'Linux Tests':
+        'chromium.findit': {
+            'fake-tester':
                 bot_spec.BotSpec.create(
-                    parent_buildername='Linux Builder',
+                    parent_buildername='fake-builder',
                     swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
@@ -252,7 +251,7 @@ def GenTests(api):
                     execution_mode=bot_spec.TEST,
                     simulation_platform='linux',
                 ),
-            'Linux Builder':
+            'fake-builder':
                 bot_spec.BotSpec.create(
                     swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
@@ -288,9 +287,8 @@ def GenTests(api):
         ),
         api.properties(props_proto),
         api.chromium_tests.read_source_side_spec(*(spec or _default_spec)),
+        api.chromium_tests.builders(_default_builders),
     ], api.empty_test_data())
-    if test_override_builders:
-      t += api.chromium_tests.builders(_default_builders)
     return t
 
   yield api.test(
@@ -353,8 +351,7 @@ def GenTests(api):
       'with_tests_and_analyze',
       _common(
           api,
-          test_override_builders=True,
-          target_builder='Linux Tests',
+          target_builder='fake-tester',
           tests={
               'blink_web_tests': [
                   'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
@@ -381,8 +378,8 @@ def GenTests(api):
       _common(
           api,
           tests={'checkperms': []},
-          spec=('chromium.linux', {
-              'Linux Builder': {
+          spec=('chromium.findit', {
+              'fake-builder': {
                   'scripts': [{
                       'name': 'checkperms',
                       'script': 'checkperms.py'

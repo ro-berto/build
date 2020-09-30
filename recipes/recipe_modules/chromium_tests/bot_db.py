@@ -15,6 +15,37 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
 from RECIPE_MODULES.build.chromium.types import BuilderId
 
 
+def _migration_validation(builder_id, builder_spec):
+  """Validate that back-sliding of BotSpec migrations does not occur."""
+  if builder_spec.test_specs:
+    assert builder_id.group in (
+        'chrome.pgo',
+        'chromium.clang',
+        'chromium.fyi',
+        'chromium.perf',
+        'chromium.webrtc',
+        'official.chrome',
+        'official.chrome.continuous',
+        'official.chromeos.continuous',
+    ), ('Builder: {!r}\nUse of the test_specs field is deprecated,'
+        ' instead update the source side spec file for builder group {!r}.'
+        ' Contact gbeaty@ if you need assistance.').format(
+            builder_id, builder_id.group)
+
+  elif builder_spec.swarming_dimensions:
+    assert builder_id.group in (
+        'chromium.fyi',
+        'chromium.webrtc',
+
+        # Used for tests of the code that consumes swarming_dimensions
+        'chromium.findit',
+        'test_group',
+    ), ('Builder: {!r}\nUse of the swarming_dimensions field is deprecated,'
+        ' instead update the source side spec file for builder group {!r}.'
+        ' Contact gbeaty@ if you need assistance., {}').format(
+            builder_id, builder_id.group, builder_spec.swarming_dimensions)
+
+
 @attrs()
 class BotDatabase(collections.Mapping):
   """A database that provides information for multiple groups.
@@ -63,6 +94,8 @@ class BotDatabase(collections.Mapping):
           message = '{} while creating spec for builder {!r}'.format(
               e.message, builder_id)
           raise type(e)(message), None, sys.exc_info()[2]
+
+        _migration_validation(builder_id, builder_spec)
 
         builders_for_group[builder_name] = builder_spec
         db[builder_id] = builder_spec

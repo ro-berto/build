@@ -50,11 +50,6 @@ def GenTests(api):
                       bot_spec.BotSpec.create(
                           chromium_config='chromium',
                           chromium_apply_config=['foo', 'bar'],
-                          test_specs=[
-                              bot_spec.TestSpec.create(steps.SizesStep,
-                                                       'fake-url',
-                                                       'fake-config-name')
-                          ],
                       ),
               }
           })),

@@ -362,12 +362,6 @@ def GenTests(api):
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
-                          swarming_dimensions={
-                              'device_type': 'phone',
-                              'device_os': 'android',
-                              'gpu': 'nv',
-                              'os': 'Linux',
-                          },
                       ),
               },
           })),
@@ -381,7 +375,14 @@ def GenTests(api):
                           'test_location_base': '//test/location',
                       },
                       'swarming': {
-                          'can_use_on_swarming_builders': True,
+                          'can_use_on_swarming_builders':
+                              True,
+                          'dimension_sets': [{
+                              'device_type': 'phone',
+                              'device_os': 'android',
+                              'gpu': 'nv',
+                              'os': 'Linux',
+                          }],
                       },
                       'test_id_prefix': 'ninja://:fake_test/',
                   }],
