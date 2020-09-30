@@ -93,6 +93,7 @@
       "@@@STEP_LOG_LINE@flake config@{@@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_builder_group\": \"client.v8\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_buildername\": \"V8 Linux64 - debug builder\", @@@",
+      "@@@STEP_LOG_LINE@flake config@  \"bisect_mastername\": \"client.v8\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bug_url\": \"https://crbug.com/v8/8744\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"build_config\": \"Debug\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"extra_args\": [], @@@",

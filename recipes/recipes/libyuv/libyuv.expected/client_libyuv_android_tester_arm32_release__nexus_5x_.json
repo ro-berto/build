@@ -127,7 +127,7 @@
       "gs://chromium-libyuv/client.libyuv/Android Release/full-build-linux.zip",
       "--build_revision",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--builder-group",
+      "--master-name",
       "client.libyuv",
       "--build-number",
       "1337"
