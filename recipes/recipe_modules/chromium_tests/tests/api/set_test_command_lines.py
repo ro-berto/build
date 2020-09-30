@@ -393,9 +393,9 @@ def GenTests(api):
           'test_pre_run.[trigger] %s on (nv) GPU on Linux' % fake_test, [
               '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
               'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
-              'builder=fake-tester', '-var', 'device_os=android', '-var',
-              'device_type=phone', '-var', 'gpu=nv', '-var', 'os=Linux', '-var',
-              'test_suite=fake_test', '-test-location-base', '//test/location',
+              'builder:fake-tester', '-var', 'device_os:android', '-var',
+              'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
+              'test_suite:fake_test', '-test-location-base', '//test/location',
               '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
