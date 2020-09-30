@@ -283,10 +283,13 @@ def generate_gtests(api,
     ]
 
   for spec in get_tests(api):
-    for test in generate_gtests_from_one_spec(api, chromium_tests_api,
-                                              builder_group, buildername, spec,
-                                              bot_update_step,
-                                              swarming_dimensions):
+    if spec.get('use_isolated_scripts_api'):
+      generator = generate_isolated_script_tests_from_one_spec
+    else:
+      generator = generate_gtests_from_one_spec
+
+    for test in generator(api, chromium_tests_api, builder_group, buildername,
+                          spec, bot_update_step, swarming_dimensions):
       yield test
 
 

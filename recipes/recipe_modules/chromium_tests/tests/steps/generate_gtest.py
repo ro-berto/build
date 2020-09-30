@@ -101,6 +101,45 @@ def GenTests(api):
   )
 
   yield api.test(
+      'use_isolated_scripts_api_in_gtest',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'use_isolated_scripts_api': True,
+          },
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      ),
+      api.post_process(post_process.StepCommandContains, 'base_unittests',
+                       ['--isolated-script-test-output']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'do_not_use_isolated_scripts_api_in_gtest',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'use_isolated_scripts_api': False,
+          },
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      ),
+      api.post_process(post_process.StepCommandContains, 'base_unittests',
+                       ['--test-launcher-summary-output']),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'service_account',
       api.chromium.ci_build(
           builder_group='test_group',
