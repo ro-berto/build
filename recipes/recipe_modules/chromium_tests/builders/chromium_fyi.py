@@ -33,7 +33,6 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
       },
       'chromium_tests_apply_config': [],
       'simulation_platform': platform,
-      'chromium_tests_apply_config': ['use_swarming_recipe_to_trigger'],
   }
   bot_config.update(**kwargs)
   if staging:
@@ -53,10 +52,7 @@ def chromium_apply_configs(base_config, config_names):
   Returns:
     new config obj.
   """
-  return base_config.extend(
-      chromium_apply_config=config_names,
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
-  )
+  return base_config.extend(chromium_apply_config=config_names)
 
 
 def no_archive(base_config):
@@ -86,7 +82,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Mac11.0 Tests':
         bot_spec.BotSpec.create(
@@ -103,7 +98,6 @@ SPEC = {
             execution_mode=bot_spec.TEST,
             parent_buildername='Mac Builder Next',
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-arm64-rel-tests':
         bot_spec.BotSpec.create(
@@ -125,7 +119,6 @@ SPEC = {
             parent_builder_group='chromium.mac',
             parent_buildername='mac-arm64-rel',
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-osxbeta-rel':
         bot_spec.BotSpec.create(
@@ -145,7 +138,6 @@ SPEC = {
             parent_builder_group='chromium.mac',
             parent_buildername='Mac Builder',
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
@@ -162,7 +154,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'WebKit Linux layout_ng_disabled Builder':
         bot_spec.BotSpec.create(
@@ -176,7 +167,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-arm64-dbg':
         bot_spec.BotSpec.create(
@@ -194,7 +184,6 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-arm64-rel':
         bot_spec.BotSpec.create(
@@ -212,7 +201,6 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-x64-dbg':
         bot_spec.BotSpec.create(
@@ -230,7 +218,6 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'fuchsia-fyi-x64-rel':
         bot_spec.BotSpec.create(
@@ -248,7 +235,6 @@ SPEC = {
             serialize_tests=True,
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Mac OpenSSL':
         bot_spec.BotSpec.create(
@@ -261,7 +247,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Site Isolation Android':
         bot_spec.BotSpec.create(
@@ -277,7 +262,6 @@ SPEC = {
             android_config='arm64_builder_mb',
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win Builder Localoutputcache':
         chromium_apply_configs(
@@ -299,7 +283,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-code-coverage':
         bot_spec.BotSpec.create(
@@ -313,7 +296,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win32-arm64-rel':
         bot_spec.BotSpec.create(
@@ -327,7 +309,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm'
             },
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win 10 Fast Ring':
         bot_spec.BotSpec.create(
@@ -341,7 +322,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Linux remote_run Builder':
         bot_spec.BotSpec.create(
@@ -357,7 +337,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Linux remote_run Tester':
         bot_spec.BotSpec.create(
@@ -379,7 +358,6 @@ SPEC = {
             ],
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'chromeos-amd64-generic-lacros-rel':
         bot_spec.BotSpec.create(
@@ -398,7 +376,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
@@ -413,7 +390,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-chromeos-code-coverage':
         bot_spec.BotSpec.create(
@@ -431,7 +407,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-cronet':
         bot_spec.BotSpec.create(
@@ -450,7 +425,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-webkit-tot':
         bot_spec.BotSpec.create(
@@ -468,7 +442,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-beta-simulator':
         bot_spec.BotSpec.create(
@@ -487,7 +460,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-sdk-device':
         bot_spec.BotSpec.create(
@@ -505,7 +477,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-sdk-simulator':
         bot_spec.BotSpec.create(
@@ -524,7 +495,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios14-beta-simulator':
         bot_spec.BotSpec.create(
@@ -543,7 +513,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios14-sdk-simulator':
         bot_spec.BotSpec.create(
@@ -562,7 +531,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-asan':
         bot_spec.BotSpec.create(
@@ -581,7 +549,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-multi-window':
         bot_spec.BotSpec.create(
@@ -600,7 +567,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-cr-recipe':
         bot_spec.BotSpec.create(
@@ -618,7 +584,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-code-coverage':
         bot_spec.BotSpec.create(
@@ -637,7 +602,6 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android-code-coverage':
         bot_spec.BotSpec.create(
@@ -653,7 +617,6 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android-code-coverage-native':
         bot_spec.BotSpec.create(
@@ -669,7 +632,6 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win10 Tests x64 1803':
         bot_spec.BotSpec.create(
@@ -685,7 +647,6 @@ SPEC = {
             parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win10 Tests x64 1909':
         bot_spec.BotSpec.create(
@@ -701,7 +662,6 @@ SPEC = {
             parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win10-code-coverage':
         bot_spec.BotSpec.create(
@@ -718,7 +678,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -731,7 +690,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -744,7 +702,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -757,7 +714,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
 }
 
@@ -861,4 +817,5 @@ SPEC.update([
 # rather than have to do 2 different things for specs based on other specs and
 # specs created within this file, just evolve all of the specs afterwards
 for name, spec in SPEC.iteritems():
-  SPEC[name] = spec.evolve(build_gs_bucket='chromium-fyi-archive')
+  SPEC[name] = spec.evolve(build_gs_bucket='chromium-fyi-archive').extend(
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'])
