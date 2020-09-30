@@ -33,6 +33,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
       },
       'chromium_tests_apply_config': [],
       'simulation_platform': platform,
+      'chromium_tests_apply_config': ['use_swarming_recipe_to_trigger'],
   }
   bot_config.update(**kwargs)
   if staging:
@@ -52,7 +53,10 @@ def chromium_apply_configs(base_config, config_names):
   Returns:
     new config obj.
   """
-  return base_config.extend(chromium_apply_config=config_names)
+  return base_config.extend(
+      chromium_apply_config=config_names,
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
+  )
 
 
 def no_archive(base_config):
@@ -141,6 +145,7 @@ SPEC = {
             parent_builder_group='chromium.mac',
             parent_buildername='Mac Builder',
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
@@ -256,6 +261,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Site Isolation Android':
         bot_spec.BotSpec.create(
@@ -271,6 +277,7 @@ SPEC = {
             android_config='arm64_builder_mb',
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win Builder Localoutputcache':
         chromium_apply_configs(
@@ -334,6 +341,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Linux remote_run Builder':
         bot_spec.BotSpec.create(
@@ -349,6 +357,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Linux remote_run Tester':
         bot_spec.BotSpec.create(
@@ -370,6 +379,7 @@ SPEC = {
             ],
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'chromeos-amd64-generic-lacros-rel':
         bot_spec.BotSpec.create(
@@ -388,6 +398,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
@@ -402,6 +413,7 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-chromeos-code-coverage':
         bot_spec.BotSpec.create(
@@ -419,6 +431,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-cronet':
         bot_spec.BotSpec.create(
@@ -437,6 +450,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-webkit-tot':
         bot_spec.BotSpec.create(
@@ -454,6 +468,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-beta-simulator':
         bot_spec.BotSpec.create(
@@ -472,6 +487,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-sdk-device':
         bot_spec.BotSpec.create(
@@ -489,6 +505,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios13-sdk-simulator':
         bot_spec.BotSpec.create(
@@ -507,6 +524,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios14-beta-simulator':
         bot_spec.BotSpec.create(
@@ -525,6 +543,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios14-sdk-simulator':
         bot_spec.BotSpec.create(
@@ -543,6 +562,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-asan':
         bot_spec.BotSpec.create(
@@ -561,6 +581,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-multi-window':
         bot_spec.BotSpec.create(
@@ -579,6 +600,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-cr-recipe':
         bot_spec.BotSpec.create(
@@ -596,6 +618,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'ios-simulator-code-coverage':
         bot_spec.BotSpec.create(
@@ -614,6 +637,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android-code-coverage':
         bot_spec.BotSpec.create(
@@ -629,6 +653,7 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android-code-coverage-native':
         bot_spec.BotSpec.create(
@@ -644,6 +669,7 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win10 Tests x64 1803':
         bot_spec.BotSpec.create(
@@ -659,6 +685,7 @@ SPEC = {
             parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'Win10 Tests x64 1909':
         bot_spec.BotSpec.create(
@@ -674,6 +701,7 @@ SPEC = {
             parent_builder_group='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win10-code-coverage':
         bot_spec.BotSpec.create(
@@ -690,6 +718,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'linux-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -702,6 +731,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'mac-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -714,6 +744,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'win-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -726,6 +757,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
+            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
 }
 
