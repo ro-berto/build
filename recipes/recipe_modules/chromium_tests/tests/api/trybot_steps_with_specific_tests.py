@@ -485,9 +485,9 @@ def GenTests(api):
   # "Step Layer Flakiness".
   yield api.test(
       'findit_step_layer_flakiness_retry_shards_flaky_test',
-      api.properties.tryserver(
-          builder_group='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',

@@ -93,6 +93,10 @@ def GenTests(api):
 
   yield api.test(
       'fake_results_handler',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',

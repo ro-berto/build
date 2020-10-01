@@ -82,7 +82,8 @@ def GenTests(api):
 
   yield api.test(
       'success_swarming',
-      api.builder_group.for_current('test_group'),
+      api.chromium.generic_build(
+          builder_group='test_group', builder='test_builder'),
       api.properties(
           buildername='test_buildername',
           bot_id='test_bot_id',
