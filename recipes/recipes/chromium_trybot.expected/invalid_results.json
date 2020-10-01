@@ -1989,41 +1989,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "Analyze DEPS autorolls correctness check",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@This is an informational step for infra maintainers and shouldn't impact the build@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "Analyze DEPS autorolls correctness check.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "Analyze DEPS autorolls correctness check.Not an autoroll",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**base_unittests** failed because of:\n\n- Test.Two"

@@ -1444,7 +1444,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure message if an error occurred.
       - None if no failures
     """
-    raw_result, task, build_config = self._calculate_tests_to_run(
+    raw_result, task = self._calculate_tests_to_run(
         builders=builders,
         mirrored_bots=mirrored_bots,
         tests_to_run=tests,
@@ -1470,89 +1470,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not unrecoverable_test_suites:
         return None
 
-      if self.m.tryserver.is_tryserver:
-        with self.m.step.nest(
-            'Analyze DEPS autorolls correctness check') as step_result:
-          step_result.presentation.step_text = (
-              'This is an informational step for infra maintainers '
-              'and shouldn\'t impact the build')
-          self.analyze_deps_autorolls(task.bot, build_config,
-                                      unrecoverable_test_suites)
-        if not self._contains_invalid_results(unrecoverable_test_suites):
-          self.m.cq.set_do_not_retry_build()
+      if (self.m.tryserver.is_tryserver and
+          not self._contains_invalid_results(unrecoverable_test_suites)):
+        self.m.cq.set_do_not_retry_build()
 
       return result_pb2.RawResult(
           summary_markdown=self._format_unrecoverable_failures(
               unrecoverable_test_suites, 'with patch'),
           status=common_pb.FAILURE)
-
-  def analyze_deps_autorolls(self, bot, build_config, failed_test_suites):
-    """Check whether our DEPS roll analysis would've caught these failures
-
-    This is a provisional mode to test for false negatives before making
-    this logic affect the actual selection of tests
-
-    Args:
-      failed_test_suites: a list of test suites that failed this run
-    """
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
-
-    # When DEPS is autorolled, typically the change is an updated git revision.
-    # We use the following logic to figure out which files really changed.
-    # by checking out the old DEPS file and recursively running git diff on all
-    # of the repos listed in DEPS.
-    # When successful, diff_deps() augments just ['DEPS'] with an actual list of
-    # affected files. When not successful, it falls back to the original logic
-    # We don't apply this logic to manual DEPS rolls, as they can contain
-    # changes to other variables, whose effects are not easily discernible.
-    owner = self.m.tryserver.gerrit_change_owner
-    should_run_analysis = ('DEPS' in affected_files and owner and
-                           owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS)
-    if not should_run_analysis:
-      self.m.step('Not an autoroll', [])
-      return
-
-    try:
-      revised_affected_files = self.m.gclient.diff_deps(
-          self.m.chromium_checkout.checkout_dir.join(
-              self.m.gclient.get_gerrit_patch_root()))
-
-      def remove_src_prefix(src_file):
-        if src_file.startswith('src/'):
-          return src_file[len('src/'):]
-        return src_file
-
-      affected_files = [
-          remove_src_prefix(src_file) for src_file in revised_affected_files
-      ]
-
-    except (self.m.gclient.DepsDiffException, self.m.step.InfraFailure):
-      # Sometimes it can't figure out what changed, so it'll throw this.
-      # In this case, we'll test everything, so it's safe to return
-      self.m.step('Analyze DEPS skip', [])
-      return
-
-    test_targets, _compile_targets = self._determine_compilation_targets(
-        bot, affected_files, build_config)
-
-    self.m.step('Test targets DEPS analyze would have run', [
-        'echo',
-        '\n'.join(test_targets),
-    ])
-
-    missed_tests = set([
-        test.target_name
-        for test in failed_test_suites
-        if test.target_name not in test_targets
-    ])
-    if missed_tests:
-      self.m.step('Analyze DEPS miss', [
-          'echo',
-          'Analyze DEPS logic would have failed to run failing test suites:\n',
-          '\n'.join(missed_tests)
-      ])
-    else:
-      self.m.step('Analyze DEPS correct', [])
 
   def _format_unrecoverable_failures(self,
                                      unrecoverable_test_suites,
@@ -1843,11 +1768,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    return (
-        raw_result,
-        Task(bot, tests, bot_update_step, affected_files),
-        build_config,
-    )
+    return raw_result, Task(bot, tests, bot_update_step, affected_files)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
