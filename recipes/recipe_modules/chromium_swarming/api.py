@@ -671,11 +671,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # output.json name is expected by collect_task.py.
     extra_args.append(_create_output_flag(
         'isolated-script-test-output', 'output.json'))
-    # perftest-output.json name is expected by benchmarks generating chartjson
-    # or histogram output
-    extra_args.append(_create_output_flag(
-        'isolated-script-test-perf-output',
-        'perftest-output.json'))
 
     merge = {
       'script': self.merge_script_path('standard_isolated_script_merge.py')
