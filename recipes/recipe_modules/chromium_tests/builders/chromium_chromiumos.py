@@ -7,7 +7,9 @@ from .. import bot_spec
 
 def _chromium_chromiumos_spec(**kwargs):
   return bot_spec.BotSpec.create(
-      build_gs_bucket='chromium-chromiumos-archive', **kwargs)
+      build_gs_bucket='chromium-chromiumos-archive',
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
+      **kwargs)
 
 
 SPEC = {
@@ -38,17 +40,14 @@ def _config(name,
             target_bits=64,
             chromium_apply_config=None,
             gclient_apply_config=None,
-            chromium_tests_apply_config=None,
             **kwargs):
   gclient_apply_config = gclient_apply_config or []
-  chromium_tests_apply_config = chromium_tests_apply_config or []
   if 'chromeos' not in gclient_apply_config:
     gclient_apply_config.append('chromeos')
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
-      'chromium_tests_apply_config': chromium_tests_apply_config,
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
       'isolate_server': 'https://isolateserver.appspot.com',
@@ -74,7 +73,6 @@ def _config(name,
 SPEC.update([
     _config(
         'linux-chromeos-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['use_clang_coverage']),
     _config(
@@ -114,7 +112,6 @@ SPEC.update([
         cros_board='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         cros_board='amd64-generic',
         checkout_qemu_image=True,
         isolate_server='https://isolateserver.appspot.com'),
