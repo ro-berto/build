@@ -843,7 +843,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     for i in range(len(req)):
       task_slice = req[i]
 
-      # resultdb is supported only if the sliece was set with raw_cmd.
+      # resultdb is supported only if the slice was set with raw_cmd.
       if not task_slice.command:
         continue
       step_name = tags_by_key.get('stepname')
