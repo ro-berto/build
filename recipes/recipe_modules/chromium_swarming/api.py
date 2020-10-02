@@ -809,6 +809,66 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
     return tags
 
+  def _maybe_enable_resultdb_for_task(self, req):
+    """Enables resultdb for a given task.
+
+    This function enables resultdb for the test commands set in the given
+    task request by wrapping the commands with result-sink.
+
+    Note that the request should be configured to enable ResultDB. Otherwise,
+    the given task request will be returned without changes.
+
+    Args:
+      req: swarming.TaskRequest instance as created by swarming.task_request().
+    Returns:
+      A clone of the request with all the commands wrapped with result sink.
+      Or, the original TaskRequest if the request was not configured to enable
+      resultdb.
+    """
+    if not (req.resultdb and req.resultdb.enable):
+      return req
+
+    # If resultdb was enabled without realm, then use the builder realm.
+    # This is needed to allow experimenting with ResultDB-enabled tests
+    # before realms are available everywhere.
+    #
+    # TODO(crbug.com/1122808): Remove this fallback.
+    if not req.realm:
+      req = req.with_realm(self.m.buildbucket.builder_realm)
+
+    # if there are duplicate keys, the last one wins.
+    tags_by_key = {
+        pair[0]: pair[1] for pair in map(lambda t: t.split(':', 1), req.tags)
+    }
+    for i in range(len(req)):
+      task_slice = req[i]
+
+      # resultdb is supported only if the sliece was set with raw_cmd.
+      if not task_slice.command:
+        continue
+      step_name = tags_by_key.get('stepname')
+      variants = {
+          k: v for k, v in [
+              ('builder', self.m.buildbucket.builder_name),
+              ('device_type', task_slice.dimensions.get('device_type')),
+              ('device_os', task_slice.dimensions.get('device_os')),
+              ('gpu', task_slice.dimensions.get('gpu')),
+              ('os', task_slice.dimensions.get('os')),
+              ('test_suite', tags_by_key.get('test_suite')),
+          ] if v
+      }
+      req = req.with_slice(
+          i,
+          task_slice.with_command(
+              self.m.resultdb.wrap(
+                  task_slice.command,
+                  test_id_prefix=tags_by_key.get('test_id_prefix', ''),
+                  test_location_base=tags_by_key.get('test_location_base', ''),
+                  base_variant=variants,
+                  base_tags=[('step_name', step_name)] if step_name else None)))
+
+    return req
+
   def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
@@ -821,8 +881,18 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     # TODO(crbug.com/894045): Remove this method once we have fully migrated
     # to use swarming recipe module to trigger tasks.
-    task_request = task.request
-    task_slice = task_request[0].with_named_caches(task.named_caches)
+    task_slice = task.request[0].with_named_caches(task.named_caches)
+    tags = collections.defaultdict(list)
+    for t in self._generate_trigger_task_tags(task, task_slice):
+      kv = t.split(':', 1)
+      assert len(kv) == 2
+      tags[kv[0]].append(kv[1])
+    tags['triggered_by'].append('swarming_py')
+    task_request = self._maybe_enable_resultdb_for_task(
+        task.request.with_slice(0, task_slice).with_tags(tags))
+    # refresh task_slice, as _maybe_enable_resultdb_for_task() could modify
+    # the first slice.
+    task_slice = task_request[0]
 
     # Trigger parameters.
     pre_trigger_args = ['trigger']
@@ -860,10 +930,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.containment_type:
       args.extend(['--containment-type', task.containment_type])
 
-    for tag in sorted(self._generate_trigger_task_tags(task, task_slice)):
-      assert ':' in tag, tag
-      args.extend(['--tag', tag])
-    args.extend(['--tag', 'triggered_by:swarming_py'])
+    for pair in sorted(task_request.tags):
+      args.extend(['--tag', pair])
 
     if self.verbose:
       args.append('--verbose')
@@ -874,13 +942,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_request.realm:
       args.extend(['--realm', task_request.realm])
     if task_request.resultdb and task_request.resultdb.enable:
-      # If resultdb was enabled without realm, then use the builder realm.
-      # This is needed to allow experimenting with ResultDB-enabled tests
-      # before realms are available everywhere.
-      #
-      # TODO(crbug.com/1122808): Remove this fallback.
-      if not task_request.realm:
-        args.extend(['--realm', self.m.buildbucket.builder_realm])
       args.extend(['--resultdb'])
 
     for path, package_list in sorted(
@@ -1061,6 +1122,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     tags_dict['triggered_by'].append('recipe_modules/swarming')
 
     req = req.with_slice(0, req_slice).with_tags(tags_dict)
+    req = self._maybe_enable_resultdb_for_task(req)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
           self.get_step_name('trigger', task), [req], self.verbose)

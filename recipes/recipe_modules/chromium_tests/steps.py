@@ -1814,10 +1814,6 @@ class SwarmingTest(Test):
     return self._name
 
   @property
-  def dimensions(self):
-    return self._dimensions
-
-  @property
   def target_name(self):
     return self._target_name or self._name
 
@@ -2019,6 +2015,9 @@ class SwarmingTest(Test):
         'test_id_prefix': [self.test_id_prefix or ''],
         'test_suite': [self.canonical_name],
     }
+    test_location_base = (self.resultdb or {}).get('test_location_base')
+    if test_location_base:
+      tags['test_location_base'] = [test_location_base]
 
     task.request = (
         task_request.with_slice(0, task_slice).with_name(

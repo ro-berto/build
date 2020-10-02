@@ -618,6 +618,8 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_with_realm_and_resultdb',
+      api.buildbucket.try_build(
+          project='chromium', builder='linux', build_number=1),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),

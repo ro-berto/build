@@ -397,7 +397,8 @@ def GenTests(api):
               'builder:fake-tester', '-var', 'device_os:android', '-var',
               'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
               'test_suite:fake_test', '-test-location-base', '//test/location',
-              '--'
+              '-tag',
+              'step_name:%s on (nv) GPU on Linux' % fake_test, '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )
