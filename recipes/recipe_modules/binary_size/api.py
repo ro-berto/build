@@ -103,7 +103,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
           self.m.gclient.c.solutions[0].revision = recent_upload_revision
 
         try:
-          bot_update_step = self.m.chromium_checkout.ensure_checkout()
+          bot_update_step = self.m.chromium_checkout.ensure_checkout(
+              # Make sure that the git cache is refreshed with another origin
+              # fetch to get a correct diff of the patch
+              enforce_fetch=True)
         except self.m.step.StepFailure:
           # CL patch is incompatible with revision used in recently uploaded
           # analysis. Use the most recent trunk commit instead.
