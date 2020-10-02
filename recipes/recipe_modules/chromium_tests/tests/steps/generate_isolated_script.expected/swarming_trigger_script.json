@@ -248,7 +248,8 @@
       "--isolated",
       "deadbeef",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
     "name": "[trigger (custom trigger script)] base_unittests",

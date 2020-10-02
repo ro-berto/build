@@ -961,7 +961,8 @@
       "--isolated",
       "[dummy hash for blink_web_tests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1300,7 +1301,8 @@
       "--isolated",
       "[dummy hash for blink_web_tests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

@@ -1159,7 +1159,8 @@
       "--isolated",
       "[dummy hash for telemetry_gpu_unittests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1486,7 +1487,8 @@
       "--isolated",
       "[dummy hash for telemetry_gpu_unittests]",
       "--",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json"
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2438,6 +2440,7 @@
       "[dummy hash for telemetry_gpu_unittests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--isolated-script-test-filter=test1.Test1::test2.Test2"
     ],
     "cwd": "[CACHE]/builder",
