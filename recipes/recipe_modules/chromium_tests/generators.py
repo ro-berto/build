@@ -117,8 +117,13 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   # TODO(crbug.com/1074033): Remove full_test_target.
   kwargs['full_test_target'] = spec.get('test_target')
   kwargs['test_id_prefix'] = spec.get('test_id_prefix')
-  kwargs['resultdb'] = spec.get('resultdb')
   kwargs['name'] = name
+
+  # Enables resultdb if the build is picked for the experiment.
+  # TODO(crbug.com/1108016): Enable resultdb globally.
+  is_sink_exp = ('chromium.resultdb.result_sink' in
+                 api.buildbucket.build.input.experiments)
+  kwargs['resultdb'] = spec.get('resultdb') if is_sink_exp else None
 
   set_up = list(spec.get('setup', []))
   processed_set_up = []

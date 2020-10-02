@@ -351,7 +351,11 @@ def GenTests(api):
 
   yield api.test(
       "ci_bot_with_rdb_enabled_swarming_test",
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.chromium.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          # TODO(crbug.com/1108016): Remove experiments
+          experiments=['chromium.resultdb.result_sink']),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.platform('linux', 64),
       api.chromium_tests.builders(
