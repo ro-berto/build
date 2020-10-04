@@ -45,9 +45,6 @@ PROPERTIES = {
     'bisect_builder_group': Property(kind=str),
     # Name of the builder that produced the builds for bisection.
     'bisect_buildername': Property(kind=str),
-    # Build config passed to V8's run-tests.py script (there it's parameter
-    # --mode, example: Release or Debug).
-    'build_config': Property(kind=str),
     # Extra arguments to V8's run-tests.py script.
     'extra_args': Property(default=None, kind=list),
     # Number of commits, backwards bisection will initially leap over.
@@ -60,6 +57,8 @@ PROPERTIES = {
     'isolated_name': Property(kind=str),
     # Initial number of swarming shards.
     'num_shards': Property(default=2, kind=Single((int, float))),
+    # Optional build directory for backwards-compatibility, e.g. 'out/Release'.
+    'outdir': Property(default=None, kind=str),
     # Initial number of test repetitions (passed to --random-seed-stress-count
     # option).
     'repetitions': Property(default=5000, kind=Single((int, float))),
@@ -129,8 +128,8 @@ TEST_FAILED_TEMPLATE = """
 
 class Command(object):
   """Helper class representing a command line to V8's run-tests.py."""
-  def __init__(self, test_name, build_config, variant, repetitions, repro_only,
-               total_timeout_sec, timeout=60, extra_args=None):
+  def __init__(self, test_name, variant, repetitions, repro_only,
+               total_timeout_sec, timeout=60, extra_args=None, outdir=None):
     self.repetitions = repetitions
     self.test_name = test_name
     self.total_timeout_sec = total_timeout_sec
@@ -138,8 +137,7 @@ class Command(object):
     self.base_cmd = [
       'tools/run-tests.py',
       '--progress=verbose',
-      '--mode=%s' % build_config,
-      '--outdir=out',
+      '--outdir=%s' % (outdir or 'out/build'),
       '--timeout=%d' % timeout,
       '--swarming',
       '--variants=%s' % variant,
@@ -540,9 +538,9 @@ def setup_swarming(
     api.chromium_swarming.set_default_dimension(k, v)
 
 
-def RunSteps(api, bisect_builder_group, bisect_buildername, build_config,
+def RunSteps(api, bisect_builder_group, bisect_buildername,
              extra_args, initial_commit_offset, max_calibration_attempts,
-             isolated_name, num_shards, repetitions, repro_only,
+             isolated_name, num_shards, outdir, repetitions, repro_only,
              swarming_dimensions, swarming_priority, swarming_expiration,
              test_name, timeout_sec, total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
@@ -562,8 +560,8 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, build_config,
   depot = Depot(api, bisect_builder_group, bisect_buildername, isolated_name,
                 to_revision)
   command = Command(
-      test_name, build_config, variant, repetitions, repro_only,
-      total_timeout_sec, timeout_sec, extra_args)
+      test_name, variant, repetitions, repro_only, total_timeout_sec,
+      timeout_sec, extra_args, outdir)
   runner = Runner(
       api, depot, command, num_shards, repro_only, max_calibration_attempts)
 
@@ -587,7 +585,6 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, build_config,
         [{
             'bisect_builder_group': bisect_builder_group,
             'bisect_buildername': bisect_buildername,
-            'build_config': build_config,
             'isolated_name': isolated_name,
             'test_name': test_name,
             'variant': variant,
@@ -629,7 +626,6 @@ def GenTests(api):
             bisect_buildername='V8 Foobar',
             extra_args=['--foo-flag', '--bar-flag'],
             isolated_name='foo_isolated',
-            build_config='Debug',
             repetitions=64,
             swarming_dimensions=['os:Ubuntu-16.04', 'cpu:x86-64'],
             test_name='mjsunit/foobar',

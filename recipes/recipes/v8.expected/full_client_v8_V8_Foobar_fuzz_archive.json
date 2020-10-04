@@ -142,7 +142,7 @@
       "--raw-cmd",
       "--",
       "tools/jsfunfuzz/fuzz-harness.sh",
-      "out/Release/d8",
+      "out/build/d8",
       "${ISOLATED_OUTDIR}/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
     "name": "trigger tests.[trigger] Fuzz"

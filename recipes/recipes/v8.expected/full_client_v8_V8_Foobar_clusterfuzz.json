@@ -14,7 +14,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "v8_foobar"
@@ -50,7 +50,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "--platform",
       "linux",
       "--output",
@@ -77,9 +77,9 @@
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
-      "d8_bar-linux64-release-v8-component-50110",
+      "d8_bar-linux64-build-v8-component-50110",
       "[\"file1\", \"file2\"]",
-      "[CACHE]/builder/v8/out/Release"
+      "[CACHE]/builder/v8/out/build"
     ],
     "infra_step": true,
     "name": "zipping"
@@ -99,13 +99,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]/chrome_staging/d8_bar-linux64-release-v8-component-50110.zip",
-      "gs://v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip"
+      "[CLEANUP]/chrome_staging/d8_bar-linux64-build-v8-component-50110.zip",
+      "gs://v8_clusterfoo/linux64-build/d8_bar-linux64-build-v8-component-50110.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8_clusterfoo/linux64-build/d8_bar-linux64-build-v8-component-50110.zip@@@"
     ]
   }
 ]

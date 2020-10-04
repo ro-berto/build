@@ -69,7 +69,7 @@
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "mjsunit\n",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -96,7 +96,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/mjsunit.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [

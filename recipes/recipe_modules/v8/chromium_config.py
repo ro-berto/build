@@ -12,11 +12,7 @@ def v8(c):
       c.CHECKOUT_PATH.join('infra', 'mb', 'gn_isolate_map.pyl'),
   ]
   c.build_dir = c.CHECKOUT_PATH.join('out')
-
-  if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
-    # TODO(machenbach): This resets Chromium's defauls, which add a _x64 suffix.
-    # We sould remove it when crbug.com/470681 is resolved.
-    c.build_config_fs = c.BUILD_CONFIG
+  c.build_config_fs = 'build'
 
   if c.HOST_PLATFORM == 'mac' and c.TARGET_PLATFORM != 'ios':
     # Update via recipe logic in api.chromium.runhooks and mac_toolchains DEPS

@@ -213,7 +213,7 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -244,7 +244,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -264,7 +264,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -287,10 +287,8 @@
       "-u",
       "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "--random-seed=-358114921",
       "bot_default",
       "--variants=more,dev",
@@ -371,10 +369,8 @@
       "-u",
       "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "--random-seed=-358114921",
       "test262",
       "--variants=more,dev",
@@ -596,7 +592,7 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -627,7 +623,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -647,7 +643,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -670,10 +666,8 @@
       "-u",
       "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",
@@ -863,7 +857,7 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -894,7 +888,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -914,7 +908,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -937,10 +931,8 @@
       "-u",
       "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",
@@ -1162,7 +1154,7 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -1193,7 +1185,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -1213,7 +1205,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -1236,10 +1228,8 @@
       "-u",
       "[CACHE]/builder/v8/tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",

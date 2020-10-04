@@ -561,19 +561,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.m.platform('linux', 64),
     )
     if parent_buildername:
-      # The parent build config (Release or Debug) is either statically defined
-      # or simulated dynamically defined.
-      parent_build_config = (
-          parent_bot_config.get('v8_config_kwargs', {}).get('BUILD_CONFIG') or
-          parent_bot_config.get('testing', {}).get('properties', {}).get(
-              'build_config')
-      )
       test += self.m.properties(
           parent_got_revision='deafbeef'*5,
           parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
-          parent_build_config=parent_build_config,
       )
       test += self.m.scheduler(triggers=[
         self.example_scheduler_buildbucket_trigger('a'),

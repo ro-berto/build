@@ -6,7 +6,7 @@
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/v8",
       "gen",
-      "//out/Debug",
+      "//out/build",
       "--args=v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -34,7 +34,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Debug",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "v8_archive"
@@ -62,7 +62,7 @@
       "-u",
       "[CACHE]/builder/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[CACHE]/builder/v8/out/Debug",
+      "[CACHE]/builder/v8/out/build",
       "--platform",
       "linux",
       "--type",
@@ -75,8 +75,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/Debug/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/Debug/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/build/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/build/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -88,7 +88,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/Debug/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/Debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/Debug\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/build\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

@@ -6,7 +6,7 @@
       "RECIPE_REPO[depot_tools]\\gn.py",
       "--root=[CACHE]\\builder\\v8",
       "gen",
-      "//out/Release",
+      "//out/build",
       "--args=symbol_level=2 is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[CACHE]\\builder\\v8",

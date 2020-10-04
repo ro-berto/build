@@ -132,7 +132,7 @@ class V8Api(recipe_api.RecipeApi):
         ]
     return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
-  def update_bot_config(self, bot_config, binary_size_tracking, build_config,
+  def update_bot_config(self, bot_config, binary_size_tracking,
                         clusterfuzz_archive, coverage, enable_swarming,
                         target_arch, target_platform, track_build_dependencies,
                         triggers, triggers_proxy):
@@ -142,7 +142,6 @@ class V8Api(recipe_api.RecipeApi):
       bot_config: The bot_config dict to update.
       binary_size_tracking: Additional configurations to enable binary size
           tracking.
-      build_config: Config value for BUILD_CONFIG in chromium recipe module.
       clusterfuzz_archive: Additional configurations set for archiving builds to
           GS buckets for clusterfuzz.
       coverage: Optional coverage setting.
@@ -164,7 +163,6 @@ class V8Api(recipe_api.RecipeApi):
         bot_config.get('v8_config_kwargs', {}))
     # Update only specified properties.
     for k, v in (
-        ('BUILD_CONFIG', build_config),
         ('TARGET_ARCH', target_arch),
         ('TARGET_PLATFORM', target_platform)):
       if v is not None:
@@ -274,8 +272,6 @@ class V8Api(recipe_api.RecipeApi):
     self.bot_config = bot_config
 
     kwargs = {}
-    if self.m.properties.get('parent_build_config'):
-      kwargs['BUILD_CONFIG'] = self.m.properties['parent_build_config']
     kwargs.update(self.bot_config.get('v8_config_kwargs', {}))
 
     self.set_config('v8', optional=True, **kwargs)
@@ -1302,8 +1298,7 @@ class V8Api(recipe_api.RecipeApi):
     env = {}
     full_args = [
       '--progress=verbose',
-      '--mode', self.m.chromium.c.build_config_fs,
-      '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
+      '--outdir', self.m.path.join('out', self.m.chromium.c.build_config_fs),
     ]
 
     # TODO(machenbach): Remove exception for branches once tested on main
@@ -1377,7 +1372,6 @@ class V8Api(recipe_api.RecipeApi):
     properties = {
       'parent_got_revision': self.revision,
       'parent_buildername': self.m.buildbucket.builder_name,
-      'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
     }
     if self.m.scheduler.triggers:
       sched_trs = self.m.scheduler.triggers

@@ -229,7 +229,7 @@
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -263,7 +263,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -283,7 +283,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -309,8 +309,8 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
-      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [
@@ -420,10 +420,8 @@
       "--",
       "tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "--random-seed=831298184",
       "bot_default",
       "--variants=more,dev",
@@ -510,10 +508,8 @@
       "--",
       "tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "--random-seed=831298184",
       "test262",
       "--variants=more,dev",
@@ -718,7 +714,7 @@
       "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@fast@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'build_config=\"Release\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/fast\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
+      "@@@STEP_LOG_LINE@fast@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/fast\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
       "@@@STEP_LOG_LINE@fast@Exit code: 1 [0x01]@@@",
@@ -742,7 +738,7 @@
       "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@slow@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'build_config=\"Release\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/slow\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
+      "@@@STEP_LOG_LINE@slow@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/slow\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
       "@@@STEP_LOG_LINE@slow@Exit code: 1 [0x01]@@@",
@@ -1031,7 +1027,7 @@
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -1065,7 +1061,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -1085,7 +1081,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -1111,8 +1107,8 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
-      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
     "name": "Bisect a0.isolate tests",
     "~followup_annotations": [
@@ -1218,10 +1214,8 @@
       "--",
       "tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",
@@ -1493,7 +1487,7 @@
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -1527,7 +1521,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -1547,7 +1541,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -1573,8 +1567,8 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
-      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
     "name": "Bisect a2.isolate tests",
     "~followup_annotations": [
@@ -1680,10 +1674,8 @@
       "--",
       "tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",
@@ -1792,7 +1784,7 @@
       "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@fast@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'build_config=\"Release\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/fast\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
+      "@@@STEP_LOG_LINE@fast@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/fast\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
       "@@@STEP_LOG_LINE@fast@@@@",
       "@@@STEP_LOG_LINE@fast@Run #1@@@",
       "@@@STEP_LOG_LINE@fast@Exit code: 1 [0x01]@@@",
@@ -1816,7 +1808,7 @@
       "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@slow@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'build_config=\"Release\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/slow\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
+      "@@@STEP_LOG_LINE@slow@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar\"' -p 'extra_args=[]' -p 'isolated_name=\"bot_default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/slow\"' -p 'timeout_sec=60' -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'total_timeout_sec=120' -p 'variant=\"default\"'@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_LINE@slow@Run #1@@@",
       "@@@STEP_LOG_LINE@slow@Exit code: 1 [0x01]@@@",
@@ -1993,7 +1985,7 @@
       "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\ntest262\n",
-      "//out/Release"
+      "//out/build"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -2027,7 +2019,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80"
     ],
@@ -2047,7 +2039,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "-d",
@@ -2073,8 +2065,8 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/bot_default.isolated.gen.json",
-      "[CACHE]/builder/v8/out/Release/test262.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
+      "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
     "name": "Bisect a1.isolate tests",
     "~followup_annotations": [
@@ -2180,10 +2172,8 @@
       "--",
       "tools/run-tests.py",
       "--progress=verbose",
-      "--mode",
-      "Release",
       "--outdir",
-      "out",
+      "out/build",
       "suite-name/dir/fast",
       "--random-seed",
       "123",

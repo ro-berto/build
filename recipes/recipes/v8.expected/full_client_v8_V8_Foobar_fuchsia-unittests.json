@@ -69,7 +69,7 @@
       "[dummy hash for fuchsia-unittests]",
       "--raw-cmd",
       "--",
-      "out/Release/bin/run_v8_unittests"
+      "out/build/bin/run_v8_unittests"
     ],
     "name": "trigger tests.[trigger] Unittests"
   },

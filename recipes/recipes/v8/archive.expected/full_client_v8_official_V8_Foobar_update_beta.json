@@ -186,7 +186,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/v8/out/Release"
+      "[CACHE]/builder/v8/out/build"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -229,7 +229,7 @@
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/v8",
       "gen",
-      "//out/Release",
+      "//out/build",
       "--args=is_official_build=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -348,7 +348,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "v8_archive"
@@ -369,7 +369,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "v8_archive",
@@ -493,9 +493,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/v8/out/Release\", \"-j\", 80, \"v8_archive\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/v8/out/build\", \"-j\", 80, \"v8_archive\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -571,7 +571,7 @@
       "-u",
       "[CACHE]/builder/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "--platform",
       "linux",
       "--type",
@@ -584,8 +584,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/build/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[CACHE]/builder/v8/out/build/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -597,7 +597,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive (ref).zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/build\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

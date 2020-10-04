@@ -36,7 +36,7 @@ PROPERTIES = {
   # Additional configurations to enable binary size tracking. The mapping
   # consists of "binary" and "category".
   'binary_size_tracking': Property(default=None, kind=dict),
-  # One of Release|Debug.
+  # Deprecated.
   'build_config': Property(default=None, kind=str),
   # Switch to clobber build dir before runhooks.
   'clobber': Property(default=False, kind=bool),
@@ -88,7 +88,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
-      binary_size_tracking, build_config, clusterfuzz_archive, coverage,
+      binary_size_tracking, clusterfuzz_archive, coverage,
       enable_swarming, target_arch, target_platform, track_build_dependencies,
       triggers, triggers_proxy,
   )
@@ -206,13 +206,10 @@ def GenTests(api):
     api.step_data('initialization.bot_update', retcode=1)
   )
 
-  # Minimal bot config for a release builder. Used to simulate test data for
+  # Minimal bot config for a builder. Used to simulate test data for
   # triggered testers.
-  release_bot_config = {
+  linux_bot_config = {
     'testing': {
-      'properties': {
-        'build_config': 'Release',
-      },
       'platform': 'linux',
     },
   }
@@ -234,7 +231,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'triggered_by_cq',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
         blamelist=['dude@chromium.org'],
     )
@@ -249,7 +246,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'test_filter',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
         testfilter=['mjsunit/regression/*', 'intl/foo', 'intl/bar'],
         extra_flags='--trace_gc --turbo_stats',
@@ -280,7 +277,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'positional_extra_flags',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
         extra_flags=['--trace_gc', '--turbo_stats'],
     )
@@ -292,7 +289,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'failures',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.override_step_data(
@@ -305,7 +302,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'flakes',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.override_step_data(
@@ -368,7 +365,7 @@ def GenTests(api):
         'V8 Foobar',
         'swarming_collect_failure',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.step_data('Check', api.legacy_annotation.infra_failure_step)
@@ -402,7 +399,7 @@ def GenTests(api):
         'V8 Foobar',
         'one_failure_build_env_not_supported',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.override_step_data('Check', api.v8.one_failure()) +
@@ -423,11 +420,8 @@ def GenTests(api):
   )
 
   # Test flako command line with interesting data.
-  debug_bot_config = {
+  win_bot_config = {
     'testing': {
-      'properties': {
-        'build_config': 'Debug',
-      },
       'platform': 'win',
     },
   }
@@ -448,7 +442,7 @@ def GenTests(api):
           'V8 Foobar',
           'flako',
           parent_buildername='V8 Foobar - builder',
-          parent_bot_config=debug_bot_config,
+          parent_bot_config=win_bot_config,
           parent_test_spec=flake_test_spec,
       ) +
       api.override_step_data('Test262', api.v8.one_flake()) +
@@ -462,7 +456,7 @@ def GenTests(api):
           'V8 Foobar',
           'flako_numfuzz',
           parent_buildername='V8 Foobar - builder',
-          parent_bot_config=debug_bot_config,
+          parent_bot_config=win_bot_config,
           parent_test_spec=flake_test_spec,
       ) +
       api.override_step_data('Test262', api.v8.one_flake(num_fuzz=True)) +
@@ -475,7 +469,7 @@ def GenTests(api):
         'V8 Foobar',
         'generic_swarming_task',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
     )
   )
@@ -488,7 +482,7 @@ def GenTests(api):
         'V8 Foobar',
         'fuzz_archive',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
     ) +
     api.override_step_data('Fuzz', step_test_data)
@@ -500,7 +494,7 @@ def GenTests(api):
         'V8 Foobar',
         'gcmole',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "gcmole"}]}',
     )
   )
@@ -511,7 +505,7 @@ def GenTests(api):
         'V8 Foobar',
         'initializers',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "v8initializers"}]}',
     )
   )
@@ -522,7 +516,7 @@ def GenTests(api):
         'V8 Foobar',
         'bytecode_baseline',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "check-bytecode-baseline"}]}',
     ) +
     api.post_process(MustRun, 'Bytecode-Baseline') +
@@ -535,7 +529,7 @@ def GenTests(api):
         'V8 Foobar',
         'fuchsia-unittests',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "fuchsia-unittests"}]}',
     ) +
     api.post_process(MustRun, 'Unittests') +
@@ -551,7 +545,7 @@ def GenTests(api):
         'V8 Foobar',
         'perf',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec='{"tests": [{"name": "perf_integration"}]}',
     )
   )
@@ -629,7 +623,7 @@ def GenTests(api):
         'V8 Foobar',
         'bisect_tester_swarming',
         parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.v8.fail('Check') +
@@ -700,7 +694,7 @@ def GenTests(api):
         'v8_foobar_rel_ng_triggered',
         'slow_tests',
         parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
         blamelist=['dude@chromium.org'],
@@ -716,7 +710,6 @@ def GenTests(api):
         'v8_foobar_rel_ng',
         'with_cache',
         blamelist=['dude@chromium.org'],
-        build_config='Release',
         requester='commit-bot@chromium.org',
         triggers=['v8_foobar_rel_ng_triggered'],
     )
@@ -728,7 +721,6 @@ def GenTests(api):
         'tryserver.v8',
         'v8_foobar_rel_ng',
         'with_build_id',
-        build_config='Release',
         build_id='buildbucket/cr-buildbucket.appspot.com/1234567890',
         triggers=['v8_foobar_rel_ng_triggered'],
     )
@@ -808,7 +800,7 @@ def GenTests(api):
         'client.v8',
         'V8 Foobar',
         'tester_with_test_spec',
-        parent_bot_config=release_bot_config,
+        parent_bot_config=linux_bot_config,
         parent_buildername='V8 Foobar builder',
         parent_test_spec=test_spec,
     ) +
@@ -832,7 +824,6 @@ def GenTests(api):
     api.v8.test(
         'client.v8',
         'Android bot',
-        parent_build_config='Release',
         parent_test_spec=android_test_spec,
         swarm_hashes={'mjsunit': 'hash'},
     ) +
@@ -920,7 +911,6 @@ def GenTests(api):
   # Test using source side properties.
   yield (
       api.v8.test('client.v8', 'V8 Foobar - builder', 'src_side_properties',
-                  build_config='Debug',
                   target_arch='arm',
                   target_platform='fuchsia',
                   triggers=['V8 Foobar'],
@@ -932,16 +922,14 @@ def GenTests(api):
       api.v8.check_in_param(
           'initialization.bot_update',
           '--spec-path', 'target_os = [\'fuchsia\']') +
-      api.v8.check_in_any_arg('build.generate_build_files', 'Debug') +
-      api.v8.check_in_any_arg('build.compile', 'Debug') +
+      api.v8.check_in_any_arg('build.generate_build_files', 'build') +
+      api.v8.check_in_any_arg('build.compile', 'build') +
       api.post_process(Filter('trigger'))
   )
 
   # Test mac builder.
   yield (
-      api.v8.test('client.v8', 'V8 Foobar - builder', 'mac',
-                  build_config='Release',
-      ) +
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'mac') +
       api.platform('mac', 64) +
       api.post_process(MustRun, 'initialization.ensure_installed') +
       api.post_process(DropExpectation)
@@ -950,7 +938,6 @@ def GenTests(api):
   # Test ios configs.
   yield (
       api.v8.test('client.v8', 'V8 Foobar - builder', 'ios',
-                  build_config='Release',
                   target_platform='ios',
       ) +
       api.platform('mac', 64) +
@@ -990,7 +977,6 @@ def GenTests(api):
         'tryserver.v8',
         'v8_foobar',
         'sanitizer_coverage',
-        build_config='Release',
         coverage='sanitizer',
     ) +
     api.step_data(
@@ -1013,7 +999,6 @@ def GenTests(api):
         'client.v8',
         'V8 Foobar',
         'gcov_coverage',
-        build_config='Release',
         clobber=True,
         coverage='gcov',
         enable_swarming=False,

@@ -912,9 +912,6 @@ class Failure(object):
         # Full qualified test name that failed (e.g. mjsunit/foo/bar).
         'test_name':
             self.results[0]['name'],
-        # Release or Debug.
-        'build_config':
-            self.api.chromium.c.build_config_fs,
         # Add timeout default for convenience.
         'timeout_sec':
             60,

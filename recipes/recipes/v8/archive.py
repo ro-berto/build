@@ -58,7 +58,7 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
       api.chromium.c.gn_args.append('is_official_build=true')
     api.chromium.apply_config('clobber')
     api.chromium.apply_config('default_target_v8_archive')
-    if api.chromium.c.build_config_fs == 'Debug':
+    if api.chromium.c.BUILD_CONFIG == 'Debug':
       api.chromium.apply_config('slow_dchecks')
     elif archive_type in ['all', 'lib']:
       api.chromium.apply_config('v8_static_library')
@@ -199,7 +199,8 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
         bot_config['v8_config_kwargs'][key] = value
 
   if build_config == 'Debug':
-    # Debug binaries require libraries to be present in the same archive to run.
+    # Debug binaries require libraries to be present in the same archive to
+    # run.
     version, compile_failure = make_archive(api, bot_config, ref, None, 'all')
     if compile_failure:
       return compile_failure
@@ -301,7 +302,7 @@ def GenTests(api):
       api.v8.check_param_equals(
           'make archive.filter build files',
           '--dir',
-          '[CACHE]\\builder\\v8\\out\\Release') +
+          '[CACHE]\\builder\\v8\\out\\build') +
       # Show GN configs to be resiliant to changes of chromium configs.
       api.post_process(Filter('build.gn'))
   )

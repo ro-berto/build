@@ -8,7 +8,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--verbose",
-      "[CACHE]/builder/v8/out/Release/run-num-fuzzer.isolated.gen.json"
+      "[CACHE]/builder/v8/out/build/run-num-fuzzer.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [

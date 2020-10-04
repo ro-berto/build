@@ -142,7 +142,7 @@
       "--raw-cmd",
       "--",
       "tools/check-static-initializers.sh",
-      "out/Release/d8"
+      "out/build/d8"
     ],
     "name": "trigger tests.[trigger] Static-Initializers"
   },

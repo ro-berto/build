@@ -14,7 +14,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/v8/out/Release",
+      "[CACHE]/builder/v8/out/build",
       "-j",
       "80",
       "d8"
