@@ -45,6 +45,7 @@ def GenTests(api):
   fake_tester = 'fake-tester'
   fake_try_builder = 'fake-try-builder'
   fake_test = 'fake_test'
+  webgl_fake_test = 'webgl_fake_test'
   fake_source_side_spec = (fake_group, {
       fake_tester: {
           'isolated_scripts': [{
@@ -55,11 +56,18 @@ def GenTests(api):
           }],
       }
   })
-  fake_swarm_hashes = {fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}
+  fake_swarm_hashes = {
+      fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      webgl_fake_test: 'gggggggggggggggggggggggggg'
+  }
   fake_command_lines_hash = 'ffffffffffffffffffffffffffffffff'
   fake_command_lines = {
       fake_test: [
           './%s' % fake_test, '--fake-flag', '--fake-log-file',
+          '$ISOLATED_OUTDIR/fake.log'
+      ],
+      webgl_fake_test: [
+          './%s' % webgl_fake_test, '--fake-flag', '--fake-log-file',
           '$ISOLATED_OUTDIR/fake.log'
       ],
   }
@@ -404,5 +412,107 @@ def GenTests(api):
               '-tag',
               'step_name:%s on (nv) GPU on Linux' % fake_test, '--'
           ] + fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      "ci_bot_with_default_resultdb_swarming_gtest",
+      api.chromium.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          experiments=['chromium.resultdb.result_sink']),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'gtest_tests': [{
+                      'name': fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                      'test_id_prefix': 'ninja://:fake_test/',
+                  }],
+              }
+          }),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.[trigger] %s' % fake_test, [
+              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
+              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
+              'builder:fake-tester', '-var', 'os:Ubuntu-16.04', '-var',
+              'test_suite:fake_test', '-tag',
+              'step_name:%s' % fake_test, '--', 'result_adapter', 'gtest',
+              '-artifact-directory', '${ISOLATED_OUTDIR}', '-result-file',
+              '${ISOLATED_OUTDIR}/output.json', '--'
+          ] + fake_command_lines[fake_test]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      "ci_bot_with_rdb_enabled_swarming_webgl_test",
+      api.chromium.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          experiments=['chromium.resultdb.result_sink']),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          fake_group, {
+              fake_tester: {
+                  'isolated_scripts': [{
+                      'name': webgl_fake_test,
+                      'swarming': {
+                          'can_use_on_swarming_builders':
+                              True,
+                          'dimension_sets': [{
+                              'device_type': 'phone',
+                              'device_os': 'android',
+                              'gpu': 'nv',
+                              'os': 'Linux',
+                          }],
+                      },
+                      'test_id_prefix': 'ninja://:fake_test/',
+                  }],
+              }
+          }),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.[trigger] %s on (nv) GPU on Linux' % webgl_fake_test, [
+              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
+              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
+              'builder:fake-tester', '-var', 'device_os:android', '-var',
+              'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
+              'test_suite:webgl_fake_test', '-test-location-base',
+              '//third_party/webgl/src/sdk/tests/', '-tag',
+              'step_name:webgl_fake_test on (nv) GPU on Linux', '--',
+              'result_adapter', 'json', '-artifact-directory',
+              '${ISOLATED_OUTDIR}', '-result-file',
+              '${ISOLATED_OUTDIR}/output.json', '-test-location', '--'
+          ] + fake_command_lines[webgl_fake_test]),
       api.post_process(post_process.DropExpectation),
   )

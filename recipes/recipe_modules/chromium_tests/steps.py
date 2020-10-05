@@ -2015,9 +2015,19 @@ class SwarmingTest(Test):
         'test_id_prefix': [self.test_id_prefix or ''],
         'test_suite': [self.canonical_name],
     }
-    test_location_base = (self.resultdb or {}).get('test_location_base')
+
+    resultdb = (self.resultdb or {})
+    test_location_base = resultdb.get('test_location_base')
     if test_location_base:
       tags['test_location_base'] = [test_location_base]
+
+    result_format = resultdb.get('result_format')
+    if result_format:
+      tags['result_format'] = [result_format]
+
+    test_id_as_test_location = resultdb.get('test_id_as_test_location')
+    if test_id_as_test_location:
+      tags['test_id_as_test_location'] = [test_id_as_test_location]
 
     task.request = (
         task_request.with_slice(0, task_slice).with_name(

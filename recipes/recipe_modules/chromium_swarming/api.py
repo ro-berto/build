@@ -809,6 +809,25 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
     return tags
 
+  def _wrap_cmd_with_result_adapter(self, cmd, result_format,
+                                    test_id_as_test_location):
+    """Wraps the cmd with result_adapter."""
+
+    if not result_format:
+      return cmd
+
+    ret = [
+        'result_adapter', result_format,
+        '-artifact-directory', '${ISOLATED_OUTDIR}',
+        '-result-file', '${ISOLATED_OUTDIR}/output.json'
+    ]
+
+    if test_id_as_test_location:
+      ret += ['-test-location']
+
+    ret += ['--'] + list(cmd)
+    return ret
+
   def _maybe_enable_resultdb_for_task(self, req):
     """Enables resultdb for a given task.
 
@@ -861,7 +880,9 @@ class SwarmingApi(recipe_api.RecipeApi):
           i,
           task_slice.with_command(
               self.m.resultdb.wrap(
-                  task_slice.command,
+                  self._wrap_cmd_with_result_adapter(
+                      task_slice.command, tags_by_key.get('result_format'),
+                      tags_by_key.get('test_id_as_test_location')),
                   test_id_prefix=tags_by_key.get('test_id_prefix', ''),
                   test_location_base=tags_by_key.get('test_location_base', ''),
                   base_variant=variants,

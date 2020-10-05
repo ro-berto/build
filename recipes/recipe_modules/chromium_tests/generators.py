@@ -326,6 +326,12 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     kwargs['isolate_profile_data'] = (
         spec.get('isolate_coverage_data') or spec.get('isolate_profile_data'))
     kwargs['ignore_task_failure'] = spec.get('ignore_task_failure', False)
+
+    # Enables resultdb if the build is picked for the experiment.
+    # TODO(crbug.com/1108016): Enable resultdb globally.
+    if not kwargs.get('resultdb') and ('chromium.resultdb.result_sink' in
+                                   api.buildbucket.build.input.experiments):
+      kwargs['resultdb'] = {'enable': True, 'result_format': 'gtest'}
     return steps.SwarmingGTestTest(**kwargs)
 
   def gtest_local_delegate(spec, **kwargs):
@@ -450,6 +456,21 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
                                                       False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_builder_group'] = builder_group
+
+    # Enables resultdb if the build is picked for the experiment.
+    # TODO(crbug.com/1108016): Enable resultdb globally.
+    if not kwargs.get('resultdb') and ('chromium.resultdb.result_sink' in
+                                   api.buildbucket.build.input.experiments):
+      kwargs['resultdb'] = {'enable': True, 'result_format': 'json'}
+
+      # For webgl tests, we can construct test locations as
+      # <test_location_base>/<test names>.
+      if kwargs['name'].startswith('webgl'):
+        # Arg for result_adapter to pass test names as test locations.
+        kwargs['resultdb']['test_id_as_test_location'] = "true"
+        # Arg for ResultSink to prepend to test locations.
+        kwargs['resultdb'][
+            'test_location_base'] = '//third_party/webgl/src/sdk/tests/'
 
     return steps.SwarmingIsolatedScriptTest(**kwargs)
 
