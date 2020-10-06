@@ -174,6 +174,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   swarming_spec = spec.get('swarming', {})
   if swarming_spec.get('can_use_on_swarming_builders'):
     swarming_dimension_sets = swarming_spec.get('dimension_sets')
+    swarming_optional_dimensions = swarming_spec.get('optional_dimensions')
     kwargs['expiration'] = swarming_spec.get('expiration')
     kwargs['containment_type'] = swarming_spec.get('containment_type')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
@@ -246,6 +247,9 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
       new_dimensions = dict(swarming_dimensions)
       new_dimensions.update(dimensions)
       kwargs['dimensions'] = new_dimensions
+
+      # Also, add in optional dimensions.
+      kwargs['optional_dimensions'] = swarming_optional_dimensions
 
       tests.append(swarming_delegate(spec, **kwargs))
 

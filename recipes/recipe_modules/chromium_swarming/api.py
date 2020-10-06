@@ -436,6 +436,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            isolated='',
            merge=None,
            named_caches=None,
+           optional_dimensions=None,
            raw_cmd=None,
            service_account=None,
            shards=1,
@@ -517,6 +518,13 @@ class SwarmingApi(recipe_api.RecipeApi):
       * env: a dict {ENVVAR: ENVVALUE} which instructs swarming to set the
           environment variables before invoking the command. These are applied
           on top of the default environment variables.
+      * optional_dimensions: {expiration: [{key: value}]} mapping with swarming
+          dimensions that specify on what Swarming bots tasks can run.  These
+          are similar to what is specified in dimensions but will create
+          additional 'fallback' task slice(s) with the optional dimensions. Note
+          that the slice expirations are cumulative. e.g. if the first slice
+          has an expiration of 60s and the second has 120s, the second slice
+          will only wait an additional 60s after the first slice expires.
       * task_to_retry: Task object. If set, indicates that this task is a
           (potentially partial) retry of another task. When collecting, the
           successful shards from 'task_to_retry' will be merged with the new
@@ -589,21 +597,21 @@ class SwarmingApi(recipe_api.RecipeApi):
                                    request[0].with_relative_cwd(relative_cwd))
 
     return SwarmingTask(
-      request=request,
-      builder_info=builder_info,
-      collect_step=collect_step,
-      extra_args=extra_args,
-      ignore_task_failure=ignore_task_failure,
-      named_caches=named_caches,
-      shard_indices=shard_indices,
-      shards=shards,
-      spec_name=spec_name,
-      task_output_dir=task_output_dir,
-      task_to_retry=task_to_retry,
-      build_properties=build_properties,
-      merge=merge,
-      trigger_script=trigger_script
-    )
+        request=request,
+        builder_info=builder_info,
+        collect_step=collect_step,
+        extra_args=extra_args,
+        ignore_task_failure=ignore_task_failure,
+        named_caches=named_caches,
+        optional_dimensions=optional_dimensions,
+        shard_indices=shard_indices,
+        shards=shards,
+        spec_name=spec_name,
+        task_output_dir=task_output_dir,
+        task_to_retry=task_to_retry,
+        build_properties=build_properties,
+        merge=merge,
+        trigger_script=trigger_script)
 
   def gtest_task(self,
                  name=None,
@@ -1065,6 +1073,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     Raises:
       InfraFailure if shard cannot be triggered.
     """
+    assert not task.optional_dimensions, \
+        'Use _trigger_task_shard_default() for tasks with optional dimensions.'
+
     # TODO(crbug.com/894045): Remove this method once we have fully migrated
     # to use swarming recipe module to trigger tasks.
     script, pre_trigger_args, post_trigger_args = (
@@ -1142,7 +1153,21 @@ class SwarmingApi(recipe_api.RecipeApi):
     # to use swarming recipe module to trigger tasks.
     tags_dict['triggered_by'].append('recipe_modules/swarming')
 
-    req = req.with_slice(0, req_slice).with_tags(tags_dict)
+    slices = [req_slice]
+    if task.optional_dimensions:
+      for exp, dimensions in sorted(
+          task.optional_dimensions.iteritems(), key=lambda x: int(x[0])):
+        current_slice = slices[0]
+        for d in dimensions:
+          for name, value in d.iteritems():
+            current_slice = current_slice.with_dimensions(**{name: value})
+        current_slice = current_slice.with_expiration_secs(int(exp))
+        slices = [current_slice] + slices
+    req = req.with_slice(0, slices[0])
+    for s in slices[1:]:
+      req = req.add_slice(s)
+
+    req = req.with_tags(tags_dict)
     req = self._maybe_enable_resultdb_for_task(req)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
@@ -1923,6 +1948,7 @@ class SwarmingTask(object):
                containment_type=None,
                merge=None,
                named_caches=None,
+               optional_dimensions=None,
                task_to_retry=None,
                trigger_script=None):
 
@@ -1991,6 +2017,7 @@ class SwarmingTask(object):
     self.ignore_task_failure = ignore_task_failure
     self.merge = merge or {}
     self.named_caches = named_caches or {}
+    self.optional_dimensions = optional_dimensions
     self.request = request
     self.shards = shards
     self.shard_indices = shard_indices

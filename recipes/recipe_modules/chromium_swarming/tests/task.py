@@ -13,9 +13,11 @@ from recipe_engine import recipe_test_api, post_process
 
 
 def RunSteps(api):
+  opt_dims = api.properties.get('optional_dimensions')
   task = api.chromium_swarming.task(
       name=api.properties.get('task_name', 'sample_task'),
       isolated='0123456789012345678901234567890123456789',
+      optional_dimensions=opt_dims,
       env_prefixes={'FOO': ['some/path']})
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
@@ -97,6 +99,29 @@ def GenTests(api):
       api.post_check(
           api.swarming.check_triggered_request, '[trigger] windows gpu task',
           lambda check, req: check(req[0].named_caches['foo'] == 'cache/foo')),
+  )
+
+  yield api.test(
+      'optional_dimensions',
+      api.properties(
+          task_name='optional-dimension task',
+          wait_for_capacity=True,
+          use_swarming_recipe_to_trigger=True,
+          optional_dimensions={
+              60: [{
+                  'os': 'most-preferred-os'
+              }],
+              120: [{
+                  'os': 'less-preferred-os'
+              }],
+              180: [{
+                  'os': 'least-preferred-os'
+              }],
+          }),
+      api.post_check(api.swarming.check_triggered_request,
+                     '[trigger] optional-dimension task', lambda check, req:
+                     check(len(req) == 4)),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
