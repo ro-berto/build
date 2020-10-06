@@ -227,6 +227,26 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ])
     return r
 
+  def _retrieve_bad_results(self, suites, suffix):
+    """Extract invalid and failed suites from a list of suites.
+
+    Args:
+        suites: List of TestSuite objects to inspect
+        suffix: string suffix designating test variant to pay attention to
+    Returns:
+      Tuple; (list of suites which were invalid; list of suites which failed)
+    """
+    # TODO: Refactor this/its subroutines to use resultsdb, not a O(n^2) lookup
+    failed_test_suites = []
+    invalid_results = []
+    for t in suites:
+      # Note that this is technically O(n^2). We expect n to be small.
+      if not t.has_valid_results(suffix):
+        invalid_results.append(t)
+      elif t.deterministic_failures(suffix) and t not in failed_test_suites:
+        failed_test_suites.append(t)
+    return invalid_results, failed_test_suites
+
   # Runs a set of tests once.
   #
   # Used as a helper function by run_tests. See full documentation there.
@@ -263,21 +283,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
     for group in groups:
       group.run(caller_api, suffix)
 
-    failed_test_suites = []
-    invalid_results = []
-    for t in test_suites:
-      # Note that this is technically O(n^2). We expect n to be small.
-      if not t.has_valid_results(suffix):
-        invalid_results.append(t)
-      elif t.deterministic_failures(suffix) and t not in failed_test_suites:
-        failed_test_suites.append(t)
+    bad_results_tuple = self._retrieve_bad_results(test_suites, suffix)
 
     if (self.m.buildbucket.build.builder.project != 'chromium' or
         self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
       # Only derives results on chromium ci/try builders.
       # Note: this is a temporary change for ResultDB to control the builders it
       # gets test results from.
-      return invalid_results, failed_test_suites
+      return bad_results_tuple
 
     # Derives swarming test results to ResultDB.
     # The returned results are not being used yet.
@@ -293,7 +306,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step_result.presentation.logs["stdout"] = [
           'No swarming test results to derive.'
       ]
-      return invalid_results, failed_test_suites
+      return bad_results_tuple
 
     swarming_host = caller_api.chromium_swarming.swarming_server
     parsed = urlparse.urlparse(swarming_host)
@@ -312,7 +325,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Temporary workaround to make sure led builds don't fail because of
       # this.
       # Should be removed when led v2 starts to create invocations.
-      return invalid_results, failed_test_suites
+      return bad_results_tuple
 
     if suffix != 'without patch':
       # Include the derived invocations in the build's invocation.
@@ -340,7 +353,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         step_name=step_name,
     )
 
-    return invalid_results, failed_test_suites
+    return bad_results_tuple
 
   def _test_variants_with_unexpected_results(self, invocations, suffix):
     """Gets test variants with unexpected results.
