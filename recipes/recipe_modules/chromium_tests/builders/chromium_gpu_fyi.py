@@ -9,6 +9,8 @@ def _chromium_gpu_fyi_spec(**kwargs):
   if kwargs.get('execution_mode') != bot_spec.PROVIDE_TEST_SPEC:
     kwargs.setdefault('build_gs_bucket', 'chromium-gpu-fyi-archive')
     kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
+    kwargs.setdefault('chromium_tests_apply_config',
+                      ['use_swarming_recipe_to_trigger'])
   return bot_spec.BotSpec.create(**kwargs)
 
 

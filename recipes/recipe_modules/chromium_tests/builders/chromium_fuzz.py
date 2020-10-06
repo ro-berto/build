@@ -306,3 +306,9 @@ SPEC = {
             simulation_platform='linux',
         ),
 }
+
+for name, spec in SPEC.iteritems():
+  USE_SWARMING_CONFIG_KEY = 'use_swarming_recipe_to_trigger'
+  if USE_SWARMING_CONFIG_KEY not in spec.chromium_tests_apply_config:
+    spec = spec.extend(chromium_tests_apply_config=[USE_SWARMING_CONFIG_KEY])
+  SPEC[name] = spec
