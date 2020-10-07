@@ -13,7 +13,7 @@ Example usage:
 
 export_tarball.py /foo/bar
 
-The above will create file /foo/bar.tar.bz2.
+The above will create file /foo/bar.tar.xz.
 """
 
 import optparse
@@ -25,28 +25,14 @@ import tarfile
 
 nonessential_dirs = {
     'chrome/common/extensions/docs',
+    'third_party/blink/tools',
     'third_party/blink/web_tests',
-    'third_party/findbugs',
     'third_party/hunspell_dictionaries',
     'third_party/hunspell/tests',
     'third_party/jdk/current',
     'third_party/jdk/extras',
     'third_party/liblouis/src/tests/harness',
-    'third_party/sqlite/patched/test',
     'third_party/xdg-utils/tests',
-    'third_party/yasm/source/patched-yasm/modules/arch/x86/tests',
-    'third_party/yasm/source/patched-yasm/modules/dbgfmts/dwarf2/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/bin/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/coff/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/elf/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/macho/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/rdf/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/win32/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/win64/tests',
-    'third_party/yasm/source/patched-yasm/modules/objfmts/xdf/tests',
-    'third_party/WebKit/LayoutTests',
-    'third_party/WebKit/Tools/Scripts',
-    'tools/gyp/test',
     'v8/test',
 }
 
@@ -61,9 +47,6 @@ ESSENTIAL_FILES = (
 )
 
 TEST_DIRS = {
-    # This can be removed once we no longer need to build M62.
-    'breakpad/src/processor/testdata',
-
     'chrome/test/data',
     'content/test/data',
     'courgette/testdata',
@@ -187,10 +170,6 @@ def main(argv):
       print('Could not run build/util/lastchange.py to update '
             'gpu_lists_version.h.')
       return 1
-
-  # Some versions prior to M68 need third_party/blink/tools.
-  if version_major >= 68:
-    nonessential_dirs.add('third_party/blink/tools')
 
   output_fullname = args[0] + '.tar'
   output_basename = options.basename or os.path.basename(args[0])
