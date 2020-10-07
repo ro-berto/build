@@ -99,6 +99,14 @@ def run_script(api, step_name, script, args=None):
     api.python(step_name, sc_path, args=args)
 
 
+def run_node_script(api, step_name, script, args=None):
+  with api.context(cwd=api.path['checkout']):
+    sc_path = api.path.join('third_party', 'node', 'node.py')
+    node_args = ['--output', api.path.join('scripts', 'test', script)]
+    node_args.extend(args or [])
+    api.python(step_name, sc_path, args=node_args)
+
+
 def run_unit_tests(api):
   run_script(api, 'Unit Tests', 'run_unittests.py',
              ['--target=Release', '--coverage'])
@@ -112,7 +120,7 @@ def run_type_check(api):
 
 
 def run_lint_check(api):
-  run_script(api, 'Lint Check with ESLint', 'run_lint_check.py')
+  run_node_script(api, 'Lint Check with ESLint', 'run_lint_check_js.js')
 
 
 def run_localization_check(api):
