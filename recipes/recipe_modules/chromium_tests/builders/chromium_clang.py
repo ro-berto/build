@@ -9,7 +9,9 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 
 def _chromium_clang_spec(**kwargs):
   return bot_spec.BotSpec.create(
-      build_gs_bucket='chromium-clang-archive', **kwargs)
+      build_gs_bucket='chromium-clang-archive',
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
+      **kwargs)
 
 
 def config(name,
