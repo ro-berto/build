@@ -407,14 +407,20 @@ class V8Test(BaseTest):
     if self.applied_test_filter:
       step_result.presentation.logs['test filter'] = self.applied_test_filter
 
-    # The output is expected to be a list of architecture dicts that
-    # each contain a results list. On the bots, there is only one
-    # architecture.
-    assert len(json_output) == 1
-    self.api.v8._update_durations(json_output[0], step_result.presentation)
+    # TODO(machenbach): This is to flexibly switch to a single dict as json
+    # output instead of a list wrapping a dict. Remove after V8 has
+    # switched to flattened output on all release branches.
+    if isinstance(json_output, list):
+      # The output is expected to be a list of architecture dicts that
+      # each contain a results list. On the bots, there is only one
+      # architecture.
+      assert len(json_output) == 1
+      json_output = json_output[0]
+    assert isinstance(json_output, dict)
+    self.api.v8._update_durations(json_output, step_result.presentation)
     failure_factory = Failure.factory_func(self)
     failure_log, failures, flake_log, flakes = (
-        self.api.v8._get_failure_logs(json_output[0], failure_factory))
+        self.api.v8._get_failure_logs(json_output, failure_factory))
     self.api.v8._update_failure_presentation(
         failure_log, failures, step_result.presentation)
 
@@ -424,7 +430,7 @@ class V8Test(BaseTest):
       step_result.presentation.status = self.api.step.FAILURE
 
     infra_failures = []
-    if 'UNRELIABLE_RESULTS' in json_output[0].get('tags', []):
+    if 'UNRELIABLE_RESULTS' in json_output.get('tags', []):
       infra_failures.append('One ore more shards did not complete.')
       step_result.presentation.status = self.api.step.EXCEPTION
 
@@ -440,7 +446,7 @@ class V8Test(BaseTest):
             flake_log, flakes, step_result.presentation)
       self._add_flake_links(flakes, step_result.presentation)
 
-    if self.has_only_stress_opt_failures(json_output[0]):
+    if self.has_only_stress_opt_failures(json_output):
       self.api.step('Found isolated stress failures', cmd=None)
 
     coverage_context.post_run()

@@ -51,34 +51,31 @@ class BadShards:
 class AggregatedResults:
 
   def __init__(self, slow_tests_cutoff):
-    self.archs = []
-    self.modes = []
     self.slowest_tests = []
     self.results = []
     self.slow_tests_cutoff = slow_tests_cutoff
 
   def append(self, json_data):
-    # On continuous bots, the test driver outputs exactly one item in the
-    # test results list for one architecture.
-    assert len(json_data) == 1
-    self.archs.append(json_data[0]['arch'])
-    self.modes.append(json_data[0]['mode'])
-    self.slowest_tests.extend(json_data[0]['slowest_tests'])
-    self.results.extend(json_data[0]['results'])
+    # TODO(machenbach): This is to flexibly switch to a single dict as json
+    # output instead of a list wrapping a dict. Remove after V8 has
+    # switched to flattened output on all release branches.
+    if isinstance(json_data, list):
+      # On continuous bots, the test driver outputs exactly one item in the
+      # test results list for one architecture.
+      assert len(json_data) == 1
+      json_data = json_data[0]
+    assert isinstance(json_data, dict)
+    self.slowest_tests.extend(json_data['slowest_tests'])
+    self.results.extend(json_data['results'])
 
   def as_json(self, tags):
-    # Each shard must have used the same arch and mode configuration.
-    assert len(set(self.archs)) == 1
-    assert len(set(self.modes)) == 1
     sorted_tests = sorted(
         self.slowest_tests, key=lambda t: t['duration'], reverse=True)
-    return [{
-        'arch': self.archs[0],
-        'mode': self.modes[0],
+    return {
         'slowest_tests': sorted_tests[:self.slow_tests_cutoff],
         'results': self.results,
         'tags': sorted(tags),
-    }]
+    }
 
 
 def emit_warning(title, log=None):
@@ -143,7 +140,7 @@ def merge_shard_results(output_dir, shards, options):
   # Handle the case when all shards fail. Return minimalistic dict that has all
   # fields that a calling recipe expects to avoid recipe-level exceptions.
   if bad_shards.missing_count() == len(shards):
-    return [{'slowest_tests': [], 'results': [], 'tags': sorted(tags)}]
+    return {'slowest_tests': [], 'results': [], 'tags': sorted(tags)}
 
   return aggregated_results.as_json(tags)
 
