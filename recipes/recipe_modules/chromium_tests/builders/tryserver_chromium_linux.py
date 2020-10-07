@@ -18,6 +18,19 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'linux-blink-web-tests-force-accessibility-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
     'linux-layout-tests-edit-ng':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
