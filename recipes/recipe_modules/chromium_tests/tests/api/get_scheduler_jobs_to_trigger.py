@@ -43,25 +43,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'bucketed-triggers',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
-      ),
-      api.properties(
-          expected={
-              'chromium': ['ci-Linux Tests'],
-          },
-          **{
-              '$build/chromium_tests': {
-                  'bucketed_triggers': True,
-              },
-          }),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'luci-project-overridden-for-tester',
       api.chromium.ci_build(
           builder_group='fake-group',

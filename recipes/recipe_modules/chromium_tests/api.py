@@ -102,7 +102,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
-    self._bucketed_triggers = input_properties.bucketed_triggers
     self._project_trigger_overrides = input_properties.project_trigger_overrides
     self._builders = builders_module.BUILDERS
     self._trybots = trybots_module.TRYBOTS
@@ -615,18 +614,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     single build (e.g. a CI builder completes multiple builds during a CI tester
     run, only a single additional run of the test occurs).
     """
-    get_job_name = lambda buildername: buildername
-    if self._bucketed_triggers:
-      prefix = self.m.buildbucket.build.builder.bucket + '-'
-      get_job_name = lambda buildername: prefix + buildername
-
     scheduler_jobs = collections.defaultdict(list)
     for child_id in sorted(bot_config.bot_db.bot_graph[builder_id]):
       child_spec = bot_config.bot_db[child_id]
-      job = get_job_name(child_id.builder)
       luci_project = self._project_trigger_overrides.get(
           child_spec.luci_project, child_spec.luci_project)
-
+      job = child_id.builder
       scheduler_jobs[luci_project].append(job)
 
     return scheduler_jobs
