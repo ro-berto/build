@@ -410,7 +410,8 @@ def GenTests(api):
               'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
               'test_suite:fake_test', '-test-location-base', '//test/location',
               '-tag',
-              'step_name:%s on (nv) GPU on Linux' % fake_test, '--'
+              'step_name:%s on (nv) GPU on Linux' % fake_test,
+              '-coerce-negative-duration', '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
   )
@@ -454,8 +455,9 @@ def GenTests(api):
               'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
               'builder:fake-tester', '-var', 'os:Ubuntu-16.04', '-var',
               'test_suite:fake_test', '-tag',
-              'step_name:%s' % fake_test, '--', 'result_adapter', 'gtest',
-              '-artifact-directory', '${ISOLATED_OUTDIR}', '-result-file',
+              'step_name:%s' % fake_test, '-coerce-negative-duration', '--',
+              'result_adapter', 'gtest', '-artifact-directory',
+              '${ISOLATED_OUTDIR}', '-result-file',
               '${ISOLATED_OUTDIR}/output.json', '--'
           ] + fake_command_lines[fake_test]),
       api.post_process(post_process.DropExpectation),
@@ -509,9 +511,9 @@ def GenTests(api):
               'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
               'test_suite:webgl_fake_test', '-test-location-base',
               '//third_party/webgl/src/sdk/tests/', '-tag',
-              'step_name:webgl_fake_test on (nv) GPU on Linux', '--',
-              'result_adapter', 'json', '-artifact-directory',
-              '${ISOLATED_OUTDIR}', '-result-file',
+              'step_name:webgl_fake_test on (nv) GPU on Linux',
+              '-coerce-negative-duration', '--', 'result_adapter', 'json',
+              '-artifact-directory', '${ISOLATED_OUTDIR}', '-result-file',
               '${ISOLATED_OUTDIR}/output.json', '-test-location', '--'
           ] + fake_command_lines[webgl_fake_test]),
       api.post_process(post_process.DropExpectation),

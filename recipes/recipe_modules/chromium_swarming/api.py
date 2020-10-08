@@ -894,7 +894,8 @@ class SwarmingApi(recipe_api.RecipeApi):
                   test_id_prefix=tags_by_key.get('test_id_prefix', ''),
                   test_location_base=tags_by_key.get('test_location_base', ''),
                   base_variant=variants,
-                  base_tags=[('step_name', step_name)] if step_name else None)))
+                  base_tags=[('step_name', step_name)] if step_name else None,
+                  coerce_negative_duration=True)))
 
     return req
 
