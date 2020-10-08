@@ -87,3 +87,7 @@ SPEC = {
             simulation_platform='win',
         ),
 }
+
+for name, spec in SPEC.iteritems():
+  SPEC[name] = spec.extend(
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'])

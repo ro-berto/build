@@ -17,6 +17,7 @@ def _chromium_dawn_spec(os, bits, **kwargs):
       },
       simulation_platform=os,
       build_gs_bucket='chromium-dawn-archive',
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
       **kwargs)
 
 
