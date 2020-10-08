@@ -245,18 +245,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                            scripts_compile_targets_fn,
                                            bot_update_step):
     tests = [s.get_test() for s in bot_spec.test_specs]
-    # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
+    # TODO(https://crbug.com/1128746): Once all test specs are migrated to the
+    # source side spec files, switch the generators to return tests directly
     for generator in generators.ALL_GENERATORS:
-      tests.extend(
-          generator(
-              self.m,
-              self,
-              builder_group,
-              buildername,
-              source_side_spec,
-              bot_update_step,
-              swarming_dimensions=swarming_dimensions,
-              scripts_compile_targets_fn=scripts_compile_targets_fn))
+      test_specs = generator(
+          self.m,
+          self,
+          builder_group,
+          buildername,
+          source_side_spec,
+          bot_update_step,
+          swarming_dimensions=swarming_dimensions,
+          scripts_compile_targets_fn=scripts_compile_targets_fn)
+      tests.extend(s.get_test() for s in test_specs)
     return tuple(tests)
 
   def read_source_side_spec(self, source_side_spec_file):

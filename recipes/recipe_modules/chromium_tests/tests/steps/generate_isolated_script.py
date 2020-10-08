@@ -37,16 +37,16 @@ def RunSteps(api):
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   single_spec = api.properties.get('single_spec')
-  test_spec = {
+  source_side_spec = {
       'test_buildername': {
           'isolated_scripts': [single_spec] if single_spec else [],
       }
   }
 
-  for test in generators.generate_isolated_script_tests(api, api.chromium_tests,
-                                                        'test_group',
-                                                        'test_buildername',
-                                                        test_spec, update_step):
+  for test_spec in generators.generate_isolated_script_tests(
+      api, api.chromium_tests, 'test_group', 'test_buildername',
+      source_side_spec, update_step):
+    test = test_spec.get_test()
     try:
       test.pre_run(api, '')
       test.run(api, '')
