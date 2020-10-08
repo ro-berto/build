@@ -2357,7 +2357,7 @@ class LocalIsolatedScriptTest(Test):
     if self.raw_cmd:
       pre_args += ['--raw-cmd']
 
-    args = _merge_args_and_test_options(self, self.raw_cmd + list(self._args),
+    args = _merge_args_and_test_options(self, self.raw_cmd + self._args,
                                         test_options)
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)

@@ -5,10 +5,7 @@
 import string
 import textwrap
 
-from . import bot_spec
 from . import steps
-
-from RECIPE_MODULES.build.attr_utils import attrib, attrs
 
 
 def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
@@ -97,7 +94,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
-def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
+def generator_common(api, spec, swarming_delegate, local_delegate,
                      swarming_dimensions):
   """Common logic for generating tests from JSON specs.
 
@@ -107,46 +104,28 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
     local_delgate: function to call to create a local test.
 
   Yields:
-    instances of bot_spec.TestSpec.
+    instances of Test.
   """
 
+  tests = []
   kwargs = {}
 
-  target_name = raw_test_spec.get('test') or raw_test_spec.get('isolate_name')
-  name = raw_test_spec.get('name', target_name)
-
-  wrap_test_spec = lambda s: s
-  experiment_percentage = raw_test_spec.get('experiment_percentage')
-  if experiment_percentage is not None:
-    experiment_percentage = int(experiment_percentage)
-
-    @attrs()
-    class ExperimentalTestSpec(object):
-
-      _test_spec = attrib(bot_spec.TestSpec)
-      _experiment_percentage = attrib(int)
-
-      def get_test(self):
-        return steps.ExperimentalTest(self._test_spec.get_test(),
-                                      self._experiment_percentage, api)
-
-    wrap_test_spec = lambda s: ExperimentalTestSpec(
-        test_spec=s, experiment_percentage=experiment_percentage)
+  target_name = spec.get('test') or spec.get('isolate_name')
+  name = spec.get('name', target_name)
 
   kwargs['target_name'] = target_name
   # TODO(crbug.com/1074033): Remove full_test_target.
-  kwargs['full_test_target'] = raw_test_spec.get('test_target')
-  kwargs['test_id_prefix'] = raw_test_spec.get('test_id_prefix')
-  kwargs['resultdb'] = raw_test_spec.get('resultdb')
+  kwargs['full_test_target'] = spec.get('test_target')
+  kwargs['test_id_prefix'] = spec.get('test_id_prefix')
   kwargs['name'] = name
 
   # Enables resultdb if the build is picked for the experiment.
   # TODO(crbug.com/1108016): Enable resultdb globally.
   is_sink_exp = ('chromium.resultdb.result_sink' in
                  api.buildbucket.build.input.experiments)
-  kwargs['resultdb'] = raw_test_spec.get('resultdb') if is_sink_exp else None
+  kwargs['resultdb'] = spec.get('resultdb') if is_sink_exp else None
 
-  set_up = list(raw_test_spec.get('setup', []))
+  set_up = list(spec.get('setup', []))
   processed_set_up = []
   for set_up_step in set_up:
     set_up_step_script = set_up_step.get('script')
@@ -169,7 +148,7 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
             as_log='details')
   kwargs['set_up'] = processed_set_up
 
-  tear_down = list(raw_test_spec.get('teardown', []))
+  tear_down = list(spec.get('teardown', []))
   processed_tear_down = []
   for tear_down_step in tear_down:
     tear_down_step_script = tear_down_step.get('script')
@@ -192,7 +171,7 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
             as_log='details')
   kwargs['tear_down'] = processed_tear_down
 
-  swarming_spec = raw_test_spec.get('swarming', {})
+  swarming_spec = spec.get('swarming', {})
   if swarming_spec.get('can_use_on_swarming_builders'):
     swarming_dimension_sets = swarming_spec.get('dimension_sets')
     swarming_optional_dimensions = swarming_spec.get('optional_dimensions')
@@ -220,7 +199,7 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
     if service_account:
       kwargs['service_account'] = service_account
 
-    merge = dict(raw_test_spec.get('merge', {}))
+    merge = dict(spec.get('merge', {}))
     if merge:
       merge_script = merge.get('script')
       if merge_script:
@@ -241,7 +220,7 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
               as_log='details')
     kwargs['merge'] = merge
 
-    trigger_script = dict(raw_test_spec.get('trigger_script', {}))
+    trigger_script = dict(spec.get('trigger_script', {}))
     if trigger_script:
       trigger_script_path = trigger_script.get('script')
       if trigger_script_path:
@@ -272,17 +251,24 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
       # Also, add in optional dimensions.
       kwargs['optional_dimensions'] = swarming_optional_dimensions
 
-      yield wrap_test_spec(swarming_delegate(raw_test_spec, **kwargs))
+      tests.append(swarming_delegate(spec, **kwargs))
 
   else:
-    yield wrap_test_spec(local_delegate(raw_test_spec, **kwargs))
+    tests.append(local_delegate(spec, **kwargs))
+
+  experiment_percentage = spec.get('experiment_percentage')
+  for t in tests:
+    if experiment_percentage is not None:
+      yield steps.ExperimentalTest(t, experiment_percentage, api)
+    else:
+      yield t
 
 
 def generate_gtests(api,
                     chromium_tests_api,
                     builder_group,
                     buildername,
-                    source_side_spec,
+                    test_spec,
                     bot_update_step,
                     swarming_dimensions=None,
                     scripts_compile_targets_fn=None):
@@ -302,7 +288,7 @@ def generate_gtests(api,
     del api
     return [
         canonicalize_test(t)
-        for t in source_side_spec.get(buildername, {}).get('gtest_tests', [])
+        for t in test_spec.get(buildername, {}).get('gtest_tests', [])
     ]
 
   for spec in get_tests(api):
@@ -317,22 +303,21 @@ def generate_gtests(api,
 
 
 def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
-                                  buildername, raw_test_spec, bot_update_step,
+                                  buildername, spec, bot_update_step,
                                   swarming_dimensions):
 
-  def gtest_delegate_common(raw_test_spec, **kwargs):
+  def gtest_delegate_common(spec, **kwargs):
     del kwargs
     common_gtest_kwargs = {}
-    args = get_args_for_test(api, chromium_tests_api, raw_test_spec,
-                             bot_update_step)
-    if raw_test_spec['shard_index'] != 0 or raw_test_spec['total_shards'] != 1:
+    args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
+    if spec['shard_index'] != 0 or spec['total_shards'] != 1:
       args.extend([
-          '--test-launcher-shard-index=%d' % raw_test_spec['shard_index'],
-          '--test-launcher-total-shards=%d' % raw_test_spec['total_shards']
+          '--test-launcher-shard-index=%d' % spec['shard_index'],
+          '--test-launcher-total-shards=%d' % spec['total_shards']
       ])
     common_gtest_kwargs['args'] = args
 
-    common_gtest_kwargs['override_compile_targets'] = raw_test_spec.get(
+    common_gtest_kwargs['override_compile_targets'] = spec.get(
         'override_compile_targets', None)
 
     common_gtest_kwargs['waterfall_builder_group'] = builder_group
@@ -340,27 +325,25 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
 
     return common_gtest_kwargs
 
-  def gtest_swarming_delegate(raw_test_spec, **kwargs):
-    kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
+  def gtest_swarming_delegate(spec, **kwargs):
+    kwargs.update(gtest_delegate_common(spec, **kwargs))
     kwargs['isolate_profile_data'] = (
-        raw_test_spec.get('isolate_coverage_data') or
-        raw_test_spec.get('isolate_profile_data'))
-    kwargs['ignore_task_failure'] = raw_test_spec.get('ignore_task_failure',
-                                                      False)
+        spec.get('isolate_coverage_data') or spec.get('isolate_profile_data'))
+    kwargs['ignore_task_failure'] = spec.get('ignore_task_failure', False)
 
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
     if not kwargs.get('resultdb') and ('chromium.resultdb.result_sink' in
                                    api.buildbucket.build.input.experiments):
       kwargs['resultdb'] = {'enable': True, 'result_format': 'gtest'}
-    return bot_spec.TestSpec.create(steps.SwarmingGTestTest, **kwargs)
+    return steps.SwarmingGTestTest(**kwargs)
 
-  def gtest_local_delegate(raw_test_spec, **kwargs):
-    kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
-    kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
-    return bot_spec.TestSpec.create(steps.LocalGTestTest, **kwargs)
+  def gtest_local_delegate(spec, **kwargs):
+    kwargs.update(gtest_delegate_common(spec, **kwargs))
+    kwargs['use_xvfb'] = spec.get('use_xvfb', True)
+    return steps.LocalGTestTest(**kwargs)
 
-  for t in generator_common(api, raw_test_spec, gtest_swarming_delegate,
+  for t in generator_common(api, spec, gtest_swarming_delegate,
                             gtest_local_delegate, swarming_dimensions):
     yield t
 
@@ -369,15 +352,14 @@ def generate_junit_tests(api,
                          chromium_tests_api,
                          builder_group,
                          buildername,
-                         source_side_spec,
+                         test_spec,
                          bot_update_step,
                          swarming_dimensions=None,
                          scripts_compile_targets_fn=None):
   del api, chromium_tests_api, bot_update_step
   del swarming_dimensions, scripts_compile_targets_fn
-  for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
-    yield bot_spec.TestSpec.create(
-        steps.AndroidJunitTest,
+  for test in test_spec.get(buildername, {}).get('junit_tests', []):
+    yield steps.AndroidJunitTest(
         test.get('name', test['test']),
         target_name=test['test'],
         additional_args=test.get('args'),
@@ -389,16 +371,15 @@ def generate_script_tests(api,
                           chromium_tests_api,
                           builder_group,
                           buildername,
-                          source_side_spec,
+                          test_spec,
                           bot_update_step,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
   # Unused arguments
   del api, chromium_tests_api, bot_update_step, swarming_dimensions
 
-  for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
-    yield bot_spec.TestSpec.create(
-        steps.ScriptTest,
+  for script_spec in test_spec.get(buildername, {}).get('scripts', []):
+    yield steps.ScriptTest(
         str(script_spec['name']),
         script_spec['script'],
         scripts_compile_targets_fn(),
@@ -412,13 +393,13 @@ def generate_isolated_script_tests(api,
                                    chromium_tests_api,
                                    builder_group,
                                    buildername,
-                                   source_side_spec,
+                                   test_spec,
                                    bot_update_step,
                                    swarming_dimensions=None,
                                    scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
-  for spec in source_side_spec.get(buildername, {}).get('isolated_scripts', []):
+  for spec in test_spec.get(buildername, {}).get('isolated_scripts', []):
     for test in generate_isolated_script_tests_from_one_spec(
         api, chromium_tests_api, builder_group, buildername, spec,
         bot_update_step, swarming_dimensions):
@@ -427,11 +408,10 @@ def generate_isolated_script_tests(api,
 
 def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
                                                  builder_group, buildername,
-                                                 source_side_spec,
-                                                 bot_update_step,
+                                                 spec, bot_update_step,
                                                  swarming_dimensions):
 
-  def isolated_script_delegate_common(raw_test_spec, name=None, **kwargs):
+  def isolated_script_delegate_common(test, name=None, **kwargs):
     del kwargs
 
     common_kwargs = {}
@@ -439,21 +419,20 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
-    common_kwargs['args'] = get_args_for_test(api, chromium_tests_api,
-                                              raw_test_spec, bot_update_step)
+    common_kwargs['args'] = get_args_for_test(api, chromium_tests_api, test,
+                                              bot_update_step)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
     # to GN.
-    common_kwargs['override_compile_targets'] = raw_test_spec.get(
+    common_kwargs['override_compile_targets'] = test.get(
         'override_compile_targets', None)
     common_kwargs['isolate_profile_data'] = (
-        raw_test_spec.get('isolate_coverage_data') or
-        raw_test_spec.get('isolate_profile_data'))
+        test.get('isolate_coverage_data') or test.get('isolate_profile_data'))
 
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
-    results_handler_name = raw_test_spec.get('results_handler', 'default')
+    results_handler_name = test.get('results_handler', 'default')
     try:
       common_kwargs['results_handler'] = {
           'default': lambda: None,
@@ -472,10 +451,10 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
 
     return common_kwargs
 
-  def isolated_script_swarming_delegate(raw_test_spec, **kwargs):
-    kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
+  def isolated_script_swarming_delegate(spec, **kwargs):
+    kwargs.update(isolated_script_delegate_common(spec, **kwargs))
 
-    swarming_spec = raw_test_spec.get('swarming', {})
+    swarming_spec = spec.get('swarming', {})
 
     kwargs['ignore_task_failure'] = swarming_spec.get('ignore_task_failure',
                                                       False)
@@ -497,14 +476,13 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
         kwargs['resultdb'][
             'test_location_base'] = '//third_party/webgl/src/sdk/tests/'
 
-    return bot_spec.TestSpec.create(steps.SwarmingIsolatedScriptTest, **kwargs)
+    return steps.SwarmingIsolatedScriptTest(**kwargs)
 
-  def isolated_script_local_delegate(raw_test_spec, **kwargs):
-    kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
-    return bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest, **kwargs)
+  def isolated_script_local_delegate(spec, **kwargs):
+    kwargs.update(isolated_script_delegate_common(spec, **kwargs))
+    return steps.LocalIsolatedScriptTest(**kwargs)
 
-  for t in generator_common(api, source_side_spec,
-                            isolated_script_swarming_delegate,
+  for t in generator_common(api, spec, isolated_script_swarming_delegate,
                             isolated_script_local_delegate,
                             swarming_dimensions):
     yield t
