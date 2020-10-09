@@ -19,7 +19,6 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
     'android_blink_rel':
         bot_spec.BotSpec.create(
@@ -37,6 +36,5 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['android'],
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
         ),
 }

@@ -38,10 +38,7 @@ def browser_perf_test(perf_id):
 
 
 def _chromium_webrtc_spec(**kwargs):
-  return bot_spec.BotSpec.create(
-      build_gs_bucket='chromium-webrtc',
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
-      **kwargs)
+  return bot_spec.BotSpec.create(build_gs_bucket='chromium-webrtc', **kwargs)
 
 
 SPEC = {
