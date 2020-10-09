@@ -5,7 +5,10 @@
 from .. import bot_spec
 
 def _client_openscreen_chromium_spec(**kwargs):
-  return bot_spec.BotSpec.create(luci_project='openscreen', **kwargs)
+  return bot_spec.BotSpec.create(
+      luci_project='openscreen',
+      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
+      **kwargs)
 
 
 SPEC = {
