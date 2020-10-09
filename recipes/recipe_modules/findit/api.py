@@ -371,7 +371,10 @@ class FinditApi(recipe_api.RecipeApi):
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
     self.m.chromium_swarming.configure_swarming('chromium', precommit=False)
 
-    self.m.step.active_result.presentation.properties['target_buildername'] = (
+    # Create a step for setting the property so that it doesn't depend on the
+    # implementation of other modules leaving an open step
+    step_result = self.m.step('target_buildername', [])
+    step_result.presentation.properties['target_buildername'] = (
         bot_mirror.builder_id.builder)
 
     return bot_mirror, checked_out_revision, cached_revision
