@@ -31,7 +31,8 @@ def RunSteps(api, properties):
   androidx_dir = api.path['checkout'].join('third_party', 'androidx')
   androidx_libs_dir = androidx_dir.join('libs')
 
-  api.file.rmcontents('delete libs directory', androidx_libs_dir)
+  api.file.ensure_directory('ensure libs dir exists', androidx_libs_dir)
+  api.file.rmcontents('delete libs dir contents', androidx_libs_dir)
 
   if api.file.listdir('check libs empty', androidx_libs_dir):
     return result_pb.RawResult(
