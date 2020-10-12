@@ -482,6 +482,20 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_unittests"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "unittests"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_embeddertests"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "embeddertests"
+  },
+  {
+    "cmd": [
       "sudo",
       "xcode-select",
       "--reset"

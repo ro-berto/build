@@ -428,6 +428,20 @@
     ]
   },
   {
+    "cmd": [
+      "[CACHE]\\builder\\pdfium\\out\\debug_skiapaths_xfa_v8\\pdfium_unittests.exe"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "name": "unittests"
+  },
+  {
+    "cmd": [
+      "[CACHE]\\builder\\pdfium\\out\\debug_skiapaths_xfa_v8\\pdfium_embeddertests.exe"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "name": "embeddertests"
+  },
+  {
     "name": "$result"
   }
 ]

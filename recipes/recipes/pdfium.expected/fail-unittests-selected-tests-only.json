@@ -174,8 +174,8 @@
       "--check",
       "--root=[CACHE]/builder/pdfium",
       "gen",
-      "//out/debug_skiapaths_xfa_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=true pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "//out/debug_v8",
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "gn gen"
@@ -194,7 +194,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_skia_paths"
+      "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -211,7 +211,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -260,7 +260,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "-j",
       "80",
       "pdfium_all"
@@ -281,7 +281,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -313,7 +313,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -334,7 +334,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -367,9 +367,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8\", \"-j\", 80, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_v8\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -385,10 +385,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"linux_skia_paths\", \"project\": \"pdfium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"pdfium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux_skia_paths",
+      "linux",
       "--buildbot-mastername",
       "client.pdfium",
       "--buildbot-slavename",
@@ -429,19 +429,26 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_unittests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_unittests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "unittests"
+    "name": "unittests",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_embeddertests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_embeddertests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "embeddertests"
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('unittests') (retcode: 1)"
+    },
     "name": "$result"
   }
 ]
