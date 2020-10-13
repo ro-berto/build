@@ -408,6 +408,23 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'linux-chromeos-js-code-coverage':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'goma_high_parallel',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'ios-simulator-cronet':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
