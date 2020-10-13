@@ -56,6 +56,7 @@ def RunSteps(api):
       revision_dir=api.properties.get('revision_dir'),
       primary_project=api.properties.get('primary_project'),
       bitness=api.properties.get('bitness'),
+      build_config=api.properties.get('build_config'),
       use_legacy=api.properties.get('use_legacy', True),
       sortkey_datetime=api.properties.get('sortkey_datetime', None),
   )
@@ -104,6 +105,24 @@ def GenTests(api):
       ),
       api.override_step_data('filter build_dir', api.json.output(['chrome'])),
       api.runtime(is_experimental=True),
+  )
+
+  # Overwrite the build config and ensure it is used in the GS archive name.
+  def check_gs_url_equals(check, steps, expected):
+    check('gsutil upload' in steps)
+    check(expected == steps['gsutil upload'].cmd[-1])
+
+  yield api.test(
+      'custom_build_config',
+      api.platform('linux', 64),
+      api.properties(
+          build_config='debease',
+          update_properties=update_properties),
+      api.post_process(
+          check_gs_url_equals,
+          'gs://chromium/linux-debease/'
+          'chrome-asan-linux-debease-refs_heads_B1-123456.zip'),
+      api.post_process(post_process.DropExpectation),
   )
 
   # A component build with git.

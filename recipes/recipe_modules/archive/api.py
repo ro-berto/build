@@ -177,6 +177,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                           revision_dir=None,
                           primary_project=None,
                           bitness=None,
+                          build_config=None,
                           use_legacy=True,
                           sortkey_datetime=None,
                           **kwargs):
@@ -217,6 +218,9 @@ class ArchiveApi(recipe_api.RecipeApi):
                        checkout
       bitness: The bitness of the build (32 or 64) to distinguish archive
                names.
+      build_config: Name of build config, e.g. release or debug. This is used
+                    to qualify archive file names. If not given, it is inferred
+                    from the build output directory.
       use_legacy: Specify if legacy paths and archive names should be used. Set
                   to false for new builders.
       sortkey_datetime: If set, the api will use this datetime as the sortable
@@ -228,7 +232,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     # 32 and 64 bit bots can coexist. We don't change old bots to not confuse
     # clusterfuzz bisect jobs.
     assert use_legacy or bitness, 'Must specify bitness for new builders.'
-    target = self.m.path.split(build_dir)[-1]
+    build_config = (build_config or self.m.path.split(build_dir)[-1]).lower()
     gs_metadata = {}
     if sortkey_datetime is not None:
       sortkey_path = sortkey_datetime.strftime('%Y%m%d%H%M')
@@ -287,13 +291,13 @@ class ArchiveApi(recipe_api.RecipeApi):
     # by 'win32').
     if use_legacy:
       platform_name = self.legacy_platform_name()
-      target_name = target.lower()
+      target_name = build_config
     else:
       # Always qualify platform with bitness on new bots. E.g. linux32 or win64.
       platform_name = self.m.platform.name + str(bitness)
       # Split off redundant _x64 suffix on windows. The bitness is part of the
       # platform.
-      target_name = target.lower().split('_')[0]
+      target_name = build_config.split('_')[0]
 
     pieces = [platform_name, target_name]
     if archive_subdir_suffix:
