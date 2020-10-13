@@ -855,6 +855,17 @@ class V8Api(recipe_api.RecipeApi):
         args=['-a', 'public-read'],
     )
 
+  def get_build_type(self):
+    """Returns the given build type: 'debug' if gn args is_debug or
+    dcheck_always_on are set, 'release' otherwise.
+    """
+    build_config_path = self.build_output_dir.join('v8_build_config.json')
+    build_config = self.m.json.read(
+      'read build config', build_config_path,
+      step_test_data=self.test_api.example_build_config).json.output
+    debug = build_config['is_debug'] or build_config['dcheck_always_on']
+    return 'debug' if debug else 'release'
+
   def maybe_create_clusterfuzz_archive(self, update_step):
     clusterfuzz_archive = self.bot_config.get('clusterfuzz_archive')
     if clusterfuzz_archive:
@@ -864,6 +875,7 @@ class V8Api(recipe_api.RecipeApi):
         kwargs['bitness'] = clusterfuzz_archive['bitness']
       self.m.archive.clusterfuzz_archive(
           revision_dir='v8',
+          build_config=self.get_build_type(),
           build_dir=self.build_output_dir,
           update_properties=update_step.presentation.properties,
           gs_bucket=clusterfuzz_archive.get('bucket'),

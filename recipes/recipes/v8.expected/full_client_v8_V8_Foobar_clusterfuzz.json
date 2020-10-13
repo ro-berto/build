@@ -77,7 +77,7 @@
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
-      "d8_bar-linux64-build-v8-component-50110",
+      "d8_bar-linux64-release-v8-component-50110",
       "[\"file1\", \"file2\"]",
       "[CACHE]/builder/v8/out/build"
     ],
@@ -99,13 +99,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]/chrome_staging/d8_bar-linux64-build-v8-component-50110.zip",
-      "gs://v8_clusterfoo/linux64-build/d8_bar-linux64-build-v8-component-50110.zip"
+      "[CLEANUP]/chrome_staging/d8_bar-linux64-release-v8-component-50110.zip",
+      "gs://v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8_clusterfoo/linux64-build/d8_bar-linux64-build-v8-component-50110.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip@@@"
     ]
   }
 ]

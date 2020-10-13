@@ -1043,6 +1043,10 @@ def GenTests(api):
     api.post_process(DropExpectation)
   )
 
+  def check_gs_url_equals(check, steps, expected):
+    check('gsutil upload' in steps)
+    check(expected == steps['gsutil upload'].cmd[-1])
+
   # Test configurations for clusterfuzz builders.
   yield (
     api.v8.test(
@@ -1057,6 +1061,10 @@ def GenTests(api):
         },
         default_targets=['v8_foobar'],
     ) +
+    api.post_process(
+        check_gs_url_equals,
+        'gs://v8_clusterfoo/linux64-release/'
+        'd8_bar-linux64-release-v8-component-50110.zip') +
     api.post_process(MustRun, 'initialization.clobber') +
     api.post_process(Filter(
         'build.compile',
