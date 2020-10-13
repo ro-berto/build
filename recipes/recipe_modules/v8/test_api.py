@@ -48,7 +48,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         },
     ]
 
-  def output_json(self, has_failures=False, wrong_results=False, flakes=False,
+  def output_json(self, has_failures=False, flakes=False,
                   unmarked_slow_test=False):
     slowest_tests = V8TestApi.SLOWEST_TESTS()
     # The collect step is still on legacy @@@annotation@@@
@@ -62,32 +62,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'marked_slow': False,
       }]
     if not has_failures:
-      return successful_collect_step + self.m.json.output([{
-        'arch': 'theArch',
-        'mode': 'theMode',
+      return successful_collect_step + self.m.json.output({
         'results': [],
         'slowest_tests': slowest_tests,
         'tags': [],
-      }])
-    if wrong_results:
-      return successful_collect_step + self.m.json.output([{
-        'arch': 'theArch1',
-        'mode': 'theMode1',
-        'results': [],
-        'slowest_tests': slowest_tests,
-        'tags': [],
-      },
-      {
-        'arch': 'theArch2',
-        'mode': 'theMode2',
-        'results': [],
-        'slowest_tests': slowest_tests,
-        'tags': [],
-      }])
+      })
     if flakes:
-      return successful_collect_step + self.m.json.output([{
-        'arch': 'theArch1',
-        'mode': 'theMode1',
+      return successful_collect_step + self.m.json.output({
         'results': [
           {
             'flags': [],
@@ -148,7 +129,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         ],
         'slowest_tests': slowest_tests,
         'tags': [],
-      }])
+      })
 
 
     # Add enough failures to exceed the maximum number of shown failures
@@ -198,18 +179,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'exit_code': 1,
       })
 
-    return successful_collect_step + self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
+    return successful_collect_step + self.m.json.output({
       'results': results,
       'slowest_tests': slowest_tests,
       'tags': [],
-    }])
+    })
 
   def one_failure(self):
-    return self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
+    return self.m.json.output({
       'results': [
         {
           'flags': [],
@@ -229,7 +206,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }]) + self.m.legacy_annotation.success_step
+    }) + self.m.legacy_annotation.success_step
 
   def one_flake(self, num_fuzz=False):
     if num_fuzz:
@@ -241,9 +218,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       variant = 'stress'
       variant_flags = None
 
-    return self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
+    return self.m.json.output({
       'results': [
         {
           'flags': [],
@@ -280,22 +255,18 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }]) + self.m.legacy_annotation.success_step
+    }) + self.m.legacy_annotation.success_step
 
   def infra_failure(self):
-    return self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
+    return self.m.json.output({
       'results': [],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': ['UNRELIABLE_RESULTS'],
-    }]) + self.m.legacy_annotation.success_step
+    }) + self.m.legacy_annotation.success_step
 
   def failures_example(self, variant1='default', variant2='default'):
     flags = {'default': '', 'stress': ' --stress-opt'}
-    return self.m.json.output([{
-      'arch': 'theArch',
-      'mode': 'theMode',
+    return self.m.json.output({
       'results': [
         {
           'flags': [],
@@ -330,7 +301,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
       'tags': [],
-    }]) + self.m.legacy_annotation.success_step
+    }) + self.m.legacy_annotation.success_step
 
   def example_scheduler_buildbucket_trigger(self, key='a'):
     trigger = triggers_pb2.Trigger(id=key)

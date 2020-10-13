@@ -56,14 +56,6 @@ class AggregatedResults:
     self.slow_tests_cutoff = slow_tests_cutoff
 
   def append(self, json_data):
-    # TODO(machenbach): This is to flexibly switch to a single dict as json
-    # output instead of a list wrapping a dict. Remove after V8 has
-    # switched to flattened output on all release branches.
-    if isinstance(json_data, list):
-      # On continuous bots, the test driver outputs exactly one item in the
-      # test results list for one architecture.
-      assert len(json_data) == 1
-      json_data = json_data[0]
     assert isinstance(json_data, dict)
     self.slowest_tests.extend(json_data['slowest_tests'])
     self.results.extend(json_data['results'])

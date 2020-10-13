@@ -309,29 +309,22 @@ def GenTests(api):
         'Check', api.v8.output_json(has_failures=True, flakes=True))
   )
 
-  def TestFailures(wrong_results, flakes):
-    results_suffix = "_wrong_results" if wrong_results else ""
+  def TestFailures(flakes):
     flakes_suffix = "_flakes" if flakes else ""
     return (
       api.v8.test(
           'client.v8',
           'V8 Foobar',
-          'test_failures%s%s' % (results_suffix, flakes_suffix),
+          'test_failures%s' % flakes_suffix,
       ) +
       api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
       api.override_step_data(
-          'Check', api.v8.output_json(
-              has_failures=True, wrong_results=wrong_results, flakes=flakes)) +
+          'Check', api.v8.output_json(has_failures=True, flakes=flakes)) +
       api.post_process(Filter().include_re(r'.*Check.*'))
     )
 
-  yield TestFailures(wrong_results=False, flakes=False)
-  yield TestFailures(wrong_results=False, flakes=True)
-  yield (
-      TestFailures(wrong_results=True, flakes=False) +
-      api.expect_exception('AssertionError') +
-      api.post_process(DropExpectation)
-  )
+  yield TestFailures(flakes=False)
+  yield TestFailures(flakes=True)
 
   yield (
     api.v8.test(
@@ -352,8 +345,7 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.override_step_data(
-        'Check', api.v8.output_json(
-            has_failures=True, wrong_results=False, flakes=False)) +
+        'Check', api.v8.output_json(has_failures=True, flakes=False)) +
     api.step_data('Bisect a2.compile', retcode=1) +
     api.post_process(StatusFailure) +
     api.post_process(DropExpectation)

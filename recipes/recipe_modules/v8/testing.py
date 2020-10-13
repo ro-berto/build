@@ -407,15 +407,6 @@ class V8Test(BaseTest):
     if self.applied_test_filter:
       step_result.presentation.logs['test filter'] = self.applied_test_filter
 
-    # TODO(machenbach): This is to flexibly switch to a single dict as json
-    # output instead of a list wrapping a dict. Remove after V8 has
-    # switched to flattened output on all release branches.
-    if isinstance(json_output, list):
-      # The output is expected to be a list of architecture dicts that
-      # each contain a results list. On the bots, there is only one
-      # architecture.
-      assert len(json_output) == 1
-      json_output = json_output[0]
     assert isinstance(json_output, dict)
     self.api.v8._update_durations(json_output, step_result.presentation)
     failure_factory = Failure.factory_func(self)
