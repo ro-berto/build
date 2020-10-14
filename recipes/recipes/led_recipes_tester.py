@@ -417,7 +417,7 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       ir = ir.then('launch')
 
       job = ir.launch_result
-      presentation.links.update(api.step.active_result.presentation.links)
+      presentation.links['Swarming task'] = job.swarming_task_url
 
     with api.swarming.with_server(job.swarming_hostname):
       results = api.swarming.collect(
