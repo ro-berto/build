@@ -1240,9 +1240,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r2.isolate tests",
@@ -2465,9 +2465,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r3.isolate tests",
@@ -3630,9 +3630,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r4.isolate tests",

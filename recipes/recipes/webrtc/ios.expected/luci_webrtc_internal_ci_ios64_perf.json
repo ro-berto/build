@@ -966,9 +966,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://chrome-isolated.appspot.com",
-      "--verbose",
       "[CLEANUP]/isolate_tmp_2/0.isolated.gen.json"
     ],
     "name": "isolate.isolate tests",

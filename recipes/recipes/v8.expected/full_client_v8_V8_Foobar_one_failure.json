@@ -306,9 +306,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
       "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],

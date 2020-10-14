@@ -93,9 +93,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/v8/out/build/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",

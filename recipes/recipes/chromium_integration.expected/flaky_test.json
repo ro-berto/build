@@ -814,9 +814,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/blink_web_tests.isolated.gen.json"
     ],
     "env": {

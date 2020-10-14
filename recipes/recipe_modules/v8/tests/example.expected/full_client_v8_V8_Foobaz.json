@@ -218,9 +218,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://chrome-isolated.appspot.com",
-      "--verbose",
       "[CACHE]/builder/v8/out/build/perf.isolated.gen.json"
     ],
     "name": "isolate tests (perf)",
@@ -269,9 +269,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",

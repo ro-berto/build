@@ -1133,9 +1133,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]\\builder\\src\\out\\Release\\gl_tests.isolated.gen.json"
     ],
     "name": "test r1.isolate tests",

@@ -1019,9 +1019,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],
     "env": {

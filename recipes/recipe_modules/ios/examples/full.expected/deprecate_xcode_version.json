@@ -697,9 +697,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json"
     ],

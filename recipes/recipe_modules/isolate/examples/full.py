@@ -43,6 +43,8 @@ def RunSteps(api):
   if expected_targets is not None:
     api.isolate.isolate_tests(
         build_path, expected_targets)
+    api.isolate.isolate_tests(
+        build_path, expected_targets, use_cas=True)
 
 
 def GenTests(api):

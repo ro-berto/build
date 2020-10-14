@@ -747,9 +747,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/base_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",

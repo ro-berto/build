@@ -1008,9 +1008,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],
     "env": {
@@ -2318,9 +2318,9 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
+      "--verbose",
       "--isolate-server",
       "https://isolateserver.appspot.com",
-      "--verbose",
       "[CACHE]/builder/src/out/Release/dummy_target_1.isolated.gen.json",
       "[CACHE]/builder/src/out/Release/dummy_target_2.isolated.gen.json"
     ],

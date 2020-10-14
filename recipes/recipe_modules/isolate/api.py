@@ -121,7 +121,11 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
-                    step_name=None,  suffix='', **kwargs):
+                    step_name=None,  suffix='',
+                    # TODO(crbug.com/chrome-operations/49): remove this after
+                    # isolate server shutdown.
+                    use_cas=False,
+                    **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -142,6 +146,7 @@ class IsolateApi(recipe_api.RecipeApi):
             make sure to pass different propery names for each invocation.
         suffix: suffix of isolate_tests step.
             e.g. ' (with patch)', ' (without patch)'.
+        use_cas: whether upload files to RBE-CAS or not.
     """
     # FIXME: Make all steps in this function nested under one overall
     # 'isolate tests' master step.
@@ -177,9 +182,12 @@ class IsolateApi(recipe_api.RecipeApi):
           'batcharchive',
           '--dump-json',
           self.m.json.output(),
-          '--isolate-server',
-          self._isolate_server,
       ] + (['--verbose'] if verbose else [])
+
+      if use_cas:
+        args.extend(['-cas-instance', self.m.cas.instance])
+      else:
+        args.extend(['--isolate-server', self._isolate_server])
 
       args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
 
