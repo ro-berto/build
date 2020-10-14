@@ -136,6 +136,7 @@ def TestSpec(config_name,
   kwargs['gclient_apply_config'].append('no_checkout_flash')
   kwargs['gclient_apply_config'].append(
       'chromium_skip_render_test_goldens_download')
+  kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
 
   if cros_board:
     kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
