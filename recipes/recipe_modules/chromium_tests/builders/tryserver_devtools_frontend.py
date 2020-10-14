@@ -15,6 +15,7 @@ COMMON_BOT_CONFIG = bot_spec.BotSpec.create(
     },
     test_results_config='public_server',
     simulation_platform='linux',
+    chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
 )
 
 SPEC = {
