@@ -102,6 +102,9 @@ def BuildSpec(config_name,
     kwargs['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
 
   kwargs['gclient_apply_config'] += ['checkout_pgo_profiles']
+  kwargs['gclient_apply_config'] += [
+      'chromium_skip_render_test_goldens_download'
+  ]
   if extra_gclient_apply_config:
     kwargs['gclient_apply_config'] += list(extra_gclient_apply_config)
 
@@ -131,6 +134,8 @@ def TestSpec(config_name,
 
   kwargs['parent_buildername'] = parent_buildername
   kwargs['gclient_apply_config'].append('no_checkout_flash')
+  kwargs['gclient_apply_config'].append(
+      'chromium_skip_render_test_goldens_download')
 
   if cros_board:
     kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
@@ -151,7 +156,6 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
 
 
 def _AddBuildSpec(name, platform, target_bits=64, bisect_archive_build=False):
-
   SPEC[name] = BuildSpec(
       'chromium_perf',
       platform,
@@ -186,7 +190,9 @@ SPEC.update({
                 'mb_luci_auth',
             ],
             gclient_config='chromium_perf',
-            gclient_apply_config=['chromeos'],
+            gclient_apply_config=[
+                'chromeos', 'chromium_skip_render_test_goldens_download'
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
