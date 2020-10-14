@@ -171,7 +171,6 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    isolate_steps = []
     try:
       exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
 
@@ -191,24 +190,16 @@ class IsolateApi(recipe_api.RecipeApi):
 
       args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
 
-      isolate_steps.append(
-          self.m.step(
-              step_name or ('isolate tests%s' % suffix),
-              args,
-              step_test_data=lambda: self.test_api.output_json(targets),
-              **kwargs))
-
-      # TODO(tansell): Change this to return a dummy "isolate results" or the
-      # top level master step.
-      return isolate_steps[-1]
+      step_result = self.m.step(
+          step_name or ('isolate tests%s' % suffix),
+          args,
+          step_test_data=lambda: self.test_api.output_json(targets),
+          **kwargs)
+      return step_result
     finally:
-      step_result = self.m.step.active_result
       swarm_hashes = {}
-      for step in isolate_steps:
-        if not step.json.output:
-          continue  # pragma: no cover
-
-        for k, v in step.json.output.iteritems():
+      if step_result.json.output:
+        for k, v in step_result.json.output.iteritems():
           # TODO(tansell): Raise an error here when it can't clobber an
           # existing error. This code is currently inside a finally block,
           # meaning it could be executed when an existing error is occurring.
