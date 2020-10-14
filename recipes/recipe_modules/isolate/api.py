@@ -24,7 +24,6 @@ class IsolateApi(recipe_api.RecipeApi):
     # https://crbug.com/944904
     self._isolate_server = 'https://isolateserver.appspot.com'
     self._isolated_tests = {}
-    self._service_account_json = None
 
   @property
   def isolate_server(self):
@@ -35,16 +34,6 @@ class IsolateApi(recipe_api.RecipeApi):
   def isolate_server(self, value):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
-
-  @property
-  def service_account_json(self):
-    """Service account json to use."""
-    return self._service_account_json
-
-  @service_account_json.setter
-  def service_account_json(self, value):
-    """Service account json to use."""
-    self._service_account_json = value
 
   def clean_isolated_files(self, build_dir):
     """Cleans out all *.isolated files from the build directory in
@@ -191,9 +180,6 @@ class IsolateApi(recipe_api.RecipeApi):
           '--isolate-server',
           self._isolate_server,
       ] + (['--verbose'] if verbose else [])
-
-      if self.service_account_json:
-        args.extend(['--service-account-json', self.service_account_json])
 
       args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
 

@@ -39,9 +39,6 @@ def RunSteps(api):
                              api.properties.get('expected_swarming_dimensions'))
   api.assertions.assertEqual(api.isolate.isolate_server,
                              api.properties.get('expected_isolate_server'))
-  api.assertions.assertEqual(
-      api.isolate.service_account_json,
-      api.properties.get('expected_isolate_service_account'))
 
 
 def GenTests(api):

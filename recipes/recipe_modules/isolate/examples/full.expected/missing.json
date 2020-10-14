@@ -128,8 +128,6 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
-      "--service-account-json",
-      "chromium_builder",
       "RECIPE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_REPO[build]/test2.isolated.gen.json"
     ],

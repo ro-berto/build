@@ -31,10 +31,6 @@ def RunSteps(api):
   api.isolate.namespace = 'default-gzip'
   assert api.isolate.namespace == 'default-gzip'
 
-  # Code coverage for service_account_json property.
-  api.isolate.service_account_json = 'chromium_builder'
-  assert api.isolate.service_account_json == 'chromium_builder'
-
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())
   expected_targets = step_result.stdout
