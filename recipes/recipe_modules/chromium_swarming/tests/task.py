@@ -14,9 +14,12 @@ from recipe_engine import recipe_test_api, post_process
 
 def RunSteps(api):
   opt_dims = api.properties.get('optional_dimensions')
+  cas_input_root = api.properties.get('cas_input_root', '')
   task = api.chromium_swarming.task(
       name=api.properties.get('task_name', 'sample_task'),
-      isolated='0123456789012345678901234567890123456789',
+      isolated=(None if cas_input_root else
+                '0123456789012345678901234567890123456789'),
+      cas_input_root=cas_input_root,
       optional_dimensions=opt_dims,
       env_prefixes={'FOO': ['some/path']})
   if api.properties.get('wait_for_capacity'):
@@ -73,6 +76,20 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        '[trigger] windows gpu task',
                        ['--containment-type', 'AUTO']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  empty_digest = (
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
+  yield api.test(
+      'cas_input_root',
+      api.properties(
+          task_name='task with cas input',
+          cas_input_root=empty_digest,
+          use_swarming_recipe_to_trigger=True),
+      api.post_process(
+          api.swarming.check_triggered_request, '[trigger] task with cas input',
+          lambda check, req: check(req[0].cas_input_root == empty_digest)),
       api.post_process(post_process.DropExpectation),
   )
 

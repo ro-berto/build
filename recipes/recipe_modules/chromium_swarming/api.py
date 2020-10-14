@@ -131,10 +131,10 @@ class SwarmingApi(recipe_api.RecipeApi):
   General usage:
     1. Tweak default task parameters applied to all swarming tasks (such as
        default_dimensions and default_priority).
-    2. Isolate some test using 'isolate' recipe module. Get isolated hash as
-       a result of that process.
+    2. Isolate some test using 'isolate' recipe module. Get isolated hash or
+       RBE-CAS digest as a result of that process.
     3. Create a task configuration using 'task(...)' method, providing
-       isolated hash obtained previously.
+       isolated hash or RBE-CAS digest obtained previously.
     4. Tweak the task parameters. This step is optional.
     5. Launch the task on swarming by calling 'trigger_task(...)'.
     6. Continue doing useful work locally while the task is running concurrently
@@ -434,6 +434,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            idempotent=None,
            ignore_task_failure=False,
            isolated='',
+           cas_input_root='',
            merge=None,
            named_caches=None,
            optional_dimensions=None,
@@ -464,6 +465,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     Args:
       * name: name of the test, used as part of a task ID.
       * isolated: hash of isolated test on isolate server, the test should
+          be already isolated there, see 'isolate' recipe module.
+      * cas_input_root: digeste of isolated test on RBE-CAS, the test should
           be already isolated there, see 'isolate' recipe module.
       * ignore_task_failure: whether to ignore the test failure of swarming
         tasks. By default, this is set to False.
@@ -580,7 +583,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if resultdb and resultdb.get('enable'):
       request = request.with_resultdb()
 
-    request = (request.with_slice(0, request[0].
+    req_slice = (
+      request[0].
       with_cipd_ensure_file(ensure_file).
       with_command(raw_cmd or []).
       with_dimensions(**self._default_dimensions).
@@ -589,12 +593,18 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_execution_timeout_secs(self.default_hard_timeout).
       with_expiration_secs(self.default_expiration).
       with_io_timeout_secs(self.default_io_timeout).
-      with_isolated(isolated).
-      with_idempotent(idempotent)))
+      with_idempotent(idempotent))
+
+    if isolated:
+      req_slice = req_slice.with_isolated(isolated)
+
+    if cas_input_root:
+      req_slice = req_slice.with_cas_input_root(cas_input_root)
 
     if relative_cwd:
-      request = request.with_slice(0,
-                                   request[0].with_relative_cwd(relative_cwd))
+      req_slice = req_slice.with_relative_cwd(relative_cwd)
+
+    request = request.with_slice(0, req_slice)
 
     return SwarmingTask(
         request=request,
@@ -616,6 +626,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def gtest_task(self,
                  name=None,
                  isolated='',
+                 cas_input_root='',
                  extra_args=None,
                  cipd_packages=None,
                  merge=None,
@@ -653,6 +664,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         collect_step=self._gtest_collect_step,
         extra_args=extra_args,
         isolated=isolated,
+        cas_input_root=cas_input_root,
         merge=merge,
         raw_cmd=raw_cmd,
         relative_cwd=relative_cwd,
@@ -796,7 +808,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     tags.update(task_request.tags or ())
     tags.update(self._default_tags)
 
-    tags.add('data:' + task_slice.isolated)
+    if task_slice.isolated:
+      tags.add('data:' + task_slice.isolated)
+    if task_slice.cas_input_root:
+      tags.add('data:' + task_slice.cas_input_root)
     tags.add('name:' + task_request.name.split(' ')[0])
     builder_group = self.m.builder_group.for_current
     if builder_group:
@@ -2041,12 +2056,11 @@ class SwarmingTask(object):
       task_name_suffix += '/%s/%s' % (
         self.builder_info[0], self.builder_info[1])
 
-    return '%s/%s/%s%s' % (
-        self.request.name,
-        self.request[0].dimensions['os'],
-        self.request[0].isolated[:10],
-        task_name_suffix
-    )
+    return '%s/%s/%s%s' % (self.request.name, self.request[0].dimensions['os'],
+                           self.request[0].isolated[:10] or
+                           self.request[0].cas_input_root[:10],
+                           task_name_suffix)
+
   @property
   def trigger_output(self):
     """JSON results of 'trigger' step or None if not triggered.
