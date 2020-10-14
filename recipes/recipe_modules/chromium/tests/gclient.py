@@ -69,6 +69,18 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'chromium_skip_wpr_archives_download',
+      api.properties(
+          apply_gclient_config='chromium_skip_wpr_archives_download'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'chromium_skip_render_test_goldens_download',
+      api.properties(
+          apply_gclient_config='chromium_skip_render_test_goldens_download'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'clang_tidy',
       api.properties(apply_gclient_config='use_clang_tidy'),
       api.post_process(post_process.DropExpectation),

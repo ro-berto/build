@@ -16,10 +16,10 @@ def chromium_bare(c):
   s.name = 'src'
   s.url = ChromiumGitURL(c, 'chromium', 'src.git')
   s.custom_vars = {
-    # We always want the bots to fetch the dependencies needed to
-    # run the telemetry tests, regardless of whether they are needed or not
-    # (this makes things simpler and more consistent).
-    'checkout_telemetry_dependencies': 'True',
+      # We always want the bots to fetch the dependencies needed to
+      # run the telemetry tests, regardless of whether they are needed or not
+      # (this makes things simpler and more consistent).
+      'checkout_telemetry_dependencies': 'True'
   }
   m = c.got_revision_reverse_mapping
   m['got_revision'] = 'src'
@@ -321,6 +321,17 @@ def checkout_instrumented_libraries(c):
 @CONFIG_CTX(includes=['chromium'])
 def chromium_no_telemetry_dependencies(c):  # pragma: no cover
   c.solutions[0].custom_vars['checkout_telemetry_dependencies'] = 'False'
+
+
+@CONFIG_CTX(includes=['chromium'])
+def chromium_skip_wpr_archives_download(c):
+  c.solutions[0].custom_vars['skip_wpr_archives_download'] = 'True'
+
+
+@CONFIG_CTX(includes=['chromium'])
+def chromium_skip_render_test_goldens_download(c):
+  c.solutions[0].custom_vars['skip_render_test_goldens_download'] = 'True'
+
 
 @CONFIG_CTX()
 def android_prebuilts_build_tools(c):
