@@ -9,6 +9,7 @@ from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
 from PB.recipe_engine import result as result_pb2
+from PB.recipe_modules.build.archive import properties as archive_properties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
@@ -260,6 +261,55 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
+  )
+
+  def check_gs_url_equals(check, steps, expected):
+    check('Generic Archiving Steps.gsutil upload' in steps)
+    check(expected == steps['Generic Archiving Steps.gsutil upload'].cmd[-1])
+
+  input_properties = archive_properties.InputProperties()
+  archive_data = archive_properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%chrome_version%}/chrome'
+  archive_data.archive_type = archive_properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+  yield api.test(
+      'archive_builder_no_chrome_version',
+      api.chromium_tests.platform([{
+          'builder_group': 'chromium.linux',
+          'buildername': 'Linux Builder'
+      }]),
+      api.properties(
+          chrome_version=None, **{'$build/archive': input_properties}),
+      api.chromium.ci_build(
+          builder_group='chromium.linux',
+          builder='Linux Builder',
+          revision='refs/tags/1.2.3.4',
+          git_ref='refs/tags/1.2.3.4'),
+      api.post_process(check_gs_url_equals,
+                       'gs://any-bucket/x86/1.2.3.4/chrome'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'archive_builder_with_chrome_version',
+      api.chromium_tests.platform([{
+          'builder_group': 'chromium.linux',
+          'buildername': 'Linux Builder'
+      }]),
+      api.properties(
+          chrome_version='2.2.2.2', **{'$build/archive': input_properties}),
+      api.chromium.ci_build(
+          builder_group='chromium.linux',
+          builder='Linux Builder',
+          revision='refs/tags/1.2.3.4',
+          git_ref='refs/tags/1.2.3.4'),
+      api.post_process(check_gs_url_equals,
+                       'gs://any-bucket/x86/2.2.2.2/chrome'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

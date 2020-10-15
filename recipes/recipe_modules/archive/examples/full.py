@@ -35,7 +35,7 @@ def RunSteps(api):
     api.archive.generic_archive(
         build_dir=api.m.path.mkdtemp(),
         update_properties=api.properties.get('update_properties'),
-        config=None)
+        custom_vars=api.properties.get('custom_vars'))
     return
 
   if 'no_llvm' not in api.properties:
@@ -285,6 +285,53 @@ def GenTests(api):
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%chrome_version%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_with_custom_vars',
+      api.properties(
+          generic_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          custom_vars={
+              'chrome_version': '1.2.3.4',
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%wrong_placeholder%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_with_wrong_custom_vars',
+      api.properties(
+          generic_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          custom_vars={
+              'chrome_version': '1.2.3.4',
           },
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StatusFailure),

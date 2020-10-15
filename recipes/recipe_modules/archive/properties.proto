@@ -33,11 +33,13 @@ message ArchiveData {
   // The name of the google cloud storage bucket to upload to.
   string gcs_bucket = 3;
   // The destination path in the bucket to upload to. The following string
-  // substitutions will be made:
+  // substitutions are built-in:
   // {%position%} -> commit position extracted from got_revision_cp (or
   //     got_src_revision_cp if it is not set).
   // {%commit%} -> commit hash from got_revision.
   // {%timestamp%} -> UTC timestamp in %Y%m%d%H%M%S.
+  // Custom string substitutions are also supported through the 'custom_vars'
+  // parameter in generic_archive().
   string gcs_path = 4;
 
   enum ArchiveType {

@@ -526,7 +526,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return output_path
 
-  def _replace_placeholders(self, update_properties, input_str):
+  def _replace_placeholders(self, update_properties, custom_vars, input_str):
     position_placeholder = '{%position%}'
     if position_placeholder in input_str:
       commit_position = self._get_commit_position(update_properties, None)
@@ -552,9 +552,21 @@ class ArchiveApi(recipe_api.RecipeApi):
       timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
       input_str = input_str.replace(timestamp_placeholder, timestamp)
 
+    if custom_vars:
+      for placeholder, key in re.findall('({%(.*?)%})', input_str):
+        if key in custom_vars.keys():
+          input_str = input_str.replace(placeholder, custom_vars[key])
+        else:
+          self.m.python.failing_step('Unresolved placeholder',
+                                     placeholder + ' can not be resolved')
+
     return input_str
 
-  def generic_archive(self, build_dir, update_properties, config):
+  def generic_archive(self,
+                      build_dir,
+                      update_properties,
+                      custom_vars=None,
+                      config=None):
     """Archives one or multiple packages to google cloud storage.
 
     The exact configuration of the archive is specified by InputProperties. See
@@ -565,6 +577,10 @@ class ArchiveApi(recipe_api.RecipeApi):
                  [slave-build]/src/out/Release
       update_properties: The properties from the bot_update step (containing
                          commit information).
+      custom_vars: Dict of custom string substitution for gcs paths.
+                   E.g. custom_vars={'chrome_version':'1.2.3.4'}, then
+                   gcs_path='gcs/{%chrome_version%}/path' will be replaced to
+                   'gcs/1.2.3.4/path'.
       config: An instance of archive/properties.proto:InputProperties.
               DEPRECATED: If None, this will default to the global property
               $build/archive.
@@ -579,7 +595,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       for archive_data in config.archive_datas:
 
         # Perform dynamic configuration from placeholders, if necessary.
-        gcs_path = self._replace_placeholders(update_properties,
+        gcs_path = self._replace_placeholders(update_properties, custom_vars,
                                               archive_data.gcs_path)
 
         expanded_files = set(archive_data.files)
@@ -630,7 +646,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                 ' not declared', 'Both latest_gcs_path and '
                 'latest_gcs_file_content must be non-empty.')
           content = self._replace_placeholders(
-              update_properties, archive_data.latest_upload.gcs_file_content)
+              update_properties, custom_vars,
+              archive_data.latest_upload.gcs_file_content)
           content_ascii = content.encode('ascii', 'ignore')
           temp_dir = self.m.path.mkdtemp()
           output_file = temp_dir.join('latest.txt')

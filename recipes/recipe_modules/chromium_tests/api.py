@@ -596,15 +596,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           archive_subdir_suffix=bot_spec.cf_archive_subdir_suffix,
       )
 
+    # TODO(crbug.com/1138672) Move custom_vars to higher level of recipes.
+    custom_vars = {}
+    custom_vars['chrome_version'] = self._get_chrome_version()
+
     # The goal of generic archive is to eventually replace most of the custom
     # archive logic with InputProperties driven archiving.
     # https://crbug.com/1076679.
     self.m.archive.generic_archive(
         build_dir=self.m.chromium.output_dir,
         update_properties=update_step.presentation.properties,
-        config=None)
+        custom_vars=custom_vars)
 
     self.m.symupload(self.m.chromium.output_dir)
+
+  def _get_chrome_version(self):
+    chrome_version = self.m.properties.get('chrome_version')
+    if not chrome_version:
+      ref = self.m.buildbucket.gitiles_commit.ref
+      if ref.startswith('refs/tags/'):
+        chrome_version = str(ref[len('refs/tags/'):])
+    return chrome_version
 
   def _get_scheduler_jobs_to_trigger(self, builder_id, bot_config):
     """Get the LUCI scheduler jobs to trigger.
