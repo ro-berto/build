@@ -98,21 +98,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'Mac Builder Code Coverage':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'mac-arm64-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -192,23 +177,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac10.13 Tests Code Coverage':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Mac Builder Code Coverage',
             simulation_platform='mac',
         ),
     'Mac10.14 Tests':

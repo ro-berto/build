@@ -196,21 +196,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'GPU Mac Builder Code Coverage':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'Mac Release (Intel)':
         _chromium_gpu_spec(
             chromium_config='chromium',
@@ -225,23 +210,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='GPU Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac Release (Intel) Code Coverage':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU Mac Builder Code Coverage',
             simulation_platform='mac',
         ),
     'Mac Debug (Intel)':
@@ -274,23 +242,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='GPU Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac Retina Release (AMD) Code Coverage':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU Mac Builder Code Coverage',
             simulation_platform='mac',
         ),
     'Mac Retina Debug (AMD)':

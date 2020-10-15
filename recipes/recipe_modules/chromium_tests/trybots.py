@@ -1097,24 +1097,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.mac',
                 buildername='mac-arm64-rel',
             ),
-        'mac-coverage-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.mac',
-                    buildername='Mac Builder Code Coverage',
-                    tester='Mac10.13 Tests Code Coverage',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder Code Coverage',
-                    tester='Mac Release (Intel) Code Coverage',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder Code Coverage',
-                    tester='Mac Retina Release (AMD) Code Coverage',
-                ),
-            ]),
         'mac-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
