@@ -193,7 +193,8 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result = self.m.step(
           step_name or ('isolate tests%s' % suffix),
           args,
-          step_test_data=lambda: self.test_api.output_json(targets),
+          step_test_data=lambda: self.test_api.output_json(
+              targets, use_cas=use_cas),
           **kwargs)
       return step_result
     finally:

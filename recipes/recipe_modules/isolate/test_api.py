@@ -5,7 +5,8 @@
 from recipe_engine import recipe_test_api
 
 class IsolateTestApi(recipe_test_api.RecipeTestApi):
-  def output_json(self, targets=None, missing=None):
+
+  def output_json(self, targets=None, missing=None, use_cas=False):
     """Mocked output of 'find_isolated_tests' and 'isolate_tests' steps.
 
     Deterministically synthesizes json.output test data for the given targets.
@@ -18,7 +19,10 @@ class IsolateTestApi(recipe_test_api.RecipeTestApi):
     missing = missing or ()
     if targets is None:
       targets = ['dummy_target_1', 'dummy_target_2']
+    suffix = ''
+    if use_cas:
+      suffix = '/dummy size'
     return self.m.json.output({
-      target: None if target in missing else '[dummy hash for %s]' % target
-      for target in targets
+        target: None if target in missing else '[dummy hash for %s%s]' %
+        (target, suffix) for target in targets
     })
