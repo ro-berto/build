@@ -188,6 +188,12 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
   return test_options_copy
 
 
+def _add_suffix(step_name, suffix):
+  if not suffix:
+    return step_name
+  return '{} ({})'.format(step_name, suffix)
+
+
 class Test(object):
   """
   Base class for a test suite that can be run locally or remotely.
@@ -519,9 +525,7 @@ class Test(object):
     builds, since there could be post-processing on the step_name by other
     apis, like swarming (see api.chromium_swarming.get_step_name()).
     """
-    if not suffix:
-      return self.name
-    return '%s (%s)' % (self.name, suffix)
+    return _add_suffix(self.name, suffix)
 
   def step_metadata(self, suffix=None):
     data = {
@@ -1018,10 +1022,6 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    name = self.name
-    if suffix:
-      name += ' (%s)' % suffix  # pragma: no cover
-
     run_args = []
 
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1034,7 +1034,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
       if self._script_args:
         script_args = ['--args', api.json.input(self._script_args)]
       api.python(
-          name,
+          self.step_name(suffix),
           # Enforce that all scripts are in the specified directory
           # for consistency.
           api.path['checkout'].join('testing', 'scripts',
@@ -1560,10 +1560,7 @@ def _clean_step_name(step_name, suffix):
   if ' ' in step_name:
     step_name = step_name.split(' ')[0]
 
-  if not suffix:
-    return step_name
-
-  return '%s (%s)' % (step_name, suffix)
+  return _add_suffix(step_name, suffix)
 
 
 class LayoutTestResultsHandler(JSONResultsHandler):
@@ -2866,32 +2863,26 @@ class MockTest(Test):
       self._failures.append('test_failure')
       raise
 
-  def _mock_suffix(self, suffix):
-    return ' (%s)' % suffix if suffix else ''
-
   def pre_run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('pre_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
+      api.step('pre_run {}'.format(self.step_name(suffix)), None)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
-      step_result = api.step('%s%s' % (self.name, self._mock_suffix(suffix)),
-                             None)
+      step_result = api.step(self.step_name(suffix), None)
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     return step_result
 
   def has_valid_results(self, suffix):
-    self._api.step(
-        'has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
+    self._api.step('has_valid_results {}'.format(self.step_name(suffix)), None)
     if suffix in self._per_suffix_valid:  # pragma: no cover
       return self._per_suffix_valid[suffix]
     return self._has_valid_results
 
   def failures(self, suffix):
-    self._api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)),
-                   None)
+    self._api.step('failures {}'.format(self.step_name(suffix)), None)
     if suffix in self._per_suffix_failures:  # pragma: no cover
       return self._per_suffix_failures[suffix]
     return self._failures
