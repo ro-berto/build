@@ -60,21 +60,6 @@ SPEC = {
             parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),
-    'Win10 Tests x64 Code Coverage':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Win x64 Builder Code Coverage',
-            simulation_platform='win',
-        ),
     'Win7 (32) Tests':
         _chromium_win_spec(
             chromium_config='chromium',
@@ -112,19 +97,6 @@ SPEC = {
             simulation_platform='win',
         ),
     'Win x64 Builder':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='win',
-        ),
-    'Win x64 Builder Code Coverage':
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
