@@ -408,6 +408,14 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       presentation.links.update(step_result.presentation.links)
 
       ir = bundle.apply(ir)
+      # TODO(https://crbug.com/1138533): If a flag is added to prevent the
+      # priority modification, start using it and remove this code
+      # led get-builder automatically adds 10 to the priority, restore it to its
+      # previous value since this recipe blocks the build.git CQ
+      priority = (
+          ir.result.buildbucket.bbagent_args.build.infra.swarming.priority)
+      priority -= 10
+      ir = ir.then('edit-system', '-p', priority)
       # We used to set `is_experimental` to true, but the chromium recipe
       # currently uses that to deprioritize swarming tasks, which results in
       # very slow runtimes for the led task. Because this recipe blocks the
@@ -578,16 +586,19 @@ def GenTests(api):
   def non_existent_builder(name):
     return api.led.mock_get_builder(None, *parse_legacy_buildername(name))
 
+  def led_job(recipe):
+    job = job_pb2.Definition()
+    build = job.buildbucket.bbagent_args.build
+    build.input.properties['recipe'] = recipe
+    build.infra.swarming.priority = 40
+    return job
+
   def led_set_builder_recipe(name, recipe):
-    build = job_pb2.Definition()
-    build.buildbucket.bbagent_args.build.input.properties['recipe'] = recipe
-    return api.led.mock_get_builder(build, *parse_legacy_buildername(name))
+    return api.led.mock_get_builder(
+        led_job(recipe), *parse_legacy_buildername(name))
 
   def default_builders():
-    # Set the default recipe for all chromium builders
-    build = job_pb2.Definition()
-    build.buildbucket.bbagent_args.build.input.properties['recipe'] = RECIPE
-    return api.led.mock_get_builder(build)
+    return api.led.mock_get_builder(led_job(RECIPE))
 
   def affected_recipes_input_files(steps):
     json_input = steps['determine affected recipes'].cmd[-2]
