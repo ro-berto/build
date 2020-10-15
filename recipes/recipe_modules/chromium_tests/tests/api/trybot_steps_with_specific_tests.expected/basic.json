@@ -496,6 +496,7 @@
       "--idempotent",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
@@ -1534,6 +1535,7 @@
       "--idempotent",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_repeat=10",

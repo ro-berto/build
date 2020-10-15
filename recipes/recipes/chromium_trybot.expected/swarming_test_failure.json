@@ -1157,6 +1157,7 @@
       "--idempotent",
       "--isolated",
       "[dummy hash for gl_tests]",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
@@ -1516,6 +1517,7 @@
       "triggered_by:swarming_py",
       "--isolated",
       "[dummy hash for gl_tests]",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],

@@ -117,7 +117,9 @@ def RunSteps(api, platforms, custom_trigger_script,
     # shards on Linux.
     if gtest_task:
       task = api.chromium_swarming.gtest_task(
-          name='hello_world', isolated=isolated,
+          raw_cmd=['hello_world.exe'],
+          name='hello_world',
+          isolated=isolated,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge)
     elif isolated_script_task:

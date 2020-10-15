@@ -356,7 +356,9 @@
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
       "hash_for_linux",
+      "--raw-cmd",
       "--",
+      "hello_world.exe",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
@@ -444,7 +446,9 @@
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--isolated",
       "hash_for_linux",
+      "--raw-cmd",
       "--",
+      "hello_world.exe",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,

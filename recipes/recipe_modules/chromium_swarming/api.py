@@ -624,13 +624,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         trigger_script=trigger_script)
 
   def gtest_task(self,
+                 raw_cmd,
                  name=None,
                  isolated='',
                  cas_input_root='',
-                 extra_args=None,
                  cipd_packages=None,
                  merge=None,
-                 raw_cmd=None,
                  relative_cwd=None,
                  resultdb=None,
                  **kwargs):
@@ -641,17 +640,23 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     For meaning of the rest of the arguments see 'task' method.
     """
-    extra_args = list(extra_args or [])
+
+    # TODO(crbug.com/1108005): enable this assertion.
+    # assert len(raw_cmd) > 0
+
+    # Copy before modify.
+    raw_cmd = raw_cmd[:]
 
     # Ensure --test-launcher-summary-output is not already passed. We are going
     # to overwrite it.
     bad_args = any(
-        x.startswith('--test-launcher-summary-output=') for x in extra_args)
+        x.startswith('--test-launcher-summary-output=') for x in raw_cmd)
     if bad_args:  # pragma: no cover
-      raise ValueError('--test-launcher-summary-output should not be used.')
+      raise ValueError('--test-launcher-summary-output should not be used. %s' %
+                       raw_cmd)
 
     # Append it. output.json name is expected by collect_task.py.
-    extra_args.append(
+    raw_cmd.append(
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
     merge = merge or {'script': self.merge_script_path(
@@ -662,7 +667,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         name=name,
         cipd_packages=cipd_packages,
         collect_step=self._gtest_collect_step,
-        extra_args=extra_args,
         isolated=isolated,
         cas_input_root=cas_input_root,
         merge=merge,

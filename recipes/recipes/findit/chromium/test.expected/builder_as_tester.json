@@ -1231,6 +1231,7 @@
       "--idempotent",
       "--isolated",
       "[dummy hash for services_unittests]",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",

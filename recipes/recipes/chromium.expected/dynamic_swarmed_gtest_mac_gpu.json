@@ -520,6 +520,7 @@
       "--idempotent",
       "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
@@ -624,6 +625,7 @@
       "--idempotent",
       "--isolated",
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],

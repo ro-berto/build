@@ -249,6 +249,7 @@
       "{$HOME}/logdog:infra/logdog/linux-386:git_revision:deadbeef",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],

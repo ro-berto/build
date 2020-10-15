@@ -1381,6 +1381,7 @@
       "--idempotent",
       "--isolated",
       "[dummy hash for affected_tests]",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",

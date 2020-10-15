@@ -1263,6 +1263,7 @@
       "--idempotent",
       "--isolated",
       "[dummy hash for gl_tests]",
+      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One:Test.Two:Test.Three",
