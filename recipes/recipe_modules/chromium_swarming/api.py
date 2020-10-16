@@ -676,8 +676,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         **kwargs)
     return task
 
-  def isolated_script_task(self, raw_cmd=None, relative_cwd=None,
-                           resultdb=None):
+  def isolated_script_task(self,
+                           raw_cmd=None,
+                           relative_cwd=None,
+                           resultdb=None,
+                           isolated='',
+                           cas_input_root=''):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
     At the time of this writting, this code is used by WebRTC and
@@ -706,7 +710,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     }
 
     task = self.task(
-        raw_cmd=raw_cmd, relative_cwd=relative_cwd, resultdb=resultdb)
+        raw_cmd=raw_cmd,
+        relative_cwd=relative_cwd,
+        resultdb=resultdb,
+        isolated=isolated,
+        cas_input_root=cas_input_root)
     task.extra_args = extra_args
     task.merge = merge
     task.collect_step = self._isolated_script_collect_step

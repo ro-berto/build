@@ -1866,8 +1866,8 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def _apply_swarming_task_config(self, task, api, suffix, isolated,
-                                  filter_flag, filter_delimiter):
+  def _apply_swarming_task_config(self, task, api, suffix, filter_flag,
+                                  filter_delimiter):
     """Applies shared configuration for swarming tasks.
     """
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1980,8 +1980,7 @@ class SwarmingTest(Test):
       for package in self._cipd_packages:
         ensure_file.add_package(package[1], package[2], package[0])
 
-    task_slice = (
-        task_slice.with_cipd_ensure_file(ensure_file).with_isolated(isolated))
+    task_slice = (task_slice.with_cipd_ensure_file(ensure_file))
 
     if self._named_caches:
       task.named_caches.update(self._named_caches)
@@ -2203,9 +2202,9 @@ class SwarmingGTestTest(SwarmingTest):
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
+        isolated=isolated,
         resultdb=self.resultdb)
-    self._apply_swarming_task_config(task, api, suffix, isolated,
-                                     '--gtest_filter', ':')
+    self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -2504,9 +2503,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     task = api.chromium_swarming.isolated_script_task(
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
+        isolated=isolated,
         resultdb=self.resultdb)
 
-    self._apply_swarming_task_config(task, api, suffix, isolated,
+    self._apply_swarming_task_config(task, api, suffix,
                                      '--isolated-script-test-filter', '::')
     return task
 
@@ -2995,12 +2995,12 @@ class SwarmingIosTest(SwarmingTest):
         name=task['step name'],
         task_output_dir=task['tmp_dir'],
         failure_as_exception=False,
+        isolated=task['isolated hash'],
     )
     self._apply_swarming_task_config(
         swarming_task,
         api,
         suffix,
-        task['isolated hash'],
         filter_flag=None,
         filter_delimiter=None)
 
