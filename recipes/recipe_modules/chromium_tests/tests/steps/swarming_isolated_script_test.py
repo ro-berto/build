@@ -139,6 +139,18 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic_cas',
+      api.chromium.ci_build(
+          builder_group='chromium.linux',
+          builder='Linux Tests',
+      ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
+      }),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'missing_shards',
       api.chromium.ci_build(
           builder_group='chromium.linux',

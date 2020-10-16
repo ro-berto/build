@@ -1853,13 +1853,24 @@ class SwarmingTest(Test):
   def relative_cwd(self, value):
     self._relative_cwd = value
 
-  def create_task(self, api, suffix, isolated):
+  # TODO(https://crbug.com/chrome-operations/49):
+  # remove this after isolate shutdown.
+  def _get_isolated_or_cas_input_root(self, task_input):
+    """
+    This checks format of |task_input| and returns appropriate value as
+    (isolated, cas_input_root).
+    """
+    if '/' in task_input:
+      return '', task_input
+    return task_input, ''
+
+  def create_task(self, api, suffix, task_input):
     """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
       api: Caller's API.
       suffix: Suffix added to the test name.
-      isolated: Hash of the isolated test to be run.
+      task_input: Hash or digest of the isolated test to be run.
 
     Returns:
       A SwarmingTask object.
@@ -2048,14 +2059,14 @@ class SwarmingTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated = api.isolate.isolated_tests.get(self.isolate_target)
-    if not isolated:
+    task_input = api.isolate.isolated_tests.get(self.isolate_target)
+    if not task_input:
       return api.python.failing_step(
           '[error] %s' % self.step_name(suffix),
           '*.isolated file for target %s is missing' % self.isolate_target)
 
     # Create task.
-    self._tasks[suffix] = self.create_task(api, suffix, isolated)
+    self._tasks[suffix] = self.create_task(api, suffix, task_input)
 
     api.chromium_swarming.trigger_task(
         self._tasks[suffix],
@@ -2198,11 +2209,13 @@ class SwarmingGTestTest(SwarmingTest):
       return self._override_compile_targets
     return [self.target_name]
 
-  def create_task(self, api, suffix, isolated):
+  def create_task(self, api, suffix, task_input):
+    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
         isolated=isolated,
+        cas_input_root=cas_input_root,
         resultdb=self.resultdb)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
     return task
@@ -2499,11 +2512,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def test_options(self, value):
     self._test_options = value
 
-  def create_task(self, api, suffix, isolated):
+  def create_task(self, api, suffix, task_input):
+    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
     task = api.chromium_swarming.isolated_script_task(
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
         isolated=isolated,
+        cas_input_root=cas_input_root,
         resultdb=self.resultdb)
 
     self._apply_swarming_task_config(task, api, suffix,
@@ -3138,7 +3153,7 @@ class SwarmingIosTest(SwarmingTest):
   def validate_task_results(self, api, step_result):
     raise NotImplementedError()  # pragma: no cover
 
-  def create_task(self, api, suffix, isolated):
+  def create_task(self, api, suffix, task_input):
     raise NotImplementedError()  # pragma: no cover
 
   def compile_targets(self):

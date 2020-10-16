@@ -83,6 +83,18 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic_cas',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
+      }),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'basic_ignore_task_failure',
       api.chromium.ci_build(
           builder_group='test_group',
