@@ -114,6 +114,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm64-rel',
                 tester='android-cronet-arm64-rel-marshmallow-tests',
             ),
+        'android-inverse-fieldtrials-pie-x86-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android.fyi',
+                buildername='android-inverse-fieldtrials-pie-x86-fyi-rel',
+            ),
         'android-lollipop-arm-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
