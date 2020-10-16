@@ -34,6 +34,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        buildername,
                        revision,
                        parent_got_revision=None,
+                       pinpoint_job_id=None,
                        failing_test=None,
                        fail_compile=False,
                        suffix='',
@@ -76,6 +77,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(revision=revision,
                                 got_revision='a' * 40,
                                 got_revision_cp='refs/heads/master@{#1337}')
+    if pinpoint_job_id:
+      test += self.m.properties(pinpoint_job_id=pinpoint_job_id)
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += self.m.properties(parent_got_revision=parent_rev)

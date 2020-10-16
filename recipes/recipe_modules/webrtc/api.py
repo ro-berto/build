@@ -271,13 +271,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
-  @property
-  def is_triggering_perf_tests(self):
-    for triggered_bot in self.bot.triggered_bots():
-      if self.get_bot(*triggered_bot).test_suite.endswith('perf_swarming'):
-        return self.bot.should_build
-    return False
-
   def is_compile_needed(self, phase=None, is_ios=False):
     test_targets = set()
     non_isolated_test_targets = set()
@@ -605,24 +598,26 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
-  def isolate(self):
-    if self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
-      # Set the swarm_hashes name so that it is found by pinpoint.
-      commit_position = self.revision_cp.replace('@', '(at)')
-      swarm_hashes_property_name = '_'.join(
-          ('swarm_hashes', commit_position, 'without_patch'))
-      self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir,
-          targets=self._isolated_targets,
-          swarm_hashes_property_name=swarm_hashes_property_name)
+  def pinpoint_isolate(self):
+    # Set the swarm_hashes name so that it is found by pinpoint.
+    commit_position = self.revision_cp.replace('@', '(at)')
+    swarm_hashes_property_name = '_'.join(
+        ('swarm_hashes', commit_position, 'without_patch'))
+    self.m.isolate.isolate_tests(
+        self.m.chromium.output_dir,
+        targets=self._isolated_targets,
+        swarm_hashes_property_name=swarm_hashes_property_name)
+    # Upload the isolate file to the pinpoint server.
+    self.m.perf_dashboard.upload_isolate(
+        self.m.buildbucket.builder_name,
+        self.m.perf_dashboard.get_change_info([{
+            'repository': 'webrtc',
+            'git_hash': self.revision
+        }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
 
-      # Upload the isolate file to the pinpoint server.
-      self.m.perf_dashboard.upload_isolate(
-          self.m.buildbucket.builder_name,
-          self.m.perf_dashboard.get_change_info([{
-              'repository': 'webrtc',
-              'git_hash': self.revision
-          }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
+  def isolate(self):
+    if self.m.properties.get('pinpoint_job_id'):
+      self.pinpoint_isolate()
     else:
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir, targets=self._isolated_targets)
@@ -722,14 +717,17 @@ class WebRTCApi(recipe_api.RecipeApi):
 
 
   def maybe_trigger(self):
-    properties = {
-      'revision': self.revision,
-      'parent_got_revision': self.revision,
-      'parent_got_revision_cp': self.revision_cp,
-    }
+    # The tests are triggered by pinpoint.
+    if self.m.properties.get('pinpoint_job_id'):
+      return
 
     triggered_bots = list(self.bot.triggered_bots())
     if triggered_bots:
+      properties = {
+          'revision': self.revision,
+          'parent_got_revision': self.revision,
+          'parent_got_revision_cp': self.revision_cp,
+      }
       raw_command_lines = self.find_swarming_command_lines()
       # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
       # the variable to be expanded by the builder instead of the tester.
