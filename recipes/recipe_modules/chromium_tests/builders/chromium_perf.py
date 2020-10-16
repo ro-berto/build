@@ -147,21 +147,33 @@ def TestSpec(config_name,
   return bot_spec.BotSpec.create(**kwargs)
 
 
-def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
+def _AddIsolatedTestSpec(name,
+                         platform,
+                         parent_buildername,
+                         target_bits=64,
+                         target_arch=None):
   spec = TestSpec(
       'chromium_perf',
       platform,
       target_bits,
-      parent_buildername=parent_buildername)
+      parent_buildername=parent_buildername,
+      target_arch=target_arch)
   SPEC[name] = spec
 
 
-def _AddBuildSpec(name, platform, target_bits=64, bisect_archive_build=False):
+def _AddBuildSpec(name,
+                  platform,
+                  target_bits=64,
+                  bisect_archive_build=False,
+                  target_arch=None,
+                  gclient_apply_config=None):
   SPEC[name] = BuildSpec(
       'chromium_perf',
       platform,
       target_bits,
-      bisect_archive_build=bisect_archive_build)
+      bisect_archive_build=bisect_archive_build,
+      target_arch=target_arch,
+      extra_gclient_apply_config=gclient_apply_config)
 
 
 # LUCI builder
@@ -181,6 +193,12 @@ _AddBuildSpec(
 _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
+_AddBuildSpec(
+    'mac-arm-builder-perf',
+    'mac',
+    bisect_archive_build=True,
+    target_arch='arm',
+    gclient_apply_config=['use_xcode_12_beta'])
 
 # Adapted from 'chromeos-amd64-generic-lacros-internal' to measure binary size.
 SPEC.update({
@@ -245,7 +263,9 @@ _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'mac-builder-perf')
-_AddIsolatedTestSpec('mac-arm_dtk-perf', 'mac', 'mac-builder-perf')
+_AddIsolatedTestSpec('mac-arm_dtk_x86-perf', 'mac', 'mac-builder-perf')
+_AddIsolatedTestSpec(
+    'mac-arm_dtk_arm-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
 
