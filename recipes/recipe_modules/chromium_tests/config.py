@@ -16,6 +16,9 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
       # TODO(894045): Remove once all tasks are switched to `swarming`
       use_swarming_recipe_to_trigger=Single(
           bool, empty_val=False, required=False),
+      # TODO(crbug.com/chrome-operations/49):
+      # Remove once all tasks are switched to `cas`
+      use_cas=Single(bool, empty_val=False),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -34,3 +37,8 @@ def staging(c):
 @config_ctx()
 def use_swarming_recipe_to_trigger(c):
   c.use_swarming_recipe_to_trigger = True
+
+
+@config_ctx()
+def use_cas(c):
+  c.use_cas = True

@@ -16,6 +16,8 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config(api.properties.get('gclient_config', 'chromium'))
   api.chromium.set_config(api.properties.get('chromium_config', 'chromium'))
+  api.chromium_tests.set_config(
+      api.properties.get('chromium_tests_config', 'chromium'))
 
 
 def GenTests(api):
@@ -24,5 +26,11 @@ def GenTests(api):
       api.properties(
           gclient_config='chromium_perf_clang',
           chromium_config='chromium_perf_clang'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'use_cas',
+      api.properties(chromium_tests_config='use_cas'),
       api.post_process(post_process.DropExpectation),
   )

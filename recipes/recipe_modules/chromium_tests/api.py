@@ -460,6 +460,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             suffix=name_suffix,
             targets=list(set(isolated_targets)),
             verbose=True,
+            use_cas=self.c.use_cas,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
         self.set_test_command_lines(tests_including_triggered, name_suffix)
@@ -879,6 +880,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
             suffix=' (%s)' % suffix,
+            use_cas=self.c.use_cas,
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
