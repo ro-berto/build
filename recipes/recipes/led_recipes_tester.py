@@ -4,7 +4,6 @@
 
 """Tests a recipe CL by running a chromium builder."""
 
-import attr
 import collections
 import contextlib
 import re
@@ -13,6 +12,9 @@ from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.led.job import job as job_pb2
+
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
+                                             sequence_attrib)
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -49,10 +51,10 @@ DEFAULT_BUILDERS = (
 )
 
 
-@attr.s(frozen=True)
+@attrs()
 class PathBasedBuilderSet(object):
-  builders = attr.ib()
-  files = attr.ib()
+  builders = sequence_attrib(str)
+  files = sequence_attrib(str)
 
 
 # Builders that will be tested only if specific files are touched
@@ -113,20 +115,7 @@ CHROMIUM_SRC_TEST_CLS = {
 }
 
 
-# The builders and trybots files affect specific builders, so when changes only
-# affect these files, launching the default set of builders will only provide a
-# useful signal in the small percentage of CLs that affect those default
-# builders and unnecesarily consume resources and time in the rest of the CLs
-PER_BUILDER_CONFIG_PATTERNS = [
-    r'recipes/recipe_modules/chromium_tests/builders/.*\.py',
-    r'recipes/recipe_modules/chromium_tests/trybots\.py',
-]
-
-PER_BUILDER_CONFIG_REGEX = re.compile('^({})$'.format('|'.join(
-    '({})'.format(p) for p in PER_BUILDER_CONFIG_PATTERNS)))
-
-
-@attr.s(frozen=True)
+@attrs()
 class RelatedBuilder(object):
   """Type to record a related builder.
 
@@ -134,8 +123,8 @@ class RelatedBuilder(object):
   builder for the release branches. This type is used to record the
   original builder and the bucket variant.
   """
-  original_builder = attr.ib()
-  bucket = attr.ib()
+  original_builder = attrib(str)
+  bucket = attrib(str)
 
 
 def _get_recipe(led_builder):
@@ -223,6 +212,69 @@ def _get_builders_to_check(api, affected_files, repo_path):
     if any(f in affected_files for f in builder_set.files):
       builders.extend(builder_set.builders)
   return True, collections.OrderedDict.fromkeys(builders)
+
+
+@attrs()
+class FilesToIgnore(object):
+  # A list of strings containing regex patterns of files to ignore. The patterns
+  # will be matched against the repo-root-relative paths of the affected files
+  # (e.g. recipes/recipe_modules/chromium_tests/trybots.py). The patterns will
+  # be implicitly anchored to match the entire relative path.
+  patterns = sequence_attrib(str)
+
+  # If any files match `ignore_patterns`, a step will be created with the name
+  # `step_name` and the step text will combine `step_text` and the list of
+  # excluded files.
+  step_name = attrib(str)
+  step_text = attrib(str)
+
+  @cached_property
+  def regex(self):
+    # Create a single pattern that has all of the patterns as options. Surround
+    # each individual pattern with parentheses so that the | applies to the
+    # whole pattern, not just the boundary characters.
+    pattern = '|'.join('({})'.format(p) for p in self.patterns)
+    # Anchor the combined pattern so that the whole string must be matched.
+    # Parentheses are used so that the anchors apply to the entire combined
+    # pattern, not just the first and last options.
+    pattern = '^({})$'.format(pattern)
+    return re.compile(pattern)
+
+
+def _ignore_affected_files(api, repo_path, affected_files, files_to_ignore):
+  """Ignore files for analysis that match a regex.
+
+  Args:
+    api - The recipe API object.
+    repo_path - The path to the repo root.
+    affected_files - The list of files affected by the change.
+    files_to_ignore - A list of `FilesToIgnore` that detail the files to
+      ignore for analysis.
+
+  Returns:
+    The list of affected files with ignored files removed.
+  """
+  ignored_files = {i: [] for i in files_to_ignore}
+  new_affected_files = []
+
+  for f in affected_files:
+    rel_path = api.path.relpath(f, repo_path)
+    ignored = False
+    for i in files_to_ignore:
+      if i.regex.match(rel_path):
+        ignored_files[i].append(f)
+        ignored = True
+    if not ignored:
+      new_affected_files.append(f)
+
+  for i, files in ignored_files.iteritems():
+    if files:
+      step_result = api.step(i.step_name, [])
+      message = ['\n' + i.step_text]
+      message.extend(sorted(files))
+      step_result.presentation.step_text = '\n  '.join(message)
+
+  return new_affected_files
 
 
 def _get_led_builders(api, builders):
@@ -459,27 +511,39 @@ def RunSteps(api):
   ignore_per_builder_config, builders = _get_builders_to_check(
       api, affected_files, repo_path)
 
+  files_to_ignore = [
+      FilesToIgnore(
+          patterns=[
+              r'(.+/)?recipe_modules/[^/]+/examples/.+',
+              r'(.+/)?recipe_modules/[^/]+/tests/.+',
+          ],
+          step_name='ignoring recipe tests',
+          step_text=('The following affected files'
+                     ' do not contain production recipe code:'),
+      ),
+  ]
+
+  # The builders and trybots files affect specific builders, so when changes
+  # only affect these files, launching the default set of builders will only
+  # provide a useful signal in the small percentage of CLs that affect those
+  # default builders and unnecesarily consume resources and time in the rest of
+  # the CLs
   if ignore_per_builder_config:
-    ignored_files = []
-    new_affected_files = []
-    for f in affected_files:
-      rel_path = api.path.relpath(f, repo_path)
-      if PER_BUILDER_CONFIG_REGEX.match(rel_path):
-        ignored_files.append(f)
-      else:
-        new_affected_files.append(f)
+    files_to_ignore.append(
+        FilesToIgnore(
+            patterns=[
+                r'recipes/recipe_modules/chromium_tests/builders/.*\.py',
+                r'recipes/recipe_modules/chromium_tests/trybots\.py',
+            ],
+            step_name='ignoring per-builder config',
+            step_text=(
+                'The following affected files are being ignored because they'
+                ' contain per-builder config that is unlikely to affect the'
+                ' default builders:'),
+        ))
 
-    if ignored_files:
-      step_result = api.step('ignoring affected files', [])
-      message = [
-          '\nThe following affected files are being ignored because '
-          'they contain per-builder config that is unlikely to affect the '
-          'default builders:'
-      ]
-      message.extend(sorted(ignored_files))
-      step_result.presentation.step_text = '\n  '.join(message)
-
-    affected_files = new_affected_files
+  affected_files = _ignore_affected_files(api, repo_path, affected_files,
+                                          files_to_ignore)
 
   led_builders = _get_led_builders(api, builders)
   recipes = set(
@@ -631,11 +695,27 @@ def GenTests(api):
           'recipes/recipe_modules/chromium_tests/builders/chromium.py',
           'recipes/recipe_modules/chromium_tests/trybots.py'),
       default_builders(),
-      api.post_check(post_process.MustRun, 'ignoring affected files'),
+      api.post_check(post_process.MustRun, 'ignoring per-builder config'),
       api.post_check(
           affected_recipes_input_files_does_not_contain,
           'recipes/recipe_modules/chromium_tests/builders/chromium.py',
           'recipes/recipe_modules/chromium_tests/trybots.py'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'recipe_test_ignored',
+      gerrit_change(),
+      affected_recipes(RECIPE),
+      affected_files(
+          'recipes/recipe_modules/chromium_swarming/examples/full.py',
+          'recipes/recipe_modules/chromium_tests/tests/builders.py'),
+      default_builders(),
+      api.post_check(post_process.MustRun, 'ignoring recipe tests'),
+      api.post_check(
+          affected_recipes_input_files_does_not_contain,
+          'recipes/recipe_modules/chromium_swarming/examples/full.py',
+          'recipes/recipe_modules/chromium_tests/tests/builders.py'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -764,7 +844,7 @@ def GenTests(api):
           'recipes/recipe_modules/chromium_tests/builders/chromium.py',
           'recipes/recipe_modules/chromium_tests/trybots.py'),
       default_builders(),
-      api.post_check(post_process.DoesNotRun, 'ignoring affected files'),
+      api.post_check(post_process.DoesNotRun, 'ignoring builder config'),
       api.post_check(
           affected_recipes_input_files_contains,
           'recipes/recipe_modules/chromium_tests/builders/chromium.py',
