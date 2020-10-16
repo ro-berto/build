@@ -2506,9 +2506,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         relative_cwd=self.relative_cwd,
         resultdb=self.resultdb)
 
-    task_slice = task.request[0]
-    task.request = task.request.with_slice(0, task_slice)
-
     self._apply_swarming_task_config(task, api, suffix, isolated,
                                      '--isolated-script-test-filter', '::')
     return task
