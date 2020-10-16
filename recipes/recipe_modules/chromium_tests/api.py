@@ -1307,18 +1307,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return self.m.file.read_json(
         'read command lines', command_lines_file, test_data={})
 
-  def _contains_invalid_results(self, unrecoverable_test_suites):
+  def _get_valid_and_invalid_results(self, unrecoverable_test_suites):
+    valid = []
+    invalid = []
     for test_suite in unrecoverable_test_suites:
       # Both 'with patch' and 'without patch' must have valid results to
       # skip CQ retries.
-      valid_results, _ = (test_suite.with_patch_failures_including_retry())
-      if not valid_results:
-        return True
+      valid_results_with_patch, _ = (
+          test_suite.with_patch_failures_including_retry())
+      if valid_results_with_patch and test_suite.has_valid_results(
+          'without patch'):
+        valid.append(test_suite)
+      else:
+        invalid.append(test_suite)
 
-      if not test_suite.has_valid_results('without patch'):
-        return True
-
-    return False
+    return valid, invalid
 
   def deapply_deps(self, bot_update_step):
     with self.m.context(cwd=self.m.chromium_checkout.working_dir):
@@ -1428,18 +1431,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
 
+      # This means the tests passed
       if not unrecoverable_test_suites:
         return None
 
+      # This means there was a failure of some sort
       if self.m.tryserver.is_tryserver:
-        if self.revised_test_targets is not None:
+        valid_suites, invalid_suites = self._get_valid_and_invalid_results(
+            unrecoverable_test_suites)
+        # For DEPS autoroll analysis
+        if self.revised_test_targets is not None and valid_suites:
           with self.m.step.nest(
               'Analyze DEPS autorolls correctness check') as step_result:
             step_result.presentation.step_text = (
                 'This is an informational step for infra maintainers '
                 'and shouldn\'t impact the build')
-            self.analyze_deps_autorolls_correctness(unrecoverable_test_suites)
-        if not self._contains_invalid_results(unrecoverable_test_suites):
+            self.analyze_deps_autorolls_correctness(valid_suites)
+        if not invalid_suites:
           self.m.cq.set_do_not_retry_build()
 
       return result_pb2.RawResult(
