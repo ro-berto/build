@@ -449,7 +449,7 @@ class IndexPack(object):
         print('missing ' + fname)
         return
       # Derive the new filename from the SHA256 hash.
-      with open(fname, 'rU') as source_file:
+      with open(fname, 'rb') as source_file:
         content = source_file.read()
       content_hash = hashlib.sha256(content).hexdigest()
       # Check if we've already seen this hash before.
@@ -540,7 +540,7 @@ class IndexPack(object):
 
     # Add unit file
     try:
-      with kzip.open(unit, 'rU') as f:
+      with kzip.open(unit, 'U') as f:
         content = f.read()
     except zipfile.BadZipfile as e:
       # Should there be issue with extracting kzip, skip this unit
@@ -573,7 +573,7 @@ class IndexPack(object):
     # Add all files
     for (filename, zip_info) in files.iteritems():
       try:
-        with kzip.open(zip_info, 'rU') as f:
+        with kzip.open(zip_info, 'r') as f:
           content = f.read()
       except zipfile.BadZipfile as e:
         # Should there be issue with extracting kzip, skip this unit
