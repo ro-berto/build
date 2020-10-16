@@ -109,12 +109,6 @@ def GenTests(api):
   yield generate_builder(bucketname, buildername, revision='a' * 40,
                          failing_test='rtc_unittests',
                          suffix='_failing_test')
-  yield generate_builder(
-      bucketname,
-      buildername,
-      revision=None,
-      pinpoint_job_id='some_job_id',
-      suffix='_pinpoint')
   yield (
     generate_builder(
       bucketname,
