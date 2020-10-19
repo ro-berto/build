@@ -9,15 +9,38 @@ import urllib
 from recipe_engine.types import freeze
 
 
-MONORAIL_SEARCH_FLAKY_BUGS_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Flake+%(name)s')
+MONORAIL_SEARCH_BUGS_TEMPLATE = (
+    'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+%(name)s')
 
-MONORAIL_FILE_FLAKY_BUG_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/entry?template=Report+flaky+test&'
-    'summary=%(name)s+starts+flaking&description=Failing+test:+%(name)s%%0A'
-    'Failure+link:+%(build_link)s%%0ALink+to+Flako+run:+%%3Cinsert%%3E')
+MONORAIL_FILE_BUG_TEMPLATE = (
+    'https://bugs.chromium.org/p/v8/issues/entry?template=%(template)s&'
+    'summary=%(name)s+%(title)s&description=Failing+test:+%(name)s%%0A'
+    'Failure+link:+%(build_link)s%%0A%(footer)s')
 
-MAX_FLAKE_LINKS = 5
+FLAKO_LINK_TEMPLATE = 'Link+to+Flako+run:+%3Cinsert%3E'
+
+FAILURE_BUG_DEFAULTS = {
+  'template': 'Report+failing+test',
+  'title': 'starts+failing',
+  'footer': '',
+  'label':  'Hotlist-Failure',
+}
+
+FLAKE_BUG_DEFAULTS = {
+  'template': 'Report+flaky+test',
+  'title': 'starts+flaking',
+  'footer': FLAKO_LINK_TEMPLATE,
+  'label':  'Hotlist-Flake',
+}
+
+FLAGFUZZ_BUG_DEFAULTS = {
+  'template': 'Report+flag-fuzzer+failure',
+  'title': 'starts+failing+%%28flag+fuzzer%%29',
+  'footer': FLAKO_LINK_TEMPLATE,
+  'label':  'Hotlist-FlagFuzz',
+}
+
+MAX_BUG_LINKS = 5
 
 
 # pylint: disable=abstract-method
@@ -414,6 +437,7 @@ class V8Test(BaseTest):
         self.api.v8._get_failure_logs(json_output, failure_factory))
     self.api.v8._update_failure_presentation(
         failure_log, failures, step_result.presentation)
+    self._add_bug_links(failures, step_result.presentation)
 
     if failure_log and failures:
       # Mark the test step as failure only if there were real failures (i.e.
@@ -435,7 +459,7 @@ class V8Test(BaseTest):
       step_result.presentation.status = self.api.step.FAILURE
       self.api.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
-      self._add_flake_links(flakes, step_result.presentation)
+      self._add_bug_links(flakes, step_result.presentation)
 
     if self.has_only_stress_opt_failures(json_output):
       self.api.step('Found isolated stress failures', cmd=None)
@@ -444,22 +468,20 @@ class V8Test(BaseTest):
 
     return TestResults(failures, flakes, infra_failures)
 
-  def _add_flake_links(self, flakes, presentation):
-    """Adds links to search/file bugs for up to MAX_FLAKE_LINKS flaky tests."""
-    for flake in flakes[:MAX_FLAKE_LINKS]:
-      test_name = flake.results[0]['name']
-      ui_label = self.api.v8.ui_test_label(test_name)
-      link_params = {
-        'name': test_name,
-        'build_link': urllib.quote(self.api.buildbucket.build_url()),
-      }
+  def _add_bug_links(self, failures, presentation):
+    """Adds links to search/file bugs for up to MAX_BUG_LINKS tests."""
+    for failure in failures[:MAX_BUG_LINKS]:
+      ui_label = self.api.v8.ui_test_label(failure.name)
+      link_params = failure.get_monorail_params(
+          urllib.quote(self.api.buildbucket.build_url()))
+
       presentation.links['%s (bugs)' % ui_label] = (
-          MONORAIL_SEARCH_FLAKY_BUGS_TEMPLATE % link_params)
+          MONORAIL_SEARCH_BUGS_TEMPLATE % link_params)
       presentation.links['%s (new)' % ui_label] = (
-          MONORAIL_FILE_FLAKY_BUG_TEMPLATE % link_params)
-    if len(flakes) > MAX_FLAKE_LINKS:  # pragma: no cover
+          MONORAIL_FILE_BUG_TEMPLATE % link_params)
+    if len(failures) > MAX_BUG_LINKS:
       presentation.step_text += (
-          'too many flakes, only showing some links below<br/>')
+          'too many failures, only showing some links below<br/>')
 
   def _setup_rerun_config(self, failure_dict):
     """Return: A test config that reproduces a specific failure."""
@@ -848,13 +870,30 @@ class Failure(object):
     self.is_flaky = not all(
         x['result'] == results[0]['result'] for x in results)
 
+  def get_monorail_params(self, build_link):
+    if self.framework_name == 'num_fuzzer':
+      link_params = FLAGFUZZ_BUG_DEFAULTS
+    elif self.is_flaky:
+      link_params = FLAKE_BUG_DEFAULTS
+    else:
+      link_params = FAILURE_BUG_DEFAULTS
+    return dict(link_params, name=self.name, build_link=build_link)
+
   @property
   def failure_dict(self):
     return self.results[0]
 
   @property
+  def framework_name(self):
+    return self.failure_dict.get('framework_name')
+
+  @property
   def duration(self):
     return self.failure_dict['duration']
+
+  @property
+  def name(self):
+    return self.failure_dict['name']
 
   @property
   def test_step_config(self):
@@ -875,7 +914,7 @@ class Failure(object):
     # fuzzer, we have to ignore the arguments passed to the fuzzer and instead
     # pass the flags the fuzzer used for that particular test. Also variants
     # are not used on the fuzzer, which is the same as using 'default'.
-    if self.results[0].get('framework_name') == 'num_fuzzer':
+    if self.framework_name == 'num_fuzzer':
       extra_args = []
       for flag in self.results[0]['variant_flags']:
         extra_args += ['--extra-flags', flag]
@@ -885,7 +924,7 @@ class Failure(object):
       extra_args = (list(test_config.get('test_args', [])) +
                     list(self.api.v8.c.testing.test_args) +
                     list(self.test_step_config.test_args))
-      variant = self.results[0]['variant']
+      variant = self.failure_dict['variant']
 
     properties = {
         # This assumes the builder's group is the same as the tester.
@@ -908,7 +947,7 @@ class Failure(object):
             test_config.get('isolated_target') or test_config['tests'][0],
         # Full qualified test name that failed (e.g. mjsunit/foo/bar).
         'test_name':
-            self.results[0]['name'],
+            self.name,
         # Add timeout default for convenience.
         'timeout_sec':
             60,
@@ -932,10 +971,10 @@ class Failure(object):
 
     # Add common description for multiple runs.
     flaky_suffix = ' (flaky in a repeated run)' if self.is_flaky else ''
-    lines.append('Test: %s%s' % (self.results[0]['name'], flaky_suffix))
-    lines.append('Flags: %s' % ' '.join(self.results[0]['flags']))
-    lines.append('Command: %s' % self.results[0]['command'])
-    lines.append('Variant: %s' % self.results[0]['variant'])
+    lines.append('Test: %s%s' % (self.name, flaky_suffix))
+    lines.append('Flags: %s' % ' '.join(self.failure_dict['flags']))
+    lines.append('Command: %s' % self.failure_dict['command'])
+    lines.append('Variant: %s' % self.failure_dict['variant'])
     lines.append('')
     lines.append('Build environment:')
     if self.api.v8.build_environment is None:

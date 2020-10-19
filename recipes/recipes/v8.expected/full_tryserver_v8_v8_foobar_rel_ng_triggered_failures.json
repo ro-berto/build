@@ -357,7 +357,7 @@
     "name": "Check",
     "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
-      "@@@STEP_TEXT@failures: 19<br/>@@@",
+      "@@@STEP_TEXT@failures: 19<br/>too many failures, only showing some links below<br/>@@@",
       "@@@STEP_LOG_LINE@step.sub_build@{@@@",
       "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
       "@@@STEP_LOG_LINE@step.sub_build@}@@@",
@@ -923,6 +923,12 @@
       "@@@STEP_LOG_LINE@test-name8@Some errput.@@@",
       "@@@STEP_LOG_LINE@test-name8@@@@",
       "@@@STEP_LOG_END@test-name8@@@",
+      "@@@STEP_LINK@other-test-very-very-very-long-n... (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+other-suite/dir/other-test-very-very-very-long-name0@@@",
+      "@@@STEP_LINK@other-test-very-very-very-long-n... (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=other-suite/dir/other-test-very-very-very-long-name0+starts+failing&description=Failing+test:+other-suite/dir/other-test-very-very-very-long-name0%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
+      "@@@STEP_LINK@test-name0 (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/test-name0@@@",
+      "@@@STEP_LINK@test-name0 (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/test-name0+starts+failing&description=Failing+test:+suite-name/dir/test-name0%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
+      "@@@STEP_LINK@test-name1 (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/test-name1@@@",
+      "@@@STEP_LINK@test-name1 (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/test-name1+starts+failing&description=Failing+test:+suite-name/dir/test-name1%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
