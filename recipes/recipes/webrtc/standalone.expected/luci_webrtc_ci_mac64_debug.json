@@ -204,16 +204,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Mac64_Debug"
-    ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
