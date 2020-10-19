@@ -719,14 +719,18 @@ class WebRTCApi(recipe_api.RecipeApi):
 
 
   def maybe_trigger(self):
-    properties = {
-      'revision': self.revision,
-      'parent_got_revision': self.revision,
-      'parent_got_revision_cp': self.revision_cp,
-    }
+    # If the builder is triggered by pinpoint, don't run the tests.
+    for tag in self.m.buildbucket.build.tags:
+      if tag.key == 'pinpoint_job_id':
+        return
 
     triggered_bots = list(self.bot.triggered_bots())
     if triggered_bots:
+      properties = {
+          'revision': self.revision,
+          'parent_got_revision': self.revision,
+          'parent_got_revision_cp': self.revision_cp,
+      }
       raw_command_lines = self.find_swarming_command_lines()
       # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
       # the variable to be expanded by the builder instead of the tester.

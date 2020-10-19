@@ -41,7 +41,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        fail_android_archive=False,
                        is_experimental=False,
                        gn_analyze_output=None,
-                       phases=None):
+                       phases=None,
+                       tags=None):
     builder_group = builders[bucketname]['settings'].get(
         'builder_group', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
@@ -127,14 +128,16 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           bucket=short_bucket,
           builder=buildername,
           git_repo=git_repo,
-          revision=revision or None)
+          revision=revision or None,
+          tags=tags)
     else:
       test += self.m.buildbucket.ci_build(
           project=project,
           bucket=short_bucket,
           builder=buildername,
           git_repo=git_repo,
-          revision=revision or 'a' * 40)
+          revision=revision or 'a' * 40,
+          tags=tags)
     test += self.m.properties(buildnumber=1337)
 
     return test
