@@ -13,7 +13,8 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromite.set_config('chromiumos_coverage')
+  with api.chromite.with_system_python():
+    api.chromite.set_config('chromiumos_coverage')
 
   # goma.py checkout/build exercise.
   api.chromite.checkout(
