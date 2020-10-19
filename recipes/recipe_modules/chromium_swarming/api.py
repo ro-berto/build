@@ -537,9 +537,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       * relative_cwd: An optional string indicating the working directory
         relative to the task root where `raw_cmd` (or the command specified
         in the isolate, if raw_cmd is empty) will run.
-      * resultdb: An optional dict with ResultDB-integration configurations. To
-        enable ResultDB-intergation, the dict must have key "enable" with True
-        in value. That is, {'enable': True}
+      * resultdb: A `steps.ResultDB` instance. To enable ResultDB-integration,
+        `resultdb.enable` must be True.
     """
 
     if not collect_step:
@@ -580,7 +579,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_service_account(service_account or '').
       with_user(self.default_user or ''))
 
-    if resultdb and resultdb.get('enable'):
+    if resultdb and resultdb.enable:
       request = request.with_resultdb()
 
     req_slice = (

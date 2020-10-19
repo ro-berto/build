@@ -64,7 +64,7 @@ def RunSteps(api):
           'gpu': '8086',
       }),
       isolate_coverage_data=isolate_coverage_data,
-      resultdb={'enable': True})
+      resultdb=steps.ResultDB.create(enable=True))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
   assert test.runs_on_swarming and not test.is_gtest
   assert test.shards > 0

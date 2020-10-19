@@ -94,6 +94,12 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
+# TODO(crbug.com/1108016): Enable resultdb globally.
+def _result_sink_experiment_enabled(api):
+  return ('chromium.resultdb.result_sink' in
+          api.buildbucket.build.input.experiments)
+
+
 def generator_common(api, spec, swarming_delegate, local_delegate,
                      swarming_dimensions):
   """Common logic for generating tests from JSON specs.
@@ -121,9 +127,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
 
   # Enables resultdb if the build is picked for the experiment.
   # TODO(crbug.com/1108016): Enable resultdb globally.
-  is_sink_exp = ('chromium.resultdb.result_sink' in
-                 api.buildbucket.build.input.experiments)
-  kwargs['resultdb'] = spec.get('resultdb') if is_sink_exp else None
+  if _result_sink_experiment_enabled(api):
+    resultdb_kwargs = spec.get('resultdb')
+    if resultdb_kwargs:
+      kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
 
   set_up = list(spec.get('setup', []))
   processed_set_up = []
@@ -333,9 +340,11 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
 
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
-    if not kwargs.get('resultdb') and ('chromium.resultdb.result_sink' in
-                                   api.buildbucket.build.input.experiments):
-      kwargs['resultdb'] = {'enable': True, 'result_format': 'gtest'}
+    if _result_sink_experiment_enabled(api):
+      resultdb = kwargs.get('resultdb')
+      if not resultdb:
+        kwargs['resultdb'] = steps.ResultDB.create(
+            enable=True, result_format='gtest')
     return steps.SwarmingGTestTest(**kwargs)
 
   def gtest_local_delegate(spec, **kwargs):
@@ -463,18 +472,21 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
 
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
-    if not kwargs.get('resultdb') and ('chromium.resultdb.result_sink' in
-                                   api.buildbucket.build.input.experiments):
-      kwargs['resultdb'] = {'enable': True, 'result_format': 'json'}
+    if _result_sink_experiment_enabled(api):
+      resultdb = kwargs.get('resultdb')
+      if not resultdb:
+        resultdb_kwargs = {'enable': True, 'result_format': 'json'}
 
-      # For webgl tests, we can construct test locations as
-      # <test_location_base>/<test names>.
-      if kwargs['name'].startswith('webgl'):
-        # Arg for result_adapter to pass test names as test locations.
-        kwargs['resultdb']['test_id_as_test_location'] = "true"
-        # Arg for ResultSink to prepend to test locations.
-        kwargs['resultdb'][
-            'test_location_base'] = '//third_party/webgl/src/sdk/tests/'
+        # For webgl tests, we can construct test locations as
+        # <test_location_base>/<test names>.
+        if kwargs['name'].startswith('webgl'):
+          # Arg for result_adapter to pass test names as test locations.
+          resultdb_kwargs['test_id_as_test_location'] = True
+          # Arg for ResultSink to prepend to test locations.
+          resultdb_kwargs['test_location_base'] = (
+              '//third_party/webgl/src/sdk/tests/')
+
+        kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
 
     return steps.SwarmingIsolatedScriptTest(**kwargs)
 

@@ -17,6 +17,9 @@ from recipe_engine import recipe_api
 from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
 
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
+                                             mapping_attrib)
+
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 # When we retry failing tests, we try to choose a high repeat count so that
@@ -194,6 +197,48 @@ def _add_suffix(step_name, suffix):
   return '{} ({})'.format(step_name, suffix)
 
 
+@attrs()
+class ResultDB(object):
+  """Configuration for ResultDB-integration for a test.
+
+  Attributes:
+    * enable - Whether or not ResultDB-integration is enabled.
+    * result_format - The format of the test results.
+    * test_id_as_test_location - Whether the test ID will be used as the
+      test location. It only makes sense to set this for blink_web_tests
+      and webgl_conformance_tests.
+    * test_location_base - File base to prepend to the test location
+      file name, if the file name is a relative path. It must start with
+      "//".
+  """
+
+  enable = attrib(bool, default=False)
+  result_format = enum_attrib(['gtest', 'json'], default=None)
+  test_id_as_test_location = attrib(bool, default=False)
+  test_location_base = attrib(str, default=None)
+
+  @classmethod
+  def create(cls, **kwargs):
+    """Create a ResultDB instance.
+
+    Args:
+      * kwargs - Keyword arguments to initialize the attributes of the
+        created object.
+
+    Returns:
+      If True was passed for keyword argument `enable`, a `ResultDB`
+      instance with attributes initialized with the matching keyword
+      arguments. Otherwise, a default `ResultDB` instance (validity of
+      the keyword arguments will still be checked).
+    """
+    # Unconditionally construct an instance with the keywords to have the
+    # arguments validated.
+    resultdb = cls(**kwargs)
+    if not resultdb.enable:
+      return cls()
+    return resultdb
+
+
 class Test(object):
   """
   Base class for a test suite that can be run locally or remotely.
@@ -240,8 +285,8 @@ class Test(object):
         This value would be different from trybot group.
       waterfall_buildername (str): Matching waterfall builder name.
         This value would be different from trybot builder name.
-      resultdb (dict): Configuration of the ResultDB integration for the test.
-        If the value is None or the dict is missing an entry with "enable",
+      resultdb (ResultDB): Configuration of the ResultDB integration for the
+        test. If the value is None or `resultdb.enable` is False,
         ResultDB integration is disabled by default.
     """
     super(Test, self).__init__()
@@ -285,7 +330,7 @@ class Test(object):
     self._target_name = target_name
     self._full_test_target = full_test_target
     self._test_id_prefix = test_id_prefix
-    self._resultdb = resultdb
+    self._resultdb = resultdb or ResultDB.create()
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -341,10 +386,7 @@ class Test(object):
   def resultdb(self):
     """Configuration of ResultDB integration in the test.
 
-    May return None if ResultDB integration is not enabled in the test.
-    Otherwise, this returns a dict, where each entry corresponds to
-    the configuration of ResultDB integration in the test.
-    e.g., {'enable': True}
+    Returns a ResultDB instance.
     """
     return self._resultdb
 
@@ -2030,18 +2072,18 @@ class SwarmingTest(Test):
         'test_suite': [self.canonical_name],
     }
 
-    resultdb = (self.resultdb or {})
-    test_location_base = resultdb.get('test_location_base')
+    resultdb = self.resultdb
+    test_location_base = resultdb.test_location_base
     if test_location_base:
       tags['test_location_base'] = [test_location_base]
 
-    result_format = resultdb.get('result_format')
+    result_format = resultdb.result_format
     if result_format:
       tags['result_format'] = [result_format]
 
-    test_id_as_test_location = resultdb.get('test_id_as_test_location')
+    test_id_as_test_location = resultdb.test_id_as_test_location
     if test_id_as_test_location:
-      tags['test_id_as_test_location'] = [test_id_as_test_location]
+      tags['test_id_as_test_location'] = ['true']
 
     task.request = (
         task_request.with_slice(0, task_slice).with_name(
@@ -2853,7 +2895,7 @@ class MockTest(Test):
     self._name = name
     self._runs_on_swarming = runs_on_swarming
     self._api = api
-    self._resultdb = FrozenDict(resultdb or {})
+    self._resultdb = resultdb or ResultDB.create()
 
   @property
   def name(self):
