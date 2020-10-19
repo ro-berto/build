@@ -44,7 +44,9 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
             },
             simulation_platform='linux',
-            chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
+            chromium_tests_apply_config=[
+                'use_swarming_recipe_to_trigger', 'use_cas'
+            ],
         ),
     'mac-rel-swarming':
         bot_spec.BotSpec.create(
