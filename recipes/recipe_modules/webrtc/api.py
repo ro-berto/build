@@ -426,8 +426,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
         builder_group=self.builder_group,
-        path_to_testing_dir=self.m.path.join(self._working_dir, 'src',
-                                             'testing'))
+        path_to_merge_scripts=self.m.path.join(self._working_dir, 'src',
+                                               'testing', 'merge_scripts'))
     self.m.chromium_swarming.set_default_dimension(
         'os',
         self.m.chromium_swarming.prefered_os_dimension(

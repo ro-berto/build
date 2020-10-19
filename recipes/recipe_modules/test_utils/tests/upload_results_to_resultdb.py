@@ -9,6 +9,7 @@ DEPS = [
     'chromium_tests',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
@@ -40,6 +41,8 @@ def RunSteps(api, is_swarming_test=True):
     tests = [
         steps.SwarmingGTestTest('base_unittests', shards=2),
     ]
+  api.chromium_swarming.path_to_merge_scripts = (
+      api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   api.test_utils.run_tests(

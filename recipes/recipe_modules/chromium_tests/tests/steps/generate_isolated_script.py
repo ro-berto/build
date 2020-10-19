@@ -34,6 +34,8 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
 
   update_step = api.bot_update.ensure_checkout()
+  api.chromium_swarming.path_to_merge_scripts = (
+      api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   single_spec = api.properties.get('single_spec')

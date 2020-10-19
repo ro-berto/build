@@ -41,9 +41,11 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   api.chromium_tests.configure_build(bot.settings)
   api.chromium_swarming.configure_swarming(
-      'chromium', precommit=True,
+      'chromium',
+      precommit=True,
       # Fake path to make tests pass.
-      path_to_testing_dir=api.path['start_dir'].join('checkout'))
+      path_to_merge_scripts=api.path['start_dir'].join('checkout',
+                                                       'merge_scripts'))
 
   update_step, _build_config = api.chromium_tests.prepare_checkout(bot.settings)
 

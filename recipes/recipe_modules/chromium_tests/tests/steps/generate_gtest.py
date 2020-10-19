@@ -31,6 +31,8 @@ from RECIPE_MODULES.build.chromium_tests import generators
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
+  api.chromium_swarming.path_to_merge_scripts = (
+      api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
   api.test_results.set_config('public_server')
 

@@ -7,6 +7,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -32,6 +33,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
+  api.chromium_swarming.path_to_merge_scripts = (
+      api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   class MockSwarmingTest(steps.SwarmingIsolatedScriptTest, steps.MockTest):

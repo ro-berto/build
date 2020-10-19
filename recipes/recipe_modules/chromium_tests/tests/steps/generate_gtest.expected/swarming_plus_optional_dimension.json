@@ -339,7 +339,7 @@
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
       "--merge-script",
-      "None/merge_scripts/standard_gtest_merge.py",
+      "[CACHE]/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",

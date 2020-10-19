@@ -11,6 +11,7 @@ import os.path
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
+from recipe_engine.config_types import Path
 
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
@@ -188,8 +189,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     self._task_output_stdout = 'all'
 
-    # Path to chromium source testing directory.
-    self._path_to_testing_dir = None
+    # Path to the chromium source directory containing merge scripts.
+    self._path_to_merge_scripts = None
 
   def initialize(self):
     self.add_default_tag(
@@ -376,6 +377,18 @@ class SwarmingApi(recipe_api.RecipeApi):
     assert value in ('none', 'json', 'console', 'all')
     self._task_output_stdout = value
 
+  @property
+  def path_to_merge_scripts(self):
+    """Path to the directory containing merge scripts."""
+    return self._path_to_merge_scripts
+
+  @path_to_merge_scripts.setter
+  def path_to_merge_scripts(self, value):
+    if not isinstance(value, Path):
+      value = self.m.path.abs_to_path(value)
+    assert isinstance(value, Path), '{!r} is not a Path'.format(value)
+    self._path_to_merge_scripts = value
+
   def add_default_tag(self, tag):
     """Adds a tag to the Swarming tasks triggered.
 
@@ -420,7 +433,14 @@ class SwarmingApi(recipe_api.RecipeApi):
     This assumes that a chromium checkout exists, and the chromium module is
     configured correctly.
     """
-    return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
+    path_to_merge_scripts = self.path_to_merge_scripts
+    if not path_to_merge_scripts:
+      assert self.m.chromium_checkout.working_dir, (
+          'path_to_merge_scripts must be set or'
+          ' chromium_checkout.ensure_checkout must be called')
+      path_to_merge_scripts = self.m.chromium_checkout.working_dir.join(
+          'src', 'testing', 'merge_scripts')
+    return path_to_merge_scripts.join(name)
 
   def task(self,
            name=None,
@@ -1879,13 +1899,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       },
     })
 
-  def configure_swarming(
-      self,
-      project_name,
-      precommit,
-      builder_group=None,
-      default_priority=None,
-      path_to_testing_dir=None):
+  def configure_swarming(self,
+                         project_name,
+                         precommit,
+                         builder_group=None,
+                         default_priority=None,
+                         path_to_merge_scripts=None):
     """Configures default swarming dimensions and tags.
 
     Uses the 'chromium' global config to determine target platform defaults,
@@ -1900,10 +1919,10 @@ class SwarmingApi(recipe_api.RecipeApi):
           default priority of swarming tasks.
       default_priority: optional default_priority to use. Will override the
           priority name inherited from builder_group (or the global default).
-      path_to_testing_dir: The path to a local directory mirroring
-          https://chromium.googlesource.com/chromium/src/+/master/testing. This
-          is needed to access merge and trigger scripts. If unset, this module
-          will look at self.m.chromium_checkout.working_dir.
+      path_to_merge_scripts: The path to a local directory mirroring
+          https://chromium.googlesource.com/chromium/src/+/master/testing/merge_scripts/.
+          This is needed for accessing the scripts used for merging outputs. If
+          unset, this module will look at self.m.chromium_checkout.working_dir.
     """
     # Set platform-specific default dims.
     target_platform = self.m.chromium.c.TARGET_PLATFORM
@@ -1949,13 +1968,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       # everything else.
       self.default_priority = 40
 
-    if path_to_testing_dir:
-      self._path_to_testing_dir = path_to_testing_dir
-    else:
-      # TODO(martiniss): Assert that working_dir is not None once the
-      # auto_bisect module is deleted.
-      self._path_to_testing_dir = self.m.chromium_checkout.working_dir.join(
-          'src', 'testing')
+    if path_to_merge_scripts:
+      self.path_to_merge_scripts = path_to_merge_scripts
 
 
 class SwarmingTask(object):

@@ -554,7 +554,7 @@
       "--task-output-dir",
       "[CLEANUP]/hello_isolated_world_tmp_1/task_output_dir",
       "--merge-script",
-      "None/merge_scripts/standard_isolated_script_merge.py",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",

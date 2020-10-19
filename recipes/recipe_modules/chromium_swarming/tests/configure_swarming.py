@@ -22,7 +22,8 @@ def RunSteps(api):
       precommit=api.properties['precommit'],
       default_priority=api.properties.get('default_priority'),
       # Fake path to make tests pass.
-      path_to_testing_dir=api.path['start_dir'].join('checkout'))
+      path_to_merge_scripts=api.path['start_dir'].join('checkout',
+                                                       'merge_scripts'))
 
 
 def GenTests(api):
