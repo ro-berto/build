@@ -46,7 +46,6 @@ class IsolateApi(recipe_api.RecipeApi):
       self.resource('find_isolated_tests.py'),
       [
         '--build-dir', build_dir,
-        '--clean-isolated-files'
       ])
 
   def check_swarm_hashes(self, targets):
@@ -69,55 +68,6 @@ class IsolateApi(recipe_api.RecipeApi):
       if missing:
         raise self.m.step.InfraFailure(
           'Missing isolated target(s) %s in swarm_hashes' % ', '.join(missing))
-
-
-  def find_isolated_tests(self, build_dir, targets=None, **kwargs):
-    """Returns a step which finds all *.isolated files in a build directory.
-
-    Useful only with 'archive' isolation mode.
-    In 'prepare' mode use 'isolate_tests' instead.
-
-    Assigns the dict {target name -> *.isolated file hash} to the swarm_hashes
-    build property. This implies this step can currently only be run once
-    per recipe.
-
-    If |targets| is None, the step will use all *.isolated files it finds.
-    Otherwise, it will verify that all |targets| are found and will use only
-    them. If some expected targets are missing, will abort the build.
-    """
-    step_result = self.m.python(
-      'find isolated tests',
-      self.resource('find_isolated_tests.py'),
-      [
-        '--build-dir', build_dir,
-        '--output-json', self.m.json.output(),
-      ],
-      step_test_data=lambda: (self.test_api.output_json(targets)),
-      **kwargs)
-
-    assert isinstance(step_result.json.output, dict)
-    self._isolated_tests = step_result.json.output
-    if targets is not None and (
-            step_result.presentation.status != self.m.step.FAILURE):
-      found = set(step_result.json.output)
-      expected = set(targets)
-      if found >= expected:  # pragma: no cover
-        # Limit result only to |expected|.
-        self._isolated_tests = {
-          target: step_result.json.output[target] for target in expected
-        }
-      else:
-        # Some expected targets are missing? Fail the step.
-        step_result.presentation.status = self.m.step.FAILURE
-        step_result.presentation.logs['missing.isolates'] = (
-            ['Failed to find *.isolated files:'] + list(expected - found))
-    if len(self._isolated_tests) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH:
-      step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
-    # No isolated files found? That looks suspicious, emit warning.
-    if (not self._isolated_tests and
-        step_result.presentation.status != self.m.step.FAILURE):
-      step_result.presentation.status = self.m.step.WARNING
-
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',

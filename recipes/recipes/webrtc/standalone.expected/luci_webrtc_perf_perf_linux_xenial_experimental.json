@@ -194,8 +194,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Perf_Linux_Xenial",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/Perf_Linux_Xenial"
     ],
     "name": "clean isolated files"
   },

@@ -313,8 +313,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/linux_msan",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/linux_msan"
     ],
     "name": "clean isolated files"
   },

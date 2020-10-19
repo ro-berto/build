@@ -32,10 +32,6 @@ def RunSteps(api):
   expected_targets = step_result.stdout
 
   build_path = api.isolate.repo_resource()
-  # Generates code coverage for find_isolated_tests corner cases.
-  # TODO(vadimsh): This step doesn't actually make any sense when the recipe
-  # is running for real.
-  api.isolate.find_isolated_tests(build_path, expected_targets)
 
   # Code coverage for 'isolate_tests'. 'isolated_test' doesn't support discovery
   # of isolated targets in build directory, so skip if 'expected_targets' is
@@ -56,8 +52,6 @@ def GenTests(api):
         name,
         api.step_data(
             'read test spec', stdout=api.json.output(expected_targets)),
-        api.override_step_data('find isolated tests',
-                               api.isolate.output_json(discovered_targets)),
     )
 
     # See comment around 'if expected_targets is not None' above.

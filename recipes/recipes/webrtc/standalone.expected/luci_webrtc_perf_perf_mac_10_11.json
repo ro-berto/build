@@ -227,8 +227,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Perf_Mac_10_11",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/Perf_Mac_10_11"
     ],
     "name": "clean isolated files"
   },

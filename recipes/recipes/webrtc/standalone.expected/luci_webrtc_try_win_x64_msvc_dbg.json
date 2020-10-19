@@ -327,8 +327,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]\\builder\\src\\out\\win_x64_msvc_dbg",
-      "--clean-isolated-files"
+      "[CACHE]\\builder\\src\\out\\win_x64_msvc_dbg"
     ],
     "name": "clean isolated files"
   },

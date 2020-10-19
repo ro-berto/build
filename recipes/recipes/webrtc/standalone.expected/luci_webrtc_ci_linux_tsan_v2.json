@@ -173,8 +173,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Linux_Tsan_v2",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/Linux_Tsan_v2"
     ],
     "name": "clean isolated files"
   },

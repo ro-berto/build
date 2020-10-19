@@ -733,8 +733,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/Release"
     ],
     "name": "test r1.clean isolated files",
     "~followup_annotations": [

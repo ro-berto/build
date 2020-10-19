@@ -349,8 +349,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/mac_rel",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/mac_rel"
     ],
     "name": "clean isolated files"
   },

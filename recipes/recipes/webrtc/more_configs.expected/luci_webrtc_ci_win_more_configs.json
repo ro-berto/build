@@ -893,8 +893,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
-      "--clean-isolated-files"
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp"
     ],
     "name": "clean isolated files"
   },

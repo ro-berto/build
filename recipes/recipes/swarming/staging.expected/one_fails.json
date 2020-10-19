@@ -316,8 +316,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--clean-isolated-files"
+      "[CACHE]/builder/src/out/Release"
     ],
     "name": "clean isolated files"
   },
@@ -794,26 +793,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"deadbeef\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"browser_tests\": \"deadbeef\"}@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "test_pre_run"
   },
@@ -881,7 +860,7 @@
       "-server",
       "https://chromium-swarm-dev.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:0:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:linux-rel-swarming\", \"buildnumber:123\", \"data:deadbeef\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:linux-rel-swarming\", \"stepname:browser_tests on Ubuntu\", \"test_id_prefix:\", \"test_suite:browser_tests\", \"triggered_by:recipe_modules/swarming\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"deadbeef\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:0:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:linux-rel-swarming\", \"buildnumber:123\", \"data:[dummy hash for browser_tests]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:linux-rel-swarming\", \"stepname:browser_tests on Ubuntu\", \"test_id_prefix:\", \"test_suite:browser_tests\", \"triggered_by:recipe_modules/swarming\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash for browser_tests]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json",
       "-verbose"
@@ -895,7 +874,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:0:2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:0:2\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -905,7 +884,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:0:2\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:0:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"20\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
@@ -914,7 +893,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.dev\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:linux-rel-swarming\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:123\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for browser_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:browser_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
@@ -972,7 +951,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"inputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"[dummy hash for browser_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"isolatedserver\": \"https://example.isolateserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"namespace\": \"default-gzip\"@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -987,7 +966,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:0:2@https://chromium-swarm-dev.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:0:2@https://chromium-swarm-dev.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -997,7 +976,7 @@
       "-server",
       "https://chromium-swarm-dev.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:1:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:linux-rel-swarming\", \"buildnumber:123\", \"data:deadbeef\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:linux-rel-swarming\", \"stepname:browser_tests on Ubuntu\", \"test_id_prefix:\", \"test_suite:browser_tests\", \"triggered_by:recipe_modules/swarming\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"deadbeef\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:1:2\", \"priority\": \"20\", \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:linux-rel-swarming\", \"buildnumber:123\", \"data:[dummy hash for browser_tests]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:linux-rel-swarming\", \"stepname:browser_tests on Ubuntu\", \"test_id_prefix:\", \"test_suite:browser_tests\", \"triggered_by:recipe_modules/swarming\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash for browser_tests]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json",
       "-verbose"
@@ -1011,7 +990,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:1:2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:1:2\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -1021,7 +1000,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:1:2\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:1:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"20\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
@@ -1030,7 +1009,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.dev\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:linux-rel-swarming\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:123\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for browser_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:browser_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
@@ -1088,7 +1067,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"inputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"[dummy hash for browser_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"isolatedserver\": \"https://example.isolateserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"namespace\": \"default-gzip\"@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -1103,7 +1082,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests/Ubuntu/deadbeef/linux-rel-swarming/123:1:2@https://chromium-swarm-dev.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: browser_tests/Ubuntu/[dummy has/linux-rel-swarming/123:1:2@https://chromium-swarm-dev.appspot.com/task?id=1@@@"
     ]
   },
   {

@@ -136,10 +136,6 @@ def GenTests(api):
           }
         },],
       }),
-      api.override_step_data('find isolated tests',
-                             api.json.output({
-                                 'browser_tests': 'deadbeef',
-                             })),
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
@@ -155,10 +151,6 @@ def GenTests(api):
           }
         },],
       }),
-      api.override_step_data('find isolated tests',
-                             api.json.output({
-                                 'browser_tests': 'deadbeef',
-                             })),
       api.override_step_data(
           'browser_tests on Ubuntu',
           api.chromium_swarming.canned_summary_output(
@@ -181,10 +173,6 @@ def GenTests(api):
         },],
       }),
       api.platform('win', 64),
-      api.override_step_data('find isolated tests',
-                             api.json.output({
-                                 'browser_tests': 'deadbeef',
-                             })),
   )
 
   yield api.test(

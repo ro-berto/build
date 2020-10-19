@@ -5,8 +5,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "None/out/Release",
-      "--clean-isolated-files"
+      "None/out/Release"
     ],
     "name": "clean isolated files"
   },
