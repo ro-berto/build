@@ -865,7 +865,22 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def _wrap_cmd_with_result_adapter(self, cmd, result_format,
                                     test_id_as_test_location):
-    """Wraps the cmd with result_adapter."""
+    """Wraps the cmd with result_adapter.
+
+    If result_format is empty, cmd is returned without result_adapter.
+
+    Args:
+      cmd (list of strings): The command line to run.
+      result_format (str): The format of the input test results. The valid
+        formats are 'gtest' and 'json'.
+      test_id_as_test_location (bool): If true, the test location of all tests
+        will be set with the test ID. Note that this param is used only if
+        param result_format is set to 'json'. Otherwise, this param is always
+        enforced to False.
+    """
+    assert isinstance(cmd, (tuple, list)), cmd
+    assert isinstance(result_format, (type(None), str)), result_format
+    assert isinstance(test_id_as_test_location, bool), test_id_as_test_location
 
     if not result_format:
       return cmd
@@ -876,7 +891,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         '-result-file', '${ISOLATED_OUTDIR}/output.json'
     ]
 
-    if test_id_as_test_location:
+    # -test-location is a json result_adapter specific option.
+    if result_format == 'json' and test_id_as_test_location:
       ret += ['-test-location']
 
     ret += ['--'] + list(cmd)
@@ -935,8 +951,10 @@ class SwarmingApi(recipe_api.RecipeApi):
           task_slice.with_command(
               self.m.resultdb.wrap(
                   self._wrap_cmd_with_result_adapter(
-                      task_slice.command, tags_by_key.get('result_format'),
-                      tags_by_key.get('test_id_as_test_location')),
+                      task_slice.command,
+                      tags_by_key.get('result_format'),
+                      tags_by_key.get('test_id_as_test_location') == 'true',
+                  ),
                   test_id_prefix=tags_by_key.get('test_id_prefix', ''),
                   test_location_base=tags_by_key.get('test_location_base', ''),
                   base_variant=variants,
