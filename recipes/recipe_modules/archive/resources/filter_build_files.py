@@ -116,17 +116,33 @@ EXCLUDED_FILES_PATTERN = {
   'linux': re.compile(r'^.+\.(o|a|d|ninja|stamp)$'),
 }
 
+# Pattern for excluded files in a subdirectory.
+EXCLUDED_FILES_IN_SUBDIR_PATTERN = {
+  'bin': [
+    # Wrapper scripts for tests. These aren't needed for fuzzers.
+    re.compile(r'run_.*_fuzzer(\.bat)?$'),
+  ],
+}
+
 # Pattern for whitelisted files in a subdirectory.
 INCLUDED_FILES_IN_SUBDIR_PATTERN = {
   'gen': [
-      # Include Mojo JS bindings and manifests for fuzzing.
-      re.compile(r'.*\.(js|json)$'),
+    # Include Mojo JS bindings and manifests for fuzzing.
+    re.compile(r'.*\.(js|json)$'),
   ],
 }
 
 
 def filter_files_in_subdir(relative_root, filename):
   relative_root_components = relative_root.split(os.sep)
+
+  for subdir, patterns in EXCLUDED_FILES_IN_SUBDIR_PATTERN.iteritems():
+    if subdir not in relative_root_components:
+      continue
+
+    for pattern in patterns:
+      if pattern.match(filename):
+        return True
 
   for subdir, patterns in INCLUDED_FILES_IN_SUBDIR_PATTERN.iteritems():
     if subdir not in relative_root_components:
