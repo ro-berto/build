@@ -410,7 +410,7 @@
       "gs://chromium-memory-archive/chromium.memory/Linux ASan LSan Builder/full-build-linux.zip",
       "--build_revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--master-name",
+      "--builder-group",
       "chromium.memory",
       "--build-number",
       "571"

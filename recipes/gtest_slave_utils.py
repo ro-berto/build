@@ -182,7 +182,7 @@ def GenerateJSONResults(test_results_map, options):
           options.builder_name, options.build_name, options.build_number,
           options.results_directory, options.builder_base_url,
           options.chrome_revision, options.test_results_server,
-          options.test_type, options.master_name
+          options.test_type, options.builder_group
       )
   )
 
@@ -195,7 +195,7 @@ def GenerateJSONResults(test_results_map, options):
       test_results_map,
       test_results_server=options.test_results_server,
       test_type=options.test_type,
-      master_name=options.master_name
+      builder_group=options.builder_group
   )
   generator.generate_json_output()
   generator.generate_times_ms_file()
@@ -298,7 +298,7 @@ def main():
     logging.error('--input-results-xml needs to be specified.')
     sys.exit(1)
 
-  if options.test_results_server and not options.master_name:
+  if options.test_results_server and not options.builder_group:
     logging.warn(
         '--test-results-server is given but '
         '--master-name is not specified; the results won\'t be '

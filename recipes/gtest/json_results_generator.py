@@ -103,7 +103,7 @@ class JSONResultsGenerator(object):
       svn_revisions=None,
       test_results_server=None,
       test_type='',
-      master_name='',
+      builder_group='',
       file_writer=None
   ):
     """Modifies the results.json file. Grabs it off the archive directory
@@ -124,7 +124,7 @@ class JSONResultsGenerator(object):
         included in the JSON with the given json_field_name.
       test_results_server: server that hosts test results json.
       test_type: test type string (e.g. 'webkit_tests').
-      master_name: the name of the buildbot master.
+      builder_group: the group of the builder.
       file_writer: if given the parameter is used to write JSON data to a file.
         The parameter must be the function that takes two arguments, 'file_path'
         and 'data' to be written into the file_path.
@@ -143,7 +143,7 @@ class JSONResultsGenerator(object):
 
     self._test_results_server = test_results_server
     self._test_type = test_type
-    self._master_name = master_name
+    self._builder_group = builder_group
     self._file_writer = file_writer
 
   def generate_json_output(self):
@@ -233,7 +233,7 @@ class JSONResultsGenerator(object):
     if not self._test_results_server:
       return
 
-    if not self._master_name:
+    if not self._builder_group:
       logging.error(
           '--test-results-server was set, but --master-name was not. '
           'Not uploading JSON files.'
@@ -242,7 +242,7 @@ class JSONResultsGenerator(object):
 
     print 'Uploading JSON files for builder: %s' % self._builder_name
     attrs = [('builder', self._builder_name), ('testtype', self._test_type),
-             ('master', self._master_name)]
+             ('master', self._builder_group)]
 
     files = [(f, os.path.join(self._results_directory, f)) for f in json_files]
 

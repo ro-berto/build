@@ -380,7 +380,7 @@ def Archive(options):
     build_revision = options.build_revision
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.master_name,
+      options.builder_group,
       options.build_number,
       options.parent_build_number,
       build_revision,
@@ -523,7 +523,7 @@ def AddOptions(option_parser):
       help='Only includes include file list'
       'and regex whitelist match provided'
   )
-  option_parser.add_option('--master-name', help='Name of the buildbot master.')
+  option_parser.add_option('--builder-group', help='Name of the builder group.')
   option_parser.add_option('--slave-name', help='Name of the buildbot slave.')
   option_parser.add_option(
       '--build-number', type=int, help='Buildbot build number.'
@@ -614,12 +614,8 @@ def main(argv):
   options, args = option_parser.parse_args(argv)
   slave_utils_callback(options)
 
-  if not options.master_name:
-    options.master_name = (
-        # TODO(https://crbug.com/1109276) Don't look at mastername property
-        options.build_properties.get('mastername') or
-        options.build_properties.get('builder_group', '')
-    )
+  if not options.builder_group:
+    options.builder_group = options.build_properties.get('builder_group', '')
   if not options.slave_name:
     options.slave_name = options.build_properties.get('slavename')
   if not options.build_number:

@@ -78,7 +78,7 @@ def GetBuildUrl(options, build_revision):
     return options.build_archive_url, None
 
   base_filename, version_suffix = slave_utils.GetZipFileNames(
-      options.master_name,
+      options.builder_group,
       options.build_number,
       options.parent_build_number,
       build_revision,
@@ -223,7 +223,7 @@ def main():
       help='path to the top-level sources directory'
   )
   option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--master-name', help='Name of the buildbot master.')
+  option_parser.add_option('--builder-group', help='Name of the builder group.')
   option_parser.add_option(
       '--build-number', type=int, help='Buildbot build number.'
   )
@@ -276,12 +276,8 @@ def main():
 
   slave_utils_callback(options)
 
-  if not options.master_name:
-    options.master_name = (
-        # TODO(https://crbug.com/1109276) Don't look at mastername property
-        options.build_properties.get('mastername') or
-        options.build_properties.get('builder_group', '')
-    )
+  if not options.builder_group:
+    options.builder_group = options.build_properties.get('builder_group', '')
   if not options.build_number:
     options.build_number = options.build_properties.get('buildnumber')
   if not options.parent_build_dir:

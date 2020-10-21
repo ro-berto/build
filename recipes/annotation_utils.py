@@ -63,7 +63,7 @@ def getText(result, observer, name):
   # TODO(xusydoc): see if 'crashed or hung' should be tracked by RunningTests().
   if failed_test_count:
     failure_text = ['failed %d' % failed_test_count]
-    if observer.master_name:
+    if observer.builder_group:
       # Include the link to the flakiness dashboard.
       failure_text.append('<div class="BuildResultInfo">')
       failure_text.append(
