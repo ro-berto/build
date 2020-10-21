@@ -11,6 +11,7 @@ DEPS = [
     'chromium_tests',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
+    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
 ]
@@ -24,30 +25,34 @@ def RunSteps(api):
     tests.append(
         steps.SwarmingGTestTest(
             'base_unittests',
-            set_up=[{
-                'name': 'set_up',
-                'script': 'set_up_script',
-                'args': []
-            }],
-            tear_down=[{
-                'name': 'tear_down',
-                'script': 'tear_down_script',
-                'args': []
-            }]))
+            set_up=[
+                steps.SetUpScript.create(
+                    name='set_up',
+                    script=api.path['cache'].join('set_up_script'),
+                    args=[])
+            ],
+            tear_down=[
+                steps.TearDownScript.create(
+                    name='tear_down',
+                    script=api.path['cache'].join('tear_down_script'),
+                    args=[])
+            ]))
   if api.properties.get('local_isolated_script_test'):
     tests.append(
         steps.LocalIsolatedScriptTest(
             'base_unittests',
-            set_up=[{
-                'name': 'set_up',
-                'script': 'set_up_script',
-                'args': []
-            }],
-            tear_down=[{
-                'name': 'tear_down',
-                'script': 'tear_down_script',
-                'args': []
-            }],
+            set_up=[
+                steps.SetUpScript.create(
+                    name='set_up',
+                    script=api.path['cache'].join('set_up_script'),
+                    args=[])
+            ],
+            tear_down=[
+                steps.TearDownScript.create(
+                    name='tear_down',
+                    script=api.path['cache'].join('tear_down_script'),
+                    args=[])
+            ],
             override_compile_targets=['base_unittests_run']))
   if api.properties.get('script_test'):
     tests.append(

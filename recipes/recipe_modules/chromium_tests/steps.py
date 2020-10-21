@@ -14,11 +14,12 @@ import struct
 import urlparse
 
 from recipe_engine import recipe_api
+from recipe_engine.config_types import Path
 from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
 
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
-                                             mapping_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, command_args_attrib,
+                                             enum_attrib, mapping_attrib)
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -1129,6 +1130,47 @@ class ScriptTest(Test):  # pylint: disable=W0232
           api.test_utils.format_step_text([['failures:', failures]]))
 
     return self._test_runs[suffix]
+
+
+@attrs()
+class SetUpScript(object):
+  """Configuration of a script to run before test execution.
+
+  Attributes:
+    * name - The name of the step to execute the script.
+    * script - The path to the script.
+    * args - The command-line arguments to pass to the script.
+  """
+
+  name = attrib(str)
+  script = attrib(Path)
+  args = command_args_attrib(default=())
+
+  @classmethod
+  def create(cls, **kwargs):
+    """Create a SetUpScript with attributes initialized with kwargs."""
+    return cls(**kwargs)
+
+
+@attrs()
+class TearDownScript(object):
+  """Configuration of a script to run after test execution.
+
+  Attributes:
+    * name - The name of the step to execute the script.
+    * script - The path to the script.
+    * args - The command-line arguments to pass to the script.
+  """
+
+  name = attrib(str)
+  script = attrib(Path)
+  args = command_args_attrib(default=())
+
+  @classmethod
+  def create(cls, **kwargs):
+    """Create a TearDownScript with attributes initialized with kwargs.
+    """
+    return cls(**kwargs)
 
 
 class LocalGTestTest(Test):

@@ -129,13 +129,17 @@ def GenTests(api):
                   'script': '//path/to/script.py',
               },
               'setup': [{
+                  'name': 'setup1',
                   'script': '//path/to/setup1.py'
               }, {
+                  'name': 'setup2',
                   'script': '//path/to/setup2.py'
               }],
               'teardown': [{
+                  'name': 'teardown1',
                   'script': '//path/to/teardown1.py'
               }, {
+                  'name': 'teardown2',
                   'script': '//path/to/teardown2.py'
               }],
               'swarming': {
@@ -187,8 +191,10 @@ def GenTests(api):
                   'script': '//path/to/script.py',
               },
               'teardown': [{
+                  'name': 'teardown1',
                   'script': '//path/to/teardown1.py'
               }, {
+                  'name': 'teardown2',
                   'script': 'path/to/teardown2.py'
               }],
               'swarming': {
@@ -215,8 +221,10 @@ def GenTests(api):
                   'script': '//path/to/script.py',
               },
               'setup': [{
+                  'name': 'setup1',
                   'script': '//path/to/setup1.py'
               }, {
+                  'name': 'setup2',
                   'script': 'path/to/setup2.py'
               }],
               'swarming': {

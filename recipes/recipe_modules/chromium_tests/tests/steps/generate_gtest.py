@@ -281,13 +281,17 @@ def GenTests(api):
               'test':
                   'base_unittests',
               'setup': [{
+                  'name': 'setup1',
                   'script': '//set_up_script1.py',
               }, {
+                  'name': 'setup2',
                   'script': '//set_up_script2.py',
               }],
               'teardown': [{
+                  'name': 'teardown1',
                   'script': '//tear_down_script1.py',
               }, {
+                  'name': 'teardown2',
                   'script': '//tear_down_script2.py',
               }],
           },),
@@ -304,13 +308,17 @@ def GenTests(api):
               'test':
                   'base_unittests',
               'setup': [{
+                  'name': 'setup1',
                   'script': '//set_up_script1.py',
               }, {
+                  'name': 'setup2',
                   'script': 'set_up_script2.py',
               }],
               'teardown': [{
+                  'name': 'teardown1',
                   'script': '//tear_down_script1.py',
               }, {
+                  'name': 'teardown2',
                   'script': '//tear_down_script2.py',
               }],
           },),
@@ -327,13 +335,17 @@ def GenTests(api):
               'test':
                   'base_unittests',
               'setup': [{
+                  'name': 'setup1',
                   'script': '//set_up_script1.py',
               }, {
+                  'name': 'setup2',
                   'script': '//set_up_script2.py',
               }],
               'teardown': [{
+                  'name': 'teardown1',
                   'script': '//tear_down_script1.py',
               }, {
+                  'name': 'teardown2',
                   'script': 'tear_down_script2.py',
               }],
           },),

@@ -5,10 +5,13 @@
 import attr
 
 from recipe_engine import post_process
+from recipe_engine.config_types import NamedBasePath, Path
 from recipe_engine.types import FrozenDict
+from recipe_engine.util import Placeholder
 
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
-                                             cached_property, enum_attrib,
+                                             cached_property,
+                                             command_args_attrib, enum_attrib,
                                              mapping_attrib, sequence_attrib)
 
 DEPS = [
@@ -113,6 +116,31 @@ def RunSteps(api):
   message = ("'typed' members must be <type 'basestring'> "
              "(got 4 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
+
+  # command_args ***************************************************************
+  @attr.s(frozen=True)
+  class CommandArgsAttribTest(object):
+    args = command_args_attrib()
+
+  # test that all valid argument types can be passed
+  args = [
+      0, 1L, 'x',
+      Path(NamedBasePath('fake-base-path')),
+      Placeholder('fake-placeholder')
+  ]
+  x = CommandArgsAttribTest(args)
+  api.assertions.assertEqual(x.args, tuple(args))
+
+  # test invalid argument types are rejected
+  with api.assertions.assertRaises(TypeError) as caught:
+    CommandArgsAttribTest([[]])
+
+  api.assertions.assertEqual(
+      caught.exception.message,
+      ("'args' members must be (<type 'int'>, <type 'long'>, "
+       "<type 'basestring'>, <class 'recipe_engine.config_types.Path'>, "
+       "<class 'recipe_engine.util.Placeholder'>) "
+       "(got [] that is a <type 'list'>)."))
 
   # mapping_attrib *************************************************************
   @attr.s(frozen=True)

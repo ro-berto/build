@@ -132,16 +132,15 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     if resultdb_kwargs:
       kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
 
-  set_up = list(spec.get('setup', []))
-  processed_set_up = []
-  for set_up_step in set_up:
-    set_up_step_script = set_up_step.get('script')
-    if set_up_step_script:
-      if set_up_step_script.startswith('//'):
-        set_up_step_new = dict(set_up_step)
-        set_up_step_new['script'] = api.path['checkout'].join(
-            set_up_step_script[2:].replace('/', api.path.sep))
-        processed_set_up.append(set_up_step_new)
+  processed_set_ups = []
+  for s in spec.get('setup', []):
+    script = s.get('script')
+    if script:
+      if script.startswith('//'):
+        set_up = dict(s)
+        set_up['script'] = api.path['checkout'].join(script[2:].replace(
+            '/', api.path.sep))
+        processed_set_ups.append(steps.SetUpScript.create(**set_up))
       else:
         api.python.failing_step(
             'test spec format error',
@@ -151,20 +150,19 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
                     that doesn't match the expected format. Custom set up script
                     entries should be a path relative to the top-level chromium
                     src directory and should start with "//".
-                    """ % (name, set_up_step_script))),
+                    """ % (name, script))),
             as_log='details')
-  kwargs['set_up'] = processed_set_up
+  kwargs['set_up'] = processed_set_ups
 
-  tear_down = list(spec.get('teardown', []))
-  processed_tear_down = []
-  for tear_down_step in tear_down:
-    tear_down_step_script = tear_down_step.get('script')
-    if tear_down_step_script:
-      if tear_down_step_script.startswith('//'):
-        tear_down_step_new = dict(tear_down_step)
-        tear_down_step_new['script'] = api.path['checkout'].join(
-            tear_down_step_script[2:].replace('/', api.path.sep))
-        processed_tear_down.append(tear_down_step_new)
+  processed_tear_downs = []
+  for t in spec.get('teardown', []):
+    script = t.get('script')
+    if script:
+      if script.startswith('//'):
+        tear_down = dict(t)
+        tear_down['script'] = api.path['checkout'].join(script[2:].replace(
+            '/', api.path.sep))
+        processed_tear_downs.append(steps.TearDownScript.create(**tear_down))
       else:
         api.python.failing_step(
             'test spec format error',
@@ -174,9 +172,9 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
                     that doesn't match the expected format. Custom tear down
                     script entries should be a path relative to the top-level
                     chromium src directory and should start with "//".
-                    """ % (name, tear_down_step_script))),
+                    """ % (name, script))),
             as_log='details')
-  kwargs['tear_down'] = processed_tear_down
+  kwargs['tear_down'] = processed_tear_downs
 
   swarming_spec = spec.get('swarming', {})
   if swarming_spec.get('can_use_on_swarming_builders'):

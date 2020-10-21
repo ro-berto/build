@@ -10,7 +10,9 @@ import attr
 from attr import converters, validators
 import six
 
+from recipe_engine.config_types import Path
 from recipe_engine.types import FrozenDict, freeze
+from recipe_engine.util import Placeholder
 
 _SPECIAL_DEFAULTS = (None, attr.NOTHING)
 
@@ -112,6 +114,27 @@ def sequence_attrib(member_type=None, default=attr.NOTHING):
       return value
 
   return _attrib(default, validator, converter)
+
+
+def command_args_attrib(default=attr.NOTHING):
+  """Declare an immutable attribute containing a sequence of arguments.
+
+  The value will be converted to a tuple. Attempting to assign a value that is
+  not iterable will fail (except None if default is None). The allowable values
+  for elements of the iterable are the same as for the command line for a call
+  to the step api.
+
+  Arguments:
+    default - The default value of the attribute. If no default is specified,
+      the attribute must be explicitly initialized when creating an object. If
+      default is None, None will also be considered an acceptable value for the
+      attribute. Otherwise, default must be an iterable value.
+  """
+  # The set of allowed types should be kept in sync with the types allowed by
+  # _validate_cmd_list in
+  # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/step/api.py
+  arg_types = (int, long, basestring, Path, Placeholder)
+  return sequence_attrib(member_type=arg_types, default=default)
 
 
 def mapping_attrib(key_type=None, value_type=None, default=attr.NOTHING):

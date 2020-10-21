@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "set_up_script"
+      "[CACHE]/set_up_script"
     ],
     "name": "set_up"
   },
@@ -11,7 +11,7 @@
     "cmd": [
       "python",
       "-u",
-      "tear_down_script"
+      "[CACHE]/tear_down_script"
     ],
     "name": "tear_down"
   },
