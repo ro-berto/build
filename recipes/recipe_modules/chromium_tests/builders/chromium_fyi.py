@@ -843,7 +843,6 @@ SPEC.update([
         parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
-    stock_config('linux-inverse-fieldtrials-fyi-rel'),
     stock_config(
         'linux-lacros-builder-fyi-rel',
         gclient_apply_config=['checkout_prebuilt_ash_chrome']),
@@ -914,6 +913,9 @@ SPEC.update([
         staging=False,
         execution_mode=bot_spec.TEST,
         parent_buildername='mac-omaha-builder-rel'),
+    # Builders to test inversed fieldtrials
+    stock_config('linux-inverse-fieldtrials-fyi-rel'),
+    stock_config('win10-inverse-fieldtrials-fyi-rel'),
 ])
 
 # Many of the FYI specs are made by transforming specs from other files, so
