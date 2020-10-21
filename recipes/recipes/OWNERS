@@ -35,4 +35,5 @@ per-file nacl.py=dschuff@chromium.org
 per-file nacl.py=sbc@chromium.org
 per-file openscreen.py=file:openscreen.expected/OWNERS
 per-file pdfium.py=file:pdfium.expected/OWNERS
+per-file tint.py=file:tint.expected/OWNERS
 per-file v8.py=file:v8.expected/OWNERS
