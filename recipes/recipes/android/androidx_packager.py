@@ -8,6 +8,8 @@ from PB.recipe_engine import result as result_pb
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipes.build.android import sdk_packager
 
+import math
+
 DEPS = [
     'chromium',
     'chromium_checkout',
@@ -18,6 +20,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
+    'recipe_engine/time',
 ]
 
 PROPERTIES = sdk_packager.InputProperties
@@ -39,12 +42,13 @@ def RunSteps(api, properties):
         status=common_pb.INFRA_FAILURE,
         summary_markdown='Unable to delete androidx libs directory.')
 
-  fetch_all_cmd = androidx_libs_dir.join('fetch_all_androidx.py')
+  fetch_all_cmd = androidx_dir.join('fetch_all_androidx.py')
   api.step('fetch_all', [fetch_all_cmd])
+  api.path.mock_add_paths(androidx_dir.join('cipd.yaml'))
 
-  for f in api.file.listdir('listdir libs', androidx_libs_dir, recursive=True):
-    if api.path.basename(f) == 'cipd.yaml':
-      api.cipd.create_from_yaml(f)
+  yaml_path = androidx_dir.join('cipd.yaml')
+  version = 'cr-' + str(math.floor(api.time.time() / 60 / 60 / 24))
+  api.cipd.create_from_yaml(yaml_path, tags={'version': version})
 
 
 def GenTests(api):
@@ -59,12 +63,7 @@ def GenTests(api):
           builder='android-androidx-packager'),
       api.path.exists(
           androidx_dir.join('fetch_all_androidx.py'),
-          androidx_sample_lib.join('cipd.yaml'),
           androidx_sample_lib.join('README.chromium')),
-      api.override_step_data(
-          'listdir libs',
-          api.file.listdir(
-              ['androidx_dino/cipd.yaml', 'androidx_dino/README.chromium'])),
       api.post_process(post_process.MustRun, 'fetch_all'),
       api.post_process(post_process.MustRun, 'create cipd.yaml'),
       api.post_process(post_process.StatusSuccess),
@@ -79,7 +78,6 @@ def GenTests(api):
           builder='android-androidx-packager'),
       api.path.exists(
           androidx_dir.join('fetch_all_androidx.py'),
-          androidx_sample_lib.join('cipd.yaml'),
           androidx_sample_lib.join('README.chromium')),
       api.override_step_data('check libs empty',
                              api.file.listdir(['androidx_dino/cipd.yaml'])),
