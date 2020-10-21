@@ -108,67 +108,63 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    try:
-      exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
+    exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
 
-      # FIXME: Differentiate between bad *.isolate and upload errors.
-      # Raise InfraFailure on upload errors.
-      args = [
-          exe,
-          'batcharchive',
-          '--dump-json',
-          self.m.json.output(),
-      ] + (['--verbose'] if verbose else [])
+    # FIXME: Differentiate between bad *.isolate and upload errors.
+    # Raise InfraFailure on upload errors.
+    args = [
+        exe,
+        'batcharchive',
+        '--dump-json',
+        self.m.json.output(),
+    ] + (['--verbose'] if verbose else [])
 
-      if use_cas:
-        args.extend(['-cas-instance', self.m.cas.instance])
-      else:
-        args.extend(['--isolate-server', self._isolate_server])
+    if use_cas:
+      args.extend(['-cas-instance', self.m.cas.instance])
+    else:
+      args.extend(['--isolate-server', self._isolate_server])
 
-      args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
+    args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
 
-      step_result = self.m.step(
-          step_name or ('isolate tests%s' % suffix),
-          args,
-          step_test_data=lambda: self.test_api.output_json(
-              targets, use_cas=use_cas),
-          **kwargs)
-      return step_result
-    finally:
-      swarm_hashes = {}
-      if step_result.json.output:
-        for k, v in step_result.json.output.iteritems():
-          # TODO(tansell): Raise an error here when it can't clobber an
-          # existing error. This code is currently inside a finally block,
-          # meaning it could be executed when an existing error is occurring.
-          # See https://chromium-review.googlesource.com/c/437024/
-          #assert k not in swarm_hashes or swarm_hashes[k] == v, (
-          #    "Duplicate hash for target %s was found at step %s."
-          #    "Existing hash: %s, New hash: %s") % (
-          #        k, step, swarm_hashes[k], v)
-          swarm_hashes[k] = v
+    step_result = self.m.step(
+        step_name or ('isolate tests%s' % suffix),
+        args,
+        step_test_data=lambda: self.test_api.output_json(
+            targets, use_cas=use_cas),
+        **kwargs)
 
-      if swarm_hashes:
-        self._isolated_tests = swarm_hashes
+    swarm_hashes = {}
+    if step_result.json.output:
+      for k, v in step_result.json.output.iteritems():
+        # TODO(tansell): Raise an error here when it can't clobber an
+        # existing error. This code is currently inside a finally block,
+        # meaning it could be executed when an existing error is occurring.
+        # See https://chromium-review.googlesource.com/c/437024/
+        #assert k not in swarm_hashes or swarm_hashes[k] == v, (
+        #    "Duplicate hash for target %s was found at step %s."
+        #    "Existing hash: %s, New hash: %s") % (
+        #        k, step, swarm_hashes[k], v)
+        swarm_hashes[k] = v
 
+    if swarm_hashes:
+      self._isolated_tests = swarm_hashes
+
+    step_result.presentation.properties['isolate_server'] = self._isolate_server
+
+    if (swarm_hashes_property_name and
+        len(swarm_hashes) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH):
       step_result.presentation.properties[
-          'isolate_server'] = self._isolate_server
+          swarm_hashes_property_name] = swarm_hashes
 
-      if (swarm_hashes_property_name
-          and len(swarm_hashes) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH):
-        step_result.presentation.properties[
-            swarm_hashes_property_name] = swarm_hashes
+    missing = sorted(t for t, h in self._isolated_tests.iteritems() if not h)
+    if missing:
+      step_result.presentation.logs['failed to isolate'] = (
+          ['Failed to isolate following targets:'] + missing +
+          ['', 'See logs for more information.'])
+      for k in missing:
+        self._isolated_tests.pop(k)
 
-      missing = sorted(
-          t for t, h in self._isolated_tests.iteritems() if not h)
-      if missing:
-        step_result.presentation.logs['failed to isolate'] = (
-            ['Failed to isolate following targets:'] +
-            missing +
-            ['', 'See logs for more information.']
-        )
-        for k in missing:
-          self._isolated_tests.pop(k)
+    return step_result
 
   @property
   def isolated_tests(self):
