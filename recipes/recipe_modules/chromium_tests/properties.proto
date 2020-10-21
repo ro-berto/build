@@ -29,4 +29,19 @@ message InputProperties {
   //   If the properties maps 'chromium' to 'chromium-m86', then instead the
   //   'Linux Tests' job in project 'chromium-m86' will be triggered.
   map<string, string> project_trigger_overrides = 2;
+
+  // Maps a checkout-relative path to the actual revision to check out for the
+  // repo that gets checked out to that path. The revision information is
+  // provided by the JSON output of bot_update based on which revisions are
+  // specified by the gitiles input and/or the gclient config, not the contents
+  // of the DEPS file.
+  //
+  // Example:
+  //   'GPU FYI Linux Builder' gets the revision for src from the gitiles input
+  //   and floats src/third_party/angle to 'HEAD'. It ends up checking out
+  //   revisions X and Y respectively. To ensure the testers check out the same
+  //   revisions, it adds the entries 'src': X and 'src/third_party/angle': Y.
+  //   The tester will override the gclient config for those paths to get the
+  //   same version.
+  map<string, string> fixed_revisions = 3;
 }

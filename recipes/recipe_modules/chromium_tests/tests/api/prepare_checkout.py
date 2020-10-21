@@ -12,6 +12,8 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
+from PB.recipe_modules.build.chromium_tests.properties import InputProperties
+
 DUMMY_BUILDERS = bot_db.BotDatabase.create({
     'chromium.fake': {
         'cross-group-trigger-builder':
@@ -54,6 +56,32 @@ def GenTests(api):
       api.chromium_tests.builders(DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
                        'read test spec (chromium.fake.fyi.json)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'trigger-with-fixed-revisions',
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-tester'),
+      api.chromium_tests.builders({
+          'fake-group': {
+              'fake-tester': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+          },
+      }),
+      api.properties(
+          **{
+              '$build/chromium_tests':
+                  InputProperties(fixed_revisions={
+                      'src': 'fake-src-revision',
+                      'src/foo': 'fake-foo-revision',
+                  }),
+          }),
+      api.post_check(post_process.StepCommandContains, 'bot_update',
+                     ['--revision', 'src@fake-src-revision']),
+      api.post_check(post_process.StepCommandContains, 'bot_update',
+                     ['--revision', 'src/foo@fake-foo-revision']),
       api.post_process(post_process.DropExpectation),
   )
 

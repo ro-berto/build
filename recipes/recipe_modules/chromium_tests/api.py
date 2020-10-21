@@ -103,6 +103,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
     self._project_trigger_overrides = input_properties.project_trigger_overrides
+    self._fixed_revisions = input_properties.fixed_revisions
     self._builders = builders_module.BUILDERS
     self._trybots = trybots_module.TRYBOTS
     if self._test_data.enabled:
@@ -191,6 +192,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # have been updated, even on branches.
       gclient_solution.custom_vars['cros_board'] = (
           self.m.chromium.c.TARGET_CROS_BOARD)
+
+    self.m.gclient.c.revisions.update(self._fixed_revisions)
 
     for c in bot_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
@@ -695,8 +698,48 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not to_trigger:
       return
 
-    additional_properties = additional_properties or {}
+    properties = self._get_trigger_properties(builder_id, update_step,
+                                              additional_properties)
 
+    if self.m.led.launched_by_led:
+      self._trigger_led_builds(to_trigger, properties)
+
+    else:
+      scheduler_triggers = []
+      for project, builder_ids in to_trigger.iteritems():
+        trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+        jobs = [b.builder for b in builder_ids]
+        scheduler_triggers.append((trigger, project, jobs))
+      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+
+  def _get_trigger_properties(self,
+                              builder_id,
+                              update_step,
+                              additional_properties=None):
+    """Get the properties used for triggering child builds.
+
+    Arguments:
+      * builder_id - The ID of the running builder. The
+        `parent_builder_group` and `parent_buildername` properties will
+        be set to refer to this builder.
+      * update_step - The step result of the bot_update step. For each
+        property in `update_step.presentation.properties` that starts
+        with `got_`, the returned properties will contain a property
+        with `parent_` prepended to the property and the same value. If
+        `update_step.presentation.properties` contains a `got_revision`
+        property, then the returned properties will have the `revision`
+        property set to the same value. The `fixed_revisions` field of
+        the `$build/chromium_tests` property will be set with a mapping
+        to ensure that the triggered build checks out the same versions
+        for the paths in `update_step.json.output['manifest']`.
+      * additional_properties - Additional properties to set for the
+        triggered builds. These properties will take precedence over
+        properties computed from `builder_id` and `update_step`.
+
+    Returns:
+      A dict containing the properties to be set when triggering another
+      builder.
+    """
     # LUCI-Scheduler-based triggering (required on luci stack).
     properties = {
         'parent_builder_group': builder_id.group,
@@ -710,19 +753,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if 'parent_got_revision' in properties:
       properties['revision'] = properties['parent_got_revision']
 
-    properties.update(additional_properties)
+    properties['$build/chromium_tests'] = {
+        'fixed_revisions': {
+            path: update_step.json.output['manifest'][path]['revision']
+            for path in update_step.json.output['fixed_revisions']
+        }
+    }
 
-    if self.m.led.launched_by_led:
-      self._trigger_led_builds(to_trigger, properties)
+    properties.update(additional_properties or {})
 
-    else:
-      scheduler_triggers = []
-      for project, builder_ids in to_trigger.iteritems():
-        trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
-        jobs = [b.builder for b in builder_ids]
-        scheduler_triggers.append((trigger, project, jobs))
-
-      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+    return properties
 
   def run_mb_and_compile(self,
                          compile_targets,
