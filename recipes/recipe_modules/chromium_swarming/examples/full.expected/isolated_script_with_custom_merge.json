@@ -453,7 +453,7 @@
       "--task-output-dir",
       "[CLEANUP]/hello_isolated_world_tmp_1/task_output_dir",
       "--merge-script",
-      "//fake_custom_merge_script.py",
+      "[CACHE]/fake_custom_merge_script.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",

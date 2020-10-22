@@ -13,6 +13,8 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 from recipe_engine.config_types import Path
 
+from . import types as chromium_swarming
+
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
@@ -499,37 +501,13 @@ class SwarmingApi(recipe_api.RecipeApi):
       * extra_args: list of command line arguments to pass to isolated tasks.
       * idempotent: whether this task is considered idempotent. Defaults
           to self.default_idempotent if not specified.
-      * cipd_packages: list of 3-tuples corresponding to CIPD packages needed
-          for the task: ('path', 'package_name', 'version'), defined as
-          follows:
-        * path: Path relative to the Swarming root dir in which to install
-                  the package.
-        * package_name: Name of the package to install,
-                  eg. "infra/tools/luci-auth/${platform}"
-        * version: Version of the package, either a package instance ID,
-                  ref, or tag key/value pair.
+      * cipd_packages: A list of CipdPackage instances describing CIPD packages
+          to be downloaded for the task.
       * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
-      * merge: An optional dict containing:
-        * "script": path to a script to call to post process and merge the
-              collected outputs from the tasks. The script should take one
-              named (but required) parameter, '-o' (for output), that represents
-              the path that the merged results should be written to, and accept
-              N additional paths to result files to merge. The merged results
-              should be in the JSON Results File Format
-              (https://www.chromium.org/developers/the-json-test-results-format)
-              and may optionally contain a top level "links" field that
-              may contain a dict mapping link text to URLs, for a set of
-              links that will be included in the buildbot output.
-        * "args": an optional list of additional arguments to pass to the
-              above script.
-      * trigger_script: An optional dict containing:
-        * "script": path to a script to call which will use custom logic to
-              trigger appropriate swarming jobs, using swarming.py.
-        * "args": an optional list of additional arguments to pass to the
-              script.
-          See SwarmingTask.__init__ docstring for more details.
+      * merge: An optional chromium_swarming.MergeScript instance.
+      * trigger_script: An optional chromium_swarming.TriggerScript instance.
       * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory.
       * service_account: (string) a service account email to run the task under.
@@ -568,7 +546,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     ensure_file = self.m.cipd.EnsureFile()
     if cipd_packages:
       for package in cipd_packages:
-        ensure_file.add_package(package[1], package[2], package[0])
+        # TODO(gbeaty) Once all downstream repos have switched to using
+        # CipdPackage, remove this conditional
+        if isinstance(package, tuple):
+          package = chromium_swarming.CipdPackage(
+              name=package[1], version=package[2], root=package[0])
+        ensure_file.add_package(package.name, package.version, package.root)
 
     env_prefixes = {
       var: list(paths) for var, paths in (env_prefixes or {}).items()}
@@ -678,8 +661,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     raw_cmd.append(
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
-    merge = merge or {'script': self.merge_script_path(
-        'standard_gtest_merge.py')}
+    merge = (
+        merge or chromium_swarming.MergeScript.create(
+            script=self.merge_script_path('standard_gtest_merge.py')))
 
     # Make a task, configure it to be collected through shim script.
     task = self.task(
@@ -724,9 +708,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         'isolated-script-test-perf-output',
         'perftest-output.json'))
 
-    merge = {
-      'script': self.merge_script_path('standard_isolated_script_merge.py')
-    }
+    merge = chromium_swarming.MergeScript.create(
+        script=self.merge_script_path('standard_isolated_script_merge.py'))
 
     task = self.task(
         raw_cmd=raw_cmd,
@@ -777,9 +760,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     # script are starting to diverge. The former requires that all shard indices
     # are simultaneously passed. The go implementation of the latter requires
     # that shard indices are passed one at a time. See https://crbug.com/937927.
-    if task.trigger_script and task.trigger_script.get(
-        'requires_simultaneous_shard_dispatch', False):
-      script = str(task.trigger_script.get('script', ''))
+    if (task.trigger_script and
+        task.trigger_script.requires_simultaneous_shard_dispatch):
+      script = str(task.trigger_script.script)
       assert not script.endswith('swarming.py'), (
           'trigger_script[\'script\'] must be a custom script, as %s no longer '
           'supports \'--shards\'.' % script)
@@ -1072,9 +1055,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     script = self.m.swarming_client.path.join('swarming.py')
     if task.trigger_script:
-      script = task.trigger_script['script']
-      if task.trigger_script.get('args'):
-        pre_trigger_args = task.trigger_script['args'] + pre_trigger_args
+      script = task.trigger_script.script
+      pre_trigger_args[:0] = task.trigger_script.args
 
     return script, pre_trigger_args, args
 
@@ -1463,15 +1445,16 @@ class SwarmingApi(recipe_api.RecipeApi):
       allow_missing_json = True
       kwargs.pop('allow_missing_json')
 
+    # This script still exists here, since there are many clients which depend
+    # on this module which don't necessarily have a chromium checkout (it's hard
+    # to verify they do via expectations). Leave this here for now, since this
+    # is a sane default to ship with the module.
+    merge = task.merge or chromium_swarming.MergeScript(
+        script=self.resource('noop_merge.py'))
+
     collect_task_args = self.get_collect_task_args(
-        merge_script=task.merge.get('script')
-        # This script still exists here, since there are many
-        # clients which depend on this module which don't
-        # necessarily have a chromium checkout (it's hard to verify
-        # they do via expectations). Leave this here for now, since
-        # this is a sane default to ship with the module.
-        or self.resource('noop_merge.py'),
-        merge_arguments=task.merge.get('args') or [],
+        merge_script=merge.script,
+        merge_arguments=merge.args,
         build_properties=build_properties,
         requests_json=task.collect_cmd_input(),
         output_json=output_placeholder,
@@ -2031,11 +2014,7 @@ class SwarmingTask(object):
       * extra_args: list of command line arguments to pass to isolated tasks.
       * ignore_task_failure: whether to ignore the test failure of swarming
           tasks.
-      * merge: An optional dict containing:
-        * "script": path to a script to call to post process and merge the
-              collected outputs from the tasks.
-        * "args": an optional list of additional arguments to pass to the
-              above script.
+      * merge: An optional `chromium_swarming.MergeScript`.
       * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory..
       * spec_name: task spec name. Used in monitoring.
@@ -2044,27 +2023,7 @@ class SwarmingTask(object):
       * task_to_retry: Task object. If set, indicates that this task is a
           (potentially partial) retry of another task. When collecting, should
           re-use some shards from the retried task.
-      * trigger_script: An optional dict containing:
-        * "script": path to a script to call which will use custom logic to
-              trigger appropriate swarming jobs, using swarming.py. Required.
-        * "args": an optional list of additional arguments to pass to the
-              script.
-          The script will receive the exact same arguments that are normally
-          passed to calls to `swarming.py trigger`, along with any arguments
-          provided in the "args" entry.
-
-          The script is required to output a json file to the location provided
-          by the --dump-json argument. This json file should describe the
-          swarming tasks it launched, as well as some information about the
-          request, which is used when swarming collects the tasks.
-
-          If the script launches multiple swarming shards, it needs to pass the
-          appropriate environment variables to each shard (this is normally done
-          by swarming.py trigger). Specifically, each shard should receive
-          GTEST_SHARD_INDEX, which is its shard index, and
-          GTEST_TOTAL_SHARDS, which is the total number of shards.
-          This can be done by passing `--env GTEST_SHARD_INDEX [NUM]` and
-          `--env GTEST_SHARD_SHARDS [NUM]` when calling swarming.py trigger.
+      * trigger_script: An optional `chromium_swarming.TriggerScript`.
     """
     self._trigger_output = None
     self.build_properties = build_properties
@@ -2074,7 +2033,7 @@ class SwarmingTask(object):
     self.extra_args = extra_args or []
     self.failed_shards = []
     self.ignore_task_failure = ignore_task_failure
-    self.merge = merge or {}
+    self.merge = merge
     self.named_caches = named_caches or {}
     self.optional_dimensions = optional_dimensions
     self.request = request

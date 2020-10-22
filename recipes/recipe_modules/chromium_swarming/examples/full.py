@@ -27,6 +27,8 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium_swarming
+
 PROPERTIES = {
     'platforms': Property(default=('win',)),
     'custom_trigger_script': Property(default=False),
@@ -163,7 +165,8 @@ def RunSteps(api, platforms, custom_trigger_script,
       task.shards = 1
       task.shard_indices = [0]
     if custom_trigger_script:
-      task.trigger_script = {'script': 'custom_trigger.py'}
+      task.trigger_script = chromium_swarming.TriggerScript.create(
+          script=api.path['cache'].join('custom_trigger.py'))
 
     task_request = task.request
     task_slice = task_request[0]
@@ -569,14 +572,12 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data)
-              }) + api.json.output(json_results), summary_data)),
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
+              + api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
-          merge={
-              'script': '//fake_custom_merge_script.py',
-          }),
+          merge=chromium_swarming.MergeScript.create(
+              script=api.path['cache'].join('fake_custom_merge_script.py'))),
   )
 
   yield api.test(
@@ -591,10 +592,10 @@ def GenTests(api):
               + api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
-          trigger_script={
-              'script': '//fake_custom_trigger_script.py',
-              'args': ['foo', 'bar'],
-          }),
+          trigger_script=chromium_swarming.TriggerScript.create(
+              script=api.path['cache'].join('fake_custom_trigger_script.py'),
+              args=['foo', 'bar'],
+          )),
       api.post_process(
           post_process.Filter(
               '[trigger (custom trigger script)] hello_world on Windows-7-SP1')

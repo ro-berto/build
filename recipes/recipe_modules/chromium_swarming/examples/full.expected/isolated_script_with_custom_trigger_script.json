@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "//fake_custom_trigger_script.py",
+      "[CACHE]/fake_custom_trigger_script.py",
       "foo",
       "bar",
       "trigger",

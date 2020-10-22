@@ -8,6 +8,8 @@ import sys
 
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build import chromium_swarming
+
 from . import constants
 
 
@@ -677,12 +679,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           '--sparse',
       ]
 
-    new_merge = {
-        'script': self.m.profiles.merge_results_script,
-        'args': args,
-    }
     if self.use_java_coverage:
-      new_merge['args'].extend([
+      args.extend([
           '--java-coverage-dir',
           self.m.chromium.output_dir.join('coverage'),
           '--jacococli-path',
@@ -692,19 +690,20 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.m.profiles.normalize(step_name),
       ])
     if self._is_per_cl_coverage:
-      new_merge['args'].append('--per-cl-coverage')
+      args.append('--per-cl-coverage')
     if additional_merge:
-      new_merge['args'].extend([
+      args.extend([
           '--additional-merge-script',
-          additional_merge['script'],
+          additional_merge.script,
       ])
-      if 'args' in additional_merge:
-        new_merge['args'].extend([
+      if additional_merge.args:
+        args.extend([
             '--additional-merge-script-args',
-            self.m.json.dumps(additional_merge['args'])
+            self.m.json.dumps(additional_merge.args)
         ])
 
-    return new_merge
+    return chromium_swarming.MergeScript(
+        script=self.m.profiles.merge_results_script, args=args)
 
   def _compose_gs_path_for_coverage_data(self, data_type):
     build = self.m.buildbucket.build

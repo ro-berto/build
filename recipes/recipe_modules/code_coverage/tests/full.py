@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
                                                  try_spec_module)
 
@@ -56,12 +57,11 @@ def RunSteps(api):
       steps.SwarmingGTestTest('telemetry_gpu_unittests'),
       steps.SwarmingIsolatedScriptTest(
           'blink_web_tests',
-          merge={
-              'script':
-                  api.path['start_dir'].join('coverage', 'tests',
-                                             'merge_blink_web_tests.py'),
-              'args': ['random', 'args'],
-          }),
+          merge=chromium_swarming.MergeScript.create(
+              script=api.path['start_dir'].join('coverage', 'tests',
+                                                'merge_blink_web_tests.py'),
+              args=['random', 'args'],
+          )),
       steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests_module'),
       steps.SwarmingIsolatedScriptTest('ios_web_view_inttests')
   ]

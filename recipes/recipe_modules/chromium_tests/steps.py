@@ -18,6 +18,7 @@ from recipe_engine.config_types import Path
 from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
 
+from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, command_args_attrib,
                                              enum_attrib, mapping_attrib)
 
@@ -1774,8 +1775,7 @@ class SwarmingTest(Test):
       idempotent: Wether to mark the task as idempotent. A value of None will
           cause chromium_swarming/api.py to apply its default_idempotent val.
       shards: Number of shards to trigger.
-      cipd_packages: [(str, str, str)] list of 3-tuples containing cipd
-          package root, package name, and package version.
+      cipd_packages: List of chromium_swarming.CipdPackage.
       named_caches: {str: str} dict mapping named cache name to named cache
           path.
       resultdb: Configuration of ResultDB integration.
@@ -1789,8 +1789,16 @@ class SwarmingTest(Test):
         waterfall_buildername=waterfall_buildername,
         resultdb=resultdb,
         **kwargs)
+    # TODO(gbeaty) Once downstream repos are using CipdPackage, remove this
+    def normalize_cipd_package(p):
+      if isinstance(p, tuple):
+        return chromium_swarming.CipdPackage(name=p[1], version=p[2], root=p[0])
+      return p
+
     self._tasks = {}
-    self._cipd_packages = cipd_packages or []
+    self._cipd_packages = [
+        normalize_cipd_package(p) for p in (cipd_packages or [])
+    ]
     self._containment_type = containment_type
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions
@@ -2073,7 +2081,7 @@ class SwarmingTest(Test):
     ensure_file = task_slice.cipd_ensure_file
     if self._cipd_packages:
       for package in self._cipd_packages:
-        ensure_file.add_package(package[1], package[2], package[0])
+        ensure_file.add_package(package.name, package.version, package.root)
 
     task_slice = (task_slice.with_cipd_ensure_file(ensure_file))
 
@@ -3021,11 +3029,13 @@ class SwarmingIosTest(SwarmingTest):
     """
     super(SwarmingIosTest, self).__init__(
         name=task['step name'],
-        cipd_packages=[(
-            MAC_TOOLCHAIN_ROOT,
-            MAC_TOOLCHAIN_PACKAGE,
-            MAC_TOOLCHAIN_VERSION,
-        )])
+        cipd_packages=[
+            chromium_swarming.CipdPackage.create(
+                name=MAC_TOOLCHAIN_PACKAGE,
+                version=MAC_TOOLCHAIN_VERSION,
+                root=MAC_TOOLCHAIN_ROOT,
+            )
+        ])
     self._service_account = swarming_service_account
     self._platform = platform
     self._config = copy.deepcopy(config)
@@ -3040,17 +3050,19 @@ class SwarmingIosTest(SwarmingTest):
     replay_package_version = task['test'].get('replay package version')
     use_trusted_cert = task['test'].get('use trusted cert')
     if use_trusted_cert or (replay_package_name and replay_package_version):
-      self._cipd_packages.append((
-          WPR_TOOLS_ROOT,
-          WPR_TOOLS_PACKAGE,
-          WPR_TOOLS_VERSION,
-      ))
+      self._cipd_packages.append(
+          chromium_swarming.CipdPackage.create(
+              name=WPR_TOOLS_PACKAGE,
+              version=WPR_TOOLS_VERSION,
+              root=WPR_TOOLS_ROOT,
+          ))
     if replay_package_name and replay_package_version:
-      self._cipd_packages.append((
-          WPR_REPLAY_DATA_ROOT,
-          replay_package_name,
-          replay_package_version,
-      ))
+      self._cipd_packages.append(
+          chromium_swarming.CipdPackage.create(
+              name=replay_package_name,
+              version=replay_package_version,
+              root=WPR_REPLAY_DATA_ROOT,
+          ))
     self._expiration = (
         self._task['test'].get('expiration_time') or
         self._config.get('expiration_time'))

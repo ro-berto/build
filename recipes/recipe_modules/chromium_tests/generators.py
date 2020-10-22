@@ -7,6 +7,8 @@ import textwrap
 
 from . import steps
 
+from RECIPE_MODULES.build import chromium_swarming
+
 
 def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   """Gets the argument list for a dynamically generated test, as
@@ -197,6 +199,8 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     packages = swarming_spec.get('cipd_packages')
     if packages:
       kwargs['cipd_packages'] = [
+          # TODO(gbeaty) Once downstream repos have been switched to using
+          # CipdPackage, switch this to CipdPackage
           (p['location'], p['cipd_package'], p['revision']) for p in packages
       ]
 
@@ -223,7 +227,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
                       "//".
                       """ % (name, merge_script))),
               as_log='details')
-    kwargs['merge'] = merge
+      kwargs['merge'] = chromium_swarming.MergeScript.create(**merge)
 
     trigger_script = dict(spec.get('trigger_script', {}))
     if trigger_script:
@@ -243,7 +247,8 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
                   src directory and should start with "//".
                   """ % (name, trigger_script_path))),
               as_log='details')
-    kwargs['trigger_script'] = trigger_script
+      kwargs['trigger_script'] = chromium_swarming.TriggerScript.create(
+          **trigger_script)
 
     swarming_dimensions = swarming_dimensions or {}
     for dimensions in swarming_dimension_sets or [{}]:
