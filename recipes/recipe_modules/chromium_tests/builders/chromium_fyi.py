@@ -845,7 +845,7 @@ SPEC.update([
     stock_config('linux-gcc-rel'),
     stock_config(
         'linux-lacros-builder-fyi-rel',
-        gclient_apply_config=['checkout_prebuilt_ash_chrome']),
+        gclient_apply_config=['chromeos', 'checkout_prebuilt_ash_chrome']),
     stock_config(
         'linux-lacros-tester-fyi-rel',
         execution_mode=bot_spec.TEST,
