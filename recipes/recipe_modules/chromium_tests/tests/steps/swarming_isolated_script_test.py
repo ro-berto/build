@@ -78,15 +78,7 @@ def RunSteps(api):
         run_disabled=bool(test_repeat_count))
 
   try:
-    # Emulate the behavior test_utils uses to run tests. Needed to achieve
-    # coverage of some code.
-    try:
-      test.pre_run(api, 'with patch')
-    except api.step.InfraFailure:
-      raise
-    except api.step.StepFailure:
-      # Swarming isolated script tests never abort on failure
-      pass
+    test.pre_run(api, 'with patch')
     test.run(api, 'with patch')
 
   finally:
@@ -233,7 +225,7 @@ def GenTests(api):
           builder_group='chromium.linux',
           builder='Linux Tests',
       ),
-      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 

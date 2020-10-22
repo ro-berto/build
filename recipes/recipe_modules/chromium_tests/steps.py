@@ -2149,11 +2149,9 @@ class SwarmingTest(Test):
     assert suffix not in self._tasks, ('Test %s was already triggered' %
                                        self.step_name(suffix))
 
-    # *.isolated may be missing if *_run target is misconfigured. It's a error
-    # in gyp, not a recipe failure. So carry on with recipe execution.
     task_input = api.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:
-      return api.python.failing_step(
+      return api.python.infra_failing_step(
           '[error] %s' % self.step_name(suffix),
           '*.isolated file for target %s is missing' % self.isolate_target)
 
@@ -2193,13 +2191,6 @@ class SwarmingTest(Test):
     """Waits for launched test to finish and collects the results."""
     assert suffix not in self._test_runs, (
         'Results of %s were already collected' % self.step_name(suffix))
-
-    # Emit error if test wasn't triggered. This happens if *.isolated is not
-    # found. (The build is already red by this moment anyway).
-    if suffix not in self._tasks:
-      return api.python.failing_step(
-          '[collect error] %s' % self.step_name(suffix),
-          '%s wasn\'t triggered' % self.target_name)
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
         self._tasks[suffix])

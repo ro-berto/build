@@ -1045,7 +1045,7 @@
     "cmd": [],
     "name": "test_pre_run (with patch)",
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
@@ -1058,17 +1058,17 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "infra_step": true,
     "name": "test_pre_run (with patch).[error] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
     "failure": {
-      "failure": {},
-      "humanReason": "Step('test_pre_run (with patch).[error] base_unittests (with patch)') (retcode: 1)"
+      "humanReason": "Infra Failure: Step('test_pre_run (with patch).[error] base_unittests (with patch)') (retcode: 1)"
     },
     "name": "$result"
   }
