@@ -116,8 +116,9 @@ DETERMINISTIC_BUILDERS = freeze({
 
 # Trybots to mirror the actions of builders
 DETERMINISTIC_TRYBOTS = freeze({
-  'android-deterministic-rel': 'Deterministic Android',
-  'android-deterministic-dbg': 'Deterministic Android (dbg)',
+    'android-deterministic-rel': 'Deterministic Android',
+    'android-deterministic-dbg': 'Deterministic Android (dbg)',
+    'fuchsia-deterministic-dbg': 'Deterministic Fuchsia (dbg)',
 })
 
 def MoveBuildDirectory(api, src_dir, dst_dir):
