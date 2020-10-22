@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_results',
     'test_utils',
 ]
@@ -117,15 +118,6 @@ def GenTests(api):
       expected_log = '%s: %r' % field
       check(expected_log in step.logs['details'])
 
-  def verify_isolate_flag(check, step_odict):
-    step = step_odict[
-        '[trigger] base_unittests on Intel GPU on Linux (with patch)']
-    check('LLVM_PROFILE_FILE' in step.cmd)
-    step = step_odict[
-        'base_unittests on Intel GPU on Linux (with patch)']
-    # Make sure swarming collect know how to merge coverage profile data.
-    check('[START_DIR]/merge_results.py' in step.cmd)
-
   yield api.test(
       'basic',
       api.chromium.ci_build(
@@ -183,7 +175,14 @@ def GenTests(api):
           },
           isolate_coverage_data=True,
       ),
-      api.post_process(verify_isolate_flag),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] base_unittests on Intel GPU on Linux (with patch)',
+          lambda check, req: check('LLVM_PROFILE_FILE' in req[0].env_vars),
+      ),
+      api.post_process(post_process.StepCommandContains,
+                       'base_unittests on Intel GPU on Linux (with patch)',
+                       ['[START_DIR]/merge_results.py']),
       api.post_process(post_process.DropExpectation),
   )
 

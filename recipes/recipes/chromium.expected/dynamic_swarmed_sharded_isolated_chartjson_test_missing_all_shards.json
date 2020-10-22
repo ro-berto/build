@@ -36,7 +36,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}, {\"task_id\": \"110100\"}]}"
+      "{\"tasks\": [{\"task_id\": \"0\"}, {\"task_id\": \"1\"}]}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -118,15 +118,15 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"110100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"0\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/110100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   }
 ]

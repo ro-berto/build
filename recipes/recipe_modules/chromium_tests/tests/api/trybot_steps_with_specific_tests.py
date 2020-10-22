@@ -24,6 +24,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_utils',
 ]
 
@@ -274,14 +275,14 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.StepCommandContains,
+      api.post_check(
+          api.swarming.check_triggered_request,
           'test_pre_run (with patch).[trigger] base_unittests (with patch)',
-          ['--priority', '30']),
-      api.post_process(
-          post_process.StepCommandContains,
-          'test_pre_run (without patch).[trigger] base_unittests '
-          '(without patch)', ['--priority', '29']),
+          lambda check, req: check(req.priority == 30)),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run (without patch).[trigger] base_unittests ' +
+          '(without patch)', lambda check, req: check(req.priority == 29)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -311,14 +312,14 @@ def GenTests(api):
     # 'retry shards with patch' will only retrigger the second shard. The
     # distinguishing feature is that it has 'custom_task_id' as the task_id.
     retry_trigger_summary = {
-      'base_task_name': 'base_task_name_does_not_matter',
-      'tasks': {
-        'task_name_does_not_matter': {
-          'task_id': 'custom_task_id',
-          'shard_index': 1,
-          'view_url': 'view_url_does_not_matter'
-        }
-      },
+        'base_task_name':
+            'base_task_name_does_not_matter',
+        'tasks': [{
+            'task_id': 'custom_task_id',
+            'request': {
+                'name': 'task_name_does_not_matter',
+            }
+        },]
     }
 
     # When collecting the swarming, make sure to update the task_id of shard 1.
@@ -326,6 +327,11 @@ def GenTests(api):
     retry_swarming_summary['shards'][1]['task_id'] = 'custom_task_id'
 
     base_unittests_retry = 'base_unittests (retry shards with patch)'
+
+    def check_gtest_shrad_env(check, req):
+      check(req[0].env_vars['GTEST_SHARD_INDEX'] == '1')
+      check(req[0].env_vars['GTEST_TOTAL_SHARDS'] == '2')
+
     yield api.test(
         test_name,
         api.chromium.try_build(
@@ -346,14 +352,11 @@ def GenTests(api):
 
         # Check that we are sending right input to 'retry shards with patch'
         # trigger.
-        api.post_process(post_process.StepCommandContains,
-                         retry_shards_step_name,
-                         ['--env', 'GTEST_SHARD_INDEX', '1']),
-        api.post_process(post_process.StepCommandContains,
-                         retry_shards_step_name,
-                         ['--env', 'GTEST_TOTAL_SHARDS', '2']),
         api.post_process(post_process.LogContains, retry_shards_step_name,
-                         'json.output', ['"shard_index": 1']),
+                         'json.output', ['"task_id": "custom_task_id"']),
+        api.post_check(api.swarming.check_triggered_request,
+          retry_shards_step_name, check_gtest_shrad_env),
+
 
         # Override 'retry shards with patch' trigger output.
         api.override_step_data(retry_shards_step_name,
@@ -678,10 +681,10 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.StepCommandContains, 'test_pre_run (without patch)' +
-          '.[trigger] base_unittests (without patch)',
-          ['--env', 'GTEST_TOTAL_SHARDS', '3']),
+      api.post_check(
+          api.swarming.check_triggered_request, 'test_pre_run (without patch)' +
+          '.[trigger] base_unittests (without patch)', lambda check, req: check(
+              req[0].env_vars['GTEST_TOTAL_SHARDS'] == '3')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -813,10 +816,11 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(gtest_results), retcode=1),
               failure=True)),
-      api.post_process(
-          post_process.StepCommandContains,
+      api.post_check(
+          api.swarming.check_triggered_request,
           'test_pre_run (without patch).[trigger] base_unittests '
-          '(without patch)', ['--gtest_filter=Test.Two']),
+          '(without patch)', lambda check, req: check('--gtest_filter=Test.Two'
+                                                      in req[0].command)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1204,10 +1208,11 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
-      api.post_process(
-          post_process.StepCommandContains,
+      api.post_check(
+          api.swarming.check_triggered_request,
           'test_pre_run (without patch).[trigger] base_unittests '
-          '(without patch)', ['--gtest_filter=Test.One']),
+          '(without patch)', lambda check, req: check('--gtest_filter=Test.One'
+                                                      in req[0].command)),
       api.post_process(
           post_process.StepTextContains,
           'base_unittests (test results summary)', [
