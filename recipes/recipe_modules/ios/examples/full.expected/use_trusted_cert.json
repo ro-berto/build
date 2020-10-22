@@ -713,7 +713,14 @@
       "--cipd-package",
       "wpr-ios-tools:chromium/ios/autofill/wpr-ios-tools:version:1.0",
       "--isolated",
-      "[dummy hash for 0]"
+      "[dummy hash for 0]",
+      "--relative-cwd",
+      ".",
+      "--raw-cmd",
+      "--",
+      "dummy",
+      "command",
+      "line"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,

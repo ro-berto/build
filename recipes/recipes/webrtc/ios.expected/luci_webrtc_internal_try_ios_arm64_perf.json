@@ -1190,7 +1190,14 @@
       "--cipd-package",
       ".:infra/tools/mac_toolchain/${platform}:git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
       "--isolated",
-      "[dummy hash for 0]"
+      "[dummy hash for 0]",
+      "--relative-cwd",
+      ".",
+      "--raw-cmd",
+      "--",
+      "dummy",
+      "command",
+      "line"
     ],
     "infra_step": true,
     "name": "trigger.[trigger] webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",

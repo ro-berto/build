@@ -722,7 +722,14 @@
       "--cipd-package",
       "wpr-replay-data:chromium/ios/autofill/recipe-and-replay-data:version:latest",
       "--isolated",
-      "[dummy hash for 0]"
+      "[dummy hash for 0]",
+      "--relative-cwd",
+      ".",
+      "--raw-cmd",
+      "--",
+      "dummy",
+      "command",
+      "line"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,

@@ -33,23 +33,27 @@ def RunSteps(api):
   platform = api.properties.get('platform', 'device')
   result_callback = api.properties.get('result_callback', None)
   config = {'device check': True}
-  task = {'step name': 'dummy step name',
-          'test': {'os': 'dummy OS',
-                   'device type': 'iPhone X',
-                   'app': None,
-                   'use trusted cert': True,
-                   'replay package name': 'dummy name',
-                   'replay package version': 'dummy version',
-                   'expiration_time': 50,
-                   'max runtime seconds': 70,
-                   },
-          'task_id': 'dummy task id',
-          'isolated hash': 'dummy isolated hash',
-          'xcode build version': 'dummy build version',
-          'xcode version': 'dummy xcode version',
-          'bot id': 'dummy bot id',
-          'pool': 'dummy pool',
-          }
+  task = {
+      'step name': 'dummy step name',
+      'test': {
+          'os': 'dummy OS',
+          'device type': 'iPhone X',
+          'app': None,
+          'use trusted cert': True,
+          'replay package name': 'dummy name',
+          'replay package version': 'dummy version',
+          'expiration_time': 50,
+          'max runtime seconds': 70,
+      },
+      'task_id': 'dummy task id',
+      'isolated hash': 'dummy isolated hash',
+      'xcode build version': 'dummy build version',
+      'xcode version': 'dummy xcode version',
+      'bot id': 'dummy bot id',
+      'pool': 'dummy pool',
+      'raw_cmd': ['dummy', 'command', 'line'],
+      'relative_cwd': '.',
+  }
   if platform == 'simulator':
     task['test']['host os'] = 'other-dummy-OS'
   test = steps.SwarmingIosTest(

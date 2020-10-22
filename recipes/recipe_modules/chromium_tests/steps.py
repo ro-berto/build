@@ -3107,7 +3107,9 @@ class SwarmingIosTest(SwarmingTest):
         task_output_dir=task['tmp_dir'],
         failure_as_exception=False,
         isolated=task['isolated hash'],
-    )
+        relative_cwd=task.get('relative_cwd'),
+        raw_cmd=task.get('raw_cmd'))
+
     self._apply_swarming_task_config(
         swarming_task,
         api,

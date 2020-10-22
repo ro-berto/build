@@ -710,7 +710,14 @@
       "--cipd-package",
       ".:infra/tools/mac_toolchain/${platform}:git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
       "--isolated",
-      "[dummy hash for 0]"
+      "[dummy hash for 0]",
+      "--relative-cwd",
+      ".",
+      "--raw-cmd",
+      "--",
+      "dummy",
+      "command",
+      "line"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,

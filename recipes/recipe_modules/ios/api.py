@@ -4,6 +4,8 @@
 
 import collections
 import copy
+import json
+import os
 import re
 
 from recipe_engine import recipe_api
@@ -941,9 +943,25 @@ class iOSApi(recipe_api.RecipeApi):
     if targets_to_isolate:
       step_result = self.m.isolate.isolate_tests(
           tmp_dir, targets=targets_to_isolate, verbose=True)
+
       for task in tasks:
         if task['task_id'] in step_result.json.output:
           task['isolated hash'] = step_result.json.output[task['task_id']]
+        isolated_file = '%s.isolated' % task['task_id']
+        # According to the current usage of this code, the 'relative_cwd'
+        # is always '.' (and commands always start with src/). Hardcoding
+        # this value is not a good long-term idea but this recipe_module
+        # is currently used only by WebRTC, which should migrate out of
+        # it in the next quarters.
+        task['relative_cwd'] = '.'
+        if self.m.path.abspath(tmp_dir).startswith('[CLEANUP]'):
+          # The recipe_module is in test mode, so we don't open files
+          # from the FS but instead the expected files needs to be injected.
+          task['raw_cmd'] = ['dummy', 'command', 'line']
+        else:  # pragma: no cover
+          with open(os.path.join(self.m.path.abspath(tmp_dir),
+                                 isolated_file)) as f:
+            task['raw_cmd'] = json.load(f)['command']
 
     return tasks
 
