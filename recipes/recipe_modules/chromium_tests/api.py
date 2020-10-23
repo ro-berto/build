@@ -967,6 +967,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               revision_cp, suffix.replace(' ', '_'))
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
+            failing_swarming_tests,
             suffix=' (%s)' % suffix,
             use_cas=self.c.use_cas,
             swarm_hashes_property_name=swarm_hashes_property_name,
