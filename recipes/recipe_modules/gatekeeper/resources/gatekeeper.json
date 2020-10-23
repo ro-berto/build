@@ -13,7 +13,9 @@
           "*": {}
         },
         "tree_notify": [
+            "dhoss@chromium.org",
             "dsinclair@chromium.org",
+            "nigi@chromium.org",
             "thestig@chromium.org"
         ]
       }
