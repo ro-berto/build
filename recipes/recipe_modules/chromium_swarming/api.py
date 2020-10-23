@@ -546,11 +546,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     ensure_file = self.m.cipd.EnsureFile()
     if cipd_packages:
       for package in cipd_packages:
-        # TODO(gbeaty) Once all downstream repos have switched to using
-        # CipdPackage, remove this conditional
-        if isinstance(package, tuple):
-          package = chromium_swarming.CipdPackage(
-              name=package[1], version=package[2], root=package[0])
         ensure_file.add_package(package.name, package.version, package.root)
 
     env_prefixes = {

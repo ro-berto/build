@@ -199,9 +199,11 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     packages = swarming_spec.get('cipd_packages')
     if packages:
       kwargs['cipd_packages'] = [
-          # TODO(gbeaty) Once downstream repos have been switched to using
-          # CipdPackage, switch this to CipdPackage
-          (p['location'], p['cipd_package'], p['revision']) for p in packages
+          chromium_swarming.CipdPackage.create(
+              name=p['cipd_package'],
+              version=p['revision'],
+              root=p['location'],
+          ) for p in packages
       ]
 
     service_account = swarming_spec.get('service_account')

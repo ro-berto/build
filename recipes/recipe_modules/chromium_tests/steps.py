@@ -1789,16 +1789,8 @@ class SwarmingTest(Test):
         waterfall_buildername=waterfall_buildername,
         resultdb=resultdb,
         **kwargs)
-    # TODO(gbeaty) Once downstream repos are using CipdPackage, remove this
-    def normalize_cipd_package(p):
-      if isinstance(p, tuple):
-        return chromium_swarming.CipdPackage(name=p[1], version=p[2], root=p[0])
-      return p
-
     self._tasks = {}
-    self._cipd_packages = [
-        normalize_cipd_package(p) for p in (cipd_packages or [])
-    ]
+    self._cipd_packages = cipd_packages or []
     self._containment_type = containment_type
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions

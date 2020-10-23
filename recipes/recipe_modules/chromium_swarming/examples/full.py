@@ -152,7 +152,11 @@ def RunSteps(api, platforms, custom_trigger_script,
           named_caches=named_caches,
           service_account=service_account,
           cipd_packages=[
-              ('', 'cool/package', 'vers'),
+              chromium_swarming.CipdPackage.create(
+                  name='cool/package',
+                  version='vers',
+                  root='',
+              )
           ])
 
     if platform == 'linux':
