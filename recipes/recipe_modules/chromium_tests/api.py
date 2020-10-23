@@ -697,23 +697,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                            update_step,
                            bot_config,
                            additional_properties=None):
-    to_trigger = self._get_builders_to_trigger(builder_id, bot_config)
-    if not to_trigger:
-      return
+    with self.m.context(infra_steps=True):
+      to_trigger = self._get_builders_to_trigger(builder_id, bot_config)
+      if not to_trigger:
+        return
 
-    properties = self._get_trigger_properties(builder_id, update_step,
-                                              additional_properties)
+      properties = self._get_trigger_properties(builder_id, update_step,
+                                                additional_properties)
 
-    if self.m.led.launched_by_led:
-      self._trigger_led_builds(to_trigger, properties)
+      if self.m.led.launched_by_led:
+        self._trigger_led_builds(to_trigger, properties)
 
-    else:
-      scheduler_triggers = []
-      for project, builder_ids in to_trigger.iteritems():
-        trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
-        jobs = [b.builder for b in builder_ids]
-        scheduler_triggers.append((trigger, project, jobs))
-      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+      else:
+        scheduler_triggers = []
+        for project, builder_ids in to_trigger.iteritems():
+          trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+          jobs = [b.builder for b in builder_ids]
+          scheduler_triggers.append((trigger, project, jobs))
+        self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
   def _get_trigger_properties(self,
                               builder_id,

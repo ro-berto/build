@@ -346,6 +346,7 @@
     "env": {
       "SWARMING_TASK_ID": null
     },
+    "infra_step": true,
     "name": "trigger.chromium/ci/fake-tester.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -371,6 +372,7 @@
     "env": {
       "SWARMING_TASK_ID": null
     },
+    "infra_step": true,
     "name": "trigger.chromium/ci/fake-tester.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -400,6 +402,7 @@
     "env": {
       "SWARMING_TASK_ID": null
     },
+    "infra_step": true,
     "name": "trigger.chromium/ci/fake-tester.led edit",
     "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"ci\", \n\"builder\": \"fake-tester\", \n\"project\": \"chromium\"\n}\n}\n}\n}\n}",
     "~followup_annotations": [
@@ -475,6 +478,7 @@
     "env": {
       "SWARMING_TASK_ID": null
     },
+    "infra_step": true,
     "name": "trigger.chromium/ci/fake-tester.led edit (2)",
     "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"ci\", \n\"builder\": \"fake-tester\", \n\"project\": \"chromium\"\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"fake-hash\"\n}\n}",
     "~followup_annotations": [
@@ -536,6 +540,7 @@
     "env": {
       "SWARMING_TASK_ID": null
     },
+    "infra_step": true,
     "name": "trigger.chromium/ci/fake-tester.led launch",
     "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"ci\", \n\"builder\": \"fake-tester\", \n\"project\": \"chromium\"\n}, \n\"input\": {\n\"properties\": {\n\"$build/chromium_tests\": {\n\"fixed_revisions\": {\n\"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"\n}\n}, \n\"parent_builder_group\": \"fake-group\", \n\"parent_buildername\": \"fake-builder\", \n\"parent_got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \n\"parent_got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \n\"parent_got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \n\"parent_got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \n\"parent_got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \n\"parent_got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \n\"parent_got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \n\"parent_got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \n\"parent_got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \n\"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \n\"parent_got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \n\"parent_got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \n\"parent_got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \n\"parent_got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \n\"parent_got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \n\"parent_got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \n\"parent_got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \n\"parent_got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \n\"revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"\n}\n}\n}\n}\n}, \n\"user_payload\": {\n\"digest\": \"fake-hash\"\n}\n}",
     "~followup_annotations": [
