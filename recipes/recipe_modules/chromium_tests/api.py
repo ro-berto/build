@@ -417,6 +417,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           t.isolate_target for t in tests_including_triggered if t.uses_isolate
       ]
 
+      if isolated_targets:
+        self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+
       name_suffix = ''
       if self.m.tryserver.is_tryserver:
         name_suffix = ' (with patch)'
@@ -944,7 +947,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failing_swarming_tests = [
           t.isolate_target for t in failing_tests if t.uses_isolate
       ]
-
+      if failing_swarming_tests:
+        self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
       raw_result = self.run_mb_and_compile(compile_targets,
                                            failing_swarming_tests,
                                            ' (%s)' % suffix)
