@@ -856,7 +856,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:linux-rel.trigger.led launch",
@@ -1125,7 +1127,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led launch",
@@ -1394,7 +1398,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:linux-rel.trigger.led launch",
@@ -1663,7 +1669,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:win10_chromium_x64_rel_ng.trigger.led launch",
@@ -1932,7 +1940,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m87.try:linux-rel.trigger.led launch",
@@ -2201,7 +2211,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m87.try:win10_chromium_x64_rel_ng.trigger.led launch",

@@ -1025,7 +1025,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium.try:ios-simulator.trigger.led launch",
@@ -1294,7 +1296,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m86.try:ios-simulator.trigger.led launch",
@@ -1563,7 +1567,9 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "launch"
+      "launch",
+      "-resultdb",
+      "on"
     ],
     "infra_step": true,
     "name": "test luci.chromium-m87.try:ios-simulator.trigger.led launch",

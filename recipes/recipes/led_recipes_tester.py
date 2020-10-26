@@ -474,7 +474,7 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       # build.git CQ, we decided the tradeoff to run these edited recipes in
       # production mode instead would be better.
       ir = ir.then('edit', '-exp', 'false')
-      ir = ir.then('launch')
+      ir = ir.then('launch', '-resultdb', 'on')
 
       job = ir.launch_result
       presentation.links['Swarming task'] = job.swarming_task_url
