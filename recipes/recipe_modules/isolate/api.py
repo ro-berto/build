@@ -68,13 +68,18 @@ class IsolateApi(recipe_api.RecipeApi):
         raise self.m.step.InfraFailure(
           'Missing isolated target(s) %s in swarm_hashes' % ', '.join(missing))
 
-  def isolate_tests(self, build_dir, targets=None, verbose=False,
-                    swarm_hashes_property_name='swarm_hashes',
-                    step_name=None,  suffix='',
-                    # TODO(crbug.com/chrome-operations/49): remove this after
-                    # isolate server shutdown.
-                    use_cas=False,
-                    **kwargs):
+  def isolate_tests(
+      self,
+      build_dir,
+      targets,
+      verbose=False,
+      swarm_hashes_property_name='swarm_hashes',
+      step_name=None,
+      suffix='',
+      # TODO(crbug.com/chrome-operations/49): remove this after
+      # isolate server shutdown.
+      use_cas=False,
+      **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -86,8 +91,7 @@ class IsolateApi(recipe_api.RecipeApi):
     only once.
 
     Args:
-        targets: List of targets to use instead of finding .isolated.gen.json
-            files.
+        targets: List of targets to use.
         verbose (bool): Isolate command should be verbose in output.
         swarm_hashes_property_name (str): If set, assigns the dict
             {target name -> *.isolated file hash} to the named build
@@ -97,24 +101,6 @@ class IsolateApi(recipe_api.RecipeApi):
             e.g. ' (with patch)', ' (without patch)'.
         use_cas: whether upload files to RBE-CAS or not.
     """
-    # FIXME: Make all steps in this function nested under one overall
-    # 'isolate tests' master step.
-
-    # FIXME: Always require |targets| to be passed explicitly. Currently
-    # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
-    # autodiscovery. The code path in chromium_trybot that needs it is being
-    # deprecated in favor of to *_ng builders, that pass targets explicitly.
-    if targets is None:
-      # mb generates <target>.isolated.gen.json files.
-      paths = self.m.file.glob_paths(
-          'find isolated targets',
-          build_dir, '*.isolated.gen.json',
-          test_data=['dummy_target_%d.isolated.gen.json' % i for i in (1, 2)])
-      targets = []
-      for p in paths:
-        name = self.m.path.basename(p)
-        assert name.endswith('.isolated.gen.json'), name
-        targets.append(name[:-len('.isolated.gen.json')])
 
     # No isolated tests found.
     if not targets:  # pragma: no cover

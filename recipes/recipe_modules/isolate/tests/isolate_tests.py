@@ -9,7 +9,9 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.isolate.isolate_tests(api.path['checkout'].join('out', 'Release'))
+  api.isolate.isolate_tests(
+      api.path['checkout'].join('out', 'Release'),
+      targets=['dummy_target_1', 'dummy_target_2'])
 
 
 def GenTests(api):
