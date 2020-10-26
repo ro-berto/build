@@ -35,7 +35,7 @@ FLAKE_BUG_DEFAULTS = {
 
 FLAGFUZZ_BUG_DEFAULTS = {
   'template': 'Report+flag-fuzzer+failure',
-  'title': 'starts+failing+%%28flag+fuzzer%%29',
+  'title': 'starts+failing+%28flag+fuzzer%29',
   'footer': FLAKO_LINK_TEMPLATE,
   'label':  'Hotlist-FlagFuzz',
 }
