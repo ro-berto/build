@@ -86,6 +86,7 @@
       "--ninja-log-compiler",
       "goma-clang"
     ],
+    "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
     },

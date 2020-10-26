@@ -439,6 +439,7 @@
       "--ninja-log-compiler",
       "goma"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },

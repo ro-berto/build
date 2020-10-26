@@ -207,6 +207,7 @@
       "--ninja-log-compiler",
       "unknown"
     ],
+    "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },

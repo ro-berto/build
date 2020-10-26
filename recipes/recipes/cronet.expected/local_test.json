@@ -402,6 +402,7 @@
       "--ninja-log-compiler",
       "goma"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },

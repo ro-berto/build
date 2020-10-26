@@ -514,6 +514,59 @@ class ChromiumApi(recipe_api.RecipeApi):
           build_step_name=name)
     return ninja_result
 
+  def _run_ninja_without_remote(self,
+                                ninja_command,
+                                ninja_log_outdir,
+                                name=None,
+                                ninja_env=None,
+                                **kwargs):
+    """
+    Run ninja and uploads the ninja logs.
+
+    Args:
+      ninja_command: Command used for build.
+                     This is sent as part of log.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
+      name: Name of compile step.
+      ninja_env: Environment for ninja.
+
+    Returns:
+      A named tuple with the fields
+        - failure_summary: string of the error that occurred during the step,
+        - retcode: return code of the step
+
+    Raises:
+      InfraFailure from compile step
+      StepFailure from compile confirm no-op step
+    """
+    compile_exit_status = 1
+    try:
+      ninja_result = self._run_ninja(
+          ninja_command=ninja_command,
+          name=name or 'compile',
+          ninja_env=ninja_env,
+          **kwargs)
+      compile_exit_status = ninja_result.retcode
+      return ninja_result
+    except self.m.step.StepFailure as ex:
+      compile_exit_status = ex.retcode
+      raise ex
+    finally:
+      upload_ninja_log_args = [
+          '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+          '--skip-sendgomatsmon', '--ninja-log-outdir', ninja_log_outdir,
+          '--ninja-log-command-file',
+          self.m.json.input(ninja_command), '--build-exit-status',
+          compile_exit_status, '--ninja-log-compiler',
+          self.c.compile_py.compiler or 'unknown'
+      ]
+      self.m.build.python(
+          name='upload_ninja_log',
+          script=self.repo_resource('recipes', 'upload_goma_logs.py'),
+          args=upload_ninja_log_args,
+          venv=True)
+
   @contextlib.contextmanager
   def guard_compile(self, suffix=''):
     """Ensure that the output directory gets cleaned if compile is interrupted.
@@ -658,69 +711,45 @@ class ChromiumApi(recipe_api.RecipeApi):
       command += targets
 
     assert 'env' not in kwargs
-
     assert 'cwd' not in kwargs
 
-    if not use_goma_module:
-      compile_exit_status = 1
-      try:
-        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          ninja_result = self._run_ninja(
+    try:
+      with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+        if use_goma_module:
+          ninja_result = self._run_ninja_with_goma(
               ninja_command=command,
+              ninja_env=ninja_env,
+              name=name or 'compile',
+              goma_env=goma_env,
+              ninja_log_outdir=target_output_dir,
+              ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+              **kwargs)
+        else:
+          ninja_result = self._run_ninja_without_remote(
+              ninja_command=command,
+              ninja_log_outdir=target_output_dir,
               name=name or 'compile',
               ninja_env=ninja_env,
               **kwargs)
-          compile_exit_status = ninja_result.retcode
-      except self.m.step.StepFailure as e:
-        compile_exit_status = e.retcode
-        raise e
-      finally:
-        upload_ninja_log_args = [
-            '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-            '--skip-sendgomatsmon', '--ninja-log-outdir', target_output_dir,
-            '--ninja-log-command-file',
-            self.m.json.input(command), '--build-exit-status',
-            compile_exit_status, '--ninja-log-compiler',
-            self.c.compile_py.compiler or 'unknown'
-        ]
-        self.m.build.python(
-            name='upload_ninja_log',
-            script=self.repo_resource('recipes', 'upload_goma_logs.py'),
-            args=upload_ninja_log_args,
-            venv=True)
-
-      if ninja_result.retcode:
-        return result_pb2.RawResult(
-            status=common_pb.FAILURE,
-            summary_markdown=self._format_failures(
-                ninja_result.failure_summary, name or 'compile',
-                'More information in raw_io.output[failure_summary]'))
-      return result_pb2.RawResult(status=common_pb.SUCCESS)
-    try:
-      with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-        ninja_result = self._run_ninja_with_goma(
-            ninja_command=command,
-            ninja_env=ninja_env,
-            name=name or 'compile',
-            goma_env=goma_env,
-            ninja_log_outdir=target_output_dir,
-            ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-            **kwargs)
     except self.m.step.StepFailure as ex:
       # If there is an infra failure raised at this point that means
       # goma did not get to start, so no need to handle it
-      if ex.retcode != 1:
+      if ex.retcode != 1 or not use_goma_module:
         raise ex
       # Goma failure
       return self._handle_goma_failures(ex.reason)
-    # It's possible for the StepFailure of the compile step to have
-    # a goma failure, so to avoid the message getting repeated it
-    # will be handled here
+
     if ninja_result.retcode:
       failure_summary = self._format_failures(
           ninja_result.failure_summary, name or 'compile',
           'More information in raw_io.output[failure_summary]')
-      return self._handle_goma_failures(failure_summary)
+      if use_goma_module:
+        # It's possible for the StepFailure of the compile step to have
+        # a goma failure, so to avoid the message getting repeated it
+        # will be handled here
+        return self._handle_goma_failures(failure_summary)
+      return result_pb2.RawResult(
+          status=common_pb.FAILURE, summary_markdown=failure_summary)
     return result_pb2.RawResult(status=common_pb.SUCCESS)
 
   def _handle_goma_failures(self, failure_summary):
