@@ -569,9 +569,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       # 'src' folder can be shared between builder types.
       self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
 
-    if self._isolated_targets:
-      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-
     self.m.chromium.mb_gen(
         self.builder_id,
         phase=phase,

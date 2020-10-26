@@ -35,18 +35,6 @@ class IsolateApi(recipe_api.RecipeApi):
     """Changes URL of Isolate server to use."""
     self._isolate_server = value
 
-  def clean_isolated_files(self, build_dir):
-    """Cleans out all *.isolated files from the build directory in
-    preparation for the compile. Needed in order to ensure isolates
-    are rebuilt properly because their dependencies are currently not
-    completely described to gyp.
-    """
-    self.m.python('clean isolated files',
-                  self.resource('find_isolated_tests.py'), [
-                      '--build-dir',
-                      build_dir,
-                  ])
-
   def check_swarm_hashes(self, targets):
     """Asserts that all the targets in the passed list are present as keys in
     the 'swarm_hashes' property.
