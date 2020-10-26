@@ -329,15 +329,6 @@ class V8Api(recipe_api.RecipeApi):
     self.build_environment = self.m.properties.get(
         'parent_build_environment', {})
 
-  def set_gclient_custom_var(self, var_name):
-    """Sets the gclient custom var `var_name` if given.
-
-    This customizes gclient sync, based on conditions on the variable in the
-    V8 DEPS file.
-    """
-    if var_name:
-      self.m.gclient.c.solutions[0].custom_vars[var_name] = 'True'
-
   def set_gclient_custom_vars(self, gclient_vars):
     """Sets additional gclient custom variables."""
     for key, value in (gclient_vars or {}).iteritems():

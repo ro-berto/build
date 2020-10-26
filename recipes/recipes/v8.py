@@ -61,9 +61,6 @@ PROPERTIES = {
     # Optional path to a different MB config. The path must be relative to the
     # V8 checkout and using forward slashes.
     'mb_config_path': Property(default=None, kind=str),
-    # Name of a gclient custom_var to set to 'True'.
-    # TODO(machenbach): Deprecate single boolean variables, use gclient_vars.
-    'set_gclient_var': Property(default=None, kind=str),
     # One of intel|arm|mips.
     'target_arch': Property(default=None, kind=str),
     # One of android|fuchsia|linux|mac|win.
@@ -81,7 +78,7 @@ PROPERTIES = {
 
 def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
-             enable_swarming, gclient_vars, mb_config_path, set_gclient_var,
+             enable_swarming, gclient_vars, mb_config_path,
              target_arch, target_platform, track_build_dependencies, triggers,
              triggers_proxy, use_goma):
   v8 = api.v8
@@ -93,7 +90,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       triggers, triggers_proxy,
   )
   v8.apply_bot_config(bot_config)
-  v8.set_gclient_custom_var(set_gclient_var)
   v8.set_gclient_custom_vars(gclient_vars)
   v8.set_gclient_custom_deps(custom_deps)
   v8.set_chromium_configs(clobber, default_targets)
@@ -875,9 +871,9 @@ def GenTests(api):
   yield (
       api.v8.test('client.v8', 'V8 Foobar - builder', 'custom_properties',
                   custom_deps={'v8/foo': 'bar'},
-                  gclient_vars={'mac_xcode_version': 'xcode_42_alpha'},
-                  mb_config_path='somewhere/else/mb_config.pyl',
-                  set_gclient_var='download_gcmole') +
+                  gclient_vars={'download_gcmole': 'True',
+                                'mac_xcode_version': 'xcode_42_alpha'},
+                  mb_config_path='somewhere/else/mb_config.pyl') +
       api.v8.check_in_param(
           'initialization.bot_update',
           '--spec-path', '\'custom_vars\': '
