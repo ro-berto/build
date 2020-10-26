@@ -364,15 +364,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'top100_avg_deps': 1.3,
     })
 
-  def example_patch_range(self):
-    # Gitiles returns changes in the order child -> parent.
-    return self.m.json.output({
-      'log': [
-        {'commit': '[child2 hsh]', 'parents': ['[child1 hsh]']},
-        {'commit': '[child1 hsh]', 'parents': ['[master-branch-point hsh]']},
-      ],
-    })
-
   def example_test_roots(self, *roots):
     """Simulates dynamically optained test-root directories."""
     return self.override_step_data(

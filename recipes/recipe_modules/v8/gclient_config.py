@@ -33,12 +33,6 @@ def v8_ios(c):
   c.target_os.add('ios')
 
 
-@CONFIG_CTX(includes=['v8'])
-def llvm_compiler_rt(c):
-  c.solutions[0].custom_deps['v8/third_party/llvm/projects/compiler-rt'] = (
-    ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))
-
-
 @CONFIG_CTX()
 def node_ci(c):
   soln = c.solutions.add()

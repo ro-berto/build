@@ -210,132 +210,6 @@ TEST_CONFIGS = freeze({
 })
 
 
-class NullCoverageContext(object):
-  """Null object to represent testing without collecting coverage."""
-  def get_test_runner_args(self):
-    return []
-
-  def get_swarming_collect_args(self):
-    return []
-
-  def setup(self):
-    pass
-
-  def post_run(self):
-    pass
-
-  def maybe_upload(self):
-    pass
-
-NULL_COVERAGE = NullCoverageContext()
-
-
-class SanitizerCoverageContext(object):
-  """Context during testing to collect coverage data.
-
-  Only testing on swarming is supported.
-  """
-  def __init__(self, api):
-    self.api = api
-    self.coverage_dir = api.path.mkdtemp('coverage_output')
-
-  def get_test_runner_args(self):
-    """Returns the test runner arguments for collecting coverage data."""
-    return ['--sancov-dir', '${ISOLATED_OUTDIR}']
-
-  def get_swarming_collect_args(self):
-    """Returns the swarming collect step's arguments for merging."""
-    return [
-      '--coverage-dir', self.coverage_dir,
-      '--sancov-merger', self.api.path['checkout'].join(
-          'tools', 'sanitizers', 'sancov_merger.py'),
-    ]
-
-  def setup(self):
-    """Build data file with initial zero coverage data.
-
-    To be called before any coverage data from testing is merged in.
-    """
-    self.api.python(
-        'Initialize coverage data',
-        self.api.path['checkout'].join(
-            'tools', 'sanitizers', 'sancov_formatter.py'),
-        [
-          'all',
-          '--json-output', self.coverage_dir.join('data.json'),
-        ],
-    )
-
-  def post_run(self):
-    """Merge coverage data from one test run.
-
-    To be called after every test step. Requires existing initial zero
-    coverage data, obtained by calling setup().
-    """
-    self.api.python(
-        'Merge coverage data',
-        self.api.path['checkout'].join(
-            'tools', 'sanitizers', 'sancov_formatter.py'),
-        [
-          'merge',
-          '--json-input', self.coverage_dir.join('data.json'),
-          '--json-output', self.coverage_dir.join('data.json'),
-          '--coverage-dir', self.coverage_dir,
-        ],
-    )
-
-    self.api.python.inline(
-        'Purge sancov files',
-        """
-        import glob
-        import os
-        for f in glob.glob('%s'):
-          os.remove(f)
-        """ % self.coverage_dir.join('*.sancov'),
-    )
-
-  def maybe_upload(self):
-    """Uploads coverage data to google storage if on tryserver."""
-
-    if self.api.tryserver.gerrit_change:
-      cl = self.api.tryserver.gerrit_change
-      results_path = 'tryserver/sanitizer_coverage/gerrit/%d/%d/%s%d' % (
-        cl.change, cl.patchset, self.api.platform.name, self.api.v8.target_bits)
-
-
-      self.api.gsutil.upload(
-          self.coverage_dir.join('data.json'),
-          'chromium-v8',
-          results_path + '/data.json',
-      )
-
-      data_dir = self.api.path.mkdtemp('coverage_data')
-      self.api.python(
-          'Split coverage data',
-          self.api.path['checkout'].join(
-              'tools', 'sanitizers', 'sancov_formatter.py'),
-          [
-            'split',
-            '--json-input', self.coverage_dir.join('data.json'),
-            '--output-dir', data_dir,
-          ],
-          # Allow to work with older v8 revisions that don't have the split
-          # function in which case the directory will stay empty.
-          # TODO(machenbach): Remove this when v8's passed CP 34834 + 1000.
-          ok_ret='any',
-      )
-
-      self.api.gsutil(
-          [
-            '-m', 'cp', '-a', 'public-read', '-R', data_dir.join('*'),
-            'gs://chromium-v8/%s/' % results_path,
-          ],
-          'coverage data',
-          # Same as in the step above.
-          ok_ret='any',
-      )
-
-
 class BaseTest(object):
   def __init__(self, test_step_config, api):
     self.test_step_config = test_step_config
@@ -371,10 +245,10 @@ class BaseTest(object):
     # Run all tests by default.
     return True
 
-  def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+  def pre_run(self, test=None, **kwargs):
     pass  # pragma: no cover
 
-  def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+  def run(self, test=None, **kwargs):
     raise NotImplementedError()  # pragma: no cover
 
   def rerun(self, failure_dict, **kwargs):  # pragma: no cover
@@ -394,7 +268,7 @@ class V8Test(BaseTest):
       return False
     return True
 
-  def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+  def run(self, test=None, **kwargs):
     test = test or self.api.v8.test_configs[self.name]
 
     full_args, env = self.api.v8._setup_test_runner(
@@ -421,7 +295,7 @@ class V8Test(BaseTest):
     )
     return result_variants == set([True])
 
-  def post_run(self, test, coverage_context=NULL_COVERAGE):
+  def post_run(self, test):
     # The active step was either a local test run or the swarming collect step.
     step_result = self.api.step.active_result
     json_output = step_result.json.output
@@ -463,8 +337,6 @@ class V8Test(BaseTest):
 
     if self.has_only_stress_opt_failures(json_output):
       self.api.step('Found isolated stress failures', cmd=None)
-
-    coverage_context.post_run()
 
     return TestResults(failures, flakes, infra_failures)
 
@@ -567,16 +439,18 @@ class V8SwarmingTest(V8Test):
     """Returns true if the test uses swarming."""
     return True
 
-  def _v8_collect_step(self, task, coverage_context=NULL_COVERAGE, **kwargs):
+  def _v8_collect_step(self, task, **kwargs):
     """Produces a step that collects and processes a result of a v8 task."""
     # Placeholder for the merged json output.
     json_output = self.api.json.output(add_json_log=False)
 
     # Shim script's own arguments.
     args = [
-      '--temp-root-dir', self.api.path['tmp_base'],
-      '--merged-test-output', json_output,
-    ] + coverage_context.get_swarming_collect_args()
+        '--temp-root-dir',
+        self.api.path['tmp_base'],
+        '--merged-test-output',
+        json_output,
+    ]
 
     # Arguments for actual 'collect' command.
     args.append('--')
@@ -594,7 +468,7 @@ class V8SwarmingTest(V8Test):
           step_test_data=kwargs.pop('step_test_data', None),
           **kwargs)
 
-  def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
+  def pre_run(self, test=None, **kwargs):
     # Set up arguments for test runner.
     self.test = test or self.api.v8.test_configs[self.name]
     extra_args, _ = self.api.v8._setup_test_runner(
@@ -603,10 +477,10 @@ class V8SwarmingTest(V8Test):
     # Let json results be stored in swarming's output folder. The collect
     # step will copy the folder's contents back to the client.
     extra_args += [
-      '--swarming',
-      '--json-test-results',
-      '${ISOLATED_OUTDIR}/output.json',
-    ] + coverage_context.get_test_runner_args()
+        '--swarming',
+        '--json-test-results',
+        '${ISOLATED_OUTDIR}/output.json',
+    ]
 
     # Initialize number of shards, either per test or per builder.
     shards = 1
@@ -625,12 +499,11 @@ class V8SwarmingTest(V8Test):
         shards=shards,
         raw_cmd= [command] + extra_args,
     )
-    self.task.collect_step = lambda task, **kw: (
-        self._v8_collect_step(task, coverage_context, **kw))
+    self.task.collect_step = self._v8_collect_step
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
-  def run(self, coverage_context=NULL_COVERAGE, **kwargs):
+  def run(self, **kwargs):
     # TODO(machenbach): Soften this when softening 'assert isolated_hash'
     # above.
     assert self.task
@@ -645,7 +518,7 @@ class V8SwarmingTest(V8Test):
     except self.api.step.InfraFailure as e:
       result += TestResults.infra_failure(e)
 
-    return result + self.post_run(self.test, coverage_context)
+    return result + self.post_run(self.test)
 
   def rerun(self, failure_dict, **kwargs):
     self.pre_run(test=self._setup_rerun_config(failure_dict), **kwargs)

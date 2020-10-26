@@ -301,8 +301,6 @@ class V8Api(recipe_api.RecipeApi):
     # Apply additional configs for coverage builders.
     if self.bot_config.get('coverage') == 'gcov':
       self.bot_config['disable_auto_bisect'] = True
-    elif self.bot_config.get('coverage') == 'sanitizer':
-      self.m.gclient.apply_config('llvm_compiler_rt')
 
     if self.bot_config.get('enable_swarming', True):
       self.m.gclient.c.got_revision_reverse_mapping[
@@ -420,22 +418,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.revision_cp:
       _, self.revision_number = self.m.commit_position.parse(self.revision_cp)
       self.revision_number = str(self.revision_number)
-
-  def calculate_patch_base_gerrit(self):
-    """Calculates the commit hash a gerrit patch was branched off."""
-    commits, _ = self.m.gitiles.log(
-        url=V8_URL,
-        ref='master..%s' % self.m.tryserver.gerrit_change_fetch_ref,
-        limit=100,
-        step_name='Get patches',
-        step_test_data=self.test_api.example_patch_range,
-    )
-    # There'll be at least one commit with the patch. Maybe more for dependent
-    # CLs.
-    assert len(commits) >= 1
-    # We don't support merges.
-    assert len(commits[-1]['parents']) == 1
-    return commits[-1]['parents'][0]
 
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming', True):
@@ -986,16 +968,6 @@ class V8Api(recipe_api.RecipeApi):
     result.presentation.links['report'] = (
       'https://storage.googleapis.com/chromium-v8/%s/index.html' % dest)
 
-  @property
-  def generate_sanitizer_coverage(self):
-    return self.bot_config.get('coverage') == 'sanitizer'
-
-  def create_coverage_context(self):
-    if self.generate_sanitizer_coverage:
-      return testing.SanitizerCoverageContext(self.m)
-    else:
-      return testing.NULL_COVERAGE
-
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
 
@@ -1038,35 +1010,26 @@ class V8Api(recipe_api.RecipeApi):
     non_swarming_tests = [t for t in tests if not t.uses_swarming]
     failed_tests = []
 
-    # Creates a coverage context if coverage is tracked. Null object otherwise.
-    coverage_context = self.create_coverage_context()
-
     with self.maybe_nest(swarming_tests, 'trigger tests'):
       # Make sure swarming triggers come first.
       # TODO(machenbach): Port this for rerun for bisection.
       for t in swarming_tests + non_swarming_tests:
         try:
-          t.pre_run(coverage_context=coverage_context)
+          t.pre_run()
         except self.m.step.InfraFailure:  # pragma: no cover
           raise
         except self.m.step.StepFailure:  # pragma: no cover
           failed_tests.append(t)
 
-    # Setup initial zero coverage after all swarming jobs are triggered.
-    coverage_context.setup()
-
     # Make sure non-swarming tests are run before swarming results are
     # collected.
     for t in non_swarming_tests + swarming_tests:
       try:
-        test_results += t.run(coverage_context=coverage_context)
+        test_results += t.run()
       except self.m.step.InfraFailure:  # pragma: no cover
         raise
       except self.m.step.StepFailure:  # pragma: no cover
         failed_tests.append(t)
-
-    # Upload accumulated coverage data.
-    coverage_context.maybe_upload()
 
     if failed_tests:
       failed_tests_names = [t.name for t in failed_tests]

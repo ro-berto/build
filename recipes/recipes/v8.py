@@ -33,49 +33,49 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  # Additional configurations to enable binary size tracking. The mapping
-  # consists of "binary" and "category".
-  'binary_size_tracking': Property(default=None, kind=dict),
-  # Deprecated.
-  'build_config': Property(default=None, kind=str),
-  # Switch to clobber build dir before runhooks.
-  'clobber': Property(default=False, kind=bool),
-  # Switch to clobber build dir before bot_update.
-  'clobber_all': Property(default=False, kind=bool),
-  # Additional configurations set for archiving builds to GS buckets for
-  # clusterfuzz. The mapping consists of "name", "bucket" and optional
-  # "bitness".
-  'clusterfuzz_archive': Property(default=None, kind=dict),
-  # Optional coverage setting. One of gcov|sanitizer.
-  'coverage': Property(default=None, kind=str),
-  # Mapping of custom dependencies to sync (dependency name as in DEPS file ->
-  # deps url).
-  'custom_deps': Property(default=None, kind=dict),
-  # Optional list of default targets. If not specified the implicit "all" target
-  # will be built.
-  'default_targets': Property(default=None, kind=list),
-  # Switch to enable/disable swarming.
-  'enable_swarming': Property(default=None, kind=bool),
-  # Mapping of additional gclient variables to set (map name -> value).
-  'gclient_vars': Property(default=None, kind=dict),
-  # Optional path to a different MB config. The path must be relative to the
-  # V8 checkout and using forward slashes.
-  'mb_config_path': Property(default=None, kind=str),
-  # Name of a gclient custom_var to set to 'True'.
-  # TODO(machenbach): Deprecate single boolean variables and use gclient_vars.
-  'set_gclient_var': Property(default=None, kind=str),
-  # One of intel|arm|mips.
-  'target_arch': Property(default=None, kind=str),
-  # One of android|fuchsia|linux|mac|win.
-  'target_platform': Property(default=None, kind=str),
-  # Weather to track and upload build-dependencies stats.
-  'track_build_dependencies': Property(default=None, kind=bool),
-  # List of tester names to trigger.
-  'triggers': Property(default=None, kind=list),
-  # Weather to trigger the internal trigger proxy.
-  'triggers_proxy': Property(default=False, kind=bool),
-  # Weather to use goma for compilation.
-  'use_goma': Property(default=True, kind=bool),
+    # Additional configurations to enable binary size tracking. The mapping
+    # consists of "binary" and "category".
+    'binary_size_tracking': Property(default=None, kind=dict),
+    # Deprecated.
+    'build_config': Property(default=None, kind=str),
+    # Switch to clobber build dir before runhooks.
+    'clobber': Property(default=False, kind=bool),
+    # Switch to clobber build dir before bot_update.
+    'clobber_all': Property(default=False, kind=bool),
+    # Additional configurations set for archiving builds to GS buckets for
+    # clusterfuzz. The mapping consists of "name", "bucket" and optional
+    # "bitness".
+    'clusterfuzz_archive': Property(default=None, kind=dict),
+    # Optional coverage setting. Set to "gcov" to use.
+    'coverage': Property(default=None, kind=str),
+    # Mapping of custom dependencies to sync (dependency name as in DEPS
+    # file -> deps url).
+    'custom_deps': Property(default=None, kind=dict),
+    # Optional list of default targets. If not specified the implicit "all"
+    # target will be built.
+    'default_targets': Property(default=None, kind=list),
+    # Switch to enable/disable swarming.
+    'enable_swarming': Property(default=None, kind=bool),
+    # Mapping of additional gclient variables to set (map name -> value).
+    'gclient_vars': Property(default=None, kind=dict),
+    # Optional path to a different MB config. The path must be relative to the
+    # V8 checkout and using forward slashes.
+    'mb_config_path': Property(default=None, kind=str),
+    # Name of a gclient custom_var to set to 'True'.
+    # TODO(machenbach): Deprecate single boolean variables, use gclient_vars.
+    'set_gclient_var': Property(default=None, kind=str),
+    # One of intel|arm|mips.
+    'target_arch': Property(default=None, kind=str),
+    # One of android|fuchsia|linux|mac|win.
+    'target_platform': Property(default=None, kind=str),
+    # Weather to track and upload build-dependencies stats.
+    'track_build_dependencies': Property(default=None, kind=bool),
+    # List of tester names to trigger.
+    'triggers': Property(default=None, kind=list),
+    # Weather to trigger the internal trigger proxy.
+    'triggers_proxy': Property(default=False, kind=bool),
+    # Weather to use goma for compilation.
+    'use_goma': Property(default=True, kind=bool),
 }
 
 
@@ -135,15 +135,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       if api.platform.is_win:
         api.chromium.taskkill()
 
-      if v8.generate_sanitizer_coverage:
-        # When collecting code coverage, we need to sync to the revision that
-        # fits to the patch for the line numbers to match.
-        revision = v8.calculate_patch_base_gerrit()
-        update_step = v8.checkout(
-            revision=revision, suffix='with patch base', clobber=clobber_all)
-      else:
-        update_step = v8.checkout(clobber=clobber_all)
-
+      update_step = v8.checkout(clobber=clobber_all)
       update_properties = update_step.json.output['properties']
 
       if update_properties.get('got_swarming_client_revision'):
@@ -961,28 +953,6 @@ def GenTests(api):
       'target_cpu = "x64"\n'
       'use_goma = true\n'
       '""" to _path_/args.gn.\n'
-  )
-
-  # Cover running sanitizer coverage.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_foobar',
-        'sanitizer_coverage',
-        coverage='sanitizer',
-    ) +
-    api.step_data(
-        'build.lookup GN args', api.raw_io.stream_output(fake_gn_args_x64)) +
-    api.v8.test_spec_in_checkout(
-        'v8_foobar',
-        '{"tests": [{"name": "v8testing"}]}') +
-    api.post_process(Filter(
-        'Initialize coverage data',
-        'Merge coverage data',
-        'build.gsutil upload',
-        'Split coverage data',
-        'gsutil coverage data',
-    ))
   )
 
   # Cover running gcov coverage.
