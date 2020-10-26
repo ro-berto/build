@@ -110,7 +110,10 @@ class IsolateApi(recipe_api.RecipeApi):
     else:
       args.extend(['--isolate-server', self._isolate_server])
 
-    args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
+    args.extend([
+        build_dir.join('%s.isolated.gen.json' % t)
+        for t in sorted(set(targets))
+    ])
 
     step_result = self.m.step(
         step_name or ('isolate tests%s' % suffix),

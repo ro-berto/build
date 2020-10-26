@@ -768,10 +768,10 @@
       "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\system_wrappers_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\test_support_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\tools_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\video_capture_tests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\video_engine_tests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\voip_unittests.isolated.gen.json",
-      "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\webrtc_nonparallel_tests.isolated.gen.json",
-      "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\video_capture_tests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\win_x86_msvc_rel\\webrtc_nonparallel_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

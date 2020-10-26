@@ -2066,6 +2066,7 @@
       "[CLEANUP]/isolate_tmp_1/0_1.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/0_2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json",
+      "[CLEANUP]/isolate_tmp_1/10.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/3.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/4.isolated.gen.json",
@@ -2073,8 +2074,7 @@
       "[CLEANUP]/isolate_tmp_1/6.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/7.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/8.isolated.gen.json",
-      "[CLEANUP]/isolate_tmp_1/9.isolated.gen.json",
-      "[CLEANUP]/isolate_tmp_1/10.isolated.gen.json"
+      "[CLEANUP]/isolate_tmp_1/9.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "name": "isolate.isolate tests",

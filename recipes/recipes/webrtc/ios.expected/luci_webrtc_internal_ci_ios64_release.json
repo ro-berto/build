@@ -1859,6 +1859,7 @@
       "https://chrome-isolated.appspot.com",
       "[CLEANUP]/isolate_tmp_2/0.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/1.isolated.gen.json",
+      "[CLEANUP]/isolate_tmp_2/10.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/3.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/4.isolated.gen.json",
@@ -1866,8 +1867,7 @@
       "[CLEANUP]/isolate_tmp_2/6.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/7.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_2/8.isolated.gen.json",
-      "[CLEANUP]/isolate_tmp_2/9.isolated.gen.json",
-      "[CLEANUP]/isolate_tmp_2/10.isolated.gen.json"
+      "[CLEANUP]/isolate_tmp_2/9.isolated.gen.json"
     ],
     "name": "isolate.isolate tests",
     "~followup_annotations": [
