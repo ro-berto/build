@@ -310,7 +310,8 @@ class WebRtcIsolatedGtest(object):
 
     self._task = self.create_task(api, isolated)
 
-    return api.chromium_swarming.trigger_task(self._task)
+    return api.chromium_swarming.trigger_task(
+        self._task, use_swarming_recipe_to_trigger=True)
 
   @recipe_api.composite_step
   def run(self, api):
