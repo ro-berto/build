@@ -1039,12 +1039,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='ios-simulator-code-coverage',
             ),
+        'ios-simulator-coverage-exp':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.mac',
+                buildername='ios-simulator',
+            ),
         'ios-simulator-cronet':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='ios-simulator-cronet',
             ),
         'ios-simulator-full-configs':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.mac',
+                buildername='ios-simulator-full-configs',
+            ),
+        'ios-simulator-full-configs-coverage-exp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='ios-simulator-full-configs',
