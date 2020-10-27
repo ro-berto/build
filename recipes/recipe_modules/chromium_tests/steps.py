@@ -1120,7 +1120,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
       self.update_test_run(
           api, suffix, {
               'failures': failures,
-              'valid': result.json.output['valid'],
+              'valid': result.json.output['valid'] and result.retcode == 0,
               'total_tests_ran': len(failures),
               'pass_fail_counts': pass_fail_counts,
               'findit_notrun': set(),
