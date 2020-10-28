@@ -426,7 +426,7 @@ def _trigger_swarming_task(api, task, test_step_config):
   if attrs.get('priority'):
     task.request = task.request.with_priority(attrs['priority'])
 
-  api.chromium_swarming.trigger_task(task)
+  api.chromium_swarming.trigger_task(task, use_swarming_recipe_to_trigger=True)
 
 
 class V8SwarmingTest(V8Test):
