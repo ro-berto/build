@@ -191,6 +191,27 @@ prematurely stopping test
 Oops, this test crashed!
 """
 
+TEST_DATA_SKIPPED = """
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ProcessReaderLinux
+[ RUN      ] ProcessReaderLinux.AbortMessage
+../../third_party/crashpad/crashpad/snapshot/linux/process_reader_linux_test.cc:842: Skipped
+
+Stack trace:
+#00 pc 0x00000000002350b7 /data/local/tmp/crashpad_tests__dist/crashpad_tests
+#01 pc 0x0000000000218183 /data/local/tmp/crashpad_tests__dist/crashpad_tests
+
+[  SKIPPED ] ProcessReaderLinux.AbortMessage (1 ms)
+[----------] 1 test from ProcessReaderLinux (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 0 tests.
+[  SKIPPED ] 1 test, listed below:
+[  SKIPPED ] ProcessReaderLinux.AbortMessage
+"""
+
 VALGRIND_HASH = 'B254345E4D3B6A00'
 
 VALGRIND_REPORT = """Leak_DefinitelyLost
@@ -600,6 +621,20 @@ class TestGTestLogParserTests(unittest.TestCase):
     self.assertEqual(['TIMEOUT'], parser.TriesForTest('TestFix.TestCase'))
     self.assertEqual(['SUCCESS'], parser.TriesForTest(
         'WebSocketHandshakeHandlerSpdy3Test.RequestResponse'))
+
+  def testGtestLogParserSkipped(self):
+    parser = gtest_utils.GTestLogParser()
+    for line in TEST_DATA_SKIPPED.splitlines():
+      parser.ProcessLine(line)
+
+    self.assertEqual([], parser.ParsingErrors())
+    self.assertEqual([], parser.RunningTests())
+    self.assertEqual([], parser.FailedTests())
+    self.assertEqual(['ProcessReaderLinux.AbortMessage'], parser.SkippedTests())
+    self.assertEqual(0, parser.DisabledTests())
+    self.assertEqual(0, parser.FlakyTests())
+    self.assertEqual(['SKIPPED'],
+                     parser.TriesForTest('ProcessReaderLinux.AbortMessage'))
 
   def testGTestLogParserValgrind(self):
     parser = gtest_utils.GTestLogParser()
