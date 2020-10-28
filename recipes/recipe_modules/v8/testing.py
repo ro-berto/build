@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
 import itertools
 import json
 import re
@@ -922,6 +923,61 @@ class TestResults(object):
         self.flakes + other.flakes,
         self.infra_failures + other.infra_failures,
     )
+
+
+class TestGroup(object):
+  def __init__(self, api, tests):
+    self.api = api
+    self.tests = tests
+    self.failed_tests = []
+    self.test_results = TestResults.empty()
+
+  def pre_run(self):  # pragma: no cover
+    """Executes the |pre_run| method of each test."""
+    raise NotImplementedError()
+
+  def run(self):  # pragma: no cover
+    """Executes the |run| method of each test."""
+    raise NotImplementedError()
+
+  @contextlib.contextmanager
+  def run_checked(self, test):
+    try:
+      yield
+    except self.api.step.InfraFailure:  # pragma: no cover
+      raise
+    except self.api.step.StepFailure:  # pragma: no cover
+      self.failed_tests.append(test.name)
+
+  def raise_on_failure(self):
+    if self.failed_tests:
+      raise self.api.step.StepFailure(
+          '%d tests failed: %r' % (len(self.failed_tests), self.failed_tests))
+
+
+class LocalGroup(TestGroup):
+  def pre_run(self):
+    for test in self.tests:
+      with self.run_checked(test):
+        test.pre_run()
+
+  def run(self):
+    for test in self.tests:
+      with self.run_checked(test):
+        self.test_results += test.run()
+
+
+# TODO(machenbach): Implement waiting for tasks.
+class SwarmingGroup(TestGroup):
+  def pre_run(self):
+    for test in self.tests:
+      with self.run_checked(test):
+        test.pre_run()
+
+  def run(self):
+    for test in self.tests:
+      with self.run_checked(test):
+        self.test_results += test.run()
 
 
 def create_test(test_step_config, api):

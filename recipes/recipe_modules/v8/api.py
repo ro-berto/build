@@ -990,7 +990,6 @@ class V8Api(recipe_api.RecipeApi):
           'no special characters allowed in extra flags')
 
     start_time_sec = self.m.time.time()
-    test_results = testing.TestResults.empty()
 
     # Apply test filter.
     # TODO(machenbach): Track also the number of tests that ran and throw an
@@ -998,36 +997,25 @@ class V8Api(recipe_api.RecipeApi):
     tests = [t for t in tests if t.apply_filter()]
 
     swarming_tests = [t for t in tests if t.uses_swarming]
-    non_swarming_tests = [t for t in tests if not t.uses_swarming]
-    failed_tests = []
+    local_tests = [t for t in tests if not t.uses_swarming]
+
+    # There are no mixed tests in V8.
+    assert not local_tests or not swarming_tests
+
+    if swarming_tests:
+      test_group = testing.SwarmingGroup(self.m, swarming_tests)
+    else:
+      test_group = testing.LocalGroup(self.m, local_tests)
 
     with self.maybe_nest(swarming_tests, 'trigger tests'):
-      # Make sure swarming triggers come first.
-      # TODO(machenbach): Port this for rerun for bisection.
-      for t in swarming_tests + non_swarming_tests:
-        try:
-          t.pre_run()
-        except self.m.step.InfraFailure:  # pragma: no cover
-          raise
-        except self.m.step.StepFailure:  # pragma: no cover
-          failed_tests.append(t)
+      test_group.pre_run()
 
-    # Make sure non-swarming tests are run before swarming results are
-    # collected.
-    for t in non_swarming_tests + swarming_tests:
-      try:
-        test_results += t.run()
-      except self.m.step.InfraFailure:  # pragma: no cover
-        raise
-      except self.m.step.StepFailure:  # pragma: no cover
-        failed_tests.append(t)
+    test_group.run()
 
-    if failed_tests:
-      failed_tests_names = [t.name for t in failed_tests]
-      raise self.m.step.StepFailure(
-          '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
+    test_group.raise_on_failure()
+
     self.test_duration_sec = self.m.time.time() - start_time_sec
-    return test_results
+    return test_group.test_results
 
   def maybe_bisect(self, test_results, test_spec):
     """Build-local bisection for one failure."""
