@@ -976,6 +976,22 @@ SPEC = {
             simulation_platform='mac',
             serialize_tests=True,
         ),
+    'Mac FYI Release (Intel UHD 630)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='GPU FYI Mac Builder',
+            simulation_platform='mac',
+            serialize_tests=True,
+        ),
     'Mac FYI Debug (Intel)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
