@@ -92,7 +92,7 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   # Start a virtual X server that we run the tests in.  This makes it so we can
   # run the tests even if we didn't start the tests from an X session.
   proc = subprocess.Popen([cmd, display, '-screen', '0', '1280x800x24', '-ac',
-                           '-dpi', '96'],
+                           '-dpi', '96', '-maxclients', '512'],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                           env=env)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
