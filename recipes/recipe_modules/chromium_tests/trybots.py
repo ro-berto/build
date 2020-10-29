@@ -849,6 +849,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ]),
         # Manually triggered GPU trybots.
+        'gpu-fyi-try-linux-amd-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Linux Builder',
+                tester='Linux FYI Release (AMD RX 5500 XT)',
+            ),
         'gpu-fyi-try-linux-intel-dqp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1479,6 +1485,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Win x64 Builder',
                 tester='Win7 FYI x64 Release (NVIDIA)',
+            ),
+        'gpu-fyi-try-win10-amd-rel-64':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Win x64 Builder',
+                tester='Win10 FYI x64 Release (AMD RX 5500 XT)',
             ),
         'gpu-fyi-try-win10-intel-dqp-64':
             try_spec.TrySpec.create_for_single_mirror(
