@@ -11,6 +11,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/swarming',
 ]
 
 def RunSteps(api):
@@ -46,9 +47,10 @@ def GenTests(api):
               }],
           },],
       }),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] fake test 0 (fake device 0 iOS 12.0)',
-                       ['--service-account', 'other-service-account']),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] fake test 0 (fake device 0 iOS 12.0)', lambda check, req:
+          check(req.service_account == 'other-service-account')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

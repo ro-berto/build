@@ -151,13 +151,10 @@ def GenTests(api):
     )
 
     for index, test in enumerate(BASIC_TEST_SUITES):
-      if index == 0:
-        swarming_number = 10000
-      else:
-        swarming_number = 100000 + index * 10000
       result += api.step_data(
-          test, api.ios.generate_test_results_placeholder(
-              failure=False, swarming_number=swarming_number))
+          test,
+          api.ios.generate_test_results_placeholder(
+              failure=False, swarming_number=index))
 
     result += api.post_process(post_process.StatusSuccess)
     return result

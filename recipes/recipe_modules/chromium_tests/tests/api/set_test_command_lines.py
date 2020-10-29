@@ -98,13 +98,12 @@ def GenTests(api):
           })),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
-      api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] %s' % fake_test,
-                       ['--env', 'ISOLATED_OUTDIR', '${ISOLATED_OUTDIR}']),
-      api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] %s' % fake_test,
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
+      api.post_process(
+          api.swarming.check_triggered_request, 'test_pre_run.[trigger] %s' %
+          fake_test, lambda check, req: check(req[0].env_vars[
+              'ISOLATED_OUTDIR'] == '${ISOLATED_OUTDIR}'), lambda check, req:
+          check(req[0].relative_cwd == 'out/Release'), lambda check, req: check(
+              is_subsequence(req[0].command, fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -184,9 +183,10 @@ def GenTests(api):
       api.step_data('read command lines',
                     api.file.read_json(fake_command_lines)),
       api.post_process(
-          post_process.StepCommandContains, 'test_pre_run.[trigger] fake_test',
-          ['--relative-cwd', 'out/Release_x64', '--raw-cmd', '--'] +
-          fake_command_lines[fake_test]),
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] fake_test', lambda check, req: check(req[
+              0].relative_cwd == 'out/Release_x64'), lambda check, req:
+          check(is_subsequence(req[0].command, fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -310,45 +310,6 @@ def GenTests(api):
               }
           }),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
-      api.post_process(post_process.StepCommandContains,
-                       'test_pre_run.[trigger] %s (experimental)' % fake_test,
-                       ['--relative-cwd', 'out/Release', '--raw-cmd', '--'] +
-                       fake_command_lines[fake_test]),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      "ci_bot_with_experimental_test_use_swarming",
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
-              fake_group: {
-                  fake_tester:
-                      bot_spec.BotSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
-                          chromium_tests_apply_config=[
-                              'use_swarming_recipe_to_trigger'
-                          ],
-                      ),
-              },
-          })),
-      api.chromium_tests.read_source_side_spec(
-          fake_group, {
-              fake_tester: {
-                  'isolated_scripts': [{
-                      'name': fake_test,
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                      },
-                      'experiment_percentage': 100
-                  }],
-              }
-          }),
-      api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
           api.swarming.check_triggered_request,
           'test_pre_run.[trigger] %s (experimental)' % fake_test, lambda check,
@@ -402,17 +363,19 @@ def GenTests(api):
           }),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
-          post_process.StepCommandContains,
-          'test_pre_run.[trigger] %s on (nv) GPU on Linux' % fake_test, [
-              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
-              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
-              'builder:fake-tester', '-var', 'device_os:android', '-var',
-              'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
-              'test_suite:fake_test', '-test-location-base', '//test/location',
-              '-tag',
-              'step_name:%s on (nv) GPU on Linux' % fake_test,
-              '-coerce-negative-duration', '--'
-          ] + fake_command_lines[fake_test]),
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] %s on (nv) GPU on Linux' %
+          fake_test, lambda check, req:
+          check(req[0].relative_cwd == 'out/Release'), lambda check, req: check(
+              is_subsequence(req[0].command, [
+                  'rdb', 'stream', '-test-id-prefix', 'ninja://:fake_test/',
+                  '-var', 'builder:fake-tester', '-var', 'device_os:android',
+                  '-var', 'device_type:phone', '-var', 'gpu:nv', '-var',
+                  'os:Linux', '-var', 'test_suite:fake_test',
+                  '-test-location-base', '//test/location', '-tag',
+                  'step_name:%s on (nv) GPU on Linux' % fake_test,
+                  '-coerce-negative-duration', '--'
+              ] + fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -449,17 +412,18 @@ def GenTests(api):
           }),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
-          post_process.StepCommandContains,
-          'test_pre_run.[trigger] %s' % fake_test, [
-              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
-              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
-              'builder:fake-tester', '-var', 'os:Ubuntu-16.04', '-var',
-              'test_suite:fake_test', '-tag',
-              'step_name:%s' % fake_test, '-coerce-negative-duration', '--',
-              'result_adapter', 'gtest', '-artifact-directory',
-              '${ISOLATED_OUTDIR}', '-result-file',
-              '${ISOLATED_OUTDIR}/output.json', '--'
-          ] + fake_command_lines[fake_test]),
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] %s' % fake_test, lambda check, req: check(req[
+              0].relative_cwd == 'out/Release'), lambda check, req: check(
+                  is_subsequence(req[0].command, [
+                      'rdb', 'stream', '-test-id-prefix', 'ninja://:fake_test/',
+                      '-var', 'builder:fake-tester', '-var', 'os:Ubuntu-16.04',
+                      '-var', 'test_suite:fake_test', '-tag',
+                      'step_name:%s' % fake_test, '-coerce-negative-duration',
+                      '--', 'result_adapter', 'gtest', '-artifact-directory',
+                      '${ISOLATED_OUTDIR}', '-result-file',
+                      '${ISOLATED_OUTDIR}/output.json', '--'
+                  ] + fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -503,18 +467,20 @@ def GenTests(api):
           }),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
-          post_process.StepCommandContains,
-          'test_pre_run.[trigger] %s on (nv) GPU on Linux' % webgl_fake_test, [
-              '--relative-cwd', 'out/Release', '--raw-cmd', '--', 'rdb',
-              'stream', '-test-id-prefix', 'ninja://:fake_test/', '-var',
-              'builder:fake-tester', '-var', 'device_os:android', '-var',
-              'device_type:phone', '-var', 'gpu:nv', '-var', 'os:Linux', '-var',
-              'test_suite:webgl_fake_test', '-test-location-base',
-              '//third_party/webgl/src/sdk/tests/', '-tag',
-              'step_name:webgl_fake_test on (nv) GPU on Linux',
-              '-coerce-negative-duration', '--', 'result_adapter', 'json',
-              '-artifact-directory', '${ISOLATED_OUTDIR}', '-result-file',
-              '${ISOLATED_OUTDIR}/output.json', '-test-location', '--'
-          ] + fake_command_lines[webgl_fake_test]),
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] %s on (nv) GPU on Linux' %
+          webgl_fake_test, lambda check, req:
+          check(req[0].relative_cwd == 'out/Release'), lambda check, req: check(
+              is_subsequence(req[0].command, [
+                  'rdb', 'stream', '-test-id-prefix', 'ninja://:fake_test/',
+                  '-var', 'builder:fake-tester', '-var', 'device_os:android',
+                  '-var', 'device_type:phone', '-var', 'gpu:nv', '-var',
+                  'os:Linux', '-var', 'test_suite:webgl_fake_test',
+                  '-test-location-base', '//third_party/webgl/src/sdk/tests/',
+                  '-tag', 'step_name:webgl_fake_test on (nv) GPU on Linux',
+                  '-coerce-negative-duration', '--', 'result_adapter', 'json',
+                  '-artifact-directory', '${ISOLATED_OUTDIR}', '-result-file',
+                  '${ISOLATED_OUTDIR}/output.json', '-test-location', '--'
+              ] + fake_command_lines[webgl_fake_test]))),
       api.post_process(post_process.DropExpectation),
   )

@@ -111,7 +111,7 @@ def GenTests(api):
           'fake tests (fake device iOS 8.1) (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.ios.generate_test_results_placeholder(
-                  failure=True, swarming_number=110000),
+                  failure=True, swarming_number=1),
               failure=True)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
@@ -151,8 +151,7 @@ def GenTests(api):
       api.step_data(
           'fake tests (fake device iOS 8.1) (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.ios.generate_test_results_placeholder(
-                  swarming_number=110000))),
+              api.ios.generate_test_results_placeholder(swarming_number=1))),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

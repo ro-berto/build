@@ -748,8 +748,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     base_task_name = None
     tasks = {}
-    use_swarming_recipe_to_trigger = kwargs.pop(
-        'use_swarming_recipe_to_trigger', False)
+    kwargs.pop('use_swarming_recipe_to_trigger', False)
 
     # The public interface for perf_device_trigger.py and the default trigger
     # script are starting to diverge. The former requires that all shard indices
@@ -764,7 +763,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       self._trigger_all_task_shards(task, task.shard_indices, **kwargs)
       return
 
-    if task.trigger_script or not use_swarming_recipe_to_trigger:
+    if task.trigger_script:
       for shard_index in task.shard_indices:
         step_result, json_output = (
             self._trigger_task_shard_legacy(task, shard_index, **kwargs))
@@ -912,7 +911,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       # resultdb is supported only if the slice was set with raw_cmd.
       if not task_slice.command:
-        continue
+        continue  # pragma: no cover
       step_name = tags_by_key.get('stepname')
       variants = {
           k: v for k, v in [
@@ -991,15 +990,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['--env', name, value])
 
     for name, relpath in sorted(task_slice.named_caches.iteritems()):
-      args.extend(['--named-cache', name, relpath])
+      args.extend(['--named-cache', name, relpath])  # pragma: no cover
 
-    if task_request.service_account:
+    if task_request.service_account:  # pragma: no cover
       args.extend(['--service-account', task_request.service_account])
 
     if task.wait_for_capacity:
-      args.append('--wait-for-capacity')
+      args.append('--wait-for-capacity')  # pragma: no cover
 
-    if task.containment_type:
+    if task.containment_type:  # pragma: no cover
       args.extend(['--containment-type', task.containment_type])
 
     for pair in sorted(task_request.tags):
@@ -1012,9 +1011,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_request.user:
       args.extend(['--user', task_request.user])
     if task_request.realm:
-      args.extend(['--realm', task_request.realm])
+      args.extend(['--realm', task_request.realm])  # pragma: no cover
     if task_request.resultdb and task_request.resultdb.enable:
-      args.extend(['--resultdb'])
+      args.extend(['--resultdb'])  # pragma: no cover
 
     for path, package_list in sorted(
         task_slice.cipd_ensure_file.packages.iteritems()):
@@ -1024,7 +1023,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             '%s:%s:%s' % (path or '.', package_name, package_version)
         ])
 
-    if task_slice.env_prefixes:
+    if task_slice.env_prefixes:  # pragma: no cover
       for key, paths in sorted(dict(task_slice.env_prefixes).items()):
         for path in paths:
           args.extend(('--env-prefix', key, path))
@@ -1033,7 +1032,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_slice.isolated:
       args.extend(('--isolated', task_slice.isolated))
 
-    if task_slice.relative_cwd:
+    if task_slice.relative_cwd:  # pragma: no cover
       args.extend(['--relative-cwd', task_slice.relative_cwd])
 
     # Use a raw command as extra-args on tasks without command.
@@ -1124,14 +1123,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._generate_trigger_task_shard_args(task, **kwargs))
 
     uses_trigger_script = bool(task.trigger_script)
+    assert uses_trigger_script, 'Only trigger script should use this now'
     if task.shards > 1:
-      # We must use different logic for swarming.py vs. custom trigger script.
-      if uses_trigger_script:
-        pre_trigger_args += ['--shard-index', str(shard_index)]
-        pre_trigger_args += ['--shards', str(task.shards)]
-      else:
-        pre_trigger_args += ['--env', 'GTEST_SHARD_INDEX', str(shard_index)]
-        pre_trigger_args += ['--env', 'GTEST_TOTAL_SHARDS', str(task.shards)]
+      pre_trigger_args += ['--shard-index', str(shard_index)]
+      pre_trigger_args += ['--shards', str(task.shards)]
 
     args = pre_trigger_args + post_trigger_args
 

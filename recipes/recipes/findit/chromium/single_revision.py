@@ -31,6 +31,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/swarming',
     'test_utils',
 ]
 
@@ -336,11 +337,12 @@ def GenTests(api):
           }),
       api.post_process(MustRun, 'compile'),
       api.post_process(MustRun, 'test_pre_run.[trigger] blink_web_tests'),
-      api.post_process(
-          StepCommandContains, 'test_pre_run.[trigger] blink_web_tests', [
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run.[trigger] blink_web_tests', lambda check, req: check(
               '--gtest_filter='
-              'fast/Test/One.html:fast/Test/Two.html:dummy/Three.js'
-          ]),
+              'fast/Test/One.html:fast/Test/Two.html:dummy/Three.js' in req[
+                  0].command)),
       api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests'),
       api.post_process(DoesNotRun, 'analyze'),
       api.post_process(StatusSuccess),

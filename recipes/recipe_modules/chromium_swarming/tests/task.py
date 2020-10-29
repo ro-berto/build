@@ -52,9 +52,9 @@ def GenTests(api):
       'wait_for_capacity',
       api.properties(
           task_name='capacity-constrained task', wait_for_capacity=True),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] capacity-constrained task',
-                       ['--wait-for-capacity']),
+      api.post_check(api.swarming.check_triggered_request,
+                     '[trigger] capacity-constrained task', lambda check, req:
+                     check(req[0].wait_for_capacity)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -73,9 +73,9 @@ def GenTests(api):
   yield api.test(
       'containment_type',
       api.properties(task_name='windows gpu task', containment_type='AUTO'),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] windows gpu task',
-                       ['--containment-type', 'AUTO']),
+      api.post_check(
+          api.swarming.check_triggered_request, '[trigger] windows gpu task',
+          lambda check, req: check(req[0].containment_type == 'AUTO')),
       api.post_process(post_process.DropExpectation),
   )
 

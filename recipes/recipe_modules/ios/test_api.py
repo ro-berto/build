@@ -32,8 +32,7 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
   def make_test_build_configs_for_children(self, configs):
     return self.child_build_configs(configs)
 
-  def generate_test_results_placeholder(
-      self, failure=False, swarming_number=10000):
+  def generate_test_results_placeholder(self, failure=False, swarming_number=0):
     summary_contents = {
       'logs': {
         'passed tests': ['PASSED_TEST'],

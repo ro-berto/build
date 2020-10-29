@@ -99,7 +99,7 @@ def GenTests(api):
           }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
-          ([['10000'], ['110000']], 1),
+          ([['0'], ['1']], 1),
       ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -118,7 +118,7 @@ def GenTests(api):
           }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
-          ([['110000']], 1),
+          ([['1']], 1),
       ]),
       # There's no call to get_states after there's only one test left pending,
       # as the test_utils logic just calls the regular collect logic on that
@@ -145,7 +145,7 @@ def GenTests(api):
           ([], 1),
           ([], 1),
           ([], 1),
-          ([['10000'], ['110000']], 1),
+          ([['0'], ['1']], 1),
       ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -199,7 +199,7 @@ def GenTests(api):
           }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
-          ([['10000'], ['110000']], 1),
+          ([['0'], ['1']], 1),
       ]),
       api.post_process(post_process.MustRun,
                        'base_unittests_invalid_results (retry shards)'),

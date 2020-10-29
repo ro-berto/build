@@ -17,6 +17,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_results',
     'test_utils',
 ]
@@ -183,10 +184,10 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] base_unittests', [
-                           '--env', 'LLVM_PROFILE_FILE',
-                           '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw'
-                       ]),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] base_unittests', lambda check, req: check(
+              req[0].env_vars['LLVM_PROFILE_FILE'] ==
+              '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw')),
       api.post_process(post_process.DropExpectation),
   )

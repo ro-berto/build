@@ -81,7 +81,7 @@ def GenTests(api):
     if failing_test:
       summary_contents['logs']['failed tests'] = ['FAILED_TEST']
 
-    summary_path = '10000/summary.json'
+    summary_path = '0/summary.json'
     return api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})
 
   def generate_passing_test(api, simulator):
@@ -156,7 +156,7 @@ def GenTests(api):
     },
     'step_text': 'dummy step text'
   }
-  summary_path = '10000/summary.json'
+  summary_path = '0/summary.json'
   yield api.test(
       'test_results_parser',
       api.step_data(
@@ -187,8 +187,8 @@ def GenTests(api):
         }
       }
     }
-    summary_path = '10000/summary.json'
-    perf_results_path = '10000/Documents/perf_result.json'
+    summary_path = '0/summary.json'
+    perf_results_path = '0/Documents/perf_result.json'
     output_dir_data = {
         summary_path: json.dumps(summary_contents),
         perf_results_path: json.dumps(perf_data)
@@ -200,7 +200,7 @@ def GenTests(api):
       api.step_data('dummy step name on iOS-dummy OS',
                     generate_perf_results_placeholder(api)),
       api.builder_group.for_current('tryserver.fake'),
-      api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '10000',
+      api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '0',
                                                'Documents',
                                                'perf_result.json')),
       api.post_process(post_process.StatusSuccess),
@@ -211,7 +211,7 @@ def GenTests(api):
       'upload_to_flakiness',
       generate_passing_test(api, simulator=False),
       api.builder_group.for_current('tryserver.fake'),
-      api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '10000',
+      api.path.exists(api.path['cleanup'].join('dummy task id_tmp_1', '0',
                                                'full_results.json')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

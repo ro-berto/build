@@ -20,6 +20,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_results',
     'test_utils',
 ]
@@ -171,9 +172,10 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
       ),
-      api.post_process(
-          post_process.StepCommandContains, '[trigger] base_unittests',
-          ['--service-account', 'test-account@serviceaccount.com']),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] base_unittests', lambda check, req: check(
+              req.service_account == 'test-account@serviceaccount.com')),
       api.post_process(post_process.DropExpectation),
   )
 

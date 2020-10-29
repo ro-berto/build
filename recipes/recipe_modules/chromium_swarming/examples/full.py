@@ -251,27 +251,9 @@ def GenTests(api):
   yield api.test(
       'default_trigger_script',
       api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
-      api.properties(platforms=('mac',), custom_trigger_script=False),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] hello_world on Mac-10.13',
-                       ['--env', 'GTEST_SHARD_INDEX', '1']),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] hello_world on Mac-10.13',
-                       ['--env', 'GTEST_TOTAL_SHARDS', '3']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'default_trigger_script_use_swarming',
-      api.step_data(
           'archive for linux',
           stdout=api.raw_io.output_text('hash hello_world.isolated')),
-      api.properties(
-          platforms=('linux',),
-          custom_trigger_script=False,
-          use_swarming_recipe_to_trigger=True),
+      api.properties(platforms=('linux',), custom_trigger_script=False),
       api.post_check(
           api.swarming.check_triggered_request,
           '[trigger] hello_world', lambda check, req: check(req[0].env_vars[

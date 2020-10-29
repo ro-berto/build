@@ -19,6 +19,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_results',
     'test_utils',
 ]
@@ -159,11 +160,10 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
       ),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] base_unittests', [
-                           '--service-account',
-                           'test-account@serviceaccount.com',
-                       ]),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] base_unittests', lambda check, req: check(
+              req.service_account == 'test-account@serviceaccount.com')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -220,10 +220,12 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
       ),
-      api.post_process(post_process.StepCommandContains,
-                       '[trigger] base_unittests',
-                       ['--named-cache', 'cache_name', '.path/to/named/cache']),
-      api.post_process(post_process.StatusSuccess),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          '[trigger] base_unittests',
+          lambda check, req: check(req[0].named_caches['cache_name'] ==
+                                   '.path/to/named/cache'),
+      ), api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
 
   yield api.test(
