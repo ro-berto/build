@@ -99,10 +99,9 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
   additional_trigger_properties = {}
   test_spec = v8.TEST_SPEC()
-  tests = v8.create_tests()
 
-  # Tests from V8-side test specs have precedence.
-  tests = v8.dedupe_tests(v8.extra_tests_from_properties(), tests)
+  # Read tests from V8-side test specs.
+  tests = v8.extra_tests_from_properties()
 
   if v8.is_pure_swarming_tester:
     with api.step.nest('initialization'):

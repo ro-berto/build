@@ -966,9 +966,6 @@ class V8Api(recipe_api.RecipeApi):
     """
     return testing.create_test(test, self.m)
 
-  def create_tests(self):
-    return [self.create_test(t) for t in self.bot_config.get('tests', [])]
-
   @property
   def is_pure_swarming_tester(self):
     return (self.bot_type == 'tester' and
