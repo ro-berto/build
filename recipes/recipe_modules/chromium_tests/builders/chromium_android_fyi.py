@@ -180,7 +180,7 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
-    'android-x86-weblayer-pie-tests-rel':
+    'android-weblayer-pie-x86-rel-tests':
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
