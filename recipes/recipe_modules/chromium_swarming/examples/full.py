@@ -40,6 +40,7 @@ PROPERTIES = {
     'named_caches': Property(default=None),
     'service_account': Property(default=None),
     'wait_for_tasks': Property(default=None),
+    'use_swarming_go_in_trigger_script': Property(default=False),
     'realm': Property(default=None),
     'resultdb_enabled': Property(default=False),
 }
@@ -48,7 +49,8 @@ PROPERTIES = {
 def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks, realm, resultdb_enabled):
+             wait_for_tasks, use_swarming_go_in_trigger_script, realm,
+             resultdb_enabled):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -187,7 +189,9 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    api.chromium_swarming.trigger_task(task)
+    api.chromium_swarming.trigger_task(
+        task,
+        use_swarming_go_in_trigger_script=use_swarming_go_in_trigger_script)
     assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
 
   # Recipe can do something useful here locally while tasks are
@@ -233,7 +237,10 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
-      api.properties(platforms=('mac',), custom_trigger_script=True),
+      api.properties(
+          platforms=('mac',),
+          custom_trigger_script=True,
+          use_swarming_go_in_trigger_script=True),
       api.post_process(
           post_process.StepCommandContains,
           '[trigger (custom trigger script)] hello_world on Mac-10.13',
@@ -242,6 +249,10 @@ def GenTests(api):
           post_process.StepCommandContains,
           '[trigger (custom trigger script)] hello_world on Mac-10.13',
           ['--shards', '3']),
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger (custom trigger script)] hello_world on Mac-10.13',
+          ['--use-swarming-go']),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -135,6 +135,30 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  yield api.test(
+      'combined_builder_tester_use_swarming_go_in_trigger_script',
+      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.properties(swarm_hashes=fake_swarm_hashes),
+      api.platform('linux', 64),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              fake_group: {
+                  fake_tester:
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          isolate_server='https://isolateserver.appspot.com',
+                          chromium_tests_apply_config=[
+                              'use_swarming_go_in_trigger_script'
+                          ],
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
+      api.step_data('find command lines', api.json.output(fake_command_lines)),
+      api.post_process(post_process.DropExpectation),
+  )
+
   fake_bot_db = bot_db.BotDatabase.create({
       fake_group: {
           fake_builder:
