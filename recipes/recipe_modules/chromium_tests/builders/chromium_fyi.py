@@ -922,7 +922,4 @@ SPEC.update([
 # rather than have to do 2 different things for specs based on other specs and
 # specs created within this file, just evolve all of the specs afterwards
 for name, spec in SPEC.iteritems():
-  if 'use_swarming_recipe_to_trigger' not in spec.chromium_tests_apply_config:
-    spec = spec.extend(
-        chromium_tests_apply_config=['use_swarming_recipe_to_trigger'])
   SPEC[name] = spec.evolve(build_gs_bucket='chromium-fyi-archive')

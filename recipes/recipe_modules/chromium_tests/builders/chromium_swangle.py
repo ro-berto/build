@@ -26,7 +26,6 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
       },
       simulation_platform=os,
       serialize_tests=True,
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
   )
 
 

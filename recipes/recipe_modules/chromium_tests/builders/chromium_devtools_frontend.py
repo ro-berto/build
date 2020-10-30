@@ -9,7 +9,6 @@ def _chromium_devtools_frontend_spec(**kwargs):
   return bot_spec.BotSpec.create(
       build_gs_bucket='devtools-frontend',
       luci_project='devtools-frontend',
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
       **kwargs)
 
 

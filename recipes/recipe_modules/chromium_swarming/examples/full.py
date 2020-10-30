@@ -40,7 +40,6 @@ PROPERTIES = {
     'named_caches': Property(default=None),
     'service_account': Property(default=None),
     'wait_for_tasks': Property(default=None),
-    'use_swarming_recipe_to_trigger': Property(default=False),
     'realm': Property(default=None),
     'resultdb_enabled': Property(default=False),
 }
@@ -49,8 +48,7 @@ PROPERTIES = {
 def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks, use_swarming_recipe_to_trigger, realm,
-             resultdb_enabled):
+             wait_for_tasks, realm, resultdb_enabled):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -189,8 +187,7 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    api.chromium_swarming.trigger_task(
-        task, use_swarming_recipe_to_trigger=use_swarming_recipe_to_trigger)
+    api.chromium_swarming.trigger_task(task)
     assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
 
   # Recipe can do something useful here locally while tasks are

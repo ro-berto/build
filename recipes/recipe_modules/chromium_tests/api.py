@@ -123,14 +123,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybots(self):
     return self._trybots
 
-  @property
-  def use_swarming_recipe_to_trigger(self):
-    # TODO(894045): Remove once all tasks are switched to `swarming`
-    try:
-      return self.c.use_swarming_recipe_to_trigger
-    except AttributeError:
-      return False
-
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)

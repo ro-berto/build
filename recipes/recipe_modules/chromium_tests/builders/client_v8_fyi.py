@@ -9,7 +9,6 @@ def _client_v8_fyi_spec(**kwargs):
   return bot_spec.BotSpec.create(
       build_gs_bucket='chromium-v8',
       luci_project='v8',
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'],
       **kwargs)
 
 

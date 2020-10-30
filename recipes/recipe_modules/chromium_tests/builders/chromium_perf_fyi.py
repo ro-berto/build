@@ -26,9 +26,8 @@ def _AddBuildSpec(name,
                   config_name='chromium_perf',
                   target_bits=64,
                   **kwargs):
-  SPEC[name] = chromium_perf.BuildSpec(
-      config_name, platform, target_bits, **kwargs).extend(
-          chromium_tests_apply_config=['use_swarming_recipe_to_trigger'])
+  SPEC[name] = chromium_perf.BuildSpec(config_name, platform, target_bits,
+                                       **kwargs)
 
 
 def _AddIsolatedTestSpec(name,
@@ -45,8 +44,6 @@ def _AddIsolatedTestSpec(name,
       **kwargs)
   if parent_builder_group:
     spec = spec.evolve(parent_builder_group=parent_builder_group)
-  spec = spec.extend(
-      chromium_tests_apply_config=['use_swarming_recipe_to_trigger'])
 
   SPEC[name] = spec
 
