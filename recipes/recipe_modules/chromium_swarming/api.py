@@ -748,7 +748,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     base_task_name = None
     tasks = {}
-    kwargs.pop('use_swarming_recipe_to_trigger', False)
     use_swarming_go_in_trigger_script = kwargs.pop(
         'use_swarming_go_in_trigger_script', False)
 
