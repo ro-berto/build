@@ -182,40 +182,6 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
-    'android-weblayer-lollipop-x86-rel-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-x86-fyi-rel',
-            execution_mode=bot_spec.TEST,
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-oreo-x86-rel-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-x86-fyi-rel',
-            execution_mode=bot_spec.TEST,
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
     'android-weblayer-pie-x86-rel-tests':
         _chromium_android_fyi_spec(
             chromium_config='android',
