@@ -134,7 +134,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '14.0',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
             'iOS64 Sim Debug (iOS 13)': {
@@ -153,7 +153,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '13.6',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
             'iOS64 Sim Debug (iOS 12)': {
@@ -172,7 +172,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
         },
@@ -266,7 +266,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '14.0',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
             'ios_sim_x64_dbg_ios13': {
@@ -285,7 +285,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '13.6',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
             'ios_sim_x64_dbg_ios12': {
@@ -304,7 +304,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4',
-                    'host os': 'Mac-10.15.4',
+                    'host os': 'Mac-10.15.6',
                 },
             },
         },
