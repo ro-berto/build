@@ -118,7 +118,7 @@ BUILDERS = freeze({
                     'sdk': 'iphoneos10.3',
                 },
             },
-            'iOS64 Sim Debug (iOS 10.0)': {
+            'iOS64 Sim Debug (iOS 14.0)': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Debug',
@@ -133,11 +133,11 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '10.3.1',
-                    'host os': 'Mac-10.15',
+                    'os': '14.0',
+                    'host os': 'Mac-10.15.4',
                 },
             },
-            'iOS64 Sim Debug (iOS 11)': {
+            'iOS64 Sim Debug (iOS 13)': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Debug',
@@ -152,8 +152,8 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '11.4',
-                    'host os': 'Mac-10.15',
+                    'os': '13.6',
+                    'host os': 'Mac-10.15.4',
                 },
             },
             'iOS64 Sim Debug (iOS 12)': {
@@ -172,7 +172,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4',
-                    'host os': 'Mac-10.15',
+                    'host os': 'Mac-10.15.4',
                 },
             },
         },
@@ -250,7 +250,7 @@ BUILDERS = freeze({
                     'sdk': 'iphoneos10.3',
                 },
             },
-            'ios_sim_x64_dbg_ios10': {
+            'ios_sim_x64_dbg_ios14': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Debug',
@@ -265,11 +265,11 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '10.3.1',
-                    'host os': 'Mac-10.15',
+                    'os': '14.0',
+                    'host os': 'Mac-10.15.4',
                 },
             },
-            'ios_sim_x64_dbg_ios11': {
+            'ios_sim_x64_dbg_ios13': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Debug',
@@ -284,8 +284,8 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '11.4',
-                    'host os': 'Mac-10.15',
+                    'os': '13.6',
+                    'host os': 'Mac-10.15.4',
                 },
             },
             'ios_sim_x64_dbg_ios12': {
@@ -304,7 +304,7 @@ BUILDERS = freeze({
                 'ios_testing': {
                     'device type': 'iPhone 6s',
                     'os': '12.4',
-                    'host os': 'Mac-10.15',
+                    'host os': 'Mac-10.15.4',
                 },
             },
         },
@@ -561,12 +561,12 @@ def GenTests(api):
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield (generate_builder(
       'luci.webrtc.try',
-      'ios_sim_x64_dbg_ios10',
+      'ios_sim_x64_dbg_ios14',
       revision='a' * 40,
       suffix='_gn_analyze_no_dependency',
       gn_analyze_output=gn_analyze_no_deps_output) +
          api.properties(**{'$depot_tools/osx_sdk': {
-             'sdk_version': '10l232m'
+             'sdk_version': '12a7209'
          }}))
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield (generate_builder(
