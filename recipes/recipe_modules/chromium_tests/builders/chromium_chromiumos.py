@@ -80,12 +80,9 @@ SPEC.update([
     ),
     _config(
         'linux-lacros-builder-rel',
-        isolate_server='https://isolateserver.appspot.com',
-        gclient_apply_config=['checkout_prebuilt_ash_chrome']),
+        isolate_server='https://isolateserver.appspot.com'),
     _config(
-        'linux-lacros-rel',
-        isolate_server='https://isolateserver.appspot.com',
-        gclient_apply_config=['checkout_prebuilt_ash_chrome']),
+        'linux-lacros-rel', isolate_server='https://isolateserver.appspot.com'),
     _config(
         'linux-lacros-tester-rel',
         isolate_server='https://isolateserver.appspot.com',
