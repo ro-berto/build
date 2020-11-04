@@ -349,6 +349,29 @@ def GenTests(api):
   )
 
   yield api.test(
+      'code_coverage_js_ci_bot',
+      api.chromium.ci_build(builder_group='chromium.fyi',
+          builder='linux-chromeos-js-code-coverage'),
+      api.properties(
+          swarm_hashes={'browser_tests': '[dummy hash for browser_tests]'}),
+      api.code_coverage(use_javascript_coverage=True),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.fyi', {
+              'linux-chromeos-js-code-coverage': {
+                  'gtest_tests': [{
+                      'isolate_coverage_data': True,
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'pgo_ci_bots',
       api.chromium.ci_build(
           builder_group='chromium.fyi', builder='mac-code-coverage'),

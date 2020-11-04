@@ -49,6 +49,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._use_clang_coverage = properties.use_clang_coverage
     # When set True, Java coverage is enabled.
     self._use_java_coverage = properties.use_java_coverage
+    # When set True, JavaScript coverage is enabled.
+    self._use_javascript_coverage = properties.use_javascript_coverage
     # Platform for which this build is running.
     self._platform = None
     # Determines whether a component mapping should be used for non-per-cl
@@ -62,6 +64,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def use_java_coverage(self):
     return self._use_java_coverage
+
+  @property
+  def use_javascript_coverage(self):
+    return self._use_javascript_coverage
 
   @property
   def platform(self):
@@ -111,7 +117,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def using_coverage(self):
     """Checks if the current build is running coverage-instrumented targets."""
-    return self.use_clang_coverage or self.use_java_coverage
+    return self.use_clang_coverage or self.use_java_coverage \
+           or self.use_javascript_coverage
 
   def _get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.

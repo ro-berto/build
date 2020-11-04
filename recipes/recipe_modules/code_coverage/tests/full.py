@@ -158,6 +158,16 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic_js_coverage',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi',
+          builder='linux-chromeos-js-code-coverage'),
+      api.code_coverage(use_javascript_coverage=True),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'tryserver',
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),

@@ -18,4 +18,6 @@ message InputProperties {
   repeated string coverage_test_types = 4;
   // The key to get corresponding excluded file pattern.
   string coverage_exclude_sources = 5;
+  // Whether JavaScript coverage is enabled.
+  bool use_javascript_coverage = 6;
 }
