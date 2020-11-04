@@ -583,8 +583,13 @@ class iOSApi(recipe_api.RecipeApi):
       task['xcode version'] = self.__config.get('xcode version')
     task['xcode build version'] = self.xcode_build_version
 
-  def isolate_test(self, test, tmp_dir, isolate_template,
-                   test_cases=None, shard_num=None):
+  def isolate_test(self,
+                   test,
+                   tmp_dir,
+                   isolate_template,
+                   scripts_dir,
+                   test_cases=None,
+                   shard_num=None):
     """Isolates a single test."""
     test_cases = test_cases or []
     step_name = self.get_step_name(test)
@@ -611,76 +616,171 @@ class iOSApi(recipe_api.RecipeApi):
     if task['skip']:
       return task
 
-    app_path = self.m.path.join(self.most_recent_app_dir,
-                                '%s.app' % test['app'])
+    app = '%s.app' % test['app']
+    host_app_path = 'NO_PATH'
+
     # Handling for EG2
-    host_app_path = None
     if 'host' in test:
+      app = '%s-Runner.app' % test['app']
       host_app_path = self.m.path.join(self.most_recent_app_dir,
                                        '%s.app' % test['host'])
-      app_path = self.m.path.join(self.most_recent_app_dir,
-                                  '%s-Runner.app' % test['app'])
+
+    app_path = self.m.path.join(self.most_recent_app_dir, app)
+    restart = 'true' if test.get('restart') else 'false'
+    shards = str(self.m.json.dumps(test.get('shards') or 1))
+    test_args = test.get('test args') or []
+    xcode_parallelization = 'true' if test.get(
+        'xcode parallelization') else 'false'
+    xcodebuild_device_runner = 'true' if test.get(
+        'xcodebuild device runner') else 'false'
+    test_cases = test_cases or []
+    xctest = 'true' if test.get('xctest') else 'false'
+    use_trusted_cert = 'true' if test.get('use trusted cert') else 'false'
+    use_replay = test.get('replay package name')
+    replay_path = steps.WPR_REPLAY_DATA_ROOT if use_replay else 'NO_PATH'
+    use_wpr_tools = test.get('use trusted cert') or use_replay
+    wpr_tools_path = steps.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'
+    xcode_build_version = task['xcode build version']
+
     task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
 
     args = [
-      '--config-variable', 'app_path', app_path,
-      '--config-variable', 'restart', (
-        'true' if test.get('restart') else 'false'),
-      '--config-variable', 'shards', self.m.json.dumps(test.get('shards') or 1),
-      '--config-variable', 'test_args', self.m.json.dumps(
-          test.get('test args') or []),
-      '--config-variable', 'xcode_parallelization', (
-          'true' if test.get('xcode parallelization') else 'false'),
-      '--config-variable', 'xcodebuild_device_runner', (
-          'true' if test.get('xcodebuild device runner') else 'false'),
-      '--config-variable', 'test_cases', self.m.json.dumps(test_cases or []),
-      '--config-variable', 'xctest', (
-        'true' if test.get('xctest') else 'false'),
-      '--config-variable', 'use_trusted_cert', (
-        'true' if test.get('use trusted cert') else 'false'),
-      '--isolate', isolate_template,
-      '--isolated', tmp_dir.join('%s.isolated' % test_id),
-      '--path-variable', 'app_path', app_path,
+        '--config-variable',
+        'app_path',
+        app_path,
+        '--config-variable',
+        'host_app_path',
+        host_app_path,
+        '--config-variable',
+        'restart',
+        restart,
+        '--config-variable',
+        'shards',
+        shards,
+        '--config-variable',
+        'test_args',
+        self.m.json.dumps(test_args),
+        '--config-variable',
+        'xcode_parallelization',
+        xcode_parallelization,
+        '--config-variable',
+        'xcodebuild_device_runner',
+        xcodebuild_device_runner,
+        '--config-variable',
+        'test_cases',
+        self.m.json.dumps(test_cases),
+        '--config-variable',
+        'xctest',
+        xctest,
+        '--config-variable',
+        'use_trusted_cert',
+        use_trusted_cert,
+        '--config-variable',
+        'replay_path',
+        replay_path,
+        '--config-variable',
+        'wpr_tools_path',
+        wpr_tools_path,
+        '--config-variable',
+        'xcode_version',
+        xcode_build_version,
+        '--isolate',
+        isolate_template,
+        '--isolated',
+        tmp_dir.join('%s.isolated' % test_id),
+        '--path-variable',
+        'app_path',
+        app_path,
     ]
-
-    args.extend([
-      '--config-variable', 'host_app_path', (
-          host_app_path if host_app_path else 'NO_PATH'),
-    ])
 
     # Additional_app_path is a mandatory variable defining the path to a second
     # app which will be included in the isolate's files. This is for EG2 tests
     # which uses two apps; tests that use one app will have this variable
     # equal to app_path (effectively being a no-op).
     args.extend([
-      '--path-variable', 'additional_app_path', (
-          host_app_path if host_app_path else app_path),
+        '--path-variable',
+        'additional_app_path',
+        (host_app_path if host_app_path != 'NO_PATH' else app_path),
     ])
 
-    use_wpr_tools = test.get('use trusted cert') or test.get(
-        'replay package name')
-    args.extend([
-        '--config-variable',
-        'wpr_tools_path',
-        (steps.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'),
-    ])
-
-    args.extend([
-        '--config-variable',
-        'replay_path',
-        (steps.WPR_REPLAY_DATA_ROOT
-         if test.get('replay package name') else 'NO_PATH'),
-    ])
-
-    args.extend([
-      '--config-variable', 'xcode_version', task['xcode build version'],
-    ])
-
-    if self.platform == 'simulator':
+    sim_platform = test.get('device type')
+    sim_os = test.get('os')
+    if self.platform == 'simulator' and sim_platform and sim_os:
       args.extend([
-        '--config-variable', 'platform', test['device type'],
-        '--config-variable', 'version', test['os'],
+          '--config-variable',
+          'platform',
+          sim_platform,
+          '--config-variable',
+          'version',
+          sim_os,
       ])
+
+    # relative_cwd and raw_cmd need to be passed to the Swarming invocation
+    # as relative_cwd and command are deprecated properties from isolate
+    # and isolated.
+
+    # The SwarmingIosTest object sets relative_cwd and raw_cmd from this
+    # task dict in the constructor and passes it to the Swarming task
+    # constructor as part of pre_run.
+
+    # Because command is deprecated from isolate/isolated, we'll need to
+    # build the raw command separately and pass this to the task instead.
+    # command is no longer available from the isolated file.
+
+    # * See crbug/1069704 for the deprecation of relative_cwd and command
+    # from isolate.
+    # * See crbug/1144638 for the motivation to build this command.
+
+    # According to the current usage of this code, the 'relative_cwd'
+    # is always '.' (and commands always start with src/). Hardcoding
+    # this value is not a good long-term idea.
+    def _build_command():
+      retries = str(self.__config.get('retries', 3))
+      mac_toolchain_path = '%s/mac_toolchain' % steps.MAC_TOOLCHAIN_ROOT
+
+      command_template = [
+          '%s/run.py' % scripts_dir, '--app', app_path, '--host-app',
+          host_app_path, '--out-dir', '${ISOLATED_OUTDIR}', '--retries',
+          retries, '--shards', shards, '--xcode-build-version',
+          xcode_build_version, '--mac-toolchain-cmd', mac_toolchain_path,
+          '--xcode-path', self.XCODE_APP_PATH, '--wpr-tools-path',
+          wpr_tools_path, '--replay-path', replay_path
+      ]
+
+      if test_cases:
+        for test in test_cases:
+          command_template.extend(['-t', test])
+      if test_args:
+        command_template.extend([
+            '--args-json',
+            self.m.json.dumps({
+                'test_args': self.m.json.dumps(test_args),
+            })
+        ])
+
+      if self.platform == 'simulator' and sim_platform and sim_os:
+        iossim = self.most_recent_iossim
+        command_template.extend([
+            '--iossim', iossim, '--platform', sim_platform, '--version', sim_os
+        ])
+
+      # These values have not been converted to boolean values to retain
+      # existing format, so we parse it this way. This is also in favor of
+      # deprecating args-json.
+      if xctest == 'true':
+        command_template += ['--xctest']
+      if restart == 'true':
+        command_template += ['--restart']
+      if xcode_parallelization == 'true':
+        command_template += ['--xcode-parallelization']
+      if xcodebuild_device_runner == 'true':
+        command_template += ['--xcodebuild-device-runner']
+
+      return command_template
+
+    task['relative_cwd'] = '.'
+    task['raw_cmd'] = _build_command()
+
     isolate_gen_file_contents = self.m.json.dumps({
       'args': args,
       'dir': self._ensure_checkout_dir(),
@@ -824,6 +924,7 @@ class iOSApi(recipe_api.RecipeApi):
                             swarming_tasks,
                             tmp_dir,
                             isolate_template,
+                            scripts_dir,
                             bot=None):
     """Isolate earlgrey test into small shards"""
     if 'host' in test:
@@ -860,8 +961,14 @@ class iOSApi(recipe_api.RecipeApi):
     tasks = []
     bot = bot or self.m.buildbucket.builder_name
     for i, sublist in enumerate(sublists):
-      tasks.append(self.isolate_test(
-          test, tmp_dir, isolate_template, sublist, i))
+      tasks.append(
+          self.isolate_test(
+              test,
+              tmp_dir,
+              isolate_template,
+              sublist,
+              scripts_dir,
+              shard_num=i))
       tasks[-1]['buildername'] = bot
     return tasks
 
@@ -871,6 +978,9 @@ class iOSApi(recipe_api.RecipeApi):
 
     tasks = []
 
+
+    # crbug/1144638 - Please ensure args_json and cmd are kept in sync with
+    # the template found in _build_command().
     args_json = ('{"test_args": <(test_args), "xctest": <(xctest), ' +
                  '"test_cases": <(test_cases), "restart": <(restart), ' +
                  '"xcode_parallelization": <(xcode_parallelization), ' +
@@ -929,17 +1039,25 @@ class iOSApi(recipe_api.RecipeApi):
     for bot, tests in bots_and_tests:
       for test in tests:
         # Split tests to a few bots.
+        # Swarming tasks is defined usually in tests/ under each app.
         if test.get('swarming tasks') and 'skip' not in test:
           tasks += self.isolate_earlgrey_test(
-              test, test['swarming tasks'], tmp_dir, isolate_template, bot=bot)
+              test,
+              test['swarming tasks'],
+              tmp_dir,
+              isolate_template,
+              scripts_dir,
+              bot=bot)
         else:
           # Add tests to a bot.
-          tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+          tasks.append(
+              self.isolate_test(test, tmp_dir, isolate_template, scripts_dir))
           tasks[-1]['buildername'] = bot
 
     targets_to_isolate = [
         t['task_id'] for t in tasks
         if t['isolated.gen'] and not t['skip']]
+
     if targets_to_isolate:
       step_result = self.m.isolate.isolate_tests(
           tmp_dir, targets=targets_to_isolate, verbose=True)
@@ -947,21 +1065,6 @@ class iOSApi(recipe_api.RecipeApi):
       for task in tasks:
         if task['task_id'] in step_result.json.output:
           task['isolated hash'] = step_result.json.output[task['task_id']]
-        isolated_file = '%s.isolated' % task['task_id']
-        # According to the current usage of this code, the 'relative_cwd'
-        # is always '.' (and commands always start with src/). Hardcoding
-        # this value is not a good long-term idea but this recipe_module
-        # is currently used only by WebRTC, which should migrate out of
-        # it in the next quarters.
-        task['relative_cwd'] = '.'
-        if self.m.path.abspath(tmp_dir).startswith('[CLEANUP]'):
-          # The recipe_module is in test mode, so we don't open files
-          # from the FS but instead the expected files needs to be injected.
-          task['raw_cmd'] = ['dummy', 'command', 'line']
-        else:  # pragma: no cover
-          with open(os.path.join(self.m.path.abspath(tmp_dir),
-                                 isolated_file)) as f:
-            task['raw_cmd'] = json.load(f)['command']
 
     return tasks
 

@@ -653,6 +653,7 @@ def GenTests(api):
                   'app': 'build-global xcode build version',
                   'device type': 'fake device',
                   'os': '10.0',
+                  'restart': 'true',
               },
               {
                   'app': 'task-local xcode build version',
