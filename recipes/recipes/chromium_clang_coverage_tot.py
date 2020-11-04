@@ -44,6 +44,17 @@ BUILDERS = freeze({
                         'TARGET_BITS': 64,
                     },
                 ),
+            'ToTWindowsCoverage':
+                chromium.BuilderSpec.create(
+                    chromium_config='chromium_win_clang_tot',
+                    chromium_apply_config=[],
+                    gclient_apply_config=['clang_tot'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 64,
+                    },
+                ),
         },
     },
 })
