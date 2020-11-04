@@ -59,6 +59,11 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'prebuilt_ash_chrome',
+      api.properties(apply_gclient_config='checkout_prebuilt_ash_chrome'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'enable_wpr_tests',
       api.properties(apply_gclient_config='enable_wpr_tests'),
       api.post_process(post_process.DropExpectation),

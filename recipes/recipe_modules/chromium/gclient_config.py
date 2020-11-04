@@ -367,6 +367,11 @@ def checkout_pgo_profiles(c):
 
 
 @CONFIG_CTX()
+def checkout_prebuilt_ash_chrome(c):
+  c.solutions[0].custom_vars['checkout_prebuilt_ash_chrome'] = 'True'
+
+
+@CONFIG_CTX()
 def use_clang_tidy(c):
   c.solutions[0].custom_vars['checkout_clang_tidy'] = 'True'
 
