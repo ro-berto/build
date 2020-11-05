@@ -215,7 +215,7 @@ class ResultDB(object):
   """
 
   enable = attrib(bool, default=False)
-  result_format = enum_attrib(['gtest', 'json'], default=None)
+  result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
 
