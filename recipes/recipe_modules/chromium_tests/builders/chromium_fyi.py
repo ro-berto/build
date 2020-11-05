@@ -285,54 +285,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'linux-8-core':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_high_parallel',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'linux-16-core':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_high_parallel',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'linux-32-core':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_high_parallel',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'mac-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -699,40 +651,6 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
-    'android-marshmallow-arm64-16-core':
-        bot_spec.BotSpec.create(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks', 'mb', 'goma_high_parallel'
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
-    'android-marshmallow-arm64-32-core':
-        bot_spec.BotSpec.create(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks', 'mb', 'goma_high_parallel'
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
     'win10-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -832,9 +750,6 @@ SPEC.update([
     stock_config('linux-builderless-fast-fyi-rel'),
     stock_config('linux-builderless-slow-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
-    stock_config('win-8-core'),
-    stock_config('win-16-core'),
-    stock_config('win-32-core'),
     stock_config('win-annotator-rel'),
     stock_config('win-pixel-builder-rel'),
     stock_config(
