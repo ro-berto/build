@@ -39,8 +39,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
 
   class MockSwarmingTest(steps.SwarmingIsolatedScriptTest, steps.MockTest):
 
-    def __init__(self, name, api):
-      super(MockSwarmingTest, self).__init__(name=name, api=api)
+    def __init__(self, name):
+      super(MockSwarmingTest, self).__init__(name=name)
 
     def has_valid_results(self, suffix):
       if self.name.endswith('invalid_results'):
@@ -49,16 +49,15 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
 
   if test_swarming:
     tests = [
-        MockSwarmingTest(name=test_name, api=api),
-        MockSwarmingTest(name=test_name + '_2', api=api),
-        steps.MockTest(name='test3', api=api)
+        MockSwarmingTest(name=test_name),
+        MockSwarmingTest(name=test_name + '_2'),
+        steps.MockTest(name='test3')
     ]
     api.chromium_tests.set_config('staging')
   else:
     tests = [
-        steps.MockTest(
-            name=test_name, abort_on_failure=abort_on_failure, api=api),
-        steps.MockTest(name='test2', api=api)
+        steps.MockTest(name=test_name, abort_on_failure=abort_on_failure),
+        steps.MockTest(name='test2')
     ]
 
   _, failed_tests = api.test_utils.run_tests(

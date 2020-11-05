@@ -37,19 +37,15 @@ PROPERTIES = {
 def RunSteps(api, known_flakes_expectations, exclude_failed_test,
              has_too_many_failures):
   tests = [
-      steps.MockTest(name='succeeded_test', api=api),
+      steps.MockTest(name='succeeded_test'),
       steps.MockTest(
-          name='invalid_test',
-          api=api,
-          runs_on_swarming=True,
-          has_valid_results=False),
+          name='invalid_test', runs_on_swarming=True, has_valid_results=False),
   ]
 
   if not exclude_failed_test:
     tests.append(
         steps.MockTest(
             name='failed_test',
-            api=api,
             runs_on_swarming=True,
             per_suffix_failures={'with patch': ['testA', 'testB']},
         ))
@@ -58,7 +54,6 @@ def RunSteps(api, known_flakes_expectations, exclude_failed_test,
     tests.append(
         steps.MockTest(
             name='too_many_failures',
-            api=api,
             runs_on_swarming=True,
             per_suffix_failures={
                 'with patch': ['test%d' % i for i in range(1000)]

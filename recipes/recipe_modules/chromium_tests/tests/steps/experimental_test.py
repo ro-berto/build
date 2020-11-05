@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -19,14 +20,30 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 def RunSteps(api):
 
+  class RecordingTest(steps.TestWrapper):
+    """Records execution of the has_valid_results and failures methods.
+
+    When a call is made to either method, a no-op step is created with
+    the name of the method followed by the name of the test and the
+    suffix.
+    """
+
+    def has_valid_results(self, suffix):
+      api.step('has_valid_results {}'.format(self.step_name(suffix)), [])
+      return super(RecordingTest, self).has_valid_results(suffix)
+
+    def failures(self, suffix):
+      api.step('failures {}'.format(self.step_name(suffix)), [])
+      return super(RecordingTest, self).failures(suffix)
+
   inner_test = steps.MockTest(
       'inner_test',
       abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
-      failures=api.properties.get('failures'),
-      api=api)
+      failures=api.properties.get('failures'))
+  recording_test = RecordingTest(inner_test)
   experimental_test = steps.ExperimentalTest(
-      inner_test,
+      recording_test,
       experiment_percentage=api.properties['experiment_percentage'],
       api=api)
 
@@ -86,6 +103,7 @@ def GenTests(api):
                        'has_valid_results inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun,
                        'failures inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -96,6 +114,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='0', has_valid_results=False),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -106,6 +125,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='100', failures=['foo']),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -116,6 +136,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(experiment_percentage='0', failures=['foo']),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

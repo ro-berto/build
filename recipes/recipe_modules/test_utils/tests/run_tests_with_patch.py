@@ -43,8 +43,8 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
     run_tests_kwargs['retry_failed_shards'] = retry_failed_shards
 
   tests = [
-      steps.MockTest(name='test', api=api, **_get_test_kwargs_by_index(0)),
-      steps.MockTest(name='test2', api=api, **_get_test_kwargs_by_index(1)),
+      steps.MockTest(name='test', **_get_test_kwargs_by_index(0)),
+      steps.MockTest(name='test2', **_get_test_kwargs_by_index(1)),
   ]
 
   invalid, failing = api.test_utils.run_tests_with_patch(

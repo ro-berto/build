@@ -2917,7 +2917,6 @@ class MockTest(Test):
                runs_on_swarming=False,
                per_suffix_failures=None,
                per_suffix_valid=None,
-               api=None,
                resultdb=None):
     super(MockTest, self).__init__(waterfall_builder_group,
                                    waterfall_buildername)
@@ -2931,7 +2930,6 @@ class MockTest(Test):
     self._per_suffix_valid = per_suffix_valid or {}
     self._name = name
     self._runs_on_swarming = runs_on_swarming
-    self._api = api
     self._resultdb = resultdb or ResultDB.create()
 
   @property
@@ -2967,13 +2965,11 @@ class MockTest(Test):
     return step_result
 
   def has_valid_results(self, suffix):
-    self._api.step('has_valid_results {}'.format(self.step_name(suffix)), None)
     if suffix in self._per_suffix_valid:  # pragma: no cover
       return self._per_suffix_valid[suffix]
     return self._has_valid_results
 
   def failures(self, suffix):
-    self._api.step('failures {}'.format(self.step_name(suffix)), None)
     if suffix in self._per_suffix_failures:  # pragma: no cover
       return self._per_suffix_failures[suffix]
     return self._failures
