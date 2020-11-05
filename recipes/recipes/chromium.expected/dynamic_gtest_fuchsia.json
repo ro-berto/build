@@ -19,7 +19,8 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@fuchsia-fyi-x64-rel@https://ci.chromium.org/p/chromium/builders/ci/fuchsia-fyi-x64-rel@@@"
+      "@@@STEP_LINK@fuchsia-fyi-x64-rel@https://ci.chromium.org/p/chromium/builders/ci/fuchsia-fyi-x64-rel@@@",
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:fuchsia-fyi-x64-rel\"]@@@"
     ]
   },
   {

@@ -1637,6 +1637,30 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return '\n\n'.join(test_summary_lines)
 
+  def _get_mirroring_try_builders(self, builder_id, try_db):
+    """Gets a list of try builders that are mirrors of |builder_id|.
+
+    Args:
+      builder_id: A BuilderId for the builder being checked.
+      try_db: A TryDatabase containing the CI/try mapping.
+
+    Returns:
+      A list of strings. If |builder_id| is a trybot, it will be an empty list.
+      If |builder_id| is a CI builder, it will contain all the builders that
+      mirror |builder_id|. String format is "group:builder".
+    """
+    is_trybot = builder_id in try_db
+    mirrors = set()
+    if not is_trybot:
+      for try_builder_id in try_db:
+        try_spec = try_db.get(try_builder_id)
+        for try_mirror in try_spec.mirrors:
+          if try_mirror.builder_id == builder_id:
+            mirrors.add(try_builder_id)
+          if try_mirror.tester_id == builder_id:
+            mirrors.add(try_builder_id)
+    return ['%s:%s' % (b.group, b.builder) for b in mirrors]
+
   def lookup_bot_metadata(self, builders=None, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1655,6 +1679,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     try_db = try_spec_module.TryDatabase.normalize(mirrored_bots or
                                                    self.trybots)
     builder_id = self.m.chromium.get_builder_id()
+    mirrored_builders = self._get_mirroring_try_builders(builder_id, try_db)
     try_spec = try_db.get(builder_id)
 
     if not try_spec:
@@ -1677,7 +1702,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           ' which should only appear as a tester in a mirror configuration'
           .format(b, bot_spec_module.PROVIDE_TEST_SPEC))
 
-    self._report_builders(settings)
+    self._report_builders(settings, mirrored_builders=mirrored_builders)
 
     return BotMetadata(builder_id, try_spec, settings)
 
@@ -1895,7 +1920,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return raw_result, Task(bot, tests, bot_update_step, affected_files)
 
-  def _report_builders(self, bot_config):
+  def _report_builders(self, bot_config, mirrored_builders=None):
     """Reports the builders being executed by the bot."""
 
     def bot_type(execution_mode):
@@ -1916,6 +1941,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     lines = [''] + [present_bot(m) for m in bot_config.bot_mirrors]
     result = self.m.python.succeeding_step('report builders',
                                            '<br/>'.join(lines))
+
+    if mirrored_builders:
+      result.presentation.properties['mirrored_builders'] = mirrored_builders
 
     def as_dict(bot_mirror):
       if bot_mirror.tester_id:

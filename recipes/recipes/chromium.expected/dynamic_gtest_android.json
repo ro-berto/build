@@ -19,7 +19,8 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/builders/ci/Lollipop Phone Tester@@@"
+      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/builders/ci/Lollipop Phone Tester@@@",
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:linux_android_dbg_ng\"]@@@"
     ]
   },
   {
