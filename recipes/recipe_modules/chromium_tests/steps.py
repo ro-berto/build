@@ -1192,8 +1192,7 @@ class LocalGTestTest(Test):
                waterfall_buildername=None,
                set_up=None,
                tear_down=None,
-               resultdb=None,
-               **runtest_kwargs):
+               resultdb=None):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -1216,9 +1215,6 @@ class LocalGTestTest(Test):
       set_up: Optional setup scripts.
       tear_down: Optional teardown script.
       resultdb: Configuration of the ResultDB integration for the test.
-      runtest_kwargs: Additional keyword args forwarded to the runtest.
-
-
     """
     super(LocalGTestTest, self).__init__(
         name,
@@ -1236,9 +1232,6 @@ class LocalGTestTest(Test):
     self._override_compile_targets = override_compile_targets
     self._commit_position_property = commit_position_property
     self._use_xvfb = use_xvfb
-    # FIXME: This should be a named argument, rather than catching all keyword
-    # arguments to this constructor.
-    self._runtest_kwargs = runtest_kwargs
     self._gtest_results = {}
     self._set_up = set_up
     self._tear_down = tear_down
@@ -1268,6 +1261,11 @@ class LocalGTestTest(Test):
     if self._override_compile_targets:  # pragma: no cover
       return self._override_compile_targets
     return [self.target_name]
+
+  def _get_runtest_kwargs(self, api):
+    """Get additional keyword arguments to pass to runtest."""
+    del api
+    return {}
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -1299,7 +1297,7 @@ class LocalGTestTest(Test):
       kwargs['test_type'] = self.name
       kwargs['annotate'] = 'gtest'
       kwargs['test_launcher_summary_output'] = gtest_results_file
-      kwargs.update(self._runtest_kwargs)
+      kwargs.update(self._get_runtest_kwargs(api))
 
     try:
       if is_android:
@@ -2329,13 +2327,14 @@ class LocalIsolatedScriptTest(Test):
                name,
                args=None,
                target_name=None,
+               full_test_target=None,
+               test_id_prefix=None,
                override_compile_targets=None,
                results_handler=None,
                set_up=None,
                tear_down=None,
                isolate_coverage_data=None,
-               isolate_profile_data=None,
-               **runtest_kwargs):
+               isolate_profile_data=None):
     """Constructs an instance of LocalIsolatedScriptTest.
 
     An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a
@@ -2355,17 +2354,17 @@ class LocalIsolatedScriptTest(Test):
       name: Displayed name of the test. May be modified by suffixes.
       args: Arguments to be passed to the test.
       target_name: Actual name of the test. Defaults to name.
-      runtest_kwargs: Additional keyword args forwarded to the runtest.
       override_compile_targets: The list of compile targets to use. If not
         specified this is the same as target_name.
       set_up: Optional set up scripts.
       tear_down: Optional tear_down scripts.
     """
-    super(LocalIsolatedScriptTest, self).__init__(name, target_name=target_name)
+    super(LocalIsolatedScriptTest, self).__init__(
+        name,
+        target_name=target_name,
+        full_test_target=full_test_target,
+        test_id_prefix=test_id_prefix)
     self._args = args or []
-    # FIXME: This should be a named argument, rather than catching all keyword
-    # arguments to this constructor.
-    self._runtest_kwargs = runtest_kwargs
     self._override_compile_targets = override_compile_targets
     self._set_up = set_up
     self._tear_down = tear_down
@@ -2836,8 +2835,7 @@ class WebRTCPerfTest(LocalGTestTest):
   enabled at the same time, which differs from the chromium.perf bots.
   """
 
-  def __init__(self, name, args, perf_id, commit_position_property,
-               **runtest_kwargs):
+  def __init__(self, name, args, perf_id, commit_position_property):
     """Construct a WebRTC Perf test.
 
     Args:
@@ -2850,25 +2848,44 @@ class WebRTCPerfTest(LocalGTestTest):
         use 'got_cr_revision_cp' instead.
     """
     assert perf_id
-    # TODO(kjellander): See if it's possible to rely on the build spec
-    # properties 'perf-id' and 'results-url' as set in the
-    # chromium_tests/chromium_perf.py. For now, set these to get an exact
-    # match of our current expectations.
-    runtest_kwargs['perf_id'] = perf_id
-    runtest_kwargs['results_url'] = RESULTS_URL
-
-    # TODO(kjellander): See if perf_dashboard_id is still needed.
-    runtest_kwargs['perf_dashboard_id'] = name
-    runtest_kwargs['annotate'] = 'graphing'
     super(WebRTCPerfTest, self).__init__(
-        name,
-        args,
-        commit_position_property=commit_position_property,
-        **runtest_kwargs)
+        name, args, commit_position_property=commit_position_property)
+    self._perf_id = perf_id
+
+  def _get_runtest_kwargs(self, api):
+    """Get additional keyword arguments to pass to runtest.
+
+    Additional keyword arguments are set to upload results to the perf
+    dashboard.
+    """
+    props = api.bot_update.last_returned_properties
+    return {
+        'perf_config': {
+            'a_default_rev':
+                'r_webrtc_git',
+
+            # 'got_webrtc_revision' property is present for bots in both
+            # chromium.webrtc and chromium.webrtc.fyi in reality, but due to
+            # crbug.com/713356, the latter don't get properly simulated.
+            # Fallback to got_revision then.
+            'r_webrtc_git':
+                props.get('got_webrtc_revision', props['got_revision']),
+        },
+
+        # TODO(kjellander): See if it's possible to rely on the build spec
+        # properties 'perf-id' and 'results-url' as set in the
+        # chromium_tests/chromium_perf.py. For now, set these to get an exact
+        # match of our current expectations.
+        'perf_id': self._perf_id,
+        'results_url': RESULTS_URL,
+
+        # TODO(kjellander): See if perf_dashboard_id is still needed.
+        'perf_dashboard_id': self.name,
+        'annotate': 'graphing',
+    }
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    self._wire_up_perf_config(api)
     result = super(WebRTCPerfTest, self).run(api, suffix)
 
     # These runs do not return json data about which tests were executed
@@ -2878,19 +2895,6 @@ class WebRTCPerfTest(LocalGTestTest):
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format(valid=True))
     return result
-
-  def _wire_up_perf_config(self, api):
-    props = api.bot_update.last_returned_properties
-    perf_config = {'a_default_rev': 'r_webrtc_git'}
-
-    # 'got_webrtc_revision' property is present for bots in both chromium.webrtc
-    # and chromium.webrtc.fyi in reality, but due to crbug.com/713356, the
-    # latter don't get properly simulated. Fallback to got_revision then.
-    webrtc_rev = props.get('got_webrtc_revision', props['got_revision'])
-
-    perf_config['r_webrtc_git'] = webrtc_rev
-
-    self._runtest_kwargs['perf_config'] = perf_config
 
 
 class MockTest(Test):
