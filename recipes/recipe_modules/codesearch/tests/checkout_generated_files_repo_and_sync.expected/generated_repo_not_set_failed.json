@@ -191,7 +191,7 @@
       "Traceback (most recent call last):",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py\", line 27, in RunSteps",
       "    api.codesearch.checkout_generated_files_repo_and_sync()",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 253, in checkout_generated_files_repo_and_sync",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 255, in checkout_generated_files_repo_and_sync",
       "    'Trying to check out generated files repo,'",
       "AssertionError: Trying to check out generated files repo, but the repo is not indicated"
     ]
