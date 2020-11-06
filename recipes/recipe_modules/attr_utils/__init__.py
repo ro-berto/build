@@ -11,6 +11,8 @@ following differences in behavior.
 * Classes are created frozen, which prevents changing attribute values.
 * Classes are created slotted by default, which prevents being able to
   assign to undeclared attributes.
+* A more helpful exception message is provided when required attributes
+  are not initialized.
 * Parentheses must be used in the decorator even if no arguments are
   specified.
 
@@ -31,7 +33,12 @@ class:
 All of the functions for defining attributes accept a `default` argument
 that has the same behavior:
 * If `default` is not specified, the attribute is required: a value must
-  be provided for the attribute when creating an object.
+  be provided for the attribute when creating an object. In contrast to
+  `attr.ib`, a required attribute can appear after an optional attribute
+  or in a class that has a base with an optional attribute; the ordering
+  of the arguments in `__init__` is not adjusted to account for this, so
+  it may be necessary to specify it as a keyword argument if values are
+  not being provided for all preceding optional attributes.
 * If `default` is `None`, the attribute is optional: a value does not
   need to be provided for the attribute when creating an object. `None`
   is an acceptable value in addition to any other values allowed by the
@@ -58,7 +65,9 @@ from recipe_engine.config_types import Path
 from recipe_engine.types import FrozenDict, freeze
 from recipe_engine.util import Placeholder
 
-_SPECIAL_DEFAULTS = (None, attr.NOTHING)
+_NOTHING = object()
+
+_SPECIAL_DEFAULTS = (None, _NOTHING)
 
 
 def _instance_of(type_, name_qualifier=''):
@@ -89,7 +98,17 @@ def _attrib(default, validator, converter=None):
     validator = validators.optional(validator)
     if converter is not None:
       converter = converters.optional(converter)
-  elif default is not attr.NOTHING:
+  elif default is _NOTHING:
+    wrapped_validator = validator or (lambda o, a, v: None)
+
+    def validator(obj, attribute, value):
+      if value is _NOTHING:
+        raise TypeError(
+            "No value provided for required attribute '{name}'".format(
+                name=attribute.name))
+      wrapped_validator(obj, attribute, value)
+
+  else:
     wrapped_converter = converter or (lambda x: x)
 
     def converter(x):
@@ -98,7 +117,7 @@ def _attrib(default, validator, converter=None):
   return attr.ib(default=default, validator=validator, converter=converter)
 
 
-def attrib(type_, default=attr.NOTHING):
+def attrib(type_, default=_NOTHING):
   """Declare an immutable scalar attribute.
 
   Arguments:
@@ -113,7 +132,7 @@ def attrib(type_, default=attr.NOTHING):
   return _attrib(default, validator)
 
 
-def enum_attrib(values, default=attr.NOTHING):
+def enum_attrib(values, default=_NOTHING):
   """Declare an immutable attribute that can take one of a fixed set of
   values.
 
@@ -133,7 +152,7 @@ def _null_validator(obj, attribute, value):
   pass
 
 
-def sequence_attrib(member_type=None, default=attr.NOTHING):
+def sequence_attrib(member_type=None, default=_NOTHING):
   """Declare an immutable attribute containing a sequence of values.
 
   The value will be converted to a tuple. Attempting to assign a value
@@ -162,7 +181,7 @@ def sequence_attrib(member_type=None, default=attr.NOTHING):
   return _attrib(default, validator, converter)
 
 
-def command_args_attrib(default=attr.NOTHING):
+def command_args_attrib(default=_NOTHING):
   """Declare an immutable attribute containing a sequence of arguments.
 
   The value will be converted to a tuple. Attempting to assign a value
@@ -181,7 +200,7 @@ def command_args_attrib(default=attr.NOTHING):
   return sequence_attrib(member_type=arg_types, default=default)
 
 
-def mapping_attrib(key_type=None, value_type=None, default=attr.NOTHING):
+def mapping_attrib(key_type=None, value_type=None, default=_NOTHING):
   """Declare an immutable attribute containing a mapping of values.
 
   The value will be converted to a FrozenDict (with all contained keys
@@ -287,7 +306,7 @@ def attrs(slots=True, **kwargs):
     if slots and cached_properties:
       cls = type(cls.__name__, (cls,), {'slots': cached_properties})
     for a in attr.fields(cls):
-      if a.validator is not None and a.default is not attr.NOTHING:
+      if a.validator is not None and a.default is not _NOTHING:
         try:
           a.validator(None, a, a.default)
         except Exception as e:

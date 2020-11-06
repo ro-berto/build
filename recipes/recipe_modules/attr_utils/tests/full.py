@@ -30,7 +30,8 @@ def RunSteps(api):
   # test requires arguments for attributes with no defaults
   with api.assertions.assertRaises(TypeError) as caught:
     AttribTest()
-  message_fragment = '__init__() takes at least 2 arguments'
+
+  message_fragment = "No value provided for required attribute 'required'"
   api.assertions.assertIn(message_fragment, caught.exception.message)
 
   # test validation of attribute type
@@ -54,88 +55,67 @@ def RunSteps(api):
   x = AttribTest(required='required', default=None)
   api.assertions.assertEqual(x.default, 'default')
 
+  # required after optional handling *******************************************
+  @attr.s(frozen=True)
+  class RequiredTest(object):
+    optional = attrib(str, default=None)
+    required = attrib(str)
+
+  with api.assertions.assertRaises(TypeError) as caught:
+    RequiredTest()
+
+  message = "No value provided for required attribute 'required'"
+  api.assertions.assertEqual(caught.exception.message, message)
+
+  # test successful validation
+  x = RequiredTest(required='required')
+  api.assertions.assertEqual(x.required, 'required')
+
   # enum_attrib ****************************************************************
   @attr.s(frozen=True)
   class EnumAttribTest(object):
-    required = enum_attrib([1, 2, 3])
-    optional = enum_attrib([4, 5, 6], default=None)
-    default = enum_attrib([7, 8, 9], default=7)
-
-  # test requires arguments for attributes with no defaults
-  with api.assertions.assertRaises(TypeError) as caught:
-    EnumAttribTest()
-  message_fragment = '__init__() takes at least 2 arguments'
-  api.assertions.assertIn(message_fragment, caught.exception.message)
+    value = enum_attrib([1, 2, 3])
 
   # test validation of attribute value
   with api.assertions.assertRaises(ValueError) as caught:
-    EnumAttribTest(required=4)
-  message = "'required' must be in (1, 2, 3) (got 4)"
+    EnumAttribTest(value=4)
+  message = "'value' must be in (1, 2, 3) (got 4)"
   api.assertions.assertEqual(caught.exception.message, message)
 
-  # test value and defaults
-  x = EnumAttribTest(required=1)
-  api.assertions.assertEqual(x.required, 1)
-  api.assertions.assertIsNone(x.optional)
-  api.assertions.assertEqual(x.default, 7)
-
-  # test None value allowed for attribute with None default
-  x = EnumAttribTest(required=1, optional=None)
-  api.assertions.assertIsNone(x.optional)
+  # test successful validation
+  x = EnumAttribTest(value=1)
+  api.assertions.assertEqual(x.value, 1)
 
   # sequence_attrib ************************************************************
   @attr.s(frozen=True)
   class SequenceAttribTest(object):
-    required = sequence_attrib()
-    optional = sequence_attrib(default=None)
-    default = sequence_attrib(default=[1, 2, 3])
+    value = sequence_attrib()
     typed = sequence_attrib(str, default=None)
-
-  # test requires arguments for attributes with no defaults
-  with api.assertions.assertRaises(TypeError) as caught:
-    SequenceAttribTest()
-  message_fragment = '__init__() takes at least 2 arguments'
-  api.assertions.assertIn(message_fragment, caught.exception.message)
 
   # test validation of attribute value
   with api.assertions.assertRaises(TypeError) as caught:
-    SequenceAttribTest(required=1)
-  message = (
-      "'required' must be <type 'tuple'> (got 1 that is a <type 'int'>).")
+    SequenceAttribTest(value=1)
+  message = "'value' must be <type 'tuple'> (got 1 that is a <type 'int'>)."
   api.assertions.assertEqual(caught.exception.message, message)
-
-  # test value and defaults
-  x = SequenceAttribTest(required=[1, 2, 3])
-  api.assertions.assertEqual(x.required, (1, 2, 3))
-  api.assertions.assertIsNone(x.optional)
-  api.assertions.assertEqual(x.default, (1, 2, 3))
-
-  # test None value allowed for attribute with None default
-  x = SequenceAttribTest(required=[1, 2, 3], optional=None)
-  api.assertions.assertIsNone(x.optional)
 
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
-    SequenceAttribTest(required=[1, 2, 3], typed=[4, 5, 6])
+    SequenceAttribTest(value=[1, 2, 3], typed=[4, 5, 6])
   message = ("'typed' members must be <type 'basestring'> "
              "(got 4 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
+
+  # test successful validation
+  x = SequenceAttribTest(value=[1, 2, 3], typed=['4', '5', '6'])
+  api.assertions.assertEqual(x.value, (1, 2, 3))
+  api.assertions.assertEqual(x.typed, ('4', '5', '6'))
 
   # command_args ***************************************************************
   @attr.s(frozen=True)
   class CommandArgsAttribTest(object):
     args = command_args_attrib()
 
-  # test that all valid argument types can be passed
-  args = [
-      0, 1L, 'x',
-      Path(NamedBasePath('fake-base-path')),
-      Placeholder('fake-placeholder')
-  ]
-  x = CommandArgsAttribTest(args)
-  api.assertions.assertEqual(x.args, tuple(args))
-
-  # test invalid argument types are rejected
+  # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
     CommandArgsAttribTest([[]])
 
@@ -146,50 +126,57 @@ def RunSteps(api):
        "<class 'recipe_engine.util.Placeholder'>) "
        "(got [] that is a <type 'list'>)."))
 
+  # test that all valid argument types can be passed
+  args = [
+      0, 1L, 'x',
+      Path(NamedBasePath('fake-base-path')),
+      Placeholder('fake-placeholder')
+  ]
+  x = CommandArgsAttribTest(args)
+  api.assertions.assertEqual(x.args, tuple(args))
+
   # mapping_attrib *************************************************************
   @attr.s(frozen=True)
   class MappingAttribTest(object):
-    required = mapping_attrib()
-    optional = mapping_attrib(default=None)
-    default = mapping_attrib(default={'a': 1, 'b': 2, 'c': 3})
+    value = mapping_attrib()
     typed = mapping_attrib(str, int, default=None)
-
-  # test requires arguments for attributes with no defaults
-  with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest()
-  message_fragment = '__init__() takes at least 2 arguments'
-  api.assertions.assertIn(message_fragment, caught.exception.message)
 
   # test validation of attribute value
   with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(required=1)
-  message = ("'required' must be <class 'recipe_engine.types.FrozenDict'> "
+    MappingAttribTest(value=1)
+  message = ("'value' must be <class 'recipe_engine.types.FrozenDict'> "
              "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
-  # test value and defaults
-  x = MappingAttribTest(required={1: 1, 2: 2, 3: 3})
-  api.assertions.assertEqual(x.required, FrozenDict({1: 1, 2: 2, 3: 3}))
-  api.assertions.assertIsNone(x.optional)
-  api.assertions.assertEqual(x.default, FrozenDict({'a': 1, 'b': 2, 'c': 3}))
-
-  # test None value allowed for attribute with None default
-  x = MappingAttribTest(required={1: 1, 2: 2, 3: 3}, optional=None)
-  api.assertions.assertIsNone(x.optional)
-
   # test validation of types of mapping keys
   with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(required={1: 1, 2: 2, 3: 3}, typed={1: 1})
+    MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={1: 1})
   message = ("'typed' keys must be <type 'basestring'> "
              "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
   # test validation of types of mapping values
   with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(required={1: 1, 2: 2, 3: 3}, typed={'a': 'a'})
+    MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={'a': 'a'})
   message = (
       "'typed' values must be <type 'int'> (got 'a' that is a <type 'str'>).")
   api.assertions.assertEqual(caught.exception.message, message)
+
+  # test successful validation
+  x = MappingAttribTest(
+      value={
+          1: 1,
+          2: 2,
+          3: 3,
+      },
+      typed={
+          '4': 4,
+          '5': 5,
+          '6': 6,
+      },
+  )
+  api.assertions.assertEqual(x.value, FrozenDict({1: 1, 2: 2, 3: 3}))
+  api.assertions.assertEqual(x.typed, FrozenDict({'4': 4, '5': 5, '6': 6}))
 
   # attrs **********************************************************************
   with api.assertions.assertRaises(TypeError) as caught:
