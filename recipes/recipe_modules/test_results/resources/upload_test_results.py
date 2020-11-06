@@ -4,10 +4,6 @@
 # found in the LICENSE file.
 
 """See README.md for usage instructions.
-
-This file heavily modified from build/scripts/slave/gtest_slave_utils.py and
-is intended to replace it as all tests move to swarming.
-TODO(estaab): Remove build/scripts/slave/gtest.* once this is fully deployed.
 """
 
 

@@ -7,7 +7,6 @@
 /extract_build.py                 recipes
 /goma_bq_utils.py                 recipes
 /goma_utils.py                    recipes
-/gtest_slave_utils.py             recipes
 /gtest/**                         recipes
 /histogram_results_parser.py      recipes
 /kill_processes.py                recipes

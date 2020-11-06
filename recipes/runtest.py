@@ -48,7 +48,6 @@ import annotation_utils
 import build_directory
 import crash_utils
 import histogram_results_parser
-import gtest_slave_utils
 import performance_log_processor
 import results_dashboard
 import slave_utils
