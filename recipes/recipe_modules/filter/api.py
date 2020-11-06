@@ -168,7 +168,8 @@ class FilterApi(recipe_api.RecipeApi):
     config_contents = self._load_analyze_config(config_file_name)
     exclusions = []
     ignores = []
-    for name in names:
+    valid_names = [name for name in names if name in config_contents]
+    for name in valid_names:
       exclusions.extend(config_contents[name].get('exclusions', []))
       ignores.extend(config_contents[name].get('ignores', []))
 

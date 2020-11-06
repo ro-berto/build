@@ -1740,6 +1740,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path or
           self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
+      analyze_names.append(self.m.chromium.c.TARGET_PLATFORM)
       test_targets, compile_targets = self.m.filter.analyze(
           affected_files,
           test_targets,
