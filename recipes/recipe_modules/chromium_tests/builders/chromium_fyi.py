@@ -237,6 +237,114 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'win-paeverywhere-x64-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
+            },
+            simulation_platform='win',
+            test_results_config='staging_server',
+        ),
+    'win-paeverywhere-x64-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
+            },
+            simulation_platform='win',
+            test_results_config='staging_server',
+        ),
+    'win-paeverywhere-x86-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'win',
+            },
+            simulation_platform='win',
+            test_results_config='staging_server',
+        ),
+    'win-paeverywhere-x86-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'win',
+            },
+            simulation_platform='win',
+            test_results_config='staging_server',
+        ),
+    'android-paeverywhere-arm64-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
+    'android-paeverywhere-arm64-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
+    'android-paeverywhere-arm-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
+    'android-paeverywhere-arm-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
     'Mac OpenSSL':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
