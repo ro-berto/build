@@ -1042,8 +1042,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'ios-simulator-coverage-exp':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator',
+                builder_group='chromium.fyi',
+                buildername='ios-simulator-coverage-exp',
             ),
         'ios-simulator-cronet':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1057,8 +1057,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'ios-simulator-full-configs-coverage-exp':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator-full-configs',
+                builder_group='chromium.fyi',
+                buildername='ios-simulator-full-configs-coverage-exp',
             ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(

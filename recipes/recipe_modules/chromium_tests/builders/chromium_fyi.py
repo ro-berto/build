@@ -729,6 +729,42 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'ios-simulator-coverage-exp':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='ios',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
+    'ios-simulator-full-configs-coverage-exp':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='ios',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
     'android-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='android',
