@@ -91,13 +91,14 @@ def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
                                                    coverage_script)
   output_dir_name = 'clang_tot_coverage_report'
   output_dir_path = api.path['checkout'].join('out', output_dir_name)
+  build_dir = api.chromium.output_dir
   cmd_args = []
   cmd_args.extend(SAMPLE_TARGETS)
 
   for target in SAMPLE_TARGETS:
-    cmd_args.extend(['-c', api.path['checkout'].join('out', 'Release', target)])
+    cmd_args.extend(['-c', build_dir.join(target)])
 
-  cmd_args.extend(['-b', api.path['checkout'].join('out', 'Release')])
+  cmd_args.extend(['-b', build_dir])
   cmd_args.extend(['-o', output_dir_path])
 
   coverage_tools_dir_path = api.path['checkout'].join(
