@@ -1,7 +1,51 @@
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Utilities for declaring immutable attr types."""
+"""Utilities for declaring immutable attr types.
+
+This module provides `attrs` as a replacement for `attr.s` that has the
+following differences in behavior.
+* The attribute default values are validated when the class is defined,
+  rather than validation errors occurring when attempting to create on
+  object that uses the defaults.
+* Classes are created frozen, which prevents changing attribute values.
+* Classes are created slotted by default, which prevents being able to
+  assign to undeclared attributes.
+* Parentheses must be used in the decorator even if no arguments are
+  specified.
+
+It provides the following functions for defining attribute values on a
+class:
+* `attrib` - An attribute with an enforced type.
+* `enum_attrib` - An attribute that takes on a fixed set of values.
+* `sequence_attrib` - An attribute that takes a sequence of values,
+  optionally enforcing the type of elements of the sequence. The value
+  is converted to a tuple.
+* `command_args_attrib` - An attribute that takes a sequence of values,
+  enforcing that all values are of a type that can be passed to the step
+  API. The value is converted to a `tuple`.
+* `mapping_attrib` - An attribute that takes a mapping of keys to
+  values, optionally enforcing the type of keys and/or values. The value
+  is converted to a `FrozenDict`.
+
+All of the functions for defining attributes accept a `default` argument
+that has the same behavior:
+* If `default` is not specified, the attribute is required: a value must
+  be provided for the attribute when creating an object.
+* If `default` is `None`, the attribute is optional: a value does not
+  need to be provided for the attribute when creating an object. `None`
+  is an acceptable value in addition to any other values allowed by the
+  attribute and will be the default value.
+* If `default` is not `None`, the attribute is optional: a value does
+  not need to be provided for the attribute when creating an object.
+  Values for the attribute will always conform to the definition; the
+  attribute's default value will be used if provided the value `None`.
+
+The following additional utilities are provided:
+* `cached_property` - Like property, but will only be executed once.
+* `FieldMapping` - Mixin to provide dict-like access to a class defined
+  with `attrs`.
+"""
 
 import collections
 import sys
@@ -45,6 +89,12 @@ def _attrib(default, validator, converter=None):
     validator = validators.optional(validator)
     if converter is not None:
       converter = converters.optional(converter)
+  elif default is not attr.NOTHING:
+    wrapped_converter = converter or (lambda x: x)
+
+    def converter(x):
+      return wrapped_converter(converters.default_if_none(default)(x))
+
   return attr.ib(default=default, validator=validator, converter=converter)
 
 
@@ -52,12 +102,11 @@ def attrib(type_, default=attr.NOTHING):
   """Declare an immutable scalar attribute.
 
   Arguments:
-    type_ - The type of the attribute. Attempting to assign a value that is not
-      an instance of type_ will fail (except None if default is None).
-    default - The default value of the attribute. If no default is specified,
-      the attribute must be explicitly initialized when creating an object. If
-      default is None, None will also be considered an acceptable value for the
-      attribute. Otherwise, default must be an instance of type_.
+    * type_ - The type of the attribute. Attempting to assign a value
+      that is not an instance of type_ will fail (except None if default
+      is None).
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
   """
   assert type_ is not None
   validator = _instance_of(type_)
@@ -65,16 +114,15 @@ def attrib(type_, default=attr.NOTHING):
 
 
 def enum_attrib(values, default=attr.NOTHING):
-  """Declare an immutable attribute that can take one of a fixed set of values.
+  """Declare an immutable attribute that can take one of a fixed set of
+  values.
 
   Arguments:
-    values - A container containing the allowed values of the attributes.
-      Attempting to assign a value that is not in values will fail (except None
-      if default is None).
-    default - The default value of the attribute. If no default is specified,
-      the attribute must be explicitly initialized when creating an object. If
-      default is None, None will also be considered an acceptable value for the
-      attribute. Otherwise, default must be a value in values.
+    * values - A container containing the allowed values of the
+      attributes. Attempting to assign a value that is not in values
+      will fail (except None if default is None).
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
   """
   values = tuple(values)
   validator = validators.in_(values)
@@ -88,17 +136,15 @@ def _null_validator(obj, attribute, value):
 def sequence_attrib(member_type=None, default=attr.NOTHING):
   """Declare an immutable attribute containing a sequence of values.
 
-  The value will be converted to a tuple. Attempting to assign a value that is
-  not iterable will fail (except None if default is None).
+  The value will be converted to a tuple. Attempting to assign a value
+  that is not iterable will fail (except None if default is None).
 
   Arguments:
-    member_type - The type of all contained elements of the attribute. If
-      provided, attempting to assign a value with elements that are not
-      instances of member_type will fail.
-    default - The default value of the attribute. If no default is specified,
-      the attribute must be explicitly initialized when creating an object. If
-      default is None, None will also be considered an acceptable value for the
-      attribute. Otherwise, default must be an iterable value.
+    * member_type - The type of all contained elements of the attribute.
+      If provided, attempting to assign a value with elements that are
+      not instances of member_type will fail.
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
   """
   member_validator = _null_validator
   if member_type is not None:
@@ -119,16 +165,14 @@ def sequence_attrib(member_type=None, default=attr.NOTHING):
 def command_args_attrib(default=attr.NOTHING):
   """Declare an immutable attribute containing a sequence of arguments.
 
-  The value will be converted to a tuple. Attempting to assign a value that is
-  not iterable will fail (except None if default is None). The allowable values
-  for elements of the iterable are the same as for the command line for a call
-  to the step api.
+  The value will be converted to a tuple. Attempting to assign a value
+  that is not iterable will fail (except None if default is None). The
+  allowable values for elements of the iterable are the same as for the
+  command line for a call to the step api.
 
   Arguments:
-    default - The default value of the attribute. If no default is specified,
-      the attribute must be explicitly initialized when creating an object. If
-      default is None, None will also be considered an acceptable value for the
-      attribute. Otherwise, default must be an iterable value.
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
   """
   # The set of allowed types should be kept in sync with the types allowed by
   # _validate_cmd_list in
@@ -140,21 +184,20 @@ def command_args_attrib(default=attr.NOTHING):
 def mapping_attrib(key_type=None, value_type=None, default=attr.NOTHING):
   """Declare an immutable attribute containing a mapping of values.
 
-  The value will be converted to a FrozenDict (with all contained keys and
-  values being converted to an immutable type via freeze). Attempting to assign
-  a value that cannot be used to initialize a dict will fail.
+  The value will be converted to a FrozenDict (with all contained keys
+  and values being converted to an immutable type via freeze).
+  Attempting to assign a value that cannot be used to initialize a dict
+  will fail.
 
   Arguments:
-    key_type - The type of all contained keys of the attribute. If provided,
-      attempting to assign a value with keys that are not instances of key_type
-      will fail.
-    value_type - The type of all contained values of the attribute. If provided,
-      attempting to assign a value with values that are not instances of
-      value_type will fail.
-    default - The default value of the attribute. If no default is specified,
-      the attribute must be explicitly initialized when creating an object. If
-      default is None, None will also be considered an acceptable value for the
-      attribute. Otherwise, default must be a value that can initialize a dict.
+    * key_type - The type of all contained keys of the attribute. If
+      provided, attempting to assign a value with keys that are not
+      instances of key_type will fail.
+    * value_type - The type of all contained values of the attribute. If
+      provided, attempting to assign a value with values that are not
+      instances of value_type will fail.
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
   """
   if default not in _SPECIAL_DEFAULTS:
     default = freeze(dict(default))

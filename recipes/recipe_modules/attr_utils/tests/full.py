@@ -50,6 +50,10 @@ def RunSteps(api):
   x = AttribTest(required='required', optional=None)
   api.assertions.assertIsNone(x.optional)
 
+  # test None value for attribute with non-None default results in default
+  x = AttribTest(required='required', default=None)
+  api.assertions.assertEqual(x.default, 'default')
+
   # enum_attrib ****************************************************************
   @attr.s(frozen=True)
   class EnumAttribTest(object):
