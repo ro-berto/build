@@ -377,6 +377,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     if not self.m.profiles.profile_subdirs:  # pragma: no cover.
+      self.m.python.succeeding_step(
+          'skip processing coverage data because no profile data collected', '')
       return
 
     with self.m.step.nest(
