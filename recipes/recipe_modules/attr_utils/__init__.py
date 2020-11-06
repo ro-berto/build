@@ -29,6 +29,7 @@ class:
 * `mapping_attrib` - An attribute that takes a mapping of keys to
   values, optionally enforcing the type of keys and/or values. The value
   is converted to a `FrozenDict`.
+* `callable_attrib` - An attribute that takes a callable object.
 
 All of the functions for defining attributes accept a `default` argument
 that has the same behavior:
@@ -231,6 +232,16 @@ def mapping_attrib(key_type=None, value_type=None, default=_NOTHING):
       value_validator=value_validator)
   converter = freeze
   return _attrib(default, validator, converter)
+
+
+def callable_attrib(default=_NOTHING):
+  """Declare an immutable attribute containing a callable object.
+
+  Arguments:
+    * default - The default value of the attribute. See module
+      documentation for description of the default behavior.
+  """
+  return _attrib(default, validator=validators.is_callable())
 
 
 @attr.s(frozen=True)

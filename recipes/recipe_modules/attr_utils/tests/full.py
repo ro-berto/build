@@ -10,7 +10,7 @@ from recipe_engine.types import FrozenDict
 from recipe_engine.util import Placeholder
 
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
-                                             cached_property,
+                                             cached_property, callable_attrib,
                                              command_args_attrib, enum_attrib,
                                              mapping_attrib, sequence_attrib)
 
@@ -32,14 +32,14 @@ def RunSteps(api):
     AttribTest()
 
   message_fragment = "No value provided for required attribute 'required'"
-  api.assertions.assertIn(message_fragment, caught.exception.message)
+  api.assertions.assertIn(message_fragment, str(caught.exception))
 
   # test validation of attribute type
   with api.assertions.assertRaises(TypeError) as caught:
     AttribTest(required=1)
   message = (
       "'required' must be <type 'basestring'> (got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test value and defaults
   x = AttribTest(required='required')
@@ -65,7 +65,7 @@ def RunSteps(api):
     RequiredTest()
 
   message = "No value provided for required attribute 'required'"
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
   x = RequiredTest(required='required')
@@ -80,7 +80,7 @@ def RunSteps(api):
   with api.assertions.assertRaises(ValueError) as caught:
     EnumAttribTest(value=4)
   message = "'value' must be in (1, 2, 3) (got 4)"
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
   x = EnumAttribTest(value=1)
@@ -96,14 +96,14 @@ def RunSteps(api):
   with api.assertions.assertRaises(TypeError) as caught:
     SequenceAttribTest(value=1)
   message = "'value' must be <type 'tuple'> (got 1 that is a <type 'int'>)."
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
     SequenceAttribTest(value=[1, 2, 3], typed=[4, 5, 6])
   message = ("'typed' members must be <type 'basestring'> "
              "(got 4 that is a <type 'int'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
   x = SequenceAttribTest(value=[1, 2, 3], typed=['4', '5', '6'])
@@ -120,7 +120,7 @@ def RunSteps(api):
     CommandArgsAttribTest([[]])
 
   api.assertions.assertEqual(
-      caught.exception.message,
+      str(caught.exception),
       ("'args' members must be (<type 'int'>, <type 'long'>, "
        "<type 'basestring'>, <class 'recipe_engine.config_types.Path'>, "
        "<class 'recipe_engine.util.Placeholder'>) "
@@ -146,21 +146,21 @@ def RunSteps(api):
     MappingAttribTest(value=1)
   message = ("'value' must be <class 'recipe_engine.types.FrozenDict'> "
              "(got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of types of mapping keys
   with api.assertions.assertRaises(TypeError) as caught:
     MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={1: 1})
   message = ("'typed' keys must be <type 'basestring'> "
              "(got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of types of mapping values
   with api.assertions.assertRaises(TypeError) as caught:
     MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={'a': 'a'})
   message = (
       "'typed' values must be <type 'int'> (got 'a' that is a <type 'str'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
   x = MappingAttribTest(
@@ -178,6 +178,24 @@ def RunSteps(api):
   api.assertions.assertEqual(x.value, FrozenDict({1: 1, 2: 2, 3: 3}))
   api.assertions.assertEqual(x.typed, FrozenDict({'4': 4, '5': 5, '6': 6}))
 
+  # callable_attrib ************************************************************
+  def test_callback():
+    print 'foo'  # pragma: no cover
+
+  @attr.s(frozen=True)
+  class CallableAttribTest(object):
+    callback = callable_attrib()
+
+  # test validation of attribute value
+  with api.assertions.assertRaises(TypeError) as caught:
+    CallableAttribTest(callback='x')
+  message = "'callback' must be callable (got 'x' that is a <type 'str'>)."
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  # test successful validation
+  x = CallableAttribTest(callback=test_callback)
+  api.assertions.assertEqual(x.callback, test_callback)
+
   # attrs **********************************************************************
   with api.assertions.assertRaises(TypeError) as caught:
 
@@ -187,7 +205,7 @@ def RunSteps(api):
 
   message = ("default for 'x' must be <type 'basestring'> "
              "(got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   @attrs()
   class AttrsTest(object):
