@@ -36,8 +36,7 @@ def RunSteps(api):
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
-  test_spec = steps.SwarmingIsolatedScriptTestSpec.create('base_unittests')
-  test = test_spec.get_test()
+  test = steps.SwarmingIsolatedScriptTest('base_unittests')
 
   test_options = steps.TestOptions()
   test.test_options = test_options

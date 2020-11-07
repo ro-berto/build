@@ -33,8 +33,7 @@ def config(name,
       'execution_mode': bot_spec.COMPILE_AND_TEST,
       'test_results_config': 'staging_server',
       'test_specs': {
-          bot_spec.TestSpec.create(
-              steps.SizesStep, results_url=RESULTS_URL, perf_id=name)
+          bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, name)
       },
       'simulation_platform': 'linux',
   }
@@ -198,10 +197,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWinOfficial')
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWinOfficial')
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -225,10 +222,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWinThinLTO64')
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWinThinLTO64')
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -329,8 +324,7 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
-                bot_spec.TestSpec.create(
-                    steps.SizesStep, results_url=RESULTS_URL, perf_id='ToTMac')
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, 'ToTMac')
             },
         ),
     'ToTMacOfficial':
@@ -355,10 +349,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTMacOfficial')
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTMacOfficial')
             },
         ),
     'ToTMac (dbg)':
@@ -375,10 +367,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='mac',
             test_specs={
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTMac (dbg)')
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTMac (dbg)')
             },
         ),
     'ToTMacASan':
@@ -410,8 +400,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep, results_url=RESULTS_URL, perf_id='ToTWin'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin'),
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -434,10 +424,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWin(dbg)'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin(dbg)'),
             ],
         ),
     'ToTWin(dll)':
@@ -454,10 +442,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWin(dll)'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin(dll)'),
             ],
         ),
     'ToTWin64':
@@ -475,10 +461,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWin64'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64'),
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -515,10 +499,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWin64(dbg)'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64(dbg)'),
             ],
         ),
     'ToTWin64(dll)':
@@ -535,10 +517,8 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
             test_specs=[
-                bot_spec.TestSpec.create(
-                    steps.SizesStep,
-                    results_url=RESULTS_URL,
-                    perf_id='ToTWin64(dll)'),
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64(dll)'),
             ],
         ),
 }
