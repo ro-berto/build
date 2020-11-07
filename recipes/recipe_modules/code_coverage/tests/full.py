@@ -47,35 +47,35 @@ def RunSteps(api):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
 
-  tests = [
-      steps.LocalIsolatedScriptTest('checkdeps'),
+  test_specs = [
+      steps.LocalIsolatedScriptTestSpec.create('checkdeps'),
       # Binary name equals target name.
-      steps.SwarmingGTestTest('base_unittests'),
+      steps.SwarmingGTestTestSpec.create('base_unittests'),
       # Binary name is different from target name.
-      steps.SwarmingGTestTest('xr_browser_tests'),
+      steps.SwarmingGTestTestSpec.create('xr_browser_tests'),
       # There is no binary, such as Python tests.
-      steps.SwarmingGTestTest('telemetry_gpu_unittests'),
-      steps.SwarmingIsolatedScriptTest(
+      steps.SwarmingGTestTestSpec.create('telemetry_gpu_unittests'),
+      steps.SwarmingIsolatedScriptTestSpec.create(
           'blink_web_tests',
           merge=chromium_swarming.MergeScript.create(
               script=api.path['start_dir'].join('coverage', 'tests',
                                                 'merge_blink_web_tests.py'),
               args=['random', 'args'],
           )),
-      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests_module'),
-      steps.SwarmingIsolatedScriptTest('ios_web_view_inttests')
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          'ios_chrome_smoke_eg2tests_module'),
+      steps.SwarmingIsolatedScriptTestSpec.create('ios_web_view_inttests')
   ]
+  tests = [s.get_test() for s in test_specs]
   assert _NUM_TESTS == len(tests)
 
   for test in tests:
     step = test.name
     api.profiles.profile_dir(step)
-    # Protected access ok here, as this is normally done by the test object
-    # itself.
     api.code_coverage.shard_merge(
         step,
         test.target_name,
-        additional_merge=getattr(test, '_merge', None),
+        additional_merge=getattr(test.spec, 'merge', None),
         skip_validation=True,
         sparse=True)
 

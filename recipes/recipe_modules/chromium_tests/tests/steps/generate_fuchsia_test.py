@@ -30,15 +30,16 @@ def RunSteps(api):
   update_step = api.bot_update.ensure_checkout()
 
   single_spec = api.properties.get('single_spec')
-  test_spec = {
+  source_side_spec = {
       'test_buildername': {
           'gtest_tests': [single_spec] if single_spec else [],
       }
   }
 
-  for test in generators.generate_gtests(api, api.chromium_tests, 'test_group',
-                                         'test_buildername', test_spec,
-                                         update_step):
+  for test_spec in generators.generate_gtests(api, api.chromium_tests,
+                                              'test_group', 'test_buildername',
+                                              source_side_spec, update_step):
+    test = test_spec.get_test()
     test.run(api, '')
 
 

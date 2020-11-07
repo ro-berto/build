@@ -21,10 +21,11 @@ def RunSteps(api):
 
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
 
-  test = steps.LocalIsolatedScriptTest(
+  test_spec = steps.LocalIsolatedScriptTestSpec.create(
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'),
       isolate_coverage_data=isolate_coverage_data)
+  test = test_spec.get_test()
 
   assert not test.is_gtest and not test.runs_on_swarming
 

@@ -28,8 +28,9 @@ def RunSteps(api):
   api.chromium_android.set_config('main_builder')
   api.chromium_checkout.ensure_checkout()
 
-  test = steps.AndroidJunitTest(
+  test_spec = steps.AndroidJunitTestSpec.create(
       'test_name', target_name=api.properties.get('target_name'))
+  test = test_spec.get_test()
 
   api.chromium.compile(targets=test.compile_targets(), name='compile')
 
@@ -39,9 +40,9 @@ def RunSteps(api):
     assert test.has_valid_results('')
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: %r' % test.compile_targets(),
-        'failures: %r' % test.failures(''),
-        'uses_local_devices: %r' % test.uses_local_devices,
+        'compile_targets: {!r}'.format(test.compile_targets()),
+        'failures: {!r}'.format(test.failures('')),
+        'uses_local_devices: {!r}'.format(test.uses_local_devices),
     ]
 
 

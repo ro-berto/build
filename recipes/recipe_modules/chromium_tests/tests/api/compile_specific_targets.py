@@ -33,7 +33,8 @@ BUILDERS = {
 def RunSteps(api):
   tests = []
   if api.properties.get('swarming_gtest'):
-    tests.append(steps.SwarmingGTestTest('base_unittests'))
+    tests.append(
+        steps.SwarmingGTestTestSpec.create('base_unittests').get_test())
 
   builder_id = api.chromium.get_builder_id()
   if api.tryserver.is_tryserver and builder_id in api.chromium_tests.trybots:

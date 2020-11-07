@@ -20,7 +20,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  test = steps.LocalGTestTest('base_unittests')
+  test = steps.LocalGTestTestSpec.create('base_unittests').get_test()
 
   test_options = steps.TestOptions(
       repeat_count=2, test_filter=['foo.bar'], retry_limit=3, run_disabled=True)

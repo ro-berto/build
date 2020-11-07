@@ -18,12 +18,12 @@ DEPS = [
 
 
 def RunSteps(api):
-  tests = []
+  test_specs = []
   if api.properties.get('local_gtest'):
-    tests.append(steps.LocalGTestTest('base_unittests'))
+    test_specs.append(steps.LocalGTestTestSpec.create('base_unittests'))
   if api.properties.get('swarming_gtest'):
-    tests.append(
-        steps.SwarmingGTestTest(
+    test_specs.append(
+        steps.SwarmingGTestTestSpec.create(
             'base_unittests',
             set_up=[
                 steps.SetUpScript.create(
@@ -38,8 +38,8 @@ def RunSteps(api):
                     args=[])
             ]))
   if api.properties.get('local_isolated_script_test'):
-    tests.append(
-        steps.LocalIsolatedScriptTest(
+    test_specs.append(
+        steps.LocalIsolatedScriptTestSpec.create(
             'base_unittests',
             set_up=[
                 steps.SetUpScript.create(
@@ -55,10 +55,11 @@ def RunSteps(api):
             ],
             override_compile_targets=['base_unittests_run']))
   if api.properties.get('script_test'):
-    tests.append(
-        steps.ScriptTest(
+    test_specs.append(
+        steps.ScriptTestSpec.create(
             'script_test',
-            'script.py', {'script.py': ['compile_target']},
+            script='script.py',
+            all_compile_targets={'script.py': ['compile_target']},
             script_args=['some', 'args'],
             override_compile_targets=['other_target']))
   if api.tryserver.is_tryserver:
@@ -69,6 +70,7 @@ def RunSteps(api):
     bot_ids = [api.chromium.get_builder_id()]
   bot_config_object = api.chromium_tests.create_bot_config_object(bot_ids)
   api.chromium_tests.configure_build(bot_config_object)
+  tests = [s.get_test() for s in test_specs]
   with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests=tests):
     pass
 

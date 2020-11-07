@@ -56,14 +56,14 @@ def RunSteps(api):
   }
   if platform == 'simulator':
     task['test']['host os'] = 'other-dummy-OS'
-  test = steps.SwarmingIosTest(
+  test_spec = steps.SwarmingIosTestSpec.create(
       'swarming_service_account',
       platform,
       config,
       task,
       upload_test_results=True,
-      result_callback=result_callback,
-      use_test_data=True)
+      result_callback=result_callback)
+  test = test_spec.get_test()
   assert test.runs_on_swarming
 
   test.pre_run(api, '')

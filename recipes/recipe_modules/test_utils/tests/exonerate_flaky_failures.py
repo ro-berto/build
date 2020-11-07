@@ -36,28 +36,30 @@ PROPERTIES = {
 
 def RunSteps(api, known_flakes_expectations, exclude_failed_test,
              has_too_many_failures):
-  tests = [
-      steps.MockTest(name='succeeded_test'),
-      steps.MockTest(
+  test_specs = [
+      steps.MockTestSpec.create(name='succeeded_test'),
+      steps.MockTestSpec.create(
           name='invalid_test', runs_on_swarming=True, has_valid_results=False),
   ]
 
   if not exclude_failed_test:
-    tests.append(
-        steps.MockTest(
+    test_specs.append(
+        steps.MockTestSpec.create(
             name='failed_test',
             runs_on_swarming=True,
             per_suffix_failures={'with patch': ['testA', 'testB']},
         ))
 
   if has_too_many_failures:
-    tests.append(
-        steps.MockTest(
+    test_specs.append(
+        steps.MockTestSpec.create(
             name='too_many_failures',
             runs_on_swarming=True,
             per_suffix_failures={
                 'with patch': ['test%d' % i for i in range(1000)]
             }))
+
+  tests = [s.get_test() for s in test_specs]
 
   api.test_utils.run_tests(
       api.chromium_tests.m,

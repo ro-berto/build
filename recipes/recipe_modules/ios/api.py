@@ -1099,9 +1099,11 @@ class iOSApi(recipe_api.RecipeApi):
         return None
 
     self._ensure_xcode_version(task)
-    return steps.SwarmingIosTest(self.swarming_service_account, self.platform,
-                                 self.__config, task, upload_test_results,
-                                 result_callback, self._test_data.enabled)
+    test_spec = steps.SwarmingIosTestSpec.create(self.swarming_service_account,
+                                                 self.platform, self.__config,
+                                                 task, upload_test_results,
+                                                 result_callback)
+    return test_spec.get_test()
 
   def collect(self, triggered_tests):
     failures = set()

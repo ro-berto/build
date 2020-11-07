@@ -81,8 +81,10 @@ def BuildSpec(config_name,
   # TODO (crbug.com/953108): do not run test for chromeos for now
   if run_sizes and not platform in ('android', 'chromeos'):
     test_specs = [
-        bot_spec.TestSpec.create(steps.SizesStep,
-                                 'https://chromeperf.appspot.com', config_name)
+        bot_spec.TestSpec.create(
+            steps.SizesStep,
+            results_url='https://chromeperf.appspot.com',
+            perf_id=config_name)
     ]
 
   kwargs = _common_kwargs(
