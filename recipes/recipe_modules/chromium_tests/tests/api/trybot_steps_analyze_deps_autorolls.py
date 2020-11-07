@@ -106,6 +106,7 @@ def GenTests(api):
                                     tester='retry-shards-test',
                                 ),
                             ],
+                            analyze_deps_autorolls=True,
                         ),
                 }
             })),
@@ -123,143 +124,67 @@ def GenTests(api):
                     }],
                 },
             }),
-        api.override_step_data(
-            'base_unittests (with patch)',
-            api.chromium_swarming.canned_summary_output(
-                api.test_utils.canned_gtest_output(False), failure=True)),
-        api.override_step_data(
-            'base_unittests (retry shards with patch)',
-            api.chromium_swarming.canned_summary_output(
-                api.test_utils.canned_gtest_output(False), failure=True)),
-        api.override_step_data(
-            'base_unittests (without patch)',
-            api.chromium_swarming.canned_summary_output(
-                api.test_utils.canned_gtest_output(True), failure=False)),
+        api.override_step_data('read filter exclusion spec',
+                               deps_exclusion_spec()),
+        api.override_step_data('gerrit fetch current CL info', cl_info()),
+        api.override_step_data('git diff to analyze patch',
+                               api.raw_io.stream_output('DEPS')),
     ], api.empty_test_data())
 
   yield api.test(
-      'analyze deps checker pass',
+      'analyze deps checker with dependency',
       common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
       api.override_step_data(
           'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
           api.raw_io.stream_output(deps_changes)),
       api.override_step_data(
-          'Analyze DEPS autorolls.analyze',
+          'analyze',
           api.json.output({
               'status': 'Found dependency',
               'compile_targets': ['base_unittests'],
               'test_targets': ['base_unittests'],
           })),
-      api.post_process(
-          post_process.StepSuccess,
-          'Analyze DEPS autorolls correctness check.Analyze DEPS correct'),
+      api.post_process(post_process.StepSuccess, 'base_unittests (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'analyze deps checker no dependency',
+      common_props(),
+      api.override_step_data(
+          'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
+          api.raw_io.stream_output(deps_changes)),
+      api.override_step_data(
+          'analyze',
+          api.json.output({
+              'status': 'No dependency',
+              'compile_targets': [],
+              'test_targets': [],
+          })),
+      api.post_process(post_process.DoesNotRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'analyze deps checker empty affected',
       common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
       api.override_step_data(
           'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
           api.raw_io.stream_output('')),
       api.post_process(post_process.StepSuccess, 'Analyze DEPS autorolls.Skip'),
+      api.post_process(post_process.StepSuccess, 'base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'analyze deps checker empty analyze',
+      'analyze deps infra fail',
       common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
-      api.override_step_data(
-          'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
-          api.raw_io.stream_output(deps_changes)),
-      api.override_step_data(
-          'Analyze DEPS autorolls.analyze',
-          api.json.output({
-              'status': 'No dependency',
-              'compile_targets': [],
-              'test_targets': [],
-          })),
-      api.post_process(
-          post_process.StepSuccess,
-          'Analyze DEPS autorolls correctness check.Analyze DEPS miss'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # make it run some suite other than the one that fails
-  yield api.test(
-      'analyze deps checker fail',
-      common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
-      api.override_step_data(
-          'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
-          api.raw_io.stream_output(deps_changes)),
-      api.override_step_data(
-          'Analyze DEPS autorolls.analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['not_base_unittests'],
-              'test_targets': ['not_base_unittests'],
-          })),
-      api.post_process(
-          post_process.StepSuccess,
-          'Analyze DEPS autorolls correctness check.Analyze DEPS miss'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'analyze deps checker infra fail',
-      common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
       api.override_step_data(
           'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
           retcode=1,
       ),
       api.post_process(post_process.StepSuccess,
                        'Analyze DEPS autorolls.error'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'analyze deps checker invalid results',
-      common_props(),
-      api.override_step_data('read filter exclusion spec',
-                             deps_exclusion_spec()),
-      api.override_step_data('gerrit fetch current CL info', cl_info()),
-      api.override_step_data('git diff to analyze patch',
-                             api.raw_io.stream_output('DEPS')),
-      api.override_step_data(
-          'Analyze DEPS autorolls.gclient recursively git diff all DEPS',
-          api.raw_io.stream_output(deps_changes)),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.post_process(post_process.DoesNotRun,
-                       'Analyze DEPS autorolls correctness check'),
+      api.post_process(post_process.StepSuccess, 'base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
