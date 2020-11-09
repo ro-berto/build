@@ -368,8 +368,12 @@ class IndexPack(object):
               ProtoTarget(target, self.root_dir, self.out_dir))
 
   def _IsProtoTarget(self, target):
-    return ('script' in target and
-            target['script'].endswith('/protoc_wrapper.py'))
+    if 'script' not in target:
+      return False
+    script = target['script']
+    if script.endswith('/python2_action.py') and len(target['args']) > 0:
+      script = target['args'][0]
+    return script.endswith('/protoc_wrapper.py')
 
   def _IsMojomTarget(self, gn_target):
     """Predicate to check if a GN target is a Mojom target.
