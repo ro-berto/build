@@ -128,6 +128,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-lollipop-arm-rel',
+                analyze_deps_autorolls=True,
             ),
         'android-marshmallow-arm64-rel':
             try_spec.TrySpec.create([
