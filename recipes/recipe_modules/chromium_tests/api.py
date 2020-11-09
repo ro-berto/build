@@ -779,19 +779,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
         builder_id = builder_id or self.m.chromium.get_builder_id()
-        use_goma = self._use_goma()
+        use_goma_module = self._use_goma()
         self.m.chromium.mb_gen(
             builder_id,
             phase=mb_phase,
             mb_config_path=mb_config_path,
-            use_goma=use_goma,
+            use_goma=use_goma_module,
             isolated_targets=isolated_targets,
             name='generate_build_files%s' % name_suffix,
             recursive_lookup=mb_recursive_lookup,
             android_version_code=android_version_code,
             android_version_name=android_version_name)
-        if use_goma:
-          use_goma_module = True
 
       # gn_logs.txt contains debug info for vars with smart defaults. Display
       # its contents in the build for easy debugging.
