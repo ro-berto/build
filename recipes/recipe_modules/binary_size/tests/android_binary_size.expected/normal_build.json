@@ -1056,7 +1056,7 @@
       "----",
       "cp",
       "gs://chromium-binary-size-trybot-results/android-binary-size/commit_size_analysis/1454371200_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip",
-      "[CLEANUP]/tmp_tmp_2"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1074,7 +1074,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "Unzipping tot analysis",
-    "stdin": "{\"output\": \"[CLEANUP]/binary-size-trybot_tmp_1/without_patch\", \"quiet\": false, \"zip_file\": \"[CLEANUP]/tmp_tmp_2\"}"
+    "stdin": "{\"output\": \"[CLEANUP]/binary-size-trybot_tmp_1/without_patch\", \"quiet\": false, \"zip_file\": \"[CLEANUP]/tmp_tmp_1\"}"
   },
   {
     "cmd": [

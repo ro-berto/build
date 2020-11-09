@@ -856,7 +856,7 @@
       "-task-output-stdout",
       "json",
       "-output-dir",
-      "[CLEANUP]/swarming-output_tmp_2",
+      "[CLEANUP]/swarming-output_tmp_1",
       "-timeout",
       "30m",
       "0"

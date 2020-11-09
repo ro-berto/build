@@ -340,7 +340,7 @@
     "cmd": [
       "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
       "--output",
-      "[CLEANUP]/tmp_tmp_2/sub_build.pb",
+      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
       "--",
       "vpython",
       "-u",
@@ -358,13 +358,13 @@
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_3",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
       "NOCONTROL_GOMA": "1",
       "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
-      "TEMP": "[CLEANUP]/tmp_tmp_3",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_3",
-      "TMP": "[CLEANUP]/tmp_tmp_3",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_3"
+      "TEMP": "[CLEANUP]/tmp_tmp_2",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
+      "TMP": "[CLEANUP]/tmp_tmp_2",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

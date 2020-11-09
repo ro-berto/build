@@ -1025,7 +1025,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0_tmp_2",
+      "[CLEANUP]/0_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",

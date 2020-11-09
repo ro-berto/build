@@ -338,7 +338,7 @@
       "/path/to/tmp/json",
       "copy",
       "\nvars = {\n  'chromium_git': 'https://chromium.googlesource.com',\n  'v8_revision': 'deadbeef',\n}\n\ndeps = {\n  'src/v8':\n    Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),\n}\n",
-      "[CLEANUP]/local_tmp_2/DEPS"
+      "[CLEANUP]/local_tmp_1/DEPS"
     ],
     "infra_step": true,
     "name": "local",
@@ -363,7 +363,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "getdep",
       "--var=v8_revision",
-      "--deps-file=[CLEANUP]/local_tmp_2/DEPS"
+      "--deps-file=[CLEANUP]/local_tmp_1/DEPS"
     ],
     "env_suffixes": {
       "PATH": [
