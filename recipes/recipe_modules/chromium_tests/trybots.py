@@ -139,7 +139,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                     builder_group='chromium.gpu',
                     buildername='Android Release (Nexus 5X)',
                 ),
-            ]),
+            ],
+            analyze_deps_autorolls=True,
+            ),
         'android-marshmallow-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -164,6 +166,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-pie-arm64-rel',
+                analyze_deps_autorolls=True,
             ),
         'android-pie-arm64-wpt-rel-non-cq':
             try_spec.TrySpec.create_for_single_mirror(
