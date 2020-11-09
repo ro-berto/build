@@ -966,8 +966,8 @@ class iOSApi(recipe_api.RecipeApi):
               test,
               tmp_dir,
               isolate_template,
-              sublist,
               scripts_dir,
+              test_cases=sublist,
               shard_num=i))
       tasks[-1]['buildername'] = bot
     return tasks
