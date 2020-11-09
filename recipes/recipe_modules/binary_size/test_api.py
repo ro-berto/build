@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_test_api
+from PB.recipe_modules.build.binary_size import properties as properties_pb
 
 from . import constants
 
@@ -10,6 +11,8 @@ from . import constants
 class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
 
   def properties(self, **kwargs):
+    for key in kwargs:
+      assert hasattr(properties_pb.InputProperties, key)
     return self.m.properties(**{'$build/binary_size': kwargs})
 
   def build(self, commit_message='message', size_footer=False, **kwargs):
@@ -45,3 +48,15 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
                                 self.m.json.output(footer_json)),
         self.m.time.seed(constants.TEST_TIME),
     ], self.empty_test_data())
+
+  def on_significant_binary_package_restructure(self):
+    return self.override_step_data(
+        constants.READ_SIZE_CONFIG_JSON_STEP_NAME,
+        self.m.json.output({
+            'mapping_files': constants.TEST_MAPPING_FILES,
+            'resource_sizes_args': {
+                'apk_name': constants.TEST_SUPERSIZE_INPUT_FILE,
+            },
+            'supersize_input_file': constants.TEST_SUPERSIZE_INPUT_FILE,
+            'version': constants.TEST_VERSION_NEW,  # Change.
+        }))

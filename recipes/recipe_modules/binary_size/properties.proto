@@ -19,10 +19,15 @@ message InputProperties {
   // Android-specific properties.
   AndroidProperties android = 3;
 
+  // Location of size config JSON, relative to Chromium output dir.
+  // TODO(huangs): Add default value apks/MonochromePublic_size_config.json.
+  string size_config_json = 4;
+
   // Name of the GS bucket in which results should be saved.
-  string results_bucket = 4;
+  string results_bucket = 5;
 }
 
+// TODO(huangs): Deprecate and remove this.
 message AndroidProperties {
   // Filename of the built apk or .minimal.apks to measure.
   // Defaults to MonochromePublic.minimal.apks.

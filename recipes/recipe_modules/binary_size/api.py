@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 """Binary size analysis for patchsets."""
 
+import os
 import re
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -28,10 +29,66 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                 constants.DEFAULT_COMPILE_TARGETS)
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
-    self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
-    self._mapping_names = (
-        properties.android.mapping_names or
-        constants.DEFAULT_MAPPING_FILE_NAMES)
+
+    self._use_legacy_flow = not bool(properties.size_config_json)
+    if self._use_legacy_flow:
+      # TODO(huangs): Remove by mid 2020-11.
+      apk_name = (
+          properties.android.apk_name or constants.DEFAULT_PARAMS['apk_name'])
+      mapping_names = (
+          properties.android.mapping_names or
+          constants.DEFAULT_PARAMS['mapping_file_names'])
+      self._size_config_json = None
+      # Store into |_size_config| for compatibility. Files are specified
+      # relative to Chromium output directory.
+      self._size_config = {
+          'mapping_files': [
+              os.path.join('apks', name) for name in mapping_names
+          ],
+          'resource_sizes_args': None,
+          'supersize_input_file': os.path.join('apks', apk_name),
+          'version': constants.VERSION_LEGACY_FLOW,
+      }
+    else:  # The "upcoming flow".
+      # Path relative to chromium output directory.
+      self._size_config_json = properties.size_config_json
+      self._size_config = None  # Initialized in _ensure_size_config().
+
+  def _ensure_size_config(self):
+    """Load size config JSON if |_size_config| is not initialized.
+
+    Load from JSON cannot take place in __init__() because it's a step.
+    """
+    if not self._size_config:
+      path = self.m.chromium.output_dir.join(self._size_config_json)
+      step_result = self.m.json.read(
+          name=constants.READ_SIZE_CONFIG_JSON_STEP_NAME,
+          path=path,
+          step_test_data=lambda: self.m.json.test_api.output({
+              'mapping_files': constants.TEST_MAPPING_FILES,
+              'resource_sizes_args': {
+                  'apk_name': constants.TEST_SUPERSIZE_INPUT_FILE,
+              },
+              'supersize_input_file': constants.TEST_SUPERSIZE_INPUT_FILE,
+              'version': constants.TEST_VERSION_OLD,
+          }))
+      self._size_config = step_result.json.output
+
+  def _make_version_string(self, supersize_input_file, version):
+    """Helper to render version string."""
+    return os.path.basename(supersize_input_file) + ',' + version
+
+  def get_analysis_file_version_string(self):
+    """Returns a version string for uploaded gs:// files.
+
+    On significant binary package restructure (e.g., transitioning between
+    Monochrome and Trichrome), the latest "without change" results stored in
+    gs:// would be too stale to be used (i.e., recomputation is needed). This
+    function returns a version string for staleness tagging and detection.
+    """
+    self._ensure_size_config()
+    return self._make_version_string(self._size_config['supersize_input_file'],
+                                     self._size_config['version'])
 
   def android_binary_size(self,
                           chromium_config,
@@ -204,17 +261,24 @@ class BinarySizeApi(recipe_api.RecipeApi):
       staging_dir: Staging directory to pass input files and and retrieve output
         size analysis files (e.g., .size and size JSON files).
     """
+    self._ensure_size_config()
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
-    cmd = [generator_script, '--apk-name', self._apk_name]
-    for mapping_name in self._mapping_names:
-      cmd += ['--mapping-name', mapping_name]
-    cmd += [
-        '--staging-dir',
-        staging_dir,
-        '--chromium-output-directory',
-        self.m.chromium.output_dir,
-    ]
+    cmd = [generator_script]
+
+    if self._use_legacy_flow:
+      # The old arguments filename (not path), so apply os.path.basename().
+      cmd += [
+          '--apk-name',
+          os.path.basename(self._size_config['supersize_input_file']),
+      ]
+      for mapping_name in self._size_config['mapping_files']:
+        cmd += ['--mapping-name', os.path.basename(mapping_name)]
+    else:
+      assert self._size_config_json
+      cmd += ['--size-config-json', self._size_config_json]
+    cmd += ['--staging-dir', staging_dir]
+    cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
 
   def _parse_gs_zip_path(self, gs_zip_path):
@@ -226,21 +290,35 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
   def _check_for_recent_tot_analysis(self):
     gs_directory = 'android-binary-size/commit_size_analysis/'
-    gs_zip_path = self.m.gsutil.cat(
+
+    def generate_test_data():
+      yield ('android-binary-size/commit_size_analysis/'
+             '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
+                 constants.TEST_TIME))
+      yield self._make_version_string(constants.TEST_SUPERSIZE_INPUT_FILE,
+                                      constants.TEST_VERSION_OLD)
+
+    lines = self.m.gsutil.cat(
         'gs://{bucket}/{source}'.format(
             bucket=self.results_bucket, source=gs_directory + 'LATEST'),
         stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
-            'android-binary-size/commit_size_analysis/'
-            '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
-                constants.TEST_TIME)),
-        name='cat LATEST').stdout
-
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output('\n'.join(
+            generate_test_data())),
+        name='cat LATEST').stdout.splitlines()
+    gs_zip_path = lines[0]
     latest_upload_timestamp = self._parse_gs_zip_path(gs_zip_path)[0]
 
     # If the most recent upload was created over 2 hours ago, don't use it
     if int(self.m.time.time()) - int(latest_upload_timestamp) > 7200:
       return
+
+    # Detect significant binary package restructure between the latest gs://
+    # upload and the current CL. If detected, don't use the latest upload.
+    prev_analysis_file_version_string = lines[1] if len(lines) > 1 else None
+    if (prev_analysis_file_version_string !=
+        self.get_analysis_file_version_string()):
+      return
+
     return gs_zip_path
 
   def _download_recent_tot_analysis(self, gs_zip_path, staging_dir):
@@ -252,7 +330,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
         name='Downloading zip')
 
     results_dir = staging_dir.join('without_patch')
-
     self.m.zip.unzip('Unzipping tot analysis', local_zip, results_dir)
     return results_dir
 
@@ -374,26 +451,28 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,
                     staging_dir):
+    self._ensure_size_config()
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
-      self.m.step(
-          name='Generate diffs',
-          cmd=[checker_script] + [
-              '--author',
-              author,
-              '--apk-name',
-              self._apk_name,
-              '--before-dir',
-              before_dir,
-              '--after-dir',
-              after_dir,
-              '--results-path',
-              results_path,
-              '--staging-dir',
-              staging_dir,
-          ])
+      cmd = [checker_script]
+      cmd += ['--author', author]
+      if self._use_legacy_flow:
+        cmd += [
+            '--apk-name',
+            os.path.basename(self._size_config['supersize_input_file'])
+        ]
+      else:
+        cmd += [
+            '--size-config-json-name',
+            os.path.basename(self._size_config_json)
+        ]
+      cmd += ['--before-dir', before_dir]
+      cmd += ['--after-dir', after_dir]
+      cmd += ['--results-path', results_path]
+      cmd += ['--staging-dir', staging_dir]
+      self.m.step(name='Generate diffs', cmd=cmd)
 
   def _archive_artifact(self, staging_dir, filename):
     today = self.m.time.utcnow().date()
