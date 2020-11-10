@@ -93,6 +93,16 @@ class BotSpec(object):
           "The following fields are ignored unless 'execution_mode' is {!r}: {}"
           .format(COMPILE_AND_TEST, invalid_attrs))
 
+    chromium_config_kwargs = kwargs.get('chromium_config_kwargs', {})
+    target_platform = chromium_config_kwargs.get('TARGET_PLATFORM')
+    if target_platform != 'android':
+      invalid_attrs = get_filtered_attrs('android_config',
+                                         'android_apply_config')
+      assert not invalid_attrs, (
+          'The following fields are ignored unless '
+          "'chromium_config_kwargs[\"TARGET_PLATFORM\"]' "
+          "is set to 'android': {}".format(invalid_attrs))
+
     if not kwargs.get('archive_build'):
       invalid_attrs = get_filtered_attrs('gs_bucket', 'gs_acl', 'gs_build_name')
       assert not invalid_attrs, (

@@ -171,7 +171,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.test_results.set_config(bot_config.test_results_config or
                                    default_test_results_config)
 
-    if bot_config.android_config:
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.configure_from_properties(
           bot_config.android_config, **bot_config.chromium_config_kwargs)
 
