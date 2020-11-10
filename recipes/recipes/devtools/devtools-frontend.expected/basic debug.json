@@ -175,16 +175,22 @@
   },
   {
     "cmd": [
-      "rm",
-      "-rf",
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "clean",
       "[CACHE]/builder/devtools-frontend/out/Debug"
     ],
+    "cwd": "[CACHE]/builder/devtools-frontend/out/Debug",
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
-    "name": "clean debug"
+    "name": "clean outdir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text[gn output]@@@"
+    ]
   },
   {
     "cmd": [
