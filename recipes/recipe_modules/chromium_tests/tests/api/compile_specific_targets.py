@@ -15,13 +15,10 @@ DEPS = [
 ]
 
 BASIC_CONFIG = {
-    'android_config': 'main_builder_mb',
-    'chromium_config': 'chromium',
-    'chromium_config_kwargs': {
-        'TARGET_PLATFORM': 'android',
-    },
-    'gclient_config': 'chromium',
-    'test_results_config': 'public_server',
+  'android_config': 'main_builder_mb',
+  'chromium_config': 'chromium',
+  'gclient_config': 'chromium',
+  'test_results_config': 'public_server',
 }
 
 BUILDERS = {
