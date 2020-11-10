@@ -1744,6 +1744,20 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='win-swangle-x86',
             ),
     },
+    'tryserver.chromium.updater': {
+        'win-omaha-builder-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='win-omaha-builder-rel',
+                tester='win10-omaha-tester-rel',
+            ),
+        'mac-omaha-builder-rel':
+           try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='mac-omaha-builder-rel',
+                tester='mac10.13-omaha-tester-rel',
+            ),
+    },
     'tryserver.v8': {
         'v8_linux_blink_rel':
             try_spec.TrySpec.create_for_single_mirror(
