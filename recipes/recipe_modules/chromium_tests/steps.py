@@ -1,7 +1,38 @@
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+"""Classes for running different kinds of tests.
 
+This module contains two main class hierarchies: test specs and tests.
+Test specs are immutable objects that define the details of a specific
+test and can be used to create the test object, which actually knows how
+to execute a test. Test objects can also be decorated with test
+wrappers, which can modify the execution of the test.
+
+The class `TestSpecBase` is the root of the class hierarchy for test
+specs and test wrapper specs. It defines the single method `get_test`
+which is how the test or wrapped test is obtained from the spec.
+
+All test spec types inherit from `TestSpec`. `TestSpec` implements the
+`get_test` method in terms of the `test_class` property, which concrete
+subclasses must override to return the class of the test type. All test
+wrapper types inherit from `TestWrapperSpec`.`TestWrapperSpec`
+implements the `get_test` method in terms of the `test_wrapper_class`
+property, which concrete subclasses must override to return the class of
+the test wrapper type.
+
+The class `Test` is the root of the class hierarchy for tests and test
+wrappers. All test types inherit from `Test` and all test wrapper types
+inherit from `TestWrapper`, which are both abstract base classes. Each
+concrete test type or test wrapper type has an associated spec type that
+contains the input details for the test or test wrapper and is the only
+argument to the __init__ method of the test type or test wrapper type.
+Concrete test types set the associated spec type in the `SPEC_CLASS`
+class attribute to support being created via `bot_spec.TestSpec`.
+"""
+# TODO(gbeaty) Once bot_spec.TestSpec is gone, get rid of SPEC_CLASS
+
+import abc
 import collections
 import contextlib
 import copy
@@ -19,8 +50,10 @@ from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, command_args_attrib,
-                                             enum_attrib, mapping_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
+                                             callable_attrib,
+                                             command_args_attrib, enum_attrib,
+                                             mapping_attrib, sequence_attrib)
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -59,6 +92,8 @@ IOS_PRODUCT_TYPES = {
     'iPhone X': 'iPhone10,3',
     'iPhone 11': 'iPhone12,1',
 }
+
+ALLOWED_RESULT_HANDLER_NAMES = ('default', 'layout tests', 'fake')
 
 
 class TestOptions(object):
@@ -125,7 +160,7 @@ def _merge_args_and_test_options(test, args, options):
   Returns:
     The extended list of args.
   """
-  args = args[:]
+  args = list(args)
 
   if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or
           (isinstance(test,
@@ -241,6 +276,78 @@ class ResultDB(object):
     return resultdb
 
 
+class TestSpecBase(object):
+  """Abstract base class for specs for tests and wrapped tests."""
+
+  __metaclass__ = abc.ABCMeta
+
+  @abc.abstractmethod
+  def get_test(self):
+    """Get a test instance described by the spec.
+
+    Returns:
+      An instance of either a `Test` subclass or an instance of a
+      `TestWrapper` subclass.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+
+@attrs()
+class TestSpec(TestSpecBase):
+  """Abstract base class for specs for tests.
+
+  Attributes:
+    * name - The displayed name of the test.
+    * target_name - The ninja build target for the test, a key in
+      //testing/buildbot/gn_isolate_map.pyl, e.g. "browser_tests".
+    * full_test_target - A fully qualified Ninja target, e.g.
+      "//chrome/test:browser_tests".
+    * waterfall_builder_group - The matching waterfall builder group.
+      This value would be the builder group of the mirrored builder for
+      a try builder.
+    * waterfall_buildername - The matching waterfall builder name. This
+      value would be the name of the mirrored builder for a try builder.
+    * resultdb - The ResultDB integration configuration. If
+      `resultdb.enable` is not True, then ResultDB integration is
+      disabled.
+    * test_id_prefix: A prefix to be added to the test Id for the test
+      e.g.
+      "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
+  """
+
+  name = attrib(str)
+  target_name = attrib(str)
+  full_test_target = attrib(str, default=None)
+  waterfall_builder_group = attrib(str, default=None)
+  waterfall_buildername = attrib(str, default=None)
+  resultdb = attrib(ResultDB, default=ResultDB.create())
+  test_id_prefix = attrib(str, default=None)
+
+  @classmethod
+  def create(cls, name, **kwargs):
+    """Create a TestSpec.
+
+    Arguments:
+      * name - The name of the test. The returned spec will have this
+        value for name.
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec. If the
+        `target_name` keyword is not set, the `target_name` attribute of
+        the returned spec have the value of `name`.
+    """
+    kwargs['target_name'] = kwargs.get('target_name') or name
+    return cls(name=name, **kwargs)
+
+  @abc.abstractproperty
+  def test_class(self):
+    """The test class associated with the spec."""
+    raise NotImplementedError()  # pragma: no cover
+
+  def get_test(self):
+    """Get the test described by the spec."""
+    return self.test_class(self)
+
+
 class Test(object):
   """
   Base class for a test suite that can be run locally or remotely.
@@ -265,33 +372,12 @@ class Test(object):
   those modules; the state should already be stored in the configuration.
   """
 
-  def __init__(self,
-               name,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               resultdb=None):
-    """
-    Args:
-      name: Displayed name of the test.
-      target_name: Ninja build target for the test, a key in
-          //testing/buildbot/gn_isolate_map.pyl,
-          e.g. "browser_tests".
-      full_test_target: a fully qualified Ninja target, e.g.
-        "//chrome/test:browser_tests".
-      test_id_prefix: Test_id prefix used by ResultDB, e.g.
-          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
-      waterfall_builder_group (str): Matching waterfall builder group.
-        This value would be different from trybot group.
-      waterfall_buildername (str): Matching waterfall builder name.
-        This value would be different from trybot builder name.
-      resultdb (ResultDB): Configuration of the ResultDB integration for the
-        test. If the value is None or `resultdb.enable` is False,
-        ResultDB integration is disabled by default.
-    """
+  def __init__(self, spec):
     super(Test, self).__init__()
+
+    self.spec = spec
+
+    self._test_options = TestOptions()
 
     # Contains a set of flaky failures that are known to be flaky, along with
     # the according id of the monorail bug filed for the flaky test.
@@ -324,16 +410,6 @@ class Test(object):
     # Must be updated using update_test_run()
     self._test_runs = {}
 
-    self._waterfall_builder_group = waterfall_builder_group
-    self._waterfall_buildername = waterfall_buildername
-    self._test_options = TestOptions()
-
-    self._name = name
-    self._target_name = target_name
-    self._full_test_target = full_test_target
-    self._test_id_prefix = test_id_prefix
-    self._resultdb = resultdb or ResultDB.create()
-
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
     # emits a single recipe engine step, and that the recipe engine step is the
@@ -365,16 +441,16 @@ class Test(object):
 
   @property
   def name(self):
-    return self._name
+    return self.spec.name
 
   @property
   def target_name(self):
-    return self._target_name or self._name
+    return self.spec.target_name
 
   @property
   def full_test_target(self):
     """A fully qualified Ninja target, e.g. "//chrome/test:browser_tests"."""
-    return self._full_test_target
+    return self.spec.full_test_target
 
   @property
   def test_id_prefix(self):
@@ -382,7 +458,7 @@ class Test(object):
 
     "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/"
     """
-    return self._test_id_prefix
+    return self.spec.test_id_prefix
 
   @property
   def resultdb(self):
@@ -390,7 +466,7 @@ class Test(object):
 
     Returns a ResultDB instance.
     """
-    return self._resultdb
+    return self.spec.resultdb
 
   @property
   def canonical_name(self):
@@ -573,8 +649,8 @@ class Test(object):
 
   def step_metadata(self, suffix=None):
     data = {
-        'waterfall_builder_group': self._waterfall_builder_group,
-        'waterfall_buildername': self._waterfall_buildername,
+        'waterfall_builder_group': self.spec.waterfall_builder_group,
+        'waterfall_buildername': self.spec.waterfall_buildername,
         'canonical_step_name': self.canonical_name,
         'isolate_target_name': self.isolate_target,
     }
@@ -731,14 +807,51 @@ class Test(object):
     return None
 
 
+@attrs()
+class TestWrapperSpec(TestSpecBase):
+  """Abstract base class for specs for test wrappers.
+
+  Attributes:
+    * test_spec - The spec for the wrapped test.
+  """
+
+  test_spec = attrib(TestSpecBase)
+
+  @classmethod
+  def create(cls, test_spec, **kwargs):
+    """Create a TestWrapperSpec.
+
+    Arguments:
+      * test_spec - The spec for the wrapped test.
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec.
+    """
+    return cls(test_spec, **kwargs)
+
+  def get_test(self):
+    """Get the test described by the spec."""
+    return self.test_wrapper_class(self, self.test_spec.get_test())
+
+  @abc.abstractproperty
+  def test_wrapper_class(self):
+    """The test wrapper class associated with the spec."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def name(self):
+    """The name of the test."""
+    return self.test_spec.name
+
+
 class TestWrapper(Test):  # pragma: no cover
   """ A base class for Tests that wrap other Tests.
 
   By default, all functionality defers to the wrapped Test.
   """
 
-  def __init__(self, test, **kwargs):
-    super(TestWrapper, self).__init__(test.name, **kwargs)
+  def __init__(self, spec, test):
+    super(TestWrapper, self).__init__(test.name)
+    self.spec = spec
     self._test = test
 
   @property
@@ -858,25 +971,48 @@ class TestWrapper(Test):  # pragma: no cover
     return self._test.isolate_profile_data
 
 
-class ExperimentalTest(TestWrapper):
-  """A test wrapper that runs the wrapped test on an experimental test.
+@attrs()
+class ExperimentalTestSpec(TestWrapperSpec):
+  """A spec for a test to be executed at some percentage.
 
-  Experimental tests:
-    - can run at <= 100%, depending on the experiment_percentage.
-    - will not cause the build to fail.
+  Attributes:
+    * experiment_percentage - The percentage chance that the test will
+      be executed.
+    * is_in_experiment - Whether or not the test is in the experiment.
   """
 
-  def __init__(self, test, experiment_percentage, api):
-    super(ExperimentalTest, self).__init__(test)
-    self._experiment_percentage = max(0, min(100, int(experiment_percentage)))
-    self._is_in_experiment = self._calculate_is_in_experiment(api)
+  # TODO(gbeaty) This field exists just for comparison while tracking test specs
+  # migrations, once all specs are migrated source-side it can be removed.
+  experiment_percentage = attrib(int)
+  is_in_experiment = attrib(bool)
 
-  def _experimental_suffix(self, suffix):
-    if not suffix:
-      return 'experimental'
-    return '%s, experimental' % (suffix)
+  @classmethod
+  def create(cls, test_spec, experiment_percentage, api):  # pylint: disable=arguments-differ
+    """Create an ExperimentalTestSpec.
 
-  def _calculate_is_in_experiment(self, api):
+    Arguments:
+      * test_spec - The spec of the wrapped test.
+      * experiment_percentage - The percentage chance that the test will be
+        executed.
+      * api - An api object providing access to the buildbucket and tryserver
+        recipe modules.
+    """
+    experiment_percentage = max(0, min(100, int(experiment_percentage)))
+    is_in_experiment = cls._calculate_is_in_experiment(test_spec,
+                                                       experiment_percentage,
+                                                       api)
+    return super(ExperimentalTestSpec, cls).create(
+        test_spec,
+        experiment_percentage=experiment_percentage,
+        is_in_experiment=is_in_experiment)
+
+  @property
+  def test_wrapper_class(self):
+    """The test wrapper class associated with the spec."""
+    return ExperimentalTest
+
+  @staticmethod
+  def _calculate_is_in_experiment(test_spec, experiment_percentage, api):
     # Arbitrarily determine whether to run the test based on its experiment
     # key. Tests with the same experiment key should always either be in the
     # experiment or not; i.e., given the same key, this should always either
@@ -901,15 +1037,29 @@ class ExperimentalTest(TestWrapper):
         api.buildbucket.builder_name,
         (api.tryserver.gerrit_change and api.tryserver.gerrit_change.change) or
         api.buildbucket.build.number or '0',
-        self.name,
+        test_spec.name,
     ]
 
     digest = hashlib.sha1(''.join(str(c) for c in criteria)).digest()
     short = struct.unpack_from('<H', digest)[0]
-    return self._experiment_percentage * 0xffff >= short * 100
+    return experiment_percentage * 0xffff >= short * 100
+
+
+class ExperimentalTest(TestWrapper):
+  """A test wrapper that runs the wrapped test on an experimental test.
+
+  Experimental tests:
+    - can run at <= 100%, depending on the experiment_percentage.
+    - will not cause the build to fail.
+  """
+
+  def _experimental_suffix(self, suffix):
+    if not suffix:
+      return 'experimental'
+    return '%s, experimental' % (suffix)
 
   def _is_in_experiment_and_has_valid_results(self, suffix):
-    return (self._is_in_experiment and
+    return (self.spec.is_in_experiment and
             super(ExperimentalTest, self).has_valid_results(
                 self._experimental_suffix(suffix)))
 
@@ -919,7 +1069,7 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def pre_run(self, api, suffix):
-    if not self._is_in_experiment:
+    if not self.spec.is_in_experiment:
       return []
 
     try:
@@ -931,7 +1081,7 @@ class ExperimentalTest(TestWrapper):
   #override
   @recipe_api.composite_step
   def run(self, api, suffix):
-    if not self._is_in_experiment:
+    if not self.spec.is_in_experiment:
       return []
 
     try:
@@ -942,7 +1092,7 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def has_valid_results(self, suffix):
-    if self._is_in_experiment:
+    if self.spec.is_in_experiment:
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest,
@@ -984,16 +1134,42 @@ class ExperimentalTest(TestWrapper):
     return {}
 
 
+@attrs()
+class SizesStepSpec(TestSpec):
+  """A spec for a test that runs the sizes script.
+
+  Attributes:
+    * results_url - The URL to upload the results to.
+    * perf_id - The ID to associate with the results.
+  """
+
+  results_url = attrib(str)
+  perf_id = attrib(str)
+
+  @classmethod
+  def create(cls, **kwargs):
+    """Create a SizesStepSpec.
+
+    Arguments:
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec. The `name`
+        attribute is fixed to `'sizes'`, so it cannot be specified.
+    """
+    return super(SizesStepSpec, cls).create(name='sizes', **kwargs)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return SizesStep
+
+
 class SizesStep(Test):
 
-  def __init__(self, results_url, perf_id, **kwargs):
-    super(SizesStep, self).__init__('sizes', **kwargs)
-    self.results_url = results_url
-    self.perf_id = perf_id
+  SPEC_CLASS = SizesStepSpec
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    step_result = api.chromium.sizes(self.results_url, self.perf_id)
+    step_result = api.chromium.sizes(self.spec.results_url, self.spec.perf_id)
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
     return step_result
 
@@ -1018,6 +1194,35 @@ class SizesStep(Test):
     return {}
 
 
+# TODO(gbeaty) Simplify ScriptTestSpec/ScriptTest to just have the compile
+# targets for the script rather than having a mapping with all compile targets
+# and optional override compile targets
+@attrs()
+class ScriptTestSpec(TestSpec):
+  """A spec for a test that runs a script.
+
+  Attributes:
+    * script - The filename of a script to run. The script must be
+      located within the //testing/scripts directory of the checkout.
+    * all_compile_targets - A mapping of script names to the compile
+      targets that need to be built to run the script.
+    * script_args - Arguments to be passed to the script.
+    * override_compile_targets - The compile targets that need to be
+      built to run the script. If a non-empty value is provided, the
+      `all_compile_targets` attribute will be ignored.
+  """
+
+  script = attrib(str)
+  all_compile_targets = mapping_attrib(str, tuple)
+  script_args = command_args_attrib(default=())
+  override_compile_targets = sequence_attrib(str, default=())
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return ScriptTest
+
+
 class ScriptTest(Test):  # pylint: disable=W0232
   """
   Test which uses logic from script inside chromium repo.
@@ -1031,37 +1236,20 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self,
-               name,
-               script,
-               all_compile_targets,
-               script_args=None,
-               override_compile_targets=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               **kwargs):
-    super(ScriptTest, self).__init__(
-        name,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername,
-        **kwargs)
-    self._script = script
-    self._all_compile_targets = all_compile_targets
-    self._script_args = script_args
-    self._override_compile_targets = override_compile_targets
+  SPEC_CLASS = ScriptTestSpec
 
   def compile_targets(self):
-    if self._override_compile_targets:
-      return self._override_compile_targets
+    if self.spec.override_compile_targets:
+      return self.spec.override_compile_targets
 
-    substitutions = {'name': self._name}
+    substitutions = {'name': self.spec.name}
 
-    if not self._script in self._all_compile_targets:
+    if not self.spec.script in self.spec.all_compile_targets:
       return []
 
     return [
         string.Template(s).safe_substitute(substitutions)
-        for s in self._all_compile_targets[self._script]
+        for s in self.spec.all_compile_targets[self.spec.script]
     ]
 
   @recipe_api.composite_step
@@ -1075,14 +1263,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
     try:
       script_args = []
-      if self._script_args:
-        script_args = ['--args', api.json.input(self._script_args)]
+      if self.spec.script_args:
+        script_args = ['--args', api.json.input(self.spec.script_args)]
       api.python(
           self.step_name(suffix),
           # Enforce that all scripts are in the specified directory
           # for consistency.
           api.path['checkout'].join('testing', 'scripts',
-                                    api.path.basename(self._script)),
+                                    api.path.basename(self.spec.script)),
           args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
                 ['run', '--output', api.json.output()] + run_args),
           step_test_data=lambda: api.json.test_api.output({
@@ -1174,67 +1362,51 @@ class TearDownScript(object):
     return cls(**kwargs)
 
 
+@attrs()
+class LocalGTestTestSpec(TestSpec):
+  """A spec for a test that runs a gtest-based test locally.
+
+  Attributes:
+    * args - Arguments to be passed to the test.
+    * override_compile_targets - An optional list of compile targets to
+      be built to run the test. If not provided the `target_name`
+      attribute of the spec will be the only compile target.
+    * revision - Revision of the chrome checkout.
+    * webkit_revision - Revision of the webkit checkout.
+    * android_shard_timeout - For tests on Android, the timeout to be
+      applied to the shards.
+    * commit_position_property - The name of the property containing
+      chromium's commit position.
+    * use_xvfb - Whether to use the X virtual frame buffer. Only has an
+      effect on Linux. Mostly harmless to set this, except on GPU
+      builders.
+    * set_up - Scripts to run before running the test.
+    * tear_down - Scripts to run after running the test.
+  """
+
+  args = command_args_attrib(default=())
+  override_compile_targets = sequence_attrib(str, default=())
+  revision = attrib(str, default=None)
+  webkit_revision = attrib(str, default=None)
+  android_shard_timeout = attrib(int, default=None)
+  commit_position_property = attrib(str, default='got_revision_cp')
+  use_xvfb = attrib(bool, default=True)
+  set_up = sequence_attrib(SetUpScript, default=())
+  tear_down = sequence_attrib(TearDownScript, default=())
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return LocalGTestTest
+
+
 class LocalGTestTest(Test):
 
-  def __init__(self,
-               name,
-               args=None,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               revision=None,
-               webkit_revision=None,
-               android_shard_timeout=None,
-               override_compile_targets=None,
-               commit_position_property='got_revision_cp',
-               use_xvfb=True,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               set_up=None,
-               tear_down=None,
-               resultdb=None):
-    """Constructs an instance of LocalGTestTest.
+  SPEC_CLASS = LocalGTestTestSpec
 
-    Args:
-      name: Displayed name of the test. May be modified by suffixes.
-      args: Arguments to be passed to the test.
-      target_name: Actual name of the test. Defaults to name.
-      full_test_target: a fully qualified Ninja target, e.g.
-        "//chrome/test:browser_tests".
-      test_id_prefix: Test_id prefix used by ResultDB, e.g.
-          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
-      revision: Revision of the Chrome checkout.
-      webkit_revision: Revision of the WebKit checkout.
-      override_compile_targets: List of compile targets for this test
-          (for tests that don't follow target naming conventions).
-      commit_position_property: Property to get Chromium's commit position.
-          Defaults to 'got_revision_cp'.
-      use_xvfb: whether to use the X virtual frame buffer. Only has an
-          effect on Linux. Defaults to True. Mostly harmless to
-          specify this, except on GPU bots.
-      set_up: Optional setup scripts.
-      tear_down: Optional teardown script.
-      resultdb: Configuration of the ResultDB integration for the test.
-    """
-    super(LocalGTestTest, self).__init__(
-        name,
-        target_name=target_name,
-        full_test_target=full_test_target,
-        test_id_prefix=test_id_prefix,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername,
-        resultdb=resultdb)
-    self._args = args or []
-    self._target_name = target_name
-    self._revision = revision
-    self._webkit_revision = webkit_revision
-    self._android_shard_timeout = android_shard_timeout
-    self._override_compile_targets = override_compile_targets
-    self._commit_position_property = commit_position_property
-    self._use_xvfb = use_xvfb
+  def __init__(self, spec):
+    super(LocalGTestTest, self).__init__(spec)
     self._gtest_results = {}
-    self._set_up = set_up
-    self._tear_down = tear_down
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1242,11 +1414,11 @@ class LocalGTestTest(Test):
 
   @property
   def set_up(self):
-    return self._set_up
+    return self.spec.set_up
 
   @property
   def tear_down(self):
-    return self._tear_down
+    return self.spec.tear_down
 
   @property
   def uses_local_devices(self):
@@ -1257,10 +1429,7 @@ class LocalGTestTest(Test):
     return True
 
   def compile_targets(self):
-    # TODO(phajdan.jr): clean up override_compile_targets (remove or cover).
-    if self._override_compile_targets:  # pragma: no cover
-      return self._override_compile_targets
-    return [self.target_name]
+    return self.spec.override_compile_targets or [self.spec.target_name]
 
   def _get_runtest_kwargs(self, api):
     """Get additional keyword arguments to pass to runtest."""
@@ -1275,7 +1444,7 @@ class LocalGTestTest(Test):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    args = _merge_args_and_test_options(self, self.spec.args, test_options)
 
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
@@ -1291,9 +1460,9 @@ class LocalGTestTest(Test):
     }
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
-      kwargs['shard_timeout'] = self._android_shard_timeout
+      kwargs['shard_timeout'] = self.spec.android_shard_timeout
     else:
-      kwargs['xvfb'] = self._use_xvfb
+      kwargs['xvfb'] = self.spec.use_xvfb
       kwargs['test_type'] = self.name
       kwargs['annotate'] = 'gtest'
       kwargs['test_launcher_summary_output'] = gtest_results_file
@@ -1311,8 +1480,8 @@ class LocalGTestTest(Test):
       else:
         api.chromium.runtest(
             self.target_name,
-            revision=self._revision,
-            webkit_revision=self._webkit_revision,
+            revision=self.spec.revision,
+            webkit_revision=self.spec.webkit_revision,
             **kwargs)
       # TODO(kbr): add functionality to generate_gtest to be able to
       # force running these local gtests via isolate from the src-side
@@ -1336,7 +1505,7 @@ class LocalGTestTest(Test):
             api.json.input(r.raw),
             test_type=self.name,
             chrome_revision=api.bot_update.last_returned_properties.get(
-                self._commit_position_property, 'refs/x@{#0}'))
+                self.spec.commit_position_property, 'refs/x@{#0}'))
 
     return step_result
 
@@ -1707,118 +1876,101 @@ class LayoutTestResultsHandler(JSONResultsHandler):
         base + '/layout-test-results.zip')
 
 
-class SwarmingTest(Test):
-  # Some suffixes should have marginally higher priority. See crbug.com/937151.
-  SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
+@attrs()
+class SwarmingTestSpec(TestSpec):
+  """Spec for a test that runs via swarming.
 
-  def __init__(self,
-               name,
-               dimensions=None,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               extra_suffix=None,
-               expiration=None,
-               hard_timeout=None,
-               io_timeout=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               set_up=None,
-               tear_down=None,
-               optional_dimensions=None,
-               service_account=None,
-               isolate_coverage_data=None,
-               isolate_profile_data=None,
-               merge=None,
-               ignore_task_failure=None,
-               containment_type=None,
-               idempotent=None,
-               shards=1,
-               cipd_packages=None,
-               named_caches=None,
-               resultdb=None,
-               **kwargs):
-    """Constructs an instance of SwarmingTest.
+  Attributes:
+    * cipd_packages - The CIPD packages to be loaded for the test's
+      swarming tasks.
+    * containment_type - The type of containment to use for the test's
+      swarming tasks. See `swarming.py trigger --help` for more info.
+    * dimensions - Requested dimensions of the test. The keys are
+      dimension names. The values are the value of the dimensions or
+      None to clear a dimension.
+    * expiration - The expiration timeout in seconds of the test's
+      swarming tasks.
+    * optional_dimensions - Optional dimensions that create additional
+      fallback task sices. The keys are cumulative expiration times for
+      the additional slices mapping to dicts of the same form as the
+      `dimensions` attribute. Additional task slices will be created for
+      each item, in order of the expiration time for the item using the
+      dimensions specified in the value. The final slice will set the
+      dimensions according to the `dimensions` attribute.
+    * extra_suffix - An additional suffix applied to the test's step
+      name.
+    * hard_timeout - The execution timeout in seconds of the test's
+      swarming tasks.
+    * io_timeout - The maximum amount of time in seconds swarming will
+      allow the task to be silent (no stdout or stderr).
+    * trigger_script - An optional script used for triggering the test's
+      swarming tasks.
+    * set_up - Scripts to run before running the test.
+    * tear_down - Scripts to run after running the test.
+    * merge - An optional script used for merging results between the
+      test's swarming tasks.
+    * args - Arguments to be passed to the test.
+    * isolate_coverage_data - Whether to isolate coverage profile data
+      during task execution.
+    * isolate_profile_data - Whether to isolate profile data during task
+      execution.
+    * ignore_task_failure - Whether to ignore swarming task failures. If
+      False, the test will be reported as StepFailure on failure.
+    * named_caches - Named caches to mount for the test's swarming
+      tasks. The keys are the named of the cache and the values are the
+      path relative to the swarming task's root directory where the
+      cache should be mounted.
+    * shards - The number of shards to trigger.
+    * service_account - The service account to run the test's swarming
+      tasks as.
+    * idempotent - Whether to mark the test's swarming tasks as
+      idempotent. If not provided, the default logic used by the
+      `chromium_swarming` recipe module will be used.
+  """
+  # pylint: disable=abstract-method
 
-    Args:
-      name: Displayed name of the test.
-      dimensions (dict of str: str): Requested dimensions of the test.
-      target_name: Ninja build target for the test. See
-          //testing/buildbot/gn_isolate_map.pyl for more info.
-      full_test_target: a fully qualified Ninja target, e.g.
-        "//chrome/test:browser_tests".
-      test_id_prefix: test_id_prefix: Test_id prefix used by ResultDB, e.g.
-          "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
-      extra_suffix: Suffix applied to the test's step name in the build page.
-      expiration: Expiration of the test in Swarming, in seconds.
-      hard_timeout: Timeout of the test in Swarming, in seconds.
-      io_timeout: Max amount of time in seconds Swarming will allow the task to
-          be silent (no stdout or stderr).
-      waterfall_builder_group: Waterfall/console name for the test's builder.
-      waterfall_buildername: Builder name for the test's builder.
-      set_up: Optional set up scripts.
-      tear_down: Optional tear_down scripts.
-      optional_dimensions: (dict of expiration: [{dimension(str): val(str)]}:
-          Optional dimensions that create additional fallback task slices.
-      service_account: Service account to run the test as.
-      isolate_coverage_data: Bool indicating wether to isolate coverage profile
-          data during the task.
-      isolate_profile_data: Bool indicating whether to isolate profile data
-          during the task.
-      merge: 'merge' dict as set in //testing/buildbot/ pyl files for the test.
-      ignore_task_failure: If False, the test will be reported as StepFailure on
-          failure.
-      containment_type: Type of containment to use for the task. See
-          `swarming.py trigger --help` for more info.
-      idempotent: Wether to mark the task as idempotent. A value of None will
-          cause chromium_swarming/api.py to apply its default_idempotent val.
-      shards: Number of shards to trigger.
-      cipd_packages: List of chromium_swarming.CipdPackage.
-      named_caches: {str: str} dict mapping named cache name to named cache
-          path.
-      resultdb: Configuration of ResultDB integration.
+  cipd_packages = sequence_attrib(chromium_swarming.CipdPackage, default=())
+  containment_type = attrib(str, default=None)
+  dimensions = mapping_attrib(str, default={})
+  expiration = attrib(int, default=None)
+  optional_dimensions = mapping_attrib(int, dict, default={})
+  extra_suffix = attrib(str, default=None)
+  hard_timeout = attrib(int, default=None)
+  io_timeout = attrib(int, default=None)
+  trigger_script = attrib(chromium_swarming.TriggerScript, default=None)
+  set_up = sequence_attrib(SetUpScript, default=())
+  tear_down = sequence_attrib(TearDownScript, default=())
+  merge = attrib(chromium_swarming.MergeScript, default=None)
+  args = command_args_attrib(default=())
+  isolate_coverage_data = attrib(bool, False)
+  isolate_profile_data = attrib(bool, False)
+  ignore_task_failure = attrib(bool, False)
+  named_caches = mapping_attrib(str, str, default={})
+  shards = attrib(int, default=1)
+  service_account = attrib(str, default=None)
+  idempotent = attrib(bool, default=None)
+
+  @classmethod
+  def create(cls, name, **kwargs):
+    """Create a SwarmingTestSpec.
+
+    Arguments:
+      * name - The name of the test.
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec. If the keyword
+        `extra_suffix` is not set, a value will be computed if the
+        `'gpu'` dimension is specified or if the `'os'` dimension is
+        `'Android'` and the `'device_type'` dimension is set.
     """
-    super(SwarmingTest, self).__init__(
-        name,
-        target_name=target_name,
-        full_test_target=full_test_target,
-        test_id_prefix=test_id_prefix,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername,
-        resultdb=resultdb,
-        **kwargs)
-    self._tasks = {}
-    self._cipd_packages = cipd_packages or []
-    self._containment_type = containment_type
-    self._dimensions = dimensions
-    self._optional_dimensions = optional_dimensions
-    self._extra_suffix = extra_suffix
-    self._expiration = expiration
-    self._hard_timeout = hard_timeout
-    self._io_timeout = io_timeout
-    self._set_up = set_up
-    self._merge = merge
-    self._tear_down = tear_down
-    self._isolate_coverage_data = isolate_coverage_data
-    self._isolate_profile_data = isolate_profile_data
-    self._ignore_task_failure = ignore_task_failure
-    self._named_caches = named_caches or {}
-    self._shards = shards
-    self._service_account = service_account
-    self._idempotent = idempotent
-    if dimensions and not extra_suffix:
+    dimensions = kwargs.get('dimensions', {})
+    extra_suffix = kwargs.pop('extra_suffix', None)
+    if extra_suffix is None:
       if dimensions.get('gpu'):
-        self._extra_suffix = self._get_gpu_suffix(dimensions)
-      elif 'Android' == dimensions.get('os') and dimensions.get('device_type'):
-        self._extra_suffix = self._get_android_suffix(dimensions)
-    self._raw_cmd = []
-    self._relative_cwd = None
-
-  def _dispatches_to_windows(self):
-    if self._dimensions:
-      os = self._dimensions.get('os', '')
-      return os.startswith('Windows')
-    return False
+        extra_suffix = cls._get_gpu_suffix(dimensions)
+      elif dimensions.get('os') == 'Android' and dimensions.get('device_type'):
+        extra_suffix = cls._get_android_suffix(dimensions)
+    return super(SwarmingTestSpec, cls).create(
+        name, extra_suffix=extra_suffix, **kwargs)
 
   @staticmethod
   def _get_gpu_suffix(dimensions):
@@ -1876,29 +2028,43 @@ class SwarmingTest(Test):
     product_name = device_codenames.get(targetted_device, targetted_device)
     return 'on Android device %s' % product_name
 
+
+class SwarmingTest(Test):
+  # Some suffixes should have marginally higher priority. See crbug.com/937151.
+  SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
+
+  def __init__(self, spec):
+    super(SwarmingTest, self).__init__(spec)
+
+    self._tasks = {}
+    self._raw_cmd = []
+    self._relative_cwd = None
+
+  def _dispatches_to_windows(self):
+    if self.spec.dimensions:
+      os = self.spec.dimensions.get('os', '')
+      return os.startswith('Windows')
+    return False
+
   @property
   def set_up(self):
-    return self._set_up
+    return self.spec.set_up
 
   @property
   def tear_down(self):
-    return self._tear_down
+    return self.spec.tear_down
 
   @property
   def name(self):
-    if self._extra_suffix:
-      return '%s %s' % (self._name, self._extra_suffix)
+    if self.spec.extra_suffix:
+      return '%s %s' % (self.spec.name, self.spec.extra_suffix)
     else:
-      return self._name
+      return self.spec.name
 
   @property
   def canonical_name(self):
     """Canonical name of the test, no suffix attached."""
-    return self._name
-
-  @property
-  def target_name(self):
-    return self._target_name or self._name
+    return self.spec.name
 
   @property
   def runs_on_swarming(self):
@@ -1906,18 +2072,18 @@ class SwarmingTest(Test):
 
   @property
   def isolate_coverage_data(self):
-    return bool(self._isolate_coverage_data)
+    return bool(self.spec.isolate_coverage_data)
 
   @property
   def isolate_profile_data(self):
     # TODO(crbug.com/1075823) - delete isolate_coverage_data once deprecated.
     # Release branches will still be setting isolate_coverage_data under
     # src/testing. Deprecation expected after M83.
-    return bool(self._isolate_profile_data) or self.isolate_coverage_data
+    return self.spec.isolate_profile_data or self.isolate_coverage_data
 
   @property
   def shards(self):
-    return self._shards
+    return self.spec.shards
 
   @property
   def raw_cmd(self):
@@ -1966,9 +2132,9 @@ class SwarmingTest(Test):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    args = _merge_args_and_test_options(self, self.spec.args, test_options)
 
-    shards = self._shards
+    shards = self.spec.shards
 
     if tests_to_retry:
       # The filter list is eventually passed to the binary over the command
@@ -1992,6 +2158,7 @@ class SwarmingTest(Test):
     task_request = task.request
     task_slice = task_request[0]
 
+    merge = self.spec.merge
     using_pgo = api.chromium_tests.m.pgo.using_pgo
     if self.isolate_profile_data or using_pgo:
       # Targets built with 'use_clang_coverage' or 'use_clang_profiling' (also
@@ -2024,17 +2191,17 @@ class SwarmingTest(Test):
       # data. If the test object does not specify a merge script, use the one
       # defined by the swarming task in the chromium_swarm module. (The default
       # behavior for non-coverage/non-profile tests).
-      self._merge = api.chromium_tests.m.code_coverage.shard_merge(
+      merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix),
           self.target_name,
           skip_validation=skip_validation,
           sparse=sparse,
-          additional_merge=self._merge or task.merge)
+          additional_merge=self.spec.merge or task.merge)
 
     if suffix.startswith('retry shards'):
       task_slice = task_slice.with_idempotent(False)
-    elif self._idempotent is not None:
-      task_slice = task_slice.with_idempotent(self._idempotent)
+    elif self.spec.idempotent is not None:
+      task_slice = task_slice.with_idempotent(self.spec.idempotent)
 
     if suffix == 'retry shards with patch':
       task.task_to_retry = self._tasks['with patch']
@@ -2061,41 +2228,37 @@ class SwarmingTest(Test):
       task.shard_indices = range(task.shards)
 
     task.build_properties = api.chromium.build_properties
-    task.containment_type = self._containment_type
-    task.ignore_task_failure = self._ignore_task_failure
-    if self._merge:
-      task.merge = self._merge
+    task.containment_type = self.spec.containment_type
+    task.ignore_task_failure = self.spec.ignore_task_failure
+    if merge:
+      task.merge = merge
 
-    task.trigger_script = self._trigger_script
+    task.trigger_script = self.spec.trigger_script
 
     ensure_file = task_slice.cipd_ensure_file
-    if self._cipd_packages:
-      for package in self._cipd_packages:
-        ensure_file.add_package(package.name, package.version, package.root)
+    for package in self.spec.cipd_packages:
+      ensure_file.add_package(package.name, package.version, package.root)
 
     task_slice = (task_slice.with_cipd_ensure_file(ensure_file))
 
-    if self._named_caches:
-      task.named_caches.update(self._named_caches)
+    task.named_caches.update(self.spec.named_caches)
 
     if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
       task_request = task_request.with_priority(task_request.priority - 1)
 
-    if self._expiration:
-      task_slice = task_slice.with_expiration_secs(self._expiration)
+    if self.spec.expiration:
+      task_slice = task_slice.with_expiration_secs(self.spec.expiration)
 
-    if self._hard_timeout:
-      task_slice = task_slice.with_execution_timeout_secs(self._hard_timeout)
+    if self.spec.hard_timeout:
+      task_slice = task_slice.with_execution_timeout_secs(
+          self.spec.hard_timeout)
 
-    if self._io_timeout:
-      task_slice = task_slice.with_io_timeout_secs(self._io_timeout)
+    if self.spec.io_timeout:
+      task_slice = task_slice.with_io_timeout_secs(self.spec.io_timeout)
 
     task_dimensions = task_slice.dimensions
     # Add custom dimensions.
-    if self._dimensions:  # pragma: no cover
-      #TODO(stip): concoct a test case that will trigger this codepath
-      for k, v in self._dimensions.iteritems():
-        task_dimensions[k] = v
+    task_dimensions.update(self.spec.dimensions)
     # Set default value.
     if 'os' not in task_dimensions:
       task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
@@ -2103,7 +2266,7 @@ class SwarmingTest(Test):
     task_slice = task_slice.with_dimensions(**task_dimensions)
 
     # Add optional dimensions.
-    task.optional_dimensions = self._optional_dimensions or None
+    task.optional_dimensions = self.spec.optional_dimensions
 
     # Add tags.
     tags = {
@@ -2128,7 +2291,7 @@ class SwarmingTest(Test):
     task.request = (
         task_request.with_slice(0, task_slice).with_name(
             self.step_name(suffix)).with_service_account(
-                self._service_account or '').with_tags(tags))
+                self.spec.service_account or '').with_tags(tags))
     return task
 
   def get_task(self, suffix):
@@ -2213,61 +2376,31 @@ class SwarmingTest(Test):
     return data
 
 
+@attrs()
+class SwarmingGTestTestSpec(SwarmingTestSpec):
+  """A spec for a test that runs a gtest-based test via swarming.
+
+  Attributes:
+    * override_compile_targets - The compile targets that need to be
+      built to run the script. If not provided, the target identified by
+      the `target_name` attribute will be used.
+  """
+
+  override_compile_targets = sequence_attrib(str, default=())
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return SwarmingGTestTest
+
+
 class SwarmingGTestTest(SwarmingTest):
 
-  def __init__(self,
-               name,
-               args=None,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               shards=1,
-               dimensions=None,
-               extra_suffix=None,
-               expiration=None,
-               hard_timeout=None,
-               io_timeout=None,
-               override_compile_targets=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               merge=None,
-               trigger_script=None,
-               set_up=None,
-               tear_down=None,
-               isolate_coverage_data=False,
-               isolate_profile_data=False,
-               optional_dimensions=None,
-               service_account=None,
-               containment_type=None,
-               ignore_task_failure=False,
-               **kw):
-    super(SwarmingGTestTest, self).__init__(
-        name,
-        dimensions,
-        target_name,
-        full_test_target,
-        test_id_prefix,
-        extra_suffix,
-        expiration,
-        hard_timeout,
-        io_timeout,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername,
-        set_up=set_up,
-        tear_down=tear_down,
-        isolate_coverage_data=isolate_coverage_data,
-        isolate_profile_data=isolate_profile_data,
-        merge=merge,
-        shards=shards,
-        ignore_task_failure=ignore_task_failure,
-        optional_dimensions=optional_dimensions,
-        service_account=service_account,
-        containment_type=containment_type,
-        **kw)
-    self._args = args or []
-    self._override_compile_targets = override_compile_targets
+  SPEC_CLASS = SwarmingGTestTestSpec
+
+  def __init__(self, spec):
+    super(SwarmingGTestTest, self).__init__(spec)
     self._gtest_results = {}
-    self._trigger_script = trigger_script
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -2278,9 +2411,7 @@ class SwarmingGTestTest(SwarmingTest):
     return True
 
   def compile_targets(self):
-    if self._override_compile_targets:
-      return self._override_compile_targets
-    return [self.target_name]
+    return self.spec.override_compile_targets or [self.spec.target_name]
 
   def create_task(self, api, suffix, task_input):
     isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
@@ -2321,56 +2452,63 @@ class SwarmingGTestTest(SwarmingTest):
     return step_result
 
 
+def _get_results_handler(results_handler_name, default_handler):
+  return {
+      'default': lambda: default_handler,
+      'layout tests': LayoutTestResultsHandler,
+      'fake': FakeCustomResultsHandler,
+  }[results_handler_name]()
+
+
+@attrs()
+class LocalIsolatedScriptTestSpec(TestSpec):
+  """Spec for a test that runs an isolated script locally.
+
+  Attributes:
+    * args - Arguments to be passed to the test.
+    * override_compile_targets - An optional list of compile targets to
+      be built to run the test. If not provided the `target_name`
+      attribute of the spec will be the only compile target.
+    * set_up - Scripts to run before running the test.
+    * tear_down - Scripts to run after running the test.
+    * results_handler_name - A name identifying the type of
+      `ResultsHandler` that will be used for processing the test
+      results:
+      * 'default' - JSONResultsHandler
+      * 'layout tests' - LayoutTestResultsHandler
+      * 'fake' - FakeCustomResultsHandler
+    * isolate_coverage_data - Whether to isolate coverage profile data
+      during task execution.
+    * isolate_profile_data - Whether to isolate profile data during task
+      execution.
+  """
+
+  args = command_args_attrib(default=())
+  override_compile_targets = sequence_attrib(str, default=())
+  set_up = sequence_attrib(SetUpScript, default=())
+  tear_down = sequence_attrib(TearDownScript, default=())
+  results_handler_name = enum_attrib(
+      ALLOWED_RESULT_HANDLER_NAMES, default='default')
+  isolate_coverage_data = attrib(bool, False)
+  isolate_profile_data = attrib(bool, False)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return LocalIsolatedScriptTest
+
+  @cached_property
+  def results_handler(self):
+    """The handler for proessing tests results."""
+    return _get_results_handler(self.results_handler_name, JSONResultsHandler())
+
+
 class LocalIsolatedScriptTest(Test):
 
-  def __init__(self,
-               name,
-               args=None,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               override_compile_targets=None,
-               results_handler=None,
-               set_up=None,
-               tear_down=None,
-               isolate_coverage_data=None,
-               isolate_profile_data=None):
-    """Constructs an instance of LocalIsolatedScriptTest.
+  SPEC_CLASS = LocalIsolatedScriptTestSpec
 
-    An LocalIsolatedScriptTest knows how to invoke an isolate which obeys a
-    certain contract. The isolate's main target must be a wrapper script which
-    must interpret certain command line arguments as follows:
-
-      --isolated-script-test-output [FILENAME]
-
-    The wrapper script must write the simplified json output that the recipes
-    consume (similar to GTestTest and ScriptTest) into |FILENAME|.
-
-    The contract may be expanded later to support functionality like sharding
-    and retries of specific failed tests. Currently the examples of such wrapper
-    scripts live in src/testing/scripts/ in the Chromium workspace.
-
-    Args:
-      name: Displayed name of the test. May be modified by suffixes.
-      args: Arguments to be passed to the test.
-      target_name: Actual name of the test. Defaults to name.
-      override_compile_targets: The list of compile targets to use. If not
-        specified this is the same as target_name.
-      set_up: Optional set up scripts.
-      tear_down: Optional tear_down scripts.
-    """
-    super(LocalIsolatedScriptTest, self).__init__(
-        name,
-        target_name=target_name,
-        full_test_target=full_test_target,
-        test_id_prefix=test_id_prefix)
-    self._args = args or []
-    self._override_compile_targets = override_compile_targets
-    self._set_up = set_up
-    self._tear_down = tear_down
-    self.results_handler = results_handler or JSONResultsHandler()
-    self._isolate_coverage_data = isolate_coverage_data
-    self._isolate_profile_data = isolate_profile_data
+  def __init__(self, spec):
+    super(LocalIsolatedScriptTest, self).__init__(spec)
     self._raw_cmd = []
     self._relative_cwd = None
 
@@ -2392,19 +2530,11 @@ class LocalIsolatedScriptTest(Test):
 
   @property
   def set_up(self):
-    return self._set_up
+    return self.spec.set_up
 
   @property
   def tear_down(self):
-    return self._tear_down
-
-  @property
-  def name(self):
-    return self._name
-
-  @property
-  def target_name(self):
-    return self._target_name or self._name
+    return self.spec.tear_down
 
   @property
   def uses_isolate(self):
@@ -2415,12 +2545,10 @@ class LocalIsolatedScriptTest(Test):
     # TODO(crbug.com/1075823) - delete isolate_coverage_data once deprecated
     # Release branches will still be setting isolate_coverage_data under
     # src/testing. Deprecation expected after M83.
-    return self._isolate_profile_data or self._isolate_coverage_data
+    return self.spec.isolate_profile_data or self.spec.isolate_coverage_data
 
   def compile_targets(self):
-    if self._override_compile_targets:
-      return self._override_compile_targets
-    return [self.target_name]
+    return self.spec.override_compile_targets or [self.spec.target_name]
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -2440,8 +2568,9 @@ class LocalIsolatedScriptTest(Test):
     if self.raw_cmd:
       pre_args += ['--raw-cmd']
 
-    args = _merge_args_and_test_options(self, self.raw_cmd + self._args,
-                                        test_options)
+    cmd = list(self.raw_cmd)
+    cmd.extend(self.spec.args)
+    args = _merge_args_and_test_options(self, cmd, test_options)
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 
@@ -2490,10 +2619,10 @@ class LocalIsolatedScriptTest(Test):
       presentation = step_result.presentation
 
       test_results = api.test_utils.create_results_from_json(results)
-      self.results_handler.render_results(api, test_results, presentation)
+      self.spec.results_handler.render_results(api, test_results, presentation)
 
-      self.update_test_run(api, suffix,
-                           self.results_handler.validate_results(api, results))
+      self.update_test_run(
+          api, suffix, self.spec.results_handler.validate_results(api, results))
 
       if (api.step.active_result.retcode == 0 and
           not self._test_runs[suffix]['valid']):
@@ -2504,79 +2633,48 @@ class LocalIsolatedScriptTest(Test):
     return self._test_runs[suffix]
 
 
-class SwarmingIsolatedScriptTest(SwarmingTest):
+@attrs()
+class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
+  """Spec for a test that runs an isolated script via swarming.
 
-  def __init__(self,
-               name,
-               args=None,
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               shards=1,
-               dimensions=None,
-               extra_suffix=None,
-               ignore_task_failure=False,
-               expiration=None,
-               hard_timeout=None,
-               override_compile_targets=None,
-               perf_id=None,
-               results_url=None,
-               perf_dashboard_id=None,
-               io_timeout=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               merge=None,
-               trigger_script=None,
-               results_handler=None,
-               set_up=None,
-               tear_down=None,
-               isolate_coverage_data=False,
-               isolate_profile_data=False,
-               optional_dimensions=None,
-               service_account=None,
-               resultdb=None,
-               **kw):
-    super(SwarmingIsolatedScriptTest, self).__init__(
-        name,
-        dimensions,
-        target_name,
-        full_test_target,
-        test_id_prefix,
-        extra_suffix,
-        expiration,
-        hard_timeout,
-        io_timeout,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername,
-        set_up=set_up,
-        tear_down=tear_down,
-        isolate_coverage_data=isolate_coverage_data,
-        isolate_profile_data=isolate_profile_data,
-        merge=merge,
-        shards=shards,
-        ignore_task_failure=ignore_task_failure,
-        optional_dimensions=optional_dimensions,
-        service_account=service_account,
-        resultdb=resultdb,
-        **kw)
-    self._args = args or []
-    self._override_compile_targets = override_compile_targets
-    self._perf_id = perf_id
-    self._results_url = results_url
-    self._perf_dashboard_id = perf_dashboard_id
-    self._isolated_script_results = {}
-    self._trigger_script = trigger_script
-    self.results_handler = results_handler or JSONResultsHandler(
-        ignore_task_failure=ignore_task_failure)
+  Attributes:
+    * override_compile_targets - An optional list of compile targets to
+      be built to run the test. If not provided the `target_name`
+      attribute of the spec will be the only compile target.
+    * results_handler_name - A name identifying the type of
+      `ResultsHandler` that will be used for processing the test
+      results:
+      * 'default' - JSONResultsHandler
+      * 'layout tests' - LayoutTestResultsHandler
+      * 'fake' - FakeCustomResultsHandler
+  """
+
+  override_compile_targets = sequence_attrib(str, default=())
+  results_handler_name = enum_attrib(
+      ALLOWED_RESULT_HANDLER_NAMES, default='default')
 
   @property
-  def target_name(self):
-    return self._target_name or self._name
+  def test_class(self):
+    """The test class associated with the spec."""
+    return SwarmingIsolatedScriptTest
+
+  @cached_property
+  def results_handler(self):
+    """The handler for proessing tests results."""
+    return _get_results_handler(self.results_handler_name,
+                                JSONResultsHandler(self.ignore_task_failure))
+
+
+class SwarmingIsolatedScriptTest(SwarmingTest):
+
+  SPEC_CLASS = SwarmingIsolatedScriptTestSpec
+
+  def __init__(self, spec):
+    super(SwarmingIsolatedScriptTest, self).__init__(spec)
+    self._isolated_script_results = None
 
   def compile_targets(self):
-    if self._override_compile_targets:
-      return self._override_compile_targets
-    return [self.target_name]
+    return self.spec.override_compile_targets or [self.target_name]
 
   @property
   def uses_isolate(self):
@@ -2606,11 +2704,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       results_json = {}
 
     test_run_dictionary = (
-        self.results_handler.validate_results(api, results_json))
+        self.spec.results_handler.validate_results(api, results_json))
     presentation = step_result.presentation
 
     test_results = api.test_utils.create_results_from_json(results_json)
-    self.results_handler.render_results(api, test_results, presentation)
+    self.spec.results_handler.render_results(api, test_results, presentation)
 
     self._isolated_script_results = results_json
 
@@ -2631,16 +2729,38 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     if results:
       # Noted when uploading to test-results, the step_name is expected to be an
       # exact match to the step name on the build.
-      self.results_handler.upload_results(
+      self.spec.results_handler.upload_results(
           api, results, '.'.join(step_result.name_tokens),
           not bool(self.deterministic_failures(suffix)), suffix)
     return step_result
 
 
+@attrs()
+class MiniInstallerTestSpec(TestSpec):
+  """Spec for a test that runs the test_installer script."""
+
+  @classmethod
+  def create(cls, **kwargs):
+    """Create a MiniInstallerTestSpec.
+
+    Arguments:
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec. The `name`
+        attribute is fixed to `'test_installer'`, so it cannot be
+        specified.
+    """
+    return super(MiniInstallerTestSpec, cls).create(
+        name='test_installer', **kwargs)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return MiniInstallerTest
+
+
 class MiniInstallerTest(Test):  # pylint: disable=W0232
 
-  def __init__(self, **kwargs):
-    super(MiniInstallerTest, self).__init__('test_installer', **kwargs)
+  SPEC_CLASS = MiniInstallerTestSpec
 
   def compile_targets(self):
     return ['mini_installer_tests']
@@ -2705,18 +2825,19 @@ class MiniInstallerTest(Test):  # pylint: disable=W0232
     return step_result
 
 
-class AndroidTest(Test):
+@attrs()
+class AndroidTestSpec(TestSpec):
+  """Spec for a test that runs against Android.
 
-  def __init__(self,
-               name,
-               compile_targets,
-               waterfall_builder_group=None,
-               waterfall_buildername=None):
-    super(AndroidTest, self).__init__(
-        name,
-        waterfall_builder_group=waterfall_builder_group,
-        waterfall_buildername=waterfall_buildername)
-    self._compile_targets = compile_targets
+  Attributes:
+    * compile_targets - The compile targets to be built for the test.
+  """
+  # pylint: disable=abstract-method
+
+  compile_targets = sequence_attrib(str)
+
+
+class AndroidTest(Test):
 
   def run_tests(self, api, suffix, json_results_file):
     """Runs the Android test suite and outputs the json results to a file.
@@ -2759,25 +2880,42 @@ class AndroidTest(Test):
     return step_result
 
   def compile_targets(self):
-    return self._compile_targets
+    return self.spec.compile_targets
+
+
+@attrs()
+class AndroidJunitTestSpec(AndroidTestSpec):
+  """Create a spec for a test that runs a Junit test on Android.
+
+  Attributes:
+    * additional_args - Additional arguments passed to the test.
+  """
+
+  additional_args = command_args_attrib(default=())
+
+  @classmethod
+  def create(cls, name, **kwargs):
+    """Create an AndroidJunitTestSpec.
+
+    Arguments:
+      * name - The name of the test.
+      * kwargs - Keyword arguments to initialize the attributes of the
+        created object. The `compile_targets` attribute is fixed to the
+        target name, so it cannot be specified.
+    """
+    target_name = kwargs.pop('target_name', None) or name
+    return super(AndroidJunitTestSpec, cls).create(
+        name, target_name=target_name, compile_targets=[target_name], **kwargs)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return AndroidJunitTest
 
 
 class AndroidJunitTest(AndroidTest):
 
-  def __init__(self,
-               name,
-               target_name=None,
-               additional_args=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None):
-    target_name = target_name or name
-    super(AndroidJunitTest, self).__init__(
-        name,
-        compile_targets=[target_name],
-        waterfall_builder_group=None,
-        waterfall_buildername=None)
-    self._additional_args = additional_args
-    self._target_name = target_name
+  SPEC_CLASS = AndroidJunitTestSpec
 
   @property
   def uses_local_devices(self):
@@ -2787,10 +2925,10 @@ class AndroidJunitTest(AndroidTest):
   def run_tests(self, api, suffix, json_results_file):
     return api.chromium_android.run_java_unit_test_suite(
         self.name,
-        target_name=self._target_name,
+        target_name=self.spec.target_name,
         verbose=True,
         suffix=suffix,
-        additional_args=self._additional_args,
+        additional_args=self.spec.additional_args,
         json_results_file=json_results_file,
         step_test_data=(
             lambda: api.test_utils.test_api.canned_gtest_output(False)))
@@ -2828,6 +2966,30 @@ class IncrementalCoverageTest(Test):
     return step_result
 
 
+@attrs()
+class WebRTCPerfTestSpec(LocalGTestTestSpec):
+  """Spec for a WebRTC perf test.
+
+  A WebRTC perf test is a locally run gtest-based test where perf
+  reporting is enabled while running correctness tests.
+
+  Attributes:
+    * perf_id - The ID to use when uploading perf results.
+  """
+
+  # Re-declare these fields from LocalGTestTestSpec to make them
+  # required
+  args = command_args_attrib()
+  commit_position_property = attrib(str)
+
+  perf_id = attrib(str)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return WebRTCPerfTest
+
+
 class WebRTCPerfTest(LocalGTestTest):
   """A LocalGTestTest reporting perf metrics.
 
@@ -2835,22 +2997,7 @@ class WebRTCPerfTest(LocalGTestTest):
   enabled at the same time, which differs from the chromium.perf bots.
   """
 
-  def __init__(self, name, args, perf_id, commit_position_property):
-    """Construct a WebRTC Perf test.
-
-    Args:
-      name: Name of the test.
-      args: Command line argument list.
-      perf_id: String identifier (preferably unique per machine).
-      commit_position_property: Commit position property for the Chromium
-        checkout. It's needed because for chromium.webrtc.fyi 'got_revision_cp'
-        refers to WebRTC's commit position instead of Chromium's, so we have to
-        use 'got_cr_revision_cp' instead.
-    """
-    assert perf_id
-    super(WebRTCPerfTest, self).__init__(
-        name, args, commit_position_property=commit_position_property)
-    self._perf_id = perf_id
+  SPEC_CLASS = WebRTCPerfTestSpec
 
   def _get_runtest_kwargs(self, api):
     """Get additional keyword arguments to pass to runtest.
@@ -2863,7 +3010,6 @@ class WebRTCPerfTest(LocalGTestTest):
         'perf_config': {
             'a_default_rev':
                 'r_webrtc_git',
-
             # 'got_webrtc_revision' property is present for bots in both
             # chromium.webrtc and chromium.webrtc.fyi in reality, but due to
             # crbug.com/713356, the latter don't get properly simulated.
@@ -2876,11 +3022,11 @@ class WebRTCPerfTest(LocalGTestTest):
         # properties 'perf-id' and 'results-url' as set in the
         # chromium_tests/chromium_perf.py. For now, set these to get an exact
         # match of our current expectations.
-        'perf_id': self._perf_id,
+        'perf_id': self.spec.perf_id,
         'results_url': RESULTS_URL,
 
         # TODO(kjellander): See if perf_dashboard_id is still needed.
-        'perf_dashboard_id': self.name,
+        'perf_dashboard_id': self.spec.name,
         'annotate': 'graphing',
     }
 
@@ -2897,6 +3043,34 @@ class WebRTCPerfTest(LocalGTestTest):
     return result
 
 
+@attrs()
+class MockTestSpec(TestSpec):
+  """Spec for a mock test.
+
+  Attributes:
+    * abort_on_failure - Whether the test should be aborted on failure.
+    * failures - The test cases to report as failures.
+    * has_valid_results - Whether the test has valid results.
+    * per_suffix_failures - A mapping of suffix to the test cases to
+      report as failures for the suffix.
+    * per_suffix_valid - A mapping of suffix to whether the test has
+      valid results for the suffix.
+    * runs_on_swarming - Whether the test runs on swarming.
+  """
+
+  abort_on_failure = attrib(bool, default=False)
+  failures = sequence_attrib(str, default=())
+  has_valid_results = attrib(bool, default=True)
+  per_suffix_failures = mapping_attrib(str, tuple, default={})
+  per_suffix_valid = mapping_attrib(str, bool, default={})
+  runs_on_swarming = attrib(bool, default=False)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return MockTest
+
+
 class MockTest(Test):
   """A Test solely intended to be used in recipe tests."""
 
@@ -2904,41 +3078,15 @@ class MockTest(Test):
     FAILURE = 1
     INFRA_FAILURE = 2
 
-  def __init__(self,
-               name='MockTest',
-               target_name=None,
-               full_test_target=None,
-               test_id_prefix=None,
-               waterfall_builder_group=None,
-               waterfall_buildername=None,
-               abort_on_failure=False,
-               has_valid_results=True,
-               failures=None,
-               runs_on_swarming=False,
-               per_suffix_failures=None,
-               per_suffix_valid=None,
-               resultdb=None):
-    super(MockTest, self).__init__(waterfall_builder_group,
-                                   waterfall_buildername)
-    self._target_name = target_name
-    self._full_test_target = full_test_target
-    self._test_id_prefix = test_id_prefix
-    self._abort_on_failure = abort_on_failure
-    self._failures = failures or []
-    self._has_valid_results = has_valid_results
-    self._per_suffix_failures = per_suffix_failures or {}
-    self._per_suffix_valid = per_suffix_valid or {}
-    self._name = name
-    self._runs_on_swarming = runs_on_swarming
-    self._resultdb = resultdb or ResultDB.create()
-
-  @property
-  def name(self):
-    return self._name
+  def __init__(self, spec):
+    super(MockTest, self).__init__(spec)
+    # We mutate the set of failures depending on the exit code of the test
+    # steps, so get a mutable copy
+    self._failures = list(spec.failures)
 
   @property
   def runs_on_swarming(self):  # pragma: no cover
-    return self._runs_on_swarming
+    return self.spec.runs_on_swarming
 
   @contextlib.contextmanager
   def _mock_exit_codes(self, api):
@@ -2965,13 +3113,13 @@ class MockTest(Test):
     return step_result
 
   def has_valid_results(self, suffix):
-    if suffix in self._per_suffix_valid:  # pragma: no cover
-      return self._per_suffix_valid[suffix]
-    return self._has_valid_results
+    if suffix in self.spec.per_suffix_valid:  # pragma: no cover
+      return self.spec.per_suffix_valid[suffix]
+    return self.spec.has_valid_results
 
   def failures(self, suffix):
-    if suffix in self._per_suffix_failures:  # pragma: no cover
-      return self._per_suffix_failures[suffix]
+    if suffix in self.spec.per_suffix_failures:  # pragma: no cover
+      return self.spec.per_suffix_failures[suffix]
     return self._failures
 
   def deterministic_failures(self, suffix):
@@ -2986,76 +3134,105 @@ class MockTest(Test):
 
   @property
   def abort_on_failure(self):
-    return self._abort_on_failure
+    return self.spec.abort_on_failure
 
 
-class SwarmingIosTest(SwarmingTest):
+@attrs()
+class SwarmingIosTestSpec(SwarmingTestSpec):
+  """Spec for a test that runs against iOS via swarming.
 
-  def __init__(self, swarming_service_account, platform, config, task,
-               upload_test_results, result_callback, use_test_data):
+  Attributes:
+    * platform - The platform of the iOS target.
+    * config - A dictionary detailing the build config. This is an
+      ios-specific config that has no documentation.
+    * task - A dictionary detailing the task config. This is an
+      ios-specific config that has no documentation.
+    * upload_test_results - Whether or not test results should be
+      uploaded.
+    * result_callback - A callback to run whenever a task finishes. It
+      is called with these named args:
+      * name: Name of the test ('test'->'app' attribute)
+      * step_result: Step result object from the collect step.
+      If the callback is not provided, the default is to upload
+      performance results from perf_result.json
+  """
+
+  platform = enum_attrib(['device', 'simulator'], default=None)
+  config = mapping_attrib(str, default={})
+  task = mapping_attrib(str, default={})
+  upload_test_results = attrib(bool, default=False)
+  result_callback = callable_attrib(default=None)
+
+  @classmethod
+  def create(  # pylint: disable=arguments-differ
+      cls, swarming_service_account, platform, config, task,
+      upload_test_results, result_callback):
+    """Create a SwarmingIosTestSpec.
+
+    A number of attributes in the returned spec are either extracted
+    from `task` or `config` or are based on the value of `platform`
+    and/or values in 'task' and/or 'config'.
+
+    Arguments:
+      * swarming_service_account - The service account to run the test's
+        swarming tasks as.
+      * platform - The platform of the iOS target.
+      * config - A dictionary detailing the build config.
+      * task - A dictionary detailing the task config.
+      * upload_test_results - Whether or not test results should be
+        uploaded.
+      * result_callback - A callback to run whenever a task finishes.
     """
-    Args:
-      swarming_service_account: A string representing the service account
-                                that will trigger the task.
-      platform: A string, either 'device' or 'simulator'
-      config: A dictionary detailing the build config. This is an iOS-specific
-              config that has no documentation.
-      task: A dictionary detailing the task config. This is an iOS-specific
-            config that has no documentation.
-      upload_test_results: Upload test results JSON to the flakiness dashboard.
-      result_callback: A function to call whenever a task finishes.
-        It is called with these named args:
-        * name: Name of the test ('test'->'app' attribute).
-        * step_result: Step result object from the collect step.
-        If the function is not provided, the default is to upload performance
-        results from perf_result.json.
-    """
-    super(SwarmingIosTest, self).__init__(
+    return super(SwarmingIosTestSpec, cls).create(
         name=task['step name'],
-        cipd_packages=[
-            chromium_swarming.CipdPackage.create(
-                name=MAC_TOOLCHAIN_PACKAGE,
-                version=MAC_TOOLCHAIN_VERSION,
-                root=MAC_TOOLCHAIN_ROOT,
-            )
-        ])
-    self._service_account = swarming_service_account
-    self._platform = platform
-    self._config = copy.deepcopy(config)
-    self._task = copy.deepcopy(task)
-    self._upload_test_results = upload_test_results
-    self._result_callback = result_callback
-    self._use_test_data = use_test_data
-    self._args = []
-    self._trigger_script = None
+        service_account=swarming_service_account,
+        platform=platform,
+        config=config,
+        task=task,
+        upload_test_results=upload_test_results,
+        result_callback=result_callback,
+        cipd_packages=cls._get_cipd_packages(task),
+        expiration=(task['test'].get('expiration_time') or
+                    config.get('expiration_time')),
+        hard_timeout=(task['test'].get('max runtime seconds') or
+                      config.get('max runtime seconds')),
+        dimensions=cls._get_dimensions(platform, config, task),
+        optional_dimensions=task['test'].get('optional_dimensions'),
+    )
+
+  @staticmethod
+  def _get_cipd_packages(task):
+    cipd_packages = [
+        chromium_swarming.CipdPackage.create(
+            name=MAC_TOOLCHAIN_PACKAGE,
+            version=MAC_TOOLCHAIN_VERSION,
+            root=MAC_TOOLCHAIN_ROOT,
+        )
+    ]
 
     replay_package_name = task['test'].get('replay package name')
     replay_package_version = task['test'].get('replay package version')
     use_trusted_cert = task['test'].get('use trusted cert')
     if use_trusted_cert or (replay_package_name and replay_package_version):
-      self._cipd_packages.append(
+      cipd_packages.append(
           chromium_swarming.CipdPackage.create(
               name=WPR_TOOLS_PACKAGE,
               version=WPR_TOOLS_VERSION,
               root=WPR_TOOLS_ROOT,
           ))
     if replay_package_name and replay_package_version:
-      self._cipd_packages.append(
+      cipd_packages.append(
           chromium_swarming.CipdPackage.create(
               name=replay_package_name,
               version=replay_package_version,
               root=WPR_REPLAY_DATA_ROOT,
           ))
-    self._expiration = (
-        self._task['test'].get('expiration_time') or
-        self._config.get('expiration_time'))
 
-    self._hard_timeout = self._task['test'].get(
-        'max runtime seconds') or self._config.get('max runtime seconds')
+    return cipd_packages
 
-    self._optional_dimensions = task['test'].get('optional_dimensions')
-
-    self._dimensions = {
+  @staticmethod
+  def _get_dimensions(platform, config, task):
+    dimensions = {
         'pool': 'chromium.tests',
     }
 
@@ -3064,34 +3241,45 @@ class SwarmingIosTest(SwarmingTest):
     # otherwise we may receive an older Mac OS which does not support the
     # requested Xcode version.
     if task.get('xcode version'):
-      self._dimensions['xcode_version'] = task['xcode version']
+      dimensions['xcode_version'] = task['xcode version']
 
-    if self._platform == 'simulator':
+    if platform == 'simulator':
       # TODO(crbug.com/955856): We should move away from 'host os'.
-      self._dimensions['os'] = task['test'].get('host os') or 'Mac'
-    elif self._platform == 'device':
-      self._dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
-      if self._config.get('device check'):
-        self._dimensions['device_status'] = 'available'
-      self._dimensions['device'] = IOS_PRODUCT_TYPES.get(
-          task['test']['device type'])
+      dimensions['os'] = task['test'].get('host os') or 'Mac'
+    elif platform == 'device':
+      dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
+      if config.get('device check'):
+        dimensions['device_status'] = 'available'
+      dimensions['device'] = IOS_PRODUCT_TYPES.get(task['test']['device type'])
     if task['bot id']:
-      self._dimensions['id'] = task['bot id']
+      dimensions['id'] = task['bot id']
     if task['pool']:
-      self._dimensions['pool'] = task['pool']
+      dimensions['pool'] = task['pool']
+
+    return dimensions
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return SwarmingIosTest
+
+
+class SwarmingIosTest(SwarmingTest):
 
   def pre_run(self, api, suffix):
-    task = self._task
+    task = self.spec.task
 
-    task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
-
+    task_output_dir = api.path.mkdtemp(task['task_id'])
+    raw_cmd = task.get('raw_cmd')
+    if raw_cmd is not None:
+      raw_cmd = list(raw_cmd)
     swarming_task = api.chromium_swarming.task(
         name=task['step name'],
-        task_output_dir=task['tmp_dir'],
+        task_output_dir=task_output_dir,
         failure_as_exception=False,
         isolated=task['isolated hash'],
         relative_cwd=task.get('relative_cwd'),
-        raw_cmd=task.get('raw_cmd'))
+        raw_cmd=raw_cmd)
 
     self._apply_swarming_task_config(
         swarming_task,
@@ -3106,12 +3294,12 @@ class SwarmingIosTest(SwarmingTest):
     # dimensions which don't work for iOS because the swarming bots do not
     # specify typical dimensions [GPU, cpu type]. We explicitly override
     # dimensions here to get the desired results.
-    task_slice = task_slice.with_dimensions(**self._dimensions)
+    task_slice = task_slice.with_dimensions(**self.spec.dimensions)
     swarming_task.request = (
         swarming_task.request.with_slice(0, task_slice).with_priority(
             task['test'].get('priority', 200)))
 
-    if self._platform == 'device' and self._config.get('device check'):
+    if self.spec.platform == 'device' and self.spec.config.get('device check'):
       swarming_task.wait_for_capacity = True
 
     assert task.get('xcode build version')
@@ -3120,26 +3308,26 @@ class SwarmingIosTest(SwarmingTest):
 
     swarming_task.tags.add('device_type:%s' % str(task['test']['device type']))
     swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
-    swarming_task.tags.add('platform:%s' % self._platform)
+    swarming_task.tags.add('platform:%s' % self.spec.platform)
     swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
     api.chromium_swarming.trigger_task(swarming_task)
-    task['task'] = swarming_task
     self._tasks[suffix] = swarming_task
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    task = self._task
+    task = self.spec.task
+    swarming_task = self._tasks[suffix]
 
-    assert task['task'], ('The task should have been triggered and have an '
-                          'associated swarming task')
+    assert swarming_task, ('The task should have been triggered and have an '
+                           'associated swarming task')
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
-        task['task'])
+        swarming_task)
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     # Add any iOS test runner results to the display.
-    shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
+    shard_output_dir = swarming_task.get_task_shard_output_dirs()[0]
     test_summary_path = api.path.join(shard_output_dir, 'summary.json')
 
     if test_summary_path in step_result.raw_io.output_dir:
@@ -3154,7 +3342,7 @@ class SwarmingIosTest(SwarmingTest):
       # The iOS test runners will not always emit 'failed tests' or any other
       # signal on certain types of errors. This is a test runner bug but we add
       # a workaround here. https:/crbug.com/958791.
-      if task['task'].failed_shards and not failed_tests:
+      if swarming_task.failed_shards and not failed_tests:
         failed_tests = ['invalid test results']
 
       pass_fail_counts = collections.defaultdict(lambda: {
@@ -3189,9 +3377,10 @@ class SwarmingIosTest(SwarmingTest):
 
     # Upload test results JSON to the flakiness dashboard.
     shard_output_dir_full_path = api.path.join(
-        task['task'].task_output_dir,
-        task['task'].get_task_shard_output_dirs()[0])
-    if api.bot_update.last_returned_properties and self._upload_test_results:
+        swarming_task.task_output_dir,
+        swarming_task.get_task_shard_output_dirs()[0])
+    if (api.bot_update.last_returned_properties and
+        self.spec.upload_test_results):
       test_results = api.path.join(shard_output_dir_full_path,
                                    'full_results.json')
       if api.path.exists(test_results):
@@ -3208,8 +3397,9 @@ class SwarmingIosTest(SwarmingTest):
     # Upload performance data result to the perf dashboard.
     perf_results_path = api.path.join(shard_output_dir, 'Documents',
                                       'perf_result.json')
-    if self._result_callback:
-      self._result_callback(name=task['test']['app'], step_result=step_result)
+    if self.spec.result_callback:
+      self.spec.result_callback(
+          name=task['test']['app'], step_result=step_result)
     elif perf_results_path in step_result.raw_io.output_dir:
       data = api.json.loads(step_result.raw_io.output_dir[perf_results_path])
       data_decode = data['Perf Data']

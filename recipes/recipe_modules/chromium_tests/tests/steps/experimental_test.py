@@ -20,6 +20,12 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 def RunSteps(api):
 
+  class RecordingTestSpec(steps.TestWrapperSpec):
+
+    @property
+    def test_wrapper_class(self):
+      return RecordingTest
+
   class RecordingTest(steps.TestWrapper):
     """Records execution of the has_valid_results and failures methods.
 
@@ -36,16 +42,17 @@ def RunSteps(api):
       api.step('failures {}'.format(self.step_name(suffix)), [])
       return super(RecordingTest, self).failures(suffix)
 
-  inner_test = steps.MockTest(
+  mock_test_spec = steps.MockTestSpec.create(
       'inner_test',
       abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
       failures=api.properties.get('failures'))
-  recording_test = RecordingTest(inner_test)
-  experimental_test = steps.ExperimentalTest(
-      recording_test,
+  recording_test_spec = RecordingTestSpec.create(mock_test_spec)
+  experimental_test_spec = steps.ExperimentalTestSpec.create(
+      recording_test_spec,
       experiment_percentage=api.properties['experiment_percentage'],
       api=api)
+  experimental_test = experimental_test_spec.get_test()
 
   api.python.succeeding_step(
       'Configured experimental test %s' % experimental_test.name, '')

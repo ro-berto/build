@@ -24,10 +24,12 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  test = steps.WebRTCPerfTest(
-      'test_name', ['some', 'args'],
-      'test-perf-id',
+  test_spec = steps.WebRTCPerfTestSpec.create(
+      'test_name',
+      args=['some', 'args'],
+      perf_id='test-perf-id',
       commit_position_property='got_revision_cp')
+  test = test_spec.get_test()
 
   bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium.get_builder_id()])

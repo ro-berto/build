@@ -54,7 +54,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   if api.properties.get('shards'):
     kwargs['shards'] = api.properties['shards']
 
-  tests = [steps.SwarmingGTestTest('base_unittests', **kwargs)]
+  test_specs = [steps.SwarmingGTestTestSpec.create('base_unittests', **kwargs)]
 
   if api.properties.get('use_custom_dimensions', False):
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')
@@ -65,7 +65,9 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   # Allows testing the scenario where there are multiple test suites.
   for t in api.properties.get('additional_gtest_targets', []):
-    tests.append(steps.SwarmingGTestTest(t))
+    test_specs.append(steps.SwarmingGTestTestSpec.create(t))
+
+  tests = [s.get_test() for s in test_specs]
 
   # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.

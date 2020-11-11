@@ -45,10 +45,12 @@ def RunSteps(api):
     api.path.mock_add_paths(
         api.profiles.profile_dir().join('pgo_final_aggregate.profdata'))
 
-  tests = [
-      steps.SwarmingIsolatedScriptTest('performance_test_suite'),
-      steps.SwarmingIsolatedScriptTest('different_test_suite'),
+  test_specs = [
+      steps.SwarmingIsolatedScriptTestSpec.create('performance_test_suite'),
+      steps.SwarmingIsolatedScriptTestSpec.create('different_test_suite'),
   ]
+
+  tests = [s.get_test() for s in test_specs]
 
   for test in tests:
     step = test.name
