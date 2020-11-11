@@ -698,6 +698,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           '--merged-jacoco-filename',
           self.m.profiles.normalize(step_name),
       ])
+    if self.use_javascript_coverage:
+      args.extend([
+          '--javascript-coverage-dir',
+          self.m.chromium.output_dir.join('coverage', 'devtools_code_coverage'),
+          '--merged-js-cov-filename',
+          self.m.profiles.normalize(step_name),
+      ])
     if self._is_per_cl_coverage:
       args.append('--per-cl-coverage')
     if additional_merge:
