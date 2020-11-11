@@ -903,48 +903,6 @@ SPEC.update([
         'win-pixel-tester-rel',
         execution_mode=bot_spec.TEST,
         parent_buildername='win-pixel-builder-rel'),
-    stock_config('win-omaha-builder-rel', staging=False),
-    stock_config(
-        'win7-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='win-omaha-builder-rel'),
-    stock_config(
-        'win10-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='win-omaha-builder-rel'),
-    stock_config('mac-omaha-builder-rel', staging=False),
-    stock_config(
-        'mac10.10-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
-    stock_config(
-        'mac10.11-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
-    stock_config(
-        'mac10.12-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
-    stock_config(
-        'mac10.13-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
-    stock_config(
-        'mac10.14-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
-    stock_config(
-        'mac10.15-omaha-tester-rel',
-        staging=False,
-        execution_mode=bot_spec.TEST,
-        parent_buildername='mac-omaha-builder-rel'),
     # Builders to test inversed fieldtrials
     stock_config('linux-inverse-fieldtrials-fyi-rel'),
     stock_config('win10-inverse-fieldtrials-fyi-rel'),
