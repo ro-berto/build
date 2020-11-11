@@ -80,32 +80,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "None/out/Release/config/MonochromePublic_size_config.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Read size config JSON",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mapping_files\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"apks/MonochromePublic.aab.mapping\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"resource_sizes_args\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"apk_name\": \"apks/MonochromePublic.minimal.apks\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"supersize_input_file\": \"apks/MonochromePublic.minimal.apks\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": \"0.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "vpython",
       "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
@@ -1033,8 +1007,10 @@
   {
     "cmd": [
       "[CACHE]/builder/src/tools/binary_size/generate_commit_size_analysis.py",
-      "--size-config-json",
-      "[CACHE]/builder/src/out/Release/config/MonochromePublic_size_config.json",
+      "--apk-name",
+      "MonochromePublic.minimal.apks",
+      "--mapping-name",
+      "MonochromePublic.aab.mapping",
       "--staging-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--chromium-output-directory",
@@ -1105,8 +1081,8 @@
       "[CACHE]/builder/src/tools/binary_size/trybot_commit_size_checker.py",
       "--author",
       "foo@bar.com",
-      "--size-config-json-name",
-      "MonochromePublic_size_config.json",
+      "--apk-name",
+      "MonochromePublic.minimal.apks",
       "--before-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",

@@ -30,10 +30,29 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
 
-    # Path relative to Chromium output directory.
-    self._size_config_json = (
-        properties.size_config_json or constants.DEFAULT_SIZE_CONFIG_JSON)
-    self._size_config = None  # Initialized in _ensure_size_config().
+    self._use_legacy_flow = not bool(properties.size_config_json)
+    if self._use_legacy_flow:
+      # TODO(huangs): Remove by mid 2020-11.
+      apk_name = (
+          properties.android.apk_name or constants.DEFAULT_PARAMS['apk_name'])
+      mapping_names = (
+          properties.android.mapping_names or
+          constants.DEFAULT_PARAMS['mapping_file_names'])
+      self._size_config_json = None
+      # Store into |_size_config| for compatibility. Files are specified
+      # relative to Chromium output directory.
+      self._size_config = {
+          'mapping_files': [
+              os.path.join('apks', name) for name in mapping_names
+          ],
+          'resource_sizes_args': None,
+          'supersize_input_file': os.path.join('apks', apk_name),
+          'version': constants.VERSION_LEGACY_FLOW,
+      }
+    else:  # The "upcoming flow".
+      # Path relative to chromium output directory.
+      self._size_config_json = properties.size_config_json
+      self._size_config = None  # Initialized in _ensure_size_config().
 
   def _ensure_size_config(self):
     """Load size config JSON if |_size_config| is not initialized.
@@ -246,10 +265,21 @@ class BinarySizeApi(recipe_api.RecipeApi):
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
-    cmd += [
-        '--size-config-json',
-        self.m.chromium.output_dir.join(self._size_config_json)
-    ]
+
+    if self._use_legacy_flow:
+      # The old arguments filename (not path), so apply os.path.basename().
+      cmd += [
+          '--apk-name',
+          os.path.basename(self._size_config['supersize_input_file']),
+      ]
+      for mapping_name in self._size_config['mapping_files']:
+        cmd += ['--mapping-name', os.path.basename(mapping_name)]
+    else:
+      assert self._size_config_json
+      cmd += [
+          '--size-config-json',
+          self.m.chromium.output_dir.join(self._size_config_json)
+      ]
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
@@ -431,10 +461,16 @@ class BinarySizeApi(recipe_api.RecipeApi):
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--author', author]
-      cmd += [
-          '--size-config-json-name',
-          os.path.basename(self._size_config_json)
-      ]
+      if self._use_legacy_flow:
+        cmd += [
+            '--apk-name',
+            os.path.basename(self._size_config['supersize_input_file'])
+        ]
+      else:
+        cmd += [
+            '--size-config-json-name',
+            os.path.basename(self._size_config_json)
+        ]
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
       cmd += ['--results-path', results_path]
