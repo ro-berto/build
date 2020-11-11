@@ -175,8 +175,12 @@
   },
   {
     "cmd": [
-      "rm",
-      "-rf",
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[CACHE]/builder/devtools-frontend/out/Debug"
     ],
     "env_prefixes": {
@@ -184,7 +188,8 @@
         "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
-    "name": "clean debug"
+    "infra_step": true,
+    "name": "clean outdir"
   },
   {
     "cmd": [

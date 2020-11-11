@@ -4,7 +4,7 @@
 
 from contextlib import contextmanager
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from recipe_engine.post_process import (DropExpectation, StatusFailure)
+from recipe_engine import post_process
 import json
 
 DEPS = [
@@ -39,12 +39,12 @@ def RunSteps(api):
 
   with _depot_on_path(api):
     api.chromium.ensure_goma()
-    _clean_debug(api)
+    clean_out_dir(api)
     api.chromium.run_gn(use_goma=True)
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
-    if is_debug(api):
+    if is_debug_builder(api):
       return
     run_unit_tests(api)
     run_type_check(api)
@@ -64,8 +64,12 @@ def builder_config(api):
   return api.properties.get('builder_config', 'Release')
 
 
-def is_debug(api):
+def is_debug_builder(api):
   return builder_config(api) == 'Debug'
+
+
+def is_clobber(api):
+  return api.properties.get('clobber', False)
 
 
 def _configure(api):
@@ -138,12 +142,16 @@ def _git_clean(api):
   with api.context(cwd=api.path['checkout']):
     api.git('clean', '-xf', '--', 'front_end')
 
-def _clean_debug(api):
-  if is_debug(api):
-    api.step(
-      'clean debug',
-      ['rm', '-rf', api.path['checkout'].join('out', 'Debug')]
-    )
+
+def clean_out_dir(api):
+  if is_clobber(api):
+    dir_to_clean = 'Release'
+  elif is_debug_builder(api):
+    dir_to_clean = 'Debug'
+  else:
+    return
+  path_to_clean = api.path['checkout'].join('out', dir_to_clean)
+  api.file.rmtree('clean outdir', path_to_clean)
 
 
 @contextmanager
@@ -268,7 +276,7 @@ def GenTests(api):
       api.builder_group.for_current('devtools-frontend'),
       ci_build(builder='linux'),
       api.step_data('compile', retcode=1),
-      api.post_process(StatusFailure),
+      api.post_process(post_process.StatusFailure),
   )
 
   yield api.test(
@@ -283,4 +291,14 @@ def GenTests(api):
       api.builder_group.for_current('tryserver.devtools-frontend'),
       ci_build(builder='linux'),
       api.properties(builder_config='Debug'),
+  )
+
+  yield api.test(
+      'full build',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
+      api.properties(clobber=True),
+      api.post_process(post_process.MustRun, 'clean outdir'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
