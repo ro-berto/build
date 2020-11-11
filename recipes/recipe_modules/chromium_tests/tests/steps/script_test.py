@@ -20,21 +20,19 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test_spec = steps.ScriptTestSpec.create(
+  test = steps.ScriptTest(
       'script_test',
-      script='script.py',
-      all_compile_targets={'script.py': ['compile_target']},
+      'script.py', {'script.py': ['compile_target']},
       script_args=['some', 'args'],
       override_compile_targets=['other_target'])
-  test = test_spec.get_test()
 
   try:
     test.run(api, '')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: {!r}'.format(test.compile_targets()),
-        'uses_local_devices: {!r}'.format(test.uses_local_devices),
+        'compile_targets: %r' % test.compile_targets(),
+        'uses_local_devices: %r' % test.uses_local_devices,
     ]
 
 

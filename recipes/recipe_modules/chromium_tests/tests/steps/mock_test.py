@@ -15,10 +15,9 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 
 def RunSteps(api):
-  test_spec = steps.MockTestSpec.create(
+  test = steps.MockTest(
       name=api.properties.get('test_name', 'MockTest'),
       abort_on_failure=api.properties.get('abort_on_failure', False))
-  test = test_spec.get_test()
 
   test.pre_run(api.chromium_tests.m, '')
 

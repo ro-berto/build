@@ -23,7 +23,7 @@ def RunSteps(api):
   api.test_results.set_config('public_server')
 
   test_runner = api.chromium_tests.create_test_runner(
-      tests=[steps.LocalGTestTestSpec.create('base_unittests').get_test()],
+      tests=[steps.LocalGTestTest('base_unittests')],
       serialize_tests=api.properties.get('serialize_tests'),
       retry_failed_shards=api.properties.get('retry_failed_shards'))
   return test_runner()

@@ -33,7 +33,7 @@ def RunSteps(api):
       }
   }
 
-  for test_spec in generators.generate_script_tests(
+  for test in generators.generate_script_tests(
       api,
       api.chromium_tests,
       'test_group',
@@ -41,7 +41,6 @@ def RunSteps(api):
       test_spec,
       update_step,
       scripts_compile_targets_fn=lambda: {'gtest_test.py': ['$name']}):
-    test = test_spec.get_test()
     try:
       test.pre_run(api, '')
       test.run(api, '')
