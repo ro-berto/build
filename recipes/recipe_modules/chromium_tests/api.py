@@ -1012,6 +1012,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(task.test_suites)
 
+      # We explicitly do not want trybots to upload profiles to GS. We prevent
+      # this by ensuring all trybots wanting to run the PGO workflow have
+      # skip_profile_upload.
+      if self.m.pgo.using_pgo and self.m.pgo.skip_profile_upload:
+        self.m.pgo.process_pgo_data(task.test_suites)
+
       def summarize_all_test_failures_with_no_retries():
         for t in task.test_suites:
           if t.has_failures_to_summarize():

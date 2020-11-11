@@ -11,4 +11,7 @@ message InputProperties {
   // This flag differs from use_clang_coverage because PGO only performs a
   // merge + upload.
   bool use_pgo = 1;
+
+  /// Bypasses uploading the profile to GS such that it's not rolled into src.
+  bool skip_profile_upload = 2;
 }

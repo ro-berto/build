@@ -9,7 +9,10 @@ from PB.recipe_modules.build.pgo import properties
 
 class PgoTestApi(recipe_test_api.RecipeTestApi):
 
-  def __call__(self, use_pgo=False):
-    return self.m.properties(**{
-        '$build/pgo': properties.InputProperties(use_pgo=use_pgo),
-    })
+  def __call__(self, use_pgo=False, skip_profile_upload=False):
+    return self.m.properties(
+        **{
+            '$build/pgo':
+                properties.InputProperties(
+                    use_pgo=use_pgo, skip_profile_upload=skip_profile_upload),
+        })

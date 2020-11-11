@@ -16,6 +16,7 @@ class PgoApi(recipe_api.RecipeApi):
   def __init__(self, properties, *args, **kwargs):
     super(PgoApi, self).__init__(*args, **kwargs)
     self._use_pgo = properties.use_pgo
+    self._skip_profile_upload = properties.skip_profile_upload
 
   @property
   def using_pgo(self):
@@ -24,6 +25,15 @@ class PgoApi(recipe_api.RecipeApi):
     Used by chromium_tests.run_tests() to process profile data when True.
     """
     return self._use_pgo
+
+  @property
+  def skip_profile_upload(self):
+    """Flag to skip profile uploads to GS.
+
+    Bypass uploading the generated profile to GS such that it's not rolled
+    into src.
+    """
+    return self._skip_profile_upload
 
   @property
   def branch(self):
@@ -170,6 +180,13 @@ class PgoApi(recipe_api.RecipeApi):
       new_filepath = self.m.profiles.profile_dir().join(new_filename)
       self.m.file.move('Rename the profdata artifact', profdata_artifact,
                        new_filepath)
+
+      if self.skip_profile_upload:
+        return self.m.python.succeeding_step(
+            'Skipping upload to GS for this '
+            'generated profile as '
+            'skip_profile_upload property is '
+            'enabled.', '')
 
       # Reset profdata_artifact to the updated naming
       self.m.profiles.upload(

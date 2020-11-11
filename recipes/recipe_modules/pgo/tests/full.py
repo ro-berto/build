@@ -233,3 +233,22 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'trybot',
+      api.chromium.generic_build(
+          builder_group='chromium.perf', builder='win64-builder-perf'),
+      api.pgo(use_pgo=True, skip_profile_upload=True),
+      api.platform('win', 64),
+      api.properties(mock_merged_profdata=True),
+      api.override_step_data(
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
+          api.file.listdir([
+              '\\\\performance_test_suite\\\\performance_test_suite.profdata',
+              '\\\\different_test_suite\\\\different_test_suite.profdata'
+          ])),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  ) + api.post_process(post_process.DoesNotRunRE,
+                       '.*gsutil upload artifact to GS.*')

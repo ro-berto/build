@@ -15,7 +15,9 @@ DEPS = [
     'code_coverage',
     'depot_tools/tryserver',
     'filter',
+    'pgo',
     'profiles',
+    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
@@ -88,6 +90,8 @@ def RunSteps(api):
   assert api.tryserver.is_tryserver
   api.path.mock_add_paths(
       api.profiles.profile_dir().join('overall-merged.profdata'))
+  api.path.mock_add_paths(api.profiles.profile_dir().join(
+      api.pgo.TEMP_PROFDATA_FILENAME))
 
   raw_result = api.chromium_tests.trybot_steps()
   return raw_result
@@ -528,6 +532,42 @@ def GenTests(api):
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in 2 tests'),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'pgo_trybot',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.perf', builder='Mac Builder Perf'),
+      api.properties(
+          swarm_hashes={
+              'performance_test_suite':
+                  '[dummy hash for performance_test_suite]'
+          },),
+      api.pgo(use_pgo=True, skip_profile_upload=True),
+      api.platform('mac', 64),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.perf', {
+              'mac-builder-perf': {
+                  'isolated_scripts': [{
+                      'name': 'performance_test_suite',
+                      'isolate_profile_data': True,
+                      'test': 'performance_test_suite',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.override_step_data(
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
+          api.file.listdir([('/performance_test_suite_with_patch/'
+                             'performance_test_suite.profdata')])),
+      api.post_process(post_process.DoesNotRunRE,
+                       '.*gsutil upload artifact to GS.*'),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
