@@ -276,7 +276,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
         cmd += ['--mapping-name', os.path.basename(mapping_name)]
     else:
       assert self._size_config_json
-      cmd += ['--size-config-json', self._size_config_json]
+      cmd += [
+          '--size-config-json',
+          self.m.chromium.output_dir.join(self._size_config_json)
+      ]
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
