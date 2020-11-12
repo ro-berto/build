@@ -120,6 +120,26 @@ def GenTests(api):
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess))
 
+  # TODO(huangs): Remove the use of
+  #   api.binary_size.properties(size_config_json='config/foo.json'),
+  # once |size_config_json| has a default value, and delete the tests:
+  #  * normal_build_with_upcoming_flow,
+  #  * unexpected_increase_with_upcoming_flow.
+  # Note that providing |size_config_json| in tests is to engage the upcoming
+  # flow. Actual |_size_config| data are injected via |step_test_data|, not read
+  # from (non-existent) foo.json.
+
+  yield api.test(
+      'normal_build_with_upcoming_flow', api.binary_size.build('normal_build'),
+      override_analyze(),
+      api.binary_size.properties(size_config_json='config/foo.json'),
+      api.post_check(has_expected_supersize_link),
+      api.post_check(has_expected_binary_size_url),
+      api.post_check(final_step_is_not_nested),
+      api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+
   yield api.test(
       'normal_nondefault_targets',
       api.binary_size.build('nondefault_targets'),
@@ -131,8 +151,8 @@ def GenTests(api):
 
   yield api.test(
       'normal_significant_binary_package_restructure',
-      override_analyze(),
-      api.binary_size.build('normal build + significant package restructure'),
+      api.binary_size.build(),
+      api.binary_size.properties(size_config_json='config/foo.json'),
       api.binary_size.on_significant_binary_package_restructure(),
       api.post_process(post_process.StatusSuccess),
   )
@@ -149,6 +169,22 @@ def GenTests(api):
           })),
       api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusFailure))
+
+  yield api.test(
+      'unexpected_increase_with_upcoming_flow', api.binary_size.build(),
+      override_analyze(),
+      api.binary_size.properties(size_config_json='config/foo.json'),
+      api.override_step_data(
+          constants.RESULT_JSON_STEP_NAME,
+          api.json.output({
+              'status_code': 1,
+              'summary': '\n!summary!',
+              'archive_filenames': [],
+              'links': [],
+          })),
+      api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation))
 
   def has_failed_expectations(check, steps):
     check(steps[constants.EXPECTATIONS_STEP_NAME].logs['failed expectations'] is
