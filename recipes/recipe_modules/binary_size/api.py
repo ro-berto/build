@@ -30,29 +30,13 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
 
-    self._use_legacy_flow = not bool(properties.size_config_json)
-    if self._use_legacy_flow:
-      # TODO(huangs): Remove by mid 2020-11.
-      apk_name = (
-          properties.android.apk_name or constants.DEFAULT_PARAMS['apk_name'])
-      mapping_names = (
-          properties.android.mapping_names or
-          constants.DEFAULT_PARAMS['mapping_file_names'])
-      self._size_config_json = None
-      # Store into |_size_config| for compatibility. Files are specified
-      # relative to Chromium output directory.
-      self._size_config = {
-          'mapping_files': [
-              os.path.join('apks', name) for name in mapping_names
-          ],
-          'resource_sizes_args': None,
-          'supersize_input_file': os.path.join('apks', apk_name),
-          'version': constants.VERSION_LEGACY_FLOW,
-      }
-    else:  # The "upcoming flow".
-      # Path relative to chromium output directory.
-      self._size_config_json = properties.size_config_json
-      self._size_config = None  # Initialized in _ensure_size_config().
+    # Path relative to Chromium output directory.
+    self._size_config_json = (
+        properties.size_config_json or constants.DEFAULT_SIZE_CONFIG_JSON)
+    self._size_config = None  # Initialized in _ensure_size_config().
+
+    # Cached contents of gs:// LATEST file.
+    self._latest_lines = None
 
   def _ensure_size_config(self):
     """Load size config JSON if |_size_config| is not initialized.
@@ -164,14 +148,20 @@ class BinarySizeApi(recipe_api.RecipeApi):
               # Make sure that the git cache is refreshed with another origin
               # fetch to get a correct diff of the patch
               enforce_fetch=True)
+          # Do not use gs analysis on significant binary pacakge restructure.
+          # This check cannot take place earlier because it needs to read the
+          # size config JSON file, which requires |self.m.chromium.output_dir|
+          # to be available, which requires ensure_checkout() to run first.
+          if self._has_significant_binary_package_restructure():
+            use_gs_analysis = False
         except self.m.step.StepFailure:
           # CL patch is incompatible with revision used in recently uploaded
           # analysis. Use the most recent trunk commit instead.
-          self.m.gclient.c.solutions[0].revision = None
           use_gs_analysis = False
-          bot_update_step = self.m.chromium_checkout.ensure_checkout()
 
-      else:  # pragma: no cover
+      if not use_gs_analysis:
+        gs_zip_path = None
+        self.m.gclient.c.solutions[0].revision = None
         bot_update_step = self.m.chromium_checkout.ensure_checkout()
 
       suffix = ' (with patch)'
@@ -265,21 +255,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
-
-    if self._use_legacy_flow:
-      # The old arguments filename (not path), so apply os.path.basename().
-      cmd += [
-          '--apk-name',
-          os.path.basename(self._size_config['supersize_input_file']),
-      ]
-      for mapping_name in self._size_config['mapping_files']:
-        cmd += ['--mapping-name', os.path.basename(mapping_name)]
-    else:
-      assert self._size_config_json
-      cmd += [
-          '--size-config-json',
-          self.m.chromium.output_dir.join(self._size_config_json)
-      ]
+    cmd += [
+        '--size-config-json',
+        self.m.chromium.output_dir.join(self._size_config_json)
+    ]
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
@@ -291,38 +270,44 @@ class BinarySizeApi(recipe_api.RecipeApi):
     m = re.search(r'.*\/(.*)_(.*)\.zip', gs_zip_path)
     return int(m.group(1)), m.group(2)
 
+  def _ensure_latest_lines(self):
+    if self._latest_lines is None:
+      gs_directory = 'android-binary-size/commit_size_analysis/'
+
+      def generate_test_data():
+        yield ('android-binary-size/commit_size_analysis/'
+               '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
+                   constants.TEST_TIME))
+        yield self._make_version_string(constants.TEST_SUPERSIZE_INPUT_FILE,
+                                        constants.TEST_VERSION_OLD)
+
+      self._latest_lines = self.m.gsutil.cat(
+          'gs://{bucket}/{source}'.format(
+              bucket=self.results_bucket, source=gs_directory + 'LATEST'),
+          stdout=self.m.raw_io.output(),
+          step_test_data=lambda: self.m.raw_io.test_api.stream_output('\n'.join(
+              generate_test_data())),
+          name='cat LATEST').stdout.splitlines()
+      assert self._latest_lines and len(self._latest_lines) >= 2
+
   def _check_for_recent_tot_analysis(self):
-    gs_directory = 'android-binary-size/commit_size_analysis/'
-
-    def generate_test_data():
-      yield ('android-binary-size/commit_size_analysis/'
-             '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
-                 constants.TEST_TIME))
-      yield self._make_version_string(constants.TEST_SUPERSIZE_INPUT_FILE,
-                                      constants.TEST_VERSION_OLD)
-
-    lines = self.m.gsutil.cat(
-        'gs://{bucket}/{source}'.format(
-            bucket=self.results_bucket, source=gs_directory + 'LATEST'),
-        stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output('\n'.join(
-            generate_test_data())),
-        name='cat LATEST').stdout.splitlines()
-    gs_zip_path = lines[0]
+    self._ensure_latest_lines()
+    gs_zip_path = self._latest_lines[0]
     latest_upload_timestamp = self._parse_gs_zip_path(gs_zip_path)[0]
 
     # If the most recent upload was created over 2 hours ago, don't use it
     if int(self.m.time.time()) - int(latest_upload_timestamp) > 7200:
       return
 
+    return gs_zip_path
+
+  def _has_significant_binary_package_restructure(self):
     # Detect significant binary package restructure between the latest gs://
     # upload and the current CL. If detected, don't use the latest upload.
-    prev_analysis_file_version_string = lines[1] if len(lines) > 1 else None
-    if (prev_analysis_file_version_string !=
-        self.get_analysis_file_version_string()):
-      return
-
-    return gs_zip_path
+    self._ensure_latest_lines()
+    prev_analysis_file_version_string = self._latest_lines[1]
+    return (prev_analysis_file_version_string !=
+            self.get_analysis_file_version_string())
 
   def _download_recent_tot_analysis(self, gs_zip_path, staging_dir):
     local_zip = self.m.path.mkstemp()
@@ -461,16 +446,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--author', author]
-      if self._use_legacy_flow:
-        cmd += [
-            '--apk-name',
-            os.path.basename(self._size_config['supersize_input_file'])
-        ]
-      else:
-        cmd += [
-            '--size-config-json-name',
-            os.path.basename(self._size_config_json)
-        ]
+      cmd += [
+          '--size-config-json-name',
+          os.path.basename(self._size_config_json)
+      ]
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
       cmd += ['--results-path', results_path]
