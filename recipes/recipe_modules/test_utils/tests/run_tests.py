@@ -20,18 +20,16 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
-from RECIPE_MODULES.build import chromium_swarming
 
 PROPERTIES = {
   'abort_on_failure': Property(default=False),
   'test_swarming': Property(default=False),
   'test_name': Property(default='MockTest'),
   'retry_invalid_shards': Property(default=False),
-  'swarming_test_kwargs': Property(default={})
 }
 
 def RunSteps(api, test_swarming, test_name, abort_on_failure,
-             retry_invalid_shards, swarming_test_kwargs):
+             retry_invalid_shards):
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
@@ -41,8 +39,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
 
   class MockSwarmingTest(steps.SwarmingIsolatedScriptTest, steps.MockTest):
 
-    def __init__(self, name, **kwargs):
-      super(MockSwarmingTest, self).__init__(name=name, **kwargs)
+    def __init__(self, name):
+      super(MockSwarmingTest, self).__init__(name=name)
 
     def has_valid_results(self, suffix):
       if self.name.endswith('invalid_results'):
@@ -51,8 +49,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
 
   if test_swarming:
     tests = [
-        MockSwarmingTest(name=test_name, **swarming_test_kwargs),
-        MockSwarmingTest(name=test_name + '_2', **swarming_test_kwargs),
+        MockSwarmingTest(name=test_name),
+        MockSwarmingTest(name=test_name + '_2'),
         steps.MockTest(name='test3')
     ]
     api.chromium_tests.set_config('staging')
@@ -82,25 +80,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'test2'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'cipd_describe_once_per_package',
-      api.chromium.generic_build(
-          builder_group='test_group', builder='test_builder'),
-      api.properties(
-          test_name='base_unittests',
-          test_swarming=True,
-          swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
-          },
-          swarming_test_kwargs={
-            'cipd_packages': [
-              chromium_swarming.CipdPackage.create(
-                  name='package1', version='1', root='cipd_packages')
-            ]
-          }),
   )
 
   yield api.test(

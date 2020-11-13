@@ -1711,10 +1711,6 @@ class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
   SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
 
-  # Use this dictionary to keep track of CIPD packages described for each test
-  # suite.
-  _cipd_package_descriptions = {}
-
   def __init__(self,
                name,
                dimensions=None,
@@ -2149,10 +2145,6 @@ class SwarmingTest(Test):
           '[error] %s' % self.step_name(suffix),
           '*.isolated file for target %s is missing' % self.isolate_target)
 
-    # Get descriptions for all CIPD packages downloaded for a single test suite
-    for cipd_pkg in self._cipd_packages:
-      self._maybe_get_cipd_pkg_desc(api, cipd_pkg)
-
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, task_input)
 
@@ -2160,12 +2152,6 @@ class SwarmingTest(Test):
         self._tasks[suffix],
         use_swarming_go_in_trigger_script=api.chromium_tests
         .use_swarming_go_in_trigger_script)
-
-  def _maybe_get_cipd_pkg_desc(self, api, cipd_pkg):
-    key = (cipd_pkg.name, cipd_pkg.version)
-    if key not in self._cipd_package_descriptions:
-      self._cipd_package_descriptions[key] = api.cipd.describe(
-          cipd_pkg.name, cipd_pkg.version)
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
@@ -2224,32 +2210,7 @@ class SwarmingTest(Test):
       data['patched'] = suffix in ('with patch', 'retry shards with patch')
       data['dimensions'] = self._tasks[suffix].request[0].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
-
-      cipd_metadata = self._maybe_get_cipd_metadata()
-      if cipd_metadata:
-        data['cipd_packages'] = cipd_metadata
     return data
-
-  def _maybe_get_cipd_metadata(self):
-    cipd_descriptions = []
-    for cipd_pkg in self._cipd_packages:
-      key = (cipd_pkg.name, cipd_pkg.version)
-      assert key in self._cipd_package_descriptions, (
-          'Version %s of package %s was not described in test_pre_run step'
-          % key)
-      pkg_desc = self._cipd_package_descriptions[key]
-      pkg_metadata = {}
-      pkg_metadata['package_name'] = pkg_desc.pin.package
-      pkg_metadata['instance_id'] = pkg_desc.pin.instance_id
-
-      if pkg_desc.tags:
-        pkg_metadata['tags'] = [t.tag for t in pkg_desc.tags]
-
-      if pkg_desc.refs:
-        pkg_metadata['refs'] = [r.ref for r in pkg_desc.refs]
-
-      cipd_descriptions.append(pkg_metadata)
-    return cipd_descriptions
 
 
 class SwarmingGTestTest(SwarmingTest):
