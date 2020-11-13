@@ -33,62 +33,17 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self._use_legacy_flow = not bool(properties.size_config_json)
     if self._use_legacy_flow:
       # TODO(huangs): Remove by mid 2020-11.
-      apk_name = (
+      self._apk_name = (
           properties.android.apk_name or constants.DEFAULT_PARAMS['apk_name'])
-      mapping_names = (
+      self._mapping_names = (
           properties.android.mapping_names or
           constants.DEFAULT_PARAMS['mapping_file_names'])
       self._size_config_json = None
-      # Store into |_size_config| for compatibility. Files are specified
-      # relative to Chromium output directory.
-      self._size_config = {
-          'mapping_files': [
-              os.path.join('apks', name) for name in mapping_names
-          ],
-          'resource_sizes_args': None,
-          'supersize_input_file': os.path.join('apks', apk_name),
-          'version': constants.VERSION_LEGACY_FLOW,
-      }
     else:  # The "upcoming flow".
+      self._apk_name = None
+      self._mapping_names = None
       # Path relative to chromium output directory.
       self._size_config_json = properties.size_config_json
-      self._size_config = None  # Initialized in _ensure_size_config().
-
-  def _ensure_size_config(self):
-    """Load size config JSON if |_size_config| is not initialized.
-
-    Load from JSON cannot take place in __init__() because it's a step.
-    """
-    if not self._size_config:
-      path = self.m.chromium.output_dir.join(self._size_config_json)
-      step_result = self.m.json.read(
-          name=constants.READ_SIZE_CONFIG_JSON_STEP_NAME,
-          path=path,
-          step_test_data=lambda: self.m.json.test_api.output({
-              'mapping_files': constants.TEST_MAPPING_FILES,
-              'resource_sizes_args': {
-                  'apk_name': constants.TEST_SUPERSIZE_INPUT_FILE,
-              },
-              'supersize_input_file': constants.TEST_SUPERSIZE_INPUT_FILE,
-              'version': constants.TEST_VERSION_OLD,
-          }))
-      self._size_config = step_result.json.output
-
-  def _make_version_string(self, supersize_input_file, version):
-    """Helper to render version string."""
-    return os.path.basename(supersize_input_file) + ',' + version
-
-  def get_analysis_file_version_string(self):
-    """Returns a version string for uploaded gs:// files.
-
-    On significant binary package restructure (e.g., transitioning between
-    Monochrome and Trichrome), the latest "without change" results stored in
-    gs:// would be too stale to be used (i.e., recomputation is needed). This
-    function returns a version string for staleness tagging and detection.
-    """
-    self._ensure_size_config()
-    return self._make_version_string(self._size_config['supersize_input_file'],
-                                     self._size_config['version'])
 
   def android_binary_size(self,
                           chromium_config,
@@ -261,19 +216,17 @@ class BinarySizeApi(recipe_api.RecipeApi):
       staging_dir: Staging directory to pass input files and and retrieve output
         size analysis files (e.g., .size and size JSON files).
     """
-    self._ensure_size_config()
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
 
     if self._use_legacy_flow:
       # The old arguments filename (not path), so apply os.path.basename().
-      cmd += [
-          '--apk-name',
-          os.path.basename(self._size_config['supersize_input_file']),
-      ]
-      for mapping_name in self._size_config['mapping_files']:
-        cmd += ['--mapping-name', os.path.basename(mapping_name)]
+      assert self._apk_name
+      assert self._mapping_names
+      cmd += ['--apk-name', self._apk_name]
+      for mapping_name in self._mapping_names:
+        cmd += ['--mapping-name', mapping_name]
     else:
       assert self._size_config_json
       cmd += [
@@ -298,8 +251,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
       yield ('android-binary-size/commit_size_analysis/'
              '{}_551be50f2e3dae7dd1b31522fce7a91374c0efab.zip'.format(
                  constants.TEST_TIME))
-      yield self._make_version_string(constants.TEST_SUPERSIZE_INPUT_FILE,
-                                      constants.TEST_VERSION_OLD)
 
     lines = self.m.gsutil.cat(
         'gs://{bucket}/{source}'.format(
@@ -308,18 +259,18 @@ class BinarySizeApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.raw_io.test_api.stream_output('\n'.join(
             generate_test_data())),
         name='cat LATEST').stdout.splitlines()
+
+    # If the LATEST file has blank data, it's likely to have been manually
+    # cleared to invalidate the latest gs:// results to indicate that
+    # significant binary package restructure has taken place.
+    if not lines or not lines[0].strip():
+      return
+
     gs_zip_path = lines[0]
     latest_upload_timestamp = self._parse_gs_zip_path(gs_zip_path)[0]
 
     # If the most recent upload was created over 2 hours ago, don't use it
     if int(self.m.time.time()) - int(latest_upload_timestamp) > 7200:
-      return
-
-    # Detect significant binary package restructure between the latest gs://
-    # upload and the current CL. If detected, don't use the latest upload.
-    prev_analysis_file_version_string = lines[1] if len(lines) > 1 else None
-    if (prev_analysis_file_version_string !=
-        self.get_analysis_file_version_string()):
       return
 
     return gs_zip_path
@@ -454,7 +405,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,
                     staging_dir):
-    self._ensure_size_config()
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
@@ -462,10 +412,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       cmd = [checker_script]
       cmd += ['--author', author]
       if self._use_legacy_flow:
-        cmd += [
-            '--apk-name',
-            os.path.basename(self._size_config['supersize_input_file'])
-        ]
+        cmd += ['--apk-name', self._apk_name]
       else:
         cmd += [
             '--size-config-json-name',

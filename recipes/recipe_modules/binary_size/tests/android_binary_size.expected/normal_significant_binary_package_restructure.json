@@ -80,32 +80,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "None/out/Release/config/foo.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Read size config JSON",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mapping_files\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"apks/MonochromePublic.aab.mapping\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"resource_sizes_args\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"apk_name\": \"apks/MonochromePublic.minimal.apks\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"supersize_input_file\": \"apks/MonochromePublic.minimal.apks\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": \"0.5\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "vpython",
       "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",

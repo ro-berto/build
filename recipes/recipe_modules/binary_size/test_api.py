@@ -50,13 +50,6 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
     ], self.empty_test_data())
 
   def on_significant_binary_package_restructure(self):
-    return self.override_step_data(
-        constants.READ_SIZE_CONFIG_JSON_STEP_NAME,
-        self.m.json.output({
-            'mapping_files': constants.TEST_MAPPING_FILES,
-            'resource_sizes_args': {
-                'apk_name': constants.TEST_SUPERSIZE_INPUT_FILE,
-            },
-            'supersize_input_file': constants.TEST_SUPERSIZE_INPUT_FILE,
-            'version': constants.TEST_VERSION_NEW,  # Change.
-        }))
+    # Simulates manual clearing of the LATEST file.
+    return self.override_step_data('gsutil cat LATEST',
+                                   self.m.raw_io.stream_output(''))

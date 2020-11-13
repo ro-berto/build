@@ -83,16 +83,10 @@ def RunSteps(api):
         unauthenticated_url=True,
     )
 
-    def generate_LATEST_lines():
-      # Name of the most recent zip file for android-binary-size builds for
-      # quick fetch, also encoding timestamp and revision.
-      yield gs_dest
-      # Version string to identify significant binary package restructure.
-      yield api.binary_size.get_analysis_file_version_string()
-
     local_latest_file = api.path.mkstemp()
-    api.file.write_text('write local latest file', local_latest_file,
-                        '\n'.join(generate_LATEST_lines()))
+    # Write the name of the most recent zip file for android-binary-size builds
+    # for quick fetch, also to encode timestamp and revision.
+    api.file.write_text('write local latest file', local_latest_file, gs_dest)
 
     latest_dest = GS_DIRECTORY + 'LATEST'
     api.gsutil.upload(
