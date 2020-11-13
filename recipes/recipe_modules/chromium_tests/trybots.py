@@ -1745,13 +1745,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.chromium.updater': {
-        'win-updater-builder-rel':
+        'win-updater-try-builder-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='win-updater-builder-rel',
                 tester='win10-updater-tester-rel',
             ),
-        'mac-updater-builder-rel':
+        'mac-updater-try-builder-rel':
            try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-rel',
