@@ -551,6 +551,13 @@ class ArchiveApi(recipe_api.RecipeApi):
       timestamp = str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S'))
       input_str = input_str.replace(timestamp_placeholder, timestamp)
 
+    chromium_version_placeholder = '{%chromium_version%}'
+    if chromium_version_placeholder in input_str:
+      version = self.m.chromium.get_version()
+      value = "%s.%s.%s.%s" % (version['MAJOR'], version['MINOR'],
+                               version['BUILD'], version['PATCH'])
+      input_str = input_str.replace(chromium_version_placeholder, value)
+
     if custom_vars:
       for placeholder, key in re.findall('({%(.*?)%})', input_str):
         if key in custom_vars.keys():

@@ -7,6 +7,7 @@ from PB.recipe_modules.build.archive import properties
 DEPS = [
     'build',
     'builder_group',
+    'chromium',
     'depot_tools/depot_tools',
     'depot_tools/gsutil',
     'recipe_engine/buildbucket',

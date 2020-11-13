@@ -38,6 +38,8 @@ message ArchiveData {
   //     got_src_revision_cp if it is not set).
   // {%commit%} -> commit hash from got_revision.
   // {%timestamp%} -> UTC timestamp in %Y%m%d%H%M%S.
+  // {$chromium_version%} -> Chromium version extracted from chrome/VERSION file
+  //     in {major}.{minor}.{build}.{patch} format.
   // Custom string substitutions are also supported through the 'custom_vars'
   // parameter in generic_archive().
   string gcs_path = 4;
