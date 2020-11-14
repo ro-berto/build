@@ -113,20 +113,18 @@ class BotConfig(object):
     source_side_specs = self._get_source_side_specs(chromium_tests_api)
     tests = {}
 
-    for group, source_side_spec in source_side_specs.iteritems():
-      builders_for_group = self.bot_db.builders_by_group[group]
-      for builder_name, builder_spec in builders_for_group.iteritems():
-        builder_id = chromium.BuilderId.create_for_group(group, builder_name)
-        builder_tests = chromium_tests_api.generate_tests_from_source_side_spec(
-            source_side_spec,
-            builder_spec,
-            builder_name,
-            group,
-            builder_spec.swarming_dimensions,
-            scripts_compile_targets_fn,
-            bot_update_step,
-        )
-        tests[builder_id] = builder_tests
+    for builder_id in self.all_keys:
+      builder_spec = self.bot_db[builder_id]
+      builder_tests = chromium_tests_api.generate_tests_from_source_side_spec(
+          source_side_specs[builder_id.group],
+          builder_spec,
+          builder_id.builder,
+          builder_id.group,
+          builder_spec.swarming_dimensions,
+          scripts_compile_targets_fn,
+          bot_update_step,
+      )
+      tests[builder_id] = builder_tests
 
     return BuildConfig(chromium_tests_api, self, source_side_specs, tests)
 

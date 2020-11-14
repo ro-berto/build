@@ -120,3 +120,80 @@ def GenTests(api):
                        'read test spec (fake-tester-group.json)'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'bad-spec',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      api.chromium_tests.builders({
+          'fake-group': {
+              'fake-builder': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+          },
+      }),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': 'invalid-spec',
+      }),
+      api.expect_exception('AttributeError'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'bad-spec-on-related-builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      api.chromium_tests.builders({
+          'fake-group': {
+              'fake-builder': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+              'fake-builder-with-bad-spec': {
+                  'execution_mode': bot_spec.TEST,
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+                  'parent_buildername': 'fake-builder',
+              },
+          },
+      }),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {},
+          'fake-builder-with-bad-spec': 'invalid-spec',
+      }),
+      api.expect_exception('AttributeError'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'bad-spec-on-unrelated-builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      api.chromium_tests.builders({
+          'fake-group': {
+              'fake-builder': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+              'fake-builder-with-bad-spec': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+          },
+      }),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {},
+          'fake-builder-with-bad-spec': 'invalid-spec',
+      }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
