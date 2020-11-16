@@ -93,15 +93,15 @@ def GenTests(api):
           task_name='optional-dimension task',
           wait_for_capacity=True,
           optional_dimensions={
-              60: [{
+              60: {
                   'os': 'most-preferred-os'
-              }],
-              120: [{
+              },
+              120: {
                   'os': 'less-preferred-os'
-              }],
-              180: [{
+              },
+              180: {
                   'os': 'least-preferred-os'
-              }],
+              },
           }),
       api.post_check(api.swarming.check_triggered_request,
                      '[trigger] optional-dimension task', lambda check, req:

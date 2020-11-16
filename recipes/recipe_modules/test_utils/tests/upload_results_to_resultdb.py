@@ -36,11 +36,10 @@ PROPERTIES = {
 
 
 def RunSteps(api, is_swarming_test=True):
-  tests = [steps.LocalIsolatedScriptTest('base_unittests')]
+  test_spec = steps.LocalIsolatedScriptTestSpec.create('base_unittests')
   if is_swarming_test:
-    tests = [
-        steps.SwarmingGTestTest('base_unittests', shards=2),
-    ]
+    test_spec = steps.SwarmingGTestTestSpec.create('base_unittests', shards=2)
+  tests = [test_spec.get_test()]
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')

@@ -15,8 +15,9 @@ from RECIPE_MODULES.build.chromium_tests import steps
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = steps.SizesStep(
+  test_spec = steps.SizesStepSpec.create(
       results_url='https://example/url', perf_id='test-perf-id')
+  test = test_spec.get_test()
 
   try:
     test.run(api, '')

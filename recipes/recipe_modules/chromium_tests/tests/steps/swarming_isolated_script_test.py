@@ -50,11 +50,8 @@ def RunSteps(api):
     # Needed for a test
     test_name = 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
-  test = steps.SwarmingIsolatedScriptTest(
+  test_spec = steps.SwarmingIsolatedScriptTestSpec.create(
       name=test_name,
-      perf_id=api.properties.get('perf_id'),
-      perf_dashboard_id='test-perf-dashboard-id',
-      results_url=api.properties.get('results_url'),
       ignore_task_failure=api.properties.get('ignore_task_failure'),
       override_compile_targets=api.properties.get('override_compile_targets'),
       io_timeout=120,
@@ -66,6 +63,7 @@ def RunSteps(api):
       }),
       isolate_coverage_data=isolate_coverage_data,
       resultdb=steps.ResultDB.create(enable=True))
+  test = test_spec.get_test()
   api.chromium_swarming.set_default_dimension('pool', 'foo')
   assert test.runs_on_swarming and not test.is_gtest
   assert test.shards > 0

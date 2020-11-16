@@ -27,7 +27,7 @@ def _bot_db_to_json(bot_db):
       return dict(obj)
     if attr.has(type(obj)):
       return attr.asdict(obj, dict_factory=collections.OrderedDict)
-    return None
+    return None  # pragma: no cover
 
   return json.dumps(bot_db.builders_by_group, default=encode)
 

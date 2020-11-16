@@ -250,16 +250,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     tests = [s.get_test() for s in bot_spec.test_specs]
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
-      tests.extend(
-          generator(
-              self.m,
-              self,
-              builder_group,
-              buildername,
-              source_side_spec,
-              bot_update_step,
-              swarming_dimensions=swarming_dimensions,
-              scripts_compile_targets_fn=scripts_compile_targets_fn))
+      test_specs = generator(
+          self.m,
+          self,
+          builder_group,
+          buildername,
+          source_side_spec,
+          bot_update_step,
+          swarming_dimensions=swarming_dimensions,
+          scripts_compile_targets_fn=scripts_compile_targets_fn)
+      tests.extend(s.get_test() for s in test_specs)
     return tuple(tests)
 
   def read_source_side_spec(self, source_side_spec_file):

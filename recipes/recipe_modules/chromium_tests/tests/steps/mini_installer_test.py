@@ -19,7 +19,7 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = steps.MiniInstallerTest()
+  test = steps.MiniInstallerTestSpec.create().get_test()
 
   try:
     test.run(api, '')

@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import string
 import textwrap
 
@@ -102,6 +103,24 @@ def _result_sink_experiment_enabled(api):
           api.buildbucket.build.input.experiments)
 
 
+def _normalize_optional_dimensions(optional_dimensions):
+  if not optional_dimensions:
+    return optional_dimensions
+
+  normalized = {}
+  for expiration, dimensions_sequence in optional_dimensions.iteritems():
+    if isinstance(dimensions_sequence, collections.Mapping):
+      dimensions = dimensions_sequence
+    else:
+      # TODO(https://crbug.com/1148971): Convert source side specs to use single
+      # dicts rather than lists of dicts so this can be removed
+      dimensions = {}
+      for d in dimensions_sequence:
+        dimensions.update(d)
+    normalized[int(expiration)] = dimensions
+  return normalized
+
+
 def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
                      swarming_dimensions):
   """Common logic for generating tests from JSON specs.
@@ -181,7 +200,8 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
   swarming_spec = raw_test_spec.get('swarming', {})
   if swarming_spec.get('can_use_on_swarming_builders'):
     swarming_dimension_sets = swarming_spec.get('dimension_sets')
-    swarming_optional_dimensions = swarming_spec.get('optional_dimensions')
+    swarming_optional_dimensions = _normalize_optional_dimensions(
+        swarming_spec.get('optional_dimensions'))
     kwargs['expiration'] = swarming_spec.get('expiration')
     kwargs['containment_type'] = swarming_spec.get('containment_type')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
@@ -271,7 +291,7 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
   experiment_percentage = raw_test_spec.get('experiment_percentage')
   for t in tests:
     if experiment_percentage is not None:
-      yield steps.ExperimentalTest(t, experiment_percentage, api)
+      yield steps.ExperimentalTestSpec.create(t, experiment_percentage, api)
     else:
       yield t
 
@@ -353,12 +373,12 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
       if not resultdb:
         kwargs['resultdb'] = steps.ResultDB.create(
             enable=True, result_format='gtest')
-    return steps.SwarmingGTestTest(**kwargs)
+    return steps.SwarmingGTestTestSpec.create(**kwargs)
 
   def gtest_local_delegate(raw_test_spec, **kwargs):
     kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
     kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
-    return steps.LocalGTestTest(**kwargs)
+    return steps.LocalGTestTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec, gtest_swarming_delegate,
                             gtest_local_delegate, swarming_dimensions):
@@ -376,7 +396,7 @@ def generate_junit_tests(api,
   del api, chromium_tests_api, bot_update_step
   del swarming_dimensions, scripts_compile_targets_fn
   for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
-    yield steps.AndroidJunitTest(
+    yield steps.AndroidJunitTestSpec.create(
         test.get('name', test['test']),
         target_name=test['test'],
         additional_args=test.get('args'),
@@ -396,7 +416,7 @@ def generate_script_tests(api,
   del api, chromium_tests_api, bot_update_step, swarming_dimensions
 
   for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
-    yield steps.ScriptTest(
+    yield steps.ScriptTestSpec.create(
         str(script_spec['name']),
         script=script_spec['script'],
         all_compile_targets=scripts_compile_targets_fn(),
@@ -451,13 +471,7 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
     results_handler_name = test.get('results_handler', 'default')
-    try:
-      common_kwargs['results_handler'] = {
-          'default': lambda: None,
-          'fake': steps.FakeCustomResultsHandler,
-          'layout tests': steps.LayoutTestResultsHandler,
-      }[results_handler_name]()
-    except KeyError:
+    if results_handler_name not in steps.ALLOWED_RESULT_HANDLER_NAMES:
       api.python.failing_step(
           'isolated_scripts spec format error',
           textwrap.wrap(
@@ -466,6 +480,7 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
                   results_handler "%s" but that result handler was not found.
                   """ % (name, results_handler_name))),
           as_log='details')
+    common_kwargs['results_handler_name'] = results_handler_name
 
     return common_kwargs
 
@@ -497,11 +512,11 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
 
         kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
 
-    return steps.SwarmingIsolatedScriptTest(**kwargs)
+    return steps.SwarmingIsolatedScriptTestSpec.create(**kwargs)
 
   def isolated_script_local_delegate(raw_test_spec, **kwargs):
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
-    return steps.LocalIsolatedScriptTest(**kwargs)
+    return steps.LocalIsolatedScriptTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec,
                             isolated_script_swarming_delegate,

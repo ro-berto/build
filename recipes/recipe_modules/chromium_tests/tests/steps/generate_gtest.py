@@ -40,15 +40,16 @@ def RunSteps(api):
   update_step = api.bot_update.ensure_checkout()
 
   single_spec = api.properties.get('single_spec')
-  test_spec = {
+  source_side_spec = {
       'test_buildername': {
           'gtest_tests': [single_spec] if single_spec else [],
       }
   }
 
-  for test in generators.generate_gtests(api, api.chromium_tests, 'test_group',
-                                         'test_buildername', test_spec,
-                                         update_step):
+  for test_spec in generators.generate_gtests(api, api.chromium_tests,
+                                              'test_group', 'test_buildername',
+                                              source_side_spec, update_step):
+    test = test_spec.get_test()
     try:
       test.pre_run(api, '')
       test.run(api, '')
@@ -89,12 +90,47 @@ def GenTests(api):
                       True,
                   'dimension_sets': [{
                       'os': 'Linux',
+                      'foo': None,
                   },],
+                  'optional_dimensions': {
+                      '60': {
+                          'bar': 'baz',
+                      },
+                  },
                   'cipd_packages': [{
                       'location': '{$HOME}/logdog',
                       'cipd_package': 'infra/logdog/linux-386',
                       'revision': 'git_revision:deadbeef',
                   },],
+              },
+          },
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      ),
+  )
+
+  yield api.test(
+      'swarming_with_legacy_optional_dimensions',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'test_target': '//base:base_unittests',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'dimension_sets': [{
+                      'os': 'Linux',
+                      'foo': None,
+                  },],
+                  'optional_dimensions': {
+                      '60': [{
+                          'bar': 'baz',
+                      }],
+                  },
               },
           },
           swarm_hashes={

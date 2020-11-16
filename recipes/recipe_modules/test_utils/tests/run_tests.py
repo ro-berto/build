@@ -37,10 +37,13 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
-  class MockSwarmingTest(steps.SwarmingIsolatedScriptTest, steps.MockTest):
+  class MockSwarmingTestSpec(steps.SwarmingIsolatedScriptTestSpec):
 
-    def __init__(self, name):
-      super(MockSwarmingTest, self).__init__(name=name)
+    @property
+    def test_class(self):
+      return MockSwarmingTest
+
+  class MockSwarmingTest(steps.SwarmingIsolatedScriptTest):
 
     def has_valid_results(self, suffix):
       if self.name.endswith('invalid_results'):
@@ -48,17 +51,20 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
       return super(MockSwarmingTest, self).has_valid_results(suffix)
 
   if test_swarming:
-    tests = [
-        MockSwarmingTest(name=test_name),
-        MockSwarmingTest(name=test_name + '_2'),
-        steps.MockTest(name='test3')
+    test_specs = [
+        MockSwarmingTestSpec.create(name=test_name),
+        MockSwarmingTestSpec.create(name=test_name + '_2'),
+        steps.MockTestSpec.create(name='test3')
     ]
     api.chromium_tests.set_config('staging')
   else:
-    tests = [
-        steps.MockTest(name=test_name, abort_on_failure=abort_on_failure),
-        steps.MockTest(name='test2')
+    test_specs = [
+        steps.MockTestSpec.create(
+            name=test_name, abort_on_failure=abort_on_failure),
+        steps.MockTestSpec.create(name='test2')
     ]
+
+  tests = [s.get_test() for s in test_specs]
 
   _, failed_tests = api.test_utils.run_tests(
       api.chromium_tests.m, tests, '',

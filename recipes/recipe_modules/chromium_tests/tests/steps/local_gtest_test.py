@@ -24,7 +24,7 @@ def RunSteps(api):
   api.chromium_android.set_config('main_builder')
   api.test_results.set_config('public_server')
 
-  test = steps.LocalGTestTest('base_unittests')
+  test = steps.LocalGTestTestSpec.create('base_unittests').get_test()
   assert test.is_gtest and not test.runs_on_swarming
 
   test_options = steps.TestOptions(

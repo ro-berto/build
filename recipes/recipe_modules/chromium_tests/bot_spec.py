@@ -24,19 +24,14 @@ TEST = 'test'
 PROVIDE_TEST_SPEC = 'provide-test-spec'
 
 
-@attrs()
 class TestSpec(object):
-
-  test_type = attrib(type)
-  args = sequence_attrib(default=())
-  kwargs = mapping_attrib(default={})
+  """Facade class to provide factory method for creating specific specs.
+  """
 
   @classmethod
-  def create(cls, test_type, *args, **kwargs):
-    return cls(test_type, args=args, kwargs=kwargs)
-
-  def get_test(self):
-    return self.test_type(*self.args, **self.kwargs)
+  def create(cls, test_class, *args, **kwargs):
+    test_spec_class = test_class.SPEC_CLASS
+    return test_spec_class.create(*args, **kwargs)
 
 
 @attrs()
@@ -213,7 +208,7 @@ class BotSpec(object):
   # Specs for tests to be run for this builder
   # Deprecated: Tests should be specified in the source side spec for the
   # builder
-  test_specs = sequence_attrib(TestSpec, default=())
+  test_specs = sequence_attrib(steps.TestSpec, default=())
   # A bool controlling whether swarming tests should be run serially
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity

@@ -519,7 +519,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       * env: a dict {ENVVAR: ENVVALUE} which instructs swarming to set the
           environment variables before invoking the command. These are applied
           on top of the default environment variables.
-      * optional_dimensions: {expiration: [{key: value}]} mapping with swarming
+      * optional_dimensions: {expiration: {key: value}} mapping with swarming
           dimensions that specify on what Swarming bots tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions. Note
@@ -1204,13 +1204,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     slices = [req_slice]
     if task.optional_dimensions:
-      for exp, dimensions in sorted(
-          task.optional_dimensions.iteritems(), key=lambda x: int(x[0])):
+      for exp, dimensions in sorted(task.optional_dimensions.iteritems()):
         current_slice = slices[0]
-        for d in dimensions:
-          for name, value in d.iteritems():
-            current_slice = current_slice.with_dimensions(**{name: value})
-        current_slice = current_slice.with_expiration_secs(int(exp))
+        current_slice = current_slice.with_dimensions(**dimensions)
+        current_slice = current_slice.with_expiration_secs(exp)
         slices = [current_slice] + slices
     req = req.with_slice(0, slices[0])
     for s in slices[1:]:

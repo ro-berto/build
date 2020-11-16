@@ -40,16 +40,16 @@ def RunSteps(api):
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   single_spec = api.properties.get('single_spec')
-  test_spec = {
+  source_side_spec = {
       'test_buildername': {
           'isolated_scripts': [single_spec] if single_spec else [],
       }
   }
 
-  for test in generators.generate_isolated_script_tests(api, api.chromium_tests,
-                                                        'test_group',
-                                                        'test_buildername',
-                                                        test_spec, update_step):
+  for test_spec in generators.generate_isolated_script_tests(
+      api, api.chromium_tests, 'test_group', 'test_buildername',
+      source_side_spec, update_step):
+    test = test_spec.get_test()
     try:
       test.pre_run(api, '')
       test.run(api, '')
@@ -298,8 +298,14 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
                   'dimension_sets': [{
-                      'os': 'Linux'
+                      'os': 'Linux',
+                      'foo': None,
                   },],
+                  'optional_dimensions': {
+                      '60': {
+                          'bar': 'baz',
+                      },
+                  },
               },
           },
           swarm_hashes={
@@ -309,7 +315,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'swarming_dimension_sets_plus_optional',
+      'swarming_dimension_sets_with_legacy_optional_dimensions',
       api.chromium.ci_build(
           builder_group='test_group',
           builder='test_buildername',
@@ -320,9 +326,11 @@ def GenTests(api):
               'isolate_name': 'base_unittests_run',
               'swarming': {
                   'can_use_on_swarming_builders': True,
-                  'dimension_sets': [{
-                      'os': 'Linux'
-                  },],
+                  'optional_dimensions': {
+                      '60': [{
+                          'bar': 'baz',
+                      }],
+                  },
               },
           },
           swarm_hashes={
