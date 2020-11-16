@@ -8,7 +8,6 @@ DEPS = [
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/commit_position',
-  'recipe_engine/cipd',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',

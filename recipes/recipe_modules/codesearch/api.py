@@ -190,20 +190,22 @@ class CodesearchApi(recipe_api.RecipeApi):
     Args:
       index_pack_kythe_name: Name of the Kythe index pack
     """
-    exec_path = self.m.cipd.ensure_tool("infra/tools/package_index/${platform}",
-                                        "latest")
-    args = [
-        '--checkout_dir', self.m.path['checkout'], '--path_to_compdb',
-        self.c.compile_commands_json_file, '--path_to_gn_targets',
-        self.c.gn_targets_json_file, '--path_to_java_kzips',
-        self.c.javac_extractor_output_dir, '--path_to_archive_output',
-        self.c.debug_path.join(index_pack_kythe_name), '--corpus', self.c.CORPUS
-    ]
+    args = ['--checkout-dir', self.m.path['checkout'],
+            '--path-to-compdb', self.c.compile_commands_json_file,
+            '--path-to-gn-targets', self.c.gn_targets_json_file,
+            '--path-to-java-kzips',
+            self.c.javac_extractor_output_dir,
+            '--path-to-archive-output',
+            self.c.debug_path.join(index_pack_kythe_name),
+            '--corpus', self.c.CORPUS]
     if self.c.BUILD_CONFIG:
-      args.extend(['--build_config', self.c.BUILD_CONFIG])
+      args.extend(['--build-config', self.c.BUILD_CONFIG])
     if self.c.GEN_REPO_OUT_DIR:
       args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
-    self.m.step('create kythe index pack', [exec_path] + args)
+    self.m.build.python('create kythe index pack',
+                        self.resource('package_index.py'),
+                        args,
+                        venv=True)
 
   def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
                               index_pack_kythe_name_with_revision):

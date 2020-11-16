@@ -182,69 +182,23 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "install infra/tools/package_index"
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/cipd/infra/tools/package_index/latest"
-    ],
-    "infra_step": true,
-    "name": "install infra/tools/package_index.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/cipd/infra/tools/package_index/latest",
-      "-ensure-file",
-      "infra/tools/package_index/${platform} latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "install infra/tools/package_index.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/package_index/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/cipd/infra/tools/package_index/latest/package_index",
-      "--checkout_dir",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
+      "--checkout-dir",
       "[START_DIR]/src",
-      "--path_to_compdb",
+      "--path-to-compdb",
       "[START_DIR]/src/out/Debug/compile_commands.json",
-      "--path_to_gn_targets",
+      "--path-to-gn-targets",
       "[START_DIR]/src/out/Debug/gn_targets.json",
-      "--path_to_java_kzips",
+      "--path-to-java-kzips",
       "[START_DIR]/src/out/Debug/kzip",
-      "--path_to_archive_output",
+      "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
       "chromium"
