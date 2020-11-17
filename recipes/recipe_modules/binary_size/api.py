@@ -30,20 +30,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.results_bucket = (
         properties.results_bucket or constants.NDJSON_GS_BUCKET)
 
-    self._use_legacy_flow = not bool(properties.size_config_json)
-    if self._use_legacy_flow:
-      # TODO(huangs): Remove by mid 2020-11.
-      self._apk_name = (
-          properties.android.apk_name or constants.DEFAULT_PARAMS['apk_name'])
-      self._mapping_names = (
-          properties.android.mapping_names or
-          constants.DEFAULT_PARAMS['mapping_file_names'])
-      self._size_config_json = None
-    else:  # The "upcoming flow".
-      self._apk_name = None
-      self._mapping_names = None
-      # Path relative to chromium output directory.
-      self._size_config_json = properties.size_config_json
+    # Path relative to Chromium output directory.
+    self._size_config_json = (
+        properties.size_config_json or constants.DEFAULT_SIZE_CONFIG_JSON)
 
   def android_binary_size(self,
                           chromium_config,
@@ -219,20 +208,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
-
-    if self._use_legacy_flow:
-      # The old arguments filename (not path), so apply os.path.basename().
-      assert self._apk_name
-      assert self._mapping_names
-      cmd += ['--apk-name', self._apk_name]
-      for mapping_name in self._mapping_names:
-        cmd += ['--mapping-name', mapping_name]
-    else:
-      assert self._size_config_json
-      cmd += [
-          '--size-config-json',
-          self.m.chromium.output_dir.join(self._size_config_json)
-      ]
+    cmd += [
+        '--size-config-json',
+        self.m.chromium.output_dir.join(self._size_config_json)
+    ]
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
@@ -411,13 +390,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--author', author]
-      if self._use_legacy_flow:
-        cmd += ['--apk-name', self._apk_name]
-      else:
-        cmd += [
-            '--size-config-json-name',
-            os.path.basename(self._size_config_json)
-        ]
+      cmd += [
+          '--size-config-json-name',
+          os.path.basename(self._size_config_json)
+      ]
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
       cmd += ['--results-path', results_path]

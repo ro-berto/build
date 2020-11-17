@@ -1007,10 +1007,8 @@
   {
     "cmd": [
       "[CACHE]/builder/src/tools/binary_size/generate_commit_size_analysis.py",
-      "--apk-name",
-      "MonochromePublic.minimal.apks",
-      "--mapping-name",
-      "MonochromePublic.aab.mapping",
+      "--size-config-json",
+      "[CACHE]/builder/src/out/Release/config/MonochromePublic_size_config.json",
       "--staging-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--chromium-output-directory",
@@ -1081,8 +1079,8 @@
       "[CACHE]/builder/src/tools/binary_size/trybot_commit_size_checker.py",
       "--author",
       "foo@bar.com",
-      "--apk-name",
-      "MonochromePublic.minimal.apks",
+      "--size-config-json-name",
+      "MonochromePublic_size_config.json",
       "--before-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",

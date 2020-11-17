@@ -16,24 +16,10 @@ message InputProperties {
   // Default values depend on OS.
   repeated string compile_targets = 2;
 
-  // Android-specific properties.
-  AndroidProperties android = 3;
-
-  // Location of size config JSON, relative to Chromium output dir.
-  // TODO(huangs): Add default value apks/MonochromePublic_size_config.json.
-  string size_config_json = 4;
+  // Location of size config JSON, relative to Chromium output directory.
+  // Defaults to config/MonochromePublic_size_config.json.
+  string size_config_json = 3;
 
   // Name of the GS bucket in which results should be saved.
-  string results_bucket = 5;
-}
-
-// TODO(huangs): Deprecate and remove this.
-message AndroidProperties {
-  // Filename of the built apk or .minimal.apks to measure.
-  // Defaults to MonochromePublic.minimal.apks.
-  string apk_name = 1;
-
-  // List of filenames of proguard mapping files.
-  // Defaults to [MonochromePublic.aab.mapping].
-  repeated string mapping_names = 2;
+  string results_bucket = 4;
 }
