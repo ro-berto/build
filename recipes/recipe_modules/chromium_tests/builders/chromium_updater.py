@@ -24,6 +24,7 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
 
 
 SPEC = {
+    # release builders and testers
     'win-updater-builder-rel':
         CreateBuilderConfig('win'),
     'win7-updater-tester-rel':
@@ -73,4 +74,24 @@ SPEC = {
             'mac',
             execution_mode=bot_spec.TEST,
             parent_buildername='mac-updater-builder-rel'),
+    # debug builders and testers
+    'win-updater-builder-dbg':
+        CreateBuilderConfig('win'),
+    'win7-updater-tester-dbg':
+        CreateBuilderConfig(
+            'win',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='win-updater-builder-dbg'),
+    'win10-updater-tester-dbg':
+        CreateBuilderConfig(
+            'win',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='win-updater-builder-dbg'),
+    'mac-updater-builder-dbg':
+        CreateBuilderConfig('mac'),
+    'mac10.13-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
 }
