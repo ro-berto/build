@@ -1008,7 +1008,7 @@
     "cmd": [
       "[CACHE]/builder/src/tools/binary_size/generate_commit_size_analysis.py",
       "--size-config-json",
-      "[CACHE]/builder/src/out/Release/config/MonochromePublic_size_config.json",
+      "[CACHE]/builder/src/out/Release/config/Trichrome_size_config.json",
       "--staging-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--chromium-output-directory",
@@ -1706,7 +1706,7 @@
     "cmd": [
       "[CACHE]/builder/src/tools/binary_size/generate_commit_size_analysis.py",
       "--size-config-json",
-      "[CACHE]/builder/src/out/Release/config/MonochromePublic_size_config.json",
+      "[CACHE]/builder/src/out/Release/config/Trichrome_size_config.json",
       "--staging-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--chromium-output-directory",
@@ -1956,7 +1956,7 @@
       "--author",
       "foo@bar.com",
       "--size-config-json-name",
-      "MonochromePublic_size_config.json",
+      "Trichrome_size_config.json",
       "--before-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",

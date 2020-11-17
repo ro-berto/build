@@ -12,8 +12,9 @@ DEFAULT_COMPILE_TARGETS = [
     'monochrome_static_initializers',
     'trichrome_minimal_apks',
 ]
+
 # Path is relative to Chromium output directory.
-DEFAULT_SIZE_CONFIG_JSON = 'config/MonochromePublic_size_config.json'
+DEFAULT_SIZE_CONFIG_JSON = 'config/Trichrome_size_config.json'
 
 EXPECTATIONS_STEP_NAME = 'Checking for expectation failures'
 
