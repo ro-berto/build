@@ -14,7 +14,7 @@ message LatestFile {
   string gcs_file_content = 2;
 }
 
-// Next id: 8
+// Next id: 9
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -59,6 +59,17 @@ message ArchiveData {
     // All input files and dirs are tar gzipped. gcs_path should be a path
     // whose final component is the name of the archive file.
     ARCHIVE_TYPE_TAR_GZ = 3;
+
+    // Recursively upload directories and subdirectories. Files are not
+    // supported. gcs_path should be a path to the directory where the uploaded
+    // items will be placed.
+    ARCHIVE_TYPE_RECURSIVE = 4;
+
+    // Upload files flattened such that the file is uploaded directly to the
+    // gcs_path directory. ie/ cronet/VERSION file would be uploaded to
+    // "gs://{bucket}/test", resulting in {bucket}/test/VERSION. Directories
+    // are not supported.
+    ARCHIVE_TYPE_FLATTEN_FILES = 5;
   }
   ArchiveType archive_type = 5;
   // When set, system will update the latest file.

@@ -183,13 +183,14 @@ def GenTests(api):
       (properties.ArchiveData.ARCHIVE_TYPE_UNSPECIFIED, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_ZIP, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_FILES, '', False),
+      (properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES, '', False),
       (properties.ArchiveData.ARCHIVE_TYPE_TAR_GZ, 'any-path.tar.gz', True),
   ):
     input_properties = properties.InputProperties()
     archive_data = properties.ArchiveData()
     archive_data.files.extend([
-        'chrome',
-        'snapshot_blob.bin',
+        'folder1/chrome',
+        'folder2/snapshot_blob.bin',
     ])
     archive_data.file_globs.append('glob*.txt')
     if include_dirs:
@@ -343,10 +344,28 @@ def GenTests(api):
   archive_data.dirs.extend(['anydir'])
   archive_data.gcs_bucket = 'any-bucket'
   archive_data.gcs_path = 'dest_dir/'
-  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_FILES
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_RECURSIVE
   input_properties.archive_datas.extend([archive_data])
   yield api.test(
-      'generic_archive_dirs_unsupported',
+      'Raw dir archive',
+      api.properties(
+          generic_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.gsutil upload', ['-R']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'dest_dir/'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_RECURSIVE
+  input_properties.archive_datas.extend([archive_data])
+  yield api.test(
+      'No dirs for ARCHIVE_TYPE_RECURSIVE',
       api.properties(
           generic_archive=True,
           update_properties={},
@@ -354,3 +373,24 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
+  for archive_type in [
+      properties.ArchiveData.ARCHIVE_TYPE_FILES,
+      properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES
+  ]:
+    input_properties = properties.InputProperties()
+    archive_data = properties.ArchiveData()
+    archive_data.dirs.extend(['anydir'])
+    archive_data.gcs_bucket = 'any-bucket'
+    archive_data.gcs_path = 'dest_dir/'
+    archive_data.archive_type = archive_type
+    input_properties.archive_datas.extend([archive_data])
+    yield api.test(
+        'generic_archive_dirs unsupported for %s' % archive_type,
+        api.properties(
+            generic_archive=True,
+            update_properties={},
+            **{'$build/archive': input_properties}),
+        api.post_process(post_process.StatusFailure),
+        api.post_process(post_process.DropExpectation),
+    )

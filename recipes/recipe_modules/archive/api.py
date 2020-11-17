@@ -603,6 +603,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         # Perform dynamic configuration from placeholders, if necessary.
         gcs_path = self._replace_placeholders(update_properties, custom_vars,
                                               archive_data.gcs_path)
+        gcs_args = []
 
         expanded_files = set(archive_data.files)
         for filename in archive_data.file_globs:
@@ -629,10 +630,31 @@ class ArchiveApi(recipe_api.RecipeApi):
           uploads = {
               build_dir.join(f): '/'.join([gcs_path, f]) for f in expanded_files
           }
+        elif (archive_data.archive_type ==
+              ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES):
+          if archive_data.dirs:
+            self.m.python.failing_step(
+                'ARCHIVE_TYPE_FLATTEN_FILES does not support dirs',
+                'archive_data properties with |archive_type| '
+                'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
+          uploads = {
+              build_dir.join(f): '/'.join([gcs_path,
+                                           self.m.path.basename(f)])
+              for f in expanded_files
+          }
         elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
           archive_file = self._create_targz_archive_for_upload(
               build_dir, expanded_files, archive_data.dirs)
           uploads = {archive_file: gcs_path}
+        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
+          if not archive_data.dirs:
+            self.m.python.failing_step(
+                'ARCHIVE_TYPE_RECURSIVE does not support '
+                'empty dirs', 'archive_data properties with '
+                '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
+                'specify |dirs|')
+          uploads = {build_dir.join(d): gcs_path for d in archive_data.dirs}
+          gcs_args += ['-R']
         else:
           archive_file = self._create_zip_archive_for_upload(
               build_dir, expanded_files, archive_data.dirs)
@@ -642,7 +664,8 @@ class ArchiveApi(recipe_api.RecipeApi):
           self.m.gsutil.upload(
               file_path,
               bucket=archive_data.gcs_bucket,
-              dest=uploads[file_path])
+              dest=uploads[file_path],
+              args=gcs_args)
 
         if archive_data.HasField('latest_upload'):
           if (not archive_data.latest_upload.gcs_file_content or
