@@ -979,6 +979,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-amd64-generic-rel',
+                analyze_deps_autorolls=True,
             ),
         'chromeos-arm-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -989,6 +990,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-arm-generic-rel',
+                analyze_deps_autorolls=True,
             ),
         'chromeos-kevin-compile-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1000,12 +1002,14 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-kevin-rel',
+                analyze_deps_autorolls=True,
             ),
         'linux-chromeos-compile-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-dbg',
                 execution_mode=try_spec.COMPILE,
+                analyze_deps_autorolls=True,
             ),
         'linux-chromeos-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1016,6 +1020,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-rel',
+                analyze_deps_autorolls=True,
             ),
        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
