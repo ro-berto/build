@@ -1140,7 +1140,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='GPU Mac Builder',
                     tester='Mac Retina Release (AMD)',
                 ),
-            ]),
+            ],
+            analyze_deps_autorolls=True,
+            ),
         'mac_chromium_10.10':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
@@ -1182,6 +1184,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.mac',
                 buildername='Mac Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                analyze_deps_autorolls=True,
             ),
         'mac_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
