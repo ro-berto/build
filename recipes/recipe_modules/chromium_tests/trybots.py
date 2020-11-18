@@ -947,6 +947,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-wpt-identity-fyi-rel',
             ),
+        'linux-wpt-input-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-wpt-input-fyi-rel',
+            ),
         'linux-wpt-payments-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
