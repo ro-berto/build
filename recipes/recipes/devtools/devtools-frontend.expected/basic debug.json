@@ -569,6 +569,87 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
+      "--target=Debug",
+      "--coverage",
+      "--no-html-coverage"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "name": "Unit Tests"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/devtools-frontend/karma-coverage/coverage-summary.json",
+      "/path/to/tmp/"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "name": "Coverage summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Lines: 11.11%<br/>Statements: 11.12%<br/>Functions: 11.13%<br/>Branches: 11.14%@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@{\"total\": {\"branches\": {\"pct\": 11.14}, \"functions\": {\"pct\": 11.13}, \"lines\": {\"pct\": 11.11}, \"statements\": {\"pct\": 11.12}}}@@@",
+      "@@@STEP_LOG_END@coverage-summary.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/lines\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.11, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/statements\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.12, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/functions\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.13, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/branches\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.14, \\\"revision\\\": 0}]\"}",
+      "-o",
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "name": "perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

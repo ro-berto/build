@@ -44,13 +44,12 @@ def RunSteps(api):
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
-    if is_debug_builder(api):
-      return
     run_unit_tests(api)
-    run_type_check(api)
-    run_lint_check(api)
-    run_localization_check(api)
-    run_e2e(api)
+    if not is_debug_builder(api):
+      run_type_check(api)
+      run_lint_check(api)
+      run_localization_check(api)
+      run_e2e(api)
 
     publish_coverage_points(api)
 
@@ -112,8 +111,11 @@ def run_node_script(api, step_name, script, args=None):
 
 
 def run_unit_tests(api):
-  run_script(api, 'Unit Tests', 'run_unittests.py',
-             ['--target=Release', '--coverage'])
+  run_script(api, 'Unit Tests', 'run_unittests.py', [
+      '--target=' +  builder_config(api),
+      '--coverage',
+      '--no-html-coverage',
+    ])
 
 
 def run_type_check(api):
@@ -133,7 +135,7 @@ def run_localization_check(api):
 
 def run_e2e(api):
   run_script(api, 'E2E tests', 'run_test_suite.py',
-             ['--target=Release', '--test-suite=e2e'])
+             ['--target=' +  builder_config(api), '--test-suite=e2e'])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
@@ -195,24 +197,23 @@ def test_cov_data():
   }
 
 def publish_coverage_points(api):
-  if api.tryserver.is_tryserver:
+  if not is_debug_builder(api):
     return
 
   dimensions = ["lines", "statements", "functions", "branches"]
 
   report_file = api.path['checkout'].join('karma-coverage',
                                           'coverage-summary.json')
-  if api.path.exists(report_file):
-    summary = api.file.read_json(
-        'Coverage summary', report_file, test_data=test_cov_data())
-    totals = summary['total']
-    api.step.active_result.presentation.step_text = "".join([
-        "\n%s: %s%%" % (dim.capitalize(), totals[dim]['pct'])
-        for dim in dimensions
-    ])
+  summary = api.file.read_json(
+      'Coverage summary', report_file, test_data=test_cov_data())
+  totals = summary['total']
+  api.step.active_result.presentation.step_text = "".join([
+      "\n%s: %s%%" % (dim.capitalize(), totals[dim]['pct'])
+      for dim in dimensions
+  ])
 
-    points = [_point(api, dim, summary['total']) for dim in dimensions]
-    api.perf_dashboard.add_point(points, halt_on_failure=True)
+  points = [_point(api, dim, summary['total']) for dim in dimensions]
+  api.perf_dashboard.add_point(points, halt_on_failure=True)
 
 
 def _point(api, dimension, totals):
