@@ -1,6 +1,3 @@
-gbeaty@chromium.org
-iannucci@chromium.org
-martiniss@chromium.org
 per-file angle_chromium.py=file:angle.expected/OWNERS
 per-file angle_chromium_trybot.py=file:angle.expected/OWNERS
 per-file angle.py=file:angle.expected/OWNERS
@@ -39,3 +36,7 @@ per-file openscreen.py=file:openscreen.expected/OWNERS
 per-file pdfium.py=file:pdfium.expected/OWNERS
 per-file tint.py=file:tint.expected/OWNERS
 per-file v8.py=file:v8.expected/OWNERS
+
+# Generic owners, if the file isn't listed above.
+gbeaty@chromium.org
+martiniss@chromium.org
