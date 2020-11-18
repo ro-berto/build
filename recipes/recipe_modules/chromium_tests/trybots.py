@@ -1412,12 +1412,15 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='GPU Win x64 Builder',
                     tester='Win10 x64 Release (NVIDIA)',
                 ),
-            ]),
+            ],
+            analyze_deps_autorolls=True,
+            ),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
                 buildername='Win Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                analyze_deps_autorolls=True,
             ),
         'win_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
