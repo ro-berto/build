@@ -703,13 +703,8 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mirrors=[
                     try_spec.TryMirror.create(
                         builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
+                        buildername='Linux Builder Robocrop',
+                        tester='Linux Tests Robocrop',
                     ),
                 ],
                 analyze_deps_autorolls=True,

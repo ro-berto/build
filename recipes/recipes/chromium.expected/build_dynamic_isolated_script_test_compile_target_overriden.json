@@ -20,7 +20,7 @@
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux Builder@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-clang-tidy-rel\", \"tryserver.chromium.linux:linux_chromium_compile_rel_ng\", \"tryserver.chromium.linux:linux-rel-builderful\", \"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-dcheck-off-rel\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-clang-tidy-rel\", \"tryserver.chromium.linux:linux_chromium_compile_rel_ng\", \"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-dcheck-off-rel\"]@@@"
     ]
   },
   {
