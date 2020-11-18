@@ -5,12 +5,13 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'recipe_engine/json',
     'recipe_engine/properties',
 ]
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
 
 from PB.recipe_modules.build.chromium_tests.properties import InputProperties
 
@@ -196,4 +197,165 @@ def GenTests(api):
       }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
+  )
+
+  group = 'fake-group'
+  builder = 'fake-builder'
+
+  def fake_builder(test_specs, builder_source_side_spec=None):
+    data = api.chromium.ci_build(builder_group=group, builder=builder)
+    data += api.chromium_tests.builders(
+        bot_db.BotDatabase.create({
+            group: {
+                builder:
+                    bot_spec.BotSpec.create(
+                        chromium_config='chromium',
+                        gclient_config='chromium',
+                        test_specs=test_specs,
+                    ),
+            },
+        }))
+    if builder_source_side_spec:
+      data += api.chromium_tests.read_source_side_spec(
+          builder_group=group,
+          contents={
+              builder: builder_source_side_spec,
+          },
+      )
+    return data
+
+  def migration_step(migration_type, test):
+    return 'test spec migration.{}.{}.{}.{}'.format(migration_type, group,
+                                                    builder, test)
+
+  yield api.test(
+      'test-migration-needs-migration',
+      fake_builder(test_specs=[
+          bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest, 'fake-test'),
+      ]),
+      api.post_check(post_process.MustRun,
+                     migration_step('needs migration', 'fake-test')),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # Test cases for already migrated tests: 1 for each type of test that can be
+  # produced via ALL_GENERATORS, specifying the minimum set of arguments to
+  # ensure that default argument handling works for each type
+  def already_migrated_test(name, test_spec, builder_source_side_spec):
+    return api.test(
+        name,
+        fake_builder(
+            test_specs=[test_spec],
+            builder_source_side_spec=builder_source_side_spec),
+        api.post_check(post_process.MustRun,
+                       migration_step('already migrated', 'fake-test')),
+        api.post_process(post_process.DropExpectation),
+    )
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-isolated-scripts',
+      test_spec=bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest,
+                                         'fake-test'),
+      builder_source_side_spec={
+          'isolated_scripts': [{
+              'name': 'fake-test',
+          }],
+      },
+  )
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-isolated-scripts-swarming',
+      test_spec=bot_spec.TestSpec.create(steps.SwarmingIsolatedScriptTest,
+                                         'fake-test'),
+      builder_source_side_spec={
+          'isolated_scripts': [{
+              'name': 'fake-test',
+              'swarming': {
+                  'can_use_on_swarming_builders': True
+              },
+          }],
+      },
+  )
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-gtest-tests',
+      test_spec=bot_spec.TestSpec.create(steps.LocalGTestTest, 'fake-test'),
+      builder_source_side_spec={
+          'gtest_tests': [{
+              'test': 'fake-test',
+          }],
+      })
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-gtest-tests-swarming',
+      test_spec=bot_spec.TestSpec.create(steps.SwarmingGTestTest, 'fake-test'),
+      builder_source_side_spec={
+          'gtest_tests': [{
+              'test': 'fake-test',
+              'swarming': {
+                  'can_use_on_swarming_builders': True
+              },
+          }],
+      })
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-junit-tests',
+      test_spec=bot_spec.TestSpec.create(
+          steps.ScriptTest,
+          'fake-test',
+          script='fake-script',
+          all_compile_targets={}),
+      builder_source_side_spec={
+          'scripts': [{
+              'name': 'fake-test',
+              'script': 'fake-script',
+          }],
+      },
+  )
+
+  yield already_migrated_test(
+      'test-migration-already-migrated-scripts',
+      test_spec=bot_spec.TestSpec.create(
+          steps.AndroidJunitTest, 'fake-test', target_name='fake-target'),
+      builder_source_side_spec={
+          'junit_tests': [{
+              'name': 'fake-test',
+              'test': 'fake-target',
+          }],
+      },
+  )
+
+  yield api.test(
+      'test-migration-mismatch',
+      fake_builder(
+          test_specs=[
+              bot_spec.TestSpec.create(
+                  steps.ScriptTest,
+                  'fake-test',
+                  script='fake-script',
+                  all_compile_targets={}),
+          ],
+          builder_source_side_spec={
+              'scripts': [{
+                  'name': 'fake-test',
+                  'script': 'fake-script2',
+              }],
+          },
+      ),
+  )
+
+  yield api.test(
+      'test-migration-mismatch-experimental',
+      fake_builder(
+          test_specs=[
+              bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest,
+                                       'fake-test'),
+          ],
+          builder_source_side_spec={
+              'isolated_scripts': [{
+                  'name': 'fake-test',
+                  'experiment_percentage': 10,
+              }],
+          },
+      ),
   )

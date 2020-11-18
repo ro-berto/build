@@ -33,6 +33,7 @@ class attribute to support being created via `bot_spec.TestSpec`.
 # TODO(gbeaty) Once bot_spec.TestSpec is gone, get rid of SPEC_CLASS
 
 import abc
+import attr
 import collections
 import contextlib
 import copy
@@ -291,6 +292,21 @@ class TestSpecBase(object):
     """
     raise NotImplementedError()  # pragma: no cover
 
+  @abc.abstractmethod
+  def without_waterfall(self):
+    """Get a spec without any waterfall specified.
+
+    Specs created manually in recipes will most likely not have the
+    waterfall specified, so this provides a means of comparing the
+    actual values of concern during migration.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  @abc.abstractmethod
+  def as_jsonish(self):
+    """Convert the spec to a JSON-representable equivalent dict."""
+    raise NotImplementedError()  # pragma: no cover
+
 
 @attrs()
 class TestSpec(TestSpecBase):
@@ -315,13 +331,27 @@ class TestSpec(TestSpecBase):
       "ninja://chrome/test:telemetry_gpu_integration_test/trace_test/".
   """
 
-  name = attrib(str)
+  _name = attrib(str)
   target_name = attrib(str)
   full_test_target = attrib(str, default=None)
   waterfall_builder_group = attrib(str, default=None)
   waterfall_buildername = attrib(str, default=None)
   resultdb = attrib(ResultDB, default=ResultDB.create())
   test_id_prefix = attrib(str, default=None)
+
+  @property
+  def name(self):
+    """The name of the step without a phase suffix.
+
+    Additional suffixes may be present (e.g. os and GPU for swarming
+    tests).
+    """
+    return self._name
+
+  @property
+  def canonical_name(self):
+    """Canonical name of the test, no suffix attached."""
+    return self._name
 
   @classmethod
   def create(cls, name, **kwargs):
@@ -346,6 +376,15 @@ class TestSpec(TestSpecBase):
   def get_test(self):
     """Get the test described by the spec."""
     return self.test_class(self)
+
+  def without_waterfall(self):
+    return attr.evolve(
+        self, waterfall_builder_group=None, waterfall_buildername=None)
+
+  def as_jsonish(self):
+    d = attr.asdict(self)
+    d['_spec_type'] = type(self).__name__
+    return d
 
 
 class Test(object):
@@ -444,6 +483,11 @@ class Test(object):
     return self.spec.name
 
   @property
+  def canonical_name(self):
+    """Canonical name of the test, no suffix attached."""
+    return self.spec.canonical_name
+
+  @property
   def target_name(self):
     return self.spec.target_name
 
@@ -467,11 +511,6 @@ class Test(object):
     Returns a ResultDB instance.
     """
     return self.spec.resultdb
-
-  @property
-  def canonical_name(self):
-    """Canonical name of the test, no suffix attached."""
-    return self.name
 
   @property
   def isolate_target(self):
@@ -841,6 +880,20 @@ class TestWrapperSpec(TestSpecBase):
   def name(self):
     """The name of the test."""
     return self.test_spec.name
+
+  def without_waterfall(self):
+    return attr.evolve(self, test_spec=self.test_spec.without_waterfall())
+
+  def as_jsonish(self):
+
+    def attribute_filter(attribute, value):
+      del value
+      return attribute.name != 'test_spec'
+
+    d = attr.asdict(self, filter=attribute_filter)
+    d['_spec_type'] = type(self).__name__
+    d['test_spec'] = self.test_spec.as_jsonish()
+    return d
 
 
 class TestWrapper(Test):  # pragma: no cover
@@ -1972,6 +2025,13 @@ class SwarmingTestSpec(TestSpec):
     return super(SwarmingTestSpec, cls).create(
         name, extra_suffix=extra_suffix, **kwargs)
 
+  @property
+  def name(self):
+    if self.extra_suffix:
+      return '%s %s' % (self._name, self.extra_suffix)
+    else:
+      return self._name
+
   @staticmethod
   def _get_gpu_suffix(dimensions):
     gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
@@ -2053,18 +2113,6 @@ class SwarmingTest(Test):
   @property
   def tear_down(self):
     return self.spec.tear_down
-
-  @property
-  def name(self):
-    if self.spec.extra_suffix:
-      return '%s %s' % (self.spec.name, self.spec.extra_suffix)
-    else:
-      return self.spec.name
-
-  @property
-  def canonical_name(self):
-    """Canonical name of the test, no suffix attached."""
-    return self.spec.name
 
   @property
   def runs_on_swarming(self):

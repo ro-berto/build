@@ -27,6 +27,9 @@ def _migration_validation(builder_id, builder_spec):
         'official.chrome',
         'official.chrome.continuous',
         'official.chromeos.continuous',
+
+        # Used for testing the migration
+        'fake-group',
     ), ('Builder: {!r}\nUse of the test_specs field is deprecated,'
         ' instead update the source side spec file for builder group {!r}.'
         ' Contact gbeaty@ if you need assistance.').format(

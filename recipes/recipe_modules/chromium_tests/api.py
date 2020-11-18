@@ -5,13 +5,14 @@
 import collections
 import contextlib
 import copy
+import difflib
 import itertools
 import json
 import os
 import re
 import traceback
 
-from recipe_engine.types import freeze
+from recipe_engine.types import freeze, FrozenDict
 from recipe_engine import recipe_api
 
 from PB.recipe_engine import result as result_pb2
@@ -247,10 +248,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                            swarming_dimensions,
                                            scripts_compile_targets_fn,
                                            bot_update_step):
-    tests = [s.get_test() for s in bot_spec.test_specs]
+    test_specs = collections.OrderedDict()
+
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
-      test_specs = generator(
+      test_specs_for_generator = generator(
           self.m,
           self,
           builder_group,
@@ -259,8 +261,59 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_update_step,
           swarming_dimensions=swarming_dimensions,
           scripts_compile_targets_fn=scripts_compile_targets_fn)
-      tests.extend(s.get_test() for s in test_specs)
-    return tuple(tests)
+      for s in test_specs_for_generator:
+        test_specs[s.name] = s
+
+    migration_state = {
+        'needs migration': [],
+        'already migrated': [],
+        'mismatch': [],
+    }
+    for s in bot_spec.test_specs:
+      src_spec = test_specs.get(s.name)
+      test_specs[s.name] = s
+      if src_spec is None:
+        migration_state['needs migration'].append({'test': s.name})
+      else:
+        src_spec = src_spec.without_waterfall()
+        s = s.without_waterfall()
+        if s == src_spec:
+          migration_state['already migrated'].append({'test': s.name})
+        else:
+
+          def to_text(spec):
+
+            def encode(obj):
+              if isinstance(obj, FrozenDict):
+                return dict(obj)
+              return '**Could not be encoded**'  # pragma: no cover
+
+            text = self.m.json.dumps(
+                spec.as_jsonish(), default=encode, indent=2, sort_keys=True)
+            return text.splitlines()
+
+          src_spec_text = to_text(src_spec)
+          s_text = to_text(s)
+          d = {
+              'test': s.name,
+              'logs': {
+                  'specs diff':
+                      difflib.unified_diff(
+                          s_text,
+                          src_spec_text,
+                          'spec defined in recipe',
+                          'spec defined in source side spec file',
+                          # Use the max of the lengths so that the entire spec
+                          # appears in the diff
+                          n=max(len(s_text), len(src_spec_text)),
+                          lineterm='')
+              }
+          }
+          migration_state['mismatch'].append(d)
+
+    tests = tuple(s.get_test() for s in test_specs.itervalues())
+
+    return tests, migration_state
 
   def read_source_side_spec(self, source_side_spec_file):
     source_side_spec_path = self.m.chromium.c.source_side_spec_dir.join(

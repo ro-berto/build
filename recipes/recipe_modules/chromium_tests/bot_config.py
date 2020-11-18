@@ -112,21 +112,55 @@ class BotConfig(object):
 
     source_side_specs = self._get_source_side_specs(chromium_tests_api)
     tests = {}
+    # migration type -> builder group -> builder -> test info
+    # migration type is one of 'already migrated', 'needs migration', 'mismatch'
+    # test info is a dict with key 'test' storing the name of the test and the
+    # optional key 'logs' containing logs to add to the migration tracking step
+    # for the test
+    migration_state = {}
 
     for builder_id in self.all_keys:
       builder_spec = self.bot_db[builder_id]
-      builder_tests = chromium_tests_api.generate_tests_from_source_side_spec(
-          source_side_specs[builder_id.group],
-          builder_spec,
-          builder_id.builder,
-          builder_id.group,
-          builder_spec.swarming_dimensions,
-          scripts_compile_targets_fn,
-          bot_update_step,
-      )
+      builder_tests, builder_migration_state = (
+          chromium_tests_api.generate_tests_from_source_side_spec(
+              source_side_specs[builder_id.group],
+              builder_spec,
+              builder_id.builder,
+              builder_id.group,
+              builder_spec.swarming_dimensions,
+              scripts_compile_targets_fn,
+              bot_update_step,
+          ))
       tests[builder_id] = builder_tests
 
+      for key, migration_tests in builder_migration_state.iteritems():
+        if not migration_tests:
+          continue
+        migration_type_dict = migration_state.setdefault(key, {})
+        group_dict = migration_type_dict.setdefault(builder_id.group, {})
+        group_dict[builder_id.builder] = migration_tests
+
+    if migration_state:
+      self._report_test_spec_migration_state(chromium_tests_api,
+                                             migration_state)
+
     return BuildConfig(chromium_tests_api, self, source_side_specs, tests)
+
+  @staticmethod
+  def _report_test_spec_migration_state(chromium_tests_api, migration_state):
+    with chromium_tests_api.m.step.nest('test spec migration') as presentation:
+      presentation.step_text = (
+          '\nThis is an informational step for infra maintainers')
+      for key, groups in sorted(migration_state.iteritems()):
+        with chromium_tests_api.m.step.nest(key):
+          for group, builders in sorted(groups.iteritems()):
+            with chromium_tests_api.m.step.nest(group):
+              for builder, tests in sorted(builders.iteritems()):
+                with chromium_tests_api.m.step.nest(builder):
+                  for t in sorted(tests, key=lambda t: t['test']):
+                    result = chromium_tests_api.m.step(t['test'], [])
+                    for log, contents in sorted(t.get('logs', {}).iteritems()):
+                      result.presentation.logs[log] = contents
 
 
 @attrs()
