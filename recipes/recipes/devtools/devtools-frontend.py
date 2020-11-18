@@ -44,14 +44,17 @@ def RunSteps(api):
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
-    run_unit_tests(api)
-    if not is_debug_builder(api):
-      run_type_check(api)
-      run_lint_check(api)
-      run_localization_check(api)
-      run_e2e(api)
 
+    run_unit_tests(api)
     publish_coverage_points(api)
+
+    if is_debug_builder(api):
+      return
+
+    run_type_check(api)
+    run_lint_check(api)
+    run_localization_check(api)
+    run_e2e(api)
 
     if on_cq_experiment(api):
       # Place here any unstable steps that you want to be performed on
@@ -197,7 +200,7 @@ def test_cov_data():
   }
 
 def publish_coverage_points(api):
-  if not is_debug_builder(api):
+  if api.tryserver.is_tryserver or not is_debug_builder(api):
     return
 
   dimensions = ["lines", "statements", "functions", "branches"]
@@ -213,7 +216,9 @@ def publish_coverage_points(api):
   ])
 
   points = [_point(api, dim, summary['total']) for dim in dimensions]
-  api.perf_dashboard.add_point(points, halt_on_failure=True)
+  #TODO(liviurau) find another way arroud 400 error "Invalid ID (revision) 1055; 
+  #compared to previous ID 0, it was larger or smaller by too much."
+  api.perf_dashboard.add_point(points, halt_on_failure=False)
 
 
 def _point(api, dimension, totals):
