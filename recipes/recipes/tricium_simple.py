@@ -46,6 +46,7 @@ def RunSteps(api):
     analyzers = [
         api.tricium.analyzers.HTTPS_CHECK,
         api.tricium.analyzers.MOJOM_COMMENTATOR,
+        api.tricium.analyzers.OBJECTIVE_C_STYLE,
         api.tricium.analyzers.SPELLCHECKER,
     ]
     api.tricium.run_legacy(analyzers, input_dir, affected_files, commit_message)
