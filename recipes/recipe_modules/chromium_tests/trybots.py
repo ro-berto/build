@@ -535,6 +535,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Cast Linux',
+                analyze_deps_autorolls=True,
             ),
         'cast_shell_audio_linux':
             try_spec.TrySpec.create_for_single_mirror(
@@ -658,7 +659,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='linux-ozone-rel',
                     tester='Linux Ozone Tester (Wayland)',
                 ),
-            ]),
+            ],
+            analyze_deps_autorolls=True,
+            ),
         'linux-webkit-msan-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -714,12 +717,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
+                analyze_deps_autorolls=True,
             ),
         'linux_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Linux Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                analyze_deps_autorolls=True,
             ),
         'linux_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -767,6 +772,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux TSan Builder',
                 tester='Linux TSan Tests',
+                analyze_deps_autorolls=True,
             ),
         'linux_chromium_cfi_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
