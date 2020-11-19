@@ -199,6 +199,37 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  # TODO(https://crbug.com/1109276) Remove this test once the substitution is no
+  # longer required
+  yield api.test(
+      'mastername-substition',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      api.chromium_tests.builders({
+          'fake-group': {
+              'fake-builder': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
+              },
+          },
+      }),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'gtest_tests': [{
+                      'name': 'fake-test',
+                      'args': ['$mastername'],
+                  }],
+              },
+          }),
+      api.post_process(
+          post_process.MustRun,
+          'mastername substitution.fake-group.fake-builder.fake-test'),
+      api.post_process(post_process.DropExpectation),
+  )
+
   group = 'fake-group'
   builder = 'fake-builder'
 

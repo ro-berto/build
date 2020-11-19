@@ -338,6 +338,7 @@ class TestSpec(TestSpecBase):
   waterfall_buildername = attrib(str, default=None)
   resultdb = attrib(ResultDB, default=ResultDB.create())
   test_id_prefix = attrib(str, default=None)
+  substituted_mastername = attrib(bool, default=False)
 
   @property
   def name(self):
@@ -880,6 +881,10 @@ class TestWrapperSpec(TestSpecBase):
   def name(self):
     """The name of the test."""
     return self.test_spec.name
+
+  @property
+  def substituted_mastername(self):
+    return self.test_spec.substituted_mastername
 
   def without_waterfall(self):
     return attr.evolve(self, test_spec=self.test_spec.without_waterfall())

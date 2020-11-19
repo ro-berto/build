@@ -31,12 +31,15 @@ def RunSteps(api):
   single_spec = api.properties.get('single_spec')
   test_spec = single_spec if single_spec else {}
 
-  test_args = generators.get_args_for_test(api, api.chromium_tests, test_spec,
-                                           update_step)
+  test_args, substituted_mastername = generators.get_args_for_test(
+      api, api.chromium_tests, test_spec, update_step)
   if api.properties.get('expected_args'):
     # For some reason, we get expected_args as a tuple instead of a list
     api.assertions.assertEqual(
         list(api.properties.get('expected_args')), test_args)
+  api.assertions.assertEqual(
+      substituted_mastername,
+      api.properties.get('expected_substituted_mastername', False))
 
 
 def GenTests(api):
@@ -86,6 +89,26 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           expected_args=[u'8945511751514863184'],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # TODO(https://crbug.com/1109276) Remove this test once the substitution is no
+  # longer required
+  yield api.test(
+      'substituted_mastername',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'args': ['$mastername'],
+              'test': 'base_unittests',
+          },
+          expected_args=[u'test_group'],
+          expected_substituted_mastername=True,
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
