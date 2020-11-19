@@ -102,7 +102,6 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             gclient_config='chromium',
-            gclient_apply_config=['use_xcode_12_beta'],
             chromium_apply_config=[
                 'mb',
             ],

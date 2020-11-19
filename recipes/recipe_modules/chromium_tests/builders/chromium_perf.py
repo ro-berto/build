@@ -196,11 +196,7 @@ _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
 _AddBuildSpec(
-    'mac-arm-builder-perf',
-    'mac',
-    bisect_archive_build=True,
-    target_arch='arm',
-    gclient_apply_config=['use_xcode_12_beta'])
+    'mac-arm-builder-perf', 'mac', bisect_archive_build=True, target_arch='arm')
 
 # Adapted from 'chromeos-amd64-generic-lacros-internal' to measure binary size.
 SPEC.update({

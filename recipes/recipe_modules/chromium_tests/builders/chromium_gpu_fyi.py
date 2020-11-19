@@ -1195,7 +1195,6 @@ SPEC = {
                 'angle_internal',
                 'angle_top_of_tree',
                 'no_kaleidoscope',
-                'use_xcode_12_beta',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
