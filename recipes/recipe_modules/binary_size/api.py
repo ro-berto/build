@@ -69,6 +69,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
     """
     assert self.m.tryserver.is_tryserver
 
+    # For m87, don't use size config JSON, and use MonochromePublic.
+    use_m87_flow = (self.m.buildbucket.build.builder.project == 'chromium-m87')
+
     # Don't want milestone try builds to use gs analysis. The 'project' field
     # looks like 'chromium-m86'
     is_trunk_builder = (
@@ -144,7 +147,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
       # expectation files in different repositiories (e.g. //clank), and in this
       # case use_gs_analysis == False.
       expectations_without_patch_json = None
-      with_results_dir, raw_result = self._build_and_measure(True, staging_dir)
+      with_results_dir, raw_result = self._build_and_measure(
+          True, staging_dir, use_m87_flow)
 
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result
@@ -166,7 +170,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
           self.m.chromium.runhooks(name='runhooks' + suffix)
           without_results_dir, raw_result = self._build_and_measure(
-              False, staging_dir)
+              False, staging_dir, use_m87_flow)
 
           if raw_result and raw_result.status != common_pb.SUCCESS:
             self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
@@ -189,7 +193,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       with self.m.context(cwd=self.m.path['checkout']):
         size_results_path = staging_dir.join('size_results.json')
         self._create_diffs(author, without_results_dir, with_results_dir,
-                           size_results_path, staging_dir)
+                           size_results_path, staging_dir, use_m87_flow)
         expectation_success = self._maybe_fail_for_expectation_files(
             expectations_with_patch_json, expectations_without_patch_json)
         binary_size_success = self._check_for_undocumented_increase(
@@ -198,7 +202,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
           raise self.m.step.StepFailure(
               'Failed Checks. See Failing steps for details')
 
-  def get_size_analysis_command(self, staging_dir):
+  def get_size_analysis_command(self, staging_dir, use_m87_flow=False):
     """Returns the command to compute size analysis files.
 
     Args:
@@ -208,10 +212,14 @@ class BinarySizeApi(recipe_api.RecipeApi):
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
-    cmd += [
-        '--size-config-json',
-        self.m.chromium.output_dir.join(self._size_config_json)
-    ]
+    if use_m87_flow:  # pragma: no cover
+      cmd += ['--apk-name', 'MonochromePublic.minimal.apks']
+      cmd += ['--mapping-name', 'MonochromePublic.aab.mapping']
+    else:
+      cmd += [
+          '--size-config-json',
+          self.m.chromium.output_dir.join(self._size_config_json)
+      ]
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
@@ -266,7 +274,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.m.zip.unzip('Unzipping tot analysis', local_zip, results_dir)
     return results_dir
 
-  def _build_and_measure(self, with_patch, staging_dir):
+  def _build_and_measure(self, with_patch, staging_dir, use_m87_flow):
     suffix = ' (with patch)' if with_patch else ' (without patch)'
     results_basename = 'with_patch' if with_patch else 'without_patch'
 
@@ -281,7 +289,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
     self.m.step(
         name='Generate commit size analysis files',
-        cmd=self.get_size_analysis_command(results_dir))
+        cmd=self.get_size_analysis_command(results_dir, use_m87_flow))
 
     return results_dir, None
 
@@ -383,17 +391,20 @@ class BinarySizeApi(recipe_api.RecipeApi):
     return url
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,
-                    staging_dir):
+                    staging_dir, use_m87_flow):
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--author', author]
-      cmd += [
-          '--size-config-json-name',
-          os.path.basename(self._size_config_json)
-      ]
+      if use_m87_flow:  # pragma: no cover
+        cmd += ['--apk-name', 'MonochromePublic.minimal.apks']
+      else:
+        cmd += [
+            '--size-config-json-name',
+            os.path.basename(self._size_config_json)
+        ]
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
       cmd += ['--results-path', results_path]
