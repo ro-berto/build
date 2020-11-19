@@ -206,6 +206,9 @@ def publish_coverage_points(api):
 
   report_file = api.path['checkout'].join('karma-coverage',
                                           'coverage-summary.json')
+  if not api.path.exists(report_file):
+    return
+
   summary = api.file.read_json(
       'Coverage summary', report_file, test_data=test_cov_data())
   totals = summary['total']
@@ -215,7 +218,7 @@ def publish_coverage_points(api):
   ])
 
   points = [_point(api, dim, summary['total']) for dim in dimensions]
-  #TODO(liviurau) find another way arroud 400 error "Invalid ID (revision) 1055; 
+  #TODO(liviurau) find another way arroud 400 error "Invalid ID (revision) 1055;
   #compared to previous ID 0, it was larger or smaller by too much."
   api.perf_dashboard.add_point(points, halt_on_failure=False)
 
@@ -262,14 +265,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'basic with cov',
-      api.builder_group.for_current('devtools-frontend'),
-      ci_build(builder='linux'),
-      api.path.exists(api.path['checkout'].join('karma-coverage',
-                                                'coverage-summary.json')),
-  )
-
-  yield api.test(
       'experimental',
       api.builder_group.for_current('tryserver.devtools-frontend'),
       try_build(
@@ -296,6 +291,17 @@ def GenTests(api):
       api.builder_group.for_current('tryserver.devtools-frontend'),
       ci_build(builder='linux'),
       api.properties(builder_config='Debug'),
+  )
+
+  yield api.test(
+      'debug cov',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
+      api.properties(builder_config='Debug'),
+      api.path.exists(api.path['checkout'].join(
+          'karma-coverage',
+          'coverage-summary.json',
+      )),
   )
 
   yield api.test(

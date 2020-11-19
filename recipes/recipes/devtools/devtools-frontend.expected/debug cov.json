@@ -175,13 +175,31 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/devtools-frontend/out/Debug"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "name": "clean outdir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/devtools-frontend",
       "gen",
-      "//out/Release",
-      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "//out/Debug",
+      "--args=is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
@@ -313,7 +331,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "-j",
       "80"
     ],
@@ -335,7 +353,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "-j",
       "80",
       "-d",
@@ -472,9 +490,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/devtools-frontend/out/Release\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/devtools-frontend/out/Debug\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -495,7 +513,7 @@
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",
-      "devtools-frontend",
+      "tryserver.devtools-frontend",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
@@ -555,7 +573,7 @@
       "python",
       "-u",
       "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
-      "--target=Release",
+      "--target=Debug",
       "--coverage"
     ],
     "env_prefixes": {
@@ -567,60 +585,68 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_type_check.py"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/devtools-frontend/karma-coverage/coverage-summary.json",
+      "/path/to/tmp/"
     ],
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
-    "name": "Type Check with Closure"
+    "infra_step": true,
+    "name": "Coverage summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Lines: 11.11%<br/>Statements: 11.12%<br/>Functions: 11.13%<br/>Branches: 11.14%@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@{\"total\": {\"branches\": {\"pct\": 11.14}, \"functions\": {\"pct\": 11.13}, \"lines\": {\"pct\": 11.11}, \"statements\": {\"pct\": 11.12}}}@@@",
+      "@@@STEP_LOG_END@coverage-summary.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "name": "get access token for default account"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "third_party/node/node.py",
-      "--output",
-      "scripts/test/run_lint_check_js.js"
-    ],
-    "cwd": "[CACHE]/builder/devtools-frontend",
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "name": "Lint Check with ESLint"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_localization_check.py"
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/lines\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.11, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/statements\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.12, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/functions\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.13, \\\"revision\\\": 0}, {\\\"buildnumber\\\": 0, \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"supplemental_columns\\\": {\\\"r_devtools_git\\\": \\\"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\\\", \\\"a_default_rev\\\": \\\"r_devtools_git\\\"}, \\\"buildername\\\": \\\"linux\\\", \\\"test\\\": \\\"devtools.infra/coverage/branches\\\", \\\"bot\\\": \\\"linux\\\", \\\"value\\\": 11.14, \\\"revision\\\": 0}]\"}",
+      "-o",
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"
       ]
     },
-    "name": "Localization Check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
-      "--target=Release",
-      "--test-suite=e2e"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "name": "E2E tests"
+    "name": "perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "name": "$result"
