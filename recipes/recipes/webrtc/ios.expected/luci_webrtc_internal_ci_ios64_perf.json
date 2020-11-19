@@ -1302,7 +1302,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos"
+      "[CACHE]/builder/src/out/Release-iphoneos",
+      "--wait-for-upload"
     ],
     "infra_step": true,
     "name": "webrtc_perf_tests Dashboard Upload",

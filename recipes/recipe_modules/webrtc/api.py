@@ -834,13 +834,9 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.raw_io.input(perf_results), '--dashboard-url',
           DASHBOARD_UPLOAD_URL, '--commit-position', self.revision_number,
           '--webrtc-git-hash', self.revision, '--perf-dashboard-machine-group',
-          perf_bot_group, '--outdir', self.m.chromium.output_dir
+          perf_bot_group, '--outdir', self.m.chromium.output_dir,
+          '--wait-for-upload'
       ]
-
-      # Continuous roll out of wait-for-upload feature. Will be turned on for
-      # all webrtc uploads after it proofs it's stability.
-      if 'Perf_Linux_Trusty' in str(self.m.chromium.output_dir):
-        args.append('--wait-for-upload')
 
       upload_script = self.m.path['checkout'].join(
           'tools_webrtc', 'perf', 'webrtc_dashboard_upload.py')
