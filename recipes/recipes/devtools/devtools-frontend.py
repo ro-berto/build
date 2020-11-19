@@ -117,7 +117,6 @@ def run_unit_tests(api):
   run_script(api, 'Unit Tests', 'run_unittests.py', [
       '--target=' +  builder_config(api),
       '--coverage',
-      '--no-html-coverage',
     ])
 
 

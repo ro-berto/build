@@ -602,8 +602,7 @@
       "-u",
       "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
       "--target=Release",
-      "--coverage",
-      "--no-html-coverage"
+      "--coverage"
     ],
     "env_prefixes": {
       "PATH": [
