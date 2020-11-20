@@ -76,6 +76,7 @@ SPEC = {
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
+            gclient_apply_config=['use_xcode_12_beta'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
