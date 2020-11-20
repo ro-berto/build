@@ -25,11 +25,6 @@ def getText(result, observer, name):
   Updates the waterfall with any unusual test output, with a link to logs of
   failed test steps.
   """
-  GTEST_DASHBOARD_BASE = (
-      'https://test-results.appspot.com'
-      '/dashboards/flakiness_dashboard.html'
-  )
-
   # TODO(xusydoc): unify this with gtest reporting below so getText() is
   # less confusing
   if hasattr(observer, 'PerformanceSummary'):
@@ -63,17 +58,6 @@ def getText(result, observer, name):
   # TODO(xusydoc): see if 'crashed or hung' should be tracked by RunningTests().
   if failed_test_count:
     failure_text = ['failed %d' % failed_test_count]
-    if observer.builder_group:
-      # Include the link to the flakiness dashboard.
-      failure_text.append('<div class="BuildResultInfo">')
-      failure_text.append(
-          '<a href="%s#testType=%s'
-          '&tests=%s">' %
-          (GTEST_DASHBOARD_BASE, name, ','.join(observer.FailedTests()))
-      )
-      failure_text.append('Flakiness dashboard')
-      failure_text.append('</a>')
-      failure_text.append('</div>')
   else:
     failure_text = ['crashed or hung']
   return basic_info + failure_text
