@@ -179,7 +179,6 @@ SPEC = {
             chromium_apply_config=[
                 'dcheck',
                 'mb',
-                'mac_toolchain',
             ],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
@@ -196,7 +195,6 @@ SPEC = {
             chromium_apply_config=[
                 'dcheck',
                 'mb',
-                'mac_toolchain',
             ],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
@@ -214,7 +212,6 @@ SPEC = {
             chromium_apply_config=[
                 'dcheck',
                 'mb',
-                'mac_toolchain',
             ],
             isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
