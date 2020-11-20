@@ -751,12 +751,11 @@ class iOSApi(recipe_api.RecipeApi):
         for test in test_cases:
           command_template.extend(['-t', test])
       if test_args:
-        command_template.extend([
-            '--args-json',
-            self.m.json.dumps({
-                'test_args': self.m.json.dumps(test_args),
-            })
-        ])
+        command_template.extend(
+            ['--args-json',
+             self.m.json.dumps({
+                 'test_args': test_args,
+             })])
 
       if self.platform == 'simulator' and sim_platform and sim_os:
         iossim = self.most_recent_iossim
