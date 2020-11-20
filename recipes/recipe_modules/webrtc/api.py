@@ -845,6 +845,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           upload_script,
           args,
           step_test_data=lambda: self.m.json.test_api.output({}),
+          venv=True,
           infra_step=True)
 
 

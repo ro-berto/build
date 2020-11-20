@@ -1031,7 +1031,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
       "--build-page-url",
@@ -1145,7 +1145,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
       "--build-page-url",
