@@ -39,11 +39,6 @@ SPEC = {
             parent_buildername='win-updater-builder-rel'),
     'mac-updater-builder-rel':
         CreateBuilderConfig('mac'),
-    'mac10.10-updater-tester-rel':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=bot_spec.TEST,
-            parent_buildername='mac-updater-builder-rel'),
     'mac10.11-updater-tester-rel':
         CreateBuilderConfig(
             'mac',
