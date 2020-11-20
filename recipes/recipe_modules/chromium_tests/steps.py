@@ -27,10 +27,7 @@ inherit from `TestWrapper`, which are both abstract base classes. Each
 concrete test type or test wrapper type has an associated spec type that
 contains the input details for the test or test wrapper and is the only
 argument to the __init__ method of the test type or test wrapper type.
-Concrete test types set the associated spec type in the `SPEC_CLASS`
-class attribute to support being created via `bot_spec.TestSpec`.
 """
-# TODO(gbeaty) Once bot_spec.TestSpec is gone, get rid of SPEC_CLASS
 
 import abc
 import attr
@@ -1223,8 +1220,6 @@ class SizesStepSpec(TestSpec):
 
 class SizesStep(Test):
 
-  SPEC_CLASS = SizesStepSpec
-
   @recipe_api.composite_step
   def run(self, api, suffix):
     step_result = api.chromium.sizes(self.spec.results_url, self.spec.perf_id)
@@ -1293,8 +1288,6 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
   All new tests are strongly encouraged to use this infrastructure.
   """
-
-  SPEC_CLASS = ScriptTestSpec
 
   def compile_targets(self):
     if self.spec.override_compile_targets:
@@ -1459,8 +1452,6 @@ class LocalGTestTestSpec(TestSpec):
 
 
 class LocalGTestTest(Test):
-
-  SPEC_CLASS = LocalGTestTestSpec
 
   def __init__(self, spec):
     super(LocalGTestTest, self).__init__(spec)
@@ -2449,8 +2440,6 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
 
 class SwarmingGTestTest(SwarmingTest):
 
-  SPEC_CLASS = SwarmingGTestTestSpec
-
   def __init__(self, spec):
     super(SwarmingGTestTest, self).__init__(spec)
     self._gtest_results = {}
@@ -2557,8 +2546,6 @@ class LocalIsolatedScriptTestSpec(TestSpec):
 
 
 class LocalIsolatedScriptTest(Test):
-
-  SPEC_CLASS = LocalIsolatedScriptTestSpec
 
   def __init__(self, spec):
     super(LocalIsolatedScriptTest, self).__init__(spec)
@@ -2720,8 +2707,6 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
-  SPEC_CLASS = SwarmingIsolatedScriptTestSpec
-
   def __init__(self, spec):
     super(SwarmingIsolatedScriptTest, self).__init__(spec)
     self._isolated_script_results = None
@@ -2812,8 +2797,6 @@ class MiniInstallerTestSpec(TestSpec):
 
 
 class MiniInstallerTest(Test):  # pylint: disable=W0232
-
-  SPEC_CLASS = MiniInstallerTestSpec
 
   def compile_targets(self):
     return ['mini_installer_tests']
@@ -2968,8 +2951,6 @@ class AndroidJunitTestSpec(AndroidTestSpec):
 
 class AndroidJunitTest(AndroidTest):
 
-  SPEC_CLASS = AndroidJunitTestSpec
-
   @property
   def uses_local_devices(self):
     return False
@@ -3049,8 +3030,6 @@ class WebRTCPerfTest(LocalGTestTest):
   WebRTC is the only project that runs correctness tests with perf reporting
   enabled at the same time, which differs from the chromium.perf bots.
   """
-
-  SPEC_CLASS = WebRTCPerfTestSpec
 
   def _get_runtest_kwargs(self, api):
     """Get additional keyword arguments to pass to runtest.

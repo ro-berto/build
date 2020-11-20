@@ -21,8 +21,7 @@ PERF_BROWSER_TESTS_FILTER = [
 
 
 def browser_perf_test(perf_id):
-  return bot_spec.TestSpec.create(
-      steps.WebRTCPerfTest,
+  return steps.WebRTCPerfTestSpec.create(
       name='browser_tests',
       # These tests needs --test-launcher-jobs=1 since some of them are
       # not able to run in parallel (they record system audio, etc).

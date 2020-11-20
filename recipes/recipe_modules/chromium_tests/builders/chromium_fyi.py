@@ -465,8 +465,7 @@ SPEC = {
             execution_mode=bot_spec.TEST,
             parent_buildername='Linux remote_run Builder',
             test_specs=[
-                bot_spec.TestSpec.create(steps.LocalGTestTest,
-                                         'base_unittests'),
+                steps.LocalGTestTestSpec.create('base_unittests'),
             ],
             test_results_config='staging_server',
             simulation_platform='linux',

@@ -262,7 +262,7 @@ def GenTests(api):
   yield api.test(
       'test-migration-needs-migration',
       fake_builder(test_specs=[
-          bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest, 'fake-test'),
+          steps.LocalIsolatedScriptTestSpec.create('fake-test'),
       ]),
       api.post_check(post_process.MustRun,
                      migration_step('needs migration', 'fake-test')),
@@ -285,8 +285,7 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-isolated-scripts',
-      test_spec=bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest,
-                                         'fake-test'),
+      test_spec=steps.LocalIsolatedScriptTestSpec.create('fake-test'),
       builder_source_side_spec={
           'isolated_scripts': [{
               'name': 'fake-test',
@@ -296,8 +295,7 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-isolated-scripts-swarming',
-      test_spec=bot_spec.TestSpec.create(steps.SwarmingIsolatedScriptTest,
-                                         'fake-test'),
+      test_spec=steps.SwarmingIsolatedScriptTestSpec.create('fake-test'),
       builder_source_side_spec={
           'isolated_scripts': [{
               'name': 'fake-test',
@@ -310,7 +308,7 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-gtest-tests',
-      test_spec=bot_spec.TestSpec.create(steps.LocalGTestTest, 'fake-test'),
+      test_spec=steps.LocalGTestTestSpec.create('fake-test'),
       builder_source_side_spec={
           'gtest_tests': [{
               'test': 'fake-test',
@@ -319,7 +317,7 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-gtest-tests-swarming',
-      test_spec=bot_spec.TestSpec.create(steps.SwarmingGTestTest, 'fake-test'),
+      test_spec=steps.SwarmingGTestTestSpec.create('fake-test'),
       builder_source_side_spec={
           'gtest_tests': [{
               'test': 'fake-test',
@@ -331,11 +329,8 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-junit-tests',
-      test_spec=bot_spec.TestSpec.create(
-          steps.ScriptTest,
-          'fake-test',
-          script='fake-script',
-          all_compile_targets={}),
+      test_spec=steps.ScriptTestSpec.create(
+          'fake-test', script='fake-script', all_compile_targets={}),
       builder_source_side_spec={
           'scripts': [{
               'name': 'fake-test',
@@ -346,8 +341,8 @@ def GenTests(api):
 
   yield already_migrated_test(
       'test-migration-already-migrated-scripts',
-      test_spec=bot_spec.TestSpec.create(
-          steps.AndroidJunitTest, 'fake-test', target_name='fake-target'),
+      test_spec=steps.AndroidJunitTestSpec.create(
+          'fake-test', target_name='fake-target'),
       builder_source_side_spec={
           'junit_tests': [{
               'name': 'fake-test',
@@ -360,11 +355,8 @@ def GenTests(api):
       'test-migration-mismatch',
       fake_builder(
           test_specs=[
-              bot_spec.TestSpec.create(
-                  steps.ScriptTest,
-                  'fake-test',
-                  script='fake-script',
-                  all_compile_targets={}),
+              steps.ScriptTestSpec.create(
+                  'fake-test', script='fake-script', all_compile_targets={}),
           ],
           builder_source_side_spec={
               'scripts': [{
@@ -379,8 +371,7 @@ def GenTests(api):
       'test-migration-mismatch-experimental',
       fake_builder(
           test_specs=[
-              bot_spec.TestSpec.create(steps.LocalIsolatedScriptTest,
-                                       'fake-test'),
+              steps.LocalIsolatedScriptTestSpec.create('fake-test'),
           ],
           builder_source_side_spec={
               'isolated_scripts': [{

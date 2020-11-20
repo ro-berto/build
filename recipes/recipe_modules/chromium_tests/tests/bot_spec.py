@@ -167,32 +167,6 @@ def RunSteps(api):
     )
   api.assertions.assertEqual(caught.exception.message, message)
 
-  # Test spec ******************************************************************
-
-  @attrs()
-  class FakeTestSpec(object):
-
-    x = attrib(int)
-    y = attrib(int, default=0)
-    z = attrib(int, default=1)
-    s = attrib(str, default=None)
-
-    @classmethod
-    def create(cls, *args, **kwargs):
-      return cls(*args, **kwargs)
-
-  class FakeTest(object):
-
-    SPEC_CLASS = FakeTestSpec
-
-  test_spec = bot_spec.TestSpec.create(FakeTest, 0, 1, 2, s='bar')
-  expected = FakeTestSpec.create(0, 1, 2, s='bar')
-  api.assertions.assertEqual(test_spec, expected)
-
-  test_spec = bot_spec.TestSpec.create(FakeTest, -1)
-  expected = FakeTestSpec.create(-1, 0, 1)
-  api.assertions.assertEqual(test_spec, expected)
-
 
 def GenTests(api):
   yield api.test(

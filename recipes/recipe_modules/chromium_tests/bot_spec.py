@@ -24,16 +24,6 @@ TEST = 'test'
 PROVIDE_TEST_SPEC = 'provide-test-spec'
 
 
-class TestSpec(object):
-  """Facade class to provide factory method for creating specific specs.
-  """
-
-  @classmethod
-  def create(cls, test_class, *args, **kwargs):
-    test_spec_class = test_class.SPEC_CLASS
-    return test_spec_class.create(*args, **kwargs)
-
-
 @attrs()
 class BotSpec(object):
   """An immutable specification for a bot.
