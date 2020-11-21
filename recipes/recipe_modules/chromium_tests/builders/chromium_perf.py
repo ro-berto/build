@@ -263,7 +263,6 @@ _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'mac-builder-perf')
-_AddIsolatedTestSpec('mac-arm_dtk_x86-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec(
     'mac-arm_dtk_arm-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
 
