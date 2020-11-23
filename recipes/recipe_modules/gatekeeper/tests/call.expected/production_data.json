@@ -23,25 +23,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"status-url\": \"https://pdfium-status.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"track-revisions\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"v8-mail-notifiers\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"v8_mail_notifiers_build_db.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gitiles-config\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"path\": \"gatekeeper/mail_notifiers.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"ref\": \"refs/heads/infra/config\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repo_url\": \"https://chromium.googlesource.com/v8/v8\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.chromium\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.fyi\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -61,38 +42,6 @@
     ],
     "infra_step": true,
     "name": "ensure cache"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--url",
-      "https://chromium.googlesource.com/v8/v8/+/refs/heads/infra/config/gatekeeper/mail_notifiers.json",
-      "--format",
-      "text"
-    ],
-    "name": "fetch refs/heads/infra/config:gatekeeper/mail_notifiers.json"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
-      "--json",
-      "{}",
-      "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json",
-      "--verbose",
-      "--build-db",
-      "[CACHE]/builder/v8_mail_notifiers_build_db.json",
-      "https://build.chromium.org/p/client.v8.fyi",
-      "https://build.chromium.org/p/client.v8",
-      "https://build.chromium.org/p/client.v8.chromium"
-    ],
-    "name": "gatekeeper: v8-mail-notifiers"
   },
   {
     "cmd": [
