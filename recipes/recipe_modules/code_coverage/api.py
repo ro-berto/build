@@ -701,7 +701,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if self.use_javascript_coverage:
       args.extend([
           '--javascript-coverage-dir',
-          self.m.chromium.output_dir.join('coverage', 'devtools_code_coverage'),
+          self.m.chromium.output_dir.join('devtools_code_coverage'),
           '--merged-js-cov-filename',
           self.m.profiles.normalize(step_name),
       ])
