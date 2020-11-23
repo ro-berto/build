@@ -1875,7 +1875,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=self.m.tryserver.is_tryserver)
 
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
+    affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+        report_via_property=True
+    )
     affected_files = self.revise_affected_files_for_deps_autorolls(
         bot, affected_files, build_config)
 

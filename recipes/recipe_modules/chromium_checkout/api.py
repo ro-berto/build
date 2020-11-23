@@ -47,7 +47,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
   def get_checkout_dir(self, bot_config):
     return self.checkout_dir
 
-  def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
+  def get_files_affected_by_patch(self, relative_to='src/', cwd=None,
+                                  report_via_property=False):
     """Returns list of POSIX paths of files affected by patch for "analyze".
 
     Paths are relative to `relative_to` which for analyze should be 'src/'.
@@ -63,7 +64,12 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if not cwd and self.working_dir:
       cwd = self.working_dir.join(patch_root)
     with self.m.context(cwd=cwd):
-      files = self.m.tryserver.get_files_affected_by_patch(patch_root)
+      files = self.m.tryserver.get_files_affected_by_patch(
+          patch_root,
+          report_files_via_property=(
+             'affected_files' if report_via_property else None
+          ),
+      )
     for i, path in enumerate(files):
       path = str(path)
       files[i] = self.m.path.relpath(path, relative_to)
