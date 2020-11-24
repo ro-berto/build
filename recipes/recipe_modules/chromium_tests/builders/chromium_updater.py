@@ -69,6 +69,11 @@ SPEC = {
             'mac',
             execution_mode=bot_spec.TEST,
             parent_buildername='mac-updater-builder-rel'),
+    'mac-arm64-updater-tester-rel':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='mac-updater-builder-rel'),
     # debug builders and testers
     'win-updater-builder-dbg':
         CreateBuilderConfig('win'),
