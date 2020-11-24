@@ -165,25 +165,26 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
 
   if test_suite == 'ios':
     tests += [
-        IosTest('apprtcmobile_tests', xctest=True),
-        IosTest('sdk_unittests', xctest=True),
-        IosTest('sdk_framework_unittests', xctest=True),
-        IosTest('audio_decoder_unittests'),
-        IosTest('common_audio_unittests'),
-        IosTest('common_video_unittests'),
-        IosTest('modules_tests'),
-        IosTest('modules_unittests'),
-        IosTest('rtc_media_unittests'),
-        IosTest('rtc_pc_unittests'),
-        IosTest('rtc_stats_unittests'),
-        IosTest('rtc_unittests'),
-        IosTest('system_wrappers_unittests'),
-        IosTest('test_support_unittests'),
-        IosTest('tools_unittests'),
-        IosTest('video_capture_tests'),
-        IosTest('video_engine_tests'),
-        IosTest('voip_unittests'),
-        IosTest('webrtc_nonparallel_tests'),
+        IosTest('apprtcmobile_tests', xctest=True, xcode_parallelization=True),
+        IosTest('sdk_unittests', xctest=True, xcode_parallelization=True),
+        IosTest(
+            'sdk_framework_unittests', xctest=True, xcode_parallelization=True),
+        IosTest('audio_decoder_unittests', xctest=True),
+        IosTest('common_audio_unittests', xctest=True),
+        IosTest('common_video_unittests', xctest=True),
+        IosTest('modules_tests', xctest=True),
+        IosTest('modules_unittests', xctest=True),
+        IosTest('rtc_media_unittests', xctest=True),
+        IosTest('rtc_pc_unittests', xctest=True),
+        IosTest('rtc_stats_unittests', xctest=True),
+        IosTest('rtc_unittests', xctest=True),
+        IosTest('system_wrappers_unittests', xctest=True),
+        IosTest('test_support_unittests', xctest=True),
+        IosTest('tools_unittests', xctest=True),
+        IosTest('video_capture_tests', xctest=True),
+        IosTest('video_engine_tests', xctest=True),
+        IosTest('voip_unittests', xctest=True),
+        IosTest('webrtc_nonparallel_tests', xctest=True),
     ]
 
   if test_suite == 'ios_device':
@@ -528,13 +529,22 @@ class AndroidJunitTest(Test):
 
 class IosTest(object):
   """A fake shell of an iOS test. It is only read by apply_ios_config."""
-  def __init__(self, name, args=None, xctest=False):
+
+  def __init__(self, name, args=None, xctest=False,
+               xcode_parallelization=False):
     self._name = name
     self.config = {'app': name}
     if args:
       self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True
+      # WebRTC iOS tests are in the process of being migrated to XCTest so
+      # there is no need to have a flag to handle how they run.
+      if 'test args' not in self.config:
+        self.config['test args'] = []
+      self.config['test args'].append(
+          '--undefok="enable-run-ios-unittests-with-xctest"')
+    if xcode_parallelization:
       # TODO(crbug.com/1006881): "xctest" indicates how to run the targets but
       # not how to parse test outputs since recent iOS test runner changes.
       # This arg is needed for outputs to be parsed correctly.
