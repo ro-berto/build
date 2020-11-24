@@ -543,6 +543,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('process javascript coverage'):
       try:
+        dir_metadata_path = self._generate_dir_metadata()
+
         coverage_dir = self.m.chromium.output_dir.join('devtools_code_coverage')
         args = [
             '--src-path',
@@ -551,6 +553,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             coverage_dir,
             '--coverage-dir',
             coverage_dir,
+            '--dir-metadata-path',
+            dir_metadata_path,
         ]
 
         self.m.python(

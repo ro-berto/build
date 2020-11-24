@@ -58,7 +58,14 @@ def _parse_args(args):
       type=str,
       help='absolute path to the directory that contains merged JavaScript '
       'coverage data')
+  parser.add_argument(
+      '--dir-metadata-path',
+      type=str,
+      help='absolute path to json file mapping dirs to metadata')
   params = parser.parse_args(args=args)
+
+  if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
+    parser.error('Dir metadata %s is missing' % params.dir_metadata_path)
 
   return params
 
@@ -66,7 +73,17 @@ def _parse_args(args):
 def main():
   params = _parse_args(sys.argv[1:])
 
-  # TODO(benreich): Add monorail component mapping
+  component_mapping = None
+  if params.dir_metadata_path:
+    with open(params.dir_metadata_path) as f:
+      component_mapping = {
+          d: md['monorail']['component']
+          for d, md in json.load(f)['dirs'].iteritems()
+          if 'monorail' in md and 'component' in md['monorail']
+      }
+
+  assert component_mapping, (
+      'component_mapping (for full-repo coverage) must be specified')
 
   coverage_files = get_json_coverage_files(params.coverage_dir)
   if not coverage_files:
