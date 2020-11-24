@@ -115,7 +115,6 @@ SPEC = {
             swarming_dimensions={
                 'cpu': 'arm',
             },
-            serialize_tests=True,
             execution_mode=bot_spec.TEST,
             parent_builder_group='chromium.mac',
             parent_buildername='mac-arm64-rel',
