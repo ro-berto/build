@@ -158,11 +158,47 @@ def GenTests(api):
   )
 
   yield api.test(
-      'basic_js_coverage',
+      'javascript: full repo',
       api.chromium.generic_build(
           builder_group='chromium.fyi',
           builder='linux-chromeos-js-code-coverage'),
       api.code_coverage(use_javascript_coverage=True),
+      api.post_process(post_process.MustRun, 'process javascript coverage'),
+      api.post_process(
+          post_process.MustRun,
+          'process javascript coverage.Generate JavaScript coverage metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'javascript: full repo with no coverage files',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi',
+          builder='linux-chromeos-js-code-coverage'),
+      api.code_coverage(use_javascript_coverage=True),
+      api.step_data(
+          'process javascript coverage.Generate JavaScript coverage metadata',
+          retcode=1),
+      api.post_check(lambda check, steps: check(steps[
+          'process javascript coverage.Generate JavaScript coverage metadata'
+          ''].output_properties['process_coverage_data_failure'] == True)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'javascript: per cl coverage unsupported',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.code_coverage(use_javascript_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.js',
+          'some/other/path/to/file.js',
+      ]),
+      api.post_process(
+          post_process.MustRun,
+          'per cl coverage is not supported for javascript code coverage'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
