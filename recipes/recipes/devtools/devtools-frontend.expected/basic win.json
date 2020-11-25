@@ -566,10 +566,6 @@
     "name": "Unit Tests"
   },
   {
-    "cmd": [],
-    "name": "Skipping Type Check with Closure ..."
-  },
-  {
     "cmd": [
       "python",
       "-u",

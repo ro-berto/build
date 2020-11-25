@@ -51,7 +51,6 @@ def RunSteps(api):
     if is_debug_builder(api):
       return
 
-    run_type_check(api)
     run_lint_check(api)
     run_localization_check(api)
     run_e2e(api)
@@ -118,13 +117,6 @@ def run_unit_tests(api):
       '--target=' +  builder_config(api),
       '--coverage',
     ])
-
-
-def run_type_check(api):
-  if api.platform.is_win:
-    api.step('Skipping Type Check with Closure ...', [])
-  else:
-    run_script(api, 'Type Check with Closure', 'run_type_check.py')
 
 
 def run_lint_check(api):

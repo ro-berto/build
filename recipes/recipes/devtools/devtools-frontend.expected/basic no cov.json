@@ -569,19 +569,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_type_check.py"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "name": "Type Check with Closure"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "third_party/node/node.py",
       "--output",
       "scripts/test/run_lint_check_js.js"
