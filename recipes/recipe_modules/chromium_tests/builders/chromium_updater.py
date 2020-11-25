@@ -37,6 +37,14 @@ SPEC = {
             'win',
             execution_mode=bot_spec.TEST,
             parent_buildername='win-updater-builder-rel'),
+    # win 32 release builders and testers
+    'win32-updater-builder-rel':
+        CreateBuilderConfig('win'),
+    'win7(32)-updater-tester-rel':
+        CreateBuilderConfig(
+            'win',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='win32-updater-builder-rel'),
     'mac-updater-builder-rel':
         CreateBuilderConfig('mac'),
     'mac10.11-updater-tester-rel':
@@ -87,6 +95,14 @@ SPEC = {
             'win',
             execution_mode=bot_spec.TEST,
             parent_buildername='win-updater-builder-dbg'),
+    # win32 debug builders and testers
+    'win32-updater-builder-dbg':
+        CreateBuilderConfig('win'),
+    'win7(32)-updater-tester-dbg':
+        CreateBuilderConfig(
+            'win',
+            execution_mode=bot_spec.TEST,
+            parent_buildername='win32-updater-builder-dbg'),
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
     'mac10.13-updater-tester-dbg':
