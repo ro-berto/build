@@ -5,12 +5,17 @@
 syntax = "proto3";
 package recipe_modules.build.symupload;
 
-// Next id: 3
+// Next id: 4
 message SymuploadData {
   // The artifact that should be uploaded by symupload. The artifact is relative
   // to the build directory, which is passed alongside this proto to the
   // symupload code.
   string artifact = 1;
+
+  // A list of globs that will be expanded to files that should be archived. All
+  // globs are expanded relative to the build directory, which is passed
+  // alongside this proto to the archiving code.
+  repeated string file_globs = 3;
 
   // The full url to pass to symupload.
   string url = 2;

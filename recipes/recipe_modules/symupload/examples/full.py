@@ -9,10 +9,20 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
                                                  try_spec_module)
 
-DEPS = ['recipe_engine/path', 'recipe_engine/properties', 'symupload']
+DEPS = [
+    'chromium',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'symupload',
+]
 
 
 def RunSteps(api):
+  api.chromium.set_config(
+      'chromium', **{
+          'TARGET_PLATFORM': api.properties.get('target_platform'),
+          'HOST_PLATFORM': api.properties.get('host_platform')
+      })
   api.symupload(api.path['tmp_base'])
 
 
@@ -22,9 +32,11 @@ def GenTests(api):
 
   symupload_data.artifact = 'some_artifact.txt'
   symupload_data.url = 'https://some.url.com'
+  symupload_data.file_globs.append('glob*.txt')
 
   yield api.test(
       'basic',
+      api.properties(target_platform='linux', host_platform='linux'),
       api.path.exists(api.path['tmp_base'].join('symupload')),
       api.symupload(input_properties),
       api.post_process(post_process.StatusSuccess),
@@ -32,15 +44,17 @@ def GenTests(api):
 
   yield api.test(
       'no symupload binary',
+      api.properties(target_platform='win', host_platform='win'),
       api.symupload(input_properties),
-      api.post_process(post_process.StepFailure, 'Symupload'),
+      api.post_process(post_process.StepFailure, 'symupload'),
       api.post_process(post_process.StatusFailure),
   )
 
   yield api.test(
       'no action',
+      api.properties(target_platform='mac', host_platform='mac'),
       api.symupload(properties.InputProperties()),
-      api.post_process(post_process.DoesNotRun, 'Symupload'),
+      api.post_process(post_process.DoesNotRun, 'symupload'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

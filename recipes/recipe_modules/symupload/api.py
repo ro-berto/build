@@ -27,9 +27,17 @@ class SymuploadApi(recipe_api.RecipeApi):
     ]
     self.m.step('symupload %s' % artifact, cmd)
 
+  @property
+  def symupload_binary(self):
+    platform = self.m.chromium.c.TARGET_PLATFORM
+    binary_name = 'symupload'
+    if platform.startswith('win'):
+      binary_name = 'symupload.exe'
+
+    return binary_name
+
   def __call__(self, build_dir):
     """
-
     Args:
       build_dir: The absolute path to the build output directory, e.g.
                  [slave-build]/src/out/Release
@@ -37,17 +45,35 @@ class SymuploadApi(recipe_api.RecipeApi):
     if not self._properties.symupload_datas:
       return
 
-    with self.m.step.nest('Symupload'):
+    with self.m.step.nest('symupload'):
       # Check binary before moving on
-      symupload_binary = self.m.path.join(build_dir, 'symupload')
+      symupload_binary = self.m.path.join(build_dir, self.symupload_binary)
       if not self.m.path.exists(symupload_binary):
         raise self.m.step.StepFailure('The symupload binary cannot be found '
                                       'at %s. Please ensure targets symupload '
-                                      'and dump_syms are being built such that '
-                                      'the binaries are generated.' %
-                                      str(symupload_binary))
+                                      'are being built such that the binaries '
+                                      'are generated.' % str(symupload_binary))
 
+      uploads = []
       for symupload_data in self._properties.symupload_datas:
-        self.symupload(symupload_binary,
-                       self.m.path.join(build_dir, symupload_data.artifact),
-                       symupload_data.url)
+        # File globs
+        for filename in symupload_data.file_globs:
+          for f in self.m.file.glob_paths(
+              'expand file globs',
+              build_dir,
+              filename,
+              test_data=('glob1.txt', 'glob2.txt')):
+            # Turn the returned Path object back into a string relative to
+            # build_dir.
+            assert build_dir.base == f.base
+            assert build_dir.is_parent_of(f)
+            common_pieces = f.pieces[len(build_dir.pieces):]
+            uploads.append(('/'.join(common_pieces), symupload_data.url))
+
+        if symupload_data.artifact:
+          uploads.append(
+              (self.m.path.join(build_dir,
+                                symupload_data.artifact), symupload_data.url))
+
+      for artifact in uploads:
+        self.symupload(symupload_binary, artifact[0], artifact[1])
