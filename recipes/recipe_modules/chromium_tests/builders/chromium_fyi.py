@@ -236,6 +236,58 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'linux-paeverywhere-x64-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'linux',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
+    'linux-paeverywhere-x64-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'linux',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
+    'mac-paeverywhere-x64-fyi-dbg':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+            test_results_config='staging_server',
+        ),
+    'mac-paeverywhere-x64-fyi-rel':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+            test_results_config='staging_server',
+        ),
     'win-paeverywhere-x64-fyi-dbg':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
