@@ -160,7 +160,7 @@ class IsolateApi(recipe_api.RecipeApi):
     """The dictionary of 'target name -> isolated hash' for this run.
 
     These come either from the incoming swarm_hashes build property,
-    or from calling find_isolated_tests, above, at some point during the run.
+    or from calling isolate_tests, above, at some point during the run.
     """
     hashes = self.m.properties.get('swarm_hashes', self._isolated_tests)
     # Be robust in the case where swarm_hashes is an empty string

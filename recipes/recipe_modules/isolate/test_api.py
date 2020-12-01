@@ -10,8 +10,6 @@ class IsolateTestApi(recipe_test_api.RecipeTestApi):
     """Mocked output of 'find_isolated_tests' and 'isolate_tests' steps.
 
     Deterministically synthesizes json.output test data for the given targets.
-    If |targets| is None, will emit test data with some dummy targets instead,
-    emulating find_isolated_tests.py finding some files.
 
     If |missing| is given it's a subset of |targets| that wasn't isolated in
     'isolate_tests' due to some error.
