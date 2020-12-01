@@ -80,17 +80,25 @@ _TARGET_DEVICE_MAP = {
 
 
 def checkout(api):
-  api.repo.init('https://android.googlesource.com/platform/manifest',
-      '-b', 'master-art')
-  api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
-  api.repo.manifest()
+  # (https://crbug.com/1153114): do not attempt to update repo when
+  # 'repo sync' runs.
+  env = {'DEPOT_TOOLS_UPDATE': '0'}
+  with api.context(env=env):
+    api.repo.init('https://android.googlesource.com/platform/manifest', '-b',
+                  'master-art')
+    api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
+    api.repo.manifest()
 
 
 def full_checkout(api):
-  api.repo.init('https://android.googlesource.com/platform/manifest',
-      '-b', 'master')
-  api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
-  api.repo.manifest()
+  # (https://crbug.com/1153114): do not attempt to update repo when
+  # 'repo sync' runs.
+  env = {'DEPOT_TOOLS_UPDATE': '0'}
+  with api.context(env=env):
+    api.repo.init('https://android.googlesource.com/platform/manifest', '-b',
+                  'master')
+    api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
+    api.repo.manifest()
 
 
 def clobber(api):

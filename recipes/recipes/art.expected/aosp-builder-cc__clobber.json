@@ -8,6 +8,9 @@
       "-b",
       "master"
     ],
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
     "infra_step": true,
     "name": "repo init"
   },
@@ -20,6 +23,9 @@
       "-j16",
       "--no-tags"
     ],
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
     "infra_step": true,
     "name": "repo sync"
   },
@@ -31,6 +37,9 @@
       "-o",
       "-"
     ],
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
     "infra_step": true,
     "name": "repo manifest"
   },
