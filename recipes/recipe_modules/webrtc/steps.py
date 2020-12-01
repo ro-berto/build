@@ -164,9 +164,18 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
               ]))
 
   if test_suite == 'ios':
+    # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
+    # platforms because they fail or they are flaky.
+    if bot.builder not in [
+        'iOS64 Sim Debug (iOS 14.0)', 'ios_sim_x64_dbg_ios14'
+    ]:
+      tests += [
+          IosTest(
+              'apprtcmobile_tests', xctest=True, xcode_parallelization=True),
+          IosTest('sdk_unittests', xctest=True, xcode_parallelization=True)
+      ]
+
     tests += [
-        IosTest('apprtcmobile_tests', xctest=True, xcode_parallelization=True),
-        IosTest('sdk_unittests', xctest=True, xcode_parallelization=True),
         IosTest(
             'sdk_framework_unittests', xctest=True, xcode_parallelization=True),
         IosTest('audio_decoder_unittests', xctest=True),
