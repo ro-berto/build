@@ -603,7 +603,22 @@
     "name": "Coverage summary",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Lines: 11.11%<br/>Statements: 11.12%<br/>Functions: 11.13%<br/>Branches: 11.14%@@@",
-      "@@@STEP_LOG_LINE@coverage-summary.json@{\"total\": {\"branches\": {\"pct\": 11.14}, \"functions\": {\"pct\": 11.13}, \"lines\": {\"pct\": 11.11}, \"statements\": {\"pct\": 11.12}}}@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@{@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@  \"total\": {@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    \"branches\": {@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@      \"pct\": 11.14@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    },@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    \"functions\": {@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@      \"pct\": 11.13@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    },@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    \"lines\": {@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@      \"pct\": 11.11@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    },@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    \"statements\": {@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@      \"pct\": 11.12@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@    }@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@  }@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@}@@@",
       "@@@STEP_LOG_END@coverage-summary.json@@@"
     ]
   },
