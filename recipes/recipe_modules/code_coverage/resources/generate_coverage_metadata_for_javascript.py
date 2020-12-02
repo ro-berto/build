@@ -32,6 +32,44 @@ def get_json_coverage_files(json_dir):
   return files
 
 
+def get_coverage_data_and_paths(src_checkout, coverage_file_path):
+  """Returns coverage data and make source paths absolute
+
+  Args:
+    src_checkout: The absolute path to the checkout of
+      source files, used to make the return paths
+      absolute.
+    coverage_file_path: The absolute path to the code
+      coverage JSON file. The file contains a JSON
+      object with keys pertaining to file paths
+      relative to the checkout src.
+
+  Returns:
+    A dictionary with keys being absolute paths to the
+    source file and values being the coverage data.
+
+  Raises:
+    If one of the source paths in the |coverage_file_path|
+    does not exist, raise an exception and fail immediately.
+  """
+  with open(coverage_file_path) as f:
+    coverage_data = json.load(f)
+    source_files_and_coverage_data = {}
+
+    for file_path in coverage_data.keys():
+      relative_file_path = file_path.replace('//', '')
+      absolute_file_path = os.path.join(src_checkout, relative_file_path)
+
+      if not os.path.exists(absolute_file_path):
+        raise Exception('Identified source path %s does not exist' %
+                        absolute_file_path)
+
+      source_files_and_coverage_data[absolute_file_path] = coverage_data[
+          file_path]
+
+    return source_files_and_coverage_data
+
+
 def _parse_args(args):
   """Parses the arguments.
 
@@ -90,6 +128,23 @@ def main():
   if not coverage_files:
     raise Exception('No coverage file found under %s' % params.coverage_dir)
   logging.info('Found coverage files: %s', str(coverage_files))
+
+  coverage_by_absolute_path = {}
+  for file_path in coverage_files:
+    source_files_and_coverage_data = get_coverage_data_and_paths(
+        params.src_path, file_path)
+
+    for absolute_source_path, coverage in source_files_and_coverage_data.items(
+    ):
+      if absolute_source_path in coverage_by_absolute_path:
+        raise Exception('Duplicate source file %s found, not yet supported' %
+                        absolute_source_path)
+
+      coverage_by_absolute_path[absolute_source_path] = coverage
+
+  if not coverage_by_absolute_path:
+    raise Exception('No source files found')
+  logging.info('Found source files: %s', str(coverage_by_absolute_path.keys()))
 
   # TODO(benreich): Process the merged coverage files.
 
