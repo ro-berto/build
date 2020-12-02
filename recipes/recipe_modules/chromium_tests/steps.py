@@ -40,6 +40,7 @@ import json
 import re
 import string
 import struct
+import urllib
 import urlparse
 
 from recipe_engine import recipe_api
@@ -1917,7 +1918,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     sanitized_buildername = re.sub('[ .()]', '_', buildername)
     base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
             (sanitized_buildername, buildnumber))
-    base += '/' + step_name
+    base += '/' + urllib.quote(step_name)
 
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')

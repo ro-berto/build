@@ -1163,8 +1163,8 @@
     },
     "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28with%20patch%29/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28with%20patch%29/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1457,8 +1457,8 @@
     },
     "name": "archive results for blink_web_tests (retry shards with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (retry shards with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (retry shards with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28retry%20shards%20with%20patch%29/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28retry%20shards%20with%20patch%29/layout-test-results.zip@@@"
     ]
   },
   {
@@ -2396,8 +2396,8 @@
     },
     "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28without%20patch%29/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28without%20patch%29/layout-test-results.zip@@@"
     ]
   },
   {
