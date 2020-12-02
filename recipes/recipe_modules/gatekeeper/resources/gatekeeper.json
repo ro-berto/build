@@ -3,34 +3,6 @@
               "Look in gatekeeper_ng_config.py for documentation on ",
               "this files's format."],
 
-  "masters": {
-    "https://build.chromium.org/p/client.pdfium": [
-      {
-        "categories": [
-          "pdfium_all"
-        ],
-        "builders": {
-          "*": {}
-        },
-        "tree_notify": [
-            "dhoss@chromium.org",
-            "dsinclair@chromium.org",
-            "nigi@chromium.org",
-            "thestig@chromium.org"
-        ]
-      }
-    ]
-  },
-
-  "categories": {
-    "pdfium_all": {
-      "closing_optional": [
-        "*"
-      ],
-      "forgiving_optional": [
-        "update_scripts",
-        "steps"
-      ]
-    }
-  }
+  "masters": {},
+  "categories": {}
 }
