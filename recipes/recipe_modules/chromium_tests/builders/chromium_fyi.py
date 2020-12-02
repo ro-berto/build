@@ -571,6 +571,18 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'linux-example-builder':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'linux-chromeos-js-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
