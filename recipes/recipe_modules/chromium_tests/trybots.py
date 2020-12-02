@@ -1155,6 +1155,12 @@ TRYBOTS = try_spec.TryDatabase.create({
             ],
             analyze_deps_autorolls=True,
             ),
+        'mac_chromium_10.11_rel_ng':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.mac',
+                buildername='Mac Builder',
+                tester='Mac10.11 Tests',
+            ),
         'mac_chromium_10.12_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
