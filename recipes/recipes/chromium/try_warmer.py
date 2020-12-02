@@ -12,7 +12,7 @@ DEPS = [
     'recipe_engine/step',
 ]
 
-SCHEDULING_TIMEOUT_SEC = 600
+SCHEDULING_TIMEOUT_SEC = 3600
 
 
 def RunSteps(api):

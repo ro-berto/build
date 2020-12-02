@@ -103,7 +103,7 @@
       "SWARMING_TASK_ID": null
     },
     "name": "led launch",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux_warmed\", \n\"project\": \"chromium\"\n}, \n\"scheduling_timeout\": \"600s\"\n}\n}, \n\"name\": \"led: warm linux_warmed\"\n}\n}",
+    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux_warmed\", \n\"project\": \"chromium\"\n}, \n\"scheduling_timeout\": \"3600s\"\n}\n}, \n\"name\": \"led: warm linux_warmed\"\n}\n}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
