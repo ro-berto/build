@@ -328,11 +328,6 @@ def chromium_skip_wpr_archives_download(c):
   c.solutions[0].custom_vars['skip_wpr_archives_download'] = 'True'
 
 
-@CONFIG_CTX(includes=['chromium'])
-def chromium_skip_render_test_goldens_download(c):
-  c.solutions[0].custom_vars['skip_render_test_goldens_download'] = 'True'
-
-
 @CONFIG_CTX()
 def android_prebuilts_build_tools(c):
   c.solutions[0].custom_vars['checkout_android_prebuilts_build_tools'] = 'True'
