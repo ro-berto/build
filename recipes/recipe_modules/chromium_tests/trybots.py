@@ -635,6 +635,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Linux Release (NVIDIA)',
                 ),
             ]),
+        'linux-example-builder':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-example-builder',
+            ),
         'linux-gcc-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
