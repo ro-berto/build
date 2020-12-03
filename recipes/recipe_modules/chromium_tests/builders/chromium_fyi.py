@@ -581,6 +581,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            execution_mode=bot_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
     'linux-chromeos-js-code-coverage':
