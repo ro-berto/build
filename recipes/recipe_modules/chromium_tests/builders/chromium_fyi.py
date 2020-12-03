@@ -950,8 +950,10 @@ SPEC.update([
     stock_config('linux-perfetto-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
-    stock_config('linux-wpt-identity-fyi-rel'),
-    stock_config('linux-wpt-input-fyi-rel'),
+    # Despite the FYI name, these are the "MVP bots" used by teams:
+    # https://source.chromium.org/chromium/chromium/src/+/master:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
+    stock_config('linux-wpt-identity-fyi-rel', staging=False),
+    stock_config('linux-wpt-input-fyi-rel', staging=False),
     # For testing impact of builderful: https://crbug.com/1123673
     # remove by 2020-10-05 gatong
     stock_config('linux-builderful-fast-fyi-rel'),
