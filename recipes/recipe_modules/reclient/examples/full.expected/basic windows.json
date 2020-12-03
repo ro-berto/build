@@ -1,0 +1,34 @@
+[
+  {
+    "cmd": [
+      "[TMP_BASE]\\checkout\\tools\\reclient\\bootstrap.exe",
+      "-output_dir",
+      "[CLEANUP]\\log_dir_tmp_1"
+    ],
+    "env": {
+      "RBE_instance": "projects/test-rbe-project/instances/default_instance",
+      "RBE_log_dir": "[CLEANUP]\\log_dir_tmp_1",
+      "RBE_proxy_log_dir": "[CLEANUP]\\log_dir_tmp_1",
+      "RBE_re_proxy": "[TMP_BASE]\\checkout\\tools\\reclient\\reproxy.exe",
+      "RBE_server_address": "pipe://reproxy.pipe",
+      "RBE_service": "remotebuildexecution.googleapis.com:443",
+      "RBE_use_application_default_credentials": "false",
+      "RBE_use_gce_credentials": "true"
+    },
+    "name": "start reproxy via bootstrap"
+  },
+  {
+    "cmd": [
+      "[TMP_BASE]\\checkout\\tools\\reclient\\bootstrap.exe",
+      "-shutdown",
+      "-proxy_log_dir",
+      "[CLEANUP]\\log_dir_tmp_1",
+      "-output_dir",
+      "[CLEANUP]\\log_dir_tmp_1"
+    ],
+    "name": "shutdown reproxy via bootstrap"
+  },
+  {
+    "name": "$result"
+  }
+]

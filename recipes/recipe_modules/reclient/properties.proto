@@ -1,0 +1,17 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipe_modules.build.reclient;
+
+message InputProperties {
+  // This is to specify the RBE instance
+  // This needs to be a GCP project ID to use default instance, or full
+  // RBE-CAS instance name
+  // e.g. `projects/<project name>/instances/<instance name>`.
+  string instance = 1;
+
+  // The remote execution service to dial when calling via gRPC.
+  string rbe_service = 2;
+}
