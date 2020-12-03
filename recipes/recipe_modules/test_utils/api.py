@@ -648,6 +648,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       # Assume that non swarming test retries probably won't help.
       swarming_test_suites = [t for t in suites_to_retry if t.runs_on_swarming]
+      # This is where we decide to run 'retry shards with patch'. I'm putting
+      # this comment here so it's easier for people to find this section of the
+      # code with codesearch.
       if swarming_test_suites:
         retry_suffix = 'retry shards'
         if suffix:
