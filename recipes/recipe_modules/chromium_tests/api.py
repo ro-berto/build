@@ -1334,9 +1334,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.isolate.isolated_tests)
 
       if self.m.chromium.c.project_generator.tool == 'mb':
+        isolated_hash, cas_digest = self._archive_command_lines(
+            self._swarming_command_lines, bot.settings.isolate_server)
         additional_trigger_properties['swarming_command_lines_hash'] = (
-            self._archive_command_lines(self._swarming_command_lines,
-                                        bot.settings.isolate_server))
+            isolated_hash)
+        additional_trigger_properties['swarming_command_lines_digest'] = (
+            cas_digest)
         additional_trigger_properties['swarming_command_lines_cwd'] = (
             self.m.path.relpath(self.m.chromium.output_dir,
                                 self.m.path['checkout']))
@@ -1439,10 +1442,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     command_lines_file = self.m.path['cleanup'].join('command_lines.json')
     self.m.file.write_json('write command lines', command_lines_file,
                            command_lines)
+
+    cas_digest = self.m.cas.archive('archive command lines to RBE-CAS',
+                                    self.m.path['cleanup'], command_lines_file)
+
+    # TODO(crbug.com/1155432): deprecate this.
     isolate = self.m.isolated.isolated(self.m.path['cleanup'])
     isolate.add_file(command_lines_file)
-    return isolate.archive(
+    isolated_hash = isolate.archive(
         'archive command lines', isolate_server=isolate_server)
+    return (isolated_hash, cas_digest)
 
   def _download_command_lines(self, command_lines_hash, isolate_server):
     self.m.isolated.download(

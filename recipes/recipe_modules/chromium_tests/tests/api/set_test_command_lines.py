@@ -61,6 +61,8 @@ def GenTests(api):
       webgl_fake_test: 'gggggggggggggggggggggggggg'
   }
   fake_command_lines_hash = 'ffffffffffffffffffffffffffffffff'
+  fake_command_lines_digest = (
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
   fake_command_lines = {
       fake_test: [
           './%s' % fake_test, '--fake-flag', '--fake-log-file',
@@ -184,8 +186,12 @@ def GenTests(api):
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.step_data('archive command lines',
                     api.raw_io.output_text(fake_command_lines_hash)),
+      api.step_data('archive command lines to RBE-CAS',
+                    api.raw_io.output_text(fake_command_lines_digest)),
       api.post_process(post_process.LogContains, 'trigger', 'input',
                        [fake_command_lines_hash]),
+      api.post_process(post_process.LogContains, 'trigger', 'input',
+                       [fake_command_lines_digest]),
       api.post_process(post_process.LogContains, 'trigger', 'input',
                        ['swarming_command_lines_cwd', 'out/Release']),
       api.post_process(post_process.DropExpectation),
@@ -197,6 +203,7 @@ def GenTests(api):
       api.properties(
           swarm_hashes=fake_swarm_hashes,
           swarming_command_lines_hash=fake_command_lines_hash,
+          swarming_command_lines_digest=fake_command_lines_digest,
           swarming_command_lines_cwd='out/Release_x64'),
       api.platform('linux', 64),
       api.chromium_tests.builders(fake_bot_db),
