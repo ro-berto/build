@@ -29,7 +29,6 @@ DEPS = [
     'pgo',
     'puppet_service_account',
     'recipe_engine/buildbucket',
-    'recipe_engine/cas',
     'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/cq',
