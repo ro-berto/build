@@ -1407,7 +1407,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     hsh = self.m.properties.get('swarming_command_lines_hash', '')
     cwd = self.m.properties.get('swarming_command_lines_cwd', '')
     if hsh:
-      self._swarming_command_lines = self.download_command_lines(
+      self._swarming_command_lines = self._download_command_lines(
           hsh, bot_settings.isolate_server)
       for test in tests:
         if test.runs_on_swarming:
@@ -1444,7 +1444,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return isolate.archive(
         'archive command lines', isolate_server=isolate_server)
 
-  def download_command_lines(self, command_lines_hash, isolate_server):
+  def _download_command_lines(self, command_lines_hash, isolate_server):
     self.m.isolated.download(
         'download command lines',
         command_lines_hash,
