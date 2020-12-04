@@ -1159,6 +1159,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ],
             analyze_deps_autorolls=True,
+            task_output_stdout='none',
             ),
         'mac_chromium_10.11_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

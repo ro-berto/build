@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
-                                        StatusFailure, StatusSuccess)
+                                        StatusFailure, StatusSuccess,
+                                        StepCommandContains)
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
   'build',
@@ -146,6 +148,37 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, is_win=False, swarming=True))),
+  )
+
+  yield api.test(
+      'dynamic_isolated_script_test_on_trybot_no_stdout',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.mac', builder='mac-rel'),
+      swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
+      api.platform.name('mac'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_gpu_unittests',
+                      'name': 'telemetry_gpu_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  },],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.override_step_data(
+          'telemetry_gpu_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True, is_win=False, swarming=True))),
+      api.post_process(StepCommandContains,
+                       'telemetry_gpu_unittests (with patch)',
+                       ['-task-output-stdout', 'none']),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
   yield api.test(
@@ -759,7 +792,7 @@ def GenTests(api):
   )
 
 
-  def check_ordering(check, step_odict, *steps):
+  def check_ordering(check, step_odict):
     test_steps = [
         'test_pre_run (with patch).[trigger] 10_gtest (with patch)',
         'test_pre_run (with patch).[trigger] 6_isolated_tests (with patch)',

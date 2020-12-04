@@ -1835,6 +1835,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         result.presentation.logs['backtrace'] = traceback.format_exc()
         return affected_files
 
+  def configure_swarming(self, precommit, task_output_stdout=None, **kwargs):
+    self.m.chromium_swarming.configure_swarming(
+        'chromium', precommit=precommit, **kwargs)
+
+    if task_output_stdout:
+      self.m.chromium_swarming.task_output_stdout = task_output_stdout
+
   def _calculate_tests_to_run(self,
                               builders=None,
                               mirrored_bots=None,
@@ -1874,8 +1881,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         no_fetch_tags=True,
         root_solution_revision=root_solution_revision)
 
-    self.m.chromium_swarming.configure_swarming(
-        'chromium', precommit=self.m.tryserver.is_tryserver)
+    self.configure_swarming(
+        self.m.tryserver.is_tryserver,
+        task_output_stdout=bot.config.task_output_stdout)
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True
@@ -2055,10 +2063,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not tests:
       return
 
-    self.m.chromium_swarming.configure_swarming(
-        'chromium',
-        precommit=False,
-        builder_group=bot_meta_data.builder_id.group)
+    self.configure_swarming(False, builder_group=bot_meta_data.builder_id.group)
     test_runner = self.create_test_runner(
         tests,
         serialize_tests=bot_meta_data.settings.serialize_tests,
