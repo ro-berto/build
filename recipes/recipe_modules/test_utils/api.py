@@ -632,8 +632,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if not t.known_flaky_failures:
           continue
 
-        if (set(
-            t.deterministic_failures('with patch')) == t.known_flaky_failures):
+        if set(t.deterministic_failures('with patch')).issubset(
+            t.known_flaky_failures):
           failed_test_suites.remove(t)
 
     failed_and_invalid_suites = list(
