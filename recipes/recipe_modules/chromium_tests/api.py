@@ -1245,6 +1245,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step, build_config = self.prepare_checkout(
         bot.settings,
         timeout=3600,
+        set_output_commit=True,
         root_solution_revision=root_solution_revision,
         add_blamelists=True)
     if bot.settings.execution_mode == bot_spec_module.TEST:
@@ -1869,6 +1870,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_update_step, build_config = self.prepare_checkout(
         bot.settings,
         timeout=3600,
+        set_output_commit=True,
         no_fetch_tags=True,
         root_solution_revision=root_solution_revision)
 
