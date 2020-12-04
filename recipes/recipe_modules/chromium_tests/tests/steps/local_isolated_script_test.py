@@ -94,8 +94,8 @@ def GenTests(api):
           raw_cmd=['./base_unittests', '--bar'],
           relative_cwd='out/Release'),
       api.post_process(post_process.StepCommandContains, 'base_unittests', [
-          '--relative-cwd', 'out/Release', '--raw-cmd', '--',
-          './base_unittests', '--bar', '--isolated-script-test-output'
+          '--relative-cwd', 'out/Release', '--', './base_unittests', '--bar',
+          '--isolated-script-test-output'
       ]),
       api.post_process(post_process.DropExpectation),
   )

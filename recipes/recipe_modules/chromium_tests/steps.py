@@ -2606,9 +2606,6 @@ class LocalIsolatedScriptTest(Test):
     if self.relative_cwd:
       pre_args += ['--relative-cwd', self.relative_cwd]
 
-    if self.raw_cmd:
-      pre_args += ['--raw-cmd']
-
     cmd = list(self.raw_cmd)
     cmd.extend(self.spec.args)
     args = _merge_args_and_test_options(self, cmd, test_options)
