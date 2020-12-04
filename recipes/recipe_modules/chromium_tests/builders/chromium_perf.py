@@ -257,6 +257,8 @@ _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'mac-builder-perf')
 _AddIsolatedTestSpec(
     'mac-arm_dtk_arm-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
+_AddIsolatedTestSpec(
+    'mac-m1_mini_2020-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
 
