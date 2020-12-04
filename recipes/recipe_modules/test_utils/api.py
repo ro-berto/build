@@ -639,52 +639,55 @@ class TestUtilsApi(recipe_api.RecipeApi):
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))
 
-    if retry_failed_shards or retry_invalid_shards:
-      suites_to_retry = set()
-      if retry_failed_shards:
-        suites_to_retry.update(failed_test_suites)
-      if retry_invalid_shards:
-        suites_to_retry.update(invalid_test_suites)
+    if not (retry_failed_shards or retry_invalid_shards):
+      return invalid_test_suites, failed_and_invalid_suites
+    suites_to_retry = set()
+    if retry_failed_shards:
+      suites_to_retry.update(failed_test_suites)
+    if retry_invalid_shards:
+      suites_to_retry.update(invalid_test_suites)
 
-      # Assume that non swarming test retries probably won't help.
-      swarming_test_suites = [t for t in suites_to_retry if t.runs_on_swarming]
-      # This is where we decide to run 'retry shards with patch'. I'm putting
-      # this comment here so it's easier for people to find this section of the
-      # code with codesearch.
-      if swarming_test_suites:
-        retry_suffix = 'retry shards'
-        if suffix:
-          retry_suffix += ' ' + suffix
-        new_swarming_invalid_suites, _ = self._run_tests_once(
-            caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
+    # Assume that non swarming test retries probably won't help.
+    swarming_test_suites = [t for t in suites_to_retry if t.runs_on_swarming]
+    if not swarming_test_suites:
+      return invalid_test_suites, failed_and_invalid_suites
 
-        # For swarming test suites, if we have valid test results from one of
-        # the runs of a test suite, then that test suite by definition doesn't
-        # have invalid test results.
-        # For non-swarming test suites, becuase they don't get retried in
-        # 'retry shards with patch' steps, invalid non-swarming test suites are
-        # still invalid.
-        non_swarming_invalid_suites = [
-            t for t in invalid_test_suites if not t.runs_on_swarming
-        ]
-        invalid_test_suites = list(
-            set(invalid_test_suites).intersection(
-                set(new_swarming_invalid_suites))) + non_swarming_invalid_suites
+    # This is where we decide to run 'retry shards with patch'. I'm putting
+    # this comment here so it's easier for people to find this section of the
+    # code with codesearch.
+    retry_suffix = 'retry shards'
+    if suffix:
+      retry_suffix += ' ' + suffix
+    new_swarming_invalid_suites, _ = self._run_tests_once(
+        caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
 
-        # Some suites might be passing now, since we retried some tests. Remove
-        # any suites which are now fully passing.
-        # with_patch_failures_including_retry appropriately takes 'retry shards
-        # with patch' and 'with patch' runs into account.
-        #
-        # Also take known flaky tests into consideration because it is possible
-        # that both the original and retry runs fail due to the same flaky test.
-        def _still_failing(suite):
-          valid, failures = suite.failures_including_retry(suffix)
-          return (not valid) or failures
+    # For swarming test suites, if we have valid test results from one of
+    # the runs of a test suite, then that test suite by definition doesn't
+    # have invalid test results.
+    # For non-swarming test suites, becuase they don't get retried in
+    # 'retry shards with patch' steps, invalid non-swarming test suites are
+    # still invalid.
+    non_swarming_invalid_suites = [
+        t for t in invalid_test_suites if not t.runs_on_swarming
+    ]
+    invalid_test_suites = list(
+        set(invalid_test_suites).intersection(
+            set(new_swarming_invalid_suites))) + non_swarming_invalid_suites
 
-        failed_and_invalid_suites = [
-            t for t in failed_and_invalid_suites if _still_failing(t)
-        ]
+    # Some suites might be passing now, since we retried some tests. Remove
+    # any suites which are now fully passing.
+    # with_patch_failures_including_retry appropriately takes 'retry shards
+    # with patch' and 'with patch' runs into account.
+    #
+    # Also take known flaky tests into consideration because it is possible
+    # that both the original and retry runs fail due to the same flaky test.
+    def _still_failing(suite):
+      valid, failures = suite.failures_including_retry(suffix)
+      return (not valid) or failures
+
+    failed_and_invalid_suites = [
+        t for t in failed_and_invalid_suites if _still_failing(t)
+    ]
 
     return invalid_test_suites, failed_and_invalid_suites
 
