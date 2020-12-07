@@ -875,6 +875,81 @@
   },
   {
     "cmd": [],
+    "name": "install infra/tools/luci/cas"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/luci/cas/cas_module_pin"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/luci/cas.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/luci/cas/cas_module_pin",
+      "-ensure-file",
+      "infra/tools/luci/cas/${platform} cas_module_pin",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "install infra/tools/luci/cas.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-cas_module_pin--\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/cas/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/luci/cas/cas_module_pin/cas",
+      "archive",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-dump-digest",
+      "/path/to/tmp/",
+      "-paths",
+      "[CLEANUP]:command_lines.json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "archive command lines to RBE-CAS"
+  },
+  {
+    "cmd": [],
     "name": "install infra/tools/luci/isolated"
   },
   {
@@ -967,7 +1042,7 @@
     },
     "infra_step": true,
     "name": "trigger",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Linux Tests\", \"project\": \"chromium\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"$build/chromium_tests\": {\"fixed_revisions\": {\"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}}, \"parent_builder_group\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"parent_got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"parent_got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"parent_got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"parent_got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"parent_got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"parent_got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"parent_got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"parent_got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"parent_got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"parent_got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"parent_got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"parent_got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"parent_got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"parent_got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"parent_got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"parent_got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"parent_got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}, \"swarming_command_lines_cwd\": \"out/Release\", \"swarming_command_lines_hash\": \"[dummy hash]\"}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/chromium/src/+/2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Linux Builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Linux Builder/571\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Linux Tests\", \"project\": \"chromium\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"$build/chromium_tests\": {\"fixed_revisions\": {\"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}}, \"parent_builder_group\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"parent_got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"parent_got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"parent_got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"parent_got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"parent_got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"parent_got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"parent_got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"parent_got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"parent_got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"parent_got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"parent_got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"parent_got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"parent_got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"parent_got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"parent_got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"parent_got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"parent_got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}, \"swarming_command_lines_cwd\": \"out/Release\", \"swarming_command_lines_digest\": \"\", \"swarming_command_lines_hash\": \"[dummy hash]\"}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/chromium/src/+/2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Linux Builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Linux Builder/571\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -1011,6 +1086,7 @@
       "@@@STEP_LOG_LINE@input@                            \"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"@@@",
       "@@@STEP_LOG_LINE@input@                        }, @@@",
       "@@@STEP_LOG_LINE@input@                        \"swarming_command_lines_cwd\": \"out/Release\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"swarming_command_lines_digest\": \"\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"swarming_command_lines_hash\": \"[dummy hash]\"@@@",
       "@@@STEP_LOG_LINE@input@                    }, @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
