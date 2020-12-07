@@ -248,10 +248,10 @@ class ResultDB(object):
       "//".
     * base_tags - Tags to attach to all test results by default. Each element
       is (key, value), and a key may be repeated.
-    * base_variant - Variant key-value pairs to attach to all test results by
-      default.
+    * base_variant - Dict of Variant key-value pairs to attach to all test
+      results by default.
     * test_id_prefix - Prefix to prepend to test IDs of all test results.
-    * coerce_negative_duration -  If True, negative duration values will
+    * coerce_negative_duration - If True, negative duration values will
       be coerced to 0. If false, tests results with negative duration values
       will be rejected with an error.
   """
@@ -259,8 +259,8 @@ class ResultDB(object):
   result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
-  base_tags = attrib(list, default=None)
-  base_variant = attrib(dict, default=None)
+  base_tags = sequence_attrib(tuple, default=None)
+  base_variant = mapping_attrib(str, str, default=None)
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
 
@@ -269,7 +269,7 @@ class ResultDB(object):
     """Create a ResultDB instance.
 
     Args:
-      kwargs: Keyword arguments to initialize the attributes of the
+      * kwargs - Keyword arguments to initialize the attributes of the
         created object.
 
     Returns:
@@ -302,13 +302,14 @@ class ResultDB(object):
     the ResultDB object.
 
     Args:
-      api: Recipe API object.
-      cmd: Test command to wrap with ResultSink and result_adapter.
-      step_name: Step name to add as a tag to each test result.
-      base_variant: Dict of variants to add to base_variant.
+      * api - Recipe API object.
+      * cmd - List with the test command and arguments to wrap with ResultSink
+        and result_adapter.
+      * step_name - Step name to add as a tag to each test result.
+      * base_variant - Dict of variants to add to base_variant.
         If there are duplicate keys, the new variant value wins.
-      base_tags: List of tags to add to base_tags.
-      kwargs: Overrides for the rest of ResultDB attrs.
+      * base_tags - List of tags to add to base_tags.
+      * kwargs - Overrides for the rest of ResultDB attrs.
     """
     assert isinstance(cmd, (tuple, list)), "%s: %s" % (step_name, cmd)
     assert isinstance(step_name, (type(None), str)), "%s: %s" % (step_name, cmd)
@@ -332,16 +333,15 @@ class ResultDB(object):
     var.update(self.base_variant or {})
     var.update(base_variant or {})
 
-    tags = list(base_tags) if base_tags else []
-    if self.base_tags:
-      tags.extend(self.base_tags)
+    tags = set(base_tags or [])
+    tags.update(self.base_tags or [])
     if step_name:
-      tags.append(('step_name', step_name))
+      tags.add(('step_name', step_name))
 
     # wrap it with rdb-stream
     return api.resultdb.wrap(
         cmd,
-        base_tags=tags,
+        base_tags=list(tags),
         base_variant=var,
         coerce_negative_duration=configs.coerce_negative_duration,
         test_id_prefix=configs.test_id_prefix,

@@ -67,8 +67,7 @@ def RunSteps(api):
   )
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, base_tags=[('k1', 'v1')]),
-      ['rdb', 'stream', '-var', bvar, '-tag', 'k1:v1', '-tag', 'k1:v1', '--'] +
-      cmd,
+      ['rdb', 'stream', '-var', bvar, '-tag', 'k1:v1', '--'] + cmd,
   )
 
   # base_variant
