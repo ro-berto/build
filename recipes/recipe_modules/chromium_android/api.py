@@ -1205,17 +1205,25 @@ class AndroidApi(recipe_api.RecipeApi):
         f.result.presentation.status = self.m.step.FAILURE
       raise
 
-  def test_runner(self,
-                  step_name,
-                  args=None,
-                  wrapper_script_suite_name=None,
-                  pass_adb_path=True,
-                  **kwargs):
+  def test_runner(
+      self,
+      step_name,
+      args=None,
+      wrapper_script_suite_name=None,
+      pass_adb_path=True,
+      # TODO(crbug.com/1108016): Once resultdb is enabled globally,
+      # makes resultdb as a required param.
+      resultdb=None,
+      **kwargs):
     """Wrapper for the python testrunner script.
 
     Args:
       step_name: Name of the step.
       args: Testrunner arguments.
+      wrapper_script_suite_name: Name of wrapper_script_suite
+      pass_adb_path: If True, pass the adb path with --adb-path.
+      resultdb: None or chromium_tests.steps.ResultDB instance. If set with
+        True in resultdb.enable, the test will be executed with ResultSink.
     """
     if not args:  # pragma: no cover
       args = []
@@ -1230,5 +1238,9 @@ class AndroidApi(recipe_api.RecipeApi):
       else:
         env['CHROMIUM_OUTPUT_DIR'] = self.m.context.env.get(
             'CHROMIUM_OUTPUT_DIR', self.m.chromium.output_dir)
+
       with self.m.context(env=env):
-        return self.m.step(step_name, [script] + args, **kwargs)
+        cmd = [script] + args
+        if resultdb and resultdb.enable:
+          cmd = resultdb.wrap(self.m, cmd, step_name=step_name)
+        return self.m.step(step_name, cmd, **kwargs)

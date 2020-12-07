@@ -4,13 +4,15 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
+
 DEPS = [
     'chromium',
     'chromium_android',
     'chromium_checkout',
     'test_utils',
     'depot_tools/gclient',
-    'recipe_engine/json',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
@@ -26,33 +28,47 @@ def RunSteps(api):
       target_name=api.properties.get('target_name', 'test_suite'),
       additional_args=api.properties.get('additional_args'),
       json_results_file=api.test_utils.gtest_results())
+  api.chromium_android.run_java_unit_test_suite(
+      'test_suite-with-rdb',
+      target_name=api.properties.get('target_name', 'test_suite'),
+      additional_args=api.properties.get('additional_args'),
+      json_results_file=api.test_utils.gtest_results(),
+      resultdb=ResultDB.create(enable=True))
 
 
 def GenTests(api):
   yield api.test(
       'basic',
+      api.buildbucket.try_build(),
       api.override_step_data('test_suite',
                              api.test_utils.canned_gtest_output(passing=True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'test_suite'),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
-      'different-display-name', api.properties(target_name='test_target'),
+      'different-display-name',
+      api.buildbucket.try_build(),
+      api.properties(target_name='test_target'),
       api.override_step_data('test_suite',
                              api.test_utils.canned_gtest_output(passing=True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'test_suite'),
       api.post_process(post_process.StepCommandContains, 'test_suite',
                        ['[CACHE]/builder/src/out/Release/bin/run_test_target']),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
-      'additional-args', api.properties(additional_args=['--foo=bar']),
+      'additional-args',
+      api.buildbucket.try_build(),
+      api.properties(additional_args=['--foo=bar']),
       api.override_step_data('test_suite',
                              api.test_utils.canned_gtest_output(passing=True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'test_suite'),
       api.post_process(post_process.StepCommandContains, 'test_suite',
                        ['--foo=bar']),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
