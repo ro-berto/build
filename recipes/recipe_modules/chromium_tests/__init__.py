@@ -34,7 +34,6 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/cq',
     'recipe_engine/file',
-    'recipe_engine/isolated',
     'recipe_engine/led',
     'recipe_engine/json',
     'recipe_engine/path',
