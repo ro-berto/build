@@ -1408,11 +1408,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.download_command_lines_for_tests(tests_using_isolates, bot.settings)
 
   def download_command_lines_for_tests(self, tests, bot_settings):
-    hsh = self.m.properties.get('swarming_command_lines_hash', '')
+    digest = self.m.properties.get('swarming_command_lines_digest', '')
     cwd = self.m.properties.get('swarming_command_lines_cwd', '')
-    if hsh:
-      self._swarming_command_lines = self._download_command_lines(
-          hsh, bot_settings.isolate_server)
+    if digest:
+      self._swarming_command_lines = self._download_command_lines(digest)
       for test in tests:
         if test.runs_on_swarming:
           command_line = self._swarming_command_lines.get(test.target_name, [])
@@ -1454,12 +1453,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'archive command lines', isolate_server=isolate_server)
     return (isolated_hash, cas_digest)
 
-  def _download_command_lines(self, command_lines_hash, isolate_server):
-    self.m.isolated.download(
-        'download command lines',
-        command_lines_hash,
-        self.m.path['cleanup'],
-        isolate_server=isolate_server)
+  def _download_command_lines(self, command_lines_digest):
+    self.m.cas.download('download command lines', command_lines_digest,
+                        self.m.path['cleanup'])
     command_lines_file = self.m.path['cleanup'].join('command_lines.json')
     return self.m.file.read_json(
         'read command lines', command_lines_file, test_data={})
