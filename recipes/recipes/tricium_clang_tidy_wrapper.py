@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import collections
-import json
-
 from recipe_engine import post_process
 from RECIPE_MODULES.build.tricium_clang_tidy import _clang_tidy_path
 
