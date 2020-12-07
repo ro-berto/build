@@ -468,6 +468,16 @@
     "name": "Run the Dawn unittests"
   },
   {
+    "cmd": [
+      "[CACHE]\\builder\\dawn\\out\\release_x86_static\\dawn_unittests",
+      "--enable-toggles=use_tint_inspector"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Run the Dawn unittests (2)"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma (2)"
   },

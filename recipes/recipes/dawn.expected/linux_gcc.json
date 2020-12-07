@@ -430,6 +430,13 @@
     "name": "Run the Dawn unittests"
   },
   {
+    "cmd": [
+      "[CACHE]/builder/dawn/out/release_static/dawn_unittests",
+      "--enable-toggles=use_tint_inspector"
+    ],
+    "name": "Run the Dawn unittests (2)"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma (2)"
   },

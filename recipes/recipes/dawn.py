@@ -124,6 +124,12 @@ def _run_unittests(api, out_dir):
   api.step('Run the Dawn unittests', [test_path])
 
 
+def _run_tint_inspector_unittests(api, out_dir):
+  test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
+  api.step('Run the Dawn unittests',
+           [test_path, '--enable-toggles=use_tint_inspector'])
+
+
 def _run_swiftshader_end2end_tests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_end2end_tests')
   api.step('Run the Dawn end2end tests with SwiftShader',
@@ -152,6 +158,7 @@ def RunSteps(api, target_cpu, debug, clang):
           swiftshader=False)
       _build_steps(api, out_dir_static, clang)
       _run_unittests(api, out_dir_static)
+      _run_tint_inspector_unittests(api, out_dir_static)
 
       # Component build and run dawn_end2end_tests with SwiftShader
       # When using SwiftShader a component build should be used.
