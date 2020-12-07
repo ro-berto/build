@@ -246,19 +246,30 @@ class ResultDB(object):
     * test_location_base - File base to prepend to the test location
       file name, if the file name is a relative path. It must start with
       "//".
+    * base_tags - Tags to attach to all test results by default. Each element
+      is (key, value), and a key may be repeated.
+    * base_variant - Variant key-value pairs to attach to all test results by
+      default.
+    * test_id_prefix - Prefix to prepend to test IDs of all test results.
+    * coerce_negative_duration -  If True, negative duration values will
+      be coerced to 0. If false, tests results with negative duration values
+      will be rejected with an error.
   """
-
   enable = attrib(bool, default=False)
   result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
+  base_tags = attrib(list, default=None)
+  base_variant = attrib(dict, default=None)
+  coerce_negative_duration = attrib(bool, default=True)
+  test_id_prefix = attrib(str, default='')
 
   @classmethod
   def create(cls, **kwargs):
     """Create a ResultDB instance.
 
     Args:
-      * kwargs - Keyword arguments to initialize the attributes of the
+      kwargs: Keyword arguments to initialize the attributes of the
         created object.
 
     Returns:
@@ -273,6 +284,69 @@ class ResultDB(object):
     if not resultdb.enable:
       return cls()
     return resultdb
+
+  def wrap(self,
+           api,
+           cmd,
+           step_name=None,
+           base_variant=None,
+           base_tags=None,
+           **kwargs):
+    """Wraps the cmd with ResultSink and result_adapter, if conditions are met.
+
+    This function enables resultdb for a given command by wrapping it with
+    ResultSink and result_adapter, based on the config values set in ResultDB
+    instance. Find the config descriptions for more info.
+
+    If config values are passed as params, they override the values set in
+    the ResultDB object.
+
+    Args:
+      api: Recipe API object.
+      cmd: Test command to wrap with ResultSink and result_adapter.
+      step_name: Step name to add as a tag to each test result.
+      base_variant: Dict of variants to add to base_variant.
+        If there are duplicate keys, the new variant value wins.
+      base_tags: List of tags to add to base_tags.
+      kwargs: Overrides for the rest of ResultDB attrs.
+    """
+    assert isinstance(cmd, (tuple, list)), "%s: %s" % (step_name, cmd)
+    assert isinstance(step_name, (type(None), str)), "%s: %s" % (step_name, cmd)
+    configs = attr.evolve(self, **kwargs)
+    if not configs.enable:
+      return cmd
+
+    # wrap it with result_adapter
+    if configs.result_format:
+      result_adapter = [
+          'result_adapter', configs.result_format, '-artifact-directory',
+          '${ISOLATED_OUTDIR}', '-result-file', '${ISOLATED_OUTDIR}/output.json'
+      ]
+      if configs.result_format == 'json' and configs.test_id_as_test_location:
+        result_adapter += ['-test-location']
+
+      cmd = result_adapter + ['--'] + list(cmd)
+
+    # add var 'builder' by default
+    var = {'builder': api.buildbucket.builder_name}
+    var.update(self.base_variant or {})
+    var.update(base_variant or {})
+
+    tags = list(base_tags) if base_tags else []
+    if self.base_tags:
+      tags.extend(self.base_tags)
+    if step_name:
+      tags.append(('step_name', step_name))
+
+    # wrap it with rdb-stream
+    return api.resultdb.wrap(
+        cmd,
+        base_tags=tags,
+        base_variant=var,
+        coerce_negative_duration=configs.coerce_negative_duration,
+        test_id_prefix=configs.test_id_prefix,
+        test_location_base=configs.test_location_base,
+    )
 
 
 class TestSpecBase(object):
