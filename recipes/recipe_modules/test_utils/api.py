@@ -485,7 +485,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # If *all* the deterministic failures are known flaky tests, a test suite
     # will not be considered failure anymore, and thus will not be retried.
     #
-    # A long as there is at least one non-flaky failure, all the failed shards
+    # As long as there is at least one non-flaky failure, all the failed shards
     # will be retried, including those due to flaky failures. Existing APIs
     # don't allow associating test failures with shard indices. Such a
     # connection could be implemented, but the cost is high and return is not;
@@ -599,6 +599,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
                                     flake['monorail_issue'])
           break
 
+  def _still_invalid_suites(self, old_invalid_suites, retried_invalid_suites):
+    # For swarming test suites, if we have valid test results from one of
+    # the runs of a test suite, then that test suite by definition doesn't
+    # have invalid test results.
+    # Non-swarming test suites don't get retried in 'retry shards with patch'
+    # steps, so all invalid non-swarming suites are still invalid
+    non_swarming_invalid_suites = [
+        t for t in old_invalid_suites if not t.runs_on_swarming
+    ]
+    still_invalid_swarming_suites = list(
+        set(old_invalid_suites).intersection(retried_invalid_suites))
+    return still_invalid_swarming_suites + non_swarming_invalid_suites
+
   def run_tests(self,
                 caller_api,
                 test_suites,
@@ -659,14 +672,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if not (retry_failed_shards or retry_invalid_shards):
       return invalid_test_suites, failed_and_invalid_suites
+
     suites_to_retry = set()
     if retry_failed_shards:
       suites_to_retry.update(failed_test_suites)
     if retry_invalid_shards:
       suites_to_retry.update(invalid_test_suites)
-
-    # Assume that non swarming test retries probably won't help.
     swarming_test_suites = [t for t in suites_to_retry if t.runs_on_swarming]
+
+    # Only retries of Swarming tasks are likely to help, so exit early if the
+    # retry list contains only non-Swarming tasks
     if not swarming_test_suites:
       return invalid_test_suites, failed_and_invalid_suites
 
@@ -679,18 +694,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     new_swarming_invalid_suites, _ = self._run_tests_once(
         caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
 
-    # For swarming test suites, if we have valid test results from one of
-    # the runs of a test suite, then that test suite by definition doesn't
-    # have invalid test results.
-    # For non-swarming test suites, becuase they don't get retried in
-    # 'retry shards with patch' steps, invalid non-swarming test suites are
-    # still invalid.
-    non_swarming_invalid_suites = [
-        t for t in invalid_test_suites if not t.runs_on_swarming
-    ]
-    invalid_test_suites = list(
-        set(invalid_test_suites).intersection(
-            set(new_swarming_invalid_suites))) + non_swarming_invalid_suites
+    invalid_test_suites = self._still_invalid_suites(
+        old_invalid_suites=invalid_test_suites,
+        retried_invalid_suites=new_swarming_invalid_suites)
 
     # Some suites might be passing now, since we retried some tests. Remove
     # any suites which are now fully passing.
