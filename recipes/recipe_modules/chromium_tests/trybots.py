@@ -242,6 +242,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='Optional Android Release (Nexus 5X)',
+                retry_failed_shards=False,
             ),
         'android-webview-marshmallow-arm64-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -847,18 +848,21 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         # Optional GPU bots.
         'linux_optional_gpu_tests_rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Linux Builder DEPS ANGLE',
-                    tester='Optional Linux Release (NVIDIA)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Linux Builder DEPS ANGLE',
-                    tester='Optional Linux Release (Intel HD 630)',
-                ),
-            ]),
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Linux Builder DEPS ANGLE',
+                        tester='Optional Linux Release (NVIDIA)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Linux Builder DEPS ANGLE',
+                        tester='Optional Linux Release (Intel HD 630)',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-linux-amd-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1203,23 +1207,26 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         # Optional GPU bots.
         'mac_optional_gpu_tests_rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Retina Release (NVIDIA)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Retina Release (AMD)',
-                ),
-            ]),
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Mac Builder DEPS ANGLE',
+                        tester='Optional Mac Release (Intel)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Mac Builder DEPS ANGLE',
+                        tester='Optional Mac Retina Release (NVIDIA)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Mac Builder DEPS ANGLE',
+                        tester='Optional Mac Retina Release (AMD)',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-mac-amd-dqp':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1441,18 +1448,21 @@ TRYBOTS = try_spec.TryDatabase.create({
         # This trybot used to mirror "Optional Win7 Release (AMD)",
         # but that had to be disabled due to capacity constraints.
         'win_optional_gpu_tests_rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Win x64 Builder DEPS ANGLE',
-                    tester='Optional Win10 x64 Release (NVIDIA)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Win x64 Builder DEPS ANGLE',
-                    tester='Optional Win10 x64 Release (Intel HD 630)',
-                ),
-            ]),
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Win x64 Builder DEPS ANGLE',
+                        tester='Optional Win10 x64 Release (NVIDIA)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu.fyi',
+                        buildername='GPU FYI Win x64 Builder DEPS ANGLE',
+                        tester='Optional Win10 x64 Release (Intel HD 630)',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-win7-amd-dbg-32':
             try_spec.TrySpec.create_for_single_mirror(
