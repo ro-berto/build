@@ -630,8 +630,7 @@ def GenTests(api):
   yield api.test(
       'iOS code coverage tryserver',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.mac',
-          builder='ios-simulator-code-coverage'),
+          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
       api.code_coverage(use_clang_coverage=True, coverage_test_types=['unit']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -702,8 +701,7 @@ def GenTests(api):
   yield api.test(
       'skip processing when more than one test type in per-cl coverage',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.mac',
-          builder='ios-simulator-code-coverage'),
+          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
       api.code_coverage(
           use_clang_coverage=True, coverage_test_types=['unit', 'overall']),
       api.properties(files_to_instrument=[
