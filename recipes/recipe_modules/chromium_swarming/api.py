@@ -467,8 +467,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None,
            task_to_retry=None,
            trigger_script=None,
-           relative_cwd=None,
-           resultdb=None):
+           relative_cwd=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -535,8 +534,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       * relative_cwd: An optional string indicating the working directory
         relative to the task root where `raw_cmd` (or the command specified
         in the isolate, if raw_cmd is empty) will run.
-      * resultdb: A `steps.ResultDB` instance. To enable ResultDB-integration,
-        `resultdb.enable` must be True.
     """
 
     if not collect_step:
@@ -576,9 +573,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_priority(self.default_priority).
       with_service_account(service_account or '').
       with_user(self.default_user or ''))
-
-    if resultdb and resultdb.enable:
-      request = request.with_resultdb()
 
     req_slice = (
       request[0].
@@ -628,7 +622,6 @@ class SwarmingApi(recipe_api.RecipeApi):
                  cipd_packages=None,
                  merge=None,
                  relative_cwd=None,
-                 resultdb=None,
                  **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -670,14 +663,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge=merge,
         raw_cmd=raw_cmd,
         relative_cwd=relative_cwd,
-        resultdb=resultdb,
         **kwargs)
     return task
 
   def isolated_script_task(self,
                            raw_cmd=None,
                            relative_cwd=None,
-                           resultdb=None,
                            isolated='',
                            cas_input_root=''):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
@@ -709,7 +700,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     task = self.task(
         raw_cmd=raw_cmd,
         relative_cwd=relative_cwd,
-        resultdb=resultdb,
         isolated=isolated,
         cas_input_root=cas_input_root)
     task.extra_args = extra_args
@@ -722,7 +712,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     return self.m.swarming_client.ensure_script_version(
         'swarming.py', MINIMAL_SWARMING_VERSION, step_test_data)
 
-  def trigger_task(self, task, **kwargs):
+  def trigger_task(self, task, resultdb=None, **kwargs):
     """Triggers one task.
 
     It the task is sharded, will trigger all shards. This steps justs posts
@@ -735,6 +725,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     Args:
       task: SwarmingTask instance.
+      resultdb: None or chromium_tests.steps.ResultDB instance. resultdb.enable
+        must be set to True in order to trigger the task with ResultSink API
+        integration.
       kwargs: passed to recipe step constructor as-is.
     """
     assert isinstance(task, SwarmingTask)
@@ -762,7 +755,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           'trigger_script[\'script\'] must be a custom script, as %s no longer '
           'supports \'--shards\'.' % script)
       self._trigger_all_task_shards(task, task.shard_indices,
-                                    use_swarming_go_in_trigger_script, **kwargs)
+                                    use_swarming_go_in_trigger_script, resultdb,
+                                    **kwargs)
       return
 
     if task.trigger_script:
@@ -770,7 +764,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result, json_output = (
             self._trigger_task_shard_legacy(task, shard_index,
                                             use_swarming_go_in_trigger_script,
-                                            **kwargs))
+                                            resultdb, **kwargs))
 
         # Merge the JSON outputs. There should be two fields: base_task_name,
         # which should be identical from all outputs. And tasks, a dictionary of
@@ -794,7 +788,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             result=step_result)
     else:
       for shard_index in task.shard_indices:
-        metas = self._trigger_task_shard_default(task, shard_index)
+        metas = self._trigger_task_shard_default(task, shard_index, resultdb)
         for meta in metas:
           tasks[meta.name] = {
               'task_id': str(meta.id),
@@ -844,42 +838,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
     return tags
 
-  def _wrap_cmd_with_result_adapter(self, cmd, result_format,
-                                    test_id_as_test_location):
-    """Wraps the cmd with result_adapter.
-
-    If result_format is empty, cmd is returned without result_adapter.
-
-    Args:
-      cmd (list of strings): The command line to run.
-      result_format (str): The format of the input test results. The valid
-        formats are 'gtest' and 'json'.
-      test_id_as_test_location (bool): If true, the test location of all tests
-        will be set with the test ID. Note that this param is used only if
-        param result_format is set to 'json'. Otherwise, this param is always
-        enforced to False.
-    """
-    assert isinstance(cmd, (tuple, list)), cmd
-    assert isinstance(result_format, (type(None), str)), result_format
-    assert isinstance(test_id_as_test_location, bool), test_id_as_test_location
-
-    if not result_format:
-      return cmd
-
-    ret = [
-        'result_adapter', result_format,
-        '-artifact-directory', '${ISOLATED_OUTDIR}',
-        '-result-file', '${ISOLATED_OUTDIR}/output.json'
-    ]
-
-    # -test-location is a json result_adapter specific option.
-    if result_format == 'json' and test_id_as_test_location:
-      ret += ['-test-location']
-
-    ret += ['--'] + list(cmd)
-    return ret
-
-  def _maybe_enable_resultdb_for_task(self, req):
+  def _maybe_enable_resultdb_for_task(self, req, resultdb):
     """Enables resultdb for a given task.
 
     This function enables resultdb for the test commands set in the given
@@ -890,12 +849,15 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     Args:
       req: swarming.TaskRequest instance as created by swarming.task_request().
+      resultdb: None or chromium_tests.steps.ResultDB instance. resultdb.enable
+        must be set to True in order to trigger the task with ResultSink API
+        integration.
     Returns:
       A clone of the request with all the commands wrapped with result sink.
       Or, the original TaskRequest if the request was not configured to enable
       resultdb.
     """
-    if not (req.resultdb and req.resultdb.enable):
+    if not (resultdb and resultdb.enable):
       return req
 
     # If resultdb was enabled without realm, then use the builder realm.
@@ -905,47 +867,51 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(crbug.com/1122808): Remove this fallback.
     if not req.realm:
       req = req.with_realm(self.m.buildbucket.builder_realm)
+    req = req.with_resultdb()
 
     # if there are duplicate keys, the last one wins.
     tags_by_key = {
         pair[0]: pair[1] for pair in map(lambda t: t.split(':', 1), req.tags)
     }
+
+    # tags for 'test_suite' and 'stepname' must be present.
+    step_name = tags_by_key.get('stepname')
+    test_suite = tags_by_key.get('test_suite')
+    assert step_name, 'missing tag "stepname"'
+    assert test_suite, 'missing tag "test_suite"'
+
     for i in range(len(req)):
       task_slice = req[i]
 
       # resultdb is supported only if the slice was set with raw_cmd.
       if not task_slice.command:
         continue  # pragma: no cover
-      step_name = tags_by_key.get('stepname')
-      variants = {
+
+      var = {
           k: v for k, v in [
               ('builder', self.m.buildbucket.builder_name),
               ('device_type', task_slice.dimensions.get('device_type')),
               ('device_os', task_slice.dimensions.get('device_os')),
               ('gpu', task_slice.dimensions.get('gpu')),
               ('os', task_slice.dimensions.get('os')),
-              ('test_suite', tags_by_key.get('test_suite')),
+              ('test_suite', test_suite),
           ] if v
       }
       req = req.with_slice(
           i,
           task_slice.with_command(
-              self.m.resultdb.wrap(
-                  self._wrap_cmd_with_result_adapter(
-                      task_slice.command,
-                      tags_by_key.get('result_format'),
-                      tags_by_key.get('test_id_as_test_location') == 'true',
-                  ),
-                  test_id_prefix=tags_by_key.get('test_id_prefix', ''),
-                  test_location_base=tags_by_key.get('test_location_base', ''),
-                  base_variant=variants,
-                  base_tags=[('step_name', step_name)] if step_name else None,
-                  coerce_negative_duration=True)))
+              resultdb.wrap(
+                  self.m,
+                  task_slice.command,
+                  step_name=step_name,
+                  base_variant=var,
+              )))
 
     return req
 
   def _generate_trigger_task_shard_args(self, task,
-                                        use_swarming_go_in_trigger_script):
+                                        use_swarming_go_in_trigger_script,
+                                        resultdb):
     """Generates the arguments for triggered shards.
 
     This generates all arguments other than sharding parameters.
@@ -965,7 +931,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       tags[kv[0]].append(kv[1])
     tags['triggered_by'].append('swarming_py')
     task_request = self._maybe_enable_resultdb_for_task(
-        task.request.with_slice(0, task_slice).with_tags(tags))
+        task.request.with_slice(0, task_slice).with_tags(tags), resultdb)
     # refresh task_slice, as _maybe_enable_resultdb_for_task() could modify
     # the first slice.
     task_slice = task_request[0]
@@ -1063,7 +1029,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     return script, pre_trigger_args, args
 
   def _trigger_all_task_shards(self, task, shard_indices,
-                               use_swarming_go_in_trigger_script, **kwargs):
+                               use_swarming_go_in_trigger_script, resultdb,
+                               **kwargs):
     """Triggers all shards as a single step.
 
     This method adds links to the presentation, and updates
@@ -1074,7 +1041,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(
-            task, use_swarming_go_in_trigger_script))
+            task, use_swarming_go_in_trigger_script, resultdb))
     assert len(shard_indices) == task.shards, (
         'The only trigger script that requires all shards to be simultaneously '
         'triggered is perf_device_trigger.py, and it doesn\'t support multi '
@@ -1112,16 +1079,14 @@ class SwarmingApi(recipe_api.RecipeApi):
     return step_result
 
   def _trigger_task_shard_legacy(self, task, shard_index,
-                                 use_swarming_go_in_trigger_script, **kwargs):
+                                 use_swarming_go_in_trigger_script, resultdb,
+                                 **kwargs):
     """Triggers a single shard for a task.
 
     This is the legacy way for triggering a task. It uses `swarming.py` and
     manually constructs a command line.
 
     Returns: (step_result, json_output)
-      step_result: The step representing the triggered shard.
-      json_output: The JSON output of the triggered shard.
-
     Raises:
       InfraFailure if shard cannot be triggered.
     """
@@ -1132,7 +1097,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # to use swarming recipe module to trigger tasks.
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(
-            task, use_swarming_go_in_trigger_script))
+            task, use_swarming_go_in_trigger_script, resultdb))
 
     uses_trigger_script = bool(task.trigger_script)
     assert uses_trigger_script, 'Only trigger script should use this now'
@@ -1166,7 +1131,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result, step_result.json.output
 
-  def _trigger_task_shard_default(self, task, shard_index):
+  def _trigger_task_shard_default(self, task, shard_index, resultdb):
     """Triggers a single shard for a task using the `swarming` recipe module.
 
     Returns:
@@ -1214,7 +1179,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       req = req.add_slice(s)
 
     req = req.with_tags(tags_dict)
-    req = self._maybe_enable_resultdb_for_task(req)
+    req = self._maybe_enable_resultdb_for_task(req, resultdb)
     with self.m.swarming.with_server(self.swarming_server):
       metas = self.m.swarming.trigger(
           self.get_step_name('trigger', task), [req], self.verbose)

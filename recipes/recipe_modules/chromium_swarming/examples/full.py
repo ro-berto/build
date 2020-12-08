@@ -28,6 +28,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_swarming
+from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
 
 PROPERTIES = {
     'platforms': Property(default=('win',)),
@@ -42,7 +43,7 @@ PROPERTIES = {
     'wait_for_tasks': Property(default=None),
     'use_swarming_go_in_trigger_script': Property(default=False),
     'realm': Property(default=None),
-    'resultdb_enabled': Property(default=False),
+    'resultdb_spec': Property(default={}),
 }
 
 
@@ -50,7 +51,7 @@ def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
              wait_for_tasks, use_swarming_go_in_trigger_script, realm,
-             resultdb_enabled):
+             resultdb_spec):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -98,6 +99,7 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Prepare a bunch of swarming tasks to run hello_world on multiple platforms.
   tasks = []
+  resultdb = ResultDB.create(**resultdb_spec)
   for platform in platforms:
     # Isolate example hello_world.isolate from swarming client repo.
     # TODO(vadimsh): Add a thin wrapper around isolate to 'isolate' module?
@@ -136,8 +138,6 @@ def RunSteps(api, platforms, custom_trigger_script,
 
       if realm:
         task.request = task.request.with_realm(realm)
-      if resultdb_enabled:
-        task.request = task.request.with_resultdb()
 
       task.task_output_dir = temp_dir.join('task_output_dir')
       if merge:
@@ -178,6 +178,10 @@ def RunSteps(api, platforms, custom_trigger_script,
     task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
         platform)
     task.tags.add('os:' + platform)
+
+    # test_suite is required, if resultdb is enabled.
+    if resultdb.enable:
+      task.tags.add('test_suite:chromium_test')
     ensure_file = task_slice.cipd_ensure_file
     if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
       ensure_file.add_package('super/awesome/pkg', 'git_revision:deadbeef',
@@ -191,7 +195,8 @@ def RunSteps(api, platforms, custom_trigger_script,
   for task in tasks:
     api.chromium_swarming.trigger_task(
         task,
-        use_swarming_go_in_trigger_script=use_swarming_go_in_trigger_script)
+        use_swarming_go_in_trigger_script=use_swarming_go_in_trigger_script,
+        resultdb=resultdb)
     assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
 
   # Recipe can do something useful here locally while tasks are
@@ -630,7 +635,7 @@ def GenTests(api):
           platforms=('win', 'linux', 'mac'),
           isolated_script_task=True,
           realm="test:task_realm",
-          resultdb_enabled=True),
+          resultdb_spec={'enable': True}),
   )
 
   summary_data = {

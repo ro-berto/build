@@ -161,6 +161,12 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
   if _result_sink_experiment_enabled(api):
     resultdb_kwargs = raw_test_spec.get('resultdb')
     if resultdb_kwargs:
+      # Set test_id_prefix with TestSpec.test_id_prefix, if the ResultDB dict
+      # has no test_id_prefix set.
+      #
+      # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
+      # gets turned down.
+      resultdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
       kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
 
   processed_set_ups = []
@@ -384,7 +390,9 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
       resultdb = kwargs.get('resultdb')
       if not resultdb:
         kwargs['resultdb'] = steps.ResultDB.create(
-            enable=True, result_format='gtest')
+            enable=True,
+            result_format='gtest',
+            test_id_prefix=raw_test_spec.get('test_id_prefix'))
     return steps.SwarmingGTestTestSpec.create(**kwargs)
 
   def gtest_local_delegate(raw_test_spec, **kwargs):
@@ -511,7 +519,11 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     if _result_sink_experiment_enabled(api):
       resultdb = kwargs.get('resultdb')
       if not resultdb:
-        resultdb_kwargs = {'enable': True, 'result_format': 'json'}
+        resultdb_kwargs = {
+            'enable': True,
+            'result_format': 'json',
+            'test_id_prefix': raw_test_spec.get('test_id_prefix'),
+        }
 
         # For webgl tests, we can construct test locations as
         # <test_location_base>/<test names>.

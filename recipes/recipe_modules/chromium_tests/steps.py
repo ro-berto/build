@@ -409,6 +409,7 @@ class TestSpec(TestSpecBase):
   waterfall_builder_group = attrib(str, default=None)
   waterfall_buildername = attrib(str, default=None)
   resultdb = attrib(ResultDB, default=ResultDB.create())
+  # TODO(crbug/1106965): remove test_id_prefix, if deriver gets turned down.
   test_id_prefix = attrib(str, default=None)
   substituted_mastername = attrib(bool, default=False)
 
@@ -2390,22 +2391,11 @@ class SwarmingTest(Test):
     # Add tags.
     tags = {
         'ninja_target': [self.full_test_target or ''],
+        # TODO(crbug/1106965): remove test_id_prefix from tags, if deriver
+        # gets turned down.
         'test_id_prefix': [self.test_id_prefix or ''],
         'test_suite': [self.canonical_name],
     }
-
-    resultdb = self.resultdb
-    test_location_base = resultdb.test_location_base
-    if test_location_base:
-      tags['test_location_base'] = [test_location_base]
-
-    result_format = resultdb.result_format
-    if result_format:
-      tags['result_format'] = [result_format]
-
-    test_id_as_test_location = resultdb.test_id_as_test_location
-    if test_id_as_test_location:
-      tags['test_id_as_test_location'] = ['true']
 
     task.request = (
         task_request.with_slice(0, task_slice).with_name(
@@ -2433,7 +2423,8 @@ class SwarmingTest(Test):
     api.chromium_swarming.trigger_task(
         self._tasks[suffix],
         use_swarming_go_in_trigger_script=api.chromium_tests
-        .use_swarming_go_in_trigger_script)
+        .use_swarming_go_in_trigger_script,
+        resultdb=self.resultdb)
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
@@ -2536,8 +2527,7 @@ class SwarmingGTestTest(SwarmingTest):
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
         isolated=isolated,
-        cas_input_root=cas_input_root,
-        resultdb=self.resultdb)
+        cas_input_root=cas_input_root)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
     return task
 
@@ -2800,8 +2790,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
         isolated=isolated,
-        cas_input_root=cas_input_root,
-        resultdb=self.resultdb)
+        cas_input_root=cas_input_root)
 
     self._apply_swarming_task_config(task, api, suffix,
                                      '--isolated-script-test-filter', '::')
