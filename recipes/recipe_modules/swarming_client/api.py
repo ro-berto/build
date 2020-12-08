@@ -82,7 +82,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
       as_text = '.'.join(map(str, step_test_data))
       step_test_data_cb = lambda: self.m.raw_io.test_api.stream_output(as_text)
     else:
-      step_test_data_cb = None
+      step_test_data_cb = lambda: self.m.raw_io.test_api.stream_output('1.2.3')
 
     if script not in self._script_version:
       try:
