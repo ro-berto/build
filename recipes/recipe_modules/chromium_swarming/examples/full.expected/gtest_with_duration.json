@@ -516,7 +516,7 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 120.0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 120, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\"@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
