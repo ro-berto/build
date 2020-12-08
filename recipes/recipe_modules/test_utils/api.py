@@ -469,6 +469,40 @@ class TestUtilsApi(recipe_api.RecipeApi):
             ))
     return ret
 
+  def _clean_failed_suite_list(self, failed_test_suites):
+    """Returns a list of failed suites with flaky-fails-only suites excluded.
+
+    This does not modify the argument list.
+    This feature is controlled by the should_exonerate_flaky_failures property,
+    which allows switch on/off with ease and flexibility.
+
+    Args:
+      failed_test_suites ([steps.Test]): A list of failed test suites to check.
+
+    Returns:
+      [steps.Test]: A list of unexonerated test suites, possibly empty.
+    """
+    # If *all* the deterministic failures are known flaky tests, a test suite
+    # will not be considered failure anymore, and thus will not be retried.
+    #
+    # A long as there is at least one non-flaky failure, all the failed shards
+    # will be retried, including those due to flaky failures. Existing APIs
+    # don't allow associating test failures with shard indices. Such a
+    # connection could be implemented, but the cost is high and return is not;
+    # both for CQ cycle time and for overall resource usage, return is very low.
+    if not self._should_exonerate_flaky_failures:
+      return failed_test_suites  #pragma: nocover
+    pruned_suites = failed_test_suites[:]
+    self._query_and_mark_flaky_failures(pruned_suites)
+    for t in failed_test_suites:
+      if not t.known_flaky_failures:
+        continue
+
+      if set(t.deterministic_failures('with patch')).issubset(
+          t.known_flaky_failures):
+        pruned_suites.remove(t)
+    return pruned_suites
+
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.
 
@@ -617,24 +651,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       result.presentation.status = self.m.step.FAILURE
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
-    if suffix == 'with patch' and self._should_exonerate_flaky_failures:
-      # If *all* the deterministic failures are known flaky tests, a test suite
-      # will not be considered failure anymore, and thus will not be retried.
-      #
-      # A long as there is at least one non-flaky failure, all the failed shards
-      # will be retried, including those due to flaky failures, and the reason
-      # is that existing APIs don't allow associating test failures with shard
-      # indices. One could implement such a connection, but the cost is high,
-      # while return is very low from both the CQ cycle time and resource usage
-      # perspective.
-      self._query_and_mark_flaky_failures(failed_test_suites)
-      for t in failed_test_suites[:]:
-        if not t.known_flaky_failures:
-          continue
-
-        if set(t.deterministic_failures('with patch')).issubset(
-            t.known_flaky_failures):
-          failed_test_suites.remove(t)
+    if suffix == 'with patch':
+      failed_test_suites = self._clean_failed_suite_list(failed_test_suites)
 
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))
