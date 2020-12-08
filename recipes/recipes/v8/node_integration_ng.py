@@ -62,7 +62,7 @@ def run_with_retry(api, step_name, step_fun):
   step_fun(step_name=step_name + ' (retry)')
 
   # If the retry didn't raise, we found a flake. We report it in a separate
-  # step that's ignored by gatekeeper.
+  # step that's ignored for tree closing.
   step_result = api.step(step_name + ' (flakes)', cmd=None)
   step_result.presentation.status = api.step.FAILURE
   return True
@@ -170,7 +170,7 @@ def RunSteps(api, triggers, v8_tot):
       )
       has_flakes |= run_with_retry(api, 'test ' + suite, run_test)
 
-  # Make flakes visible on the waterfall. This is not tracked by gatekeeper.
+  # Make flakes visible on the waterfall. This is not tracked for tree closing.
   # Ignore flakes on tryjobs.
   if has_flakes and not api.tryserver.is_tryserver:
     raise api.step.StepFailure('Flakes in build')

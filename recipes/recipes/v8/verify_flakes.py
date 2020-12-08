@@ -6,7 +6,7 @@
 
 The recipe reads flake config and for each entry triggers flako recipe in
 reproduce_only mode. If any flake fails to reproduce, the build is marked as
-failed, which can then be used to alert sheriffs via a gatekeeper rule.
+failed, which can then be used to alert sheriffs via a LUCI-Notify rule.
 """
 
 import ast

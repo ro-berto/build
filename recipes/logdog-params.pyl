@@ -67,8 +67,6 @@
 
     'chromium.webrtc': {},
 
-    'chromium.gatekeeper': {},
-
     # Blink
     'tryserver.blink': {},
 

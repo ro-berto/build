@@ -112,7 +112,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
         pass
 
       # Simulate a v8 update on slim swarming testers. The revision
-      # property is mandatory. The commit position is required by gatekeeper.
+      # property is mandatory.
       info_step = api.step('simulated revision info', cmd=None)
       info_step.presentation.properties['got_revision'] = (
           api.buildbucket.gitiles_commit.id)
