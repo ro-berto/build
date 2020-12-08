@@ -1076,25 +1076,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           if t.has_failures_to_summarize():
             self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
 
-      if invalid_test_suites:
+      # Exit without retries if there were invalid tests or if all tests passed
+      if invalid_test_suites or not failing_test_suites:
         summarize_all_test_failures_with_no_retries()
-        return None, invalid_test_suites
+        return None, invalid_test_suites or []
 
-      if not failing_test_suites:
-        summarize_all_test_failures_with_no_retries()
-        return None, []
-
-      # If there are failures but we shouldn't deapply the patch, then we're
-      # done.
+      # Also exit if there are failures but we shouldn't deapply the patch
       if not self._should_retry_with_patch_deapplied(task.affected_files):
         self.m.python.succeeding_step(
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +
             '<br/>'.join(RECIPE_CONFIG_PATHS))
-
-        for t in task.test_suites:
-          if t.has_failures_to_summarize():
-            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+        summarize_all_test_failures_with_no_retries()
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
