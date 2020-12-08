@@ -58,7 +58,7 @@ def RunSteps(api):
     if on_cq_experiment(api):
       # Place here any unstable steps that you want to be performed on
       # bots with property experiment_percentage != 0
-      pass
+      run_interactions(api)
 
 
 def builder_config(api):
@@ -130,6 +130,11 @@ def run_localization_check(api):
 def run_e2e(api):
   run_script(api, 'E2E tests', 'run_test_suite.py',
              ['--target=' +  builder_config(api), '--test-suite=e2e'])
+
+
+def run_interactions(api):
+  run_script(api, 'Interactions', 'run_test_suite.py',
+             ['--target=' +  builder_config(api), '--test-suite=interactions'])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
