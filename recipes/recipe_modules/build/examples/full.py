@@ -2,8 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
+
 DEPS = [
     'build',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/raw_io',
 ]
@@ -28,6 +31,20 @@ def RunSteps(api):
       legacy_annotation=True,
   )
 
+  api.build.python(
+      'vpython with resultdb',
+      'foo.py',
+      venv=api.path['cache'].join('path', 'to', 'venv'),
+      resultdb=ResultDB.create(enable=True),
+  )
+
+  api.build.python(
+      'legacy with resultdb',
+      'foo.py',
+      legacy_annotation=True,
+      resultdb=ResultDB.create(enable=True),
+  )
+
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test('basic', api.buildbucket.try_build())

@@ -6,6 +6,8 @@ import contextlib
 
 from recipe_engine import config_types, recipe_api
 
+from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
+
 
 class ToolsBuildApi(recipe_api.RecipeApi):
 
@@ -44,6 +46,7 @@ class ToolsBuildApi(recipe_api.RecipeApi):
              unbuffered=True,
              venv=None,
              legacy_annotation=False,
+             resultdb=None,
              **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".
 
@@ -57,11 +60,17 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     `legacy_annotation` module from recipe_engine to adapt to the new luciexe
     protocol. Note that this feature is DEPRECATED and all new usecase should
     use StepPresentation instead to modify build.
+
+    resultdb is an instance of chromium_tests.steps.ResultDB.
+    If resultdb.enable is set to True, then the python script is wrapped
+    with ResultSink and result_adapter before execution.
+    For more info, find the doc-string of chromium_tests.steps.ResultDB.
     """
     cmd = ['vpython' if venv else 'python']
     if isinstance(venv, config_types.Path):
       cmd += ['-vpython-spec', venv]
-
+    assert isinstance(resultdb,
+                      (type(None), ResultDB)), "%s: %s" % (name, resultdb)
     env = None
     if unbuffered:
       cmd.append('-u')
@@ -77,6 +86,9 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     cmd.extend(['--', 'python', script])
     if args:
       cmd.extend(args)
+
+    if resultdb:
+      cmd = resultdb.wrap(self.m, cmd, step_name=name)
 
     with self.m.context(env=env, infra_steps=kwargs.pop('infra_step', None)):
       if legacy_annotation:

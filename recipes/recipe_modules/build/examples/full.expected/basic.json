@@ -117,6 +117,67 @@
     ]
   },
   {
+    "cmd": [
+      "rdb",
+      "stream",
+      "-var",
+      "builder:builder",
+      "-tag",
+      "step_name:vpython with resultdb",
+      "-coerce-negative-duration",
+      "--",
+      "vpython",
+      "-vpython-spec",
+      "[CACHE]/path/to/venv",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "foo.py"
+    ],
+    "name": "vpython with resultdb"
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
+      "--",
+      "rdb",
+      "stream",
+      "-var",
+      "builder:builder",
+      "-tag",
+      "step_name:legacy with resultdb",
+      "-coerce-negative-duration",
+      "--",
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "foo.py"
+    ],
+    "env": {
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TEMP": "[CLEANUP]/tmp_tmp_4",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TMP": "[CLEANUP]/tmp_tmp_4",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
+    },
+    "name": "legacy with resultdb",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]
