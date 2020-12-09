@@ -466,6 +466,20 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'fuchsia-code-coverage':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['fuchsia_x64', 'use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            simulation_platform='linux',
+        ),
     'mac-code-coverage':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
