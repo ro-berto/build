@@ -1,7 +1,7 @@
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Tests a recipe CL by running a chromium builder."""
+"""Warms try bot builder cache by triggering a build on ToT."""
 
 from recipe_engine import post_process
 
@@ -24,6 +24,7 @@ def RunSteps(api):
   # changing environment.
   with api.context(env={'SWARMING_TASK_ID': None}):
     builder = api.properties['builder_to_warm']
+    trigger_count = api.properties.get('trigger_count') or 1
 
     with api.step.nest('get ' + builder):
       led_builder = api.led('get-builder',
@@ -33,15 +34,33 @@ def RunSteps(api):
       led_builder.result.buildbucket.bbagent_args.build.scheduling_timeout \
           .FromSeconds(SCHEDULING_TIMEOUT_SEC)
 
-    led_builder.then('launch')
+    for _ in range(trigger_count):
+      led_builder.then('launch')
 
 
 def GenTests(api):
-  yield api.test('basic', api.properties(builder_to_warm='linux_warmed'))
+  yield api.test(
+      'basic',
+      api.properties(builder_to_warm='linux_warmed'),
+      api.post_process(post_process.MustRun, 'led launch'),
+      api.post_process(post_process.DoesNotRun, 'led launch (2)'),
+      api.post_process(post_process.StatusSuccess),
+  )
+
+  yield api.test(
+      'trigger_count',
+      api.properties(builder_to_warm='linux_warmed', trigger_count=2),
+      api.post_process(post_process.MustRun, 'led launch'),
+      api.post_process(post_process.MustRun, 'led launch (2)'),
+      api.post_process(post_process.StatusSuccess),
+  )
 
   yield api.test(
       'non_existent_builder',
       api.properties(builder_to_warm='non_existent_builder'),
       api.led.mock_get_builder(None),
-      api.post_check(post_process.StepFailure,
-                     'get non_existent_builder.led get-builder'))
+      api.post_process(post_process.StepFailure,
+                       'get non_existent_builder.led get-builder'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )

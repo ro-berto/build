@@ -1674,7 +1674,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             mirrors.add(try_builder_id)
     return ['%s:%s' % (b.group, b.builder) for b in mirrors]
 
-  def lookup_bot_metadata(self, builders=None, mirrored_bots=None):
+  def lookup_bot_metadata(self,
+                          builders=None,
+                          mirrored_bots=None,
+                          builder_id=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
     # This logic takes the <group, buildername> of the triggering trybot,
@@ -1691,7 +1694,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # See ChromiumTestsApi for more details.
     try_db = try_spec_module.TryDatabase.normalize(mirrored_bots or
                                                    self.trybots)
-    builder_id = self.m.chromium.get_builder_id()
+    builder_id = builder_id or self.m.chromium.get_builder_id()
     mirrored_builders = self._get_mirroring_try_builders(builder_id, try_db)
     try_spec = try_db.get(builder_id)
 
