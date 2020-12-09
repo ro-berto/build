@@ -67,6 +67,7 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='test_group',
           builder='test_buildername',
+          experiments={'chromium.resultdb.result_sink.gtests_local': True},
       ),
       api.properties(
           single_spec={

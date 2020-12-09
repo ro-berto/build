@@ -108,9 +108,16 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
 
 
 # TODO(crbug.com/1108016): Enable resultdb globally.
-def _result_sink_experiment_enabled(api):
-  return ('chromium.resultdb.result_sink' in
-          api.buildbucket.build.input.experiments)
+def _result_sink_experiment_enabled(api, test_class=''):
+  assert test_class in {
+      '',
+      'gtests_local',
+      'junit_tests',
+  }, 'invalid test_class %s' % test_class
+  name = 'chromium.resultdb.result_sink'
+  if test_class:
+    name += '.%s' % test_class
+  return name in api.buildbucket.build.input.experiments
 
 
 def _normalize_optional_dimensions(optional_dimensions):
@@ -159,15 +166,15 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate,
   # Enables resultdb if the build is picked for the experiment.
   # TODO(crbug.com/1108016): Enable resultdb globally.
   if _result_sink_experiment_enabled(api):
-    resultdb_kwargs = raw_test_spec.get('resultdb')
-    if resultdb_kwargs:
+    rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
+    if rdb_kwargs:
       # Set test_id_prefix with TestSpec.test_id_prefix, if the ResultDB dict
       # has no test_id_prefix set.
       #
       # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
       # gets turned down.
-      resultdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
-      kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
+      rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
+      kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
 
   processed_set_ups = []
   for s in raw_test_spec.get('setup', []):
@@ -387,8 +394,7 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
     if _result_sink_experiment_enabled(api):
-      resultdb = kwargs.get('resultdb')
-      if not resultdb:
+      if not kwargs.get('resultdb'):
         kwargs['resultdb'] = steps.ResultDB.create(
             enable=True,
             result_format='gtest',
@@ -398,6 +404,15 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
   def gtest_local_delegate(raw_test_spec, **kwargs):
     kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
     kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
+
+    # Enables resultdb if the build is picked for the experiment.
+    # TODO(crbug.com/1108016): Enable resultdb globally.
+    if _result_sink_experiment_enabled(api, 'gtests_local'):
+      if not kwargs.get('resultdb'):
+        kwargs['resultdb'] = steps.ResultDB.create(
+            enable=True,
+            result_format='gtest',
+            test_id_prefix=raw_test_spec.get('test_id_prefix'))
     return steps.LocalGTestTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec, gtest_swarming_delegate,
@@ -413,15 +428,27 @@ def generate_junit_tests(api,
                          bot_update_step,
                          swarming_dimensions=None,
                          scripts_compile_targets_fn=None):
-  del api, chromium_tests_api, bot_update_step
+  del chromium_tests_api, bot_update_step
   del swarming_dimensions, scripts_compile_targets_fn
+
   for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
+    # Enables resultdb if the build is picked for the experiment.
+    # TODO(crbug.com/1108016): Enable resultdb globally.
+    resultdb = None
+    if _result_sink_experiment_enabled(api, 'junit_tests'):
+      # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
+      # gets turned down.
+      rdb_kwargs = dict(test.get('resultdb', {'enable': True}))
+      rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
+      resultdb = steps.ResultDB.create(**rdb_kwargs)
+
     yield steps.AndroidJunitTestSpec.create(
         test.get('name', test['test']),
         target_name=test['test'],
         additional_args=test.get('args'),
         waterfall_builder_group=builder_group,
-        waterfall_buildername=buildername)
+        waterfall_buildername=buildername,
+        resultdb=resultdb)
 
 
 def generate_script_tests(api,

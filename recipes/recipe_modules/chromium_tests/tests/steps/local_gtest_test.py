@@ -3,12 +3,15 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'build',
     'chromium',
     'chromium_android',
     'depot_tools/bot_update',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_results',
     'test_utils',
@@ -24,7 +27,10 @@ def RunSteps(api):
   api.chromium_android.set_config('main_builder')
   api.test_results.set_config('public_server')
 
-  test = steps.LocalGTestTestSpec.create('base_unittests').get_test()
+  test = steps.LocalGTestTestSpec.create(
+      'base_unittests',
+      resultdb=steps.ResultDB(enable=True, result_format='gtest'),
+  ).get_test()
   assert test.is_gtest and not test.runs_on_swarming
 
   test_options = steps.TestOptions(

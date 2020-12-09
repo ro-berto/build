@@ -29,7 +29,10 @@ def RunSteps(api):
   api.chromium_checkout.ensure_checkout()
 
   test_spec = steps.AndroidJunitTestSpec.create(
-      'test_name', target_name=api.properties.get('target_name'))
+      'test_name',
+      target_name=api.properties.get('target_name'),
+      resultdb=steps.ResultDB(enable=True),
+  )
   test = test_spec.get_test()
 
   api.chromium.compile(targets=test.compile_targets(), name='compile')
@@ -49,7 +52,11 @@ def RunSteps(api):
 def GenTests(api):
 
   def calls_runner_script(check, step_odict, step, runner_script_name):
-    runner_script = step_odict[step].cmd[0]
+    cmd = step_odict[step].cmd
+    check(
+        'In step %s, runner script %s is wrapped with rdb' %
+        (step, runner_script_name), cmd[0] == 'rdb')
+    runner_script = cmd[cmd.index('--') + 1]
     check('step %s called runner script %s' % (step, runner_script_name),
           runner_script.endswith('bin/%s' % runner_script_name))
 

@@ -94,3 +94,59 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'junit-with-rdb-by-default',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments={'chromium.resultdb.result_sink.junit_tests': True},
+      ),
+      api.properties(single_spec={
+          'foo': 'bar',
+          'test': 'junit_test',
+          'args': ['--foo=bar'],
+      }),
+      api.post_process(post_process.MustRun, 'junit_test'),
+      api.override_step_data('junit_test',
+                             api.test_utils.canned_gtest_output(True)),
+      api.post_process(post_process.StepCommandContains, 'junit_test', [
+          'rdb', 'stream', '-var', 'builder:test_buildername', '-tag',
+          'step_name:junit_test', '-coerce-negative-duration', '--'
+      ]),
+      api.post_process(post_process.StepCommandContains, 'junit_test',
+                       ['--foo=bar']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'junit-with-test-spec-rdb-override',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments={'chromium.resultdb.result_sink.junit_tests': True},
+      ),
+      api.properties(
+          single_spec={
+              'foo': 'bar',
+              'test': 'junit_test',
+              'args': ['--foo=bar'],
+              'resultdb': {
+                  'enable': True,
+                  'test_id_prefix': 'prefix'
+              },
+          }),
+      api.post_process(post_process.MustRun, 'junit_test'),
+      api.override_step_data('junit_test',
+                             api.test_utils.canned_gtest_output(True)),
+      api.post_process(post_process.StepCommandContains, 'junit_test', [
+          'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
+          'builder:test_buildername', '-tag', 'step_name:junit_test',
+          '-coerce-negative-duration', '--'
+      ]),
+      api.post_process(post_process.StepCommandContains, 'junit_test',
+                       ['--foo=bar']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

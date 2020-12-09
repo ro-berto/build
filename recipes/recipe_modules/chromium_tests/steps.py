@@ -1582,6 +1582,7 @@ class LocalGTestTest(Test):
         'name': self.step_name(suffix),
         'args': args,
         'step_test_data': step_test_data,
+        'resultdb': self.spec.resultdb,
     }
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
@@ -1601,6 +1602,7 @@ class LocalGTestTest(Test):
                                               'run_%s' % self.target_name)
         args.extend(['--test-launcher-summary-output', gtest_results_file])
         args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
+        # TODO(crbug.com/1084332): enable ResultDB for Fuchsia LocalGTest.
         api.python(self.target_name, script, args)
       else:
         api.chromium.runtest(
@@ -3026,7 +3028,8 @@ class AndroidJunitTest(AndroidTest):
         additional_args=self.spec.additional_args,
         json_results_file=json_results_file,
         step_test_data=(
-            lambda: api.test_utils.test_api.canned_gtest_output(False)))
+            lambda: api.test_utils.test_api.canned_gtest_output(False)),
+        resultdb=self.spec.resultdb)
 
 
 class IncrementalCoverageTest(Test):
