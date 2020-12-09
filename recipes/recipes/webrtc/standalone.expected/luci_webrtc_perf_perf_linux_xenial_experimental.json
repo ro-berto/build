@@ -1054,8 +1054,7 @@
       "--perf-dashboard-machine-group",
       "ExperimentalWebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Linux_Xenial",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Linux_Xenial"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1168,8 +1167,7 @@
       "--perf-dashboard-machine-group",
       "ExperimentalWebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Linux_Xenial",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Linux_Xenial"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1282,8 +1280,7 @@
       "--perf-dashboard-machine-group",
       "ExperimentalWebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Linux_Xenial",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Linux_Xenial"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

@@ -996,8 +996,7 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Android64_M_Nexus5X",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Android64_M_Nexus5X"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

@@ -996,8 +996,7 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Android32_M_AOSP_Nexus6",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Android32_M_AOSP_Nexus6"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1111,8 +1110,7 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Android32_M_AOSP_Nexus6",
-      "--wait-for-upload"
+      "[CACHE]/builder/src/out/Perf_Android32_M_AOSP_Nexus6"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
