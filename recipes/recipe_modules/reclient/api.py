@@ -46,7 +46,9 @@ class ReclientApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       exe_name += '.exe'
     if self._reclient_cipd_dir is None:
-      reclient_cipd = self.m.path['checkout'].join('tools', 'reclient')
+      # This depends on where the reclient CIPD is checked out in DEPS,
+      # https://source.chromium.org/chromium/chromium/src/+/master:DEPS;l=452-461;drc=6b88cf228d9d27f49e89f7c4d9ffb582771daa48
+      reclient_cipd = self.m.path['checkout'].join('buildtools', 'reclient')
       self._reclient_cipd_dir = str(reclient_cipd)
     return self.m.path.join(self._reclient_cipd_dir, exe_name)
 
