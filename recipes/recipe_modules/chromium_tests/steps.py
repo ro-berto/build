@@ -1602,8 +1602,10 @@ class LocalGTestTest(Test):
                                               'run_%s' % self.target_name)
         args.extend(['--test-launcher-summary-output', gtest_results_file])
         args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
-        # TODO(crbug.com/1084332): enable ResultDB for Fuchsia LocalGTest.
-        api.python(self.target_name, script, args)
+        cmd = ['python', '-u', script] + args
+        if self.spec.resultdb and self.spec.resultdb.enable:
+          cmd = self.spec.resultdb.wrap(api, cmd, step_name=self.target_name)
+        api.step(self.target_name, cmd)
       else:
         api.chromium.runtest(
             self.target_name,

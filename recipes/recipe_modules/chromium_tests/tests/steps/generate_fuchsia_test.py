@@ -15,7 +15,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_results',
     'test_utils',
@@ -49,6 +49,17 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='test_group',
           builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'test': 'gtest_test',
+      },),
+  )
+  yield api.test(
+      'basic-with-rdb',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments={'chromium.resultdb.result_sink.gtests_local': True},
       ),
       api.properties(single_spec={
           'test': 'gtest_test',
