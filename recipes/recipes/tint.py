@@ -117,11 +117,13 @@ def _build_steps(api, out_dir, clang, *targets):
       ninja_log_compiler=_get_compiler_name(api, clang))
 
 
-def _run_cts_tests(api):
+def _run_cts_tests(api, out_dir):
   cts_test_runner_path = api.path['checkout'].join('tools', 'run_tests.py')
+  build_dir = api.path['checkout'].join('out', out_dir)
   checkout = api.path['checkout']
   with api.context(cwd=checkout):
-    api.python('Run the CTS', cts_test_runner_path)
+    api.python('Run the CTS', cts_test_runner_path,
+               ['--build_dir=' + str(build_dir)])
 
 
 def _run_unittests(api, out_dir):
@@ -143,7 +145,7 @@ def RunSteps(api, target_cpu, debug, clang):
       _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
       _build_steps(api, out_dir, clang)
       _run_unittests(api, out_dir)
-      _run_cts_tests(api)
+      _run_cts_tests(api, out_dir)
 
 
 def GenTests(api):
