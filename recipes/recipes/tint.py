@@ -117,6 +117,13 @@ def _build_steps(api, out_dir, clang, *targets):
       ninja_log_compiler=_get_compiler_name(api, clang))
 
 
+def _run_cts_tests(api):
+  cts_test_runner_path = api.path['checkout'].join('tools', 'run_tests.py')
+  checkout = api.path['checkout']
+  with api.context(cwd=checkout):
+    api.python('Run the CTS', cts_test_runner_path)
+
+
 def _run_unittests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'tint_unittests')
   api.step('Run the Tint unittests', [test_path])
@@ -132,10 +139,11 @@ def RunSteps(api, target_cpu, debug, clang):
     _checkout_steps(api)
     out_dir = _out_path(target_cpu, debug, clang)
     with api.osx_sdk('mac'):
-      # Static build all targets and run unittests
+      # Static build all targets, run unittests and cts
       _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
       _build_steps(api, out_dir, clang)
       _run_unittests(api, out_dir)
+      _run_cts_tests(api)
 
 
 def GenTests(api):
@@ -146,6 +154,7 @@ def GenTests(api):
           project='tint', builder='linux', git_repo=TINT_REPO) +
       api.post_process(post_process.MustRun, r'compile with ninja') +
       api.post_process(post_process.MustRun, r'Run the Tint unittests') +
+      api.post_process(post_process.MustRun, r'Run the CTS') +
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
