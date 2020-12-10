@@ -1000,9 +1000,6 @@ SPEC.update([
         'win-pixel-tester-rel',
         execution_mode=bot_spec.TEST,
         parent_buildername='win-pixel-builder-rel'),
-    # Builders to test inversed fieldtrials
-    stock_config('linux-inverse-fieldtrials-fyi-rel'),
-    stock_config('win10-inverse-fieldtrials-fyi-rel'),
 ])
 
 # Many of the FYI specs are made by transforming specs from other files, so

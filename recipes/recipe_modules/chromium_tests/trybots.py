@@ -119,10 +119,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm64-rel',
                 tester='android-cronet-arm64-rel-marshmallow-tests',
             ),
+        # This trybot mirrors the trybot android-pie-x86-rel
         'android-inverse-fieldtrials-pie-x86-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-inverse-fieldtrials-pie-x86-fyi-rel',
+                builder_group='chromium.android',
+                buildername='android-pie-x86-rel',
             ),
         'android-lollipop-arm-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -646,11 +647,20 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='linux-gcc-rel',
             ),
+        # This trybot mirrors the trybot linux-rel
         'linux-inverse-fieldtrials-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-inverse-fieldtrials-fyi-rel',
-            ),
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.linux',
+                    buildername='Linux Builder',
+                    tester='Linux Tests',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Linux Builder',
+                    tester='Linux Release (NVIDIA)',
+                ),
+            ]),
         'linux-ozone-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
@@ -1031,6 +1041,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-dbg',
             ),
+        # This trybot mirrors the trybot linux-chromeos-rel with
+        # analyze_deps_autorolls set to False
+        'linux-chromeos-inverse-fieldtrials-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-chromeos-rel',
+            ),
         'linux-chromeos-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
@@ -1069,6 +1086,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='ios-simulator-full-configs',
+            ),
+        # This trybot mirrors the trybot ios-simulator with
+        # analyze_deps_autorolls set to False
+        'ios-simulator-inverse-fieldtrials-fyi':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.mac',
+                buildername='ios-simulator',
             ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1128,6 +1152,28 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='mac-arm64-rel',
+            ),
+        # This trybot mirrors the trybot mac-rel with
+        # analyze_deps_autorolls set to False
+        'mac-inverse-fieldtrials-fyi-rel':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.mac',
+                    buildername='Mac Builder',
+                    tester='Mac10.13 Tests',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Mac Builder',
+                    tester='Mac Release (Intel)',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Mac Builder',
+                    tester='Mac Retina Release (AMD)',
+                ),
+            ],
+            task_output_stdout='none',
             ),
         'mac-rel':
             try_spec.TrySpec.create([
@@ -1399,6 +1445,21 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
             ),
+        # This trybot mirrors the trybot win10_chromium_x64_rel_ng with
+        # analyze_deps_autorolls set to False
+        'win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.win',
+                    buildername='Win x64 Builder',
+                    tester='Win10 Tests x64',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Win x64 Builder',
+                    tester='Win10 x64 Release (NVIDIA)',
+                ),
+            ]),
         'win10_chromium_x64_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
