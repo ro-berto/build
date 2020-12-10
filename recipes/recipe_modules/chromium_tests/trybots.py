@@ -661,6 +661,34 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Linux Release (NVIDIA)',
                 ),
             ]),
+        # This trybot mirrors linux-rel
+        'linux-mbi-mode-per-render-process-host-rel':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.linux',
+                    buildername='Linux Builder',
+                    tester='Linux Tests',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Linux Builder',
+                    tester='Linux Release (NVIDIA)',
+                ),
+            ]),
+        # This trybot mirrors linux-rel
+        'linux-mbi-mode-per-site-instance-host-rel':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.linux',
+                    buildername='Linux Builder',
+                    tester='Linux Tests',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Linux Builder',
+                    tester='Linux Release (NVIDIA)',
+                ),
+            ]),
         'linux-ozone-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
