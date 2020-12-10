@@ -53,14 +53,8 @@ def _WindowsCMakeWorkaround(path):
 def _GetHostCMakeArgs(buildername, platform, bot_utils):
   args = {}
   if platform.is_win:
-    # TODO(davidben): When we've finished switching to NASM, remove this token
-    # and make all bots use NASM.
-    if _HasToken(buildername, 'nasm'):
-      args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
-          bot_utils.join('nasm-win32.exe'))
-    else:
-      args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
-          bot_utils.join('yasm-win32.exe'))
+    args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
+        bot_utils.join('nasm-win32.exe'))
     args['PERL_EXECUTABLE'] = bot_utils.join('perl-win32', 'perl', 'bin',
                                              'perl.exe')
   return args
@@ -89,7 +83,7 @@ def _UsesCustomLibCXX(buildername):
   return any(_HasToken(buildername, token) for token in ('msan', 'tsan'))
 
 
-def _GetGclientVars(buildername):
+def _GetGclientVars(buildername, platform):
   ret = {}
   if _UsesClang(buildername):
     ret['checkout_clang'] = 'True'
@@ -97,7 +91,7 @@ def _GetGclientVars(buildername):
     ret['checkout_sde'] = 'True'
   if _HasToken(buildername, 'fuzz'):
     ret['checkout_fuzzer'] = 'True'
-  if _HasToken(buildername, 'nasm'):
+  if platform.is_win:
     ret['checkout_nasm'] = 'True'
   if _UsesCustomLibCXX(buildername):
     ret['checkout_libcxx'] = 'True'
@@ -258,7 +252,8 @@ def RunSteps(api):
     api.gclient.set_config('boringssl')
     if _HasToken(buildername, 'android'):
       api.gclient.c.target_os.add('android')
-    api.gclient.c.solutions[0].custom_vars = _GetGclientVars(buildername)
+    api.gclient.c.solutions[0].custom_vars = _GetGclientVars(
+        buildername, api.platform)
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
@@ -414,13 +409,11 @@ def GenTests(api):
       ('win32_rel', api.platform('win', 64)),
       ('win32_vs2017', api.platform('win', 64)),
       ('win32_vs2017_clang', api.platform('win', 64)),
-      ('win32_nasm', api.platform('win', 64)),
       ('win64', api.platform('win', 64)),
       ('win64_small', api.platform('win', 64)),
       ('win64_rel', api.platform('win', 64)),
       ('win64_vs2017', api.platform('win', 64)),
       ('win64_vs2017_clang', api.platform('win', 64)),
-      ('win64_nasm', api.platform('win', 64)),
       ('android_arm', api.platform('linux', 64)),
       ('android_arm_rel', api.platform('linux', 64)),
       ('android_arm_armmode_rel', api.platform('linux', 64)),
