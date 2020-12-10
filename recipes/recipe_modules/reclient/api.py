@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 """API for interacting with the re-client remote compiler."""
 
+import socket
+
 from recipe_engine import recipe_api
 
 
@@ -18,6 +20,12 @@ class ReclientApi(recipe_api.RecipeApi):
     self._rbe_service = props.rbe_service or DEFAULT_SERVICE
     # Initialization is delayed until the first call for reclient exe
     self._reclient_cipd_dir = None
+
+    if self._test_data.enabled:
+      self._hostname = 'fakevm999-m9'
+    else:  #pragma: no cover
+      # TODO: find a recipe way to get hostname
+      self._hostname = socket.gethostname()
 
   @property
   def instance(self):
@@ -76,8 +84,15 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_use_gce_credentials': 'true',
     }
     with self.m.context(env=env):
-      return self.m.step('start reproxy via bootstrap',
-                         [self._bootstrap_bin_path, '-output_dir', log_dir])
+      self.m.step(
+          'start reproxy via bootstrap',
+          [self._bootstrap_bin_path, '-output_dir', log_dir],
+          infra_step=True)
+
+      # TODO: Shall we use the same project providing the RBE workers?
+      cloudtail_project_id = 'goma-logs'
+      self._start_cloudtail(cloudtail_project_id,
+                            self.m.path.join(log_dir, 'reproxy.INFO'))
 
   def stop_reproxy(self, log_dir):
     """Stops the reproxy via bootstramp.
@@ -86,7 +101,65 @@ class ReclientApi(recipe_api.RecipeApi):
     Args
       log_dir (str): Directory that holds the reproxy log
     """
-    return self.m.step('shutdown reproxy via bootstrap', [
-        self._bootstrap_bin_path, '-shutdown', '-proxy_log_dir', log_dir,
-        '-output_dir', log_dir
+    step_result = self.m.step('shutdown reproxy via bootstrap', [
+        self._bootstrap_bin_path, '-shutdown', '-server_address',
+        self.rbe_service_addr, '-proxy_log_dir', log_dir, '-output_dir', log_dir
     ])
+    self._stop_cloudtail()
+    return step_result
+
+  @property
+  def _cloudtail_exe_path(self):
+    if self.m.platform.is_win:
+      return 'cloudtail.exe'
+    return 'cloudtail'
+
+  @property
+  def _cloudtail_wrapper_path(self):
+    return self.resource('cloudtail_wrapper.py')
+
+  @property
+  def _cloudtail_pid_file(self):
+    return self.m.path['tmp_base'].join('cloudtail.pid')
+
+  def _start_cloudtail(self, project_id, log_path):
+    """Start cloudtail to upload reproxy INFO log.
+
+    'cloudtail' binary should be in PATH already.
+
+    Args:
+      project_id (str): Cloud project ID
+      log_path (str): Path to reproxy's INFO log.
+
+    Raises:
+      InfraFailure if it fails to start cloudtail
+    """
+    cloudtail_args = [
+        'start', '--cloudtail-path', self._cloudtail_exe_path,
+        '--cloudtail-project-id', project_id, '--cloudtail-log-path', log_path,
+        '--pid-file',
+        self.m.raw_io.output_text(leak_to=self._cloudtail_pid_file)
+    ]
+
+    step_result = self.m.build.python(
+        name='start cloudtail',
+        script=self._cloudtail_wrapper_path,
+        args=cloudtail_args,
+        step_test_data=(lambda: self.m.raw_io.test_api.output_text('12345')),
+        infra_step=True)
+    step_result.presentation.links['cloudtail'] = (
+        'https://console.cloud.google.com/logs/viewer?'
+        'project=%s&resource=gce_instance%%2F'
+        'instance_id%%2F%s' % (project_id, self._hostname))
+
+  def _stop_cloudtail(self):
+    """Stop cloudtail started by _start_cloudtail
+
+    Raises:
+      InfraFailure if it fails to stop cloudtail
+    """
+    self.m.build.python(
+        name='stop cloudtail',
+        script=self._cloudtail_wrapper_path,
+        args=['stop', '--killed-pid-file', self._cloudtail_pid_file],
+        infra_step=True)

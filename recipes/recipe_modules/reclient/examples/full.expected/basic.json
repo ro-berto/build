@@ -15,18 +15,74 @@
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
     },
+    "infra_step": true,
     "name": "start reproxy via bootstrap"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--cloudtail-project-id",
+      "goma-logs",
+      "--cloudtail-log-path",
+      "[CLEANUP]/log_dir_tmp_1/reproxy.INFO",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "env": {
+      "RBE_instance": "projects/test-rbe-project/instances/default_instance",
+      "RBE_log_dir": "[CLEANUP]/log_dir_tmp_1",
+      "RBE_proxy_log_dir": "[CLEANUP]/log_dir_tmp_1",
+      "RBE_re_proxy": "[TMP_BASE]/checkout/buildtools/reclient/reproxy",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
+      "RBE_service": "remotebuildexecution.googleapis.com:443",
+      "RBE_use_application_default_credentials": "false",
+      "RBE_use_gce_credentials": "true"
+    },
+    "infra_step": true,
+    "name": "start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
   },
   {
     "cmd": [
       "[TMP_BASE]/checkout/buildtools/reclient/bootstrap",
       "-shutdown",
+      "-server_address",
+      "unix:///[TMP_BASE]/reproxy.sock",
       "-proxy_log_dir",
       "[CLEANUP]/log_dir_tmp_1",
       "-output_dir",
       "[CLEANUP]/log_dir_tmp_1"
     ],
     "name": "shutdown reproxy via bootstrap"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "infra_step": true,
+    "name": "stop cloudtail"
   },
   {
     "name": "$result"
