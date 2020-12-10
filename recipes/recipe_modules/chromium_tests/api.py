@@ -1071,14 +1071,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.pgo.using_pgo and self.m.pgo.skip_profile_upload:
         self.m.pgo.process_pgo_data(task.test_suites)
 
-      def summarize_all_test_failures_with_no_retries():
-        for t in task.test_suites:
+      def summarize_all_test_failures_with_no_retries(suites):
+        for t in suites:
           if t.has_failures_to_summarize():
             self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
 
       # Exit without retries if there were invalid tests or if all tests passed
       if invalid_test_suites or not failing_test_suites:
-        summarize_all_test_failures_with_no_retries()
+        summarize_all_test_failures_with_no_retries(task.test_suites)
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
@@ -1087,7 +1087,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +
             '<br/>'.join(RECIPE_CONFIG_PATHS))
-        summarize_all_test_failures_with_no_retries()
+        summarize_all_test_failures_with_no_retries(task.test_suites)
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
@@ -1099,23 +1099,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.test_utils.run_tests(
           self.m, failing_test_suites, 'without patch', sort_by_shard=True)
 
-      unrecoverable_test_suites = []
-      for t in task.test_suites:
-        if not t.has_failures_to_summarize():
-          continue
+      unretried_suites = [
+          s for s in task.test_suites if s not in failing_test_suites
+      ]
+      summarize_all_test_failures_with_no_retries(unretried_suites)
 
-        if t not in failing_test_suites:
-          # 'Without patch' steps only apply to failed test suites, so when a
-          # test suite didn't fail, but still has failures to summarize
-          # (known flaky failures), it is summarized in a way that
-          # "without patch" step didn't happen.
-          self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-          continue
+      # Test suites whose failure is probably the CL's fault
+      culpable_test_suites = []
+      for t in failing_test_suites:
+        tot_fails = self.m.test_utils.summarize_test_with_patch_deapplied(
+            self.m, t)
+        if not tot_fails:
+          culpable_test_suites.append(t)
 
-        if not self.m.test_utils.summarize_test_with_patch_deapplied(self.m, t):
-          unrecoverable_test_suites.append(t)
-
-      return None, unrecoverable_test_suites
+      return None, culpable_test_suites
 
   def _build_bisect_gs_archive_url(self, bot_spec):
     return self.m.archive.legacy_upload_url(
