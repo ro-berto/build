@@ -87,7 +87,7 @@ SPEC = {
             no_archive(chromium.SPEC['linux-archive-rel']), ['goma_canary']),
     'Mac Builder Goma Canary':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder'],
-                               ['goma_canary', 'goma_use_local']),
+                               ['goma_canary']),
     'Mac Builder (dbg) Goma Canary':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_canary']),
@@ -171,7 +171,7 @@ SPEC = {
             ['goma_latest_client']),
     'Mac Builder Goma Latest Client':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
+                               ['goma_latest_client']),
     'Mac Builder (dbg) Goma Latest Client':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_latest_client']),

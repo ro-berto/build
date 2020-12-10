@@ -1000,8 +1000,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.compile",
     "~followup_annotations": [
@@ -1025,8 +1024,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r4.compile confirm no-op",
     "~followup_annotations": [
@@ -2216,8 +2214,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.compile",
     "~followup_annotations": [
@@ -2241,8 +2238,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r5.compile confirm no-op",
     "~followup_annotations": [
@@ -3369,8 +3365,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.compile",
     "~followup_annotations": [
@@ -3394,8 +3389,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r6.compile confirm no-op",
     "~followup_annotations": [
@@ -4519,8 +4513,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.compile",
     "~followup_annotations": [
@@ -4544,8 +4537,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r2.compile confirm no-op",
     "~followup_annotations": [
@@ -5661,8 +5653,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.compile",
     "~followup_annotations": [
@@ -5686,8 +5677,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "test r3.compile confirm no-op",
     "~followup_annotations": [

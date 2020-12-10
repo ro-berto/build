@@ -88,6 +88,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -119,6 +120,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -135,6 +137,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -151,6 +154,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -168,6 +172,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -184,6 +189,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
