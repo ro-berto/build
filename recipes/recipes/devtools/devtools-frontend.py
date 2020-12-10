@@ -55,9 +55,9 @@ def RunSteps(api):
     run_localization_check(api)
     run_e2e(api)
 
-    if on_cq_experiment(api):
+    if can_run_experimental_teps(api):
       # Place here any unstable steps that you want to be performed on
-      # bots with property experiment_percentage != 0
+      # builders with property run_experimental_steps == True
       run_interactions(api)
 
 
@@ -169,12 +169,8 @@ def _depot_on_path(api):
     yield
 
 
-def on_cq_experiment(api):
-  for tag in api.buildbucket.build.tags:
-    if tag.key == 'cq_experimental':
-      return tag.value == 'true'
-
-  return False
+def can_run_experimental_teps(api):
+  return api.properties.get('run_experimental_steps', False)
 
 
 def test_cov_data():
@@ -264,8 +260,8 @@ def GenTests(api):
   yield api.test(
       'experimental',
       api.builder_group.for_current('tryserver.devtools-frontend'),
-      try_build(
-          builder='linux', tags=api.buildbucket.tags(cq_experimental='true')),
+      try_build(builder='linux'),
+      api.properties(run_experimental_steps=True),
   )
 
   yield api.test(
