@@ -1299,7 +1299,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Optional Mac Retina Release (AMD)',
                     ),
                 ],
-                retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-mac-amd-dqp':
