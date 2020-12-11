@@ -25,9 +25,7 @@
   },
   {
     "cmd": [
-      "[TMP_BASE]/symupload.exe",
-      "--timeout",
-      "0",
+      "[TMP_BASE]/symupload",
       "glob1.txt",
       "https://some.url.com"
     ],
@@ -38,9 +36,7 @@
   },
   {
     "cmd": [
-      "[TMP_BASE]/symupload.exe",
-      "--timeout",
-      "0",
+      "[TMP_BASE]/symupload",
       "glob2.txt",
       "https://some.url.com"
     ],
@@ -51,9 +47,7 @@
   },
   {
     "cmd": [
-      "[TMP_BASE]/symupload.exe",
-      "--timeout",
-      "0",
+      "[TMP_BASE]/symupload",
       "[TMP_BASE]/some_artifact.txt",
       "https://some.url.com"
     ],

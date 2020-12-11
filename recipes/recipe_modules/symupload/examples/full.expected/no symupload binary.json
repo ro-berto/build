@@ -1,0 +1,16 @@
+[
+  {
+    "cmd": [],
+    "name": "symupload",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "The symupload binary cannot be found at [TMP_BASE]/symupload.exe. Please ensure targets symupload are being built such that the binaries are generated."
+    },
+    "name": "$result"
+  }
+]

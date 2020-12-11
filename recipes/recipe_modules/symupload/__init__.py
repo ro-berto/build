@@ -5,9 +5,7 @@
 from PB.recipe_modules.build.symupload import properties
 
 DEPS = [
-    'build/build',
     'chromium',
-    'infra/cloudkms',
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
