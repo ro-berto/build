@@ -996,7 +996,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Android64_O_Pixel2"
+      "[CACHE]/builder/src/out/Perf_Android64_O_Pixel2",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1110,7 +1111,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Android64_O_Pixel2"
+      "[CACHE]/builder/src/out/Perf_Android64_O_Pixel2",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

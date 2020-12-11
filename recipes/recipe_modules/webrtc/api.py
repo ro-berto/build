@@ -834,7 +834,8 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.raw_io.input(perf_results), '--dashboard-url',
           DASHBOARD_UPLOAD_URL, '--commit-position', self.revision_number,
           '--webrtc-git-hash', self.revision, '--perf-dashboard-machine-group',
-          perf_bot_group, '--outdir', self.m.chromium.output_dir
+          perf_bot_group, '--outdir', self.m.chromium.output_dir,
+          '--wait-for-upload'
       ]
 
       upload_script = self.m.path['checkout'].join(

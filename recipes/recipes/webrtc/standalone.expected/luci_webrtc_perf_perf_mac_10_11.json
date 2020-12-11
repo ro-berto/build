@@ -1119,7 +1119,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Mac_10_11"
+      "[CACHE]/builder/src/out/Perf_Mac_10_11",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1232,7 +1233,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Mac_10_11"
+      "[CACHE]/builder/src/out/Perf_Mac_10_11",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -1345,7 +1347,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Perf_Mac_10_11"
+      "[CACHE]/builder/src/out/Perf_Mac_10_11",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

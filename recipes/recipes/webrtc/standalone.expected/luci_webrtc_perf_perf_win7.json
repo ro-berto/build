@@ -1067,7 +1067,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]\\builder\\src\\out\\Perf_Win7"
+      "[CACHE]\\builder\\src\\out\\Perf_Win7",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
@@ -1180,7 +1181,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]\\builder\\src\\out\\Perf_Win7"
+      "[CACHE]\\builder\\src\\out\\Perf_Win7",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
@@ -1293,7 +1295,8 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]\\builder\\src\\out\\Perf_Win7"
+      "[CACHE]\\builder\\src\\out\\Perf_Win7",
+      "--wait-for-upload"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
