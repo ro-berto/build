@@ -123,7 +123,7 @@ def _run_cts_tests(api, out_dir):
   checkout = api.path['checkout']
   with api.context(cwd=checkout):
     api.python('Run the CTS', cts_test_runner_path,
-               ['--build_dir=' + str(build_dir)])
+               ['--build-dir=' + str(build_dir)])
 
 
 def _run_unittests(api, out_dir):
