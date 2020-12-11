@@ -37,8 +37,7 @@ def RunSteps(api):
 
     if compile_targets:
       request = api.buildbucket.schedule_request(
-          builder=builder_to_trigger['buildername'],
-          swarming_parent_run_id=api.swarming.task_id)
+          builder=builder_to_trigger['buildername'])
       api.buildbucket.schedule([request])
     return
 
