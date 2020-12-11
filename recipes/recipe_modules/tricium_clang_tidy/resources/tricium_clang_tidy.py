@@ -177,8 +177,24 @@ _TidyReplacement = collections.namedtuple(
     '_TidyReplacement',
     ['new_text', 'start_line', 'end_line', 'start_char', 'end_char'])
 
+# Notes which specifically reference macro expansion.
 _ExpandedFrom = collections.namedtuple('_ExpandedFrom',
                                        ['file_path', 'line_number'])
+
+
+class _TidyNote(
+    collections.namedtuple('_TidyNote', [
+        'file_path',
+        'line_number',
+        'message',
+        'expansion_locs',
+    ])):
+  """A note emitted by clang-tidy."""
+
+  def to_dict(self):
+    my_dict = self._asdict()
+    my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
+    return my_dict
 
 
 # Note that we shove these in a set for cheap deduplication, and we sort based
@@ -186,8 +202,13 @@ _ExpandedFrom = collections.namedtuple('_ExpandedFrom',
 # deterministic/pretty output.
 class _TidyDiagnostic(
     collections.namedtuple('_TidyDiagnostic', [
-        'file_path', 'line_number', 'diag_name', 'message', 'replacements',
-        'expansion_locs'
+        'file_path',
+        'line_number',
+        'diag_name',
+        'message',
+        'replacements',
+        'expansion_locs',
+        'notes',
     ])):
   """A diagnostic emitted by clang-tidy"""
 
@@ -195,6 +216,7 @@ class _TidyDiagnostic(
     my_dict = self._asdict()
     my_dict['replacements'] = [x._asdict() for x in my_dict['replacements']]
     my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
+    my_dict['notes'] = [x.to_dict() for x in my_dict['notes']]
     return my_dict
 
 
@@ -233,6 +255,40 @@ class _LineOffsetMap(object):
   @staticmethod
   def for_text(data):
     return _LineOffsetMap([m.start() for m in re.finditer(r'\n', data)])
+
+
+class _DiagnosticNoteBuilder(object):
+  """Converts a flat series of notes from YAML into a 'tree' of notes.
+
+  Each note can have "expanded from" notes associated with it. There may also
+  be "expanded from" entries associated with the top-level diagnostic.
+  """
+
+  def __init__(self):
+    self._top_level_expansion_locs = []
+    self._notes = []
+
+  def push_expansion_loc(self, expanded_from):
+    if self._notes:
+      self._notes[-1].expansion_locs.append(expanded_from)
+    else:
+      self._top_level_expansion_locs.append(expanded_from)
+
+  def push_tidy_note(self, file_path, line_number, message):
+    self._notes.append(
+        _TidyNote(
+            file_path=file_path,
+            line_number=line_number,
+            message=message,
+            expansion_locs=[],
+        ))
+
+  def build_top_level_expansions(self):
+    return tuple(self._top_level_expansion_locs)
+
+  def build_notes(self):
+    return tuple(
+        x._replace(expansion_locs=tuple(x.expansion_locs)) for x in self._notes)
 
 
 def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
@@ -320,18 +376,24 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
                 end_char=line_offsets.get_line_offset(end_offset),
             ))
 
-      expansion_locs = []
+      notes_builder = _DiagnosticNoteBuilder()
       for note in diag.get('Notes', ()):
-        if not note['Message'].startswith('expanded from macro '):
-          continue
-
         absolute_note_path = makeabs(note['FilePath'])
         note_offsets = get_line_offsets(absolute_note_path)
-        expansion_locs.append(
-            _ExpandedFrom(
-                file_path=absolute_note_path,
-                line_number=note_offsets.get_line_number(note['FileOffset']),
-            ))
+        line_number = note_offsets.get_line_number(note['FileOffset'])
+        note_message = note['Message']
+        if note_message.startswith('expanded from macro '):
+          notes_builder.push_expansion_loc(
+              _ExpandedFrom(
+                  file_path=absolute_note_path,
+                  line_number=line_number,
+              ))
+        else:
+          notes_builder.push_tidy_note(
+              file_path=absolute_note_path,
+              line_number=line_number,
+              message=note_message,
+          )
 
       yield _TidyDiagnostic(
           diag_name=diag['DiagnosticName'],
@@ -339,7 +401,8 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
           file_path=absolute_file_path,
           line_number=line_offsets.get_line_number(message['FileOffset']),
           replacements=tuple(replacements),
-          expansion_locs=tuple(expansion_locs),
+          expansion_locs=notes_builder.build_top_level_expansions(),
+          notes=notes_builder.build_notes(),
       )
   except KeyError as k:
     key_name = k.args[0]

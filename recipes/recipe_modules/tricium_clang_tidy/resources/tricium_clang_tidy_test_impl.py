@@ -62,7 +62,8 @@ def _build_tidy_diagnostic(file_path,
                            diag_name,
                            message,
                            replacements=(),
-                           expansion_locs=()):
+                           expansion_locs=(),
+                           notes=()):
   """Builds a _TidyDiagnostic with a few default values for convenience."""
   return tidy._TidyDiagnostic(
       file_path=file_path,
@@ -71,6 +72,7 @@ def _build_tidy_diagnostic(file_path,
       message=message,
       replacements=replacements,
       expansion_locs=expansion_locs,
+      notes=notes,
   )
 
 
@@ -276,6 +278,71 @@ class Tests(unittest.TestCase):
             _to_stringio(diag_yaml),
             tidy_invocation_dir='/tidy'))
     self.assertEqual(fixes, tidy_diags)
+
+  def test_tidy_notes_are_parsed_from_notes(self):
+    yaml = '\n'.join([
+        'MainSourceFile:  "/tmp/x.c"',
+        'Diagnostics:',
+        ' - DiagnosticName:  google-explicit-constructor',
+        '   DiagnosticMessage:',
+        '     Message:         foo',
+        '     FilePath:        "/tmp/x.c"',
+        '     FileOffset:      3',
+        '     Replacements:    []',
+        '   Notes:',
+        '     - Message:         "expanded from macro \'\'a\'\'"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      3',
+        '     - Message:         "message 2"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      2',
+        '     - Message:         "message 1"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      1',
+        '     - Message:         "expanded from macro \'\'a\'\'"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      2',
+        '',
+    ])
+
+    def read_line_offsets(file_path):
+      if file_path == '/tmp/x.c':
+        return tidy._LineOffsetMap([0, 1])
+      if file_path == '/tmp/x.h':
+        return tidy._LineOffsetMap([1, 2])
+      self.fail('Unknown parsed file path: %r' % file_path)
+
+    diags = list(
+        tidy._parse_tidy_fixes_file(
+            read_line_offsets=read_line_offsets,
+            stream=_to_stringio(yaml),
+            tidy_invocation_dir='/tidy'))
+
+    self.assertEqual(diags, [
+        _build_tidy_diagnostic(
+            file_path='/tmp/x.c',
+            line_number=3,
+            diag_name='google-explicit-constructor',
+            message='foo',
+            expansion_locs=(tidy._ExpandedFrom(
+                file_path='/tmp/x.h', line_number=3),),
+            notes=(
+                tidy._TidyNote(
+                    file_path='/tmp/x.h',
+                    line_number=2,
+                    message='message 2',
+                    expansion_locs=(),
+                ),
+                tidy._TidyNote(
+                    file_path='/tmp/x.h',
+                    line_number=1,
+                    message='message 1',
+                    expansion_locs=(tidy._ExpandedFrom(
+                        file_path='/tmp/x.h', line_number=2),),
+                ),
+            ),
+        )
+    ])
 
   def test_fix_parsing_doesnt_read_the_same_offsets_twice(self):
     tidy_diags = [
