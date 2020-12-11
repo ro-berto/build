@@ -254,6 +254,8 @@ class ResultDB(object):
     * coerce_negative_duration - If True, negative duration values will
       be coerced to 0. If false, tests results with negative duration values
       will be rejected with an error.
+    * result_file - path to result file for result_adapter to read test results
+      from. It is meaningful only when result_format is not None.
   """
   enable = attrib(bool, default=False)
   result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
@@ -263,6 +265,7 @@ class ResultDB(object):
   base_variant = mapping_attrib(str, str, default=None)
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
+  result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
 
   @classmethod
   def create(cls, **kwargs):
@@ -321,7 +324,7 @@ class ResultDB(object):
     if configs.result_format:
       result_adapter = [
           'result_adapter', configs.result_format, '-artifact-directory',
-          '${ISOLATED_OUTDIR}', '-result-file', '${ISOLATED_OUTDIR}/output.json'
+          '${ISOLATED_OUTDIR}', '-result-file', configs.result_file
       ]
       if configs.result_format == 'json' and configs.test_id_as_test_location:
         result_adapter += ['-test-location']
