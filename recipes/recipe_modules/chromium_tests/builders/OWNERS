@@ -1,6 +1,9 @@
 file://recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
 
 per-file chromium_android*=bpastene@chromium.org
+per-file chromium_angle.py=jmadill@chromium.org
+per-file chromium_angle.py=kbr@chromium.org
+per-file chromium_angle.py=ynovikov@chromium.org
 per-file chromium_clang.py=hans@chromium.org
 per-file chromium_clang.py=thakis@chromium.org
 per-file chromium_dawn.py=kbr@chromium.org

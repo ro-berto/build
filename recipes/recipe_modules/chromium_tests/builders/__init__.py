@@ -6,6 +6,7 @@ from .. import bot_db, bot_spec
 from . import chromium
 from . import chromium_android
 from . import chromium_android_fyi
+from . import chromium_angle
 from . import chromium_chromiumos
 from . import chromium_clang
 from . import chromium_dawn
