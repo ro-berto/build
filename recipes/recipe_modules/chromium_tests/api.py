@@ -662,8 +662,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         update_properties=update_step.presentation.properties,
         custom_vars=custom_vars)
 
-    self.m.symupload(self.m.chromium.output_dir)
-
   def _get_chrome_version(self):
     chrome_version = self.m.properties.get('chrome_version')
     if not chrome_version:
