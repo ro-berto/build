@@ -5,6 +5,7 @@
 
 import os
 import sys
+import tempfile
 import unittest
 
 import mock
@@ -85,6 +86,183 @@ class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
       with self.assertRaises(Exception):
         generator.get_coverage_data_and_paths(
             '/b/some/path/src', '/b/some/path/coverage_data.json')
+
+  def test_convert_to_line_column(self):
+    mock_source_file = 'exports.test = arg => { return arg ? "y" : "n" }'
+    mock_coverage_blocks = [{
+        'end': 41,
+        'count': 1
+    }, {
+        'end': 46,
+        'count': 0
+    }, {
+        'end': 48,
+        'count': 1
+    }]
+
+    expected_output = (
+        # Covered lines
+        [{
+            'count': 1,
+            'first': 1,
+            'last': 1
+        }],
+        # Uncovered Blocks
+        [{
+            'ranges': [{
+                'end': 46,
+                'first': 41
+            }],
+            'line': 1
+        }],
+    )
+
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w+') as f:
+      f.write(mock_source_file)
+      f.seek(0, os.SEEK_SET)
+
+      output = generator.convert_coverage_to_line_column_format(
+          f.name, mock_coverage_blocks)
+
+      self.assertEqual(output, expected_output)
+
+  def test_convert_to_line_column_coverage_offset_smaller_than_file(self):
+    mock_source_file = 'exports.test = arg => { return arg ? "yes" : "no" }'
+    mock_coverage_blocks = [{
+        'end': 41,
+        'count': 1
+    }, {
+        'end': 46,
+        'count': 0
+    }, {
+        'end': 48,
+        'count': 1
+    }]
+
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w+') as f:
+      f.write(mock_source_file)
+      f.seek(0, os.SEEK_SET)
+
+      with self.assertRaises(Exception):
+        generator.convert_coverage_to_line_column_format(
+            f.name, mock_coverage_blocks)
+
+  def test_convert_to_line_column_coverage_offset_bigger_than_file(self):
+    mock_source_file = 'exports.test = arg => { return arg ? "y" : "n" }'
+    mock_coverage_blocks = [{
+        'end': 41,
+        'count': 1
+    }, {
+        'end': 46,
+        'count': 0
+    }, {
+        'end': 50,
+        'count': 1
+    }]
+
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w+') as f:
+      f.write(mock_source_file)
+      f.seek(0, os.SEEK_SET)
+
+      with self.assertRaises(Exception):
+        generator.convert_coverage_to_line_column_format(
+            f.name, mock_coverage_blocks)
+
+  def test_convert_to_line_column_multiple_lines(self):
+    mock_source_file = 'function test(arg) {\n\
+  arg += 1;\n\
+  if (arg == 2) {\n\
+    return "yes";\n\
+  }\n\
+  if (arg == 3) {\n\
+    return "no";\n\
+  }\n\
+  return "maybe";\n\
+}\n\
+exports.test = test;'
+
+    mock_coverage_blocks = [{
+        'count': 3,
+        'end': 49
+    }, {
+        'count': 1,
+        'end': 72
+    }, {
+        'count': 2,
+        'end': 89
+    }, {
+        'count': 0,
+        'end': 111
+    }, {
+        'count': 2,
+        'end': 130
+    }, {
+        'count': 3,
+        'end': 131
+    }, {
+        'count': 1,
+        'end': 152
+    }]
+
+    expected_output = (
+        # Covered lines
+        [{
+            'count': 3,
+            'last': 3,
+            'first': 1
+        }, {
+            'count': 1,
+            'last': 4,
+            'first': 4
+        }, {
+            'count': 2,
+            'last': 6,
+            'first': 5
+        }, {
+            'count': 0,
+            'first': 7,
+            'last': 7
+        }, {
+            'count': 2,
+            'last': 9,
+            'first': 8
+        }, {
+            'count': 3,
+            'last': 10,
+            'first': 10
+        }, {
+            'count': 1,
+            'last': 11,
+            'first': 11
+        }],
+        # Uncovered blocks
+        [{
+            'ranges': [{
+                'end': 18,
+                'first': 16
+            }],
+            'line': 6
+        }, {
+            'ranges': [{
+                'end': 17,
+                'first': 0
+            }],
+            'line': 7
+        }, {
+            'ranges': [{
+                'end': 3,
+                'first': 0
+            }],
+            'line': 8
+        }])
+
+    with tempfile.NamedTemporaryFile(suffix='.js', mode='w+') as f:
+      f.write(mock_source_file)
+      f.seek(0, os.SEEK_SET)
+
+      output = generator.convert_coverage_to_line_column_format(
+          f.name, mock_coverage_blocks)
+      self.assertEqual(output, expected_output)
 
 
 if __name__ == '__main__':

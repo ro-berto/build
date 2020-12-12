@@ -148,13 +148,97 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
 
     def _add_uncovered_block(coverage_start_offset, coverage_end_offset,
                              line_start_offset, line_end_offset):
-      # TODO(benreich): Implement adding of an uncovered block of code
-      pass
+      """Adds uncovered code block to |uncovered_blocks|
+
+      If the supplied coverage offsets extend before or after the supplied
+      line offsets, only add a coverage block for the current line. If the
+      line is already under consideration (i.e. multiple disjoint uncovered
+      blocks exist on the same line) then append to the ranges array for
+      the last line added to |uncovered_blocks|.
+
+      Args:
+        coverage_start_offset: The uncovered coverage block start
+          character offset (inclusive)
+        coverage_end_offset: The uncovered coverage block end character
+          offset (exclusive)
+        line_start_offset: The absolute character offset for the start
+          off the current line. (inclusive)
+        line_end_offset: The absolute character offset for the end
+          off the current line. (inclusive)
+      """
+      uncovered_block_start = max(coverage_start_offset,
+                                  line_start_offset) - line_start_offset
+      uncovered_block_end = min(coverage_end_offset,
+                                line_end_offset) - line_start_offset
+      uncovered_block = None
+
+      if uncovered_blocks and uncovered_blocks[-1]['line'] == line_num:
+        uncovered_block = uncovered_blocks.pop()
+      else:
+        uncovered_block = {'line': line_num, 'ranges': []}
+
+      uncovered_block['ranges'].append({
+          'first': uncovered_block_start,
+          'end': uncovered_block_end
+      })
+      uncovered_blocks.append(uncovered_block)
 
     def _append_or_extend_previous_line_range(line_num, coverage_count):
-      # TODO(benreich): Implement extending a line range that has already
-      #   been added to the list of lines.
-      pass
+      """Extends the last added line range identified
+
+      If the last line added to |lines| has the same coverage count
+      as the supplied line, extend the last value on the final
+      element in |lines|. Otherwise, append a new line.
+
+      If the last line added to |lines| and the supplied |line_num|
+      have a gap, append a line range of 0 count from last line + 1
+      up until |line_num| - 1 to indicate instrumented but not
+      invoked line range. This line range will match up with a
+      corresponding uncovered_block.
+
+      Args:
+        line_num: The current line number
+        coverage_count: Invocation count for |line_num|
+      """
+      if lines and line_num == lines[-1]['last'] + 1 \
+          and lines[-1]['count'] == coverage_count:
+        # Extend previous LineRange by one line.
+        lines[-1]['last'] = line_num
+      elif lines and line_num == lines[-1]['last'] \
+          and lines[-1]['count'] < coverage_count:
+        if lines[-1]['last'] > lines[-1]['first']:
+          # LineRange extends across multiple lines
+          # break it up instead of changing count.
+          lines[-1]['last'] = line_num - 1
+          lines.append({
+              'first': line_num,
+              'last': line_num,
+              'count': coverage_count
+          })
+        else:
+          # Larger coverage found on same line, use
+          # higher count.
+          lines[-1]['count'] = coverage_count
+      elif lines and line_num == lines[-1]['last'] \
+          and lines[-1]['count'] >= coverage_count:
+        # Same or smaller count identified on same line, discard.
+        return
+      else:
+        if lines and lines[-1]['last'] < line_num - 1:
+          # Pad lines with 0 count LineRange up to the
+          # current line.
+          lines.append({
+              'first': lines[-1]['last'] + 1,
+              'last': line_num - 1,
+              'count': 0
+          })
+
+        # Start new LineRange.
+        lines.append({
+            'first': line_num,
+            'last': line_num,
+            'count': coverage_count
+        })
 
     def _is_coverage_within_line_range(coverage_start_offset,
                                        coverage_end_offset, line_start_offset,
@@ -243,13 +327,12 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
         if not coverage_data:
           raise Exception(
               'Source file still has characters without coverage data, final '
-              'coverage block must match total characters in source file'
-          )
+              'coverage block must match total characters in source file')
 
         coverage_block = coverage_data.pop(0)
         # Use the previous coverage block end offset to
         # start the next coverage block.
-        coverage_start_offset = 0 if not coverage_block else coverage_end_offset
+        coverage_start_offset = coverage_end_offset
         coverage_end_offset = coverage_block['end']
         coverage_count = coverage_block['count']
 
