@@ -1161,15 +1161,9 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
     else:
       timed_out_src_files.append(normalized_path)
 
-  all_diagnostics = []
-  for diag in findings:
-    normalized_path = _normalize_path_to_base(diag.file_path, base_path)
-    if normalized_path is None:
-      logging.info('Dropping out-of-base diagnostic from %s', diag.file_path)
-      continue
-
-    normalized_locs = []
-    for loc in diag.expansion_locs:
+  def normalize_expansion_locs(expansion_locs):
+    results = []
+    for loc in expansion_locs:
       n = _normalize_path_to_base(loc.file_path, base_path)
       if n is None:
         logging.warning('Failed to normalize expansion loc path %s',
@@ -1179,14 +1173,40 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
         # only ultimately used so we can present better diagnostics to the
         # user, so there's no _hard_ requirement for them all to be relative to
         # a specific place.
-        normalized_locs.append(loc)
+        results.append(loc)
       else:
-        normalized_locs.append(loc._replace(file_path=n))
+        results.append(loc._replace(file_path=n))
+    return tuple(results)
+
+  all_diagnostics = []
+  for diag in findings:
+    normalized_path = _normalize_path_to_base(diag.file_path, base_path)
+    if normalized_path is None:
+      logging.info('Dropping out-of-base diagnostic from %s', diag.file_path)
+      continue
+
+    normalized_notes = []
+    for note in diag.notes:
+      # Sometimes, notes won't have an associated file-path. Drop those.
+      if not note.file_path:
+        logging.info('Dropping note with no file path: %r', note)
+        continue
+
+      n = _normalize_path_to_base(note.file_path, base_path)
+      if n is None:
+        logging.info('Dropping out-of-base note from %s', note.file_path)
+        continue
+      normalized_notes.append(
+          note._replace(
+              file_path=n,
+              expansion_locs=normalize_expansion_locs(note.expansion_locs),
+          ))
 
     all_diagnostics.append(
         diag._replace(
             file_path=normalized_path,
-            expansion_locs=normalized_locs,
+            expansion_locs=normalize_expansion_locs(diag.expansion_locs),
+            notes=tuple(normalized_notes),
         ))
 
   if only_src_files is not None:

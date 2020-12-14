@@ -871,6 +871,49 @@ class Tests(unittest.TestCase):
             'timed_out_src_files': [],
         })
 
+  def test_output_conversion_drops_notes_with_empty_paths(self):
+    self._silence_logs()
+
+    main_action = tidy._TidyAction(
+        cc_file='/foo/src_file.cc', target='bar.o', in_dir='in/', flags='')
+    result = tidy._convert_tidy_output_json_obj(
+        base_path='/foo',
+        tidy_actions={
+            main_action: ['/foo/src_file.cc', '/foo/src_file.h'],
+        },
+        failed_actions=[],
+        failed_tidy_actions=[],
+        timed_out_actions=[],
+        findings=[
+            _build_tidy_diagnostic(
+                file_path='/foo/src_file.cc',
+                line_number=1,
+                diag_name='bar',
+                message='baz',
+                notes=(tidy._TidyNote(
+                    file_path='',
+                    line_number=0,
+                    message='oh no',
+                    expansion_locs=(),
+                ),)),
+        ],
+        only_src_files=['/foo/src_file.cc'],
+    )
+
+    self.assertEqual(
+        result, {
+            'diagnostics': [
+                _build_tidy_diagnostic(
+                    file_path='src_file.cc',
+                    line_number=1,
+                    diag_name='bar',
+                    message='baz').to_dict(),
+            ],
+            'failed_src_files': [],
+            'failed_tidy_files': [],
+            'timed_out_src_files': [],
+        })
+
   def test_output_conversion_translates_expansion_locs(self):
     self._silence_logs()
 
@@ -894,6 +937,23 @@ class Tests(unittest.TestCase):
                     tidy._ExpandedFrom('/foo/src_file2.h', 1),
                     tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
                 ),
+                notes=(
+                    tidy._TidyNote(
+                        file_path='/foo/src_file_dne.h',
+                        line_number=1,
+                        message='note',
+                        expansion_locs=(
+                            tidy._ExpandedFrom('/foo/src_file.h', 1),
+                            tidy._ExpandedFrom('/bar/out_of_base.h', 3),
+                        ),
+                    ),
+                    tidy._TidyNote(
+                        file_path='/bar/src_file_dne.h',
+                        line_number=1,
+                        message='note outside of base',
+                        expansion_locs=(),
+                    ),
+                ),
             ),
         ],
         only_src_files=None,
@@ -910,7 +970,17 @@ class Tests(unittest.TestCase):
                     expansion_locs=(
                         tidy._ExpandedFrom('src_file2.h', 1),
                         tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
-                    )).to_dict(),
+                    ),
+                    notes=(tidy._TidyNote(
+                        file_path='src_file_dne.h',
+                        line_number=1,
+                        message='note',
+                        expansion_locs=(
+                            tidy._ExpandedFrom('src_file.h', 1),
+                            tidy._ExpandedFrom('/bar/out_of_base.h', 3),
+                        ),
+                    ),),
+                ).to_dict(),
             ],
             'failed_src_files': [],
             'failed_tidy_files': [],
