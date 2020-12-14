@@ -256,7 +256,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     result.presentation.properties['coverage_is_presubmit'] = (
         self._is_per_cl_coverage)
 
-  def instrument(self, affected_files, output_dir=None):
+  def instrument(self,
+                 affected_files,
+                 output_dir=None,
+                 is_deps_only_change=False):
     """Saves source paths to generate coverage instrumentation for to a file.
 
     Args:
@@ -273,6 +276,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self.m.python.succeeding_step(
           'skip instrumenting code coverage because >200 files are modified',
           '')
+    if is_deps_only_change:
+      # Skip instrumentation if current change is a DEPS only change.
+      # This is because code_coverage recipe module expects affected_files to
+      # belong to a chromium checkout, and in case of DEPS only change
+      # affected_files belong to third party code.
+      affected_files = []
+      self.m.python.succeeding_step(
+          'Skip instrumentating code coverage because DEPS only change', '')
 
     if not output_dir:
       output_dir = self.m.chromium.output_dir
@@ -288,6 +299,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
+
     self.m.python(
         'save paths of affected files',
         self.resource('write_paths_to_instrument.py'),

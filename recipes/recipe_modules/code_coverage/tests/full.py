@@ -37,7 +37,9 @@ def RunSteps(api):
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
   if 'tryserver' in builder_id.group:
-    api.code_coverage.instrument(api.properties['files_to_instrument'])
+    api.code_coverage.instrument(
+        api.properties['files_to_instrument'],
+        is_deps_only_change=api.properties.get('is_deps_only_change', False))
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
         api.profiles.profile_dir().join('unit-merged.profdata'))
@@ -259,6 +261,17 @@ def GenTests(api):
       api.properties(files_to_instrument=[
           'some/path/to/file%d.cc' % i for i in range(500)
       ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'tryserver skip instrumenting if DEPS only change',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=['third_party/skia/file.cc']),
+      api.properties(is_deps_only_change=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

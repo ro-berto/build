@@ -1873,12 +1873,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True
     )
+
+    is_deps_only_change = affected_files == ["DEPS"]
     affected_files = self.revise_affected_files_for_deps_autorolls(
         bot, affected_files, build_config)
 
     # Must happen before without patch steps.
     if self.m.code_coverage.using_coverage:
-      self.m.code_coverage.instrument(affected_files)
+      self.m.code_coverage.instrument(
+          affected_files, is_deps_only_change=is_deps_only_change)
 
     tests, tests_including_triggered = self._gather_tests_to_run(
         bot, build_config)
