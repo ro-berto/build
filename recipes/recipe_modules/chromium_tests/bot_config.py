@@ -112,8 +112,6 @@ class BotConfig(object):
 
     source_side_specs = self._get_source_side_specs(chromium_tests_api)
     tests = {}
-    # builder group -> builder -> test names
-    mastername_substitutions = {}
     # migration type -> builder group -> builder -> test info
     # migration type is one of 'already migrated', 'needs migration', 'mismatch'
     # test info is a dict with key 'test' storing the name of the test and the
@@ -135,11 +133,6 @@ class BotConfig(object):
           ))
       tests[builder_id] = builder_tests
 
-      for test in builder_tests:
-        if test.spec.substituted_mastername:
-          group_dict = mastername_substitutions.setdefault(builder_id.group, {})
-          group_dict.setdefault(builder_id.builder, set()).add(test.name)
-
       for key, migration_tests in builder_migration_state.iteritems():
         if not migration_tests:
           continue
@@ -147,29 +140,11 @@ class BotConfig(object):
         group_dict = migration_type_dict.setdefault(builder_id.group, {})
         group_dict[builder_id.builder] = migration_tests
 
-    if mastername_substitutions:
-      self._report_mastername_subsitutions(chromium_tests_api,
-                                           mastername_substitutions)
-
     if migration_state:
       self._report_test_spec_migration_state(chromium_tests_api,
                                              migration_state)
 
     return BuildConfig(chromium_tests_api, self, source_side_specs, tests)
-
-  @staticmethod
-  def _report_mastername_subsitutions(chromium_tests_api,
-                                      mastername_substitutions):
-    step_api = chromium_tests_api.m.step
-    with step_api.nest('mastername substitution') as presentation:
-      presentation.step_text = (
-          '\nThis is an informational step for infra maintainers')
-      for group, builders in sorted(mastername_substitutions.iteritems()):
-        with step_api.nest(group):
-          for builder, tests in sorted(builders.iteritems()):
-            with step_api.nest(builder):
-              for t in sorted(tests):
-                step_api(t, [])
 
   @staticmethod
   def _report_test_spec_migration_state(chromium_tests_api, migration_state):

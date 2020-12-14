@@ -57,9 +57,6 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
   # Perform substitution of known variables.
   build = chromium_tests_api.m.buildbucket.build
   cl = (build.input.gerrit_changes or [None])[0]
-
-  substituted_mastername = False
-  new_args = []
   substitutions = {
       'buildbucket_build_id':
           build.id,
@@ -94,17 +91,7 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
       'xcode_build_version':
           api.chromium.xcode_build_version
   }
-  for arg in args:
-    arg = string.Template(arg).safe_substitute(substitutions)
-    # TODO(https://crbug.com/1109276) Once no tests are using the mastername
-    # substitution, stop doing it
-    new_arg = string.Template(arg).safe_substitute(
-        mastername=api.builder_group.for_current)
-    if new_arg != arg:
-      substituted_mastername = True
-    new_args.append(new_arg)
-
-  return new_args, substituted_mastername
+  return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
 # TODO(crbug.com/1108016): Enable resultdb globally.
@@ -364,16 +351,14 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
   def gtest_delegate_common(raw_test_spec, **kwargs):
     del kwargs
     common_gtest_kwargs = {}
-    args, substituted_mastername = get_args_for_test(api, chromium_tests_api,
-                                                     raw_test_spec,
-                                                     bot_update_step)
+    args = get_args_for_test(api, chromium_tests_api, raw_test_spec,
+                             bot_update_step)
     if raw_test_spec['shard_index'] != 0 or raw_test_spec['total_shards'] != 1:
       args.extend([
           '--test-launcher-shard-index=%d' % raw_test_spec['shard_index'],
           '--test-launcher-total-shards=%d' % raw_test_spec['total_shards']
       ])
     common_gtest_kwargs['args'] = args
-    common_gtest_kwargs['substituted_mastername'] = substituted_mastername
 
     common_gtest_kwargs['override_compile_targets'] = raw_test_spec.get(
         'override_compile_targets', None)
@@ -504,8 +489,8 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
-    common_kwargs['args'], common_kwargs['substituted_mastername'] = (
-        get_args_for_test(api, chromium_tests_api, test, bot_update_step))
+    common_kwargs['args'] = get_args_for_test(api, chromium_tests_api, test,
+                                              bot_update_step)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
