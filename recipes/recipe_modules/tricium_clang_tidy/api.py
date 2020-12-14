@@ -7,7 +7,6 @@ of affected files, gather warnings, and post via Tricium.
 """
 
 import collections
-import json
 
 from recipe_engine.recipe_api import RecipeApi
 
@@ -108,6 +107,37 @@ class _SourceFileComments(object):
 
       subcategory = '/'.join([category, check_name])
       yield subcategory, message + suffix + failure_suffix, line_number, ()
+
+
+def _parse_tidy_diagnostic(diagnostic, diagnostic_name):
+  """Parses a single clang-tidy diagnostic into tricium-amenable messages."""
+  base_message = diagnostic['message']
+  base_line_number = diagnostic['line_number']
+  base_file_path = diagnostic['file_path']
+  yield (
+      base_message,
+      base_line_number,
+      base_file_path,
+      diagnostic['expansion_locs'],
+  )
+
+  # bugprone-use-after-move can be caused either by the addition of a use after
+  # a move, or by the addition of a move before a use. We want to warn about
+  # both cases, since CLs can easily introduce either.
+  if diagnostic_name != 'bugprone-use-after-move':
+    return
+
+  for note in diagnostic.get('notes', ()):
+    if note['message'] != 'move occurred here':
+      continue
+
+    message = 'A `move` operation occurred here, which caused %r at %s:%d' % (
+        base_message,
+        base_file_path,
+        base_line_number,
+    )
+    yield message, note['line_number'], note['file_path'], note[
+        'expansion_locs']
 
 
 class TriciumClangTidyApi(RecipeApi):
@@ -227,21 +257,27 @@ class TriciumClangTidyApi(RecipeApi):
       else:
         suggestions = ()
 
-      message = diagnostic['message']
-      report_line = diagnostic['line_number']
-      report_file = file_path
-
-      expansions = diagnostic['expansion_locs']
-      if expansions:
-        # Expansions are emitted by clang-tidy (thus tricium_clang_tidy) such
-        # that item [i] "invokes" the expansion of [i+1]. So the last item in
-        # this list should tell us where the original macro definition is.
-        e = expansions[-1]
-        per_file_comments[e['file_path']].add_macro_expanded_tidy_diagnostic(
-            message, e['line_number'], diag_name, suggestions, report_file,
-            report_line)
-      else:
-        per_file_comments[report_file].add_tidy_diagnostic(
-            message, report_line, diag_name, suggestions)
+      # One clang-tidy diagnostic can turn into multiple Tricium comments when
+      # there's action at a distance (e.g., we report use-after-move both where
+      # the use occurs, and where each move that could end in badness occurs).
+      # crbug.com/1157503
+      #
+      # Because all messages have the same diagnostic, we attach the same set
+      # of replacements to each message.
+      for message, line, file_path, expansions in _parse_tidy_diagnostic(
+          diagnostic, diag_name):
+        if expansions:
+          # Expansions are emitted by clang-tidy (thus tricium_clang_tidy) such
+          # that item [i] "invokes" the expansion of [i+1]. So the last item in
+          # this list should tell us where the original macro definition is.
+          e = expansions[-1]
+          # FIXME(gbiv): In general, notes should be handled here, as well. It's
+          # unclear how to do so cleanly.
+          per_file_comments[e['file_path']].add_macro_expanded_tidy_diagnostic(
+              message, e['line_number'], diag_name, suggestions, file_path,
+              line)
+        else:
+          per_file_comments[file_path].add_tidy_diagnostic(
+              message, line, diag_name, suggestions)
 
     return per_file_comments

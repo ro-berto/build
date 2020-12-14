@@ -361,3 +361,53 @@ def GenTests(api):
          api.post_process(post_process.StepWarning, 'clang-tidy') +
          api.post_process(post_process.StatusSuccess) +
          api.post_process(post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'diagnostic_use_after_move',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'diagnostics': [{
+                  'file_path': 'path/to/some/cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'bugprone-use-after-move',
+                  'message': 'base message',
+                  'replacements': [],
+                  'notes': [
+                      {
+                          'message': 'clang-tidy go brrrrr',
+                          'line_number': 123,
+                          'file_path': 'path/to/some/cc/file.cpp',
+                          'expansion_locs': [],
+                      },
+                      {
+                          'message': 'move occurred here',
+                          'line_number': 321,
+                          'file_path': 'path/to/some/cc/file.cpp',
+                          'expansion_locs': [],
+                      },
+                  ],
+                  'expansion_locs': [],
+              },]
+          })) + api.post_process(post_process.StepSuccess,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(_tricium_outputs_json, [
+             {
+                 'category': 'ClangTidy/bugprone-use-after-move',
+                 'path': 'path/to/some/cc/file.cpp',
+                 'message': 'base message '
+                            '(https://clang.llvm.org/extra/clang-tidy/checks/'
+                            'bugprone-use-after-move.html)',
+                 'startLine': 2,
+             },
+             {
+                 'category': 'ClangTidy/bugprone-use-after-move',
+                 'path': 'path/to/some/cc/file.cpp',
+                 'message': 'A `move` operation occurred here, which caused '
+                            "'base message' at path/to/some/cc/file.cpp:2 "
+                            '(https://clang.llvm.org/extra/clang-tidy/checks/'
+                            'bugprone-use-after-move.html)',
+                 'startLine': 321,
+             },
+         ]) + api.post_process(post_process.DropExpectation))
