@@ -14,8 +14,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 #
 # Skylab tests are invoked via a luci rpc call to cros_test_platform builder,
 # aka CTP. CTP supports multiple request in one build, where each request has
-# an unique tag. A request executes an autotest suite test, which can wrapper
-# one or more tast suites. Users must specify the autotest suite name in their
+# an unique tag. A request executes an autotest test, which wraps one
+# tast suite. Users must specify this autotest wrapper name in their
 # request.
 #
 # As LaCrOS decided to use tast test framework, this module is designed to be
@@ -46,7 +46,8 @@ class SkylabRequest(object):
   Attributes:
     * display_name: The step name to display in Milo frontend.
     * request_tag: The tag to identify a request in the CTP build.
-    * suite: The autotest wrapper name, e.g. bvt-tast-chrome-pfq.
+    * suite: The autotest test which wraps a tast suite,
+             e.g. tast.critical-chrome.
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
                 e.g. atlas-release/R88-13545.0.0
@@ -119,11 +120,11 @@ class SkylabTaggedResponses(object):
 
   Attributes:
     * build_id: CTP's build ID.
-    * responses: A mapping of request tag to the SkylabResponse.
+    * responses: A mapping of request tag to the list of SkylabResponses.
     * status: Representation of the CTP build status.
   """
   build_id = attrib(int, default=0)
-  responses = mapping_attrib(str)
+  responses = mapping_attrib(str, tuple)
   status = attrib(int, default=0)
 
   @classmethod

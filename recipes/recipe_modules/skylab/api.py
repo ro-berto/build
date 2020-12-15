@@ -54,18 +54,19 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
         req.params.migrations.enable_synchronous_offload = True
-        suite_to_create = req.test_plan.suite.add()
-        suite_to_create.name = s.suite
+        autotest_to_create = req.test_plan.test.add()
+        # SkylabRequest.suite is tast suite, represented by an autotest test.
+        autotest_to_create.autotest.name = s.suite
         tags = {
             'label-pool': 'DUT_POOL_QUOTA',
             'label-board': s.board,
             'build': gs_img_uri,
             'suite': s.suite,
         }
-        request_tags = [
+        swarming_tags = [
             '{}:{}'.format(key, value) for key, value in tags.items()
         ]
-        req.params.decorations.tags.extend(request_tags)
+        req.params.decorations.tags.extend(swarming_tags)
         if retry:
           self._enable_test_retries(req)
         reqs[s.request_tag] = json_format.MessageToDict(req)
@@ -118,6 +119,8 @@ class SkylabApi(recipe_api.RecipeApi):
       tagged_responses = {}
       responses = self._get_multi_response_binary(ctp_build)
       for t in responses:
+        # Note, request tag is mapped to a list of responses, because CTP has
+        # retry logic. A single request may have multiple attempts executed.
         tagged_responses[t] = self._translate_result(
             responses.get(t, self._default_failed_response()))
 
@@ -130,8 +133,6 @@ class SkylabApi(recipe_api.RecipeApi):
 
   def _enable_test_retries(self, req):
     """Enable test retries within suites.
-
-    The values here are in-line with what LCQ currently does.
 
     Args:
       params: A request.Request object.

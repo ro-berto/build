@@ -35,7 +35,9 @@ def RunSteps(api):
   got = api.skylab.wait_on_suites(build_id, timeout_seconds=3600)
   api.assertions.assertEqual(got.status, common_pb2.SUCCESS)
   api.assertions.assertIn('m88_lacros', got.responses)
+  api.assertions.assertEqual(len(got.responses.get('m88_lacros')), 3)
   api.assertions.assertIn('m87_lacros', got.responses)
+  api.assertions.assertEqual(len(got.responses.get('m87_lacros')), 3)
 
 
 def GenTests(api):
