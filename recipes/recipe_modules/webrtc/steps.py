@@ -172,7 +172,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
         'iOS64 Sim Debug (iOS 13)',
         'ios_sim_x64_dbg_ios13',
         'iOS64 Sim Debug (iOS 12)',
-        'ios_sim_x64_dbg_ios12 ',
+        'ios_sim_x64_dbg_ios12',
     ]:
       tests += [
           IosTest(
