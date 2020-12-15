@@ -362,6 +362,67 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
     return lines, uncovered_blocks
 
 
+def get_coverage_metric_summaries():
+  # TODO(benreich): Implement coverage metric summary of
+  #                 covered lines per file.
+  return []
+
+
+def get_files_coverage_data(src_path, coverage_files):
+  """Extract and convert coverage data to required format.
+
+  Takes in a coverage file which contains the merged v8 coverage
+  format and return back a list of files which conform to the
+  File message type.
+
+  Args:
+    src_path: The absolute path to the source files checkout.
+    coverage_files: A list of files containing merged coverage.
+
+  Returns:
+    List of File dictionaries defined as:
+    {
+      lines: List of lines and their invocation counts.
+      uncovered_blocks: Blocks of code uncovered by coverage.
+      path: Path to source file relative to src checkout.
+      summaries: Summary of metric data for the file.
+    }
+
+  Raises:
+    Exception: If 2+ coverage files contain the same source file
+      which may happen if tests for source files are sharded
+      over different builders.
+  """
+  files_coverage_data = []
+  files_seen = set()
+
+  for file_path in coverage_files:
+    source_files_and_coverage_data = get_coverage_data_and_paths(
+        src_path, file_path)
+
+    for absolute_source_path, coverage in source_files_and_coverage_data.items(
+    ):
+      if absolute_source_path in files_seen:
+        # TODO(benreich): Allow for merging of duplicate coverage data.
+        #   This may occur when tests are sharded and 2 tests covering
+        #   the same file is on 2 different shards.
+        raise Exception(
+            'Duplicate source file %s found, merging during this step '
+            'not supported' % absolute_source_path)
+
+      files_seen.add(absolute_source_path)
+      covered_lines, uncovered_blocks = convert_coverage_to_line_column_format(
+          absolute_source_path, coverage)
+      files_coverage_data.append({
+          'lines': covered_lines,
+          'uncovered_blocks': uncovered_blocks,
+          'path': '//' + os.path.relpath(absolute_source_path, src_path),
+          'summaries': get_coverage_metric_summaries(),
+      })
+
+  return files_coverage_data
+
+
 def _parse_args(args):
   """Parses the arguments.
 
@@ -421,28 +482,11 @@ def main():
     raise Exception('No coverage file found under %s' % params.coverage_dir)
   logging.info('Found coverage files: %s', str(coverage_files))
 
-  coverage_by_absolute_path = {}
-  for file_path in coverage_files:
-    source_files_and_coverage_data = get_coverage_data_and_paths(
-        params.src_path, file_path)
+  data = {}
+  data['files'] = get_files_coverage_data(params.src_path, coverage_files)
 
-    for absolute_source_path, coverage in source_files_and_coverage_data.items(
-    ):
-      if absolute_source_path in coverage_by_absolute_path:
-        raise Exception(
-            'Duplicate source file %s found, merging during this step '
-            'not supported' % absolute_source_path)
-
-      covered_lines, uncovered_blocks = convert_coverage_to_line_column_format(
-          absolute_source_path, coverage)
-      coverage_by_absolute_path[absolute_source_path] = {
-          'lines': covered_lines,
-          'uncovered_blocks': uncovered_blocks,
-      }
-
-  if not coverage_by_absolute_path:
-    raise Exception('No source files found')
-  logging.info('Found source files: %s', str(coverage_by_absolute_path.keys()))
+  if not data['files']:
+    raise Exception('No coverage data associated with source files found.')
 
   # TODO(benreich): Finish off the extra information required for the format.
   #   - Add directory level summaries.

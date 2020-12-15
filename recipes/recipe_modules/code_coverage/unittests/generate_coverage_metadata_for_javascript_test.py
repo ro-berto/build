@@ -264,6 +264,105 @@ exports.test = test;'
           f.name, mock_coverage_blocks)
       self.assertEqual(output, expected_output)
 
+  def test_get_files_coverage_data_duplicate_files_exception(self):
+    absolute_checkout_path = '/b/some/src'
+
+    coverage_data_one = {
+        absolute_checkout_path + '/relative/path/to/file/a.js': [{
+            'end': 100,
+            'count': 2
+        },],
+        absolute_checkout_path + '/relative/path/to/file/b.js': [{
+            'end': 150,
+            'count': 1
+        },],
+    }
+
+    coverage_data_two = {
+        absolute_checkout_path + '/relative/path/to/file/a.js': [{
+            'end': 100,
+            'count': 2
+        },],
+        absolute_checkout_path + '/relative/path/to/file/c.js': [{
+            'end': 200,
+            'count': 4
+        },],
+    }
+
+    mock_get_coverage_data_and_paths = mock.Mock()
+    mock_convert_coverage_to_line_column_format = mock.Mock()
+
+    with mock.patch.object(generator, 'get_coverage_data_and_paths',
+                           mock_get_coverage_data_and_paths):
+
+      with mock.patch.object(generator,
+                             'convert_coverage_to_line_column_format',
+                             mock_convert_coverage_to_line_column_format):
+
+        mock_get_coverage_data_and_paths.side_effect = [
+            coverage_data_one, coverage_data_two
+        ]
+        mock_convert_coverage_to_line_column_format.return_value = ('covered',
+                                                                    'uncovered')
+        with self.assertRaises(Exception):
+          generator.get_files_coverage_data('/b/some/src', [
+              '/b/some/src/out/Default/coverage_one.json',
+              '/b/some/src/out/Default/coverage_two.json'
+          ])
+
+  def test_get_files_coverage_data_paths_relative_to_src(self):
+    coverage_data_one = {
+        '/b/some/src/path/to/file/a.js': [{
+            'end': 100,
+            'count': 2
+        },],
+        '/b/some/src/path/to/file/b.js': [{
+            'end': 150,
+            'count': 1
+        },],
+    }
+
+    coverage_data_two = {
+        '/b/some/src/path/to/file/c.js': [{
+            'end': 100,
+            'count': 2
+        },],
+        '/b/some/src/path/to/file/d.js': [{
+            'end': 200,
+            'count': 4
+        },],
+    }
+
+    expected_relative_paths = [
+        '//path/to/file/a.js',
+        '//path/to/file/b.js',
+        '//path/to/file/c.js',
+        '//path/to/file/d.js',
+    ]
+
+    mock_get_coverage_data_and_paths = mock.Mock()
+    mock_convert_coverage_to_line_column_format = mock.Mock()
+
+    with mock.patch.object(generator, 'get_coverage_data_and_paths',
+                           mock_get_coverage_data_and_paths):
+
+      with mock.patch.object(generator,
+                             'convert_coverage_to_line_column_format',
+                             mock_convert_coverage_to_line_column_format):
+
+        mock_get_coverage_data_and_paths.side_effect = [
+            coverage_data_one, coverage_data_two
+        ]
+        mock_convert_coverage_to_line_column_format.return_value = ('covered',
+                                                                    'uncovered')
+        output = generator.get_files_coverage_data('/b/some/src', [
+            '/b/some/src/out/Default/coverage_one.json',
+            '/b/some/src/out/Default/coverage_two.json'
+        ])
+
+        for file_data in output:
+          self.assertIn(file_data['path'], expected_relative_paths)
+
 
 if __name__ == '__main__':
   unittest.main()
