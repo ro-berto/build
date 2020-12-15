@@ -26,8 +26,7 @@ def gen_skylab_req(tag):
 
 def RunSteps(api):
   hw_test_req = gen_skylab_req('m88_lacros')
-  api.skylab.schedule_suites(
-      '', [hw_test_req], timeout_seconds=3600, retry=True)
+  api.skylab.schedule_suites('', [hw_test_req], retry=True)
 
 
 def GenTests(api):

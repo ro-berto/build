@@ -31,8 +31,7 @@ def gen_skylab_req(tag):
 def RunSteps(api):
   hw_test_req = gen_skylab_req('m88_lacros')
   another_hw_test_req = gen_skylab_req('m87_lacros')
-  build_id = api.skylab.schedule_suites(
-      '', [hw_test_req, another_hw_test_req], timeout_seconds=3600)
+  build_id = api.skylab.schedule_suites('', [hw_test_req, another_hw_test_req])
   got = api.skylab.wait_on_suites(build_id, timeout_seconds=3600)
   api.assertions.assertEqual(got.status, common_pb2.SUCCESS)
   api.assertions.assertIn('m88_lacros', got.responses)

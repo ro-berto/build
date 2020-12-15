@@ -25,13 +25,12 @@ class SkylabApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(SkylabApi, self).__init__(**kwargs)
 
-  def schedule_suites(self, name, requests, timeout_seconds, retry=False):
+  def schedule_suites(self, name, requests, retry=False):
     """Schedule CrOS autotest suites by invoking the cros_test_platform recipe.
 
     Args:
     * name (str): The step name.
     * requests (list[SkylabRequest]): List of Autotest suites to schedule.
-    * timeout_seconds (int): Timeout for the tests scheduled.
     * retry (bool): If True, retry at most 5 times within this invocation.
 
     Returns:
@@ -53,7 +52,7 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.scheduling.managed_pool = POOL
         req.params.scheduling.qs_account = QS_ACCOUNT
         req.params.software_attributes.build_target.name = s.board
-        req.params.time.maximum_duration.seconds = timeout_seconds
+        req.params.time.maximum_duration.seconds = s.timeout_sec
         req.params.migrations.enable_synchronous_offload = True
         suite_to_create = req.test_plan.suite.add()
         suite_to_create.name = s.suite

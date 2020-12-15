@@ -50,12 +50,14 @@ class SkylabRequest(object):
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
                 e.g. atlas-release/R88-13545.0.0
+    * timeout_sec: The timeout for the test in second. Default is one hour.
   """
   display_name = attrib(str)
   request_tag = attrib(str)
   suite = attrib(str)
   board = attrib(str)
   cros_img = attrib(str)
+  timeout_sec = attrib(int, default=3600)
 
   @classmethod
   def create(cls, **kwargs):
