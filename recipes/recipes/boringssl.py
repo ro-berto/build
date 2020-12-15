@@ -5,19 +5,19 @@
 from contextlib import contextmanager
 
 DEPS = [
-  'chromium',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/osx_sdk',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'test_utils',
+    'chromium',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/osx_sdk',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'test_utils',
 ]
 
 
@@ -155,8 +155,9 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
         args, 'CMAKE_C_FLAGS',
         '-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1')
   if _HasToken(buildername, 'android'):
-    args['CMAKE_TOOLCHAIN_FILE'] = bot_utils.join(
-        'android_ndk', 'build', 'cmake', 'android.toolchain.cmake')
+    args['CMAKE_TOOLCHAIN_FILE'] = bot_utils.join('android_ndk', 'build',
+                                                  'cmake',
+                                                  'android.toolchain.cmake')
     if _HasToken(buildername, 'arm'):
       args['ANDROID_ABI'] = 'armeabi-v7a'
       args['ANDROID_NATIVE_API_LEVEL'] = 16
@@ -228,9 +229,10 @@ def _CleanupMSVC(api):
     if api.platform.is_win:
       # cl.exe automatically starts background mspdbsrv.exe daemon which needs
       # to be manually stopped so Swarming can tidy up after itself.
-      api.step('taskkill mspdbsrv',
-               ['taskkill.exe', '/f', '/t', '/im', 'mspdbsrv.exe'],
-               ok_ret='any')
+      api.step(
+          'taskkill mspdbsrv',
+          ['taskkill.exe', '/f', '/t', '/im', 'mspdbsrv.exe'],
+          ok_ret='any')
 
 
 def RunSteps(api):
@@ -287,8 +289,8 @@ def RunSteps(api):
     with api.context(cwd=build_dir):
       api.python(
           'cmake', go_env, msvc_prefix + [cmake, '-GNinja'] +
-          ['-D%s=%s' % (k, v)
-           for (k, v) in sorted(cmake_args.items())] + [api.path['checkout']])
+          ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
+          [api.path['checkout']])
     api.python('ninja', go_env,
                msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
@@ -300,8 +302,8 @@ def RunSteps(api):
       # to check when building shared libraries.
       if buildername == 'linux_shared':
         api.python('check imported libraries', go_env, [
-            'go', 'run',
-            api.path['checkout'].join('util', 'check_imported_libraries.go'),
+            'go', 'run', api.path['checkout'].join(
+                'util', 'check_imported_libraries.go'),
             build_dir.join('crypto', 'libcrypto.so'),
             build_dir.join('ssl', 'libssl.so')
         ])
@@ -327,11 +329,12 @@ def RunSteps(api):
               api.test_utils.test_results()
           ])
         else:
-          api.python('unit tests', go_env, msvc_prefix + [
-              'go', 'run',
-              api.path.join('util', 'all_tests.go'), '-json-output',
-              api.test_utils.test_results()
-          ] + all_tests_args)
+          api.python(
+              'unit tests', go_env, msvc_prefix + [
+                  'go', 'run',
+                  api.path.join('util', 'all_tests.go'), '-json-output',
+                  api.test_utils.test_results()
+              ] + all_tests_args)
 
         _LogFailingTests(api, api.step.active_result)
 
@@ -436,8 +439,8 @@ def GenTests(api):
     )
 
   compile_only_tests = [
-    ('ios_compile', api.platform('mac', 64)),
-    ('ios64_compile', api.platform('mac', 64)),
+      ('ios_compile', api.platform('mac', 64)),
+      ('ios64_compile', api.platform('mac', 64)),
   ]
   for (buildername, host_platform) in compile_only_tests:
     yield api.test(
@@ -447,11 +450,11 @@ def GenTests(api):
     )
 
   unit_test_only_tests = [
-    ('linux_sde', api.platform('linux', 64)),
-    ('linux32_sde', api.platform('linux', 64)),
-    ('linux_clang_relwithasserts_tsan', api.platform('linux', 64)),
-    ('win32_sde', api.platform('win', 64)),
-    ('win64_sde', api.platform('win', 64)),
+      ('linux_sde', api.platform('linux', 64)),
+      ('linux32_sde', api.platform('linux', 64)),
+      ('linux_clang_relwithasserts_tsan', api.platform('linux', 64)),
+      ('win32_sde', api.platform('win', 64)),
+      ('win64_sde', api.platform('win', 64)),
   ]
   for (buildername, host_platform) in unit_test_only_tests:
     yield api.test(
