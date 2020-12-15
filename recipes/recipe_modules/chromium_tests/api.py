@@ -1041,6 +1041,31 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True
 
+  def _summarize_test_failures(self, task, retried_suites=()):
+    """
+    Takes a task and an optional list of suites retried without patch.
+    Summarizes the test results in the step UI, and returns the suites which
+    can be presumptively attributed to the CL.
+    Args:
+      task: Task object specifiying build/test configuration
+      retried_suites (optional): Iterable of test suites retried on ToT.
+        Must be a subset of the task's test_suites field. Default ().
+    Returns:
+      An array of test suites which failed and should not be forgiven.
+    """
+    culpable_failures = []
+    for t in task.test_suites:
+      if not t.has_failures_to_summarize():
+        continue
+      if t not in retried_suites:
+        self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+        continue
+      is_tot_fail = self.m.test_utils.summarize_test_with_patch_deapplied(
+          self.m, t)
+      if not is_tot_fail:
+        culpable_failures.append(t)
+    return culpable_failures
+
   def _run_tests_with_retries(self, task, deapply_changes):
     """This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
@@ -1069,14 +1094,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.pgo.using_pgo and self.m.pgo.skip_profile_upload:
         self.m.pgo.process_pgo_data(task.test_suites)
 
-      def summarize_all_test_failures_with_no_retries(suites):
-        for t in suites:
-          if t.has_failures_to_summarize():
-            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-
       # Exit without retries if there were invalid tests or if all tests passed
       if invalid_test_suites or not failing_test_suites:
-        summarize_all_test_failures_with_no_retries(task.test_suites)
+        self._summarize_test_failures(task)
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
@@ -1085,7 +1105,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +
             '<br/>'.join(RECIPE_CONFIG_PATHS))
-        summarize_all_test_failures_with_no_retries(task.test_suites)
+        self._summarize_test_failures(task)
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
@@ -1097,20 +1117,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.test_utils.run_tests(
           self.m, failing_test_suites, 'without patch', sort_by_shard=True)
 
-      unretried_suites = [
-          s for s in task.test_suites if s not in failing_test_suites
-      ]
-      summarize_all_test_failures_with_no_retries(unretried_suites)
-
-      # Test suites whose failure is probably the CL's fault
-      culpable_test_suites = []
-      for t in failing_test_suites:
-        tot_fails = self.m.test_utils.summarize_test_with_patch_deapplied(
-            self.m, t)
-        if not tot_fails:
-          culpable_test_suites.append(t)
-
-      return None, culpable_test_suites
+      # Returns test suites whose failure is probably the CL's fault
+      return None, self._summarize_test_failures(task, failing_test_suites)
 
   def _build_bisect_gs_archive_url(self, bot_spec):
     return self.m.archive.legacy_upload_url(
