@@ -167,7 +167,12 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
     # platforms because they fail or they are flaky.
     if bot.builder not in [
-        'iOS64 Sim Debug (iOS 14.0)', 'ios_sim_x64_dbg_ios14'
+        'iOS64 Sim Debug (iOS 14.0)',
+        'ios_sim_x64_dbg_ios14',
+        'iOS64 Sim Debug (iOS 13)',
+        'ios_sim_x64_dbg_ios13',
+        'iOS64 Sim Debug (iOS 12)',
+        'ios_sim_x64_dbg_ios12 ',
     ]:
       tests += [
           IosTest(
