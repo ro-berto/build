@@ -12,6 +12,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'chromium_swarming',
+    'skylab',
     'test_results',
     'test_utils',
 ]
@@ -19,16 +20,19 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import skylab
 from RECIPE_MODULES.build.chromium_tests import steps
 
 PROPERTIES = {
-  'abort_on_failure': Property(default=False),
-  'test_swarming': Property(default=False),
-  'test_name': Property(default='MockTest'),
-  'retry_invalid_shards': Property(default=False),
+    'abort_on_failure': Property(default=False),
+    'test_swarming': Property(default=False),
+    'test_skylab': Property(default=False),
+    'test_name': Property(default='MockTest'),
+    'retry_invalid_shards': Property(default=False),
 }
 
-def RunSteps(api, test_swarming, test_name, abort_on_failure,
+
+def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
              retry_invalid_shards):
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
@@ -57,6 +61,18 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
         steps.MockTestSpec.create(name='test3')
     ]
     api.chromium_tests.set_config('staging')
+  elif test_skylab:
+    test_specs = []
+    for spec in api.properties['src_spec']:
+      common_skylab_kwargs = {}
+      common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
+          request_tag=spec.get('name'),
+          suite=spec.get('suite'),
+          board=spec.get('cros_board'),
+          cros_img=spec.get('cros_img'),
+      )
+      test_specs.append(
+          steps.SkylabTestSpec.create(spec.get('name'), **common_skylab_kwargs))
   else:
     test_specs = [
         steps.MockTestSpec.create(
@@ -154,6 +170,24 @@ def GenTests(api):
       ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'success_skylab_test',
+      api.chromium.generic_build(
+          builder_group='test_group', builder='test_builder'),
+      api.properties(
+          src_spec=[{
+              "cros_board": "eve",
+              "cros_img": "eve-release/R89-13631.0.0",
+              "name": "basic_EVE_TOT",
+              "suite": "lacros-basic",
+              "swarming": {},
+              "test": "basic",
+              "timeout": 3600
+          }],
+          test_skylab=True,
+      ),
   )
 
   yield api.test(

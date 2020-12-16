@@ -48,7 +48,10 @@ from recipe_engine.config_types import Path
 from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
 from RECIPE_MODULES.build import chromium_swarming
+from RECIPE_MODULES.build import skylab
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              callable_attrib,
                                              command_args_attrib, enum_attrib,
@@ -3522,3 +3525,99 @@ class SwarmingIosTest(SwarmingTest):
 
   def compile_targets(self):
     raise NotImplementedError()  # pragma: no cover
+
+
+@attrs()
+class SkylabTestSpec(TestSpec):
+  """Spec for a suite that runs on CrOS Skylab."""
+  skylab_req = attrib(skylab.structs.SkylabRequest)
+
+  @property
+  def test_class(self):
+    return SkylabTest
+
+
+class SkylabTest(Test):
+
+  def __init__(self, spec):
+    super(SkylabTest, self).__init__(spec)
+    self.ctp_responses = []
+
+  def _find_valid_result(self):
+    """Return the first deterministic result from the responses.
+
+    cros_test_platform has retry logic, thus the test result is evaluated
+    over the entire list of responses.
+    """
+    # TODO(crbug/1155016): revisit this implementation after we expose CTP
+    # retry option to LaCrOS users.
+    for r in self.ctp_responses:
+      if r.status in [common_pb2.SUCCESS, common_pb2.FAILURE]:
+        return r
+    return None
+
+  @recipe_api.composite_step
+  def run(self, api, suffix):
+    self._suffix_step_name_map[suffix] = self.name
+    pass_fail_counts = {}
+    failures = []
+    total_tests_ran = 0
+    result = self._find_valid_result()
+    if result:
+      failures = [c.name for c in result.test_cases if c.verdict != "PASSED"]
+      total_tests_ran = len(result.test_cases)
+
+    with api.step.nest(self.name) as step:
+      if not self.ctp_responses:
+        step.presentation.status = api.step.FAILURE
+        step.presentation.step_text = 'Invalid test result.'
+        self.update_test_run(api, suffix,
+                             api.test_utils.canonical.result_format())
+        return self._test_runs[suffix]
+
+      # TODO(crbug/1155016): Transform test result to isolated test style, thus
+      # we could reuse existing code to render the skylab result.
+      for i, r in enumerate(self.ctp_responses, 1):
+        with api.step.nest('attempt: #' + str(i)) as attempt_step:
+          if r.verdict != "PASSED":
+            attempt_step.presentation.status = api.step.FAILURE
+          if r.url:
+            attempt_step.links['Test Run'] = r.url
+          if r.log_url:
+            attempt_step.links['Logs(stainless)'] = r.log_url
+          passed_cases, failed_cases = [], []
+          for tc in r.test_cases:
+            pass_fail_counts.setdefault(tc.name, {
+                'pass_count': 0,
+                'fail_count': 0
+            })
+            if tc.verdict == 'PASSED':
+              pass_fail_counts[tc.name]['pass_count'] += 1
+              passed_cases.append(tc.name)
+              continue
+            pass_fail_counts[tc.name]['fail_count'] += 1
+            failed_cases.append(tc.name)
+          step_log = []
+          if passed_cases:
+            step_log += ['PASSED:'] + passed_cases + ['']
+          if failed_cases:
+            step_log += ['FAILED:'] + failed_cases
+          attempt_step.logs['Test Cases'] = step_log if step_log else [
+              'No test cases found'
+          ]
+          attempt_step.step_text += (
+              '<br/>%s passed, %s failed (%s total)' %
+              (len(passed_cases), len(failed_cases), len(r.test_cases)))
+
+    self.update_test_run(
+        api, suffix, {
+            'failures': failures,
+            'valid': result is not None,
+            'total_tests_ran': total_tests_ran,
+            'pass_fail_counts': pass_fail_counts,
+            'findit_notrun': set(),
+        })
+    return self._test_runs[suffix]
+
+  def compile_targets(self):
+    return self.target_name

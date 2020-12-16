@@ -9,6 +9,7 @@ import textwrap
 from . import steps
 
 from RECIPE_MODULES.build import chromium_swarming
+from RECIPE_MODULES.build import skylab
 
 
 def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
@@ -561,9 +562,40 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     yield t
 
 
+def generate_skylab_tests(api,
+                          chromium_tests_api,
+                          builder_group,
+                          buildername,
+                          source_side_spec,
+                          bot_update_step,
+                          swarming_dimensions=None,
+                          scripts_compile_targets_fn=None):
+  del api, chromium_tests_api, scripts_compile_targets_fn, swarming_dimensions
+  del bot_update_step
+
+  for spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
+    yield generate_skylab_tests_from_one_spec(builder_group, buildername, spec)
+
+
+def generate_skylab_tests_from_one_spec(builder_group, buildername,
+                                        skylab_test_spec):
+  common_skylab_kwargs = {}
+  common_skylab_kwargs['waterfall_builder_group'] = builder_group
+  common_skylab_kwargs['waterfall_buildername'] = buildername
+  common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
+      request_tag=skylab_test_spec.get('name'),
+      suite=skylab_test_spec.get('suite'),
+      board=skylab_test_spec.get('cros_board'),
+      cros_img=skylab_test_spec.get('cros_img'),
+      timeout_sec=skylab_test_spec.get('timeout', 3600))
+  return steps.SkylabTestSpec.create(
+      skylab_test_spec.get('name'), **common_skylab_kwargs)
+
+
 ALL_GENERATORS = [
     generate_isolated_script_tests,
     generate_gtests,
     generate_junit_tests,
     generate_script_tests,
+    generate_skylab_tests,
 ]

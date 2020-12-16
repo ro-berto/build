@@ -257,9 +257,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
                       sort_by_shard=False):
     local_test_suites = []
     swarming_test_suites = []
+    skylab_test_suites = []
     for t in test_suites:
       if isinstance(t, steps.SwarmingTest):
         swarming_test_suites.append(t)
+      elif isinstance(t, steps.SkylabTest):
+        skylab_test_suites.append(t)
       else:
         local_test_suites.append(t)
 
@@ -271,7 +274,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     groups = [
         LocalGroup(local_test_suites),
-        SwarmingGroup(swarming_test_suites)
+        SwarmingGroup(swarming_test_suites),
+        SkylabGroup(skylab_test_suites),
     ]
 
     nest_name = 'test_pre_run (%s)' % suffix if suffix else 'test_pre_run'
@@ -1157,3 +1161,36 @@ class SwarmingGroup(TestGroup):
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
         test.run(caller_api, suffix)
+
+
+class SkylabGroup(TestGroup):
+
+  def __init__(self, test_suites):
+    super(SkylabGroup, self).__init__(test_suites)
+    self.ctp_build_id = 0
+    self.ctp_build_timeout_sec = 3600
+
+  def pre_run(self, caller_api, suffix):
+    """Schedule the Skylab test requests to a CTP build.
+
+    cros_test_platform(CTP) supports multiple request in a single build.
+    With batch request, tests can run concurrently.
+    """
+    reqs = []
+    for t in self._test_suites:
+      reqs.append(t.spec.skylab_req)
+      self.ctp_build_timeout_sec = max(self.ctp_build_timeout_sec,
+                                       t.spec.skylab_req.timeout_sec)
+    if reqs:
+      self.ctp_build_id = caller_api.skylab.schedule_suites(
+          'schedule tests on skylab', reqs)
+
+  def run(self, caller_api, suffix):
+    """Fetch the responses for each test request."""
+    if self._test_suites:
+      tag_resp = caller_api.skylab.wait_on_suites(
+          self.ctp_build_id, timeout_seconds=self.ctp_build_timeout_sec)
+      for t in self._test_suites:
+        t.ctp_responses = tag_resp.responses.get(t.spec.skylab_req.request_tag,
+                                                 [])
+        self._run_func(t, t.run, caller_api, suffix, True)

@@ -1,0 +1,268 @@
+[
+  {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run (with patch).schedule tests on skylab",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@suite link@https://cr-buildbucket.appspot.com/build/1234@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "bb",
+      "batch",
+      "-host",
+      "cr-buildbucket.appspot.com"
+    ],
+    "infra_step": true,
+    "name": "test_pre_run (with patch).schedule tests on skylab.buildbucket.schedule",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"requests\": {\"EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"suite:lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"migrations\": {\"enableSynchronousOffload\": true}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"lacros\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scheduleBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"scheduleBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"bucket\": \"testplatform\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"builder\": \"cros_test_platform\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"project\": \"chromeos\"@@@",
+      "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"experimental\": \"NO\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"gitilesCommit\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"host\": \"chromium.googlesource.com\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/master\"@@@",
+      "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
+      "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"requests\": {@@@",
+      "@@@STEP_LOG_LINE@request@            \"EVE_TOT\": {@@@",
+      "@@@STEP_LOG_LINE@request@              \"params\": {@@@",
+      "@@@STEP_LOG_LINE@request@                \"decorations\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@request@                    \"suite:lacros\", @@@",
+      "@@@STEP_LOG_LINE@request@                    \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", @@@",
+      "@@@STEP_LOG_LINE@request@                    \"label-board:eve\", @@@",
+      "@@@STEP_LOG_LINE@request@                    \"label-pool:DUT_POOL_QUOTA\"@@@",
+      "@@@STEP_LOG_LINE@request@                  ]@@@",
+      "@@@STEP_LOG_LINE@request@                }, @@@",
+      "@@@STEP_LOG_LINE@request@                \"metadata\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", @@@",
+      "@@@STEP_LOG_LINE@request@                  \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"@@@",
+      "@@@STEP_LOG_LINE@request@                }, @@@",
+      "@@@STEP_LOG_LINE@request@                \"migrations\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"enableSynchronousOffload\": true@@@",
+      "@@@STEP_LOG_LINE@request@                }, @@@",
+      "@@@STEP_LOG_LINE@request@                \"scheduling\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"managedPool\": \"MANAGED_POOL_QUOTA\", @@@",
+      "@@@STEP_LOG_LINE@request@                  \"qsAccount\": \"lacros\"@@@",
+      "@@@STEP_LOG_LINE@request@                }, @@@",
+      "@@@STEP_LOG_LINE@request@                \"softwareAttributes\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"buildTarget\": {@@@",
+      "@@@STEP_LOG_LINE@request@                    \"name\": \"eve\"@@@",
+      "@@@STEP_LOG_LINE@request@                  }@@@",
+      "@@@STEP_LOG_LINE@request@                }, @@@",
+      "@@@STEP_LOG_LINE@request@                \"softwareDependencies\": [@@@",
+      "@@@STEP_LOG_LINE@request@                  {@@@",
+      "@@@STEP_LOG_LINE@request@                    \"chromeosBuild\": \"eve-release/R88-13545.0.0\"@@@",
+      "@@@STEP_LOG_LINE@request@                  }@@@",
+      "@@@STEP_LOG_LINE@request@                ], @@@",
+      "@@@STEP_LOG_LINE@request@                \"time\": {@@@",
+      "@@@STEP_LOG_LINE@request@                  \"maximumDuration\": \"3600s\"@@@",
+      "@@@STEP_LOG_LINE@request@                }@@@",
+      "@@@STEP_LOG_LINE@request@              }, @@@",
+      "@@@STEP_LOG_LINE@request@              \"testPlan\": {@@@",
+      "@@@STEP_LOG_LINE@request@                \"test\": [@@@",
+      "@@@STEP_LOG_LINE@request@                  {@@@",
+      "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
+      "@@@STEP_LOG_LINE@request@                      \"name\": \"lacros\"@@@",
+      "@@@STEP_LOG_LINE@request@                    }@@@",
+      "@@@STEP_LOG_LINE@request@                  }@@@",
+      "@@@STEP_LOG_LINE@request@                ]@@@",
+      "@@@STEP_LOG_LINE@request@              }@@@",
+      "@@@STEP_LOG_LINE@request@            }@@@",
+      "@@@STEP_LOG_LINE@request@          }@@@",
+      "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@request@          {@@@",
+      "@@@STEP_LOG_LINE@request@            \"key\": \"parent_buildbucket_id\", @@@",
+      "@@@STEP_LOG_LINE@request@            \"value\": \"8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@request@          }, @@@",
+      "@@@STEP_LOG_LINE@request@          {@@@",
+      "@@@STEP_LOG_LINE@request@            \"key\": \"user_agent\", @@@",
+      "@@@STEP_LOG_LINE@request@            \"value\": \"recipe\"@@@",
+      "@@@STEP_LOG_LINE@request@          }@@@",
+      "@@@STEP_LOG_LINE@request@        ]@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@",
+      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "collect skylab results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@return value@EVE_TOT@@@",
+      "@@@STEP_LOG_END@return value@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "collect skylab results.buildbucket.collect",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "bb",
+      "collect",
+      "-host",
+      "cr-buildbucket.appspot.com",
+      "-interval",
+      "60s",
+      "1234"
+    ],
+    "infra_step": true,
+    "name": "collect skylab results.buildbucket.collect.wait",
+    "timeout": 3600,
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "bb",
+      "batch",
+      "-host",
+      "cr-buildbucket.appspot.com"
+    ],
+    "infra_step": true,
+    "name": "collect skylab results.buildbucket.collect.get",
+    "stdin": "{\"requests\": [{\"getBuild\": {\"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"id\": \"1234\"}}]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"getBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"output\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJxdzj0KwkAQhmFWBEOwCGkES0shWYPiH6iVrTbBTsK6jslikll2RrykYOsBPIgiiOABvuf9wqfw\\nW+vdOku3afgQYdMTgejehX8T4bJgtjSXUhcOK0CK6KpcZeo8VtaSRY41VpIVnVfmuBhNEjUeHvRM\\nj6bJIBl0m54NGr2OLgCYsg2yORmt2GCdAnF//+WJlalLIHpzzsY5Yl7Chz44vBL8+urCyO9t5IAu\\nJZP8Hor+43Le9j0Hx0wrgqDxAq7DTA8=\\n\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          }@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"getBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"1234\"@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@",
+      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "MockTest",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "MockTest.attempt: #1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>0 passed, 1 failed (1 total)@@@",
+      "@@@STEP_LOG_LINE@Test Cases@FAILED:@@@",
+      "@@@STEP_LOG_LINE@Test Cases@red_case@@@",
+      "@@@STEP_LOG_END@Test Cases@@@",
+      "@@@STEP_LINK@Test Run@https://chromeos-swarming.appspot.com/task?id=471a63bc9c481010@@@",
+      "@@@STEP_LINK@Logs(stainless)@https://stainless.corp.google.com/browse/chromeos-autotest-results/swarming-471a63bc9c481010/@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] derive test results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
+      "--input-path",
+      "{\"bucket\": \"ci\", \"builder\": \"test_buildername\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"MockTest\", \"test_name\": \"red_case\"}]}",
+      "--output-path",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "query known flaky failures on CQ",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@input@{@@@",
+      "@@@STEP_LOG_LINE@input@    \"project\": \"chromium\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"builder\": \"test_buildername\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"bucket\": \"ci\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@input@        {@@@",
+      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"MockTest\", @@@",
+      "@@@STEP_LOG_LINE@input@            \"test_name\": \"red_case\"@@@",
+      "@@@STEP_LOG_LINE@input@        }@@@",
+      "@@@STEP_LOG_LINE@input@    ]@@@",
+      "@@@STEP_LOG_LINE@input@}@@@",
+      "@@@STEP_LOG_END@input@@@",
+      "@@@STEP_LOG_LINE@output@null@@@",
+      "@@@STEP_LOG_END@output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: 'MockTest'@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
