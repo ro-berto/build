@@ -7,6 +7,7 @@ DEPS = [
     'depot_tools/bot_update',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
     'test_results',

@@ -259,6 +259,7 @@ class ResultDB(object):
       will be rejected with an error.
     * result_file - path to result file for result_adapter to read test results
       from. It is meaningful only when result_format is not None.
+    * result_adapter_path - path to result_adapter binary.
   """
   enable = attrib(bool, default=False)
   result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
@@ -269,6 +270,7 @@ class ResultDB(object):
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
+  result_adapter_path = attrib(str, default='result_adapter')
 
   @classmethod
   def create(cls, **kwargs):
@@ -325,8 +327,10 @@ class ResultDB(object):
 
     # wrap it with result_adapter
     if configs.result_format:
+      exe = configs.result_adapter_path + ('.exe'
+                                           if api.platform.is_win else '')
       result_adapter = [
-          'result_adapter', configs.result_format, '-artifact-directory',
+          exe, configs.result_format, '-artifact-directory',
           '${ISOLATED_OUTDIR}', '-result-file', configs.result_file
       ]
       if configs.result_format == 'json' and configs.test_id_as_test_location:
@@ -1579,11 +1583,25 @@ class LocalGTestTest(Test):
 
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
+    # result_adapter binaries are available in chromium checkout or the swarming
+    # bot.
+    #
+    # for local runs, result_adapter is available in chromium checkout.
+    # Swarmed tasks can't use it because there is no guarantee that the isolate
+    # includes result_adapter. Instead, swarmed tasks use result_adapter
+    # deployed via the pool config.
+    result_adapter_path = str(api.path['checkout'].join('tools', 'resultdb',
+                                                        'result_adapter'))
     kwargs = {
-        'name': self.step_name(suffix),
-        'args': args,
-        'step_test_data': step_test_data,
-        'resultdb': self.spec.resultdb,
+        'name':
+            self.step_name(suffix),
+        'args':
+            args,
+        'step_test_data':
+            step_test_data,
+        'resultdb':
+            attr.evolve(
+                self.spec.resultdb, result_adapter_path=result_adapter_path),
     }
     if is_android:
       kwargs['json_results_file'] = gtest_results_file

@@ -259,7 +259,7 @@
       "step_name:base_unittests",
       "-coerce-negative-duration",
       "--",
-      "result_adapter",
+      "[START_DIR]/src/tools/resultdb/result_adapter",
       "gtest",
       "-artifact-directory",
       "${ISOLATED_OUTDIR}",

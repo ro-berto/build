@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/bot_update',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
     'test_results',

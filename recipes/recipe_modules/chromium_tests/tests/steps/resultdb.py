@@ -14,6 +14,8 @@ DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     "recipe_engine/resultdb",
+    "recipe_engine/path",
+    'recipe_engine/platform',
 ]
 
 

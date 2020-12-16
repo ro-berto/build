@@ -7,8 +7,11 @@ DEPS = [
     'chromium',
     'chromium_android',
     'depot_tools/bot_update',
+    'depot_tools/gclient',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/resultdb',
@@ -21,11 +24,13 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 
 def RunSteps(api):
+  api.gclient.set_config('chromium')
   api.chromium.set_config(
       'chromium',
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
   api.chromium_android.set_config('main_builder')
   api.test_results.set_config('public_server')
+  api.bot_update.ensure_checkout()
 
   test = steps.LocalGTestTestSpec.create(
       'base_unittests',
@@ -58,7 +63,9 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(),
+      api.properties(single_spec={
+          'test': 'gtest_test',
+      },),
   )
 
   yield api.test(
@@ -67,7 +74,9 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(),
+      api.properties(single_spec={
+          'test': 'gtest_test',
+      },),
       api.override_step_data(
           'base_unittests (with patch)',
           api.test_utils.canned_gtest_output(
@@ -84,5 +93,21 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(target_platform='android',),
+      api.properties(
+          single_spec={'test': 'gtest_test'},
+          target_platform='android',
+      ),
+  )
+
+  yield api.test(
+      'windows',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.platform.name('win'),
+      api.properties(
+          single_spec={'test': 'gtest_test'},
+          target_platform='win',
+      ),
   )
