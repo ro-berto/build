@@ -238,7 +238,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   api.gclient.apply_config('android_prebuilts_build_tools')
 
   checkout_dir = api.path['cache'].join('builder')
-  with api.context(cwd=checkout_dir):
+  with api.context(cwd=checkout_dir, env={'PACKFILE_OFFLOADING': 1}):
     update_step = api.bot_update.ensure_checkout(
         root_solution_revision=root_solution_revision)
   api.chromium.set_build_properties(update_step.json.output['properties'])
