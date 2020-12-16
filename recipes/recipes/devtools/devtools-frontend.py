@@ -54,12 +54,12 @@ def RunSteps(api):
     run_lint_check(api)
     run_localization_check(api)
     run_e2e(api)
+    run_interactions(api)
 
     if can_run_experimental_teps(api):
       # Place here any unstable steps that you want to be performed on
       # builders with property run_experimental_steps == True
-      run_interactions(api)
-
+      pass
 
 def builder_config(api):
   return api.properties.get('builder_config', 'Release')
