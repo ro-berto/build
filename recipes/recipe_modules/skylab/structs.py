@@ -44,7 +44,6 @@ class SkylabRequest(object):
   suites.
 
   Attributes:
-    * display_name: The step name to display in Milo frontend.
     * request_tag: The tag to identify a request in the CTP build.
     * suite: The autotest test which wraps a tast suite,
              e.g. tast.critical-chrome.
@@ -53,7 +52,6 @@ class SkylabRequest(object):
                 e.g. atlas-release/R88-13545.0.0
     * timeout_sec: The timeout for the test in second. Default is one hour.
   """
-  display_name = attrib(str)
   request_tag = attrib(str)
   suite = attrib(str)
   board = attrib(str)

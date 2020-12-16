@@ -17,7 +17,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
-      display_name='my_little_hwtest',
       request_tag=tag,
       suite='lacros',
       board='eve',

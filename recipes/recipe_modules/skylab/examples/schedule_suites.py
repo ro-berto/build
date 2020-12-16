@@ -21,7 +21,6 @@ from PB.test_platform.steps.execution import ExecuteResponse
 
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
-      display_name='my_little_hwtest',
       request_tag=tag,
       suite='lacros',
       board='eve',
