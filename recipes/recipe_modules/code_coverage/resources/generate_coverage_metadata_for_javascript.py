@@ -362,10 +362,39 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
     return lines, uncovered_blocks
 
 
-def get_coverage_metric_summaries():
-  # TODO(benreich): Implement coverage metric summary of
-  #                 covered lines per file.
-  return []
+def get_line_coverage_metric_summary(lines):
+  """Get line coverage summary metric for supplied lines
+
+  Args:
+    lines: A list of LineRange's which are sourced from the
+      |convert_coverage_to_line_column_format| method.
+  
+  Returns:
+    A dictionary containing the summary of line coverage
+    which is defined as:
+    {
+      name: Hardcoded to 'line'.
+      total: Number of instrumented lines in the file
+        which should always be the number of lines in
+        JavaScript coverage.
+      covered: Number of lines with invocation count >0.
+    }
+  """
+  line_coverage_metric = {}
+  line_coverage_metric['name'] = 'line'
+  line_coverage_metric['total'] = 0
+  line_coverage_metric['covered'] = 0
+
+  for line_range in lines:
+    # First and last are inclusive line numbers.
+    lines_in_range = line_range['last'] - line_range['first'] + 1
+
+    if line_range['count'] > 0:
+      line_coverage_metric['covered'] += lines_in_range
+
+    line_coverage_metric['total'] += lines_in_range
+
+  return line_coverage_metric
 
 
 def get_files_coverage_data(src_path, coverage_files):
@@ -417,7 +446,7 @@ def get_files_coverage_data(src_path, coverage_files):
           'lines': covered_lines,
           'uncovered_blocks': uncovered_blocks,
           'path': '//' + os.path.relpath(absolute_source_path, src_path),
-          'summaries': get_coverage_metric_summaries(),
+          'summaries': [get_line_coverage_metric_summary(covered_lines)],
       })
 
   return files_coverage_data

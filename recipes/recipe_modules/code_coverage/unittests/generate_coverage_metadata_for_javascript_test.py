@@ -19,6 +19,58 @@ import generate_coverage_metadata_for_javascript as generator
 
 class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
 
+  MOCK_LINE_COLUMN_FORMAT_OUTPUT = (
+      # Covered lines
+      [{
+          'count': 3,
+          'last': 3,
+          'first': 1
+      }, {
+          'count': 1,
+          'last': 4,
+          'first': 4
+      }, {
+          'count': 2,
+          'last': 6,
+          'first': 5
+      }, {
+          'count': 0,
+          'first': 7,
+          'last': 7
+      }, {
+          'count': 2,
+          'last': 9,
+          'first': 8
+      }, {
+          'count': 3,
+          'last': 10,
+          'first': 10
+      }, {
+          'count': 1,
+          'last': 11,
+          'first': 11
+      }],
+      # Uncovered blocks
+      [{
+          'ranges': [{
+              'end': 18,
+              'first': 16
+          }],
+          'line': 6
+      }, {
+          'ranges': [{
+              'end': 17,
+              'first': 0
+          }],
+          'line': 7
+      }, {
+          'ranges': [{
+              'end': 3,
+              'first': 0
+          }],
+          'line': 8
+      }])
+
   @mock.patch.object(os, 'listdir')
   def test_get_json_files_ignores_everything_else(self, mock_listdir):
     mock_input_dir_listdir = [
@@ -204,57 +256,7 @@ exports.test = test;'
         'end': 152
     }]
 
-    expected_output = (
-        # Covered lines
-        [{
-            'count': 3,
-            'last': 3,
-            'first': 1
-        }, {
-            'count': 1,
-            'last': 4,
-            'first': 4
-        }, {
-            'count': 2,
-            'last': 6,
-            'first': 5
-        }, {
-            'count': 0,
-            'first': 7,
-            'last': 7
-        }, {
-            'count': 2,
-            'last': 9,
-            'first': 8
-        }, {
-            'count': 3,
-            'last': 10,
-            'first': 10
-        }, {
-            'count': 1,
-            'last': 11,
-            'first': 11
-        }],
-        # Uncovered blocks
-        [{
-            'ranges': [{
-                'end': 18,
-                'first': 16
-            }],
-            'line': 6
-        }, {
-            'ranges': [{
-                'end': 17,
-                'first': 0
-            }],
-            'line': 7
-        }, {
-            'ranges': [{
-                'end': 3,
-                'first': 0
-            }],
-            'line': 8
-        }])
+    expected_output = self.MOCK_LINE_COLUMN_FORMAT_OUTPUT
 
     with tempfile.NamedTemporaryFile(suffix='.js', mode='w+') as f:
       f.write(mock_source_file)
@@ -353,8 +355,9 @@ exports.test = test;'
         mock_get_coverage_data_and_paths.side_effect = [
             coverage_data_one, coverage_data_two
         ]
-        mock_convert_coverage_to_line_column_format.return_value = ('covered',
-                                                                    'uncovered')
+
+        mock_convert_coverage_to_line_column_format.return_value = \
+            self.MOCK_LINE_COLUMN_FORMAT_OUTPUT
         output = generator.get_files_coverage_data('/b/some/src', [
             '/b/some/src/out/Default/coverage_one.json',
             '/b/some/src/out/Default/coverage_two.json'
@@ -362,6 +365,105 @@ exports.test = test;'
 
         for file_data in output:
           self.assertIn(file_data['path'], expected_relative_paths)
+
+  def test_get_line_coverage_metric_summary(self):
+    input_line_range = [
+        {
+            'count': 1,
+            'first': 1,
+            'last': 5
+        },
+        {
+            'count': 0,
+            'first': 6,
+            'last': 6
+        },
+        {
+            'count': 1,
+            'first': 7,
+            'last': 11
+        },
+        {
+            'count': 0,
+            'first': 12,
+            'last': 15
+        },
+    ]
+
+    expected_output = {
+        'name': 'line',
+        'total': 15,
+        'covered': 10,
+    }
+
+    output = generator.get_line_coverage_metric_summary(input_line_range)
+    self.assertEqual(output, expected_output)
+
+  def test_get_line_coverage_metric_summary_no_line_coverage(self):
+    input_line_range = [
+        {
+            'count': 0,
+            'first': 1,
+            'last': 5
+        },
+        {
+            'count': 0,
+            'first': 6,
+            'last': 6
+        },
+        {
+            'count': 0,
+            'first': 7,
+            'last': 11
+        },
+        {
+            'count': 0,
+            'first': 12,
+            'last': 15
+        },
+    ]
+
+    expected_output = {
+        'name': 'line',
+        'total': 15,
+        'covered': 0,
+    }
+
+    output = generator.get_line_coverage_metric_summary(input_line_range)
+    self.assertEqual(output, expected_output)
+
+  def test_get_line_coverage_metric_summary_all_covered(self):
+    input_line_range = [
+        {
+            'count': 3,
+            'first': 1,
+            'last': 5
+        },
+        {
+            'count': 1,
+            'first': 6,
+            'last': 6
+        },
+        {
+            'count': 5,
+            'first': 7,
+            'last': 11
+        },
+        {
+            'count': 8,
+            'first': 12,
+            'last': 15
+        },
+    ]
+
+    expected_output = {
+        'name': 'line',
+        'total': 15,
+        'covered': 15,
+    }
+
+    output = generator.get_line_coverage_metric_summary(input_line_range)
+    self.assertEqual(output, expected_output)
 
 
 if __name__ == '__main__':
