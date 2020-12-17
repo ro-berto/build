@@ -15,6 +15,7 @@ DEPS = [
     'chromium_tests',
     'depot_tools/gclient',
     'depot_tools/gsutil',
+    'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -22,7 +23,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'recipe_engine/time',
-    'zip',
 ]
 
 GS_DIRECTORY = 'android-binary-size/commit_size_analysis/'

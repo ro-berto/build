@@ -235,7 +235,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "archive.zipping",
     "stdin": "{\"entries\": [{\"archive_name\": \"bin/node\", \"path\": \"[CACHE]/builder/node-ci/out/Release/node\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/node-linux-rel-187054-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CACHE]/builder/node-ci/out/Release\"}",

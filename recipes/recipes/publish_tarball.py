@@ -16,6 +16,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/gsutil',
+    'infra/omahaproxy',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -26,7 +27,6 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
-    'omahaproxy',
 ]
 
 # Sometimes a revision will be bad because the checkout will fail, causing

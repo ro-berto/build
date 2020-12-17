@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
+    'infra/zip',
     'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
@@ -25,7 +26,6 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'swarming_client',
-    'zip',
 ]
 
 

@@ -13,10 +13,10 @@ See: //docs/testing/web_platform_tests.md (https://goo.gl/rSRGmZ)
 
 DEPS = [
     'chromium',
-    'cloudkms',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
+    'infra/cloudkms',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',

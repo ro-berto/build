@@ -22,6 +22,7 @@ DEPS = [
     'depot_tools/tryserver',
     'goma',
     'ios',
+    'infra/zip',
     'isolate',
     'perf_dashboard',
     'recipe_engine/buildbucket',
@@ -41,7 +42,6 @@ DEPS = [
     'recipe_engine/step',
     'test_results',
     'test_utils',
-    'zip',
 ]
 
 

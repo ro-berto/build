@@ -349,7 +349,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "build and upload.zipping",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/archive-build/bin/node\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/node-mac-rel-50110-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CLEANUP]/archive-build\"}",

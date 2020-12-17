@@ -11,6 +11,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
+    'infra/zip',
     'ios',
     'recipe_engine/commit_position',
     'recipe_engine/context',
@@ -20,7 +21,6 @@ DEPS = [
     'recipe_engine/runtime',
     'recipe_engine/step',
     'webrtc',
-    'zip',
 ]
 
 

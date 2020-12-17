@@ -24,6 +24,7 @@ DEPS = [
     'filter',
     'gn',
     'goma',
+    'infra/zip',
     'isolate',
     'perf_dashboard',
     'pgo',
@@ -51,7 +52,6 @@ DEPS = [
     'test_results',
     'test_utils',
     'traceback',
-    'zip',
 ]
 
 PROPERTIES = properties.InputProperties

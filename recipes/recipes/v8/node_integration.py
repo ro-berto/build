@@ -11,22 +11,22 @@ from recipe_engine.types import freeze
 
 
 DEPS = [
-  'chromium',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'depot_tools/tryserver',
-  'goma',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'v8',
-  'zip',
+    'chromium',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'depot_tools/tryserver',
+    'goma',
+    'infra/zip',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'v8',
 ]
 
 BUILDERS = freeze({

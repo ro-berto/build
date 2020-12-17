@@ -15,6 +15,7 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
+    'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/context',
@@ -30,5 +31,4 @@ DEPS = [
     'recipe_engine/time',
     'recipe_engine/url',
     'test_utils',
-    'zip',
 ]

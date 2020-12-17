@@ -15,11 +15,11 @@ import contextlib
 
 DEPS = [
     'chromium',
-    'cloudkms',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/git_cl',
+    'infra/cloudkms',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',

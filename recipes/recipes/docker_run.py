@@ -9,8 +9,8 @@ from recipe_engine.config import Dict, Single, List
 
 
 DEPS = [
-  'docker',
-  'recipe_engine/properties',
+    'infra/docker',
+    'recipe_engine/properties',
 ]
 
 PROPERTIES=dict(

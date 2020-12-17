@@ -10,6 +10,7 @@ DEPS = [
     'chromium',
     'depot_tools/depot_tools',
     'depot_tools/gsutil',
+    'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/file',
@@ -22,7 +23,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/time',
     'tar',
-    'zip',
 ]
 
 PROPERTIES = properties.InputProperties

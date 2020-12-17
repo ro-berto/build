@@ -5129,7 +5129,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "cwd": "[CACHE]/builder",
     "name": "AppRTCMobile zip archive",

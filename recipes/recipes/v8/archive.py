@@ -14,22 +14,22 @@ from recipe_engine.post_process import (
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'chromium',
-  'depot_tools/gclient',
-  'depot_tools/git',
-  'depot_tools/gsutil',
-  'gn',
-  'recipe_engine/buildbucket',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
-  'v8',
-  'zip',
+    'chromium',
+    'depot_tools/gclient',
+    'depot_tools/git',
+    'depot_tools/gsutil',
+    'gn',
+    'infra/zip',
+    'recipe_engine/buildbucket',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'v8',
 ]
 
 

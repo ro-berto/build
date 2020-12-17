@@ -11,6 +11,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/gsutil',
+    'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',
@@ -22,7 +23,6 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/step',
     'recipe_engine/time',
-    'zip',
 ]
 
 from recipe_engine.recipe_api import Property

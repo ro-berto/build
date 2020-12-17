@@ -1406,7 +1406,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "Zip generated coverage report files",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/Release/coverage/coverage_html\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/Release/coverage/coverage_html.zip\", \"root\": \"[START_DIR]/src/out/Release/coverage/coverage_html\"}"

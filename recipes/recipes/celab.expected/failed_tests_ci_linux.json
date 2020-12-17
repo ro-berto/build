@@ -227,7 +227,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "zip archive",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl\", \"type\": \"file\"}, {\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/resources\", \"type\": \"dir\"}, {\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/test.whl\", \"type\": \"file\"}], \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out\"}"
@@ -376,7 +376,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
@@ -498,7 +498,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {

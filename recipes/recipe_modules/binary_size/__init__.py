@@ -15,6 +15,7 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'filter',
+    'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -26,7 +27,6 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/time',
-    'zip',
 ]
 
 PROPERTIES = properties.InputProperties
