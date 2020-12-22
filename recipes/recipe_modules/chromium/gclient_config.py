@@ -251,7 +251,7 @@ def dawn_top_of_tree(c):  # pragma: no cover
 
   Sets up ToT instead of the DEPS-pinned revision for Dawn.
   """
-  c.revisions['src/third_party/dawn'] = 'HEAD'
+  c.revisions['src/third_party/dawn'] = 'origin/main'
 
 
 @CONFIG_CTX()
