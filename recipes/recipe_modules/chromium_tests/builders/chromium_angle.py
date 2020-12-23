@@ -128,23 +128,23 @@ def CreateTesterConfig(platform, target_bits, parent_builder):
 SPEC = {
     'android-angle-arm64-builder':
         CreateAndroidBuilderConfig(64),
-    'android-angle-arm64-marshmallow':
+    'android-angle-arm64-nexus5x':
         CreateAndroidTesterConfig(64, 'android-angle-arm64-builder'),
     'android-angle-chromium-arm64-builder':
         CreateAndroidBuilderConfig(64),
-    'android-angle-chromium-arm64-marshmallow':
+    'android-angle-chromium-arm64-nexus5x':
         CreateAndroidTesterConfig(64, 'android-angle-chromium-arm64-builder'),
     'android-angle-perf-arm64-builder':
         CreateAndroidPerfBuilderConfig(64),
-    'android-angle-perf-arm64-walleye':
-        CreateAndroidTesterConfig(64, 'android-angle-perf-arm64-walleye'),
+    'android-angle-perf-arm64-pixel2':
+        CreateAndroidTesterConfig(64, 'android-angle-perf-arm64-builder'),
     'android-angle-vk-arm-builder':
         CreateAndroidBuilderConfig(32),
-    'android-angle-vk-arm-walleye':
+    'android-angle-vk-arm-pixel2':
         CreateAndroidTesterConfig(32, 'android-angle-vk-arm-builder'),
     'android-angle-vk-arm64-builder':
         CreateAndroidBuilderConfig(64),
-    'android-angle-vk-arm64-walleye':
+    'android-angle-vk-arm64-pixel2':
         CreateAndroidTesterConfig(64, 'android-angle-vk-arm64-builder'),
     'fuchsia-angle-builder':
         CreateFuchsiaBuilderConfig(64),
