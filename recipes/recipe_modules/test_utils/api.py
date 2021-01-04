@@ -247,14 +247,27 @@ class TestUtilsApi(recipe_api.RecipeApi):
         failed_test_suites.append(t)
     return invalid_results, failed_test_suites
 
-  # Runs a set of tests once.
-  #
-  # Used as a helper function by run_tests. See full documentation there.
   def _run_tests_once(self,
                       caller_api,
                       test_suites,
                       suffix,
                       sort_by_shard=False):
+    """
+    Runs a set of tests once. Used as a helper function by run_tests.
+    Args:
+      caller_api - caller's recipe API, may be different from self.m. See
+        run_test for details.
+      test_suites - list of suite objects representing tests to run
+      suffix - string specifying the stage/type of run, e.g. "without patch" or
+        "retry (with patch)".
+      sort_by_shard - if True, trigger tests in descending order by number of
+        shards required to run the test. Performance optimization.
+    Returns:
+      Triple, each a list.
+        invocations, api.resultdb.Invocation objects, for all tasks started
+        invalid suites, test_suites which were malformed or otherwise aborted
+        failed suites, test_suites which failed in any way. Superset of invalids
+   """
     local_test_suites = []
     swarming_test_suites = []
     skylab_test_suites = []
@@ -287,14 +300,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
     for group in groups:
       group.run(caller_api, suffix)
 
-    bad_results_tuple = self._retrieve_bad_results(test_suites, suffix)
+    bad_results_dict = {}
+    (bad_results_dict['invalid'],
+     bad_results_dict['failed']) = self._retrieve_bad_results(
+         test_suites, suffix)
 
     if (self.m.buildbucket.build.builder.project != 'chromium' or
         self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
       # Only derives results on chromium ci/try builders.
       # Note: this is a temporary change for ResultDB to control the builders it
       # gets test results from.
-      return bad_results_tuple
+      return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
     # Derives swarming test results to ResultDB.
     # The returned results are not being used yet.
@@ -310,14 +326,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step_result.presentation.logs["stdout"] = [
           'No swarming test results to derive.'
       ]
-      return bad_results_tuple
+      return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
     swarming_host = caller_api.chromium_swarming.swarming_server
     parsed = urlparse.urlparse(swarming_host)
     if parsed.scheme:
       swarming_host = parsed.netloc
 
-    invocations = self.m.resultdb.chromium_derive(
+    invocation_dict = self.m.resultdb.chromium_derive(
         step_name=derive_step_name,
         swarming_host=swarming_host,
         task_ids=swarming_task_ids,
@@ -329,7 +345,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Temporary workaround to make sure led builds don't fail because of
       # this.
       # Should be removed when led v2 starts to create invocations.
-      return bad_results_tuple
+      return invocation_dict, bad_results_dict['invalid'], bad_results_dict[
+          'failed']
 
     if suffix != 'without patch':
       # Include the derived invocations in the build's invocation.
@@ -339,10 +356,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       include_step_name = ('include derived test results (%s)' %
                            suffix if suffix else 'include derived test results')
       self.m.resultdb.include_invocations(
-          invocations.keys(), step_name=include_step_name)
+          invocation_dict.keys(), step_name=include_step_name)
 
     test_variants = self._test_variants_with_unexpected_results(
-        invocations, suffix)
+        invocation_dict, suffix)
 
     step_name = 'exonerate unexpected passes'
     if suffix == 'without patch':
@@ -357,7 +374,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         step_name=step_name,
     )
 
-    return bad_results_tuple
+    return invocation_dict, bad_results_dict['invalid'], bad_results_dict[
+        'failed']
 
   def _test_variants_with_unexpected_results(self, invocations, suffix):
     """Gets test variants with unexpected results.
@@ -616,6 +634,61 @@ class TestUtilsApi(recipe_api.RecipeApi):
         set(old_invalid_suites).intersection(retried_invalid_suites))
     return still_invalid_swarming_suites + non_swarming_invalid_suites
 
+  def _count_unexpected_invocations(self, invocation_dict):
+    acc = 0
+    for i in invocation_dict.values():
+      if any(not r.expected for r in i.test_results):
+        acc += 1
+    return acc
+
+  def _should_abort_tryjob(self, invocation_dict, failed_suites):
+    failures_string = (
+        'skip retrying because there are >= {} test suites with test ' +
+        'failures and it most likely indicates a problem with the CL').format(
+            self._min_failed_suites_to_skip_retry)
+    unexpected_string = (
+        'skip retrying because there are >= {} test suites with unexpected '
+        'results and it most likely indicates a problem with the CL').format(
+            self._min_failed_suites_to_skip_retry)
+    old_should_abort = (
+        len(failed_suites) >= self._min_failed_suites_to_skip_retry)
+    try:
+      new_should_abort = (
+          self._count_unexpected_invocations(invocation_dict) >=
+          self._min_failed_suites_to_skip_retry)
+    except Exception as e:  #pragma: nocover
+      breakage = self.m.python.succeeding_step(
+          'Failure in ResultDB lookup',
+          'Querying for tryjob abort via ResultDB produced error {}'.format(e))
+      breakage.presentation.status = self.m.step.FAILURE
+      return old_decision
+
+    mismatch_string = ('Legacy decision for trybot abort was {}\n' +
+                       'New decision for trybot abort was {}').format(
+                           old_should_abort, new_should_abort)
+    # Overall logic here:
+    #   - check if either source reports problems. If not, no messages needed.
+    #   - Check the source-of-truth first (currently the old verdict). If this
+    #       reports problems, set the message based on that. This order only
+    #       matters if both sources report problems.
+    #   - If the source of truth says it's fine but the other source disagrees,
+    #       then set the message based on the complaining source.
+    #   - If the two sources disagree, add an extra warning step saying so.
+    #   - Return the verdict purely based on the source of truth
+    if not old_should_abort and not new_should_abort:
+      return False
+    if old_should_abort:
+      result = self.m.python.succeeding_step(failures_string, '')
+    else:
+      result = self.m.python.succeeding_step(unexpected_string, '')
+    result.presentation.status = self.m.step.FAILURE
+
+    if new_should_abort != old_should_abort:
+      discrepancy = self.m.python.succeeding_step('Migration mismatch',
+                                                  mismatch_string)
+      discrepancy.presentation.status = self.m.step.WARNING
+    return old_should_abort
+
   def run_tests(self,
                 caller_api,
                 test_suites,
@@ -642,8 +715,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       test_suites - iterable of objects implementing the steps.Test interface.
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
-      sort_by_shard - sort the order of triggering depends on the number of
-                      shards.
+      sort_by_shard - if True, trigger tests in descending order by number of
+        shards required to run the test. Performance optimization.
       retry_failed_shards: If true, attempts to retry failed shards of swarming
                            tests, typically used with retry_invalid_shards.
       retry_invalid_shards: If true, attempts to retry shards of swarming tests
@@ -656,16 +729,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.failing_step(
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
-    invalid_test_suites, failed_test_suites = self._run_tests_once(
-        caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
+    invocation_dict, invalid_test_suites, failed_test_suites = (
+        self._run_tests_once(
+            caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
 
-    if self.m.tryserver.is_tryserver and len(
-        failed_test_suites) >= self._min_failed_suites_to_skip_retry:
-      result = self.m.python.succeeding_step(
-          'skip retrying because there are >= %d test suites with test '
-          'failures and it most likely indicate a problem with the CL' %
-          self._min_failed_suites_to_skip_retry, '')
-      result.presentation.status = self.m.step.FAILURE
+    if self.m.tryserver.is_tryserver and self._should_abort_tryjob(
+        invocation_dict, failed_test_suites):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
     if suffix == 'with patch':
@@ -695,7 +764,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retry_suffix = 'retry shards'
     if suffix:
       retry_suffix += ' ' + suffix
-    new_swarming_invalid_suites, _ = self._run_tests_once(
+    _, new_swarming_invalid_suites, _ = self._run_tests_once(
         caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
 
     invalid_test_suites = self._still_invalid_suites(
