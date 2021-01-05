@@ -13,6 +13,10 @@ import json
 import logging
 import os
 import sys
+import zlib
+
+import aggregation_util
+import repository_util
 
 
 def get_json_coverage_files(json_dir):
@@ -452,6 +456,52 @@ def get_files_coverage_data(src_path, coverage_files):
   return files_coverage_data
 
 
+def generate_json_coverage_metadata(coverage_dir, src_path, component_mapping):
+  """Generate a JSON output representing JavaScript code coverage.
+
+  JSON format conforms to the proto:
+  //infra/appengine/findit/model/proto/code_coverage.proto
+
+  Args:
+    coverage_dir: Absolute path that contains merged v8 coverage reports.
+    src_path: The absolute path to the source files checkout.
+    component_mapping: Mapping of monorail component to directory.
+
+  Returns:
+    JSON format coverage metadata.
+  """
+  coverage_files = get_json_coverage_files(coverage_dir)
+  if not coverage_files:
+    raise Exception('No coverage file found under %s' % coverage_dir)
+  logging.info('Found coverage files: %s', str(coverage_files))
+
+  data = {}
+  data['files'] = get_files_coverage_data(src_path, coverage_files)
+
+  if not data['files']:
+    raise Exception('No coverage data associated with source files found.')
+
+  # Add git revision and timestamp per source file.
+  repository_util.AddGitRevisionsToCoverageFilesMetadata(
+      data['files'], src_path, 'DEPS')
+
+  logging.info('Adding directories and components coverage data ...')
+
+  per_directory_coverage_data, per_component_coverage_data = (
+      aggregation_util.get_aggregated_coverage_data_from_files(
+          data['files'], component_mapping))
+
+  data['components'] = None
+  data['dirs'] = None
+  if per_component_coverage_data:
+    data['components'] = per_component_coverage_data.values()
+  if per_directory_coverage_data:
+    data['dirs'] = per_directory_coverage_data.values()
+    data['summaries'] = per_directory_coverage_data['//']['summaries']
+
+  return data
+
+
 def _parse_args(args):
   """Parses the arguments.
 
@@ -506,20 +556,13 @@ def main():
   assert component_mapping, (
       'component_mapping (for full-repo coverage) must be specified')
 
-  coverage_files = get_json_coverage_files(params.coverage_dir)
-  if not coverage_files:
-    raise Exception('No coverage file found under %s' % params.coverage_dir)
-  logging.info('Found coverage files: %s', str(coverage_files))
+  data = generate_json_coverage_metadata(params.coverage_dir, params.src_path,
+                                         component_mapping)
 
-  data = {}
-  data['files'] = get_files_coverage_data(params.src_path, coverage_files)
-
-  if not data['files']:
-    raise Exception('No coverage data associated with source files found.')
-
-  # TODO(benreich): Finish off the extra information required for the format.
-  #   - Add directory level summaries.
-  #   - Add component level summaries.
+  logging.info('Writing fulfilled JavaScript coverage metadata to %s',
+               params.output_dir)
+  with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
+    f.write(zlib.compress(json.dumps(data)))
 
 
 if __name__ == '__main__':

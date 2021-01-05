@@ -15,6 +15,7 @@ sys.path.insert(0,
                 os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'resources')))
 
 import generate_coverage_metadata_for_javascript as generator
+import repository_util
 
 
 class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
@@ -70,6 +71,12 @@ class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
           }],
           'line': 8
       }])
+
+  FILE_REVISIONS = {
+      '//path/to/file.js': ('hash1', 1234),
+  }
+
+  COMPONENT_MAPPING = {'path': 'Test>Component'}
 
   @mock.patch.object(os, 'listdir')
   def test_get_json_files_ignores_everything_else(self, mock_listdir):
@@ -464,6 +471,192 @@ exports.test = test;'
 
     output = generator.get_line_coverage_metric_summary(input_line_range)
     self.assertEqual(output, expected_output)
+
+  @mock.patch.object(os, 'listdir')
+  @mock.patch.object(repository_util, 'AddGitRevisionsToCoverageFilesMetadata')
+  def test_generate_json_coverage_metadata(self, mock_add_get_revisions,
+                                           mock_listdir):
+    coverage_data_one = {
+        '/b/some/src/path/to/file/a.js': [{
+            'end': 100,
+            'count': 2
+        },],
+    }
+
+    mock_add_get_revisions.return_value = self.FILE_REVISIONS
+
+    mock_listdir.return_value = \
+        ['/b/some/coverage/browser_tests_javascript.json']
+
+    expected_output = {
+        'files': [{
+            'path':
+                '//path/to/file/a.js',
+            'lines': [{
+                'count': 3,
+                'last': 3,
+                'first': 1
+            }, {
+                'count': 1,
+                'last': 4,
+                'first': 4
+            }, {
+                'count': 2,
+                'last': 6,
+                'first': 5
+            }, {
+                'count': 0,
+                'last': 7,
+                'first': 7
+            }, {
+                'count': 2,
+                'last': 9,
+                'first': 8
+            }, {
+                'count': 3,
+                'last': 10,
+                'first': 10
+            }, {
+                'count': 1,
+                'last': 11,
+                'first': 11
+            }],
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'uncovered_blocks': [{
+                'ranges': [{
+                    'end': 18,
+                    'first': 16
+                }],
+                'line': 6
+            }, {
+                'ranges': [{
+                    'end': 17,
+                    'first': 0
+                }],
+                'line': 7
+            }, {
+                'ranges': [{
+                    'end': 3,
+                    'first': 0
+                }],
+                'line': 8
+            }]
+        }],
+        'dirs': [{
+            'dirs': [{
+                'path': '//path/',
+                'name': 'path/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': '//',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }, {
+            'dirs': [],
+            'path':
+                '//path/to/file/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': [{
+                'path': '//path/to/file/a.js',
+                'name': 'a.js',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }]
+        }, {
+            'dirs': [{
+                'path': '//path/to/',
+                'name': 'to/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': '//path/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }, {
+            'dirs': [{
+                'path': '//path/to/file/',
+                'name': 'file/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': '//path/to/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }],
+        'summaries': [{
+            'covered': 10,
+            'total': 11,
+            'name': 'line'
+        }],
+        'components': [{
+            'dirs': [{
+                'path': '//path/',
+                'name': 'path/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': 'Test>Component',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }]
+        }]
+    }
+
+    mock_get_coverage_data_and_paths = mock.Mock()
+    mock_convert_coverage_to_line_column_format = mock.Mock()
+
+    with mock.patch.object(generator, 'get_coverage_data_and_paths',
+                           mock_get_coverage_data_and_paths):
+
+      with mock.patch.object(generator,
+                             'convert_coverage_to_line_column_format',
+                             mock_convert_coverage_to_line_column_format):
+
+        mock_get_coverage_data_and_paths.return_value = coverage_data_one
+        mock_convert_coverage_to_line_column_format.return_value = \
+            self.MOCK_LINE_COLUMN_FORMAT_OUTPUT
+        actual_output = generator.generate_json_coverage_metadata(
+            '/b/some/coverage', '/b/some/src', self.COMPONENT_MAPPING)
+
+        self.assertDictEqual(expected_output, actual_output)
 
 
 if __name__ == '__main__':
