@@ -597,6 +597,12 @@ class ArchiveApi(recipe_api.RecipeApi):
     if not config.archive_datas:
       return
 
+    def _sanitize_gcs_path(gcs_path, file_path):
+      gcs = gcs_path.split('/')
+      f = file_path.split('/')
+      return ('/'.join([x for x in gcs if x]) + '/' +
+              '/'.join([x for x in f if x]))
+
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in config.archive_datas:
 
@@ -619,6 +625,19 @@ class ArchiveApi(recipe_api.RecipeApi):
             common_pieces = f.pieces[len(build_dir.pieces):]
             expanded_files.add('/'.join(common_pieces))
 
+        if archive_data.verifiable_key_path:
+          sig_paths = set()
+          for f in expanded_files:
+            # Files are relative to the build_dir, so this generates the .sig
+            # file next to the original.
+            self.m.cloudkms.sign(archive_data.verifiable_key_path,
+                                 build_dir.join(f), build_dir.join(f + '.sig'))
+            # This file path is appended directly to the provided gcs_path for
+            # uploads. We'll uploaded this .sig next to the original
+            # in GCS as well.
+            sig_paths.add(f + '.sig')
+          expanded_files = expanded_files.union(sig_paths)
+
         # Get map of local file path to upload -> destination file path in GCS
         # bucket.
         if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
@@ -628,7 +647,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'archive_data properties with |archive_type| '
                 'ARCHIVE_TYPE_FILES must have empty |dirs|')
           uploads = {
-              build_dir.join(f): '/'.join([gcs_path, f]) for f in expanded_files
+              build_dir.join(f): _sanitize_gcs_path(gcs_path, f)
+              for f in expanded_files
           }
         elif (archive_data.archive_type ==
               ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES):
@@ -638,8 +658,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'archive_data properties with |archive_type| '
                 'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
           uploads = {
-              build_dir.join(f): '/'.join([gcs_path,
-                                           self.m.path.basename(f)])
+              build_dir.join(f): _sanitize_gcs_path(gcs_path,
+                                                    self.m.path.basename(f))
               for f in expanded_files
           }
         elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:

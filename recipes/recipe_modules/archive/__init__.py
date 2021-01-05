@@ -11,6 +11,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/gsutil',
     'infra/zip',
+    'infra/cloudkms',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/file',

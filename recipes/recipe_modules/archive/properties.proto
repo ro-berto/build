@@ -80,6 +80,14 @@ message ArchiveData {
   // In this way, the "x86/latest/chrome.txt" will include the latest
   // version info.
   LatestFile latest_upload = 7;
+
+  // A string path to the key used to verify bits. Setting this parameter will
+  // generated a .sig signed version for the files listed in this ArchiveData
+  // definition and upload it to the GCS path in this config. This path is
+  // NOT relative to the out dir. Please visit
+  // https://chromium.googlesource.com/infra/infra/+/refs/heads/master/recipes/
+  // recipe_modules/cloudkms/api.py#48 for details on the underlying call.
+  string verifiable_key_path = 8;
 }
 
 // Next id: 2

@@ -394,3 +394,33 @@ def GenTests(api):
         api.post_process(post_process.StatusFailure),
         api.post_process(post_process.DropExpectation),
     )
+
+  input_properties = properties.InputProperties(
+      archive_datas=[{
+          'files': ['/path/to/some/file.txt'],
+          'gcs_bucket': 'any-bucket',
+          'gcs_path': 'dest_dir/',
+          'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
+          'verifiable_key_path': '/path/to/some/key',
+      }],)
+  yield api.test(
+      'verifiable_key_path',
+      api.properties(
+          generic_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.sign', [
+                           '-input',
+                           '/path/to/some/file.txt',
+                           '-output',
+                           '/path/to/some/file.txt.sig',
+                       ]),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.gsutil upload (2)', [
+                           '/path/to/some/file.txt.sig',
+                           'gs://any-bucket/dest_dir/path/to/some/file.txt.sig',
+                       ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
