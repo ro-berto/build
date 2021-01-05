@@ -45,6 +45,8 @@ BUILDERS = bot_db.BotDatabase.create({
         chromium_android.SPEC,
     'chromium.android.fyi':
         chromium_android_fyi.SPEC,
+    'chromium.angle':
+        chromium_angle.SPEC,
     'chromium.chromiumos':
         chromium_chromiumos.SPEC,
     'chromium.clang':
