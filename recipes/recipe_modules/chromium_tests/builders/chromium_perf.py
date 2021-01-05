@@ -61,6 +61,7 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
     spec['gclient_apply_config'] += ['android']
   elif platform == 'chromeos':
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
+    spec['gclient_apply_config'] += ['chromeos']
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
@@ -203,6 +204,7 @@ SPEC.update({
             chromium_apply_config=[
                 'mb_luci_auth',
             ],
+            gclient_apply_config=['chromeos'],
             gclient_config='chromium_perf',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

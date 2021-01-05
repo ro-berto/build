@@ -77,7 +77,7 @@ _AddBuildSpec(
     target_bits=32,
     target_arch='arm',
     cros_board='kevin',
-    extra_gclient_apply_config=['arm', 'chromeos'])
+    extra_gclient_apply_config=['arm'])
 
 _AddIsolatedTestSpec(
     'linux-perf-fyi',
