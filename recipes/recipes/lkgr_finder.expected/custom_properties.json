@@ -244,7 +244,7 @@
       "git",
       "fetch",
       "origin",
-      "HEAD",
+      "master",
       "--progress"
     ],
     "cwd": "[CACHE]/builder/workdir",

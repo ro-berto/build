@@ -203,36 +203,7 @@
   },
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/led",
-      "-ensure-file",
-      "infra/tools/luci/led/${platform} latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "get led builders.get luci.chromium.try:linux-rel.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/led/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium.try:linux-rel"
     ],
@@ -274,7 +245,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium.try:win10_chromium_x64_rel_ng"
     ],
@@ -316,7 +287,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m87.try:linux-rel"
     ],
@@ -358,7 +329,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m87.try:win10_chromium_x64_rel_ng"
     ],
@@ -400,7 +371,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m88.try:linux-rel"
     ],
@@ -442,7 +413,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m88.try:win10_chromium_x64_rel_ng"
     ],
@@ -484,7 +455,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium.try:ios-simulator"
     ],
@@ -526,7 +497,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m87.try:ios-simulator"
     ],
@@ -568,7 +539,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "get-builder",
       "luci.chromium-m88.try:ios-simulator"
     ],
@@ -682,7 +653,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/builder/baz",
@@ -831,7 +802,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
     ],
@@ -877,7 +848,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-rbh",
       "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
@@ -926,7 +897,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-system",
       "-p",
       "30"
@@ -975,7 +946,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-exp",
       "false"
@@ -1024,7 +995,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "launch",
       "-resultdb",
       "on"
@@ -1102,7 +1073,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2446817"
     ],
@@ -1148,7 +1119,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-rbh",
       "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
@@ -1197,7 +1168,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-system",
       "-p",
       "30"
@@ -1246,7 +1217,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-exp",
       "false"
@@ -1295,7 +1266,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "launch",
       "-resultdb",
       "on"
@@ -1373,7 +1344,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-cr-cl",
       "https://chromium-review.googlesource.com/c/chromium/src/+/2537783"
     ],
@@ -1419,7 +1390,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-rbh",
       "8dac89c4e74d7bce5da3a69b642283fa7fca0958"
@@ -1468,7 +1439,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit-system",
       "-p",
       "30"
@@ -1517,7 +1488,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "edit",
       "-exp",
       "false"
@@ -1566,7 +1537,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/led/led",
+      "led",
       "launch",
       "-resultdb",
       "on"
