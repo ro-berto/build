@@ -53,7 +53,6 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.scheduling.qs_account = QS_ACCOUNT
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
-        req.params.migrations.enable_synchronous_offload = True
         autotest_to_create = req.test_plan.test.add()
         # SkylabRequest.suite is tast suite, represented by an autotest test.
         autotest_to_create.autotest.name = s.suite
