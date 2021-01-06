@@ -872,23 +872,102 @@
     "name": "stack_tool_for_tombstones"
   },
   {
+    "cmd": [],
+    "name": "test_report"
+  },
+  {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[CACHE]/builder/src/out/Debug/test_logs/*.log"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/src/out/Debug/test_logs",
+      "*.log"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "test_report",
+    "infra_step": true,
+    "name": "test_report.test_report_iteration",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import glob, os, sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@for report in glob.glob(sys.argv[1]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  with open(report, 'r') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    for l in f.readlines():@@@",
-      "@@@STEP_LOG_LINE@python.inline@      print l@@@",
-      "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/src/out/Debug/test_logs/bar.log@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/src/out/Debug/test_logs/foo.log@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Debug/test_logs/bar.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "test_report.print report [CACHE]/builder/src/out/Debug/test_logs/bar.log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@bar.log@contents of file [CACHE]/builder/src/out/Debug/test_logs/bar.log@@@",
+      "@@@STEP_LOG_END@bar.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Debug/test_logs/bar.log"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "test_report.clean up [CACHE]/builder/src/out/Debug/test_logs/bar.log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Debug/test_logs/foo.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "test_report.print report [CACHE]/builder/src/out/Debug/test_logs/foo.log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@foo.log@contents of file [CACHE]/builder/src/out/Debug/test_logs/foo.log@@@",
+      "@@@STEP_LOG_END@foo.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Debug/test_logs/foo.log"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "test_report.clean up [CACHE]/builder/src/out/Debug/test_logs/foo.log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

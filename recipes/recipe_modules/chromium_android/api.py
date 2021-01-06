@@ -4,6 +4,7 @@
 
 import contextlib
 import datetime
+import glob
 import json
 import os
 import pipes
@@ -874,21 +875,20 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.step('stack_tool_for_tombstones', tombstones_cmd, infra_step=True)
 
   def test_report(self):
-    self.m.python.inline(
-        'test_report',
-        """
-            import glob, os, sys
-            for report in glob.glob(sys.argv[1]):
-              with open(report, 'r') as f:
-                for l in f.readlines():
-                  print l
-              os.remove(report)
-         """,
-        args=[
-            self.m.path['checkout'].join('out', self.m.chromium.c.BUILD_CONFIG,
-                                         'test_logs', '*.log')
-        ],
-    )
+    dirpath = self.m.path['checkout'].join('out',
+                                           self.m.chromium.c.BUILD_CONFIG,
+                                           'test_logs')
+    with self.m.step.nest('test_report'):
+      for report in self.m.file.glob_paths(
+          'test_report_iteration',
+          dirpath,
+          '*.log',
+          test_data=('foo.log', 'bar.log')):
+        self.m.file.read_text(
+            "print report {}".format(report),
+            report,
+            test_data='contents of file {}'.format(report))
+        self.m.file.remove("clean up {}".format(report), report)
 
   def common_tests_setup_steps(self, **provision_kwargs):
     if self.c.use_devil_adb:
