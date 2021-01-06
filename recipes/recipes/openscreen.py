@@ -227,22 +227,23 @@ def GenerateRequest(api, binary, digest, dimensions):
       dimensions (dict of str=>str): Dimensions to be used to generate a
           request. Must be valid swarming selection dimensions to be
           unpacked as **kwargs, such as pool or os.
+
+  Returns:
+    TaskRequest: task request to execute on swarming bot.
   """
   request = api.swarming.task_request().with_name(binary)
 
-  modified_request = request[0].with_command(
-      ['./out/{}/{}'.format(BUILD_CONFIG,
-                            binary)]).with_dimensions(**dimensions)
+  # Quick note about the swarming API. Swarming Tasks are composed of "slices"
+  # made of individual TaskRequest objects. The task_request() getter returns
+  # a basic request with one mostly empty TaskRequest that can be used as a
+  # template to generate slices.
+  # For more information, see the swarming guide:
+  # https://chromium.googlesource.com/infra/luci/luci-py/+/master/appengine/swarming/doc/User-Guide.md#task #pylint: disable=line-too-long
+  task_slice = request[0].with_command([
+      './out/{}/{}'.format(BUILD_CONFIG, binary)
+  ]).with_dimensions(**dimensions).with_cas_input_root(digest)
 
-  # TODO(crbug.com/1156240): CAS digests do not work for tests.
-  # If there is an empty digest in an actual build, the swarming
-  # command will fail later. Allowing an empty digest is necessary
-  # for training tests until the above bug is resolved
-  if digest:
-    modified_request = modified_request.with_cas_input_root(
-        digest)  # pragma: no cover
-
-  request = (request.with_slice(0, modified_request))
+  request = request.with_slice(0, task_slice)
   return request
 
 
