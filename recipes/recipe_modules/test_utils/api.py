@@ -686,7 +686,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if new_should_abort != old_should_abort:
       discrepancy = self.m.python.succeeding_step('Migration mismatch',
                                                   mismatch_string)
-      discrepancy.presentation.status = self.m.step.WARNING
+      discrepancy.presentation.status = self.m.step.FAILURE
     return old_should_abort
 
   def run_tests(self,
