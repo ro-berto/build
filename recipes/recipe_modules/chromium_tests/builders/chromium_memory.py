@@ -274,6 +274,18 @@ SPEC = {
             gclient_apply_config=['android'],
             simulation_platform='linux',
         ),
+    'linux-ubsan-vptr':
+        _chromium_memory_spec(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'win-asan':
         _chromium_memory_spec(
             chromium_config='chromium_win_clang_asan',
