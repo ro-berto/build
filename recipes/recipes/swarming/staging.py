@@ -73,9 +73,6 @@ def RunSteps(api):
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
   update_step = api.chromium_checkout.ensure_checkout(bot_config)
 
-  # Ensure swarming_client version is fresh enough.
-  api.chromium_swarming.check_client_version()
-
   build_config = bot_config.create_build_config(api.chromium_tests, update_step)
   compile_targets = build_config.get_compile_targets(build_config.all_tests())
 

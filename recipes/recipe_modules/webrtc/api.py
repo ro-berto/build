@@ -516,11 +516,6 @@ class WebRTCApi(recipe_api.RecipeApi):
                           self.m.path['checkout'].join(
                               'rtc_tools', 'testing', 'golang', 'linux')])
 
-
-  def check_swarming_version(self):
-    if self.bot.should_test:
-      self.m.chromium_swarming.check_client_version()
-
   @contextlib.contextmanager
   def ensure_sdk(self):
     with self.m.osx_sdk(self.bot.config['ensure_sdk']):

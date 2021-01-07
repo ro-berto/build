@@ -490,13 +490,6 @@ def GenTests(api):
       api.step_data('compile (with patch)', retcode=1),
   )
 
-  yield api.test(
-      'check_swarming_version_failure',
-      api.chromium.try_build(),
-      api.platform.name('linux'),
-      api.step_data('swarming.py --version', retcode=1),
-  )
-
   # Successfully compiling, isolating and running two targets on swarming for a
   # commit queue job.
   yield api.test(

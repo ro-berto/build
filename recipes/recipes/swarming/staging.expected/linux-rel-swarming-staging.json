@@ -191,18 +191,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[CACHE]/builder/src/testing/buildbot/chromium.dev.json",
       "/path/to/tmp/json"

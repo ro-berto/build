@@ -14,7 +14,6 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -65,10 +64,6 @@ def GenTests(api):
               'xctest': True,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
       api.step_data('fake tests (fake device iOS 8.1) (with patch)',
                     api.ios.generate_test_results_placeholder()),
@@ -97,10 +92,6 @@ def GenTests(api):
               'xctest': True,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
       api.step_data(
           'fake tests (fake device iOS 8.1) (with patch)',
@@ -138,10 +129,6 @@ def GenTests(api):
               'xctest': True,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
       api.step_data(
           'fake tests (fake device iOS 8.1) (with patch)',
@@ -179,10 +166,6 @@ def GenTests(api):
               'xctest': True,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -202,10 +185,6 @@ def GenTests(api):
           ],
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
   )
 
@@ -233,10 +212,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
   )
 
@@ -266,10 +241,6 @@ def GenTests(api):
               'target_cpu="x86"',
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
   )
 
@@ -303,10 +274,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
   )
 
@@ -362,10 +329,6 @@ def GenTests(api):
           'additional_compile_targets': ['fake_target'],
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       suppress_analyze(),
   )
 

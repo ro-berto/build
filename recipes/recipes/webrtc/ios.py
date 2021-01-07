@@ -492,8 +492,6 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  webrtc.check_swarming_version()
-
   with api.step.nest('apply build config'):
     webrtc.apply_ios_config()
 

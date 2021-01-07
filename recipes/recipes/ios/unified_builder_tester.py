@@ -106,10 +106,6 @@ def GenTests(api):
               },
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   ], api.empty_test_data())
 
   yield api.test(
@@ -143,10 +139,6 @@ def GenTests(api):
           ],
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -169,10 +161,6 @@ def GenTests(api):
           'goma_client_type': 'candidate',
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -220,10 +208,6 @@ def GenTests(api):
               'target_cpu="arm"',
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -241,10 +225,6 @@ def GenTests(api):
               'target_cpu="arm"',
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.post_process(verify_webkit_custom_vars, True),
       api.post_process(post_process.DropExpectation),
   )

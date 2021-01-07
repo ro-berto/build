@@ -57,7 +57,6 @@ def RunSteps(api):
     api.chromium.ensure_goma()
   if webrtc.bot.should_build:
     api.chromium.runhooks()
-  webrtc.check_swarming_version()
 
   if not webrtc.is_compile_needed():
     step_result = api.step('No further steps are necessary.', cmd=None)

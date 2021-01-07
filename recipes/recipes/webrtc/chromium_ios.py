@@ -47,8 +47,4 @@ def GenTests(api):
               'os': '8.0',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
