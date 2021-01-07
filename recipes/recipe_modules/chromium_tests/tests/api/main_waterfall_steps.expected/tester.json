@@ -483,7 +483,7 @@
     "cmd": [
       "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
       "--output",
-      "[CLEANUP]/tmp_tmp_2/sub_build.pb",
+      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
       "--",
       "python",
       "-u",
@@ -502,7 +502,7 @@
       "--test-type=base_unittests",
       "--step-name=base_unittests",
       "--test-launcher-summary-output",
-      "/path/to/tmp/json",
+      "[CLEANUP]/tmp_tmp_2",
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
       "--build-number=571",
@@ -512,11 +512,11 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_3",
-      "TEMP": "[CLEANUP]/tmp_tmp_3",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_3",
-      "TMP": "[CLEANUP]/tmp_tmp_3",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_3"
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TEMP": "[CLEANUP]/tmp_tmp_4",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TMP": "[CLEANUP]/tmp_tmp_4",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
     },
     "name": "base_unittests",
     "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",

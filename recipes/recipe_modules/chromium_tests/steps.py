@@ -47,6 +47,7 @@ from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
 from recipe_engine.types import freeze
 from recipe_engine.types import FrozenDict
+from recipe_engine.util import Placeholder
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
@@ -259,6 +260,8 @@ class ResultDB(object):
       will be rejected with an error.
     * result_file - path to result file for result_adapter to read test results
       from. It is meaningful only when result_format is not None.
+    * artifact_directory - path to artifact directory where result_adapter
+      finds and uploads artifacts from.
     * result_adapter_path - path to result_adapter binary.
   """
   enable = attrib(bool, default=False)
@@ -270,6 +273,17 @@ class ResultDB(object):
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
+  artifact_directory = attrib((str, Placeholder), default='${ISOLATED_OUTDIR}')
+  # result_adapter binary is available in chromium checkout or
+  # the swarming bot.
+  #
+  # local tests can use it from chromium checkout with the following path
+  # : $CHECKOUT/src/tools/resultdb/result_adapter
+  #
+  # However, swarmed tasks can't use it, because there is no guarantee that
+  # the isolate would include result_adapter always. Instead, swarmed tasks use
+  # result_adapter deployed via the pool config. That is, result_adapter
+  # w/o preceding path.
   result_adapter_path = attrib(str, default='result_adapter')
 
   @classmethod
@@ -330,9 +344,14 @@ class ResultDB(object):
       exe = configs.result_adapter_path + ('.exe'
                                            if api.platform.is_win else '')
       result_adapter = [
-          exe, configs.result_format, '-artifact-directory',
-          '${ISOLATED_OUTDIR}', '-result-file', configs.result_file
+          exe,
+          configs.result_format,
+          '-result-file',
+          configs.result_file,
       ]
+      if configs.artifact_directory:
+        result_adapter += ['-artifact-directory', configs.artifact_directory]
+
       if configs.result_format == 'json' and configs.test_id_as_test_location:
         result_adapter += ['-test-location']
 
@@ -1123,7 +1142,7 @@ class ExperimentalTestSpec(TestWrapperSpec):
   is_in_experiment = attrib(bool)
 
   @classmethod
-  def create(cls, test_spec, experiment_percentage, api):  # pylint: disable=arguments-differ
+  def create(cls, test_spec, experiment_percentage, api):  # pylint: disable=line-too-long,arguments-differ
     """Create an ExperimentalTestSpec.
 
     Arguments:
@@ -1579,29 +1598,26 @@ class LocalGTestTest(Test):
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
-    gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
+    # for local runs, result_adapter is available in chromium checkout.
+    resultdb = attr.evolve(
+        self.spec.resultdb,
+        artifact_directory='',
+        base_variant=dict(
+            self.spec.resultdb.base_variant or {},
+            test_suite=self.canonical_name),
+        result_adapter_path=str(api.path['checkout'].join(
+            'tools', 'resultdb', 'result_adapter')),
+        result_file=api.path.abspath(api.path.mkstemp()))
+    gtest_results_file = api.test_utils.gtest_results(
+        add_json_log=False, leak_to=resultdb.result_file)
 
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
-    # result_adapter binaries are available in chromium checkout or the swarming
-    # bot.
-    #
-    # for local runs, result_adapter is available in chromium checkout.
-    # Swarmed tasks can't use it because there is no guarantee that the isolate
-    # includes result_adapter. Instead, swarmed tasks use result_adapter
-    # deployed via the pool config.
-    result_adapter_path = str(api.path['checkout'].join('tools', 'resultdb',
-                                                        'result_adapter'))
     kwargs = {
-        'name':
-            self.step_name(suffix),
-        'args':
-            args,
-        'step_test_data':
-            step_test_data,
-        'resultdb':
-            attr.evolve(
-                self.spec.resultdb, result_adapter_path=result_adapter_path),
+        'name': self.step_name(suffix),
+        'args': args,
+        'step_test_data': step_test_data,
+        'resultdb': resultdb,
     }
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
@@ -1622,8 +1638,8 @@ class LocalGTestTest(Test):
         args.extend(['--test-launcher-summary-output', gtest_results_file])
         args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
         cmd = ['python', '-u', script] + args
-        if self.spec.resultdb and self.spec.resultdb.enable:
-          cmd = self.spec.resultdb.wrap(api, cmd, step_name=self.target_name)
+        if resultdb and resultdb.enable:
+          cmd = resultdb.wrap(api, cmd, step_name=self.target_name)
         api.step(self.target_name, cmd)
       else:
         api.chromium.runtest(

@@ -749,7 +749,7 @@
       "[CACHE]/builder/src/out/bad_devices.json",
       "--verbose",
       "--json-results-file",
-      "/path/to/tmp/json",
+      "[CLEANUP]/tmp_tmp_1",
       "--adb-path",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb"
     ],

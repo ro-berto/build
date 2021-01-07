@@ -90,9 +90,9 @@ def RunSteps(api):
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, result_format='gtest'),
       ['rdb', 'stream', '-var', bvar, '--'] + [
-          'result_adapter', 'gtest', '-artifact-directory',
-          '${ISOLATED_OUTDIR}', '-result-file',
-          '${ISOLATED_OUTDIR}/output.json', '--'
+          'result_adapter', 'gtest', '-result-file',
+          '${ISOLATED_OUTDIR}/output.json', '-artifact-directory',
+          '${ISOLATED_OUTDIR}', '--'
       ] + cmd,
   )
   api.assertions.assertEqual(
@@ -100,17 +100,21 @@ def RunSteps(api):
       ['rdb', 'stream', '-var', bvar, '--'] +
       # test_id_as_test_location should be ignore, as the format is not json.
       [
-          'result_adapter', 'gtest', '-artifact-directory',
-          '${ISOLATED_OUTDIR}', '-result-file',
-          '${ISOLATED_OUTDIR}/output.json', '--'
+          'result_adapter',
+          'gtest',
+          '-result-file',
+          '${ISOLATED_OUTDIR}/output.json',
+          '-artifact-directory',
+          '${ISOLATED_OUTDIR}',
+          '--',
       ] + cmd,
   )
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, result_format='json', test_id_as_test_location=True),
       ['rdb', 'stream', '-var', bvar, '--'] + [
-          'result_adapter', 'json', '-artifact-directory', '${ISOLATED_OUTDIR}',
-          '-result-file', '${ISOLATED_OUTDIR}/output.json', '-test-location',
-          '--'
+          'result_adapter', 'json', '-result-file',
+          '${ISOLATED_OUTDIR}/output.json', '-artifact-directory',
+          '${ISOLATED_OUTDIR}', '-test-location', '--'
       ] + cmd,
   )
 

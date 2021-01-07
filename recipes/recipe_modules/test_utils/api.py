@@ -1118,7 +1118,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return TestResultsOutputPlaceholder(self, add_json_log)
 
   @recipe_util.returns_placeholder
-  def gtest_results(self, add_json_log=True):
+  def gtest_results(self, add_json_log=True, leak_to=None):
     """A placeholder which will expand to
     '--test-launcher-summary-output=/tmp/file'.
 
@@ -1126,8 +1126,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
     (i.e. a single token in the command line) is the required format.
 
     The test_results will be an instance of the GTestResults class.
+
+    Visit
+    https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/README.recipes.md
+    to find the definition and usage of add_json_log and leak_to.
     """
-    return GTestResultsOutputPlaceholder(self, add_json_log)
+    return GTestResultsOutputPlaceholder(self, add_json_log, leak_to=leak_to)
 
 
 class TestGroup(object):
