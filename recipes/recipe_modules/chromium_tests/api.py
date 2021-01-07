@@ -881,7 +881,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # The best way to ensure the old build directory is not used is to
     # remove it.
     self.m.file.rmtree(
-        'build directory',
+        'remove build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
     legacy_build_url = None
@@ -1382,7 +1382,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # be possible to remove it, though there likely isn't a significant
       # benefit to doing so.
       self.m.file.rmtree(
-          'build directory',
+          'remove build directory',
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
     if package_transfer:

@@ -368,7 +368,7 @@
       "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
-    "name": "build directory"
+    "name": "remove build directory"
   },
   {
     "cmd": [
