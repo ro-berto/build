@@ -131,7 +131,6 @@ def TestSpec(config_name,
   )
 
   kwargs['parent_buildername'] = parent_buildername
-  kwargs['gclient_apply_config'].append('no_checkout_flash')
   kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
 
   if cros_board:

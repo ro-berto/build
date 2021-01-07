@@ -379,11 +379,6 @@ def ios_webkit_tot(c):
   c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/master'
 
 @CONFIG_CTX()
-def no_checkout_flash(c):
-  # internal perf tester does not need to checkout flash related repositories.
-  c.solutions[0].custom_vars['checkout_flash'] = 'False'
-
-@CONFIG_CTX()
 def no_kaleidoscope(c):
   c.solutions[0].custom_vars['checkout_kaleidoscope'] = 'False'
 

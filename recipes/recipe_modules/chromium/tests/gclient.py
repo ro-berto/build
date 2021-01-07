@@ -85,11 +85,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
-      'no_checkout_flash',
-      api.properties(apply_gclient_config='no_checkout_flash'),
-      api.post_process(post_process.DropExpectation),
-  )
-  yield api.test(
       'no_kaleidoscope',
       api.properties(apply_gclient_config='no_kaleidoscope'),
       api.post_process(post_process.StatusSuccess),
