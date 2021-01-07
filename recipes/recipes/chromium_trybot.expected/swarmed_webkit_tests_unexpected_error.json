@@ -1397,6 +1397,18 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
       "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"blink_web_tests (with patch)\", \"test_name\": \"test2.Test2\"}, {\"step_ui_name\": \"blink_web_tests (with patch)\", \"test_name\": \"test1.Test1\"}]}",

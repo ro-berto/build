@@ -727,6 +727,15 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
       "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.Two\"}]}",
@@ -1682,6 +1691,15 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
+    "name": "Fewer than 5 failures/unexpected results, continue with retries (2)"
   },
   {
     "cmd": [

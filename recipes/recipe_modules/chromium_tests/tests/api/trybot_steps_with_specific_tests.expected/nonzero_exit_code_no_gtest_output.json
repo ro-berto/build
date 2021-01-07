@@ -719,6 +719,15 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[CACHE]/builder",
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "name": "Tests statistics",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",

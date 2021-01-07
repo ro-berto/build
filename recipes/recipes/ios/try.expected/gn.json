@@ -1426,6 +1426,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
     "cmd": [],
     "name": "test_pre_run (retry shards with patch)",
     "~followup_annotations": [

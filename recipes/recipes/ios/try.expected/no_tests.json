@@ -676,6 +676,15 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
     "name": "$result"
   }
 ]

@@ -1383,6 +1383,18 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
