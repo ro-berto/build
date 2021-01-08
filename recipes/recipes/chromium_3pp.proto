@@ -1,0 +1,32 @@
+// Copyright 20120 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipes.build.chromium_3pp;
+
+message InputProperties {
+  // src-relative paths to the folder(s) that contain the 3pp subdirectory, e.g.
+  // third_party/guava. Could also be a glob like third_party/android_deps/**
+  // which scans all the subdirectories under android_deps.
+  //
+  // Note the parent directory of 3pp directory will be the CIPD package name.
+  repeated string package_paths = 1;
+
+  // A prefix to the CIPD package name, for all 3pp packages.
+  string package_prefix = 2;
+
+  // Target platform. Must be a valid CIPD ${platform}.
+  // See https://bit.ly/2Lp67iE for details.
+  string platform = 3;
+
+  // Force building the package, but do not upload to CIPD (copied from the
+  // recipe 3pp.py in "infra/infra" repo).
+  // This is forced to true when ran by trybots.
+  bool force_build = 4;
+
+  // A list of package paths to be built. Package must be present
+  // in "package_paths". When empty, "package_paths" will be used.
+  repeated string package_paths_to_build = 5;
+}
+
