@@ -48,6 +48,10 @@ def RunSteps(api):
   if api.properties.get('mock_java_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
+  if api.properties.get('mock_javascript_metadata_path', True):
+    api.path.mock_add_paths(
+        api.chromium.output_dir.join('devtools_code_coverage').join(
+            'all.json.gz'))
 
   test_specs = [
       steps.LocalIsolatedScriptTestSpec.create('checkdeps'),
@@ -167,8 +171,14 @@ def GenTests(api):
       api.code_coverage(use_javascript_coverage=True),
       api.post_process(post_process.MustRun, 'process javascript coverage'),
       api.post_process(
-          post_process.MustRun,
-          'process javascript coverage.Generate JavaScript coverage metadata'),
+          post_process.MustRun, 'process javascript coverage.'
+          'Generate JavaScript coverage metadata'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'Generate JavaScript coverage metadata'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'gsutil Upload JSON metadata'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -180,11 +190,13 @@ def GenTests(api):
           builder='linux-chromeos-js-code-coverage'),
       api.code_coverage(use_javascript_coverage=True),
       api.step_data(
-          'process javascript coverage.Generate JavaScript coverage metadata',
+          'process javascript coverage.'
+          'Generate JavaScript coverage metadata',
           retcode=1),
       api.post_check(lambda check, steps: check(steps[
-          'process javascript coverage.Generate JavaScript coverage metadata'
-          ''].output_properties['process_coverage_data_failure'] == True)),
+          'process javascript coverage.'
+          'Generate JavaScript coverage metadata'].output_properties[
+              'process_coverage_data_failure'] == True)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
