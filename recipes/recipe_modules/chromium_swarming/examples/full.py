@@ -58,9 +58,6 @@ def RunSteps(api, platforms, custom_trigger_script,
   api.gclient.set_config('chromium')
   api.chromium_checkout.ensure_checkout()
 
-  # Ensure swarming_client version is fresh enough.
-  api.chromium_swarming.check_client_version(step_test_data=(0, 8, 6))
-
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   api.chromium_swarming.swarming_server = (
@@ -183,9 +180,7 @@ def RunSteps(api, platforms, custom_trigger_script,
     if resultdb.enable:
       task.tags.add('test_suite:chromium_test')
     ensure_file = task_slice.cipd_ensure_file
-    if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
-      ensure_file.add_package('super/awesome/pkg', 'git_revision:deadbeef',
-                              'bin')
+    ensure_file.add_package('super/awesome/pkg', 'git_revision:deadbeef', 'bin')
     task_slice = (task_slice.with_dimensions(**task_dimensions).
                     with_cipd_ensure_file(ensure_file))
     task.request = task_request.with_slice(0, task_slice)

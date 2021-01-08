@@ -132,10 +132,6 @@ def GenTests(api):
                 },],
             },
         ]),
-        api.step_data(
-            'bootstrap swarming.swarming.py --version',
-            stdout=api.raw_io.output_text('1.2.3'),
-        ),
         api.path.exists(
             api.path['cleanup'].join('0_1_tmp_3', '110000'),
             api.path['cleanup'].join('0_1_tmp_3', '110000',
@@ -201,10 +197,6 @@ def GenTests(api):
           ],
       }),
       api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
-      api.step_data(
           'isolate.generate 0.isolated.gen.json',
           retcode=1,
       ),
@@ -237,10 +229,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.step_data('fake test (fake device iOS 8.1) (with patch)',
                     api.ios.generate_test_results_placeholder(failure=True)),
       api.post_process(post_process.StatusFailure),
@@ -268,10 +256,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
@@ -305,10 +289,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
@@ -344,10 +324,6 @@ def GenTests(api):
           },],
       }),
       api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
-      api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
               'shards': [{
@@ -380,10 +356,6 @@ def GenTests(api):
           },],
       }),
       api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
-      api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
               'shards': [{
@@ -415,10 +387,6 @@ def GenTests(api):
           },],
       }),
       api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
-      api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
               'shards': [{
@@ -449,10 +417,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
       api.step_data(
           'fake test (fake device iOS 8.1) (with patch)',
           api.chromium_swarming.summary(None, {
@@ -512,10 +476,6 @@ def GenTests(api):
           ],
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -536,10 +496,6 @@ def GenTests(api):
           'clobber': True,
           'tests': [],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -565,10 +521,6 @@ def GenTests(api):
               'priority': 199,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -596,10 +548,6 @@ def GenTests(api):
               'expiration_time': 3600,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -627,10 +575,6 @@ def GenTests(api):
               'max runtime seconds': 7200,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   xcode_build_version = sum([
@@ -669,10 +613,6 @@ def GenTests(api):
               },
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   ], api.empty_test_data())
 
   yield api.test(
@@ -704,10 +644,6 @@ def GenTests(api):
               'os': '10.0',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -742,10 +678,6 @@ def GenTests(api):
               },
           ],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -781,10 +713,6 @@ def GenTests(api):
                   'version:latest',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -819,10 +747,6 @@ def GenTests(api):
               'os': '12.0.1',
           }],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -856,10 +780,6 @@ def GenTests(api):
               'os': '12.0.1',
           }],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -885,10 +805,6 @@ def GenTests(api):
               'use trusted cert': True,
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -914,10 +830,6 @@ def GenTests(api):
               'os': '8.1',
           },],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -948,10 +860,6 @@ def GenTests(api):
               'os': '13.1',
           }],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )
 
   yield api.test(
@@ -978,8 +886,4 @@ def GenTests(api):
               'swarming tasks': 2
           }],
       }),
-      api.step_data(
-          'bootstrap swarming.swarming.py --version',
-          stdout=api.raw_io.output_text('1.2.3'),
-      ),
   )

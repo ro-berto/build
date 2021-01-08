@@ -707,11 +707,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     task.collect_step = self._isolated_script_collect_step
     return task
 
-  def check_client_version(self, step_test_data=None):
-    """Yields steps to verify compatibility with swarming_client version."""
-    return self.m.swarming_client.ensure_script_version(
-        'swarming.py', MINIMAL_SWARMING_VERSION, step_test_data)
-
   def trigger_task(self, task, resultdb=None, **kwargs):
     """Triggers one task.
 

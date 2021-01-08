@@ -411,9 +411,6 @@ class V8Api(recipe_api.RecipeApi):
       self.revision_number = str(self.revision_number)
 
   def set_up_swarming(self):
-    if self.bot_config.get('enable_swarming', True):
-      self.m.chromium_swarming.check_client_version()
-
     self.m.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
     self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
     self.m.chromium_swarming.set_default_dimension('gpu', 'none')

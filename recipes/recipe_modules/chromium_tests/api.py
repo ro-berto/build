@@ -203,8 +203,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.apply_config(c)
 
   def set_up_swarming(self, bot_config):
-    self.m.chromium_swarming.check_client_version()
-
     if bot_config.isolate_server:
       self.m.isolate.isolate_server = bot_config.isolate_server
 

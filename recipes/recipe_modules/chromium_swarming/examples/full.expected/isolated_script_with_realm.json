@@ -269,18 +269,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.8.6@@@"
-    ]
-  },
-  {
-    "cmd": [
       "tools/luci-go/isolate",
       "archive",
       "-isolate",

@@ -543,20 +543,6 @@
     "name": "bootstrap swarming"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
-      "--version"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "name": "bootstrap swarming.swarming.py --version",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@1.2.3@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "isolate"
   },

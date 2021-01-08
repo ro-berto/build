@@ -92,46 +92,6 @@
     "name": "submodule update (swarming_client)"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/swarming.py",
-      "--version"
-    ],
-    "name": "swarming.py --version",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.4.4@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/isolate.py",
-      "--version"
-    ],
-    "name": "isolate.py --version",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@0.3.1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "name": "swarming.py is too old",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Expecting at least v20.0.0, got v0.4.4@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "Step('swarming.py is too old') (retcode: 1)"
-    },
     "name": "$result"
   }
 ]
