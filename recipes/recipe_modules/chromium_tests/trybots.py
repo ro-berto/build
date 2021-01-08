@@ -422,6 +422,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android FYI 64 dEQP Vk Release (Pixel 2)',
                 retry_failed_shards=False,
             ),
+        'ios-angle-try-intel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.angle',
+                buildername='ios-angle-builder',
+                tester='ios-angle-intel',
+                retry_failed_shards=False,
+            ),
         'linux-angle-rel':
             try_spec.TrySpec.create(
                 mirrors=[
