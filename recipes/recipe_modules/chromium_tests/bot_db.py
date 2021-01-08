@@ -24,8 +24,6 @@ def _migration_validation(builder_id, builder_spec):
         'chromium.fyi',
         'chromium.perf',
         'chromium.webrtc',
-        'official.chrome',
-        'official.chrome.continuous',
         'official.chromeos.continuous',
 
         # Used for testing the migration
