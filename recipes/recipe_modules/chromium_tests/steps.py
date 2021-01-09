@@ -404,6 +404,26 @@ class TestSpecBase(object):
     raise NotImplementedError()  # pragma: no cover
 
   @abc.abstractmethod
+  def without_test_id_prefix(self):
+    """Get a spec without any test ID prefix specified.
+
+    Specs created manually in recipes will most likely not have the
+    test ID prefix specified, so this provides a means of comparing the
+    actual values of concern during migration.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  @abc.abstractmethod
+  def without_merge(self):
+    """Get a spec without any merge script specified.
+
+    Specs created manually in recipes will most likely not have the
+    merge script specified, so this provides a means of comparing the
+    actual values of concern during migration.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  @abc.abstractmethod
   def as_jsonish(self):
     """Convert the spec to a JSON-representable equivalent dict."""
     raise NotImplementedError()  # pragma: no cover
@@ -482,6 +502,12 @@ class TestSpec(TestSpecBase):
   def without_waterfall(self):
     return attr.evolve(
         self, waterfall_builder_group=None, waterfall_buildername=None)
+
+  def without_test_id_prefix(self):
+    return attr.evolve(self, test_id_prefix=None)
+
+  def without_merge(self):
+    return self  # pragma: no cover
 
   def as_jsonish(self):
     d = attr.asdict(self)
@@ -985,6 +1011,12 @@ class TestWrapperSpec(TestSpecBase):
 
   def without_waterfall(self):
     return attr.evolve(self, test_spec=self.test_spec.without_waterfall())
+
+  def without_test_id_prefix(self):
+    return attr.evolve(self, test_spec=self.test_spec.without_test_id_prefix())
+
+  def without_merge(self):
+    return attr.evolve(self, test_spec=self.test_spec.without_merge())
 
   def as_jsonish(self):
 
@@ -2135,6 +2167,9 @@ class SwarmingTestSpec(TestSpec):
         extra_suffix = cls._get_android_suffix(dimensions)
     return super(SwarmingTestSpec, cls).create(
         name, extra_suffix=extra_suffix, **kwargs)
+
+  def without_merge(self):
+    return attr.evolve(self, merge=None)
 
   @property
   def name(self):

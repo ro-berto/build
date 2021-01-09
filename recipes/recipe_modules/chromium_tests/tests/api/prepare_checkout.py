@@ -6,11 +6,13 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
 ]
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
 
 from PB.recipe_modules.build.chromium_tests.properties import InputProperties
@@ -281,8 +283,10 @@ def GenTests(api):
       builder_source_side_spec={
           'gtest_tests': [{
               'test': 'fake-test',
+              'test_id_prefix': 'fake-test-id-prefix',
           }],
-      })
+      },
+  )
 
   yield already_migrated_test(
       'test-migration-already-migrated-gtest-tests-swarming',
@@ -290,11 +294,15 @@ def GenTests(api):
       builder_source_side_spec={
           'gtest_tests': [{
               'test': 'fake-test',
+              'merge': {
+                  'script': '//fake-merge',
+              },
               'swarming': {
-                  'can_use_on_swarming_builders': True
+                  'can_use_on_swarming_builders': True,
               },
           }],
-      })
+      },
+  )
 
   yield already_migrated_test(
       'test-migration-already-migrated-junit-tests',
@@ -337,15 +345,42 @@ def GenTests(api):
   )
 
   yield api.test(
+      'test-migration-mismatch-swarming-merge-script',
+      fake_builder(
+          test_specs=[
+              steps.SwarmingGTestTestSpec.create(
+                  'fake-test',
+                  merge=chromium_swarming.MergeScript.create(
+                      script=api.path['start_dir'].join('super-fake-merge')),
+              ),
+          ],
+          builder_source_side_spec={
+              'gtest_tests': [{
+                  'test': 'fake-test',
+                  'merge': {
+                      'script': '//fake-merge',
+                  },
+                  'swarming': {
+                      'can_use_on_swarming_builders': True,
+                  },
+              }],
+          },
+      ),
+  )
+
+  yield api.test(
       'test-migration-mismatch-experimental',
       fake_builder(
           test_specs=[
-              steps.LocalIsolatedScriptTestSpec.create('fake-test'),
+              steps.SwarmingIsolatedScriptTestSpec.create('fake-test'),
           ],
           builder_source_side_spec={
               'isolated_scripts': [{
                   'name': 'fake-test',
                   'experiment_percentage': 10,
+                  'swarming': {
+                      'can_use_on_swarming_builders': True,
+                  },
               }],
           },
       ),

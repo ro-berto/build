@@ -12,6 +12,7 @@ import os
 import re
 import traceback
 
+from recipe_engine.config_types import Path
 from recipe_engine.types import freeze, FrozenDict
 from recipe_engine import recipe_api
 
@@ -273,8 +274,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if src_spec is None:
         migration_state['needs migration'].append({'test': s.name})
       else:
-        src_spec = src_spec.without_waterfall()
-        s = s.without_waterfall()
+        src_spec = src_spec.without_waterfall().without_test_id_prefix()
+        s = s.without_waterfall().without_test_id_prefix()
+        if hasattr(s, 'merge') and s.merge is None:
+          # Specs specified in the recipes generally don't have the merge script
+          # set whereas the source side specs will always have them generated,
+          # so clear it from the source side spec if its not present in the
+          # recipe spec
+          src_spec = src_spec.without_merge()
         if s == src_spec:
           migration_state['already migrated'].append({'test': s.name})
         else:
@@ -284,6 +291,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             def encode(obj):
               if isinstance(obj, FrozenDict):
                 return dict(obj)
+              if isinstance(obj, Path):
+                return str(obj)
               return '**Could not be encoded**'  # pragma: no cover
 
             text = self.m.json.dumps(
