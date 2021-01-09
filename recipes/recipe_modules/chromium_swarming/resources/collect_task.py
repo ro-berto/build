@@ -123,6 +123,8 @@ def collect_task(
   extant_shard_json_files = [
       f for f in shard_json_files if os.path.exists(f)]
 
+  logging.debug('Expecting shard_json_files: %r', shard_json_files)
+
   if not allow_missing_json and shard_json_files != extant_shard_json_files:
     collect_result = 1
     logging.error(
@@ -144,8 +146,6 @@ def collect_task(
     logging.warn(
         'No shard json files found in task_output_dir: %r\nFound %r',
         task_output_dir, task_output_dir_contents)
-
-  logging.debug('Found shard_json_files: %r', shard_json_files)
 
   merge_result = 0
 
