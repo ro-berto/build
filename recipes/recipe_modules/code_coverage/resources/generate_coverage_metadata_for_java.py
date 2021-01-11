@@ -377,12 +377,6 @@ def main():
     logging.info('Skip processing data as no source file was affected in CL')
     return
 
-  cmd = [
-      'java', '-jar',
-      os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',
-                   'jacococli.jar'), 'report'
-  ] + coverage_files
-
   # JaCoCo XML report will be generated temporarily
   # then parsed to json metadata to --output-file.
   temp_dir = tempfile.mkdtemp()
@@ -390,11 +384,26 @@ def main():
   temp_host_xml = os.path.join(temp_dir, 'temp_host.xml')
   temp_combined_xml = os.path.join(temp_dir, 'combined_host.xml')
   try:
-    device_cmd = cmd + _create_classfile_args(class_files,
-                                              _DEVICE_CLASS_EXCLUDE_SUFFIX)
+    # TODO(crbug/1159938): Revert to using just cmd instead of this filtered
+    # coverage file after verifying if this solves lapsed coverage issue.
+    cmd = [
+        'java', '-jar',
+        os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',
+                     'jacococli.jar'), 'report'
+    ]
+    dev_coverage_files = [
+        f for f in coverage_files if not f.endswith('junit_tests.exec')
+    ]
+    host_coverage_files = [
+        f for f in coverage_files if f.endswith('junit_tests.exec')
+    ]
+    device_cmd = cmd + dev_coverage_files + _create_classfile_args(
+        class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX)
+    host_cmd = cmd + host_coverage_files + _create_classfile_args(
+        class_files, _HOST_CLASS_EXCLUDE_SUFFIX)
+    # End of TODO changes.
+
     device_cmd += ['--xml', temp_device_xml]
-    host_cmd = cmd + _create_classfile_args(class_files,
-                                            _HOST_CLASS_EXCLUDE_SUFFIX)
     host_cmd += ['--xml', temp_host_xml]
 
     cmd_output = subprocess.check_output(device_cmd)
