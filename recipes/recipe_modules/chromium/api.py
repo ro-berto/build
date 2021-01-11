@@ -1144,7 +1144,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.TARGET_PLATFORM == 'android':
       gn_args.append('target_os="android"')
     elif self.c.TARGET_PLATFORM in ('mac', 'win'):
-      assert self.c.TARGET_ARCH == 'intel'
+      assert self.c.TARGET_ARCH in ('arm', 'intel')
     elif self.c.TARGET_PLATFORM == 'linux':
       assert self.c.TARGET_ARCH in ('arm', 'intel', 'mips')
 
