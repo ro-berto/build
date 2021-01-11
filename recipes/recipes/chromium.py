@@ -1495,19 +1495,6 @@ def GenTests(api):
           })),
   )
 
-  yield api.test(
-      'ensure_goma_fail',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi',
-          builder='Linux remote_run Builder',
-          build_number=77457),
-      api.override_step_data(
-          'ensure_goma.ensure_installed',
-          api.json.output({'result': None}),
-          retcode=1),
-  )
-
-
   json_results = {
     'interrupted': False,
     'version': 3,

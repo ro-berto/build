@@ -522,41 +522,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
         ),
-    'Linux remote_run Builder':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
-    'Linux remote_run Tester':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Linux remote_run Builder',
-            test_specs=[
-                steps.LocalGTestTestSpec.create('base_unittests'),
-            ],
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
     'chromeos-amd64-generic-lacros-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
