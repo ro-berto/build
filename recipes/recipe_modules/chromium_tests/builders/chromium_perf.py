@@ -200,9 +200,6 @@ SPEC.update({
     'chromeos-amd64-generic-lacros-builder-perf':
         bot_spec.BotSpec.create(
             chromium_config='chromium_perf',
-            chromium_apply_config=[
-                'mb_luci_auth',
-            ],
             gclient_apply_config=['chromeos'],
             gclient_config='chromium_perf',
             chromium_config_kwargs={
