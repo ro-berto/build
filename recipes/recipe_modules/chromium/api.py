@@ -514,6 +514,39 @@ class ChromiumApi(recipe_api.RecipeApi):
           build_step_name=name)
     return ninja_result
 
+  def _run_ninja_with_reclient(self,
+                               ninja_command,
+                               ninja_env,
+                               name=None,
+                               **kwargs):
+    """
+    Run ninja with reclient.
+    This function starts reclient, calls _run_ninja and stops reclient.
+
+    Args:
+      ninja_command: Command used for build.
+                     This is sent as part of log.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      ninja_env: Environment for ninja.
+      name: Name of the compile step.
+
+    Returns:
+      A named tuple with the fields
+        - failure_summary: string of the error that occurred during the step,
+        - retcode: return code of the step
+
+    Raises:
+      - InfraFailure when an unexpected reclient failure occurs
+    """
+    # TODO(crbug.com/1133180): Upload Ninja log
+    reclient_log_dir = self.m.path.mkdtemp('reclient_log')
+    self.m.reclient.start_reproxy(reclient_log_dir)
+    try:
+      ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
+    finally:
+      self.m.reclient.stop_reproxy(reclient_log_dir)
+    return ninja_result
+
   def _run_ninja_without_remote(self,
                                 ninja_command,
                                 ninja_log_outdir,
@@ -603,6 +636,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               out_dir=None,
               target=None,
               use_goma_module=False,
+              use_reclient=False,
               **kwargs):
     """Return a compile.py invocation.
 
@@ -617,6 +651,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       target: Custom config name to use in the output directory (defaults to
         "Release" or "Debug").
       use_goma_module (bool): If True, use the goma recipe module.
+      use_reclient (bool): If True, use reclient as the remote compiler.
 
     Returns:
       A RawResult object with the compile step's status and failure message
@@ -626,6 +661,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     """
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple)), type(targets)
+    assert not (use_goma_module and use_reclient
+               ), 'goma and reclient cannot be enabled at the same time'
 
     if self.c.use_gyp_env and self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
       # Get the Clang revision before compiling.
@@ -722,6 +759,12 @@ class ChromiumApi(recipe_api.RecipeApi):
               goma_env=goma_env,
               ninja_log_outdir=target_output_dir,
               ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+              **kwargs)
+        elif use_reclient:
+          ninja_result = self._run_ninja_with_reclient(
+              ninja_command=command,
+              ninja_env=ninja_env,
+              name=name or 'compile',
               **kwargs)
         else:
           ninja_result = self._run_ninja_without_remote(

@@ -20,6 +20,7 @@ from recipe_engine import post_process
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
   use_goma_module = api.properties.get('use_goma_module', False)
+  use_reclient = api.properties.get('use_reclient', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False)
   configs = api.properties.get('configs', [])
@@ -46,8 +47,10 @@ def RunSteps(api):
         android_version_name="example")
 
     return api.chromium.compile(
-        targets=['All'], out_dir=out_dir,
-        use_goma_module=use_goma_module)
+        targets=['All'],
+        out_dir=out_dir,
+        use_goma_module=use_goma_module,
+        use_reclient=use_reclient)
 
 
 def GenTests(api):
@@ -100,6 +103,18 @@ def GenTests(api):
           out_dir='/tmp',
       ),
   )
+
+  yield api.test(
+      'basic_out_dir_with_reclient',
+      api.chromium.ci_build(
+          builder_group='chromium.android',
+          builder='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          build_number=77457,
+      ), api.properties(
+          use_reclient=True,
+          out_dir='/tmp',
+      ), api.post_process(post_process.DropExpectation))
 
   yield api.test(
       'basic_no_out_dir_with_goma_module',
