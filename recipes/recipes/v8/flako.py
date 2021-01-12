@@ -37,7 +37,6 @@ DEPS = [
     'depot_tools/gitiles',
     'depot_tools/gsutil',
     'chromium_swarming',
-    'swarming_client',
 ]
 
 PROPERTIES = {
@@ -521,7 +520,6 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
 
 def setup_swarming(
     api, swarming_dimensions, swarming_priority, swarming_expiration):
-  api.swarming_client.checkout('master')
   api.chromium_swarming.default_expiration = swarming_expiration
   api.chromium_swarming.default_hard_timeout = 60 * 60
   api.chromium_swarming.default_io_timeout = 20 * 60
