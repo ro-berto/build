@@ -402,6 +402,7 @@ def GenTests(api):
           'gcs_path': 'dest_dir/',
           'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
           'verifiable_key_path': '/path/to/some/key',
+          'base_dir': 'src-internal',
       }],)
   yield api.test(
       'verifiable_key_path',

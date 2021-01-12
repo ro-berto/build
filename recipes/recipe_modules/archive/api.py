@@ -603,8 +603,14 @@ class ArchiveApi(recipe_api.RecipeApi):
       return ('/'.join([x for x in gcs if x]) + '/' +
               '/'.join([x for x in f if x]))
 
+    def _resolve_base_dir(base_dir):
+      return self.m.chromium_checkout.get_checkout_dir({}).join(base_dir)
+
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in config.archive_datas:
+        base_path = build_dir
+        if archive_data.base_dir:
+          base_path = _resolve_base_dir(archive_data.base_dir)
 
         # Perform dynamic configuration from placeholders, if necessary.
         gcs_path = self._replace_placeholders(update_properties, custom_vars,
@@ -615,23 +621,23 @@ class ArchiveApi(recipe_api.RecipeApi):
         for filename in archive_data.file_globs:
           for f in self.m.file.glob_paths(
               'expand file globs',
-              build_dir,
+              base_path,
               filename,
               test_data=('glob1.txt', 'glob2.txt')):
             # Turn the returned Path object back into a string relative to
-            # build_dir.
-            assert build_dir.base == f.base
-            assert build_dir.is_parent_of(f)
-            common_pieces = f.pieces[len(build_dir.pieces):]
+            # base_path.
+            assert base_path.base == f.base
+            assert base_path.is_parent_of(f)
+            common_pieces = f.pieces[len(base_path.pieces):]
             expanded_files.add('/'.join(common_pieces))
 
         if archive_data.verifiable_key_path:
           sig_paths = set()
           for f in expanded_files:
-            # Files are relative to the build_dir, so this generates the .sig
+            # Files are relative to the base_path, so this generates the .sig
             # file next to the original.
             self.m.cloudkms.sign(archive_data.verifiable_key_path,
-                                 build_dir.join(f), build_dir.join(f + '.sig'))
+                                 base_path.join(f), base_path.join(f + '.sig'))
             # This file path is appended directly to the provided gcs_path for
             # uploads. We'll uploaded this .sig next to the original
             # in GCS as well.
@@ -647,7 +653,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'archive_data properties with |archive_type| '
                 'ARCHIVE_TYPE_FILES must have empty |dirs|')
           uploads = {
-              build_dir.join(f): _sanitize_gcs_path(gcs_path, f)
+              base_path.join(f): _sanitize_gcs_path(gcs_path, f)
               for f in expanded_files
           }
         elif (archive_data.archive_type ==
@@ -658,13 +664,13 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'archive_data properties with |archive_type| '
                 'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
           uploads = {
-              build_dir.join(f): _sanitize_gcs_path(gcs_path,
+              base_path.join(f): _sanitize_gcs_path(gcs_path,
                                                     self.m.path.basename(f))
               for f in expanded_files
           }
         elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
           archive_file = self._create_targz_archive_for_upload(
-              build_dir, expanded_files, archive_data.dirs)
+              base_path, expanded_files, archive_data.dirs)
           uploads = {archive_file: gcs_path}
         elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
           if not archive_data.dirs:
@@ -673,11 +679,11 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'empty dirs', 'archive_data properties with '
                 '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
                 'specify |dirs|')
-          uploads = {build_dir.join(d): gcs_path for d in archive_data.dirs}
+          uploads = {base_path.join(d): gcs_path for d in archive_data.dirs}
           gcs_args += ['-R']
         else:
           archive_file = self._create_zip_archive_for_upload(
-              build_dir, expanded_files, archive_data.dirs)
+              base_path, expanded_files, archive_data.dirs)
           uploads = {archive_file: gcs_path}
 
         for file_path in uploads:

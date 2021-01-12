@@ -8,6 +8,7 @@ DEPS = [
     'build',
     'builder_group',
     'chromium',
+    'chromium_checkout',
     'depot_tools/depot_tools',
     'depot_tools/gsutil',
     'infra/zip',

@@ -14,7 +14,7 @@ message LatestFile {
   string gcs_file_content = 2;
 }
 
-// Next id: 9
+// Next id: 10
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -88,6 +88,13 @@ message ArchiveData {
   // https://chromium.googlesource.com/infra/infra/+/refs/heads/master/recipes/
   // recipe_modules/cloudkms/api.py#48 for details on the underlying call.
   string verifiable_key_path = 8;
+
+  // A string key to override the default base directory (build dir)
+  // for the given file(s), dir(s) for this ArchiveData definition.
+  // The provided key is appended to the chromium checkout path.
+  // This key is not required and simply defaults to build dir if
+  // not provided.
+  string base_dir = 9;
 }
 
 // Next id: 2
