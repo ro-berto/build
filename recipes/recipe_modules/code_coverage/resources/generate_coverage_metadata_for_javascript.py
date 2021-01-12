@@ -183,7 +183,7 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
 
       uncovered_block['ranges'].append({
           'first': uncovered_block_start,
-          'end': uncovered_block_end
+          'last': uncovered_block_end
       })
       uncovered_blocks.append(uncovered_block)
 

@@ -54,19 +54,19 @@ class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
       # Uncovered blocks
       [{
           'ranges': [{
-              'end': 18,
+              'last': 18,
               'first': 16
           }],
           'line': 6
       }, {
           'ranges': [{
-              'end': 17,
+              'last': 17,
               'first': 0
           }],
           'line': 7
       }, {
           'ranges': [{
-              'end': 3,
+              'last': 3,
               'first': 0
           }],
           'line': 8
@@ -169,7 +169,7 @@ class GenerateCoverageMetadataForJavaScriptTest(unittest.TestCase):
         # Uncovered Blocks
         [{
             'ranges': [{
-                'end': 46,
+                'last': 46,
                 'first': 41
             }],
             'line': 1
@@ -528,19 +528,19 @@ exports.test = test;'
             }],
             'uncovered_blocks': [{
                 'ranges': [{
-                    'end': 18,
+                    'last': 18,
                     'first': 16
                 }],
                 'line': 6
             }, {
                 'ranges': [{
-                    'end': 17,
+                    'last': 17,
                     'first': 0
                 }],
                 'line': 7
             }, {
                 'ranges': [{
-                    'end': 3,
+                    'last': 3,
                     'first': 0
                 }],
                 'line': 8
