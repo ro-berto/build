@@ -843,8 +843,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'linux_chromium_ubsan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.clang',
-                buildername='UBSanVptr Linux',
+                builder_group='chromium.memory',
+                buildername='linux-ubsan-vptr',
             ),
         'linux_layout_tests_composite_after_paint':
             try_spec.TrySpec.create_for_single_mirror(

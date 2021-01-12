@@ -91,20 +91,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'UBSanVptr Linux':
-        _chromium_clang_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            # Not a ToT bot so no clang_tot gclient_apply_config.
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
     'linux-win_cross-rel':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
