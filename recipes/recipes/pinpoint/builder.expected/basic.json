@@ -537,7 +537,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_BUILD_TYPE": "_official",
       "CHROME_HEADLESS": "1",
+      "CHROMIUM_BUILD": "_google_chrome",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android_Compile_Perf",

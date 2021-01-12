@@ -125,7 +125,9 @@
     ],
     "cwd": "None",
     "env": {
+      "CHROME_BUILD_TYPE": "_official",
       "CHROME_HEADLESS": "1",
+      "CHROMIUM_BUILD": "_google_chrome",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data",
@@ -137,7 +139,8 @@
       "GOMA_HERMETIC": "fallback",
       "GOMA_LOCAL_OUTPUT_CACHE_DIR": "[CACHE]/goma/localoutputcache",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",

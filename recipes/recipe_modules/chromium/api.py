@@ -631,14 +631,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       # Get the Clang revision before compiling.
       self._clang_version = self.get_clang_version()
 
-    goma_env = self.get_env()
-    goma_env.update(self.m.context.env)
-    ninja_env = goma_env.copy()
-
-    goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
-
-    # Enable goma DepsCache
-    goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
+    ninja_env = self.get_env()
+    ninja_env.update(self.m.context.env)
 
     if self.c.compile_py.mode and self.c.compile_py.mode == 'official':
       ninja_env['CHROMIUM_BUILD'] = '_google_chrome'
@@ -656,29 +650,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.c.TARGET_PLATFORM == 'win':
         ninja_env['PATH'] = self.m.path.pathsep.join(
             ('%(PATH)s', self.m.path.dirname(self.m.depot_tools.ninja_path)))
-
-    if self.c.compile_py.goma_hermetic:
-      goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
-    if self.c.compile_py.goma_enable_localoutputcache:
-      # Use per-slave cache. LocalOutputCache could use a lot of disks.
-      # To run GC for older caches, we should share the same build
-      # among builders.
-      goma_env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
-          self.m.path.join(self.m.goma.default_cache_path_per_slave,
-                           "localoutputcache"))
-
-    if self.c.compile_py.goma_enable_global_file_stat_cache:
-      goma_env['GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE'] = 'true'
-
-    if self.c.compile_py.goma_max_active_fail_fallback_tasks:
-      goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
-          self.c.compile_py.goma_max_active_fail_fallback_tasks)
-    if (self.m.tryserver.is_tryserver or self.c.compile_py.goma_failfast):
-      # We rely on goma to meet cycle time goals on the tryserver. It's better
-      # to fail early.
-      goma_env['GOMA_FAIL_FAST'] = 'true'
-    else:
-      goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
     if out_dir is None:
       out_dir = 'out'
@@ -698,9 +669,37 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.compile_py.build_args:
       command.extend(self.c.compile_py.build_args)
 
-    # TODO(tikuta): Remove this and let goma module set '-j'
-    #               inside build_with_goma.
     if use_goma_module:
+      goma_env = ninja_env.copy()
+      goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
+
+      # Enable goma DepsCache
+      goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
+
+      if self.c.compile_py.goma_hermetic:
+        goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
+      if self.c.compile_py.goma_enable_localoutputcache:
+        # Use per-slave cache. LocalOutputCache could use a lot of disks.
+        # To run GC for older caches, we should share the same build
+        # among builders.
+        goma_env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
+            self.m.path.join(self.m.goma.default_cache_path_per_slave,
+                             "localoutputcache"))
+
+      if self.c.compile_py.goma_enable_global_file_stat_cache:
+        goma_env['GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE'] = 'true'
+
+      if self.c.compile_py.goma_max_active_fail_fallback_tasks:
+        goma_env['GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS'] = (
+            self.c.compile_py.goma_max_active_fail_fallback_tasks)
+      if (self.m.tryserver.is_tryserver or self.c.compile_py.goma_failfast):
+        # We rely on goma to meet cycle time goals on the tryserver. It's better
+        # to fail early.
+        goma_env['GOMA_FAIL_FAST'] = 'true'
+      else:
+        goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
+      # TODO(tikuta): Remove this and let goma module set '-j'
+      #               inside build_with_goma.
       # The right way to configure goma jobs number is in cr-buildbucket.cfg.
       # See also doc for goma.jobs.
       command += ['-j', self.m.goma.jobs]
