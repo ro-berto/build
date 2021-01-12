@@ -7,6 +7,6 @@ per-file upload_goma_logs.py=file://recipes/goma/GOMA_OWNERS
 per-file chromium_export_metadata*=ehmaldonado@chromium.org
 per-file chromium_export_metadata*=nodir@chromium.org
 
-# tikuta is OWNER of goma related changes.
+# tikuta is OWNER of goma and swarming related changes.
 tikuta@chromium.org
 tikuta@google.com
