@@ -74,6 +74,7 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_xcode_12_beta'],
@@ -89,6 +90,7 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
+            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -244,6 +246,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
@@ -261,6 +264,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_cas'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -326,6 +330,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_cas'],
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
