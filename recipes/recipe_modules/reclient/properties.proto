@@ -5,6 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
+// NEXT ID TO USE: 4
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -14,4 +15,7 @@ message InputProperties {
 
   // The remote execution service to dial when calling via gRPC.
   string rbe_service = 2;
+
+  // The number of jobs to run in parallel, i.e. `-j`
+  int32 jobs = 3;
 }

@@ -19,6 +19,7 @@ def RunSteps(api):
   api.reclient.stop_reproxy(log_dir)
   _ = api.reclient.instance  # for code coverage
   _ = api.reclient.rewrapper_path
+  _ = api.reclient.jobs
 
 
 def GenTests(api):

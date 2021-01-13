@@ -20,6 +20,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._rbe_service = props.rbe_service or DEFAULT_SERVICE
     # Initialization is delayed until the first call for reclient exe
     self._reclient_cipd_dir = None
+    self._jobs = props.jobs or None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -41,6 +42,14 @@ class ReclientApi(recipe_api.RecipeApi):
       self._instance = 'projects/%s/instances/default_instance' % self._instance
 
     return self._instance
+
+  @property
+  def jobs(self):
+    """Returns number of jobs for parallel build using reclient."""
+    if self._jobs is None:
+      # This heuristic is copied from Goma's recommended_jobs.
+      self._jobs = min(10 * self.m.platform.cpu_count, 200)
+    return self._jobs
 
   @property
   def rewrapper_path(self):
