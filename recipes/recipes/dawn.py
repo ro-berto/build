@@ -75,7 +75,7 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir, static, swiftshader):
   args = [
       'is_debug=%s' % gn_bool[debug],
       'is_component_build=%s' % gn_bool[not static],
-      'use_goma=true',
+      'use_goma=%s' % gn_bool[clang or clang is None],
       'dawn_use_swiftshader=%s' % gn_bool[swiftshader],
       'goma_dir="%s"' % api.goma.goma_dir,
   ]

@@ -174,7 +174,7 @@
       "--root=[CACHE]/builder/dawn",
       "gen",
       "//out/release_static",
-      "--args=is_debug=false is_component_build=false use_goma=true dawn_use_swiftshader=false goma_dir=\"[CACHE]/goma/client\" is_clang=false"
+      "--args=is_debug=false is_component_build=false use_goma=false dawn_use_swiftshader=false goma_dir=\"[CACHE]/goma/client\" is_clang=false"
     ],
     "cwd": "[CACHE]/builder/dawn",
     "name": "gn gen"
@@ -508,7 +508,7 @@
       "--root=[CACHE]/builder/dawn",
       "gen",
       "//out/release_component",
-      "--args=is_debug=false is_component_build=true use_goma=true dawn_use_swiftshader=true goma_dir=\"[CACHE]/goma/client\" dawn_enable_d3d12=false is_clang=false"
+      "--args=is_debug=false is_component_build=true use_goma=false dawn_use_swiftshader=true goma_dir=\"[CACHE]/goma/client\" dawn_enable_d3d12=false is_clang=false"
     ],
     "cwd": "[CACHE]/builder/dawn",
     "name": "gn gen (2)"
