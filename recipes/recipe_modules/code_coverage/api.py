@@ -129,19 +129,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # separate builder-tester setup.
     binaries = set()
 
-    # Android platform needs to use unstripped files for llvm-cov.
+    # Android and Fuchsia platform needs to use unstripped files for llvm-cov.
     # The unstripped artifacts will be generated under lib.unstripped/ or
     # exe.unstripped/.
-    if self.platform == 'android':
+    if self.platform in ('android', 'fuchsia'):
       step_result = self.m.python(
-          'Get all Android unstripped artifacts paths',
-          self.resource('get_android_unstripped_paths.py'),
+          'Get all unstripped artifacts paths',
+          self.resource('get_unstripped_paths.py'),
           args=[
               '--chromium-output-dir', self.m.chromium.output_dir,
               '--output-json',
               self.m.json.output()
           ])
-      android_paths = step_result.json.output
+      unstripped_paths = step_result.json.output
 
     for t in tests:
       # There are a number of local isolated scripts such as
@@ -193,10 +193,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         if self.platform == 'android':
           so_library_name = 'lib' + binary + '__library.so'
-          for android_path in android_paths:
-            if android_path.endswith(binary) or android_path.endswith(
+          for unstripped_path in unstripped_paths:
+            if unstripped_path.endswith(binary) or unstripped_path.endswith(
                 so_library_name):
-              binaries.add(android_path)
+              binaries.add(unstripped_path)
+              break
+        elif self.platform == 'fuchsia':
+          exec_name = binary + '__exec'
+          for unstripped_path in unstripped_paths:
+            if unstripped_path.endswith(exec_name):
+              binaries.add(unstripped_path)
               break
         elif self.platform == 'ios':
           if binary == 'ios_web_view_inttests':

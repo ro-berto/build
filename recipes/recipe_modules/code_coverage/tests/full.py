@@ -551,7 +551,7 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.step_data(
           'process clang code coverage data for overall test coverage.'
-          'Get all Android unstripped artifacts paths',
+          'Get all unstripped artifacts paths',
           api.json.output([
               '/chromium/output_dir/'
               'lib.unstrippedlibbase_unittests__library.so'
@@ -573,7 +573,58 @@ def GenTests(api):
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.'
-          'Get all Android unstripped artifacts paths'),
+          'Get all unstripped artifacts paths'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.Extract '
+          'directory metadata'),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
+      api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS),
+      api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'Fuchsia code coverage CI',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='fuchsia-code-coverage'),
+      api.code_coverage(use_clang_coverage=True),
+      api.step_data(
+          'process clang code coverage data for overall test coverage.'
+          'Get all unstripped artifacts paths',
+          api.json.output(['/chromium/output_dir/'
+                           'base_unittests__exec'])),
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
+                       _NUM_TESTS, _NUM_TESTS),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload artifact to GS'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.Finding '
+          'profile merge errors'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.'
+          'Get all unstripped artifacts paths'),
       api.post_process(
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.Extract '

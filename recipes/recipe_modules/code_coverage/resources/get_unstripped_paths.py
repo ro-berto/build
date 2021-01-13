@@ -1,7 +1,7 @@
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Script to get all Android unstripped artifacts' paths."""
+"""Script to get all Android/Fuchsia unstripped artifacts' paths."""
 
 import argparse
 import json
@@ -20,7 +20,7 @@ def _parse_args(args):
     The parsed arguments as parameters.
   """
   parser = argparse.ArgumentParser(
-      description='Get all Android unstripped artifacts paths')
+      description='Get all Android/Fuchsia unstripped artifacts paths')
   parser.add_argument(
       '--chromium-output-dir',
       required=True,
