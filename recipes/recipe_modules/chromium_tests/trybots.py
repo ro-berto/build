@@ -351,6 +351,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='Android FYI 64 Vk Release (Pixel 2)',
             ),
+        'gpu-fyi-try-android-r-pixel-4-32':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='Android FYI Release (Pixel 4)',
+            ),
         'gpu-try-android-m-nexus-5x-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu',

@@ -1334,6 +1334,19 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
+    'Android FYI Release (Pixel 4)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='android',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'android',
+            ],
+            chromium_config_kwargs={
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='main_builder',
+            simulation_platform='linux',
+        ),
     'Android FYI dEQP Release (Nexus 5X)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
