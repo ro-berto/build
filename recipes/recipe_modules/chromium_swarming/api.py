@@ -916,6 +916,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       pre_trigger_args: All arguments up to and including 'trigger'
       post_triggers_args: All arguments following 'trigger'
     """
+    assert task.trigger_script
+
     # TODO(crbug.com/894045): Remove this method once we have fully migrated
     # to use swarming recipe module to trigger tasks.
     task_slice = task.request[0].with_named_caches(task.named_caches)
@@ -1013,13 +1015,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.extra_args:
       args.extend(task.extra_args)
 
-    script = self.m.swarming_client.path.join('swarming.py')
-    if task.trigger_script:
-      script = task.trigger_script.script
-      trigger_script_args = list(task.trigger_script.args)
-      if use_swarming_go_in_trigger_script:
-        trigger_script_args += ['--use-swarming-go']
-      pre_trigger_args[:0] = trigger_script_args
+    script = task.trigger_script.script
+    trigger_script_args = list(task.trigger_script.args)
+    if use_swarming_go_in_trigger_script:
+      trigger_script_args += ['--use-swarming-go']
+    pre_trigger_args[:0] = trigger_script_args
 
     return script, pre_trigger_args, args
 
