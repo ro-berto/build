@@ -758,6 +758,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
+                task_output_stdout='none',
                 analyze_deps_autorolls=True,
             ),
         'linux-rel-builderful':
@@ -911,6 +912,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Optional Linux Release (Intel HD 630)',
                     ),
                 ],
+                task_output_stdout='none',
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
@@ -1093,6 +1095,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-rel',
                 analyze_deps_autorolls=True,
+                task_output_stdout='none',
             ),
        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1518,6 +1521,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Win10 x64 Release (NVIDIA)',
                 ),
             ],
+            task_output_stdout='none',
             analyze_deps_autorolls=True,
             ),
         'win_chromium_compile_dbg_ng':

@@ -1252,7 +1252,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "all",
+      "none",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"0\"}]}"
@@ -1587,7 +1587,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "all",
+      "none",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1\"}]}"
@@ -2556,7 +2556,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "all",
+      "none",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"2\"}]}"
