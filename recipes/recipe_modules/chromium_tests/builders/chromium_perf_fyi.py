@@ -45,6 +45,9 @@ def _AddIsolatedTestSpec(name,
   if parent_builder_group:
     spec = spec.evolve(parent_builder_group=parent_builder_group)
 
+  SPEC[name] = spec.extend(
+      chromium_tests_apply_config=['use_swarming_go_in_trigger_script'])
+
 
 _AddIsolatedTestSpec(
     'android-nexus5x-perf-fyi',
