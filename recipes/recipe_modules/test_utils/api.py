@@ -697,6 +697,89 @@ class TestUtilsApi(recipe_api.RecipeApi):
       discrepancy.presentation.status = self.m.step.FAILURE
     return old_should_abort
 
+  def _extract_retriable_suites_from_invocations(self, invocation_dict,
+                                                 retry_failed_shards,
+                                                 retry_invalid_shards):
+
+    def _result_invalid(test_result):
+      return test_result.status in set(
+          proto.TestStatus.STATUS_UNSPECIFIED,
+          proto.TestStatus.CRASH,
+          proto.TestStatus.ABORT,
+      )
+
+    def _result_failed(test_result):
+      return test_result.status == proto.TestStatus.FAIL  #pragma: nocover
+
+    try:
+      invalid_invocations = [
+          inv for inv in invocation_dict.values()
+          if filter(_result_invalid, inv.test_results)
+      ]
+      failed_invocations = [
+          inv for inv in invocation_dict.values()
+          if filter(_result_failed, inv.test_results) and
+          not filter(_result_invalid, inv.test_results)
+      ]
+      return set().union(
+          failed_invocations if retry_failed_shards else (),
+          invalid_invocations if retry_invalid_shards else (),
+      )
+    except Exception as e:  #pragma: nocover
+      breakage = self.m.python.succeeding_step(
+          'Failure in ResultDB lookup',
+          'Querying for Swarming retries  via ResultDB ' +
+          'produced error {}'.format(e))
+      breakage.presentation.status = self.m.step.FAILURE
+      return []
+
+  def _extract_retriable_suites_legacy(self, failed_suites, invalid_suites,
+                                       retry_failed_shards,
+                                       retry_invalid_shards):
+    target_suites = set()
+    if retry_failed_shards:
+      target_suites.update(failed_suites)
+    if retry_invalid_shards:
+      target_suites.update(invalid_suites)
+    # Only Swarming suites can be usefully retried
+    return [t for t in target_suites if t.runs_on_swarming]
+
+  def _retry_with_patch_target_suites(self, old_retriables, new_retriables):
+    mismatch_string = ('Legacy decision for retries had length {}\n' +
+                       'New decision for retries had length {}').format(
+                           len(old_retriables), len(new_retriables))
+    set_diff_string_unformatted = (
+        'Legacy retries calculation contained extra elements {}\n' +
+        'New retries calculation contained extra elements {}')
+
+    # Overall logic here:
+    #   - If either source says that there should be retries, create a step
+    #   - If they don't have the same set, report a mismatch and detail the
+    #       differences which are present.
+    #   - Return the retry list purely based on the source of truth
+    if not old_retriables and not new_retriables:
+      return []
+
+    old_retriables = set(old_retriables)
+    new_retriables = set(new_retriables)
+
+    if old_retriables.symmetric_difference(new_retriables):
+      mismatch = self.m.python.succeeding_step('Migration mismatch',
+                                               mismatch_string)
+      mismatch.presentation.status = self.m.step.FAILURE
+      extra_old_retriable_names = [
+          suite.name for suite in (old_retriables - new_retriables)
+      ]
+      extra_new_retriable_names = [
+          suite.name for suite in (new_retriables - old_retriables)
+      ]
+      discrepancy = self.m.python.succeeding_step(
+          'Migration mismatch (retriable suites)',
+          set_diff_string_unformatted.format(extra_old_retriable_names,
+                                             extra_new_retriable_names))
+      discrepancy.presentation.status = self.m.step.FAILURE
+    return old_retriables
+
   def run_tests(self,
                 caller_api,
                 test_suites,
@@ -754,21 +837,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not (retry_failed_shards or retry_invalid_shards):
       return invalid_test_suites, failed_and_invalid_suites
 
-    suites_to_retry = set()
-    if retry_failed_shards:
-      suites_to_retry.update(failed_test_suites)
-    if retry_invalid_shards:
-      suites_to_retry.update(invalid_test_suites)
-    swarming_test_suites = [t for t in suites_to_retry if t.runs_on_swarming]
-
-    # Only retries of Swarming tasks are likely to help, so exit early if the
-    # retry list contains only non-Swarming tasks
+    retry_list_old = self._extract_retriable_suites_legacy(
+        failed_test_suites, invalid_test_suites, retry_failed_shards,
+        retry_invalid_shards)
+    retry_list_new = self._extract_retriable_suites_from_invocations(
+        invocation_dict, retry_failed_shards, retry_invalid_shards)
+    swarming_test_suites = self._retry_with_patch_target_suites(
+        retry_list_old, retry_list_new)
     if not swarming_test_suites:
       return invalid_test_suites, failed_and_invalid_suites
 
-    # This is where we decide to run 'retry shards with patch'. I'm putting
-    # this comment here so it's easier for people to find this section of the
-    # code with codesearch.
     retry_suffix = 'retry shards'
     if suffix:
       retry_suffix += ' ' + suffix
@@ -781,11 +859,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Some suites might be passing now, since we retried some tests. Remove
     # any suites which are now fully passing.
-    # with_patch_failures_including_retry appropriately takes 'retry shards
-    # with patch' and 'with patch' runs into account.
-    #
-    # Also take known flaky tests into consideration because it is possible
-    # that both the original and retry runs fail due to the same flaky test.
+    # failures_including_retry both accounts for runs and for flaky tests
     def _still_failing(suite):
       valid, failures = suite.failures_including_retry(suffix)
       return (not valid) or failures
@@ -811,7 +885,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       invalid_test_suites: Test suites that do not have valid test results.
       all_failing_test_suites:
-          This includes test suites than ran but have failing tests, test suites
+          This includes test suites that ran but have failing tests, test suites
           that do not have valid test results, and test suites that failed with
           otherwise unspecified reasons. This is a superset of
           invalid_test_suites.

@@ -1124,6 +1124,32 @@
     "name": "Fewer than 5 failures/unexpected results, continue with retries"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Migration mismatch",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy decision for retries had length 1<br/>New decision for retries had length 0@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Migration mismatch (retriable suites)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy retries calculation contained extra elements ['fake tests (fake device iOS 8.1)']<br/>New retries calculation contained extra elements []@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test_pre_run (retry shards with patch)",
     "~followup_annotations": [
