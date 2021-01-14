@@ -598,6 +598,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     request = request.with_slice(0, req_slice)
 
     return SwarmingTask(
+        server=self.swarming_server,
         request=request,
         builder_info=builder_info,
         collect_step=collect_step,
@@ -1936,6 +1937,7 @@ class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
   def __init__(self,
+               server,
                request,
                collect_step,
                extra_args,
@@ -1956,6 +1958,7 @@ class SwarmingTask(object):
     """Configuration of a swarming task.
 
     Args:
+      * server: Swarming Server URL.
       * request: swarming.TaskRequest instance as created by
           swarming.task_request().
       * build_properties: An optional dict containing various build properties.
@@ -1984,6 +1987,7 @@ class SwarmingTask(object):
           re-use some shards from the retried task.
       * trigger_script: An optional `chromium_swarming.TriggerScript`.
     """
+    self._server = server
     self._trigger_output = None
     self.build_properties = build_properties
     self.builder_info = builder_info
@@ -2076,7 +2080,7 @@ class SwarmingTask(object):
     if trigger_output and trigger_output.get('tasks'):
       for shard_dict in trigger_output['tasks'].itervalues():
         if shard_dict['shard_index'] == index:
-          return shard_dict['view_url']
+          return "%s/task?id=%s" % (self._server, shard_dict['task_id'])
 
   def get_task_ids(self):
     """Returns task id of all shards.

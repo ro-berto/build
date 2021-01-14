@@ -104,11 +104,11 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/task?id=10100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/task?id=10200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/task?id=10300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/task?id=10400@@@"
     ]
   }
 ]
