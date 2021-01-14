@@ -190,6 +190,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.chromium.c.TARGET_CROS_BOARD)
       else:
         gclient_solution.custom_vars['cros_boards'] = (
+            self.m.chromium.c.TARGET_CROS_BOARDS or
             self.m.chromium.c.TARGET_CROS_BOARD)
 
     self.m.gclient.c.revisions.update(self._fixed_revisions)
