@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package stats;
+
+message Verification {
+  message Mismatch {
+    // The output path.
+    string path = 1;
+
+    // The digest given by remote execution (or cache), if exists.
+    string remote_digest = 2;
+
+    // The digest produced locally, if exists.
+    string local_digest = 3;
+  }
+  // Any SHA mismatches in the action.
+  repeated Mismatch mismatches = 1;
+
+  // The number of overall mismatches.
+  int32 total_mismatches = 2;
+}
+
+// The full aggregated build stats and properties.
+message Stats {
+  // Number of actions in the build.
+  int64 num_records = 1;
+
+  // Aggregated build stats.
+  repeated Stat stats = 2;
+
+  // Environment variables that are build settings.
+  map<string,string> environment = 3;
+
+  // Verification results, if exist.
+  Verification verification = 4;
+
+  // RBE tooling version.
+  string tool_version = 5;
+
+  // Unique invocation IDs of the aggregated actions.
+  repeated string invocation_ids = 6;
+
+  // Information about the build machine.
+  MachineInfo machine_info = 7;
+}
+
+// Outlier represents a command with an unusually large value in the stat.
+message Outlier {
+  string command_id = 1;
+  int64 value = 2;
+}
+
+message Stat {
+  // The metric/stat name.
+  string name = 1;
+
+  // The number of all the true values for booleans, the sum of all the
+  // values for ints.
+  int64 count = 2;
+
+  message Value {
+    string name = 1;
+    int64 count = 2;
+  }
+  // For enum stats, the count of each value.
+  repeated Value counts_by_value = 3;
+
+  // A list of commands that have the highest values.
+  repeated Outlier outliers = 4;
+
+  int64 median = 5;
+  int64 percentile75 = 6;
+  int64 percentile85 = 7;
+  int64 percentile95 = 8;
+  double average = 9;
+}
+
+message MachineInfo {
+  // Number of CPU cores that the machine has.
+  int64 num_cpu = 1;
+
+  // Amount of RAM that the machine has in megabytes.
+  int64 ram_mbs = 2;
+
+  // Type of operating system of the build machine.
+  string os_family = 3;
+}

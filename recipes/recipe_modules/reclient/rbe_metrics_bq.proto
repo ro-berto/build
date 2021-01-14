@@ -1,0 +1,22 @@
+// Copyright 2021 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipe_modules.build.reclient;
+
+import "google/protobuf/timestamp.proto";
+import "go.chromium.org/foundry-x/re-client/api/stats/stats.proto";
+
+// This is BigQuery schema for RBE stats metrics.
+// NEXT ID TO USE: 4
+message RbeMetricsBq {
+    // Buildbucket build ID.
+    int64 build_id = 1;
+
+    // The timestamp when this stats is uploaded to BigQuery.
+    google.protobuf.Timestamp created_at = 2;
+
+    // RBE metrics of the build
+    stats.Stats stats = 3;
+}
