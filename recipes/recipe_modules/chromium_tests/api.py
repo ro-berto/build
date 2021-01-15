@@ -124,6 +124,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybots(self):
     return self._trybots
 
+  @property
+  def use_swarming_go_in_trigger_script(self):
+    # TODO(crbug.com/1127205): Remove once all builders using the custom trigger
+    # scripts have been migrated to ues Swarming Go CLI.
+    try:
+      return self.c.use_swarming_go_in_trigger_script
+    except AttributeError:
+      return False
+
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)

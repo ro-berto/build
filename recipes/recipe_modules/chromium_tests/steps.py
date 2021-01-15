@@ -2496,6 +2496,8 @@ class SwarmingTest(Test):
 
     api.chromium_swarming.trigger_task(
         self._tasks[suffix],
+        use_swarming_go_in_trigger_script=api.chromium_tests
+        .use_swarming_go_in_trigger_script,
         resultdb=self.resultdb)
 
   def validate_task_results(self, api, step_result):

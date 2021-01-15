@@ -13,6 +13,10 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 
       # TODO(martiniss): Remove this and all uses
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
+      # TODO(crbug.com/1127205): Remove once all builders using the custom
+      # trigger scripts have been migrated to ues Swarming Go CLI.
+      use_swarming_go_in_trigger_script=Single(
+          bool, empty_val=False, required=False),
       # TODO(crbug.com/chrome-operations/49):
       # Remove once all tasks are switched to `cas`
       use_cas=Single(bool, empty_val=False),
@@ -29,6 +33,11 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
+
+
+@config_ctx()
+def use_swarming_go_in_trigger_script(c):
+  c.use_swarming_go_in_trigger_script = True
 
 
 @config_ctx()
