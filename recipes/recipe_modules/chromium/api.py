@@ -744,6 +744,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.m.goma.debug:
         ninja_env['GOMA_DUMP'] = '1'
 
+    if use_reclient:
+      command += ['-j', self.m.reclient.jobs]
+
     if targets is not None and 'all' not in targets:
       command += targets
 
