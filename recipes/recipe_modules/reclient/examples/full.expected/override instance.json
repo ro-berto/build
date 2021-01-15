@@ -85,6 +85,98 @@
     "name": "stop cloudtail"
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/log_dir_tmp_1/rbe_metrics.pb",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "load rbe_metrics.pb"
+  },
+  {
+    "cmd": [],
+    "name": "install infra/tools/bqupload"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/bqupload/latest"
+    ],
+    "infra_step": true,
+    "name": "install infra/tools/bqupload.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/bqupload/latest",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "install infra/tools/bqupload.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/bqupload/latest/bqupload",
+      "goma-logs.experimental_rbe_metrics.rbe_metrics"
+    ],
+    "name": "upload RBE metrics to BigQuery",
+    "stdin": "{\"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@rbe_metrics@{@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  \"created_at\": \"2012-05-14T12:53:21.500Z\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  \"stats\": {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@    \"environment\": [@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"value\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"key\": \"foo\"@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      }, @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"value\": \"42\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"key\": \"bar\"@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      }@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@    ]@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  }@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@}@@@",
+      "@@@STEP_LOG_END@rbe_metrics@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

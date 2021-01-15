@@ -3,9 +3,20 @@
 # found in the LICENSE file.
 """API for interacting with the re-client remote compiler."""
 
+import json
 import socket
 
 from recipe_engine import recipe_api
+
+from google.protobuf import json_format
+from PB.recipe_modules.build.reclient import rbe_metrics_bq
+
+
+def make_test_rbe_stats_pb():
+  stats = rbe_metrics_bq.RbeMetricsBq().stats
+  stats.environment['foo'] = 'false'
+  stats.environment['bar'] = '42'
+  return stats
 
 
 class ReclientApi(recipe_api.RecipeApi):
@@ -92,6 +103,7 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_use_application_default_credentials': 'false',
         'RBE_use_gce_credentials': 'true',
     }
+
     with self.m.context(env=env):
       self.m.step(
           'start reproxy via bootstrap',
@@ -115,7 +127,45 @@ class ReclientApi(recipe_api.RecipeApi):
         self.rbe_service_addr, '-proxy_log_dir', log_dir, '-output_dir', log_dir
     ])
     self._stop_cloudtail()
+    self._upload_rbe_metrics(log_dir)
+
     return step_result
+
+  def _upload_rbe_metrics(self, log_dir):
+    bq_pb = rbe_metrics_bq.RbeMetricsBq()
+    bq_pb.build_id = self.m.buildbucket.build.id
+    bq_pb.created_at.FromDatetime(self.m.time.utcnow())
+    stats_raw = self.m.file.read_raw(
+        'load rbe_metrics.pb',
+        self.m.path.join(log_dir, 'rbe_metrics.pb'),
+        test_data=make_test_rbe_stats_pb().SerializeToString())
+    bq_pb.stats.ParseFromString(stats_raw)
+    bq_json_dict = json_format.MessageToDict(
+        message=bq_pb, preserving_proto_field_name=True)
+    # "environment" is a map field and gets serialized to a JSON map.
+    # Unfortunately, this is incompatible with the corresponding BQ schema,
+    # which is a repeated field and thus expects a JSON array.
+    envs = bq_pb.stats.environment
+    if envs:
+      bq_json_dict['stats']['environment'] = [{
+          'key': k,
+          'value': envs[k]
+      } for k in envs]
+
+    bqupload_cipd_path = self.m.cipd.ensure_tool(
+        'infra/tools/bqupload/${platform}', 'latest')
+    BQ_TABLE_NAME = 'goma-logs.experimental_rbe_metrics.rbe_metrics'
+    # `bqupload`'s expected JSON proto format is different from that of the
+    # protobuf's native MessageToJson, so we have to dump this json to string on
+    # our own.
+    step_result = self.m.step(
+        'upload RBE metrics to BigQuery', [
+            bqupload_cipd_path,
+            BQ_TABLE_NAME,
+        ],
+        stdin=self.m.raw_io.input(data=json.dumps(bq_json_dict)))
+    step_result.presentation.logs['rbe_metrics'] = json.dumps(
+        bq_json_dict, indent=2)
 
   @property
   def _cloudtail_exe_path(self):
