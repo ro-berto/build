@@ -4,7 +4,6 @@
       "python",
       "-u",
       "[START_DIR]/src/perf_device_trigger.py",
-      "--use-swarming-go",
       "trigger",
       "--shards",
       "5",

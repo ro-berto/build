@@ -1014,9 +1014,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     script = task.trigger_script.script
     trigger_script_args = list(task.trigger_script.args)
 
-    # TODO(crbug.com/1127205): remove this after flag deprecation.
-    trigger_script_args += ['--use-swarming-go']
-
     pre_trigger_args[:0] = trigger_script_args
 
     return script, pre_trigger_args, args

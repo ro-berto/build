@@ -243,10 +243,6 @@ def GenTests(api):
           post_process.StepCommandContains,
           '[trigger (custom trigger script)] hello_world on Mac-10.13',
           ['--shards', '3']),
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger (custom trigger script)] hello_world on Mac-10.13',
-          ['--use-swarming-go']),
       api.post_process(post_process.DropExpectation),
   )
 

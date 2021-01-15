@@ -188,7 +188,6 @@
       "python",
       "-u",
       "[START_DIR]/src/path/to/script.py",
-      "--use-swarming-go",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",

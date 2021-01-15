@@ -6,7 +6,6 @@
       "[CACHE]/fake_custom_trigger_script.py",
       "foo",
       "bar",
-      "--use-swarming-go",
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
