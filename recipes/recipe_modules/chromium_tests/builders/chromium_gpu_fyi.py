@@ -1478,7 +1478,6 @@ SPEC = {
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
             chromium_apply_config=[
-                'cros_checkout_qemu_image',
                 'mb',
             ],
             gclient_config='chromium',
@@ -1491,6 +1490,7 @@ SPEC = {
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
                 'TARGET_CROS_BOARD': 'amd64-generic',
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',

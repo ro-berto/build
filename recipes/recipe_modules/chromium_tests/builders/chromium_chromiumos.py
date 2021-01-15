@@ -34,7 +34,7 @@ SPEC = {
 
 def _config(name,
             cros_board=None,
-            checkout_qemu_image=False,
+            cros_boards_with_qemu_images=None,
             target_arch='intel',
             target_bits=64,
             chromium_apply_config=None,
@@ -64,8 +64,10 @@ def _config(name,
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
-  if checkout_qemu_image:
-    cfg['chromium_apply_config'].append('cros_checkout_qemu_image')
+  if cros_boards_with_qemu_images:
+    cfg['chromium_config_kwargs'][
+        'CROS_BOARDS_WITH_QEMU_IMAGES'] = cros_boards_with_qemu_images
+
   return name, _chromium_chromiumos_spec(**cfg)
 
 
@@ -92,12 +94,12 @@ SPEC.update([
         'chromeos-amd64-generic-asan-rel',
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic',
-        checkout_qemu_image=True),
+        cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel',
         isolate_server='https://isolateserver.appspot.com',
         cros_board='amd64-generic',
-        checkout_qemu_image=True),
+        cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-dbg',
         isolate_server='https://isolateserver.appspot.com',
@@ -109,7 +111,7 @@ SPEC.update([
     _config(
         'chromeos-amd64-generic-rel',
         cros_board='amd64-generic',
-        checkout_qemu_image=True,
+        cros_boards_with_qemu_images='amd64-generic',
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-arm-generic-dbg',

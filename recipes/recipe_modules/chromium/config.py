@@ -31,7 +31,8 @@ def check(val, potentials):
 # chromium/api.py:get_config_defaults().
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
                TARGET_ARCH, TARGET_BITS, BUILD_CONFIG, TARGET_CROS_BOARD,
-               TARGET_CROS_BOARDS, CHECKOUT_PATH, **_kwargs):
+               TARGET_CROS_BOARDS, CROS_BOARDS_WITH_QEMU_IMAGES, CHECKOUT_PATH,
+               **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
       compile_py=ConfigGroup(
@@ -132,6 +133,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       TARGET_BITS=Static(check(TARGET_BITS, HOST_TARGET_BITS)),
       TARGET_CROS_BOARD=Static(TARGET_CROS_BOARD),
       TARGET_CROS_BOARDS=Static(TARGET_CROS_BOARDS),
+      CROS_BOARDS_WITH_QEMU_IMAGES=Static(CROS_BOARDS_WITH_QEMU_IMAGES),
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
       gn_args=List(basestring),
       clobber_before_runhooks=Single(
@@ -187,6 +189,11 @@ def validate_config(c):
   if c.TARGET_CROS_BOARDS:
     if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover
       raise BadConf("Cannot specify CROS boards for non-'chromeos' platform")
+
+  if c.CROS_BOARDS_WITH_QEMU_IMAGES:
+    if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover
+      raise BadConf("Cannot specify CROS_BOARDS_WITH_QEMU_IMAGES for "
+                    "non-'chromeos' platform")
 
   if c.HOST_BITS < c.TARGET_BITS:
     raise BadConf('host bits < targ bits')  # pragma: no cover
@@ -673,8 +680,8 @@ def codesearch(c):
 
 
 @config_ctx()
-def cros_checkout_qemu_image(c):
-  if not c.TARGET_CROS_BOARD:  # pragma: no cover
+def cros_checkout_qemu_image(c):  # pragma: no cover
+  if not c.TARGET_CROS_BOARD:
     raise BadConf('cros_checkout_qemu_image requires a board')
   c.cros_checkout_qemu_image = True
 

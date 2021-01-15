@@ -122,6 +122,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         'TARGET_ARCH': self.m.platform.arch,
         'TARGET_CROS_BOARD': None,
         'TARGET_CROS_BOARDS': None,
+        'CROS_BOARDS_WITH_QEMU_IMAGES': None,
 
         # NOTE: This is replicating logic which lives in
         # chrome/trunk/src/build/common.gypi, which is undesirable. The desired

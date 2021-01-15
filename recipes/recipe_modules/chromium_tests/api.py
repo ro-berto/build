@@ -176,7 +176,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if self.m.chromium.c.TARGET_CROS_BOARD:
       gclient_solution = self.m.gclient.c.solutions[0]
-      if self.m.chromium.c.cros_checkout_qemu_image:
+      if self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES:
+        gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
+            self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES)
+      elif self.m.chromium.c.cros_checkout_qemu_image:  # pragma: no cover
+        # TODO(crbug.com/1158590): Deprecate cros_checkout_qemu_image to favor
+        # CROS_BOARDS_WITH_QEMU_IMAGES.
         gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
             self.m.chromium.c.TARGET_CROS_BOARD)
       else:
