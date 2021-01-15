@@ -737,8 +737,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     base_task_name = None
     tasks = {}
-    use_swarming_go_in_trigger_script = kwargs.pop(
-        'use_swarming_go_in_trigger_script', False)
 
     # The public interface for perf_device_trigger.py and the default trigger
     # script are starting to diverge. The former requires that all shard indices
@@ -750,8 +748,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       assert not script.endswith('swarming.py'), (
           'trigger_script[\'script\'] must be a custom script, as %s no longer '
           'supports \'--shards\'.' % script)
-      self._trigger_all_task_shards(task, task.shard_indices,
-                                    use_swarming_go_in_trigger_script, resultdb,
+      self._trigger_all_task_shards(task, task.shard_indices, resultdb,
                                     **kwargs)
       return
 
@@ -759,7 +756,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       for shard_index in task.shard_indices:
         step_result, json_output = (
             self._trigger_task_shard_legacy(task, shard_index,
-                                            use_swarming_go_in_trigger_script,
                                             resultdb, **kwargs))
 
         # Merge the JSON outputs. There should be two fields: base_task_name,
@@ -906,7 +902,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     return req
 
   def _generate_trigger_task_shard_args(self, task,
-                                        use_swarming_go_in_trigger_script,
                                         resultdb):
     """Generates the arguments for triggered shards.
 
@@ -1018,15 +1013,15 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     script = task.trigger_script.script
     trigger_script_args = list(task.trigger_script.args)
-    if use_swarming_go_in_trigger_script:
-      trigger_script_args += ['--use-swarming-go']
+
+    # TODO(crbug.com/1127205): remove this after flag deprecation.
+    trigger_script_args += ['--use-swarming-go']
+
     pre_trigger_args[:0] = trigger_script_args
 
     return script, pre_trigger_args, args
 
-  def _trigger_all_task_shards(self, task, shard_indices,
-                               use_swarming_go_in_trigger_script, resultdb,
-                               **kwargs):
+  def _trigger_all_task_shards(self, task, shard_indices, resultdb, **kwargs):
     """Triggers all shards as a single step.
 
     This method adds links to the presentation, and updates
@@ -1036,8 +1031,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       StepResult from the step.
     """
     script, pre_trigger_args, post_trigger_args = (
-        self._generate_trigger_task_shard_args(
-            task, use_swarming_go_in_trigger_script, resultdb))
+        self._generate_trigger_task_shard_args(task, resultdb))
     assert len(shard_indices) == task.shards, (
         'The only trigger script that requires all shards to be simultaneously '
         'triggered is perf_device_trigger.py, and it doesn\'t support multi '
@@ -1074,9 +1068,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def _trigger_task_shard_legacy(self, task, shard_index,
-                                 use_swarming_go_in_trigger_script, resultdb,
-                                 **kwargs):
+  def _trigger_task_shard_legacy(self, task, shard_index, resultdb, **kwargs):
     """Triggers a single shard for a task.
 
     This is the legacy way for triggering a task. It uses `swarming.py` and
@@ -1092,8 +1084,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(crbug.com/894045): Remove this method once we have fully migrated
     # to use swarming recipe module to trigger tasks.
     script, pre_trigger_args, post_trigger_args = (
-        self._generate_trigger_task_shard_args(
-            task, use_swarming_go_in_trigger_script, resultdb))
+        self._generate_trigger_task_shard_args(task, resultdb))
 
     uses_trigger_script = bool(task.trigger_script)
     assert uses_trigger_script, 'Only trigger script should use this now'

@@ -132,7 +132,6 @@ def TestSpec(config_name,
 
   kwargs['parent_buildername'] = parent_buildername
   kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
-  kwargs['chromium_tests_apply_config'] = ['use_swarming_go_in_trigger_script']
 
   if cros_board:
     kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board

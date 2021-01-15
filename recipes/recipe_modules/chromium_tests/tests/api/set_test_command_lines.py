@@ -136,7 +136,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'combined_builder_tester_use_swarming_go_in_trigger_script',
+      'combined_builder_tester_use_trigger_script',
       api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.platform('linux', 64),
@@ -148,9 +148,6 @@ def GenTests(api):
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
-                          chromium_tests_apply_config=[
-                              'use_swarming_go_in_trigger_script'
-                          ],
                       ),
               },
           })),
