@@ -326,7 +326,12 @@ def GenTests(api):
             'task_id': 'custom_task_id',
             'request': {
                 'name': 'task_name_does_not_matter',
-            }
+            },
+            'task_result': {
+                'resultdb_info': {
+                    'invocation': 'invocations/custom_task_id',
+                }
+            },
         },]
     }
 

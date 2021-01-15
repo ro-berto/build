@@ -790,6 +790,7 @@ class SwarmingApi(recipe_api.RecipeApi):
               'task_id': str(meta.id),
               'shard_index': shard_index,
               'view_url': meta.task_ui_link,
+              'invocation': meta.invocation,
           }
       base_task_name = task.task_name
 
@@ -2092,3 +2093,16 @@ class SwarmingTask(object):
       for shard_dict in self.trigger_output['tasks'].itervalues():
         task_ids.append(shard_dict['task_id'])
     return task_ids
+
+  def get_invocation_names(self):
+    """Returns invocation names of all shards.
+
+    Works only after the task has been successfully triggered.
+    """
+    invocation_names = []
+    if self.trigger_output and 'tasks' in self.trigger_output:
+      for shard_dict in self.trigger_output['tasks'].itervalues():
+        inv_name = shard_dict.get('invocation')
+        if inv_name:
+          invocation_names.append(inv_name)
+    return invocation_names
