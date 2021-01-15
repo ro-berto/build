@@ -92,7 +92,6 @@ def _configure_build(api):
   config_name = builder_config(api)
   build_cfg = api.chromium.make_config(BUILD_CONFIG=config_name)
   build_cfg.build_config_fs = config_name
-  build_cfg.compile_py.use_autoninja = True
   build_cfg.compile_py.compiler = 'goma'
   api.chromium.c = build_cfg
 

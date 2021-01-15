@@ -309,7 +309,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]\\autoninja.bat",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -331,7 +331,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\autoninja.bat",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -474,7 +474,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\devtools-frontend\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\autoninja.bat\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\devtools-frontend\\\\out\\\\Release\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\devtools-frontend\\\\out\\\\Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
