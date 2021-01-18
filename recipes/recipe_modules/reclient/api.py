@@ -28,7 +28,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._props = props
     self._instance = None
     DEFAULT_SERVICE = 'remotebuildexecution.googleapis.com:443'
-    self._rbe_service = props.rbe_service or DEFAULT_SERVICE
+    self._service = props.service or DEFAULT_SERVICE
     # Initialization is delayed until the first call for reclient exe
     self._reclient_cipd_dir = None
     self._jobs = props.jobs or None
@@ -81,10 +81,15 @@ class ReclientApi(recipe_api.RecipeApi):
     return self.m.path.join(self._reclient_cipd_dir, exe_name)
 
   @property
-  def rbe_service_addr(self):
+  def server_address(self):
     if self.m.platform.is_win:
       return 'pipe://reproxy.pipe'
     return 'unix:///%s' % self.m.path['tmp_base'].join('reproxy.sock')
+
+  @property
+  def rbe_service_addr(self):  #pragma: no cover
+    # TODO(crbug.com/1141780): Deprecate this
+    return self.server_address
 
   def start_reproxy(self, log_dir):
     """Starts the reproxy via bootstramp.
@@ -98,8 +103,8 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_log_dir': log_dir,
         'RBE_proxy_log_dir': log_dir,
         'RBE_re_proxy': reproxy_bin_path,
-        'RBE_service': self._rbe_service,
-        'RBE_server_address': self.rbe_service_addr,
+        'RBE_service': self._service,
+        'RBE_server_address': self.server_address,
         'RBE_use_application_default_credentials': 'false',
         'RBE_use_gce_credentials': 'true',
     }
@@ -124,7 +129,7 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     step_result = self.m.step('shutdown reproxy via bootstrap', [
         self._bootstrap_bin_path, '-shutdown', '-server_address',
-        self.rbe_service_addr, '-proxy_log_dir', log_dir, '-output_dir', log_dir
+        self.server_address, '-proxy_log_dir', log_dir, '-output_dir', log_dir
     ])
     self._stop_cloudtail()
     self._upload_rbe_metrics(log_dir)

@@ -14,7 +14,7 @@ message InputProperties {
   string instance = 1;
 
   // The remote execution service to dial when calling via gRPC.
-  string rbe_service = 2;
+  string service = 2;
 
   // The number of jobs to run in parallel, i.e. `-j`
   int32 jobs = 3;
