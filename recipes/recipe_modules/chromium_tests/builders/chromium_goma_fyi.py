@@ -50,13 +50,6 @@ SPEC = {
             no_archive(chromium.SPEC['win-archive-rel']),
             ['goma_canary', 'goma_localoutputcache']),
 
-    # TODO(b/139556893): remove after win7 builders removal.
-    'Win7 Builder Goma Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_canary']),
-    'Win7 Builder (dbg) Goma Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
-                               ['goma_canary']),
     'chromeos-amd64-generic-rel-goma-canary':
         chromium_apply_configs(
             chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
@@ -131,13 +124,6 @@ SPEC = {
         chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
                                ['goma_latest_client']),
 
-    # TODO(b/139556893): remove after removal of win7.
-    'Win7 Builder Goma Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_latest_client']),
-    'Win7 Builder (dbg) Goma Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
-                               ['goma_latest_client']),
     'chromeos-amd64-generic-rel-goma-latest':
         chromium_apply_configs(
             chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
