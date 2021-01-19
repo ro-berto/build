@@ -47,7 +47,7 @@ def AreNinjaFilesNewerThanMSVSFiles(src_dir=None):
   return IsFileNewerThanFile(ninja_path, msvs_path)
 
 
-def GetBuildOutputDirectory(src_dir=None, cros_board=None):
+def GetBuildOutputDirectory(src_dir=None):
   """Returns the path to the build directory, relative to the checkout root.
 
   Assumes that the current working directory is the checkout root.
@@ -58,12 +58,7 @@ def GetBuildOutputDirectory(src_dir=None, cros_board=None):
     src_dir = 'src'
 
   if sys.platform.startswith('linux'):
-    out_dirname = 'out'
-    if cros_board:
-      # Simple chrome workflow output (e.g., "out_x86-generic")
-      out_dirname += '_%s' % (cros_board,)
-    return os.path.join(src_dir, out_dirname)
-  assert not cros_board, "'cros_board' not supported on this platform"
+    return os.path.join(src_dir, 'out')
 
   if sys.platform == 'darwin':
     if AreNinjaFilesNewerThanXcodeFiles(src_dir):

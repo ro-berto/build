@@ -74,7 +74,7 @@ def BuildSpec(config_name,
               target_bits,
               bisect_archive_build=False,
               run_sizes=True,
-              cros_board=None,
+              cros_boards=None,
               target_arch=None,
               extra_gclient_apply_config=None):
   test_specs = []
@@ -96,8 +96,8 @@ def BuildSpec(config_name,
 
   kwargs['perf_isolate_upload'] = True
 
-  if cros_board:
-    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+  if cros_boards:
+    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARDS'] = cros_boards
 
   if target_arch:
     kwargs['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
@@ -120,7 +120,7 @@ def TestSpec(config_name,
              target_bits,
              parent_buildername,
              test_specs=None,
-             cros_board=None,
+             cros_boards=None,
              target_arch=None):
   kwargs = _common_kwargs(
       execution_mode=bot_spec.TEST,
@@ -134,8 +134,8 @@ def TestSpec(config_name,
   kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
   kwargs['chromium_tests_apply_config'] = ['use_swarming_go_in_trigger_script']
 
-  if cros_board:
-    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+  if cros_boards:
+    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARDS'] = cros_boards
 
   if target_arch:
     kwargs['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
@@ -207,7 +207,7 @@ SPEC.update({
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_CROS_BOARDS': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',

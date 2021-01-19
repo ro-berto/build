@@ -29,7 +29,7 @@ def RunSteps(api):
   api.chromium.set_config(
       api.properties.get('chromium_config', 'chromium'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'),
-      TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
+      TARGET_CROS_BOARDS=api.properties.get('target_cros_boards'))
 
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
@@ -46,9 +46,9 @@ def GenTests(api):
   yield api.test('basic')
 
   yield api.test(
-      'cros_board',
+      'cros_boards',
       api.properties(
-          target_platform='chromeos', target_cros_board='x86-generic'),
+          target_platform='chromeos', target_cros_boards='x86-generic'),
   )
 
   yield api.test(

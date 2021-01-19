@@ -17,7 +17,7 @@ def RunSteps(api):
   api.chromium.set_config(
       api.properties.get('chromium_config', 'chromium'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'),
-      TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
+      TARGET_CROS_BOARDS=api.properties.get('target_cros_boards'))
 
   gn_args = api.chromium.mb_lookup(
       chromium.BuilderId.create_for_group('test-group', 'test-builder'),
@@ -51,9 +51,9 @@ def GenTests(api):
   )
 
   yield api.test(
-      'cros_board',
+      'cros_boards',
       api.properties(
-          target_platform='chromeos', target_cros_board='x86-generic'),
+          target_platform='chromeos', target_cros_boards='x86-generic'),
       api.properties(expected_gn_args=gn_args),
       api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args)),
       api.post_process(post_process.StepCommandContains, 'lookup GN args',

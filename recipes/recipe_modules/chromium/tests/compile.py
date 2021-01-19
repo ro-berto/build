@@ -27,7 +27,7 @@ def RunSteps(api, use_goma):
   api.chromium.set_config(
       api.properties.get('chromium_config', 'chromium_clang'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'),
-      TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
+      TARGET_CROS_BOARDS=api.properties.get('target_cros_boards'))
   api.chromium.apply_config('goma_hermetic_fallback')
   api.chromium.apply_config('goma_high_parallel')
   api.chromium.apply_config('goma_localoutputcache')
@@ -105,15 +105,14 @@ def GenTests(api):
   yield api.test(
       'chromeos',
       api.properties(
-          target_platform='chromeos',
-          target_cros_board='x86-generic'),
+          target_platform='chromeos', target_cros_boards='x86-generic'),
   )
 
   yield api.test(
       'chromeos_official',
       api.properties(
           target_platform='chromeos',
-          target_cros_board='x86-generic',
+          target_cros_boards='x86-generic',
           chromium_apply_config=['official']),
       api.post_process(post_process.DropExpectation),
   )

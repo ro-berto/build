@@ -184,16 +184,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gclient.apply_config(c)
 
     if (self.m.chromium.c.TARGET_CROS_BOARDS or
-        self.m.chromium.c.TARGET_CROS_BOARD or
         self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES):
       gclient_solution = self.m.gclient.c.solutions[0]
       if self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES:
         gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
             self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES)
-      else:
+      if self.m.chromium.c.TARGET_CROS_BOARDS:
         gclient_solution.custom_vars['cros_boards'] = (
-            self.m.chromium.c.TARGET_CROS_BOARDS or
-            self.m.chromium.c.TARGET_CROS_BOARD)
+            self.m.chromium.c.TARGET_CROS_BOARDS)
 
     self.m.gclient.c.revisions.update(self._fixed_revisions)
 
@@ -591,7 +589,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.chromium.c.build_config_fs,
             build_url=self._build_bisect_gs_archive_url(bot_spec),
             build_revision=build_revision,
-            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             update_properties=update_step.presentation.properties,
             exclude_perf_test_files=True,
             store_by_hash=False,
@@ -612,7 +609,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             build_url=self._build_gs_archive_url(bot_spec, builder_id.group,
                                                  builder_id.builder),
             build_revision=build_revision,
-            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             # TODO(machenbach): Make asan a configuration switch.
             package_dsym_files=(self.m.chromium.c.runtests.enable_asan and
                                 self.m.chromium.c.HOST_PLATFORM == 'mac'),

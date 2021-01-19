@@ -120,7 +120,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         'HOST_BITS': self.m.platform.bits,
         'TARGET_PLATFORM': self.m.platform.name,
         'TARGET_ARCH': self.m.platform.arch,
-        'TARGET_CROS_BOARD': None,
         'TARGET_CROS_BOARDS': None,
         'CROS_BOARDS_WITH_QEMU_IMAGES': None,
 

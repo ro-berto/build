@@ -33,7 +33,7 @@ SPEC = {
 
 
 def _config(name,
-            cros_board=None,
+            cros_boards=None,
             cros_boards_with_qemu_images=None,
             target_arch='intel',
             target_bits=64,
@@ -61,12 +61,13 @@ def _config(name,
   cfg.update(**kwargs)
   if chromium_apply_config:
     cfg['chromium_apply_config'].extend(chromium_apply_config)
-  if cros_board:
-    cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+  if cros_boards:
+    cfg['chromium_config_kwargs']['TARGET_CROS_BOARDS'] = cros_boards
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
   if cros_boards_with_qemu_images:
     cfg['chromium_config_kwargs'][
         'CROS_BOARDS_WITH_QEMU_IMAGES'] = cros_boards_with_qemu_images
+    cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
 
   return name, _chromium_chromiumos_spec(**cfg)
 
@@ -93,41 +94,38 @@ SPEC.update([
     _config(
         'chromeos-amd64-generic-asan-rel',
         isolate_server='https://isolateserver.appspot.com',
-        cros_board='amd64-generic',
         cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel',
         isolate_server='https://isolateserver.appspot.com',
-        cros_board='amd64-generic',
         cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-dbg',
         isolate_server='https://isolateserver.appspot.com',
-        cros_board='amd64-generic'),
+        cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-lacros-dbg',
         isolate_server='https://isolateserver.appspot.com',
-        cros_board='amd64-generic'),
+        cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        cros_board='amd64-generic',
         cros_boards_with_qemu_images='amd64-generic',
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-arm-generic-dbg',
         isolate_server='https://isolateserver.appspot.com',
-        cros_board='arm-generic',
+        cros_boards='arm-generic',
         target_arch='arm',
         target_bits=32),
     _config(
         'chromeos-arm-generic-rel',
-        cros_board='arm-generic',
+        cros_boards='arm-generic',
         target_arch='arm',
         target_bits=32,
         isolate_server='https://isolateserver.appspot.com'),
     _config(
         'chromeos-kevin-rel',
-        cros_board='kevin',
+        cros_boards='kevin',
         target_arch='arm',
         target_bits=32,
         gclient_apply_config=['arm'],

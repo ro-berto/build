@@ -23,8 +23,6 @@
       "gs://example_bucket/experimental/extra_component/example_buildername",
       "--build_revision",
       "example_sha",
-      "--cros-board",
-      "daisy",
       "--package-dsym-files",
       "--exclude-files",
       "example_exclude",

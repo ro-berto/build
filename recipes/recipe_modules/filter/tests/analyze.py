@@ -20,7 +20,7 @@ def RunSteps(api):
       api.properties.get('chromium_config', 'chromium_chromeos'),
       **api.properties.get('chromium_config_kwargs', {
           'TARGET_PLATFORM': 'chromeos',
-          'TARGET_CROS_BOARD': 'x86-generic',
+          'TARGET_CROS_BOARDS': 'x86-generic',
       }))
   api.chromium.apply_config('mb')
 

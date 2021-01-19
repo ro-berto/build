@@ -361,9 +361,7 @@ class PathMatcher(object):
 
 
 def Archive(options):
-  build_dir = build_directory.GetBuildOutputDirectory(
-      options.src_dir, options.cros_board
-  )
+  build_dir = build_directory.GetBuildOutputDirectory(options.src_dir)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
   staging_dir = (
@@ -561,14 +559,6 @@ def AddOptions(option_parser):
       help=(
           'Use the filename given in --build-url instead'
           'of generating one.'
-      )
-  )
-  option_parser.add_option(
-      '--cros-board',
-      help=(
-          'If building for Chrom[e|ium]OS via the '
-          'simple chrome workflow, the name of the '
-          'target CROS board.'
       )
   )
   option_parser.add_option(

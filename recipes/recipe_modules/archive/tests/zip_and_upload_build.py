@@ -26,7 +26,6 @@ def RunSteps(api):
       build_url=api.archive.legacy_upload_url(
           'example_bucket', 'extra_component'),
       build_revision='example_sha',
-      cros_board='daisy',
       package_dsym_files=True,
       exclude_files='example_exclude',
       exclude_perf_test_files=True,

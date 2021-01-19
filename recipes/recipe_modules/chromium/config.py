@@ -30,9 +30,8 @@ def check(val, potentials):
 # Note: The default values for these parameters are defined via recipe_magic in
 # chromium/api.py:get_config_defaults().
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
-               TARGET_ARCH, TARGET_BITS, BUILD_CONFIG, TARGET_CROS_BOARD,
-               TARGET_CROS_BOARDS, CROS_BOARDS_WITH_QEMU_IMAGES, CHECKOUT_PATH,
-               **_kwargs):
+               TARGET_ARCH, TARGET_BITS, BUILD_CONFIG, TARGET_CROS_BOARDS,
+               CROS_BOARDS_WITH_QEMU_IMAGES, CHECKOUT_PATH, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
       compile_py=ConfigGroup(
@@ -131,7 +130,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       TARGET_PLATFORM=Static(check(TARGET_PLATFORM, TARGET_PLATFORMS)),
       TARGET_ARCH=Static(check(TARGET_ARCH, TARGET_ARCHS)),
       TARGET_BITS=Static(check(TARGET_BITS, HOST_TARGET_BITS)),
-      TARGET_CROS_BOARD=Static(TARGET_CROS_BOARD),
       TARGET_CROS_BOARDS=Static(TARGET_CROS_BOARDS),
       CROS_BOARDS_WITH_QEMU_IMAGES=Static(CROS_BOARDS_WITH_QEMU_IMAGES),
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
@@ -179,10 +177,6 @@ def validate_config(c):
   if c.TARGET_PLATFORM not in potential_platforms:
     raise BadConf('Can not compile "%s" on "%s"' %
                   (c.TARGET_PLATFORM, c.HOST_PLATFORM))  # pragma: no cover
-
-  if c.TARGET_CROS_BOARD:
-    if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover
-      raise BadConf("Cannot specify CROS board for non-'chromeos' platform")
 
   if c.TARGET_CROS_BOARDS:
     if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover

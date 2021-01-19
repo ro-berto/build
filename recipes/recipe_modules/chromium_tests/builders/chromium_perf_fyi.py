@@ -74,7 +74,7 @@ _AddBuildSpec(
     'chromeos',
     target_bits=32,
     target_arch='arm',
-    cros_board='kevin',
+    cros_boards='kevin',
     extra_gclient_apply_config=['arm'])
 
 _AddIsolatedTestSpec(
@@ -122,7 +122,7 @@ _AddIsolatedTestSpec(
     parent_builder_group='chromium.perf.fyi',
     target_bits=32,
     target_arch='arm',
-    cros_board='kevin')
+    cros_boards='kevin')
 
 _AddIsolatedTestSpec(
     'lacros-eve-perf-fyi',
@@ -131,4 +131,4 @@ _AddIsolatedTestSpec(
     parent_builder_group='chromium.perf',
     target_bits=64,
     target_arch='intel',
-    cros_board='amd64-generic')
+    cros_boards='amd64-generic')

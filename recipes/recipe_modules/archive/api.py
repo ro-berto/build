@@ -41,7 +41,6 @@ class ArchiveApi(recipe_api.RecipeApi):
                            build_url=None,
                            src_dir=None,
                            build_revision=None,
-                           cros_board=None,
                            package_dsym_files=False,
                            exclude_files=None,
                            exclude_perf_test_files=False,
@@ -73,8 +72,6 @@ class ArchiveApi(recipe_api.RecipeApi):
       args.extend(['--build-url', build_url])
     if build_revision:
       args.extend(['--build_revision', build_revision])
-    if cros_board:
-      args.extend(['--cros-board', cros_board])
     if package_dsym_files:
       args.append('--package-dsym-files')
     if exclude_files:
