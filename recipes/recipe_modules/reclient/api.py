@@ -19,6 +19,13 @@ def make_test_rbe_stats_pb():
   return stats
 
 
+class MalformedREWrapperFlag(Exception):
+
+  def __init__(self, flag):
+    full_message = 'Flag "{}" doesn\'t start with "RBE_"'.format(flag)
+    super(MalformedREWrapperFlag, self).__init__(full_message)
+
+
 class ReclientApi(recipe_api.RecipeApi):
   """A module for interacting with re-client."""
 
@@ -32,6 +39,7 @@ class ReclientApi(recipe_api.RecipeApi):
     # Initialization is delayed until the first call for reclient exe
     self._reclient_cipd_dir = None
     self._jobs = props.jobs or None
+    self._rewrapper_env = None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -61,6 +69,25 @@ class ReclientApi(recipe_api.RecipeApi):
       # This heuristic is copied from Goma's recommended_jobs.
       self._jobs = min(10 * self.m.platform.cpu_count, 200)
     return self._jobs
+
+  @property
+  def rewrapper_env(self):
+    # While this verification would better be placed at __init__, the test
+    # framework 1) doesn't check for exceptions thrown during object creation,
+    # 2) requires 100% code coverage. Thus we have to move any exception
+    # throwing code -- such as checking validity of props inputs -- outside
+    # __init__.
+    if self._rewrapper_env is None:
+      self._rewrapper_env = self._verify_rewrapper_flags(
+          self._props.rewrapper_env)
+
+    # While it'd make more sense to set this during __init__, deciding the
+    # server_address requires knowing which platform we're running on - and
+    # accessing the recipe deps that provides platform can't happen until
+    # _after_ the object is created.
+    if 'RBE_server_address' not in self._rewrapper_env:
+      self._rewrapper_env['RBE_server_address'] = self.server_address
+    return self._rewrapper_env
 
   @property
   def rewrapper_path(self):
@@ -227,3 +254,14 @@ class ReclientApi(recipe_api.RecipeApi):
         script=self._cloudtail_wrapper_path,
         args=['stop', '--killed-pid-file', self._cloudtail_pid_file],
         infra_step=True)
+
+  def _verify_rewrapper_flags(self, rewrapper_env):
+    str_rewrapper_env = {}
+
+    for flag, value in rewrapper_env.items():
+      if not flag.startswith('RBE_'):
+        raise MalformedREWrapperFlag(flag)
+      else:
+        str_rewrapper_env[str(flag)] = str(value)
+
+    return str_rewrapper_env

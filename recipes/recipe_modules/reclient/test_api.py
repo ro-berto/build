@@ -7,9 +7,13 @@ from recipe_engine import recipe_test_api
 
 class ReclientTestApi(recipe_test_api.RecipeTestApi):
 
-  def properties(self, instance='example'):
+  def properties(self, instance='example', rewrapper_env=None):
+    if rewrapper_env is None:
+      rewrapper_env = {}
+
     return self.m.properties(**{
         '$build/reclient': {
             'instance': instance,
+            'rewrapper_env': rewrapper_env,
         },
     })

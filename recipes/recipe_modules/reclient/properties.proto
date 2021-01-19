@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
-// NEXT ID TO USE: 4
+// NEXT ID TO USE: 5
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -18,4 +18,11 @@ message InputProperties {
 
   // The number of jobs to run in parallel, i.e. `-j`
   int32 jobs = 3;
+
+  // Map of flags to be passed to rewrapper calls through environment
+  // variables. The flag names must be prefixed with The "RBE_". It may
+  // include values such as the reproxy address (ie RBE_server_address),
+  // but it can't include usage specific values such as RBE_exec_root
+  // and RBE_platform.
+  map<string, string> rewrapper_env = 4;
 }
