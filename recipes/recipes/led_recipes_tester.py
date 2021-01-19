@@ -45,10 +45,10 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 DEFAULT_BUILDERS = (
     'luci.chromium.try:linux-rel',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m87.try:linux-rel',
-    'luci.chromium-m87.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:linux-rel',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m89.try:linux-rel',
+    'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
 )
 
 
@@ -62,8 +62,8 @@ class PathBasedBuilderSet(object):
 IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
     builders=[
         'luci.chromium.try:ios-simulator',
-        'luci.chromium-m87.try:ios-simulator',
         'luci.chromium-m88.try:ios-simulator',
+        'luci.chromium-m89.try:ios-simulator',
     ],
     files=[
         'scripts/slave/recipes/ios/try.py',
@@ -78,8 +78,8 @@ PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
 # recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m87.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
 )
 
 # CL to use when testing a recipe which touches chromium source.
@@ -101,17 +101,17 @@ CHROMIUM_SRC_TEST_CLS = {
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
     },
-    'luci.chromium-m87.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2446817',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2446521',
-    },
     'luci.chromium-m88.try': {
         'slow':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2537783',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2538112',
+    },
+    'luci.chromium-m89.try': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2638008',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2638010',
     },
 }
 
@@ -858,10 +858,10 @@ def GenTests(api):
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
       default_builders(),
-      non_existent_builder('luci.chromium-m87.try:arbitrary-builder'),
+      non_existent_builder('luci.chromium-m88.try:arbitrary-builder'),
       api.post_check(
           post_process.StepWarning,
-          led_get_builder_name('luci.chromium-m87.try:arbitrary-builder')),
+          led_get_builder_name('luci.chromium-m88.try:arbitrary-builder')),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -897,8 +897,8 @@ def GenTests(api):
       affected_recipes('ios/try'),
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m87.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
   )
 
   yield api.test(
@@ -908,6 +908,6 @@ def GenTests(api):
       affected_recipes('ios/try'),
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m87.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
   )
