@@ -379,7 +379,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         result.append((change.host, change.project))
     return ', '.join('/'.join(p) for p in result)
 
-  def _process_clang_coverage_data(self, tests=None, binaries=None):
+  def process_clang_coverage_data(self, tests=None, binaries=None):
     """Processes the clang coverage data for html report or metadata.
 
     Args:
@@ -442,15 +442,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               str(x) for x in sys.exc_info())
         else:
           raise
-
-  def process_clang_coverage_data(self, tests):
-    """Processes the clang coverage data for html report or metadata.
-
-    Args:
-      tests (list of steps.Test): A list of test objects
-          whose binaries we are to create a coverage report for.
-    """
-    self._process_clang_coverage_data(tests)
 
   def _upload_coverage_data_to_gs(self, metadata_path, data_type, **kwargs):
     """Upload coverage data to GCS bucket.

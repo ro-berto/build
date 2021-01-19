@@ -366,8 +366,8 @@ def CalculateCodeCoverage(api, paths):
   # account, so that Gerrit can find it.
   # For more information, see:
   # https://source.chromium.org/chromium/chromium/tools/build/+/master:scripts/slave/recipe_modules/code_coverage/api.py;l=363  #pylint: disable=line-too-long
-  api.code_coverage._process_clang_coverage_data(None,
-                                                 {paths.unit_test_binary_path})
+  api.code_coverage.process_clang_coverage_data(
+      binaries={paths.unit_test_binary_path})
 
 
 def RunTestsLocally(api, paths):
