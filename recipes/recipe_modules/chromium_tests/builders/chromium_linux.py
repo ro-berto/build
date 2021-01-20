@@ -175,28 +175,6 @@ SPEC = {
             parent_buildername='linux-ozone-rel',
             simulation_platform='linux',
         ),
-    # crbug.com/1143924: linux-rel-builderful will mirror this so that we
-    # can trigger tests into chromium.tests.robocrop without affecting Linux
-    # Builder or linux-rel
-    'Linux Builder Robocrop':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-
-                # This is specified because 'linux-rel' builder
-                # is one of the slowest builder in CQ (crbug.com/804251).
-                'goma_high_parallel',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'Linux Builder':
         _chromium_linux_spec(
             chromium_config='chromium',
@@ -246,26 +224,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='Linux Builder',
-            simulation_platform='linux',
-        ),
-    # crbug.com/1143924: This is to trigger linux tests in the
-    # chromium.tests.robocrop pool without touching Linux Tests or linux-rel
-    'Linux Tests Robocrop':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_high_parallel',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Linux Builder Robocrop',
             simulation_platform='linux',
         ),
     'Linux Builder (dbg)(32)':
