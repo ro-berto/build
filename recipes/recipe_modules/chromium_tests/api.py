@@ -1891,6 +1891,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         report_via_property=True
     )
 
+    # This is done before calling revise_affected_files_for_deps_autorolls()
+    # intentionally because the current implementation of RTS is only aware of
+    # files in src.git. The revise_affected_files_for_deps_autorolls line
+    # expands affected_files to files that live in other git repos, which might
+    # mess up RTS.
+    if bot.config.rts_spec:
+      self.m.rts.select_tests_to_skip(
+          bot.config.rts_spec,
+          ['//%s' % fname for fname in affected_files],
+      )
+
     is_deps_only_change = affected_files == ["DEPS"]
     affected_files = self.revise_affected_files_for_deps_autorolls(
         bot, affected_files, build_config)

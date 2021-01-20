@@ -7,6 +7,7 @@ from recipe_engine.recipe_api import Property
 import textwrap
 
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build.rts.rts_spec import RTSSpec
 
 DEPS = [
     'chromium',
@@ -82,6 +83,16 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                     tester='staging-chromium-test-rel',
                 ),
             ]),
+        'rts-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.test',
+                buildername='staging-chromium-rel',
+                rts_spec=RTSSpec(
+                    rts_chromium_version='latest',
+                    model_version='latest',
+                    skip_test_files_path='src/testing/rts_exclude_file.txt',
+                    target_change_recall=0.9,
+                )),
     }
 })
 
@@ -108,6 +119,18 @@ def GenTests(api):
           },
       }),
       api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'rts',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.test', builder='rts-rel'),
+      api.chromium_tests.builders(_TEST_BUILDERS),
+      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.filter.suppress_analyze(),
+      api.post_process(post_process.MustRun,
+                       'select tests to skip (rts).rts-chromium select'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
