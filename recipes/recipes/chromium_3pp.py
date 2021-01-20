@@ -103,41 +103,23 @@ def RunSteps(api, properties):
     step_result.presentation.step_text = '\n'.join(unexpected_3pp_files)
     raise api.step.StepFailure(step_name, step_result)
 
-  all_cipd_pkg_names = set()
-  for package_path in properties.package_paths:
-    with api.step.nest('Load packages from %s' % package_path):
-      cipd_pkg_names = api.support_3pp.load_packages_from_path(
-          chromium_src,
-          glob_pattern='%s/%s' % (package_path.strip('/'), '3pp/3pp.pb'),
-          check_dup=True)
-      all_cipd_pkg_names.update(cipd_pkg_names)
+  with api.step.nest('Load all packages'):
+    api.support_3pp.load_packages_from_path(
+        chromium_src, glob_pattern='**/3pp/3pp.pb', check_dup=True)
 
-  if package_paths_to_build:
-    cipd_pkg_names_to_build = set()
-    for package_path in package_paths_to_build:
-      with api.step.nest('Load to-build packages from %s' % package_path):
-        cipd_pkg_names = api.support_3pp.load_packages_from_path(
-            chromium_src,
-            glob_pattern='%s/%s' % (package_path.strip('/'), '3pp/3pp.pb'),
-            check_dup=False)
-        cipd_pkg_names_to_build.update(cipd_pkg_names)
+  cipd_pkg_names_to_build = set()
 
-    unknown_cipd_pkg_names = cipd_pkg_names_to_build - all_cipd_pkg_names
-    if unknown_cipd_pkg_names:
-      step_name = 'Unknown packages'
-      step_result = api.step(step_name, cmd=None)
-      step_result.presentation.status = api.step.FAILURE
-      step_result.presentation.step_text = (
-          "Found unknown packages. Please add them to the builder's "
-          "property 'package_paths'.")
-      step_result.presentation.logs['unknown packages'] = sorted(
-          unknown_cipd_pkg_names)
-      raise api.step.StepFailure(step_name, step_result)
-    else:
-      all_cipd_pkg_names = cipd_pkg_names_to_build
+  for package_path in package_paths_to_build:
+    with api.step.nest('Load to-build packages from %s' % package_path):
+      cipd_pkg_names_to_build.update(
+          api.support_3pp.load_packages_from_path(
+              chromium_src,
+              glob_pattern='%s/%s' % (package_path.strip('/'), '3pp/3pp.pb'),
+              check_dup=False))
 
   _, unsupported = api.support_3pp.ensure_uploaded(
-      packages=all_cipd_pkg_names,
+      # Note that when empty, all known packages will be built.
+      packages=cipd_pkg_names_to_build,
       platform=properties.platform,
       force_build=api.tryserver.is_tryserver or properties.force_build,
   )
@@ -151,17 +133,10 @@ def RunSteps(api, properties):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          package_paths=[
-              'foo',
-              'third_party/bar/**',
-          ],
-          platform='linux-amd64',
-          package_prefix='chromium'),
+      api.properties(platform='linux-amd64', package_prefix='chromium'),
       api.post_process(
           post_process.MustRun,
-          'Load packages from foo',
-          'Load packages from third_party/bar/**',
+          'Load all packages',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -170,10 +145,6 @@ def GenTests(api):
   yield api.test(
       'basic_to_build',
       api.properties(
-          package_paths=[
-              'foo',
-              'third_party/bar/**',
-          ],
           package_paths_to_build=[
               'third_party/bar/some',
           ],
@@ -181,31 +152,15 @@ def GenTests(api):
           package_prefix='chromium'),
       api.post_process(
           post_process.MustRun,
-          'Load packages from third_party/bar/**',
+          'Load to-build packages from third_party/bar/some',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'android_deps',
-      api.properties(
-          package_paths=[
-              'third_party/android_deps/**',
-          ],
-          platform='linux-amd64',
-          package_prefix='chromium'),
-      api.post_process(post_process.MustRun,
-                       'Preprocessing third_party/android_deps'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'unexpected_3pp_change',
       api.properties(
-          package_paths=[
-              'third_party/android_deps/**',
-          ],
           platform='linux-amd64',
           package_prefix='chromium'),
       api.override_step_data(
@@ -217,47 +172,12 @@ def GenTests(api):
   )
 
   yield api.test(
-      'unknown_packages',
-      api.properties(
-          package_paths=[
-              'apple',
-          ],
-          package_paths_to_build=[
-              'banana/**',
-          ],
-          platform='linux-amd64',
-          package_prefix='chromium'),
-      api.override_step_data('Load packages from apple.find package specs',
-                             api.file.glob_paths(['apple/3pp/3pp.pb'])),
-      api.override_step_data(
-          "Load packages from apple.load package specs."
-          "read 'apple/3pp/3pp.pb'",
-          api.file.read_text('create {} upload {pkg_prefix: "p_apple"}')),
-      api.override_step_data(
-          'Load to-build packages from banana/**.find package specs',
-          api.file.glob_paths(['banana/3pp/3pp.pb'])),
-      api.override_step_data(
-          "Load to-build packages from banana/**.load package specs."
-          "read 'banana/3pp/3pp.pb'",
-          api.file.read_text('create {} upload {pkg_prefix: "p_banana"}')),
-      api.post_process(post_process.LogEquals, 'Unknown packages',
-                       'unknown packages', 'p_banana/banana'),
-      api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'unsupported_packages',
-      api.properties(
-          package_paths=[
-              'pear',
-          ],
-          platform='linux-amd64',
-          package_prefix='chromium'),
-      api.override_step_data('Load packages from pear.find package specs',
+      api.properties(platform='linux-amd64', package_prefix='chromium'),
+      api.override_step_data('Load all packages.find package specs',
                              api.file.glob_paths(['pear/3pp/3pp.pb'])),
       api.override_step_data(
-          "Load packages from pear.load package specs."
+          "Load all packages.load package specs."
           "read 'pear/3pp/3pp.pb'",
           api.file.read_text('''
               create { unsupported: true }
@@ -286,10 +206,6 @@ def GenTests(api):
       'trybot_basic',
       api.chromium.try_build(),
       api.properties(
-          package_paths=[
-              'foo',
-              'third_party/**',
-          ],
           package_paths_to_build=[
               'third_party/some',
           ],
@@ -302,15 +218,15 @@ def GenTests(api):
                        'package_paths_to_build',
                        '\n'.join(['third_party/other', 'third_party/some'])),
       api.override_step_data(
-          'Load packages from third_party/**.find package specs',
+          'Load all packages.find package specs',
           api.file.glob_paths(
               ['third_party/other/3pp/3pp.pb', 'third_party/some/3pp/3pp.pb'])),
       api.override_step_data(
-          "Load packages from third_party/**.load package specs."
+          "Load all packages.load package specs."
           "read 'third_party/other/3pp/3pp.pb'",
           api.file.read_text(trybot_basic_other)),
       api.override_step_data(
-          "Load packages from third_party/**.load package specs."
+          "Load all packages.load package specs."
           "read 'third_party/some/3pp/3pp.pb'",
           api.file.read_text(trybot_basic_some)),
       api.override_step_data(
