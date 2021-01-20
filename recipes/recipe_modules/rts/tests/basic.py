@@ -3,13 +3,12 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+from RECIPE_MODULES.build.rts import rts_spec
 
 DEPS = [
     'rts',
     'recipe_engine/platform',
 ]
-
-from recipe_engine import post_process
 
 
 def RunSteps(api):
@@ -17,11 +16,14 @@ def RunSteps(api):
       '//foo/bar.h',
       '//bar/baz.cc',
   ]
+  spec = rts_spec.RTSSpec(
+      rts_chromium_version='latest',
+      model_version='latest',
+      skip_test_files_path='src/testing/rts_exclude_file.txt',
+      target_change_recall=0.9,
+  )
 
-  api.rts.select_tests_to_skip(
-      changed_files,
-      'src/testing/rts_exclude_file.txt',
-      target_change_recall=.90)
+  api.rts.select_tests_to_skip(spec, changed_files)
 
 
 def GenTests(api):

@@ -3,11 +3,13 @@
 # found in the LICENSE file.
 """Interface for the performing regression test selection
 
-See https://source.chromium.org/chromium/chromium/src/+/master:docs/testing/regr
-ession-test-selection.md for more information
+See https://source.chromium.org/chromium/chromium/src/+/master:docs/testing/
+regression-test-selection.md
+for more information
 """
 
 from recipe_engine import recipe_api
+from .rts_spec import RTSSpec
 
 
 class RtsApi(recipe_api.RecipeApi):
@@ -48,36 +50,27 @@ class RtsApi(recipe_api.RecipeApi):
 
     return exec_path
 
+
   def select_tests_to_skip(self,
+                           spec,
                            changed_files,
-                           skip_test_files_path,
-                           target_change_recall=None,
-                           step_name='select tests to skip (rts)',
-                           rts_chromium_version='latest',
-                           model_version='latest'):
+                           step_name='select tests to skip (rts)'):
     """Selects tests to skip.
 
-    RTS looks at the changed_files and desired change recall and writes the
-    tests to skip to skip_test_files_path.
+    RTS looks at the spec's changed_files and desired change recall and writes
+    the tests to skip to skip_test_files_path.
 
-    Args:
-      changed_files (list[str]): A list of files changed in the CL. Paths must
-      skip_test_files_path (str): A path to the file where RTS will put what
-          should be skipped. Each line of the file will be a filename with
-          the "//" prefix.
-      target_change_recall (float): Must be between 0 and 1.
-          A target change recall (safety).
-          Higher values result in fewer tests skipped.
-      step_name (str): The name of the step. If None, generate a name.
-      rts_chromium_version (str): The version of the binary to download and use.
-      model_version (str): The version of the model to download and use.
+    spec (RTSSpec): The RTS spec.
+    changed_files (list[str]): A list of files changed in the CL. Paths must
+      start with "//"
+    step_name (str): The name of the step. If None, generate a name.
     """
     with self.m.step.nest(step_name):
-      assert target_change_recall is None or 0 < target_change_recall < 1, \
-         'target_change_recall must be a number between 0 and 1 or None.'
+      assert 0 < spec.target_change_recall < 1, \
+         'target_change_recall must be a number between 0 and 1.'
 
-      rts_exec = self._ensure_exec(rts_chromium_version)
-      model_dir = self._ensure_model(model_version)
+      rts_exec = self._ensure_exec(spec.rts_chromium_version)
+      model_dir = self._ensure_model(spec.model_version)
 
       # Write changed_files
       changed_files_path = self.m.path.mkstemp()
@@ -89,10 +82,9 @@ class RtsApi(recipe_api.RecipeApi):
           'select',
           '-model-dir', model_dir, \
           '-changed-files', str(changed_files_path), \
-          '-skip-test-files', str(skip_test_files_path),
+          '-skip-test-files', str(spec.skip_test_files_path), \
+          '-target-change-recall', str(spec.target_change_recall)
       ]
-      if target_change_recall is not None:
-        args += ['-target-change-recall', str(target_change_recall)]
 
       # Run it
       self.m.step('rts-chromium select', args)
