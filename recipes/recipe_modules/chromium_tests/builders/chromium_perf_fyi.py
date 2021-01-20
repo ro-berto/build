@@ -44,6 +44,7 @@ def _AddIsolatedTestSpec(name,
       **kwargs)
   if parent_builder_group:
     spec = spec.evolve(parent_builder_group=parent_builder_group)
+  SPEC[name] = spec
 
 
 _AddIsolatedTestSpec(
