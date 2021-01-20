@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
 from recipe_engine.post_process import Filter
 
 from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
@@ -12,6 +13,7 @@ DEPS = [
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
 ]
 
 BASIC_CONFIG = {
@@ -61,6 +63,18 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
+  )
+
+  yield api.test(
+      'linux_tests_reclient',
+      api.chromium.ci_build(
+          builder_group='chromium.fyi', builder='Linux Builder (reclient)'),
+      api.properties(swarming_gtest=True),
+      api.step_data('lookup GN args',
+                    api.raw_io.stream_output('use_rbe = true\n')),
+      # Check that we do use reclient as the distributed compiler
+      api.post_process(post_process.MustRun, 'start reproxy via bootstrap'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

@@ -421,6 +421,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return (chromium_config.compile_py.compiler and
             'goma' in chromium_config.compile_py.compiler)
 
+  def _use_reclient(self, gn_args):
+    args = self.m.gn.parse_gn_args(gn_args)
+    return args.get('use_rbe') == 'true'
+
   def compile_specific_targets(self,
                                bot_config,
                                update_step,
@@ -834,7 +838,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.chromium.c.project_generator.tool == 'mb':
         builder_id = builder_id or self.m.chromium.get_builder_id()
         use_goma_module = self._use_goma()
-        self.m.chromium.mb_gen(
+        gn_args = self.m.chromium.mb_gen(
             builder_id,
             phase=mb_phase,
             mb_config_path=mb_config_path,
@@ -844,6 +848,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             recursive_lookup=mb_recursive_lookup,
             android_version_code=android_version_code,
             android_version_name=android_version_name)
+        use_reclient = self._use_reclient(gn_args)
+        if use_reclient:
+          use_goma_module = False
 
       # gn_logs.txt contains debug info for vars with smart defaults. Display
       # its contents in the build for easy debugging.
@@ -856,7 +863,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return self.m.chromium.compile(
           compile_targets,
           name='compile%s' % name_suffix,
-          use_goma_module=use_goma_module)
+          use_goma_module=use_goma_module,
+          use_reclient=use_reclient)
 
   def download_and_unzip_build(self,
                                builder_id,
