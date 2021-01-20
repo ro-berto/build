@@ -25,6 +25,7 @@ per-file chromium_trybot.py=iannucci@chromium.org
 per-file chromium_trybot.py=martiniss@chromium.org
 per-file chromium_trybot.py=tmrts@chromium.org
 per-file cronet.py=file:cronet.expected/OWNERS
+per-file dawn.py=file:dawn.expected/OWNERS
 per-file emscripten_releases.py=file:emscripten_releases.expected/OWNERS
 per-file goma_client.py=file://recipes/goma/GOMA_OWNERS
 per-file goma_server.py=file://recipes/goma/GOMA_OWNERS
