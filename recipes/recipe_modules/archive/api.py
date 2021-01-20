@@ -612,8 +612,13 @@ class ArchiveApi(recipe_api.RecipeApi):
         # Perform dynamic configuration from placeholders, if necessary.
         gcs_path = self._replace_placeholders(update_properties, custom_vars,
                                               archive_data.gcs_path)
-        gcs_args = []
 
+        gcs_bucket = archive_data.gcs_bucket
+        experimental = self.m.runtime.is_experimental
+        if experimental:
+          gcs_bucket += "/experimental"
+
+        gcs_args = []
         expanded_files = set(archive_data.files)
         for filename in archive_data.file_globs:
           for f in self.m.file.glob_paths(
@@ -686,7 +691,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         for file_path in uploads:
           self.m.gsutil.upload(
               file_path,
-              bucket=archive_data.gcs_bucket,
+              bucket=gcs_bucket,
               dest=uploads[file_path],
               args=gcs_args)
 
@@ -707,5 +712,5 @@ class ArchiveApi(recipe_api.RecipeApi):
                                  content_ascii)
           self.m.gsutil.upload(
               output_file,
-              bucket=archive_data.gcs_bucket,
+              bucket=gcs_bucket,
               dest=archive_data.latest_upload.gcs_path)

@@ -425,3 +425,27 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'experimental',
+      api.runtime(is_experimental=True),
+      api.properties(
+          generic_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.sign', [
+                           '-input',
+                           '/path/to/some/file.txt',
+                           '-output',
+                           '/path/to/some/file.txt.sig',
+                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload (2)', [
+              '/path/to/some/file.txt.sig',
+              'gs://any-bucket/experimental/dest_dir/path/to/some/file.txt.sig',
+          ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
