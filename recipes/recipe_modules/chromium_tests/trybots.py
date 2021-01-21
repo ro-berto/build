@@ -886,7 +886,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-perfetto-rel',
             ),
-        'linux-rts-rel':
+        'linux-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
