@@ -83,8 +83,9 @@ class RtsApi(recipe_api.RecipeApi):
           'select',
           '-model-dir', model_dir, \
           '-changed-files', str(changed_files_path), \
-          '-skip-test-files', str(spec.skip_test_files_path), \
-          '-target-change-recall', str(spec.target_change_recall)
+          '-skip-test-files',
+          str(self.m.path['checkout'].join(spec.skip_test_files_path)),
+          '-target-change-recall', str(spec.target_change_recall),
       ]
 
       # Run it

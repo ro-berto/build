@@ -116,7 +116,7 @@
       "-changed-files",
       "[CLEANUP]/tmp_tmp_1",
       "-skip-test-files",
-      "src/testing/rts_exclude_file.txt",
+      "None/src/testing/rts_exclude_file.txt",
       "-target-change-recall",
       "0.9"
     ],
