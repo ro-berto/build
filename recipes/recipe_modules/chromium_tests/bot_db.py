@@ -23,6 +23,7 @@ def _migration_validation(builder_id, builder_spec):
         'chromium.clang',
         'chromium.fyi',
         'chromium.perf',
+        'chromium.perf.fyi',
         'chromium.webrtc',
         'official.chromeos.continuous',
 

@@ -78,6 +78,13 @@ _AddBuildSpec(
     cros_boards='kevin',
     extra_gclient_apply_config=['arm'])
 
+_AddBuildSpec(
+    'fuchsia-builder-perf-fyi',
+    'fuchsia',
+    target_bits=64,
+    target_arch='arm',
+    extra_gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'])
+
 _AddIsolatedTestSpec(
     'linux-perf-fyi',
     'linux',

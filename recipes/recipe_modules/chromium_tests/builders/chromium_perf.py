@@ -47,7 +47,8 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
           config_name,
       'gclient_apply_config': [],
       'simulation_platform':
-          'linux' if platform in ('android', 'chromeos') else platform,
+          'linux' if platform in ('android', 'chromeos',
+                                  'fuchsia') else platform,
       'test_specs':
           test_specs,
   }
@@ -62,6 +63,8 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
   elif platform == 'chromeos':
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
     spec['gclient_apply_config'] += ['chromeos']
+  elif platform == 'fuchsia':
+    spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'fuchsia'
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
