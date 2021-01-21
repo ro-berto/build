@@ -564,6 +564,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Fuchsia ARM64',
+                analyze_deps_autorolls=True,
             ),
         'fuchsia-arm64-cast':
             try_spec.TrySpec.create_for_single_mirror(
@@ -605,11 +606,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Fuchsia x64',
+                analyze_deps_autorolls=True,
             ),
         'fuchsia-x64-cast':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='fuchsia-x64-cast',
+                analyze_deps_autorolls=True,
             ),
         'fuchsia_x64_cast_audio':
             try_spec.TrySpec.create_for_single_mirror(
