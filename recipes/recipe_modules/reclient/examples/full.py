@@ -29,7 +29,8 @@ def GenTests(api):
   yield api.test('basic')
   yield (api.test('basic windows') + api.platform('win', 64))
   yield (api.test('override instance') +
-         api.reclient.properties(instance='goma'))
+         api.reclient.properties(instance='goma') +
+         api.post_process(post_process.DropExpectation))
   yield (api.test('proper_rewrapper_flags') +
          api.reclient.properties(rewrapper_env={
              'RBE_FOO': 'foo',
