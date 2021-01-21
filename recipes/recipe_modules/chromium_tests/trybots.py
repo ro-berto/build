@@ -5,6 +5,7 @@
 from recipe_engine.types import freeze
 
 from RECIPE_MODULES.build.chromium_tests import try_spec
+from RECIPE_MODULES.build.rts.rts_spec import RTSSpec
 
 
 TRYBOTS = try_spec.TryDatabase.create({
@@ -881,6 +882,18 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-perfetto-rel',
+            ),
+        'linux-rts-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='Linux Builder',
+                tester='Linux Tests',
+                rts_spec=RTSSpec(
+                    rts_chromium_version='latest',
+                    model_version='latest',
+                    skip_test_files_path='testing/rts_exclude_file.txt',
+                    target_change_recall=0.9,
+                ),
             ),
         'linux-viz-rel':
             try_spec.TrySpec.create_for_single_mirror(

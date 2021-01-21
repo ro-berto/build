@@ -71,7 +71,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "select tests to skip (rts).ensure_installed",
+    "name": "select tests to skip (rts).ensure model installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

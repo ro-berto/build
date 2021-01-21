@@ -30,7 +30,8 @@ class RtsApi(recipe_api.RecipeApi):
                                                  model_version)
     self.m.cipd.ensure(
         model_dest_dir,
-        self.m.cipd.EnsureFile().add_package('chromium/rts/model', 'latest'))
+        self.m.cipd.EnsureFile().add_package('chromium/rts/model', 'latest'),
+        name='ensure model installed')
 
     return model_dest_dir
 
