@@ -40,7 +40,9 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--send-mail"
+      "--send-mail",
+      "-b",
+      "none"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {

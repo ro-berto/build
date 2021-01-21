@@ -62,6 +62,7 @@ BOT_CONFIGS = {
         ],
         'show_commit_log': False,
         'roll_chromium_pin': True,
+        'bugs': 'none',
     },
     'Auto-roll - devtools deps': {
         'target_config': TARGET_CONFIG_DEVTOOLS,
@@ -71,6 +72,7 @@ BOT_CONFIGS = {
             'liviurau@chromium.org',
         ],
         'show_commit_log': False,
+        'bugs': 'none',
     },
     'Auto-roll - test262': {
         'target_config': TARGET_CONFIG_V8,
@@ -412,10 +414,13 @@ def RunSteps(api):
         cwd=api.path['checkout'],
         env_prefixes={'PATH': [api.v8.depot_tools_path]}):
       api.git(*args, **kwargs)
-      api.git(
+      upload_args = [
           'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-          '--send-mail',
-      )
+          '--send-mail'
+      ]
+      if 'bugs' in bot_config:
+        upload_args += ['-b', bot_config['bugs']]
+      api.git(*upload_args)
 
   if failed_deps:
     raise api.step.StepFailure(
