@@ -108,8 +108,7 @@ def GenTests(api):
           change_number=671632,
           patch_set=1),
       api.properties(
-          deps_revision_overrides={'src': '1234567890abcdef'},
-          swarming_gtest=True),
+          deps_revision_overrides={'src': '12345678' * 5}, swarming_gtest=True),
       api.post_process(Filter('pinpoint isolate upload')),
   )
 
