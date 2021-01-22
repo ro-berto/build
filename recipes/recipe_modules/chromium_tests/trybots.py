@@ -887,10 +887,20 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-perfetto-rel',
             ),
         'linux-rel-rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder',
-                tester='Linux Tests',
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.linux',
+                        buildername='Linux Builder',
+                        tester='Linux Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Linux Builder',
+                        tester='Linux Release (NVIDIA)',
+                    ),
+                ],
+                task_output_stdout='none',
                 analyze_deps_autorolls=True,
                 rts_spec=RTSSpec(
                     rts_chromium_version='latest',
