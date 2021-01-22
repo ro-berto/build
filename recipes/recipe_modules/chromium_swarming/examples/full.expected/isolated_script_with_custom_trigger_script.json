@@ -77,7 +77,6 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"hello_world/Windows-7-SP1/hash_for_w\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",

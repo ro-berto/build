@@ -320,8 +320,6 @@ def GenTests(api):
     # 'retry shards with patch' will only retrigger the second shard. The
     # distinguishing feature is that it has 'custom_task_id' as the task_id.
     retry_trigger_summary = {
-        'base_task_name':
-            'base_task_name_does_not_matter',
         'tasks': [{
             'task_id': 'custom_task_id',
             'request': {

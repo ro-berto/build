@@ -735,7 +735,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # triggered.
     self._pending_tasks.add(task.task_name)
 
-    base_task_name = None
     tasks = {}
     use_swarming_go_in_trigger_script = kwargs.pop(
         'use_swarming_go_in_trigger_script', False)
@@ -762,18 +761,6 @@ class SwarmingApi(recipe_api.RecipeApi):
                                             use_swarming_go_in_trigger_script,
                                             resultdb, **kwargs))
 
-        # Merge the JSON outputs. There should be two fields: base_task_name,
-        # which should be identical from all outputs. And tasks, a dictionary of
-        # dictionaries. Each of the keys in tasks should be unique.
-        new_base_task_name = json_output['base_task_name']
-        if (base_task_name and
-            base_task_name != new_base_task_name):  # pragma: no cover
-          raise recipe_api.StepFailure(
-              'Triggered shards for a single swarming task had different base '
-              'names: {} and {}'.format(base_task_name, new_base_task_name),
-              result=step_result)
-
-        base_task_name = new_base_task_name
         for key, value in json_output['tasks'].iteritems():
           tasks[key] = value
 
@@ -792,10 +779,8 @@ class SwarmingApi(recipe_api.RecipeApi):
               'view_url': meta.task_ui_link,
               'invocation': meta.invocation,
           }
-      base_task_name = task.task_name
 
     trigger_output = {
-        'base_task_name' : base_task_name,
         'tasks' : tasks
     }
     task._trigger_output = trigger_output
@@ -1851,7 +1836,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     tid = lambda i: '1%02d00' % (
         i + 100*(self._task_test_data_id_offset - len(subtasks)))
     return self.m.json.test_api.output({
-      'base_task_name': task.task_name,
       'tasks': {
         '%s%s' % (task.task_name, suffix): {
           'task_id': tid(i),
