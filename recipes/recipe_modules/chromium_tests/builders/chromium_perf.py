@@ -83,7 +83,8 @@ def BuildSpec(config_name,
   test_specs = []
   # TODO: Run sizes on Android.
   # TODO (crbug.com/953108): do not run test for chromeos for now
-  if run_sizes and not platform in ('android', 'chromeos'):
+  # TODO (crbug.com/1169851): do not run test for fuchsia for now.
+  if run_sizes and not platform in ('android', 'chromeos', 'fuchsia'):
     test_specs = [
         steps.SizesStepSpec.create(
             results_url='https://chromeperf.appspot.com', perf_id=config_name)
