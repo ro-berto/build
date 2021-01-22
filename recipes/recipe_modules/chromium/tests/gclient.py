@@ -101,3 +101,8 @@ def GenTests(api):
       api.properties(apply_gclient_config='android_prebuilts_build_tools'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'enable_reclient',
+      api.properties(apply_gclient_config='enable_reclient'),
+      api.post_process(post_process.DropExpectation),
+  )

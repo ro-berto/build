@@ -386,3 +386,8 @@ def no_kaleidoscope(c):
 @CONFIG_CTX()
 def enable_soda(c):
   c.solutions[0].custom_vars['checkout_soda'] = 'True'
+
+
+@CONFIG_CTX()
+def enable_reclient(c):
+  c.solutions[0].custom_vars['checkout_reclient'] = 'True'
