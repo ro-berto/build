@@ -273,7 +273,7 @@
       "--goma-dir=[CACHE]\\goma\\client",
       "--log",
       "debug",
-      "--gtest_filter=SimpleOperationTest.DrawQuad/ES2_Vulkan_SwiftShader",
+      "--gtest_filter=*/ES2_Vulkan_SwiftShader",
       "--out-dir=[CACHE]\\builder\\angle\\out\\CaptureReplayTest",
       "--depot-tools-path=RECIPE_REPO[depot_tools]"
     ],

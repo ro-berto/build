@@ -138,13 +138,19 @@ def _TraceTestsStep(api, clang):
         '--goma-dir=%s' % api.goma.goma_dir,
         '--log',
         'debug',
-        '--gtest_filter=SimpleOperationTest.DrawQuad/ES2_Vulkan_SwiftShader',
+        '--gtest_filter=*/ES2_Vulkan_SwiftShader',
         '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
         '--depot-tools-path=%s' % api.depot_tools.root,
     ]
-    api.goma.start()
-    api.step('Run trace tests', cmd)
-    api.goma.stop(0)
+
+    if api.platform.is_linux:
+      cmd += ['--xvfb']
+
+    # TODO(jmadill): Figure out why Linux is failing. http://anglebug.com/5530
+    if not api.platform.is_linux:
+      api.goma.start()
+      api.step('Run trace tests', cmd)
+      api.goma.stop(0)
 
 
 def RunSteps(api, clang, debug, target_cpu, trace_tests, uwp):
@@ -186,6 +192,13 @@ def GenTests(api):
       ci_build(builder='linux-gcc'),
       api.builder_group.for_current('client.angle'),
       api.properties(clang=False),
+  )
+  yield api.test(
+      'linux_trace',
+      api.platform('linux', 64),
+      ci_build(builder='linux'),
+      api.builder_group.for_current('client.angle'),
+      api.properties(clang=True, trace_tests=True),
   )
   yield api.test(
       'win',
