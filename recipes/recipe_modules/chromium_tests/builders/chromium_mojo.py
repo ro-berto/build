@@ -20,21 +20,6 @@ SPEC = {
             android_config='arm64_builder_mb',
             simulation_platform='linux',
         ),
-    'android-mojo-webview-rel':
-        bot_spec.BotSpec.create(
-            chromium_config='android',
-            chromium_apply_config=['android'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_mb',
-            simulation_platform='linux',
-        ),
     'Mojo ChromiumOS':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
