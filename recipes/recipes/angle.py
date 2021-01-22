@@ -25,9 +25,10 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-    'target_cpu': Property(default=None, kind=str),
-    'debug': Property(default=False, kind=bool),
     'clang': Property(default=None, kind=bool),
+    'debug': Property(default=False, kind=bool),
+    'target_cpu': Property(default=None, kind=str),
+    'trace_tests': Property(default=False, kind=bool),
     'uwp': Property(default=False, kind=bool),
 }
 
@@ -125,8 +126,28 @@ def _BuildSteps(api, out_dir, clang):
     api.step('compile with ninja', ninja_cmd)
 
 
-def RunSteps(api, target_cpu, debug, clang, uwp):
+def _TraceTestsStep(api, clang):
+  assert _IsGomaEnabled(clang)
+  api.goma.ensure_goma()
+  checkout = api.path['checkout']
+  with api.context(cwd=checkout):
+    cmd = [
+        'python3',
+        'src/tests/capture_replay_tests.py',
+        '--use-goma',
+        '--goma-dir=%s' % api.goma.goma_dir,
+        '--log',
+        'debug',
+        '--gtest_filter=SimpleOperationTest.DrawQuad/ES2_Vulkan_SwiftShader',
+        '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
+        '--depot-tools-path=%s' % api.depot_tools.root,
+    ]
+    api.goma.start()
+    api.step('Run trace tests', cmd)
+    api.goma.stop(0)
 
+
+def RunSteps(api, clang, debug, target_cpu, trace_tests, uwp):
   env = {}
   if api.platform.is_win:
     env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
@@ -134,10 +155,14 @@ def RunSteps(api, target_cpu, debug, clang, uwp):
 
   with api.context(env=env):
     _CheckoutSteps(api)
-    out_dir = _OutPath(target_cpu, debug, clang, uwp)
-    with api.osx_sdk('mac'):
-      _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir)
-      _BuildSteps(api, out_dir, clang)
+
+    if trace_tests:
+      _TraceTestsStep(api, clang)
+    else:
+      out_dir = _OutPath(target_cpu, debug, clang, uwp)
+      with api.osx_sdk('mac'):
+        _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir)
+        _BuildSteps(api, out_dir, clang)
 
 
 def GenTests(api):
@@ -188,4 +213,11 @@ def GenTests(api):
       ci_build(builder='windows'),
       api.builder_group.for_current('client.angle'),
       api.properties(clang=False, debug=True, uwp=True),
+  )
+  yield api.test(
+      'win_trace',
+      api.platform('win', 64),
+      ci_build(builder='windows'),
+      api.builder_group.for_current('client.angle'),
+      api.properties(clang=True, trace_tests=True),
   )
