@@ -895,18 +895,16 @@
   {
     "cmd": [
       "rdb",
-      "chromium-derive",
+      "query",
       "-json",
-      "-wait",
       "-n",
       "1000",
       "-u",
-      "chromium-swarm.appspot.com",
       "0"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "derive test results (with patch)",
+    "name": "query test results (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]

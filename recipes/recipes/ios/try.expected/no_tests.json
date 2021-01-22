@@ -655,9 +655,9 @@
   },
   {
     "cmd": [],
-    "name": "[skipped] derive test results (with patch)",
+    "name": "[skipped] query test results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
   },

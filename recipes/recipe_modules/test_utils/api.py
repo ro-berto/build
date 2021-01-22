@@ -307,37 +307,30 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if (self.m.buildbucket.build.builder.project != 'chromium' or
         self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
-      # Only derives results on chromium ci/try builders.
       # Note: this is a temporary change for ResultDB to control the builders it
       # gets test results from.
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
-    # Derives swarming test results to ResultDB.
+    # Query swarming test results to ResultDB.
     # The returned results are not being used yet.
-    swarming_task_ids = []
+    swarming_task_invocations = []
     for t in swarming_test_suites:
       task = t.get_task(suffix)
-      swarming_task_ids.extend(task.get_task_ids())
+      swarming_task_invocations.extend(task.get_invocation_names())
 
-    derive_step_name = ('derive test results (%s)' %
-                        suffix if suffix else 'derive test results')
-    if len(swarming_task_ids) == 0:
-      step_result = self.m.step('[skipped] %s' % derive_step_name, [])
+    query_step_name = ('query test results (%s)' %
+                       suffix if suffix else 'query test results')
+    if len(swarming_task_invocations) == 0:
+      step_result = self.m.step('[skipped] %s' % query_step_name, [])
       step_result.presentation.logs["stdout"] = [
-          'No swarming test results to derive.'
+          'No swarming test results to query.'
       ]
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
-    swarming_host = caller_api.chromium_swarming.swarming_server
-    parsed = urlparse.urlparse(swarming_host)
-    if parsed.scheme:
-      swarming_host = parsed.netloc
-
-    invocation_dict = self.m.resultdb.chromium_derive(
-        step_name=derive_step_name,
-        swarming_host=swarming_host,
-        task_ids=swarming_task_ids,
+    invocation_dict = self.m.resultdb.query(
+        inv_ids=self.m.resultdb.invocation_ids(swarming_task_invocations),
         variants_with_unexpected_results=True,
+        step_name=query_step_name,
     )
 
     if not self.m.resultdb.enabled:
@@ -349,12 +342,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'failed']
 
     if suffix != 'without patch':
-      # Include the derived invocations in the build's invocation.
-      # Note that 'without patch' results are derived but not included in
+      # Include the invocations in the build's invocation.
+      # Note that 'without patch' results are reported but not included in
       # the builds' invocation, since the results are not related to the
       # patch under test.
-      include_step_name = ('include derived test results (%s)' %
-                           suffix if suffix else 'include derived test results')
+      include_step_name = ('include test results (%s)' %
+                           suffix if suffix else 'include test results')
       self.m.resultdb.include_invocations(
           invocation_dict.keys(), step_name=include_step_name)
 

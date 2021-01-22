@@ -1459,9 +1459,8 @@ def GenTests(api):
                   'min_failed_suites_to_skip_retry': 3,
               },
           }),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_broken),
+      api.resultdb.query(
+          inv_bundle_broken, step_name='query test results (with patch)'),
       api.override_step_data(
           'target1 (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -1548,9 +1547,8 @@ def GenTests(api):
                   'min_failed_suites_to_skip_retry': 3,
               },
           }),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_successful),
+      api.resultdb.query(
+          inv_bundle_successful, step_name='query test results (with patch)'),
       api.override_step_data(
           'target1 (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -1595,9 +1593,8 @@ def GenTests(api):
                   'min_failed_suites_to_skip_retry': 3,
               },
           }),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_broken),
+      api.resultdb.query(
+          inv_bundle_broken, step_name='query test results (with patch)'),
       api.override_step_data(
           'target1 (with patch)',
           api.chromium_swarming.canned_summary_output(

@@ -1101,13 +1101,11 @@
   {
     "cmd": [
       "rdb",
-      "chromium-derive",
+      "query",
       "-json",
-      "-wait",
       "-n",
       "1000",
       "-u",
-      "chromium-swarm.appspot.com",
       "0",
       "1"
     ],
@@ -1117,7 +1115,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "derive test results",
+    "name": "query test results",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]

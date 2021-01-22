@@ -81,20 +81,19 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=False),
               shards=2,
               failure=False)),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle,
+      api.resultdb.query(
+          inv_bundle,
+          step_name='query test results (with patch)',
       ),
-      api.post_process(post_process.MustRun,
-                       'derive test results (with patch)'),
+      api.post_process(post_process.MustRun, 'query test results (with patch)'),
       api.post_process(post_process.StepSuccess,
-                       'derive test results (with patch)'),
+                       'query test results (with patch)'),
       api.post_process(post_process.MustRun,
-                       'include derived test results (with patch)'),
+                       'include test results (with patch)'),
       api.post_process(post_process.StepSuccess,
-                       'include derived test results (with patch)'),
+                       'include test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
-                       'include derived test results (without patch)'),
+                       'include test results (without patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -125,16 +124,15 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=True),
               shards=2,
               failure=False)),
-      api.override_step_data('derive test results (with patch)'),
-      api.override_step_data('derive test results (retry shards with patch)'),
-      api.post_process(post_process.MustRun,
-                       'derive test results (with patch)'),
+      api.override_step_data('query test results (with patch)'),
+      api.override_step_data('query test results (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'query test results (with patch)'),
       api.post_process(post_process.StepSuccess,
-                       'derive test results (with patch)'),
+                       'query test results (with patch)'),
       api.post_process(post_process.MustRun,
-                       'derive test results (retry shards with patch)'),
+                       'query test results (retry shards with patch)'),
       api.post_process(post_process.MustRun,
-                       'derive test results (without patch)'),
+                       'query test results (without patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -147,9 +145,9 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
       api.post_process(post_process.DoesNotRun,
-                       'derive test results (with patch)'),
+                       'query test results (with patch)'),
       api.post_process(post_process.MustRun,
-                       '[skipped] derive test results (with patch)'),
+                       '[skipped] query test results (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -170,7 +168,7 @@ def GenTests(api):
               shards=2,
               failure=False)),
       api.post_process(post_process.DoesNotRun,
-                       'derive test results (with patch)'),
+                       'query test results (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -239,17 +237,17 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=True),
               shards=2,
               failure=True)),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (with patch)',
       ),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (retry shards with patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (retry shards with patch)',
       ),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (without patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (without patch)',
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected without patch results'),
@@ -290,20 +288,20 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=True),
               shards=2,
               failure=True)),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (with patch)',
       ),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (retry shards with patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (retry shards with patch)',
       ),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (without patch)',
-          results=inv_bundle_with_failures,
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='query test results (without patch)',
       ),
       api.post_process(post_process.DoesNotRun,
-                       'include derived test results (with patch)'),
+                       'include test results (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'exonerate unexpected without patch results'),
       api.post_process(post_process.DropExpectation),
@@ -355,9 +353,9 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=False),
               shards=2,
               failure=False)),
-      api.resultdb.chromium_derive(
-          step_name='derive test results (with patch)',
-          results=inv_bundle_with_unexpected_passes,
+      api.resultdb.query(
+          inv_bundle_with_unexpected_passes,
+          step_name='query test results (with patch)',
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected passes (with patch)'),

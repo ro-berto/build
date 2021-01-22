@@ -1366,13 +1366,11 @@
   {
     "cmd": [
       "rdb",
-      "chromium-derive",
+      "query",
       "-json",
-      "-wait",
       "-n",
       "1000",
       "-u",
-      "chromium-swarm.appspot.com",
       "0"
     ],
     "cwd": "[CACHE]/builder",
@@ -1380,7 +1378,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "derive test results (with patch)",
+    "name": "query test results (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
@@ -1700,13 +1698,11 @@
   {
     "cmd": [
       "rdb",
-      "chromium-derive",
+      "query",
       "-json",
-      "-wait",
       "-n",
       "1000",
       "-u",
-      "chromium-swarm.appspot.com",
       "1"
     ],
     "cwd": "[CACHE]/builder",
@@ -1714,7 +1710,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "derive test results (retry shards with patch)",
+    "name": "query test results (retry shards with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
@@ -2682,13 +2678,11 @@
   {
     "cmd": [
       "rdb",
-      "chromium-derive",
+      "query",
       "-json",
-      "-wait",
       "-n",
       "1000",
       "-u",
-      "chromium-swarm.appspot.com",
       "2"
     ],
     "cwd": "[CACHE]/builder",
@@ -2696,7 +2690,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "derive test results (without patch)",
+    "name": "query test results (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
