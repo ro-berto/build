@@ -891,6 +891,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
                 tester='Linux Tests',
+                analyze_deps_autorolls=True,
                 rts_spec=RTSSpec(
                     rts_chromium_version='latest',
                     model_version='latest',
