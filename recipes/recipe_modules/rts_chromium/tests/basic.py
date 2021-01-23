@@ -3,11 +3,11 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from RECIPE_MODULES.build.rts import rts_spec
+from RECIPE_MODULES.build.rts_chromium import rts_spec
 
 DEPS = [
-    'rts',
     'recipe_engine/platform',
+    'rts_chromium',
 ]
 
 
@@ -23,7 +23,7 @@ def RunSteps(api):
       target_change_recall=0.9,
   )
 
-  api.rts.select_tests_to_skip(spec, changed_files)
+  api.rts_chromium.select_tests_to_skip(spec, changed_files)
 
 
 def GenTests(api):

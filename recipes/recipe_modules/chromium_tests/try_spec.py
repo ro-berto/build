@@ -8,7 +8,7 @@ import sys
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
                                              mapping_attrib, sequence_attrib)
-from RECIPE_MODULES.build.rts.rts_spec import RTSSpec
+from RECIPE_MODULES.build.rts_chromium.rts_spec import RTSSpec
 
 COMPILE_AND_TEST = 'compile/test'
 COMPILE = 'compile'

@@ -1899,7 +1899,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # expands affected_files to files that live in other git repos, which might
     # mess up RTS.
     if bot.config.rts_spec:
-      self.m.rts.select_tests_to_skip(
+      self.m.rts_chromium.select_tests_to_skip(
           bot.config.rts_spec,
           ['//%s' % fname for fname in affected_files],
       )

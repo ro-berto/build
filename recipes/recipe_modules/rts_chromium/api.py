@@ -51,7 +51,6 @@ class RtsApi(recipe_api.RecipeApi):
 
     return exec_path
 
-
   def select_tests_to_skip(self,
                            spec,
                            changed_files,

@@ -5,7 +5,7 @@
 from recipe_engine.types import freeze
 
 from RECIPE_MODULES.build.chromium_tests import try_spec
-from RECIPE_MODULES.build.rts.rts_spec import RTSSpec
+from RECIPE_MODULES.build.rts_chromium.rts_spec import RTSSpec
 
 
 TRYBOTS = try_spec.TryDatabase.create({

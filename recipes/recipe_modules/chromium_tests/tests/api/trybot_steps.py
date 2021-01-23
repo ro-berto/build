@@ -7,7 +7,7 @@ from recipe_engine.recipe_api import Property
 import textwrap
 
 from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
-from RECIPE_MODULES.build.rts.rts_spec import RTSSpec
+from RECIPE_MODULES.build.rts_chromium.rts_spec import RTSSpec
 
 DEPS = [
     'chromium',
