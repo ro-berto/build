@@ -68,15 +68,10 @@ def RunSteps(api, properties):
 
   # Special steps for scripts that auto-generate 3pp PB files.
   # For third_party/android_deps/fetch_all.py
-  with api.context(cwd=chromium_src.join('third_party', 'android_deps')):
-    fetch_all_args = [
-        '-v', '--android-deps-dir', '.', '--ignore-vulnerabilities'
-    ]
-    api.python(
-        'Preprocessing third_party/android_deps',
-        'fetch_all.py',
-        args=fetch_all_args,
-        venv=chromium_src.join('.vpython3'))
+  api.step('Preprocessing third_party/android_deps', [
+      chromium_src.join('third_party', 'android_deps', 'fetch_all.py'), '-v',
+      '--ignore-vulnerabilities'
+  ])
 
   # TODO: Migrate third_party/androidx/fetch_all_androidx.py.
 
