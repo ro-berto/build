@@ -754,8 +754,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.trigger_script:
       for shard_index in task.shard_indices:
         step_result, json_output = (
-            self._trigger_task_shard_legacy(task, shard_index,
-                                            resultdb, **kwargs))
+            self._trigger_task_with_custom_script(task, shard_index, resultdb,
+                                                  **kwargs))
 
         for key, value in json_output['tasks'].iteritems():
           tasks[key] = value
@@ -1046,11 +1046,12 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def _trigger_task_shard_legacy(self, task, shard_index, resultdb, **kwargs):
-    """Triggers a single shard for a task.
+  def _trigger_task_with_custom_script(self, task, shard_index, resultdb,
+                                       **kwargs):
+    """Triggers a single shard for a task with custom trigger script.
 
-    This is the legacy way for triggering a task. It uses `swarming.py` and
-    manually constructs a command line.
+    This uses `swarming.py` and luci-go swarming with manually constructed
+    command line via trigger script.
 
     Returns: (step_result, json_output)
     Raises:
@@ -1058,14 +1059,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     assert not task.optional_dimensions, \
         'Use _trigger_task_shard_default() for tasks with optional dimensions.'
+    assert task.trigger_script, 'Only trigger script should use this now'
 
     # TODO(crbug.com/894045): Remove this method once we have fully migrated
     # to use swarming recipe module to trigger tasks.
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, resultdb))
 
-    uses_trigger_script = bool(task.trigger_script)
-    assert uses_trigger_script, 'Only trigger script should use this now'
     if task.shards > 1:
       pre_trigger_args += ['--shard-index', str(shard_index)]
       pre_trigger_args += ['--shards', str(task.shards)]
@@ -1073,9 +1073,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
-    step_name_suffix = ' (custom trigger script)' if uses_trigger_script else ''
     step_result = self.m.python(
-        name=self.get_step_name('trigger' + step_name_suffix, task),
+        name=self.get_step_name('trigger (custom trigger script)', task),
         script=script,
         args=args,
         step_test_data=functools.partial(self._gen_trigger_step_test_data, task,
