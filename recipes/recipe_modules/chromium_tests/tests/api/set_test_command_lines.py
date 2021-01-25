@@ -148,9 +148,6 @@ def GenTests(api):
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
-                          chromium_tests_apply_config=[
-                              'use_swarming_go_in_trigger_script'
-                          ],
                       ),
               },
           })),
