@@ -27,6 +27,8 @@ PROPERTIES = chromium_3pp.InputProperties
 
 def RunSteps(api, properties):
   api.gclient.set_config('chromium')
+  # Apply android config so that steps like fetch_all.py can work fine.
+  api.gclient.apply_config('android')
   api.chromium_checkout.ensure_checkout()
   chromium_src = api.path['checkout']
 
