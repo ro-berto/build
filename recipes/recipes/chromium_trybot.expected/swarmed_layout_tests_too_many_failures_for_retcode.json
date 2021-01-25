@@ -1393,7 +1393,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+    ]
   },
   {
     "cmd": [
@@ -2705,7 +2708,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Fewer than 5 failures/unexpected results, continue with retries (2)"
+    "name": "proceed with retry (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+    ]
   },
   {
     "cmd": [

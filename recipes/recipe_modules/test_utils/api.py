@@ -635,11 +635,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return acc
 
   def _should_abort_tryjob(self, invocation_dict, failed_suites):
+    informational_string = (
+        'This step is information and of interest to infra' +
+        ' maintainers only.\n')
     failures_string = (
         'skip retrying because there are >= {} test suites with test ' +
         'failures and it most likely indicates a problem with the CL').format(
             self._min_failed_suites_to_skip_retry)
     unexpected_string = (
+        informational_string +
         'skip retrying because there are >= {} test suites with unexpected '
         'results and it most likely indicates a problem with the CL').format(
             self._min_failed_suites_to_skip_retry)
@@ -660,7 +664,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       breakage.presentation.status = self.m.step.FAILURE
       return old_decision
 
-    mismatch_string = ('Legacy decision for trybot abort was {} based on' +
+    mismatch_string = (informational_string +
+                       'Legacy decision for trybot abort was {} based on' +
                        ' {} failures.\n' +
                        'New decision for trybot abort was {} based on' +
                        ' {} unexpected results.').format(
@@ -676,18 +681,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
     #   - If the two sources disagree, add an extra warning step saying so.
     #   - Return the verdict purely based on the source of truth
     if not old_should_abort and not new_should_abort:
-      self.m.python.succeeding_step(success_string, '')
+      self.m.python.succeeding_step('proceed with retry', success_string)
       return False
     if old_should_abort:
-      result = self.m.python.succeeding_step(failures_string, '')
+      result = self.m.python.succeeding_step('abort retry', failures_string)
+      result.presentation.status = self.m.step.FAILURE
     else:
-      result = self.m.python.succeeding_step(unexpected_string, '')
-    result.presentation.status = self.m.step.FAILURE
-
+      result = self.m.python.succeeding_step(
+          'abort retry (migration, informational)', unexpected_string)
+      result.presentation.status = self.m.step.WARNING
     if new_should_abort != old_should_abort:
-      discrepancy = self.m.python.succeeding_step('Migration mismatch',
-                                                  mismatch_string)
-      discrepancy.presentation.status = self.m.step.FAILURE
+      discrepancy = self.m.python.succeeding_step(
+          'Migration mismatch (informational)', mismatch_string)
+      discrepancy.presentation.status = self.m.step.WARNING
     return old_should_abort
 
   def run_tests(self,

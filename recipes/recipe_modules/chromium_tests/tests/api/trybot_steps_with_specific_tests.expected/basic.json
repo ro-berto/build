@@ -716,7 +716,10 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+    ]
   },
   {
     "cmd": [
@@ -1683,7 +1686,10 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "Fewer than 5 failures/unexpected results, continue with retries (2)"
+    "name": "proceed with retry (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+    ]
   },
   {
     "cmd": [

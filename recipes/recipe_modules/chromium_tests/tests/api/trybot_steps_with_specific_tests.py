@@ -1479,8 +1479,7 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_success), retcode=0),
               failure=False)),
-      api.post_process(post_process.MustRunRE,
-                       'skip retrying .* a problem with the CL'),
+      api.post_process(post_process.MustRunRE, 'abort retry.*'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1520,10 +1519,7 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=True)),
-      api.post_process(
-          post_process.MustRun,
-          'skip retrying because there are >= 3 test suites with test failures '
-          'and it most likely indicates a problem with the CL'),
+      api.post_process(post_process.MustRun, 'abort retry'),
       api.post_process(post_process.DoesNotRunRE,
                        'target\d \(retry shards with patch\)'),
       api.post_process(post_process.DropExpectation),
@@ -1567,9 +1563,8 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=True)),
-      api.post_process(post_process.MustRunRE,
-                       'skip retrying .* a problem with the CL'),
-      api.post_process(post_process.MustRun, 'Migration mismatch'),
+      api.post_process(post_process.MustRun, 'abort retry'),
+      api.post_process(post_process.MustRunRE, 'Migration mismatch.*'),
       api.post_process(post_process.DoesNotRunRE,
                        'target\d \(retry shards with patch\)'),
       api.post_process(post_process.DropExpectation),
@@ -1613,8 +1608,7 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=False)),
-      api.post_process(post_process.MustRunRE,
-                       'skip retrying .* a problem with the CL'),
-      api.post_process(post_process.MustRun, 'Migration mismatch'),
+      api.post_process(post_process.MustRunRE, 'abort retry.*'),
+      api.post_process(post_process.MustRunRE, 'Migration mismatch.*'),
       api.post_process(post_process.DropExpectation),
   )

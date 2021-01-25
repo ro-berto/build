@@ -668,7 +668,10 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "Fewer than 5 failures/unexpected results, continue with retries"
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+    ]
   },
   {
     "name": "$result"
