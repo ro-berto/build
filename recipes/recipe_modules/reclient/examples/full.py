@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -16,12 +17,16 @@ DEPS = [
 def RunSteps(api):
   api.path['checkout'] = api.path['tmp_base'].join('checkout')
   log_dir = api.path.mkdtemp('log_dir')
-  api.reclient.start_reproxy(log_dir)
-  # compile chromium
-  api.reclient.stop_reproxy(log_dir)
+  with api.context(env=api.reclient.rewrapper_env):
+    api.reclient.start_reproxy(log_dir)
+    # compile chromium
+    api.reclient.stop_reproxy(log_dir)
+    api.reclient.upload_ninja_log(
+        name='compile (reclient)',
+        ninja_command=['ninja', '-C', 'out/Release'],
+        build_exit_status=0)
   _ = api.reclient.instance  # for code coverage
   _ = api.reclient.rewrapper_path
-  _ = api.reclient.rewrapper_env
   _ = api.reclient.jobs
 
 
