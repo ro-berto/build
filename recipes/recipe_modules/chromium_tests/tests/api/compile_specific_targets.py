@@ -73,7 +73,8 @@ def GenTests(api):
       api.step_data('lookup GN args',
                     api.raw_io.stream_output('use_rbe = true\n')),
       # Check that we do use reclient as the distributed compiler
-      api.post_process(post_process.MustRun, 'start reproxy via bootstrap'),
+      api.post_process(post_process.MustRun,
+                       'preprocess for reclient.start reproxy via bootstrap'),
       api.post_process(post_process.DropExpectation),
   )
 

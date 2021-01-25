@@ -16,13 +16,11 @@ DEPS = [
 
 def RunSteps(api):
   api.path['checkout'] = api.path['tmp_base'].join('checkout')
-  log_dir = api.path.mkdtemp('log_dir')
   with api.context(env=api.reclient.rewrapper_env):
-    api.reclient.start_reproxy(log_dir)
+    api.reclient.preprocess()
     # compile chromium
-    api.reclient.stop_reproxy(log_dir)
-    api.reclient.upload_ninja_log(
-        name='compile (reclient)',
+    api.reclient.postprocess(
+        ninja_step_name='compile (reclient)',
         ninja_command=['ninja', '-C', 'out/Release'],
         build_exit_status=0)
   _ = api.reclient.instance  # for code coverage

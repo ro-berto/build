@@ -43,6 +43,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._reclient_cipd_dir = None
     self._jobs = props.jobs or None
     self._rewrapper_env = None
+    self._reclient_log_dir = None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -115,15 +116,43 @@ class ReclientApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       return 'pipe://reproxy.pipe'
     # Shrink the size if the domain socket path length becomes a problem.
-    return 'unix:///%s' % self.m.path['tmp_base'].join('reproxy.sock')
+    return 'unix:///%s' % self._tmp_base_dir.join('reproxy.sock')
 
-  def start_reproxy(self, log_dir):
-    """Starts the reproxy via bootstramp.
+  @property
+  def _tmp_base_dir(self):
+    return self.m.path['tmp_base']
+
+  def preprocess(self):
+    """Runs preparatory steps before executing the ninja command."""
+    self._reclient_log_dir = self.m.path.mkdtemp('reclient_log')
+    with self.m.step.nest('preprocess for reclient'):
+      self.start_reproxy()
+
+      # TODO: Shall we use the same project providing the RBE workers?
+      cloudtail_project_id = 'goma-logs'
+      self._start_cloudtail(cloudtail_project_id,
+                            self._reclient_log_dir.join('reproxy.INFO'))
+
+  def postprocess(self, ninja_step_name, ninja_command, build_exit_status):
+    """Runs postprocessing steps after executing the ninja command.
 
     Args
-      log_dir (str): Directory that holds the reproxy log
+      ninja_step_name: Step name of the ninja build.
+      ninja_command: Command used for build.
+                     (e.g. ['ninja', '-C', 'out/Release'])
+      build_exit_status: Exit status of ninja or other build commands like
+                         make. (e.g. 0)
     """
+    with self.m.step.nest('postprocess for reclient'):
+      self.stop_reproxy()
+      self._stop_cloudtail()
+      self._upload_rbe_metrics()
+      self._upload_ninja_log(ninja_step_name, ninja_command, build_exit_status)
+
+  def start_reproxy(self):
+    """Starts the reproxy via bootstramp."""
     reproxy_bin_path = self._get_exe_path('reproxy')
+    log_dir = str(self._reclient_log_dir)
     env = {
         'RBE_instance': self.instance,
         'RBE_log_dir': log_dir,
@@ -141,34 +170,23 @@ class ReclientApi(recipe_api.RecipeApi):
           [self._bootstrap_bin_path, '-output_dir', log_dir],
           infra_step=True)
 
-      # TODO: Shall we use the same project providing the RBE workers?
-      cloudtail_project_id = 'goma-logs'
-      self._start_cloudtail(cloudtail_project_id,
-                            self.m.path.join(log_dir, 'reproxy.INFO'))
+  def stop_reproxy(self):
+    """Stops the reproxy via bootstramp."""
+    self.m.step(
+        'shutdown reproxy via bootstrap', [
+            self._bootstrap_bin_path, '-shutdown', '-server_address',
+            self.server_address, '-proxy_log_dir', self._reclient_log_dir,
+            '-output_dir', self._reclient_log_dir
+        ],
+        infra_step=True)
 
-  def stop_reproxy(self, log_dir):
-    """Stops the reproxy via bootstramp.
-
-    After this, the rbe_metrics stats file will be inside log_dir
-    Args
-      log_dir (str): Directory that holds the reproxy log
-    """
-    step_result = self.m.step('shutdown reproxy via bootstrap', [
-        self._bootstrap_bin_path, '-shutdown', '-server_address',
-        self.server_address, '-proxy_log_dir', log_dir, '-output_dir', log_dir
-    ])
-    self._stop_cloudtail()
-    self._upload_rbe_metrics(log_dir)
-
-    return step_result
-
-  def _upload_rbe_metrics(self, log_dir):
+  def _upload_rbe_metrics(self):
     bq_pb = rbe_metrics_bq.RbeMetricsBq()
     bq_pb.build_id = self.m.buildbucket.build.id
     bq_pb.created_at.FromDatetime(self.m.time.utcnow())
     stats_raw = self.m.file.read_raw(
         'load rbe_metrics.pb',
-        self.m.path.join(log_dir, 'rbe_metrics.pb'),
+        self._reclient_log_dir.join('rbe_metrics.pb'),
         test_data=make_test_rbe_stats_pb().SerializeToString())
     bq_pb.stats.ParseFromString(stats_raw)
     bq_json_dict = json_format.MessageToDict(
@@ -194,11 +212,12 @@ class ReclientApi(recipe_api.RecipeApi):
             bqupload_cipd_path,
             BQ_TABLE_NAME,
         ],
-        stdin=self.m.raw_io.input(data=json.dumps(bq_json_dict)))
+        stdin=self.m.raw_io.input(data=json.dumps(bq_json_dict)),
+        infra_step=True)
     step_result.presentation.logs['rbe_metrics'] = json.dumps(
         bq_json_dict, indent=2)
 
-  def upload_ninja_log(self, name, ninja_command, build_exit_status):
+  def _upload_ninja_log(self, name, ninja_command, build_exit_status):
     """
     Upload several logs to GCS, including:
     * ninja command line args
@@ -234,7 +253,7 @@ class ReclientApi(recipe_api.RecipeApi):
     # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/appengine/chromium_build_stats/app/ninja_log.go;l=311-314;drc=e507df6040ea871ba6ef6b5e7da00d8cb186a1bd
     gzip_filename = 'ninja_log.%s.%s.gz' % (time_now.strftime('%Y%m%d-%H%M%S'),
                                             self.m.uuid.random())
-    gzip_path = self.m.path['tmp_base'].join(gzip_filename)
+    gzip_path = self._tmp_base_dir.join(gzip_filename)
     # This assumes that ninja_log is small enough to be loaded into RAM. (As of
     # 2021/01, it's around 3MB.)
     data_txt = self.m.file.read_text(
@@ -276,7 +295,7 @@ class ReclientApi(recipe_api.RecipeApi):
 
   @property
   def _cloudtail_pid_file(self):
-    return self.m.path['tmp_base'].join('cloudtail.pid')
+    return self._tmp_base_dir.join('cloudtail.pid')
 
   def _start_cloudtail(self, project_id, log_path):
     """Start cloudtail to upload reproxy INFO log.
