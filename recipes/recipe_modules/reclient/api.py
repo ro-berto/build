@@ -114,12 +114,8 @@ class ReclientApi(recipe_api.RecipeApi):
   def server_address(self):
     if self.m.platform.is_win:
       return 'pipe://reproxy.pipe'
+    # Shrink the size if the domain socket path length becomes a problem.
     return 'unix:///%s' % self.m.path['tmp_base'].join('reproxy.sock')
-
-  @property
-  def rbe_service_addr(self):  #pragma: no cover
-    # TODO(crbug.com/1141780): Deprecate this
-    return self.server_address
 
   def start_reproxy(self, log_dir):
     """Starts the reproxy via bootstramp.
