@@ -544,8 +544,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.reclient.start_reproxy(reclient_log_dir)
     build_exit_status = -1
     try:
-      ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
-      build_exit_status = ninja_result.retcode
+      with self.m.context(env=self.m.reclient.rewrapper_env):
+        ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
+        build_exit_status = ninja_result.retcode
     finally:
       self.m.reclient.stop_reproxy(reclient_log_dir)
       self.m.reclient.upload_ninja_log(name, ninja_command, build_exit_status)
