@@ -307,20 +307,21 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if (self.m.buildbucket.build.builder.project != 'chromium' or
         self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
+      # Only derives results on chromium ci/try builders.
       # Note: this is a temporary change for ResultDB to control the builders it
       # gets test results from.
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
     # Query swarming test results to ResultDB.
     # The returned results are not being used yet.
-    swarming_task_invocations = []
+    invocation_names = []
     for t in swarming_test_suites:
       task = t.get_task(suffix)
-      swarming_task_invocations.extend(task.get_invocation_names())
+      invocation_names.extend(task.get_invocation_names())
 
     query_step_name = ('query test results (%s)' %
                        suffix if suffix else 'query test results')
-    if len(swarming_task_invocations) == 0:
+    if not invocation_names:
       step_result = self.m.step('[skipped] %s' % query_step_name, [])
       step_result.presentation.logs["stdout"] = [
           'No swarming test results to query.'
@@ -328,7 +329,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
     invocation_dict = self.m.resultdb.query(
-        inv_ids=self.m.resultdb.invocation_ids(swarming_task_invocations),
+        inv_ids=self.m.resultdb.invocation_ids(invocation_names),
         variants_with_unexpected_results=True,
         step_name=query_step_name,
     )
@@ -342,12 +343,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'failed']
 
     if suffix != 'without patch':
-      # Include the invocations in the build's invocation.
+      # Include the derived invocations in the build's invocation.
       # Note that 'without patch' results are reported but not included in
       # the builds' invocation, since the results are not related to the
       # patch under test.
-      include_step_name = ('include test results (%s)' %
-                           suffix if suffix else 'include test results')
+      include_step_name = ('include derived test results (%s)' %
+                           suffix if suffix else 'include derived test results')
       self.m.resultdb.include_invocations(
           invocation_dict.keys(), step_name=include_step_name)
 
