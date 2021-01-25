@@ -247,7 +247,6 @@
       "triggered_by:swarming_py",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
-      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
