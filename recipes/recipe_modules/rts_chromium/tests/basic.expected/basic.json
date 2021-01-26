@@ -126,6 +126,24 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "None/src/testing/rts_exclude_file.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "select tests to skip (rts).read skip_test_files_path contents",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@rts_exclude_file.txt@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

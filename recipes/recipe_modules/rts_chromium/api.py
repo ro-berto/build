@@ -77,15 +77,22 @@ class RtsApi(recipe_api.RecipeApi):
       self.m.file.write_text('write changed_files', changed_files_path,
                              '\n'.join(changed_files))
 
+      skip_test_file_full_path = str(self.m.path['checkout'].join(
+          spec.skip_test_files_path))
       args = [
           rts_exec,
           'select',
           '-model-dir', model_dir, \
           '-changed-files', str(changed_files_path), \
-          '-skip-test-files',
-          str(self.m.path['checkout'].join(spec.skip_test_files_path)),
+          '-skip-test-files', skip_test_file_full_path, \
           '-target-change-recall', str(spec.target_change_recall),
       ]
 
       # Run it
       self.m.step('rts-chromium select', args)
+
+      # Present skippable files
+      self.m.file.read_text(
+          'read skip_test_files_path contents',
+          skip_test_file_full_path,
+          include_log=True)
