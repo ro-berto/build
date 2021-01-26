@@ -986,6 +986,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_slice.relative_cwd:  # pragma: no cover
       args.extend(['--relative-cwd', task_slice.relative_cwd])
 
+    # Use a raw command as extra-args on tasks without command.
+    if task_slice.command:
+      args.append('--raw-cmd')
+
     # Additional command line args for isolated command.
     if task.extra_args or task_slice.command:
       args.append('--')
