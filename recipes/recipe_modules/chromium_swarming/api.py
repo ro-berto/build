@@ -908,7 +908,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       kv = t.split(':', 1)
       assert len(kv) == 2
       tags[kv[0]].append(kv[1])
-    tags['triggered_by'].append('swarming_py')
     task_request = self._maybe_enable_resultdb_for_task(
         task.request.with_slice(0, task_slice).with_tags(tags), resultdb)
     # refresh task_slice, as _maybe_enable_resultdb_for_task() could modify
@@ -1127,9 +1126,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       kv = t.split(':', 1)
       assert len(kv) == 2
       tags_dict[kv[0]].append(kv[1])
-    # TODO(crbug.com/894045): Remove this method once we have fully migrated
-    # to use swarming recipe module to trigger tasks.
-    tags_dict['triggered_by'].append('recipe_modules/swarming')
 
     slices = [req_slice]
     if task.optional_dimensions:
