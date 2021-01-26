@@ -80,7 +80,7 @@ def _RunUntracedMemberAnalyzer(api, src_dir, affected):
                 relpath,
                 start_line=(line + 1),
                 end_line=(line + 1),
-                start_char=(pos + 1),
+                start_char=pos,
                 end_char=(pos + len(target)))
           # Providing just one comment is enough to get author's attention.
           return
