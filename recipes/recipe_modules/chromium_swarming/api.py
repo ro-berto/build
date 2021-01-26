@@ -949,7 +949,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.append('--wait-for-capacity')  # pragma: no cover
 
     if task.containment_type:  # pragma: no cover
-      args.extend(['--containment-type', task.containment_type])
+      args.extend(['--containment-type', task.containment_type.lower()])
 
     for pair in sorted(task_request.tags):
       args.extend(['--tag', pair])
