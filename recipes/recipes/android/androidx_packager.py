@@ -49,7 +49,12 @@ def RunSteps(api, properties):
   yaml_path = androidx_dir.join('cipd.yaml')
   version = 'cr-' + str(math.floor(api.time.time() / 60 / 60 / 24))
   api.cipd.create_from_yaml(
-      yaml_path, tags={'version': version}, refs=['latest'])
+      yaml_path,
+      tags={
+          'version': version,
+          'details0': 'version-' + version
+      },
+      refs=['latest'])
 
 
 def GenTests(api):
