@@ -135,4 +135,6 @@ SPEC.update([
         # TODO(crbug.com/1057152): Fix this.
         chromium_apply_config=['mb_no_luci_auth'],
         isolate_server='https://isolateserver.appspot.com'),
+    _config(
+        'linux-cfm-rel', isolate_server='https://isolateserver.appspot.com'),
 ])
