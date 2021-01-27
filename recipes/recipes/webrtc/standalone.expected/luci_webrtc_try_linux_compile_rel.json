@@ -63,7 +63,9 @@
       "--patch_ref",
       "https://webrtc.googlesource.com/src@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

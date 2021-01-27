@@ -144,6 +144,8 @@
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/1",
       "--revision",
       "src@551be50f2e3dae7dd1b31522fce7a91374c0efab",
+      "--refs",
+      "refs/heads/main",
       "--enforce_fetch"
     ],
     "cwd": "[CACHE]/builder",

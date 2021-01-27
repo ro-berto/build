@@ -144,6 +144,8 @@
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/1",
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main",
       "--enforce_fetch"
     ],
     "cwd": "[CACHE]/builder",
@@ -1063,6 +1065,8 @@
       "/path/to/tmp/json",
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
@@ -1763,7 +1767,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/1",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

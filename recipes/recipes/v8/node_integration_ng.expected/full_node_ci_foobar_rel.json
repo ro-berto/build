@@ -68,7 +68,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/v8/node-ci@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

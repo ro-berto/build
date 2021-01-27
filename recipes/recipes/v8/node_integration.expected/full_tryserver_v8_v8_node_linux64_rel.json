@@ -70,7 +70,9 @@
       "--revision",
       "node.js@vee-eight-lkgr",
       "--revision",
-      "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

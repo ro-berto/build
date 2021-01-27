@@ -63,7 +63,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/libyuv/libyuv@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
