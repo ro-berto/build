@@ -264,6 +264,12 @@ class BotSpec(object):
   # and can run the tests; this should no longer be needed at that point.
   upload_isolates_but_do_not_run_tests = attrib(bool, default=False)
 
+  # Whether to set the buildbucket output commit for the build
+  # TODO(https://crbug.com/1170220) Remove this once we're able to specify
+  # gitiles input and properties so that Android official builders correctly
+  # propagate ref information to Android official testers
+  set_output_commit = attrib(bool, default=True)
+
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
 
