@@ -44,6 +44,10 @@ def RunSteps(api):
     api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'llvm-symbolizer'))
     api.path.mock_add_paths(api.path.join(llvm_bin_dir, 'sancov'))
 
+    llvm_lib_dir = api.path['checkout'].join('third_party', 'llvm-build',
+                                             'Release+Asserts', 'lib')
+    api.path.mock_add_paths(api.path.join(llvm_lib_dir, 'libstdc++.so.6'))
+
   build_dir = api.path['start_dir'].join('src', 'out', 'Release')
 
   api.archive.clusterfuzz_archive(

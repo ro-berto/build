@@ -266,6 +266,23 @@ class ArchiveApi(recipe_api.RecipeApi):
         # exception. Either way, this shouldn't cause the whole build to fail.
         pass
 
+    if not self.m.platform.is_win:
+      llvm_lib_dir = self.m.path['checkout'].join('third_party', 'llvm-build',
+                                                  'Release+Asserts', 'lib')
+      libstdcplusplus_lib = 'libstdc++.so.6'
+      libstdcplusplus_lib_src = self.m.path.join(llvm_lib_dir,
+                                                 libstdcplusplus_lib)
+      libstdcplusplus_lib_dst = self.m.path.join(build_dir, libstdcplusplus_lib)
+      if self.m.path.exists(libstdcplusplus_lib_src):
+        try:
+          self.m.file.copy('Copy ' + libstdcplusplus_lib,
+                           libstdcplusplus_lib_src, libstdcplusplus_lib_dst)
+        except self.m.step.StepFailure:  # pragma: no cover
+          # On some builds, it appears that a soft/hard link of libstdc++.so.6
+          # exists in the build directory, which causes shutil.copy to raise an
+          # exception. Either way, this shouldn't cause the whole build to fail.
+          pass
+
     # Build the list of files to archive.
     filter_result = self.m.python(
         'filter build_dir',

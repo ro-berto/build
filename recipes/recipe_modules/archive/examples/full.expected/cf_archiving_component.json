@@ -44,6 +44,20 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "None/third_party/llvm-build/Release+Asserts/lib/libstdc++.so.6",
+      "[START_DIR]/src/out/Release/libstdc++.so.6"
+    ],
+    "infra_step": true,
+    "name": "Copy libstdc++.so.6"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
