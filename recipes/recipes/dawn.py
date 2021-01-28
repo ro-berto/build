@@ -122,6 +122,7 @@ def _build_steps(api, out_dir, clang, *targets):
 def _run_unittests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
   api.step('Run the Dawn unittests', [test_path])
+  api.step('Run the Dawn unittests with the wire', [test_path, '--use-wire'])
 
 
 def _run_tint_inspector_unittests(api, out_dir):

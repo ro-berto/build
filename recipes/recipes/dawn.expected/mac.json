@@ -485,6 +485,13 @@
   {
     "cmd": [
       "[CACHE]/builder/dawn/out/release_static/dawn_unittests",
+      "--use-wire"
+    ],
+    "name": "Run the Dawn unittests with the wire"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/dawn/out/release_static/dawn_unittests",
       "--enable-toggles=use_tint_inspector"
     ],
     "name": "Run the Dawn unittests (2)"

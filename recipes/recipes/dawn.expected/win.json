@@ -470,6 +470,16 @@
   {
     "cmd": [
       "[CACHE]\\builder\\dawn\\out\\release_static\\dawn_unittests",
+      "--use-wire"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Run the Dawn unittests with the wire"
+  },
+  {
+    "cmd": [
+      "[CACHE]\\builder\\dawn\\out\\release_static\\dawn_unittests",
       "--enable-toggles=use_tint_inspector"
     ],
     "env": {
