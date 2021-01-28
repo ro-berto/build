@@ -154,8 +154,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
       target = t.isolate_target
 
-      if not re.search(
-          constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[
+      # Do not get the test binary if it does not correspond to test type.
+      if self.platform in constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP \
+        and not re.search(
+          constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[self.platform][
               self._current_processing_test_type], target):
         continue
 
@@ -604,9 +606,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     # Input profdata in this step was named as {target_name}.profdata. This is
     # used for filtering profdata file of current test type.
-    input_profdata_pattern = (
-        "%s\.profdata" %
-        constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
+    if self.platform in constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP:
+      input_profdata_pattern = ("%s\.profdata" %
+                                constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
+                                    self.platform][test_type])
+    else:
+      # do not filter anything
+      input_profdata_pattern = ".+\.profdata"
+
     self.m.profiles.merge_profdata(
         merged_profdata,
         profdata_filename_pattern=input_profdata_pattern,

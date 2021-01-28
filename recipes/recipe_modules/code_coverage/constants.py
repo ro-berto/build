@@ -39,9 +39,26 @@ SUPPORTED_PATCH_PROJECTS = [('chromium-review.googlesource.com',
 # defined as str literals and used across multiple places.
 SUPPORTED_TEST_TYPES = ['overall', 'unit']
 
-# A mapping of test type str literal to regex of test target names.
-# TODO(crbug.com/1071251): This map is correct for iOS tests only currently.
-TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP = {
-    'unit': '(boringssl_crypto_|boringssl_ssl_|.+_unit)tests',
-    'overall': '.+'
+# A mapping of platform to test target names regex. This is used to filter
+# the test targets to be run for a certain test type. See SUPPORTED_TEST_TYPES
+# above.
+
+# Keys in the dict are platforms that support multiple test types. If a platform
+# isn't in the keys, the default test type will be "overall" and the test
+# pattern will be '.+' i.e. all tests would run
+PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
+    'ios': {
+        'unit': '(boringssl_crypto_|boringssl_ssl_'
+                '|.+_unit)tests',
+        'overall': '.+'
+    },
+    'linux': {
+        'unit':
+            '(absl_hardening|blink_python|boringssl_crypto|boringssl_ssl'
+            '|content_shell_crash|crashpad|cronet|ipc|metrics_python'
+            '|vr_pixel|.*unit).*test.*',
+        'overall': '.+'
+    }
 }
+PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
+    'linux64'] = PLATFORM_TO_TARGET_NAME_PATTERN_MAP['linux']

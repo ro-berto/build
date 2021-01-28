@@ -78,7 +78,7 @@ class ConstantsTest(unittest.TestCase):
   def test_ios_unit_tests_pattern(self):
     """Tests correct targets are matched by ios unit test pattern."""
     ios_unit_test_target_pattern = (
-        constants.TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP['unit'])
+        constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP['ios']['unit'])
 
     unit_test_targets = [
         'boringssl_crypto_tests',
@@ -118,6 +118,34 @@ class ConstantsTest(unittest.TestCase):
         'ios_chrome_web_eg2tests_module',
         'ios_showcase_eg2tests_module',
         'ios_web_shell_eg2tests_module',
+    ]
+    filtered_non_unit_tests = filter(
+        lambda s: re.match(ios_unit_test_target_pattern, s),
+        non_unit_test_targets)
+    self.assertEqual(0, len(filtered_non_unit_tests))
+
+  def test_linux_unit_tests_pattern(self):
+    """Tests correct targets are matched by linux unit test pattern.
+       Only a few representative test suites are tested for.
+    """
+    ios_unit_test_target_pattern = (
+        constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP['linux']['unit'])
+
+    unit_test_targets = [
+        'absl_hardening_tests', 'accessibility_unittests',
+        'boringssl_crypto_tests', 'boringssl_ssl_tests', 'compositor_unittests',
+        'content_shell_crash_test', 'gpu_unittests', 'unit_tests'
+    ]
+    filtered_unit_tests = filter(
+        lambda s: re.match(ios_unit_test_target_pattern, s), unit_test_targets)
+    self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
+
+    non_unit_test_targets = [
+        'blink_web_tests',
+        'browser_tests',
+        'components_browsertests',
+        'sync_integration_tests',
+        'webdriver_wpt_tests',
     ]
     filtered_non_unit_tests = filter(
         lambda s: re.match(ios_unit_test_target_pattern, s),
