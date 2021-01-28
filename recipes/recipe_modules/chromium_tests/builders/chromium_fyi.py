@@ -41,32 +41,6 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
   return name, bot_spec.BotSpec.create(**bot_config)
 
 
-def chromium_apply_configs(base_config, config_names):
-  """chromium_apply_configs returns new config from base config with config.
-
-  It adds config names in chromium_apply_config.
-
-  Args:
-    base_config: config obj in SPEC[x].
-    config_names: a list of config names to be added into chromium_apply_config.
-  Returns:
-    new config obj.
-  """
-  return base_config.extend(chromium_apply_config=config_names)
-
-
-def no_archive(base_config):
-  """no_archive returns new config from base config without archive_build etc.
-
-  Args:
-    base_config: config obj in SPEC[x].
-  Returns:
-    new config obj.
-  """
-  return base_config.evolve(
-      archive_build=None, gs_bucket=None, gs_acl=None, gs_build_name=None)
-
-
 SPEC = {
     'Mac Builder Next':
         bot_spec.BotSpec.create(
@@ -426,18 +400,6 @@ SPEC = {
             simulation_platform='linux',
             test_results_config='staging_server',
         ),
-    'Mac OpenSSL':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            test_results_config='staging_server',
-            simulation_platform='mac',
-        ),
     'Site Isolation Android':
         bot_spec.BotSpec.create(
             chromium_config='android',
@@ -453,10 +415,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'Win Builder Localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium_win.SPEC['Win Builder']),
-            ['goma_localoutputcache']),
     # For building targets instrumented for code coverage.
     'linux-code-coverage':
         bot_spec.BotSpec.create(
@@ -766,60 +724,7 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'ios-simulator-cr-recipe':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='ios',  # add 'ios' to target_os
-            gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-            },
-            simulation_platform='mac',
-        ),
     'ios-simulator-code-coverage':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='ios',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
-    'ios-simulator-coverage-exp':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='ios',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
-    'ios-simulator-full-configs-coverage-exp':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=[
@@ -973,12 +878,6 @@ SPEC.update([
     # https://source.chromium.org/chromium/chromium/src/+/master:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
     stock_config('linux-wpt-identity-fyi-rel', staging=False),
     stock_config('linux-wpt-input-fyi-rel', staging=False),
-    # For testing impact of builderful: https://crbug.com/1123673
-    # remove by 2020-10-05 gatong
-    stock_config('linux-builderful-fast-fyi-rel'),
-    stock_config('linux-builderful-slow-fyi-rel'),
-    stock_config('linux-builderless-fast-fyi-rel'),
-    stock_config('linux-builderless-slow-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
     stock_config('win-pixel-builder-rel'),
