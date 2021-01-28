@@ -492,7 +492,7 @@
   {
     "cmd": [
       "[CACHE]/builder/dawn/out/release_static/dawn_unittests",
-      "--enable-toggles=use_tint_inspector"
+      "--enable-toggles=use_tint_generator"
     ],
     "name": "Run the Dawn unittests (2)"
   },
