@@ -13,32 +13,37 @@ DEPS = [
     'reclient',
 ]
 
+_NINJA_STEP_NAME = 'compile (reclient)'
+
 
 def RunSteps(api):
   api.path['checkout'] = api.path['tmp_base'].join('checkout')
-  with api.context(env=api.reclient.rewrapper_env):
-    api.reclient.preprocess()
-    # compile chromium
-    api.reclient.postprocess(
-        ninja_step_name='compile (reclient)',
-        ninja_command=['ninja', '-C', 'out/Release'],
-        build_exit_status=0)
+  ninja_command = ['ninja', '-C', 'out/Release']
+  with api.reclient.process(
+      ninja_step_name=_NINJA_STEP_NAME, ninja_command=ninja_command):
+    api.step(_NINJA_STEP_NAME, ninja_command)
   _ = api.reclient.instance  # for code coverage
   _ = api.reclient.rewrapper_path
   _ = api.reclient.jobs
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield (api.test('basic'))
   yield (api.test('basic windows') + api.platform('win', 64))
   yield (api.test('override instance') +
          api.reclient.properties(instance='goma') +
          api.post_process(post_process.DropExpectation))
+
+  def env_checker(check, steps):
+    env = steps[_NINJA_STEP_NAME].env
+    check(env['RBE_FOO'] == 'foo')
+    check(env['RBE_BAR'] == 'bar')
+
   yield (api.test('proper_rewrapper_flags') +
          api.reclient.properties(rewrapper_env={
              'RBE_FOO': 'foo',
              'RBE_BAR': 'bar'
-         }))
+         }) + api.post_check(env_checker))
   yield (api.test('incorrect_rewrapper_flags') +
          api.reclient.properties(rewrapper_env={
              'MISSING_RBE_PREFIX': 'foo',

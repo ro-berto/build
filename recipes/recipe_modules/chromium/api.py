@@ -539,14 +539,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     Raises:
       - InfraFailure when an unexpected reclient failure occurs
     """
-    self.m.reclient.preprocess()
-    build_exit_status = -1
-    try:
-      with self.m.context(env=self.m.reclient.rewrapper_env):
-        ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
-        build_exit_status = ninja_result.retcode
-    finally:
-      self.m.reclient.postprocess(name, ninja_command, build_exit_status)
+    with self.m.reclient.process(name, ninja_command) as p:
+      ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
+      p.build_exit_status = ninja_result.retcode
     return ninja_result
 
   def _run_ninja_without_remote(self,

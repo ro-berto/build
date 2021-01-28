@@ -45,15 +45,23 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "preprocess for reclient.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
     ]
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "out/Release"
+    ],
+    "env": {
+      "RBE_server_address": "pipe://reproxy.pipe"
+    },
+    "name": "compile (reclient)"
   },
   {
     "cmd": [],
@@ -70,9 +78,6 @@
       "-output_dir",
       "[CLEANUP]\\reclient_log_tmp_1"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.shutdown reproxy via bootstrap",
     "~followup_annotations": [
@@ -93,9 +98,6 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.stop cloudtail",
     "~followup_annotations": [
@@ -113,9 +115,6 @@
       "[CLEANUP]\\reclient_log_tmp_1\\rbe_metrics.pb",
       "/path/to/tmp/"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.load rbe_metrics.pb",
     "~followup_annotations": [
@@ -141,9 +140,6 @@
       "0777",
       "[CACHE]\\cipd\\infra\\tools\\bqupload\\latest"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.install infra/tools/bqupload.ensure package directory",
     "~followup_annotations": [
@@ -163,9 +159,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.install infra/tools/bqupload.ensure_installed",
     "~followup_annotations": [
@@ -188,9 +181,6 @@
       "[CACHE]\\cipd\\infra\\tools\\bqupload\\latest\\bqupload",
       "goma-logs.experimental_rbe_metrics.rbe_metrics"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.upload RBE metrics to BigQuery",
     "stdin": "{\"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
@@ -225,9 +215,6 @@
       "out\\Release\\.ninja_log",
       "/path/to/tmp/"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.read ninja log",
     "~followup_annotations": [
@@ -246,9 +233,6 @@
       "fake gzip data",
       "[TMP_BASE]\\ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.create ninja log gzip",
     "~followup_annotations": [
@@ -269,15 +253,28 @@
       "[TMP_BASE]\\ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "env": {
-      "RBE_server_address": "pipe://reproxy.pipe"
-    },
     "infra_step": true,
     "name": "postprocess for reclient.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@",
       "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]\\reclient_log_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.cleanup reclient log dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
