@@ -17,7 +17,7 @@
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux Tests@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel\", \"tryserver.chromium.linux:linux-rel-builderful\", \"tryserver.chromium.linux:linux-rel-rts\", \"tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel\", \"tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel\", \"tryserver.chromium.linux:linux-dcheck-off-rel\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel\", \"tryserver.chromium.linux:linux-rel-rts\", \"tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel\", \"tryserver.chromium.linux:linux-dcheck-off-rel\"]@@@"
     ]
   },
   {
