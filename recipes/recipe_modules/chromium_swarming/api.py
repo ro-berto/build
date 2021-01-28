@@ -917,7 +917,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Trigger parameters.
     pre_trigger_args = ['trigger']
     # TODO(maruel): https://crbug.com/944904
-    # Some flags with "--" are read by trigger script too.
     args = [
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
@@ -937,11 +936,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     for name, value in sorted(task_slice.env_vars.iteritems()):
       assert isinstance(value, basestring), \
         'env var %s is not a string: %s' % (name, value)
-      args.extend(['-env', '%s=%s' % (name, value)])
+      args.extend(['--env', name, value])
 
     for name, relpath in sorted(task_slice.named_caches.iteritems()):
-      args.extend(['-named-cache',
-                   "%s=%s" % (name, relpath)])  # pragma: no cover
+      args.extend(['--named-cache', name, relpath])  # pragma: no cover
 
     if task_request.service_account:  # pragma: no cover
       args.extend(['--service-account', task_request.service_account])
@@ -964,20 +962,20 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_request.realm:
       args.extend(['--realm', task_request.realm])  # pragma: no cover
     if task_request.resultdb and task_request.resultdb.enable:
-      args.extend(['-enable-resultdb'])  # pragma: no cover
+      args.extend(['--resultdb'])  # pragma: no cover
 
     for path, package_list in sorted(
         task_slice.cipd_ensure_file.packages.iteritems()):
       for package_name, package_version in package_list:
         args.extend([
-            '-cipd-package',
-            '%s:%s=%s' % (path or '.', package_name, package_version)
+            '--cipd-package',
+            '%s:%s:%s' % (path or '.', package_name, package_version)
         ])
 
     if task_slice.env_prefixes:  # pragma: no cover
       for key, paths in sorted(dict(task_slice.env_prefixes).items()):
         for path in paths:
-          args.extend(('-env-prefix', '%s=%s' % (key, path)))
+          args.extend(('--env-prefix', key, path))
 
     # What isolated command to trigger.
     if task_slice.isolated:
