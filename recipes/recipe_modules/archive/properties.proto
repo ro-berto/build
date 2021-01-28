@@ -40,6 +40,8 @@ message ArchiveData {
   // {%timestamp%} -> UTC timestamp in %Y%m%d%H%M%S.
   // {$chromium_version%} -> Chromium version extracted from chrome/VERSION file
   //     in {major}.{minor}.{build}.{patch} format.
+  // {%builder_name%} -> name of the builder, fetched from buildbucket
+  // {%build_number%} -> number of the current build, fetched from buildbucket
   // Custom string substitutions are also supported through the 'custom_vars'
   // parameter in generic_archive().
   string gcs_path = 4;

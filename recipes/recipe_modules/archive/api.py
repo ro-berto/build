@@ -572,6 +572,16 @@ class ArchiveApi(recipe_api.RecipeApi):
                                version['BUILD'], version['PATCH'])
       input_str = input_str.replace(chromium_version_placeholder, value)
 
+    builder_name_placeholder = '{%builder_name%}'
+    if builder_name_placeholder in input_str:
+      builder_name = self.m.buildbucket.builder_name
+      input_str = input_str.replace(builder_name_placeholder, builder_name)
+
+    build_number_placeholder = '{%build_number%}'
+    if build_number_placeholder in input_str:
+      build_number = str(self.m.buildbucket.build.number)
+      input_str = input_str.replace(build_number_placeholder, build_number)
+
     if custom_vars:
       for placeholder, key in re.findall('({%(.*?)%})', input_str):
         if key in custom_vars.keys():

@@ -278,7 +278,8 @@ def GenTests(api):
   archive_data = properties.ArchiveData()
   archive_data.dirs.extend(['anydir'])
   archive_data.gcs_bucket = 'any-bucket'
-  archive_data.gcs_path = 'x86/{%position%}_{%commit%}_{%timestamp%}/chrome'
+  archive_data.gcs_path = ('x86/{%position%}_{%commit%}_{%timestamp%}_'
+                           '{%builder_name%}_{%build_number%}/chrome')
   archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
   archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
   input_properties.archive_datas.extend([archive_data])
