@@ -36,10 +36,6 @@ PLATFORM_RUN_CMD = {
     'posix': '/opt/infra-python/run.py',
 }
 
-# <cmd>.<host>.<user>.log.<severity>.<yyyy><mm><dd>-<hh><mm><ss>.<xxxxx>
-FILENAME_TIMESTAMP_PATTERN = re.compile(
-    '(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})'
-)
 TIMESTAMP_PATTERN = re.compile('(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})')
 TIMESTAMP_FORMAT = '%Y/%m/%d %H:%M:%S'
 
@@ -112,18 +108,12 @@ def GetListOfGomaccInfoAfterCompilerProxyStart():
     list of gomacc.INFO file path strings.
   """
   compiler_proxy_start_time = GetCompilerProxyStartTime()
-  print('listing gomacc logs newer than: %s' % compiler_proxy_start_time)
   recent_gomacc_infos = []
   logs = glob.glob(os.path.join(GetGomaLogDirectory(), 'gomacc.*.INFO.*'))
-  print('total %s gomacc logs found' % len(logs))
   for log in logs:
     timestamp = GetLogFileTimestamp(log)
     if timestamp and timestamp > compiler_proxy_start_time:
       recent_gomacc_infos.append(log)
-  print('%s gomacc logs are new' % len(recent_gomacc_infos))
-  recent_goamcc_infos.sort()
-  if len(recent_gomacc_infos) > 100:
-    recent_gomacc_infos = recent_gomacc_infos[:50] + recent_gomacc_infos[-50:]
   return recent_gomacc_infos
 
 
@@ -263,7 +253,6 @@ def UploadGomaccInfo(gomacc_logs, metadata=None, override_gsutil=None):
 
   temp_file = tempfile.NamedTemporaryFile(delete=False)
   try:
-    print('creating tar for %s gomacc logs' % len(gomacc_logs))
     with tarfile.TarFile(fileobj=temp_file, mode='w') as tf:
       for log in gomacc_logs:
         tf.add(log, arcname=os.path.basename(log))
@@ -438,12 +427,6 @@ def GetLogFileTimestamp(glog_log):
   Raises:
     IOError if this function cannot open glog_log.
   """
-  matched = FILENAME_TIMESTAMP_PATTERN.search(glog_log)
-  if matched:
-    return datetime.datetime(
-        int(matched.group(1)), int(matched.group(2)), int(matched.group(3)),
-        int(matched.group(4)), int(matched.group(5)), int(matched.group(6))
-    )
   with open(glog_log) as f:
     matched = TIMESTAMP_PATTERN.search(f.readline())
     if matched:
