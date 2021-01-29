@@ -264,11 +264,6 @@ def mb_no_luci_auth(c):
 
 
 @config_ctx()
-def mb_luci_auth(c):
-  pass  # TODO(crbug.com/1060280): Delete this.
-
-
-@config_ctx()
 def win_analyze(c):
   c.gyp_env.GYP_DEFINES['use_goma'] = 0  # Read by api.py.
 

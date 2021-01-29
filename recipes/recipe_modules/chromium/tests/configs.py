@@ -125,12 +125,3 @@ def GenTests(api):
   yield from_config('android_internal_isolate_maps')
 
   yield from_config('official_no_clobber')
-
-  yield api.test(
-      'chromium_luci_auth',
-      api.properties(
-          chromium_config='chromium',
-          chromium_apply_config=['mb', 'mb_luci_auth']),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
