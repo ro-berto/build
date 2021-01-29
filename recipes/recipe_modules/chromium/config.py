@@ -80,6 +80,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
               int, required=False),
           GOMA_STORE_ONLY=Single(bool, empty_val=False, required=False),
           FORCE_MAC_TOOLCHAIN=Single(int, required=False),
+          FORCE_MAC_SDK_MIN=Single(basestring, required=False),
       ),
       mac_toolchain=ConfigGroup(
           enabled=Single(bool, empty_val=False, required=False),
