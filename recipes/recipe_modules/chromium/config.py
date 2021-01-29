@@ -17,7 +17,7 @@ TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos', 'fuchsia')
 HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
-BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
+BUILD_CONFIGS = ('Release', 'Debug')
 PROJECT_GENERATORS = ('gn', 'mb')
 
 
@@ -195,7 +195,7 @@ def validate_config(c):
                   'supported ones are: %s' %
                   (c.project_generator.tool, ','.join(PROJECT_GENERATORS)))
 
-  if c.BUILD_CONFIG not in ['Coverage', 'Release', 'Debug']:  # pragma: no cover
+  if c.BUILD_CONFIG not in BUILD_CONFIGS:  # pragma: no cover
     raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
 
 
