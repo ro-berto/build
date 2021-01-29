@@ -69,6 +69,10 @@
   },
   {
     "cmd": [],
+    "name": "goma.configure_enable_ats: goma.chromium.org ?prod True"
+  },
+  {
+    "cmd": [],
     "name": "preprocess_for_goma"
   },
   {

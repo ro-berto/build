@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "goma.configure_enable_ats: False False False"
+  },
+  {
     "cmd": [
       "git",
       "rev-parse",

@@ -186,6 +186,9 @@ class GomaApi(recipe_api.RecipeApi):
         self._goma_rpc_extra_params in ('?tot', '?staging', '?prod') and
         (self.m.platform.is_linux or self.m.platform.is_win)):
       self._enable_ats = True
+    step_msg = 'goma.configure_enable_ats: %s %s %s' % (
+        self._goma_server_host, self._goma_rpc_extra_params, self._enable_ats)
+    self.m.step(step_msg, cmd=None)
 
   def ensure_goma(self,
                   client_type=None,
