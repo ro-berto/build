@@ -25,7 +25,7 @@ per-file tryserver_devtools_frontend.py=machenbach@chromium.org
 per-file tryserver_devtools_frontend.py=liviurau@chromium.org
 
 # For goma canary bots config.
-per-file chromium_fyi.py=file://recipes/goma/GOMA_OWNERS
+per-file chromium_goma_fyi.py=file://recipes/goma/GOMA_OWNERS
 
 # for goma staging bots config.
 per-file chromium_goma.py=file://recipes/goma/GOMA_OWNERS
