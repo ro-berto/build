@@ -63,9 +63,9 @@ def _out_path(target_cpu, debug, clang, static):
   return out_dir
 
 
-def _gn_gen_builds(api, target_cpu, debug, clang, out_dir, static, swiftshader):
+def _gn_gen_builds(api, target_cpu, debug, clang, use_goma, out_dir, static,
+                   swiftshader):
   """calls 'gn gen'"""
-  api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
   checkout = api.path['checkout']
@@ -75,10 +75,13 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir, static, swiftshader):
   args = [
       'is_debug=%s' % gn_bool[debug],
       'is_component_build=%s' % gn_bool[not static],
-      'use_goma=%s' % gn_bool[clang or clang is None],
+      'use_goma=%s' % gn_bool[use_goma],
       'dawn_use_swiftshader=%s' % gn_bool[swiftshader],
-      'goma_dir="%s"' % api.goma.goma_dir,
   ]
+
+  if use_goma:
+    api.goma.ensure_goma()
+    args.append('goma_dir="%s"' % api.goma.goma_dir)
 
   # We run the end2end tests with SwiftShader, but the D3D12 backend,
   # though it would run zero tests, crashes on Windows 7.
@@ -97,27 +100,23 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir, static, swiftshader):
                ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
                 '--args=' + ' '.join(args)])
 
-def _get_compiler_name(api, clang):
-  # Clang is used as the default compiler.
-  if clang or clang is None:
-    return 'clang'
-  # The non-Clang compiler is OS-dependent.
-  if api.platform.is_win:
-    return 'msvc'
-  return 'gcc'
 
-
-def _build_steps(api, out_dir, clang, *targets):
+def _build_steps(api, out_dir, clang, use_goma, *targets):
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
-               '-j', api.goma.recommended_goma_jobs]
+  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
+  if use_goma:
+    ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
   ninja_cmd.extend(targets)
 
-  api.goma.build_with_goma(
-      name='compile with ninja',
-      ninja_command=ninja_cmd,
-      ninja_log_outdir=debug_path,
-      ninja_log_compiler=_get_compiler_name(api, clang))
+  if use_goma:
+    api.goma.build_with_goma(
+        name='compile with ninja',
+        ninja_command=ninja_cmd,
+        ninja_log_outdir=debug_path,
+        ninja_log_compiler='clang')
+  else:
+    api.step('compile with ninja', ninja_cmd)
+
 
 def _run_unittests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
@@ -147,6 +146,7 @@ def RunSteps(api, target_cpu, debug, clang):
     _checkout_steps(api)
     out_dir_static = _out_path(target_cpu, debug, clang, static=True)
     out_dir_component = _out_path(target_cpu, debug, clang, static=False)
+    use_goma = bool(clang or clang is None)
     with api.osx_sdk('mac'):
       # Static build all targets and run unittests
       _gn_gen_builds(
@@ -154,10 +154,11 @@ def RunSteps(api, target_cpu, debug, clang):
           target_cpu,
           debug,
           clang,
+          use_goma,
           out_dir_static,
           static=True,
           swiftshader=False)
-      _build_steps(api, out_dir_static, clang)
+      _build_steps(api, out_dir_static, clang, use_goma)
       _run_unittests(api, out_dir_static)
       _run_tint_generator_unittests(api, out_dir_static)
 
@@ -169,10 +170,12 @@ def RunSteps(api, target_cpu, debug, clang):
           target_cpu,
           debug,
           clang,
+          use_goma,
           out_dir_component,
           static=False,
           swiftshader=True)
-      _build_steps(api, out_dir_component, clang, 'dawn_end2end_tests')
+      _build_steps(api, out_dir_component, clang, use_goma,
+                   'dawn_end2end_tests')
       _run_swiftshader_end2end_tests(api, out_dir_component)
 
 
