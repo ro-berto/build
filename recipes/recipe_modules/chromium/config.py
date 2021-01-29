@@ -63,7 +63,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       gyp_env=ConfigGroup(
           DOWNLOAD_VR_TEST_APKS=Single(int, required=False),
           GYP_DEFINES=Dict(equal_fn, ' '.join, (basestring, int, Path)),
-          GYP_MSVS_VERSION=Single(basestring, required=False),
       ),
       # This allows clients to opt out of using GYP variables in the
       # environment.
