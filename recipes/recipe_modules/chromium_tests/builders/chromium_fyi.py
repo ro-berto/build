@@ -485,24 +485,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
         ),
-    'chromeos-amd64-generic-lacros-rel':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'intel',
-                'TARGET_BITS': 64,
-                'TARGET_CROS_BOARDS': 'amd64-generic',
-                'TARGET_PLATFORM': 'chromeos',
-            },
-            simulation_platform='linux',
-        ),
     'linux-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
             chromium_config='chromium',

@@ -74,6 +74,11 @@ def _config(name,
 
 SPEC.update([
     _config(
+        'lacros-amd64-generic-rel',
+        isolate_server='https://isolateserver.appspot.com',
+        cros_boards='amd64-generic',
+    ),
+    _config(
         'linux-chromeos-rel',
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['use_clang_coverage']),

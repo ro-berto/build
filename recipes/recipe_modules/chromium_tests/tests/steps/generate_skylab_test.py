@@ -30,8 +30,8 @@ def RunSteps(api):
 def GenTests(api):
 
   def boilerplate():
-    builder_group = 'chromium.fyi'
-    builder = 'chromeos-amd64-generic-lacros-rel'
+    builder_group = 'chromium.chromiumos'
+    builder = 'lacros-amd64-generic-rel'
     return sum([
         api.chromium.ci_build(
             builder_group=builder_group,

@@ -10,16 +10,16 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'chromeos-amd64-generic-lacros-rel' on group 'chromium.fyi'@@@",
+      "@@@STEP_TEXT@<br/>running builder 'lacros-amd64-generic-rel' on group 'chromium.chromiumos'@@@",
       "@@@STEP_LOG_LINE@bots.json@[@@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.fyi\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"chromeos-amd64-generic-lacros-rel\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.chromiumos\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"lacros-amd64-generic-rel\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@chromeos-amd64-generic-lacros-rel@https://ci.chromium.org/p/chromium/builders/ci/chromeos-amd64-generic-lacros-rel@@@"
+      "@@@STEP_LINK@lacros-amd64-generic-rel@https://ci.chromium.org/p/chromium/builders/ci/lacros-amd64-generic-rel@@@"
     ]
   },
   {
@@ -317,18 +317,18 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.chromiumos.json",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "read test spec (chromium.fyi.json)",
+    "name": "read test spec (chromium.chromiumos.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.chromiumos.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromeos-amd64-generic-lacros-rel\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"lacros-amd64-generic-rel\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"chrome\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
@@ -398,9 +398,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "chromium.chromiumos",
       "-b",
-      "chromeos-amd64-generic-lacros-rel",
+      "lacros-amd64-generic-rel",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -425,9 +425,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "chromium.chromiumos",
       "-b",
-      "chromeos-amd64-generic-lacros-rel",
+      "lacros-amd64-generic-rel",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -482,7 +482,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/chromeos_amd64_generic_lacros_rel"
+      "[CACHE]/goma/data/lacros_amd64_generic_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -506,7 +506,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/chromeos_amd64_generic_lacros_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/lacros_amd64_generic_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -725,12 +725,12 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"chromeos-amd64-generic-lacros-rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"lacros-amd64-generic-rel\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "chromeos-amd64-generic-lacros-rel",
+      "lacros-amd64-generic-rel",
       "--buildbot-mastername",
-      "chromium.fyi",
+      "chromium.chromiumos",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
