@@ -17,7 +17,7 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   api.chromium_tests.configure_build(bot_config)
   update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.deapply_patch(update_step)
+  api.chromium_tests.deapply_patch(update_step, 'testing/rts_exclude_file.txt')
 
 
 def GenTests(api):

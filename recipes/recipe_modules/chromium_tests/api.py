@@ -962,14 +962,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           else:
             self.m.chromium_android.test_report()
 
-  def deapply_patch(self, bot_update_step):
+  def deapply_patch(self, bot_update_step, rts_exclude_file=''):
     assert self.m.tryserver.is_tryserver
 
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
     with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+      if rts_exclude_file:
+        rts_exclude_file_abs = self.m.path.abspath(
+            self.m.path['checkout'].join(rts_exclude_file))
+        rts_exclude_file_backup = self.m.path.mkstemp()
+        self.m.file.move('back up rts_exclude_file', rts_exclude_file_abs,
+                         rts_exclude_file_backup)
       self.m.bot_update.deapply_patch(bot_update_step)
+      if rts_exclude_file:
+        self.m.file.move('restore rts_exclude_file', rts_exclude_file_backup,
+                         rts_exclude_file_abs)
 
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
@@ -1110,7 +1119,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._summarize_test_failures(task)
         return None, failing_test_suites
 
-      deapply_changes(task.bot_update_step)
+      deapply_changes(
+          task.bot_update_step, task.bot.config.rts_spec and
+          task.bot.config.rts_spec.skip_test_files_path or '')
       raw_result = self._build_and_isolate_failing_tests(
           failing_test_suites, task.bot_update_step, 'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
@@ -1463,7 +1474,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return valid, invalid
 
-  def deapply_deps(self, bot_update_step):
+  def deapply_deps(self, bot_update_step, rts_exclude_file=''):
     with self.m.context(cwd=self.m.chromium_checkout.working_dir):
       # If tests fail, we want to fix Chromium revision only. Tests will use
       # the dependencies versioned in 'src' tree.

@@ -359,6 +359,21 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[CACHE]\\builder\\src\\testing\\rts_exclude_file.txt",
+      "[CLEANUP]\\tmp_tmp_1"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "back up rts_exclude_file"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
@@ -524,6 +539,21 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[CLEANUP]\\tmp_tmp_1",
+      "[CACHE]\\builder\\src\\testing\\rts_exclude_file.txt"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "restore rts_exclude_file"
   },
   {
     "cmd": [
