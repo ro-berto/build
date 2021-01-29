@@ -108,12 +108,15 @@ def GetListOfGomaccInfoAfterCompilerProxyStart():
     list of gomacc.INFO file path strings.
   """
   compiler_proxy_start_time = GetCompilerProxyStartTime()
+  print('listing gomacc logs newer than: %s' % compiler_proxy_start_time)
   recent_gomacc_infos = []
   logs = glob.glob(os.path.join(GetGomaLogDirectory(), 'gomacc.*.INFO.*'))
+  print('total %s gomacc logs found' % len(logs))
   for log in logs:
     timestamp = GetLogFileTimestamp(log)
     if timestamp and timestamp > compiler_proxy_start_time:
       recent_gomacc_infos.append(log)
+  print('%s gomacc logs are new' % len(recent_gomacc_infos))
   return recent_gomacc_infos
 
 
@@ -253,6 +256,7 @@ def UploadGomaccInfo(gomacc_logs, metadata=None, override_gsutil=None):
 
   temp_file = tempfile.NamedTemporaryFile(delete=False)
   try:
+    print('creating tar for %s gomacc logs' % len(gomacc_logs))
     with tarfile.TarFile(fileobj=temp_file, mode='w') as tf:
       for log in gomacc_logs:
         tf.add(log, arcname=os.path.basename(log))
@@ -264,6 +268,10 @@ def UploadGomaccInfo(gomacc_logs, metadata=None, override_gsutil=None):
     # close the file here. Otherwise this will fail on Win.
     temp_file.close()
 
+    print(
+        'uploading gomacc logs %s (%s)' %
+        (gs_tarfile_name, os.path.getsize(gs_tarfile_name))
+    )
     UploadToGomaLogGS(
         temp_file.name,
         gs_tarfile_name,
