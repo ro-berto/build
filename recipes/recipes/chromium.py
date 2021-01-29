@@ -1453,25 +1453,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'dynamic_script_test_with_args',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder'),
-      api.platform('linux', 64),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
-                  'scripts': [{
-                      'name': 'media_perftests',
-                      'script': 'gtest_perf_test.py',
-                      'args': ['media_perftests', '--single-process-tests']
-                  },],
-              },
-          }),
-  )
-
-  yield api.test(
       'dynamic_script_test_failure',
       api.chromium.ci_build(
           builder_group='chromium.linux',
