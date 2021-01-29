@@ -18,7 +18,7 @@ HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
 TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
 BUILD_CONFIGS = ('Release', 'Debug', 'Coverage')
-PROJECT_GENERATORS = ('gyp', 'gn', 'mb')
+PROJECT_GENERATORS = ('gn', 'mb')
 
 
 def check(val, potentials):
