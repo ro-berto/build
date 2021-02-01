@@ -74,6 +74,11 @@ def _config(name,
 
 SPEC.update([
     _config(
+        'lacros-amd64-generic-binary-size-rel',
+        isolate_server='https://isolateserver.appspot.com',
+        cros_boards='amd64-generic',
+    ),
+    _config(
         'lacros-amd64-generic-rel',
         isolate_server='https://isolateserver.appspot.com',
         cros_boards='amd64-generic',
