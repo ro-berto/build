@@ -30,7 +30,6 @@ def RunSteps(api, use_goma):
       TARGET_CROS_BOARDS=api.properties.get('target_cros_boards'))
   api.chromium.apply_config('goma_hermetic_fallback')
   api.chromium.apply_config('goma_high_parallel')
-  api.chromium.apply_config('goma_localoutputcache')
   api.chromium.apply_config('goma_enable_global_file_stat_cache')
   api.chromium.apply_config('use_autoninja')
 
@@ -127,12 +126,6 @@ def GenTests(api):
       'goma_client_candidate',
       api.properties(
           chromium_apply_config=['goma_client_candidate']),
-  )
-
-  yield api.test(
-      'goma_localoutputcache_small',
-      api.properties(
-          chromium_apply_config=['goma_localoutputcache_small']),
   )
 
   yield api.test(

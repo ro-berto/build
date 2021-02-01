@@ -47,10 +47,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           goma_failfast=Single(bool, empty_val=False, required=False),
           goma_max_active_fail_fallback_tasks=Single(
               int, empty_val=None, required=False),
-          goma_enable_localoutputcache=Single(
-              bool, empty_val=False, required=False),
-          goma_enable_localoutputcache_small=Single(
-              bool, empty_val=False, required=False),
           goma_enable_global_file_stat_cache=Single(
               bool, empty_val=False, required=False),
           # TODO(tandrii): delete goma_high_parallel from here and use goma
@@ -74,10 +70,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           GOMA_SERVER_HOST=Single(basestring, required=False),
           GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
           GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),
-          GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB=Single(
-              int, required=False),
-          GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB=Single(
-              int, required=False),
           GOMA_STORE_ONLY=Single(bool, empty_val=False, required=False),
           FORCE_MAC_TOOLCHAIN=Single(int, required=False),
           FORCE_MAC_SDK_MIN=Single(basestring, required=False),
@@ -326,18 +318,6 @@ def goma_client_candidate(c):
 @config_ctx()
 def goma_hermetic_fallback(c):
   c.compile_py.goma_hermetic = 'fallback'
-
-
-@config_ctx()
-def goma_localoutputcache(c):
-  c.compile_py.goma_enable_localoutputcache = True
-
-
-@config_ctx()
-def goma_localoutputcache_small(c):
-  c.compile_py.goma_enable_localoutputcache = True
-  c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = 10 * 1024
-  c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = 5 * 1024
 
 
 @config_ctx()

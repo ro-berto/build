@@ -146,12 +146,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           map(str, self.c.env.PATH) + ['%(PATH)s'])
     if self.c.env.GOMA_SERVER_HOST:
       ret['GOMA_SERVER_HOST'] = self.c.env.GOMA_SERVER_HOST
-    if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB:
-      ret['GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB'] = \
-        self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB
-    if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB:
-      ret['GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB'] = \
-        self.c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB
     if self.c.env.GOMA_STORE_ONLY:
       ret['GOMA_STORE_ONLY'] = self.c.env.GOMA_STORE_ONLY
     if self.c.env.FORCE_MAC_TOOLCHAIN:
@@ -712,13 +706,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       if self.c.compile_py.goma_hermetic:
         goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
-      if self.c.compile_py.goma_enable_localoutputcache:
-        # Use per-slave cache. LocalOutputCache could use a lot of disks.
-        # To run GC for older caches, we should share the same build
-        # among builders.
-        goma_env['GOMA_LOCAL_OUTPUT_CACHE_DIR'] = (
-            self.m.path.join(self.m.goma.default_cache_path_per_slave,
-                             "localoutputcache"))
 
       if self.c.compile_py.goma_enable_global_file_stat_cache:
         goma_env['GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE'] = 'true'

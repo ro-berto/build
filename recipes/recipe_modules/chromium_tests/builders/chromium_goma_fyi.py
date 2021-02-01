@@ -45,10 +45,6 @@ SPEC = {
     'Win Builder (dbg) Goma Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
                                ['goma_canary']),
-    'win32-archive-rel-goma-canary-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['win-archive-rel']),
-            ['goma_canary', 'goma_localoutputcache']),
 
     'chromeos-amd64-generic-rel-goma-canary':
         chromium_apply_configs(
@@ -60,10 +56,6 @@ SPEC = {
     'linux-archive-rel-goma-canary':
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']), ['goma_canary']),
-    'linux-archive-rel-goma-canary-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['linux-archive-rel']),
-            ['goma_canary', 'goma_localoutputcache']),
     # RBE
     'chromeos-amd64-generic-rel-goma-rbe-canary':
         chromium_apply_configs(
@@ -90,13 +82,6 @@ SPEC = {
     'Mac Builder (dbg) Goma Canary (clobber)':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_canary', 'clobber']),
-    # Mac has less disks, so use small localoutputcache.
-    # Build chrome only. Even with smaller localoutputcache, disk is short.
-    # See crbug.com/825536
-    'mac-archive-rel-goma-canary-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['mac-archive-rel']),
-            ['goma_canary', 'goma_localoutputcache_small']),
     # RBE
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(
@@ -112,10 +97,6 @@ SPEC = {
     'Win Builder (dbg) Goma Latest Client':
         chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
                                ['goma_latest_client']),
-    'win32-archive-rel-goma-latest-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['win-archive-rel']),
-            ['goma_latest_client', 'goma_localoutputcache']),
     # RBE
     'Win Builder Goma RBE Latest Client':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
@@ -135,10 +116,6 @@ SPEC = {
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']),
             ['goma_latest_client']),
-    'linux-archive-rel-goma-latest-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['linux-archive-rel']),
-            ['goma_latest_client', 'goma_localoutputcache']),
     # RBE
     'chromeos-amd64-generic-rel-goma-rbe-latest':
         chromium_apply_configs(
@@ -168,13 +145,6 @@ SPEC = {
     'Mac Builder (dbg) Goma Latest Client (clobber)':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_latest_client', 'clobber']),
-    # Mac has less disks, so use small localoutputcache.
-    # Build chrome only. Even with smaller localoutputcache, disk is short.
-    # See crbug.com/825536
-    'mac-archive-rel-goma-latest-localoutputcache':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['mac-archive-rel']),
-            ['goma_latest_client', 'goma_localoutputcache_small']),
     # RBE
     'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
