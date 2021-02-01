@@ -216,6 +216,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -299,6 +300,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -333,6 +335,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -356,6 +359,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",

@@ -1,7 +1,7 @@
 [
   {
     "cmd": [],
-    "name": "goma.configure_enable_ats: False False False"
+    "name": "goma.configure_enable_ats: False False None"
   },
   {
     "cmd": [

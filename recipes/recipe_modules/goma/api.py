@@ -50,7 +50,9 @@ class GomaApi(recipe_api.RecipeApi):
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
-    self._enable_ats = properties.get('enable_ats', False)
+    # self._enable_ats can be updated in ensure_goma step.
+    # Since we need to refer self.m.platfom, we cannot execute that here.
+    self._enable_ats = properties.get('enable_ats', None)
     self._goma_server_host = properties.get('server_host', False)
     self._goma_rpc_extra_params = properties.get('rpc_extra_params', False)
     self._use_luci_auth = properties.get('use_luci_auth', False)
@@ -216,6 +218,10 @@ class GomaApi(recipe_api.RecipeApi):
     # client_type must be one of following values.
     assert client_type in ('release', 'candidate', 'latest')
     self._client_type = client_type
+
+    # self._enable_ats default value is True on Windows.  Otherwise, False.
+    if self._enable_ats is None:
+      self._enable_ats = self.m.platform.is_win
 
     with self.m.step.nest('ensure_goma') as step_result:
       if client_type != 'release':
