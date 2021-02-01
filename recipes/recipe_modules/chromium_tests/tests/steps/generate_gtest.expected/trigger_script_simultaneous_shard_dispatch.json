@@ -63,7 +63,6 @@
       "test_suite:base_unittests",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
-      "--raw-cmd",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
