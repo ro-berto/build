@@ -1421,6 +1421,32 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Migration mismatch (informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy decision for retries had length 1<br/>New decision for retries had length 0@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "name": "Migration mismatch (retriable suites, informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy retries calculation contained extra elements set([u'fake tests (fake device iOS 8.1)'])<br/>New retries calculation contained extra elements set([])@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test_pre_run (retry shards with patch)",
     "~followup_annotations": [
