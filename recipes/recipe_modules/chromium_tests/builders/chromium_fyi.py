@@ -840,6 +840,7 @@ SPEC.update([
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config('linux-blink-heap-verification'),
+    stock_config('linux-blink-v8-oilpan-rel'),
     stock_config('linux-chromium-tests-staging-builder'),
     stock_config(
         'linux-chromium-tests-staging-tests',
