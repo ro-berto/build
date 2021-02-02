@@ -14,12 +14,24 @@ message LatestFile {
   string gcs_file_content = 2;
 }
 
-// Next id: 10
+// Next id: 3
+message ArchiveFileRename {
+  string from_file = 1;
+  string to_file = 2;
+}
+
+// Next id: 11
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
   // the archiving code.
   repeated string files = 1;
+  // Rename files. This happends before achiving. e.g. If the compiled target
+  // has a file named "foo.zoo", and you want it to be "foo" in the zip file,
+  // then you can have:
+  //   files = ["foo"]
+  //   rename_files = [{ "from_file":"foo.zoo", "to_file":"foo" }]
+  repeated ArchiveFileRename rename_files = 10;
   // A list of globs that will be expanded to files that should be archived. All
   // globs are expanded relative to the build directory, which is passed
   // alongside this proto to the archiving code.

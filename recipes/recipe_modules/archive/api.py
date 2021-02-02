@@ -673,6 +673,23 @@ class ArchiveApi(recipe_api.RecipeApi):
             sig_paths.add(f + '.sig')
           expanded_files = expanded_files.union(sig_paths)
 
+        # Copy all files to a temporary directory. Keeping the structore.
+        # This directory will be used for archiving.
+        temp_dir = self.m.path.mkdtemp()
+        self.m.file.ensure_directory('create temp dir', temp_dir)
+        for filename in expanded_files:
+          self.m.file.copy("Copy file", self.m.path.join(base_path, filename),
+                           self.m.path.join(temp_dir, filename))
+
+        # Starting here, we will only need to care about the temporary folder
+        # which holds the files. So reset the base_path to temp_dir.
+        base_path = temp_dir
+
+        for rename_file in archive_data.rename_files:
+          self.m.file.move("Move file",
+                           self.m.path.join(base_path, rename_file.from_file),
+                           self.m.path.join(base_path, rename_file.to_file))
+
         # Get map of local file path to upload -> destination file path in GCS
         # bucket.
         if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
