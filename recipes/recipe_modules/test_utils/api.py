@@ -708,7 +708,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ])
 
     def _result_failed(test_result):
-      return test_result.status == test_result_pb2.FAIL  #pragma: nocover
+      return test_result.status == test_result_pb2.FAIL
 
     invalid_invocations = [
         inv for inv in invocation_dict.values()
@@ -756,7 +756,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for res in invocation.test_results:
         attributes = getattr(res.variant, 'def')
         if attributes and attributes.get('test_suite'):
-          names.add(attributes['test_suite'])  #pragma: nocover
+          names.add(attributes['test_suite'])
       return names
 
     # Fetching names from protobufs gets unicode strings, so coerce to unicode

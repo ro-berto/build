@@ -5,13 +5,15 @@
 DEPS = [
     'builder_group',
     'chromium',
+    'chromium_swarming',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
-    'chromium_swarming',
     'skylab',
     'test_results',
     'test_utils',
@@ -23,17 +25,24 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import skylab
 from RECIPE_MODULES.build.chromium_tests import steps
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
+                                                       rdb_invocation)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       rdb_test_result)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
+
 PROPERTIES = {
     'abort_on_failure': Property(default=False),
     'test_swarming': Property(default=False),
     'test_skylab': Property(default=False),
     'test_name': Property(default='MockTest'),
+    'retry_failed_shards': Property(default=False),
     'retry_invalid_shards': Property(default=False),
 }
 
 
 def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
-             retry_invalid_shards):
+             retry_failed_shards, retry_invalid_shards):
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
@@ -48,6 +57,12 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
       return MockSwarmingTest
 
   class MockSwarmingTest(steps.SwarmingIsolatedScriptTest):
+
+    def deterministic_failures(self, suffix):
+      if self.name.endswith('failed_results') or self.name.endswith(
+          'invalid_results'):
+        return [self]
+      return super(MockSwarmingTest, self).deterministic_failures(suffix)
 
     def has_valid_results(self, suffix):
       if self.name.endswith('invalid_results'):
@@ -83,7 +98,10 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
   tests = [s.get_test() for s in test_specs]
 
   _, failed_tests = api.test_utils.run_tests(
-      api.chromium_tests.m, tests, '',
+      api.chromium_tests.m,
+      tests,
+      '',
+      retry_failed_shards=retry_failed_shards,
       retry_invalid_shards=retry_invalid_shards)
   if failed_tests:
     raise api.step.StepFailure(
@@ -270,4 +288,66 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun, 'base_unittests'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failure_swarming',
+      api.chromium.ci_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests_failed_results',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests_failed_results':
+                  '[dummy hash for base_unittests]',
+              'base_unittests_failed_results_2':
+                  '[dummy hash for base_unittests_2]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+      ),
+      api.post_process(post_process.MustRun, 'test3'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failure_with_resultsdb',
+      api.chromium.ci_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests_failed_results',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests_failed_results':
+                  '[dummy hash for base_unittests]',
+              'base_unittests_failed_results_2':
+                  '[dummy hash for base_unittests_2]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+      ),
+      api.override_step_data(
+          'query test results',
+          stdout=api.json.invalid(
+              api.resultdb.serialize({
+                  "invid":
+                      api.resultdb.Invocation(
+                          proto=rdb_invocation.Invocation(
+                              state=rdb_invocation.Invocation.FINALIZED,
+                              name='base_unittests_failed_results'),
+                          test_results=(rdb_test_result.TestResult(
+                              test_id='base_unittests_failed_results',
+                              variant=rdb_common.Variant(
+                                  **{
+                                      'def': {
+                                          'test_suite':
+                                              'base_unittests_failed_results'
+                                      }
+                                  }),
+                              expected=False,
+                              status=rdb_test_result.FAIL),),
+                      )
+              })),
+      ),
+      api.post_process(post_process.MustRun, 'test3'),
+      api.post_process(post_process.StatusFailure),
   )
