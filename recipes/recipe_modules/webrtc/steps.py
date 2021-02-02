@@ -311,19 +311,29 @@ class WebRtcIsolatedGtest(object):
   def runs_on_swarming(self):
     return True
 
+  # TODO(bugs.webrtc.org/12072): remove this after isolate shutdown.
+  def _get_isolated_or_cas_input_root(self, task_input):
+    """
+    This checks format of |task_input| and returns appropriate value as
+    (isolated, cas_input_root).
+    """
+    if '/' in task_input:
+      return '', task_input  # pragma: no cover
+    return task_input, ''
+
   def pre_run(self, api):
     """Launches the test on Swarming."""
     assert self._task is None, (
         'Test %s was already triggered' % self.step_name)  # pragma no cover
 
     # *.isolated may be missing if *_run target is misconfigured.
-    isolated = api.isolate.isolated_tests.get(self.isolate_target)
-    if not isolated:  # pragma no cover
+    task_input = api.isolate.isolated_tests.get(self.isolate_target)
+    if not task_input:  # pragma no cover
       return api.python.failing_step(
           '[error] %s' % self.step_name,
           '*.isolated file for target %s is missing' % self.isolate_target)
 
-    self._task = self.create_task(api, isolated)
+    self._task = self.create_task(api, task_input)
 
     return api.chromium_swarming.trigger_task(self._task)
 
@@ -342,20 +352,23 @@ class WebRtcIsolatedGtest(object):
 
     return step_result
 
-  def create_task(self, api, isolated):
+  def create_task(self, api, task_input):
+    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
     task = api.chromium_swarming.task(
         name=self.step_name,
         raw_cmd=self._raw_cmd,
-        relative_cwd=self._relative_cwd)
+        relative_cwd=self._relative_cwd,
+        isolated=isolated,
+        cas_input_root=cas_input_root)
 
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)
 
-    self._apply_swarming_task_config(task, api, isolated)
+    self._apply_swarming_task_config(task, api)
     return task
 
 
-  def _apply_swarming_task_config(self, task, api, isolated):
+  def _apply_swarming_task_config(self, task, api):
     """Applies shared configuration for swarming tasks.
     """
     task.shards = self._shards
@@ -371,8 +384,7 @@ class WebRtcIsolatedGtest(object):
     if self._cipd_packages:
       for package in self._cipd_packages:
         ensure_file.add_package(package[1], package[2], package[0])
-    task_slice = (
-        task_slice.with_cipd_ensure_file(ensure_file).with_isolated(isolated))
+    task_slice = task_slice.with_cipd_ensure_file(ensure_file)
 
     task_dimensions = task_slice.dimensions
     for k, v in self._dimensions.iteritems():
