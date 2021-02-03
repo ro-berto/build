@@ -195,7 +195,18 @@ def GenTests(api):
     archive_data.files.extend([
         'folder1/chrome',
         'folder2/snapshot_blob.bin',
+        'after_rename_file',
     ])
+    if archive_type is not properties.ArchiveData.ARCHIVE_TYPE_FILES and \
+        archive_type is not properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES:
+      archive_data.dirs.extend([
+          'directory1',
+          'directory2',
+      ])
+    rename_file = properties.ArchiveFileRename()
+    rename_file.from_file = "before_rename_file"
+    rename_file.to_file = "after_rename_file"
+    archive_data.rename_files.extend([rename_file])
     archive_data.file_globs.append('glob*.txt')
     if include_dirs:
       archive_data.dirs.extend(['locales', 'swiftshader'])
