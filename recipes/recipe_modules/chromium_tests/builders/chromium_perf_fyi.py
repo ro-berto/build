@@ -86,6 +86,14 @@ _AddBuildSpec(
     extra_gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'])
 
 _AddIsolatedTestSpec(
+    'fuchsia-perf-fyi',
+    'fuchsia',
+    target_bits=64,
+    target_arch='arm',
+    parent_buildername='fuchsia-builder-perf-fyi',
+    parent_builder_group='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
     'linux-perf-fyi',
     'linux',
     parent_buildername='linux-builder-perf',
