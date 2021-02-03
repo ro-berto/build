@@ -755,9 +755,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._trigger_led_builds(to_trigger, properties)
 
       else:
+        commit = self.m.buildbucket.build.output.gitiles_commit
+        repo = '{}/{}'.format(commit.host, commit.project)
         scheduler_triggers = []
         for project, builder_ids in to_trigger.iteritems():
-          trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+          trigger = self.m.scheduler.GitilesTrigger(
+              repo=repo,
+              ref=commit.ref,
+              revision=commit.id,
+              properties=properties)
           jobs = [b.builder for b in builder_ids]
           scheduler_triggers.append((trigger, project, jobs))
         self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
