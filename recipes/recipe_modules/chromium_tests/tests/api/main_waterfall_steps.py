@@ -451,7 +451,8 @@ def GenTests(api):
     for batch in trigger_json.get('batches', []):
       if any(builder == j.get('job') for j in batch.get('jobs', [])):
         actual_properties = (
-            batch.get('trigger', {}).get('gitiles', {}).get('properties', {}))
+            batch.get('trigger', {}).get('buildbucket', {}).get(
+                'properties', {}))
         check(all(p in actual_properties for p in properties))
         break
     else:  # pragma: no cover
