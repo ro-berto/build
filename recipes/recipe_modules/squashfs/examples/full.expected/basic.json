@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::squashfs]/resources/squashfs_invoke.py",
+      "--binary-path",
+      "RECIPE_REPO[build]/third_party/squashfs/squashfs-tools/mksquashfs",
+      "--folder",
+      "some/folder",
+      "--output-file",
+      "out.squash"
+    ],
+    "name": "mksquashfs"
+  },
+  {
+    "name": "$result"
+  }
+]

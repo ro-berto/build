@@ -28,6 +28,15 @@ deps = {
     + '@version-3.1.4',
   'depot_tools':
     'https://chromium.googlesource.com/chromium/tools/depot_tools.git',
+  'build/third_party/squashfs': {
+    'packages': [
+      {
+        'package': 'infra/3pp/tools/squashfs/linux-amd64',
+        'version': 'yGR4iGjoP3vDBNoniQnRJIDNMxN75xoE6-FsjyRIS1AC',
+      },
+    ],
+    'dep_type': 'cipd',
+  },
 }
 
 deps_os = {
