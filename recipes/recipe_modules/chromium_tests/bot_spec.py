@@ -270,6 +270,9 @@ class BotSpec(object):
   # propagate ref information to Android official testers
   set_output_commit = attrib(bool, default=True)
 
+  # The Google Storage bucket used by lacros on skylab pipeline.
+  skylab_gs_bucket = attrib(str, default=None)
+
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
 
