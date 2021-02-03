@@ -639,10 +639,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-blink-heap-verification',
             ),
-        'linux-blink-v8-oilpan-rel':
+        'linux-blink-v8-oilpan':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
-                buildername='linux-blink-v8-oilpan-rel',
+                buildername='linux-blink-v8-oilpan',
             ),
         # This trybot mirrors linux-rel
         'linux-dcheck-off-rel':
