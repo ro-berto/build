@@ -147,4 +147,4 @@ _AddIsolatedTestSpec(
     parent_builder_group='chromium.perf',
     target_bits=64,
     target_arch='intel',
-    cros_boards='amd64-generic')
+    cros_boards='amd64-generic:eve')

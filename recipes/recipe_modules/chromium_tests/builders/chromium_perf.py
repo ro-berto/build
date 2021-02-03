@@ -210,7 +210,7 @@ SPEC.update({
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARDS': 'amd64-generic',
+                'TARGET_CROS_BOARDS': 'amd64-generic:eve',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
