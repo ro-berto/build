@@ -494,7 +494,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not self.c.compile_py.goma_use_local:
       # Do not allow goma to invoke local compiler.
       ninja_env['GOMA_USE_LOCAL'] = 'false'
-
+    if self.c.compile_py.goma_enable_cache_silo:
+      ninja_env['RBE_cache_silo'] = self.m.buildbucket.builder_name
     build_exit_status = -1
     try:
       ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)

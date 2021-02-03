@@ -130,6 +130,19 @@ def GenTests(api):
   )
 
   yield api.test(
+      'goma_module_with_cache_silo',
+      api.chromium.ci_build(
+          builder_group='chromium.linux',
+          builder='Linux Builder',
+          bot_id='build1-a1',
+          build_number=77457,
+      ),
+      api.properties(use_goma_module=True, configs=['goma_enable_cache_silo']),
+      api.post_check(lambda check, steps: check(steps['compile'].env[
+          'RBE_cache_silo'] == 'Linux Builder')),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
       'basic_out_dir_goma_module_build_failure',
       api.chromium.ci_build(
           builder_group='chromium.android',
