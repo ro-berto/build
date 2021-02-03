@@ -538,6 +538,19 @@ SPEC = {
             simulation_platform='win',
             serialize_tests=True,
         ),
+    'GPU FYI Lacros x64 Builder':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'GPU FYI Linux Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -637,6 +650,38 @@ SPEC = {
             # is a risk we're willing to take because checkouts take a lot
             # of disk space, and this is expected to be a corner case rather
             # than the common case.
+        ),
+    'Lacros FYI x64 Release (AMD)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='GPU FYI Lacros x64 Builder',
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
+    'Lacros FYI x64 Release (Intel)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='GPU FYI Lacros x64 Builder',
+            simulation_platform='linux',
+            serialize_tests=True,
         ),
     'Linux FYI Release (NVIDIA)':
         _chromium_gpu_fyi_spec(

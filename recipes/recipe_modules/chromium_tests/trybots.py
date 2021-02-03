@@ -937,6 +937,18 @@ TRYBOTS = try_spec.TryDatabase.create({
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
+        'gpu-fyi-try-lacros-amd-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Lacros x64 Builder',
+                tester='Lacros FYI x64 Release (AMD)',
+            ),
+        'gpu-fyi-try-lacros-intel-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Lacros x64 Builder',
+                tester='Lacros FYI x64 Release (Intel)',
+            ),
         'gpu-fyi-try-linux-amd-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
