@@ -37,8 +37,6 @@ HOST_DEFAULT_MAKE_JOBS = 8
 HOST_TEST_INTERPRETER_MAKE_JOBS = 5
 # - Value for building target artifacts (on host).
 HOST_BUILD_TARGET_MAKE_JOBS = HOST_DEFAULT_MAKE_JOBS
-# - Value for building a whole AOSP product (`aosp-builder-*` targets).
-HOST_BUILD_AOSP_MAKE_JOBS = 4
 
 _TARGET_DEVICE_MAP = {
     'walleye-armv7': {
@@ -86,17 +84,6 @@ def checkout(api):
   with api.context(env=env):
     api.repo.init('https://android.googlesource.com/platform/manifest', '-b',
                   'master-art')
-    api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
-    api.repo.manifest()
-
-
-def full_checkout(api):
-  # (https://crbug.com/1153114): do not attempt to update repo when
-  # 'repo sync' runs.
-  env = {'DEPOT_TOOLS_UPDATE': '0'}
-  with api.context(env=env):
-    api.repo.init('https://android.googlesource.com/platform/manifest', '-b',
-                  'master')
     api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
     api.repo.manifest()
 
@@ -490,38 +477,6 @@ def setup_target(api,
                [art_tools.join('buildbot-cleanup-device.sh')])
 
 
-def setup_aosp_builder(api, read_barrier):
-  full_checkout(api)
-  clobber(api)
-  builds = ['x86', 'x86_64', 'arm', 'arm64']
-  build_top_dir = api.path['start_dir']
-  with api.step.defer_results():
-    for build in builds:
-      env = { 'TARGET_PRODUCT': 'aosp_%s' % build,
-              'TARGET_BUILD_VARIANT': 'eng',
-              'TARGET_BUILD_TYPE': 'release',
-              'ANDROID_BUILD_TOP': build_top_dir,
-              'JACK_SERVER': 'false',
-              'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
-                                                        'tools', 'jacks')),
-              'PATH': str(build_top_dir.join(
-                  'out', 'host', 'linux-x86', 'bin')) +
-                      api.path.pathsep + '%(PATH)s',
-              'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
-      with api.context(env=env):
-        api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
-        api.step('Build %s' % build, [
-            'build/soong/soong_ui.bash', '--make-mode',
-            '-j%d' % (HOST_BUILD_AOSP_MAKE_JOBS)
-        ])
-        api.step('Dump oat boot %s' % build, [
-            'build/soong/soong_ui.bash', '--make-mode',
-            '-j%d' % (HOST_DEFAULT_MAKE_JOBS),
-            'dump-oat-boot-%s' % build
-        ])
-        api.step('Post clean %s' % build, ['rm', '-rf', 'out'])
-
-
 _CONFIG_MAP = {
   'x86': {
     'host-x86-ndebug': {
@@ -645,21 +600,11 @@ _CONFIG_MAP = {
       'gcstress': True,
     },
   },
-
-  'aosp': {
-    'aosp-builder-cms': {
-      'read_barrier': False
-    },
-    'aosp-builder-cc': {
-      'read_barrier': True
-    },
-  },
 }
 
 _CONFIG_DISPATCH_MAP = {
   'x86': setup_host_x86,
   'target': setup_target,
-  'aosp': setup_aosp_builder,
 }
 
 def RunSteps(api):
@@ -707,20 +652,9 @@ def GenTests(api):
           'target_angler_device_pre_run_cleanup_failure',
           'angler-armv7-ndebug') +
       api.step_data('device pre-run cleanup', retcode=1))
-  yield (
-      test('aosp_x86_build_failure', 'aosp-builder-cms') +
-      api.step_data('Build x86', retcode=1))
-#  These tests *should* exist, but can't be included as they cause the recipe
+#  This test *should* exist, but can't be included as it causes the recipe
 #  simulation to error out, instead of showing that the build should become
 #  purple instead. This may need to be fixed in the simulation test script.
-#  yield (
-#      api.test('invalid mastername') +
-#      api.properties(
-#        mastername='client.art.does_not_exist',
-#        buildername='aosp-builder-cms',
-#        bot_id='TestSlave',
-#      )
-#    )
 #  yield (
 #      api.test('invalid buildername') +
 #      api.properties(
