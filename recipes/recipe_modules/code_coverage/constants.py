@@ -53,10 +53,14 @@ PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
         'overall': '.+'
     },
     'linux': {
-        'unit':
-            '(absl_hardening|blink_python|boringssl_crypto|boringssl_ssl'
-            '|content_shell_crash|crashpad|cronet|ipc|metrics_python'
-            '|vr_pixel|.*unit).*test.*',
+        'unit': '(absl_hardening|blink_python|boringssl_crypto|boringssl_ssl'
+                '|content_shell_crash|crashpad|cronet|ipc|metrics_python'
+                '|vr_pixel|.*unit).*test.*',
+        'overall': '.+'
+    },
+    'mac': {
+        'unit': '(absl_hardening|boringssl_crypto|boringssl_ssl|crashpad'
+                '|cronet|ipc|.*unit).*test.*',
         'overall': '.+'
     }
 }
