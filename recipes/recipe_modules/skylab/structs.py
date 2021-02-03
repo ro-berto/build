@@ -9,8 +9,8 @@ from RECIPE_MODULES.build.attr_utils import (attrs, attrib, enum_attrib,
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 # This file defines an interface for other recipes to interact with Skylab. As
-# this module is designed for LaCrOS tests, the field exposed here are highly
-# focusing on the LaCrOS use cases.
+# this module is designed for Lacros tests, the field exposed here are highly
+# focusing on the Lacros use cases.
 #
 # Skylab tests are invoked via a luci rpc call to cros_test_platform builder,
 # aka CTP. CTP supports multiple request in one build, where each request has
@@ -18,7 +18,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 # tast suite. Users must specify this autotest wrapper name in their
 # request.
 #
-# As LaCrOS decided to use tast test framework, this module is designed to be
+# As Lacros decided to use tast test framework, this module is designed to be
 # more tast friendly by providing the tast suite result. See the CTP response
 # below(go/ctp-resp):
 # ````
@@ -45,17 +45,22 @@ class SkylabRequest(object):
 
   Attributes:
     * request_tag: The tag to identify a request in the CTP build.
-    * suite: The autotest test which wraps a tast suite,
-             e.g. tast.critical-chrome.
+    * tast_expr: The tast expression defines what tast test we run on the
+                 Skylab DUT, e.g. lacros.Basic.
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
                 e.g. atlas-release/R88-13545.0.0
+    * lacros_gcs_path: The GCS full path pointing to a Lacros artifact.
+                       e.g. gs://lacros-poc/lacros-builder/101/lacros.zip.
+                       If empty, DUT runs tests on the chrome bundled with
+                       the OS image.
     * timeout_sec: The timeout for the test in second. Default is one hour.
   """
   request_tag = attrib(str)
-  suite = attrib(str)
   board = attrib(str)
   cros_img = attrib(str)
+  tast_expr = attrib(str)
+  lacros_gcs_path = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
 
   @classmethod

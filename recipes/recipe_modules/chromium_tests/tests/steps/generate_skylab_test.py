@@ -46,7 +46,7 @@ def GenTests(api):
                         'cros_board': 'eve',
                         'cros_img': 'eve-release/R89-13631.0.0',
                         'name': 'basic_EVE_TOT',
-                        'suite': 'lacros-basic',
+                        'tast_expr': '("group:mainline" && "dep:lacros")',
                         'swarming': {},
                         'test': 'basic',
                         'timeout': 3600

@@ -15,6 +15,7 @@ from . import structs
 
 QS_ACCOUNT = 'lacros'
 CTP_BUILDER = 'cros_test_platform'
+AUTOTEST_NAME = 'tast.lacros'
 CROS_BUCKET = 'gs://chromeos-image-archive/'
 POOL = Request.Params.Scheduling.MANAGED_POOL_QUOTA
 
@@ -54,13 +55,24 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
         autotest_to_create = req.test_plan.test.add()
-        # SkylabRequest.suite is tast suite, represented by an autotest test.
-        autotest_to_create.autotest.name = s.suite
+        autotest_to_create.autotest.name = AUTOTEST_NAME
+        # TODO(crbug/1172129): Deprecate test_args once lacros provision
+        # is available by TLS.
+        test_args = ['dummy=crbug.com/984103']
+        if s.tast_expr:
+          # Skylab has multiple layers before this arg could land to tast.
+          # To keep the arg intact, use comma to replace space. Our autotest
+          # wrapper reverses it to required form.
+          test_args.append('tast_expr=%s' % s.tast_expr.replace(' ', ','))
+        if s.lacros_gcs_path:
+          test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
+        autotest_to_create.autotest.test_args = ' '.join(test_args)
         tags = {
             'label-pool': 'DUT_POOL_QUOTA',
             'label-board': s.board,
             'build': gs_img_uri,
-            'suite': s.suite,
+            'suite': AUTOTEST_NAME,
+            'tast-expr': s.tast_expr,
         }
         swarming_tags = [
             '{}:{}'.format(key, value) for key, value in tags.items()

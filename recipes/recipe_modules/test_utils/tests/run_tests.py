@@ -82,7 +82,7 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
       common_skylab_kwargs = {}
       common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
           request_tag=spec.get('name'),
-          suite=spec.get('suite'),
+          tast_expr=spec.get('tast_expr'),
           board=spec.get('cros_board'),
           cros_img=spec.get('cros_img'),
       )
@@ -199,7 +199,7 @@ def GenTests(api):
               "cros_board": "eve",
               "cros_img": "eve-release/R89-13631.0.0",
               "name": "basic_EVE_TOT",
-              "suite": "lacros-basic",
+              "tast_expr": "lacros.Basic",
               "swarming": {},
               "test": "basic",
               "timeout": 3600

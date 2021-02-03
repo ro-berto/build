@@ -33,7 +33,8 @@ DEPS = [
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
       request_tag=tag,
-      suite='lacros',
+      tast_expr='lacros.Basic',
+      lacros_gcs_path='gs://foo/lacros.zip',
       board='eve',
       cros_img='eve-release/R88-13545.0.0')
 

@@ -22,8 +22,9 @@ from PB.test_platform.steps.execution import ExecuteResponse
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
       request_tag=tag,
-      suite='lacros',
       board='eve',
+      tast_expr='lacros.Basic',
+      lacros_gcs_path='gs://fake_bucket/lacros.zip',
       cros_img='eve-release/R88-13545.0.0')
 
 
@@ -74,6 +75,14 @@ def GenTests(api):
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     check(tag in properties['requests'])
 
+  def check_test_arg(check, steps, test_arg):
+    req = api.json.loads(
+        steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
+    properties = req['requests'][0]['scheduleBuild'].get('properties', [])
+    for req in properties['requests'].values():
+      test = req['testPlan']['test'][0]
+      check(test_arg in test['autotest']['testArgs'])
+
   yield api.test(
       'basic',
       api.buildbucket.simulated_schedule_output(
@@ -85,4 +94,7 @@ def GenTests(api):
           step_name='collect skylab results.buildbucket.collect'),
       api.post_check(check_has_req_tag, 'm88_lacros'),
       api.post_check(check_has_req_tag, 'm87_lacros'),
+      api.post_check(check_test_arg, 'tast_expr=lacros.Basic '),
+      api.post_check(check_test_arg,
+                     ' lacros_gcs_path=gs://fake_bucket/lacros.zip'),
   )

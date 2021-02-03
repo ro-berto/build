@@ -584,7 +584,7 @@ def generate_skylab_tests_from_one_spec(builder_group, buildername,
   common_skylab_kwargs['waterfall_buildername'] = buildername
   common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
       request_tag=skylab_test_spec.get('name'),
-      suite=skylab_test_spec.get('suite'),
+      tast_expr=skylab_test_spec.get('tast_expr'),
       board=skylab_test_spec.get('cros_board'),
       cros_img=skylab_test_spec.get('cros_img'),
       timeout_sec=skylab_test_spec.get('timeout', 3600))

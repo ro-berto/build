@@ -18,8 +18,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
       request_tag=tag,
-      suite='lacros',
       board='eve',
+      tast_expr='lacros.Basic',
       cros_img='eve-release/R88-13545.0.0')
 
 
