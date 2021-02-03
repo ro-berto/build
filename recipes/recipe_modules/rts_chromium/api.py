@@ -54,16 +54,20 @@ class RtsApi(recipe_api.RecipeApi):
   def select_tests_to_skip(self,
                            spec,
                            changed_files,
+                           filter_files_dir,
                            step_name='select tests to skip (rts)'):
     """Selects tests to skip.
 
     RTS looks at the spec's changed_files and desired change recall and writes
     the tests to skip to skip_test_files_path.
 
-    spec (RTSSpec): The RTS spec.
-    changed_files (list[str]): A list of files changed in the CL. Paths must
-      start with "//"
-    step_name (str): The name of the step. If None, generate a name.
+    Args:
+      spec (RTSSpec): The RTS spec.
+      changed_files (list[str]): A list of files changed in the CL. Paths must
+        start with "//"
+      filter_files_dir (Path|str): The directory where to write .filter files
+        for each test suite.
+      step_name (str): The name of the step. If None, generate a name.
     """
     with self.m.step.nest(step_name):
       assert 0 < spec.target_change_recall < 1, \
@@ -77,22 +81,11 @@ class RtsApi(recipe_api.RecipeApi):
       self.m.file.write_text('write changed_files', changed_files_path,
                              '\n'.join(changed_files))
 
-      skip_test_file_full_path = str(self.m.path['checkout'].join(
-          spec.skip_test_files_path))
-      args = [
-          rts_exec,
-          'select',
-          '-model-dir', model_dir, \
-          '-changed-files', str(changed_files_path), \
-          '-skip-test-files', skip_test_file_full_path, \
-          '-target-change-recall', str(spec.target_change_recall),
-      ]
-
       # Run it
-      self.m.step('rts-chromium select', args)
-
-      # Present skippable files
-      self.m.file.read_text(
-          'read skip_test_files_path contents',
-          skip_test_file_full_path,
-          include_log=True)
+      self.m.step('rts-chromium select', [
+        rts_exec, 'select', \
+        '-model-dir', model_dir, \
+        '-changed-files', str(changed_files_path), \
+        '-filter-files-dir', str(filter_files_dir), \
+        '-target-change-recall', str(spec.target_change_recall),
+      ])

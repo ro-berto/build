@@ -6,29 +6,27 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build.rts_chromium import rts_spec
 
 DEPS = [
-    'recipe_engine/platform',
+    'recipe_engine/path',
     'rts_chromium',
 ]
 
 
 def RunSteps(api):
-  changed_files = [
-      '//foo/bar.h',
-      '//bar/baz.cc',
-  ]
   spec = rts_spec.RTSSpec(
       rts_chromium_version='latest',
       model_version='latest',
-      skip_test_files_path='src/testing/rts_exclude_file.txt',
       target_change_recall=0.9,
   )
 
-  api.rts_chromium.select_tests_to_skip(spec, changed_files)
+  api.rts_chromium.select_tests_to_skip(
+      spec=spec,
+      changed_files=[
+        '//foo/bar.h',
+        '//bar/baz.cc',
+      ],
+      filter_files_dir=api.path['start_dir'].join('filters'),
+  )
 
 
 def GenTests(api):
-
-  yield api.test(
-      'basic',
-      api.platform('linux', 64),
-  )
+  yield api.test('basic')

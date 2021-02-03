@@ -115,6 +115,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._trybots = self._test_data['trybots']
 
     self._swarming_command_lines = {}
+    self.filter_files_dir = None
+
+  def initialize(self):
+    self.filter_files_dir = self.m.path['cleanup'].join('rts_filter_files')
 
   @property
   def builders(self):
@@ -1902,8 +1906,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # mess up RTS.
     if bot.config.rts_spec:
       self.m.rts_chromium.select_tests_to_skip(
-          bot.config.rts_spec,
-          ['//%s' % fname for fname in affected_files],
+          spec=bot.config.rts_spec,
+          changed_files=['//%s' % fname for fname in affected_files],
+          filter_files_dir=self.filter_files_dir,
       )
 
     is_deps_only_change = affected_files == ["DEPS"]

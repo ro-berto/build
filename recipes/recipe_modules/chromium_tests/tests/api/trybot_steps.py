@@ -90,7 +90,6 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                 rts_spec=RTSSpec(
                     rts_chromium_version='latest',
                     model_version='latest',
-                    skip_test_files_path='src/testing/rts_exclude_file.txt',
                     target_change_recall=0.9,
                 )),
     }
