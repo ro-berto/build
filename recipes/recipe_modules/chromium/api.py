@@ -46,12 +46,9 @@ class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
 
 class ChromiumApi(recipe_api.RecipeApi):
 
-  Layout = collections.namedtuple('Layout', ('env',))
-
   def __init__(self, input_properties, *args, **kwargs):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
-    self._layout = None
     self._version = None
     self._clang_version = None
     self._xcode_build_version = input_properties.xcode_build_version
@@ -72,30 +69,18 @@ class ChromiumApi(recipe_api.RecipeApi):
                                           **kwargs)
     validate_config(config_object or self.c)
 
-  def ensure_chromium_layout(self):
-    """Ensures that Chromium build layout is installed.
-
-    Note: the layout must be installed into the engine context. The
-    "chromium_layout" context manager is probably a better way to access this.
-
-    Returns (ChromiumApi.Layout): The configured Chromium build layout.
-    """
-    env = {
-        # CHROME_HEADLESS makes sure that running 'gclient runhooks' and other
-        # tools don't require user interaction.
-        'CHROME_HEADLESS': '1',
-    }
-
-    return self.Layout(env=env,)
-
   @contextlib.contextmanager
   def chromium_layout(self):
     """Context manager that must be entered prior to performing any Chromium
     recipe operations. This is responsible for basic enviornment initialization.
-
-    See "ensure_chromium_layout" for more information.
     """
-    with self.m.context(env=self.ensure_chromium_layout().env):
+
+    with self.m.context(
+        env={
+            # CHROME_HEADLESS makes sure that running 'gclient runhooks' and
+            # other tools don't require user interaction.
+            'CHROME_HEADLESS': '1',
+        }):
       yield
 
   def _with_chromium_layout(fn):
