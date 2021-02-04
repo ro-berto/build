@@ -30,21 +30,14 @@ DEPS = [
 ]
 
 
-def gen_skylab_req(tag):
-  return structs.SkylabRequest.create(
-      request_tag=tag,
-      tast_expr='lacros.Basic',
-      lacros_gcs_path='gs://foo/lacros.zip',
-      board='eve',
-      cros_img='eve-release/R88-13545.0.0')
-
-
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
-  eve_tot = gen_skylab_req('EVE_TOT')
   test_spec = steps.SkylabTestSpec.create(
-      name=api.properties.get('test_name', 'MockTest'), skylab_req=eve_tot)
+      name=api.properties.get('test_name', 'EVE_TOT'),
+      tast_expr='name:lacros.Basic',
+      cros_board='eve',
+      cros_img='eve-release/R88-13545.0.0')
   test = test_spec.get_test()
   api.test_utils.run_tests(api.chromium_tests.m, [test], 'with patch')
   api.step('details', [])

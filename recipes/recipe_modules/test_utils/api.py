@@ -1340,9 +1340,9 @@ class SkylabGroup(TestGroup):
     """
     reqs = []
     for t in self._test_suites:
-      reqs.append(t.spec.skylab_req)
+      reqs.append(t.skylab_req)
       self.ctp_build_timeout_sec = max(self.ctp_build_timeout_sec,
-                                       t.spec.skylab_req.timeout_sec)
+                                       t.spec.timeout_sec)
     if reqs:
       self.ctp_build_id = caller_api.skylab.schedule_suites(
           'schedule tests on skylab', reqs)
@@ -1353,6 +1353,5 @@ class SkylabGroup(TestGroup):
       tag_resp = caller_api.skylab.wait_on_suites(
           self.ctp_build_id, timeout_seconds=self.ctp_build_timeout_sec)
       for t in self._test_suites:
-        t.ctp_responses = tag_resp.responses.get(t.spec.skylab_req.request_tag,
-                                                 [])
+        t.ctp_responses = tag_resp.responses.get(t.name, [])
         self._run_func(t, t.run, caller_api, suffix, True)

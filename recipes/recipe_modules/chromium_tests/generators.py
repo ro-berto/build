@@ -579,15 +579,13 @@ def generate_skylab_tests(api,
 
 def generate_skylab_tests_from_one_spec(builder_group, buildername,
                                         skylab_test_spec):
-  common_skylab_kwargs = {}
+  common_skylab_kwargs = {
+      k: v
+      for k, v in skylab_test_spec.items()
+      if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
+  }
   common_skylab_kwargs['waterfall_builder_group'] = builder_group
   common_skylab_kwargs['waterfall_buildername'] = buildername
-  common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
-      request_tag=skylab_test_spec.get('name'),
-      tast_expr=skylab_test_spec.get('tast_expr'),
-      board=skylab_test_spec.get('cros_board'),
-      cros_img=skylab_test_spec.get('cros_img'),
-      timeout_sec=skylab_test_spec.get('timeout', 3600))
   return steps.SkylabTestSpec.create(
       skylab_test_spec.get('name'), **common_skylab_kwargs)
 

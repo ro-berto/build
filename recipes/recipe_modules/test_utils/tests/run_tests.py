@@ -79,13 +79,11 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
   elif test_skylab:
     test_specs = []
     for spec in api.properties['src_spec']:
-      common_skylab_kwargs = {}
-      common_skylab_kwargs['skylab_req'] = skylab.structs.SkylabRequest.create(
-          request_tag=spec.get('name'),
-          tast_expr=spec.get('tast_expr'),
-          board=spec.get('cros_board'),
-          cros_img=spec.get('cros_img'),
-      )
+      common_skylab_kwargs = {
+          k: v
+          for k, v in spec.items()
+          if k in ['cros_board', 'cros_img', 'tast_expr']
+      }
       test_specs.append(
           steps.SkylabTestSpec.create(spec.get('name'), **common_skylab_kwargs))
   else:

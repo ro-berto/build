@@ -650,6 +650,10 @@ class Test(object):
     return False
 
   @property
+  def is_skylabtest(self):
+    return False
+
+  @property
   def runs_on_swarming(self):
     return False
 
@@ -3509,7 +3513,10 @@ class SwarmingIosTest(SwarmingTest):
 @attrs()
 class SkylabTestSpec(TestSpec):
   """Spec for a suite that runs on CrOS Skylab."""
-  skylab_req = attrib(skylab.structs.SkylabRequest)
+  cros_board = attrib(str)
+  cros_img = attrib(str)
+  tast_expr = attrib(str)
+  timeout_sec = attrib(int, default=3600)
 
   @property
   def test_class(self):
@@ -3521,6 +3528,30 @@ class SkylabTest(Test):
   def __init__(self, spec):
     super(SkylabTest, self).__init__(spec)
     self.ctp_responses = []
+    self._lacros_gcs_path = None
+
+  @property
+  def is_skylabtest(self):
+    return True
+
+  @property
+  def lacros_gcs_path(self):
+    return self._lacros_gcs_path
+
+  @lacros_gcs_path.setter
+  def lacros_gcs_path(self, value):
+    self._lacros_gcs_path = value
+
+  @property
+  def skylab_req(self):
+    return skylab.structs.SkylabRequest.create(
+        request_tag=self.name,
+        tast_expr=self.spec.tast_expr,
+        board=self.spec.cros_board,
+        cros_img=self.spec.cros_img,
+        lacros_gcs_path=self.lacros_gcs_path,
+        timeout_sec=self.spec.timeout_sec,
+    )
 
   def _find_valid_result(self):
     """Return the first deterministic result from the responses.
@@ -3529,7 +3560,7 @@ class SkylabTest(Test):
     over the entire list of responses.
     """
     # TODO(crbug/1155016): revisit this implementation after we expose CTP
-    # retry option to LaCrOS users.
+    # retry option to Lacros users.
     for r in self.ctp_responses:
       if r.status in [common_pb2.SUCCESS, common_pb2.FAILURE]:
         return r

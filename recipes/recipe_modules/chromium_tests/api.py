@@ -17,6 +17,7 @@ from recipe_engine.types import freeze, FrozenDict
 from recipe_engine import recipe_api
 
 from PB.recipe_engine import result as result_pb2
+from PB.recipe_modules.build.archive import properties as arch_prop
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
@@ -2084,11 +2085,52 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         android_version_code=android_version_code,
         name='lookup builder GN args')
 
+  def _prepare_lacros_artifact_for_skylab(self, bot_spec, tests):
+    if not (bot_spec.skylab_gs_bucket and tests):
+      return
+    gcs_path = '{}/{}/lacros.zip'.format(self.m.buildbucket.builder_name,
+                                         self.m.buildbucket.build.number)
+    # TODO(crbug/1114161): Package the chrome build via squashfs(crbug/1163747)
+    # once cros_test_platform provides Lacros provision feature.
+    # Archived files are hardcoded here only for POC.
+    config = arch_prop.InputProperties(archive_datas=[
+        arch_prop.ArchiveData(
+            dirs=['locales', 'swiftshader', 'WidevineCdm'],
+            files=[
+                'chrome',
+                'chrome_100_percent.pak',
+                'chrome_200_percent.pak',
+                'crashpad_handler',
+                'headless_lib.pak',
+                'icudtl.dat',
+                'nacl_helper',
+                'nacl_irt_x86_64.nexe',
+                'resources.pak',
+                'snapshot_blob.bin',
+            ],
+            gcs_bucket=bot_spec.skylab_gs_bucket,
+            gcs_path=gcs_path,
+            archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_ZIP,
+        )
+    ])
+    self.m.archive.generic_archive(
+        build_dir=self.m.chromium.output_dir,
+        update_properties={},
+        config=config)
+    path = 'gs://{}{}/{}'.format(
+        bot_spec.skylab_gs_bucket,
+        '/experimental' if self.m.runtime.is_experimental else '', gcs_path)
+    for t in tests:
+      t.lacros_gcs_path = path
+
   def run_tests(self, bot_meta_data, tests):
     if not tests:
       return
 
     self.configure_swarming(False, builder_group=bot_meta_data.builder_id.group)
+    self._prepare_lacros_artifact_for_skylab(
+        bot_meta_data.settings.bot_db[bot_meta_data.builder_id],
+        [t for t in tests if t.is_skylabtest])
     test_runner = self.create_test_runner(
         tests,
         serialize_tests=bot_meta_data.settings.serialize_tests,
