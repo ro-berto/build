@@ -9,12 +9,13 @@ from recipe_engine import post_process
 
 
 DEPS = [
-  'archive',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
+    'archive',
+    'squashfs',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
 ]
 
 TEST_HASH_MAIN='5e3250aadda2b170692f8e762d43b7e8deadbeef'
@@ -32,6 +33,9 @@ def RunSteps(api):
     return
 
   if 'generic_archive' in api.properties:
+    api.path.mock_add_paths(
+        api.squashfs.repo_resource('third_party', 'squashfs', 'squashfs-tools',
+                                   'mksquashfs'))
     api.archive.generic_archive(
         build_dir=api.m.path.mkdtemp(),
         update_properties=api.properties.get('update_properties'),
@@ -189,6 +193,7 @@ def GenTests(api):
       (properties.ArchiveData.ARCHIVE_TYPE_FILES, '', False),
       (properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES, '', False),
       (properties.ArchiveData.ARCHIVE_TYPE_TAR_GZ, 'any-path.tar.gz', True),
+      (properties.ArchiveData.ARCHIVE_TYPE_SQUASHFS, 'any-path.squash', True),
   ):
     input_properties = properties.InputProperties()
     archive_data = properties.ArchiveData()
@@ -197,8 +202,7 @@ def GenTests(api):
         'folder2/snapshot_blob.bin',
         'after_rename_file',
     ])
-    if archive_type is not properties.ArchiveData.ARCHIVE_TYPE_FILES and \
-        archive_type is not properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES:
+    if include_dirs:
       archive_data.dirs.extend([
           'directory1',
           'directory2',

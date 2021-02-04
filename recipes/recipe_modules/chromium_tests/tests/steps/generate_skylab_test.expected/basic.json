@@ -796,6 +796,287 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/tmp_tmp_1"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.create temp dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/nacl_irt_x86_64.nexe",
+      "[CLEANUP]/tmp_tmp_1/nacl_irt_x86_64.nexe"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/resources.pak",
+      "[CLEANUP]/tmp_tmp_1/resources.pak"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/nacl_helper",
+      "[CLEANUP]/tmp_tmp_1/nacl_helper"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/chrome",
+      "[CLEANUP]/tmp_tmp_1/chrome"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/snapshot_blob.bin",
+      "[CLEANUP]/tmp_tmp_1/snapshot_blob.bin"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/icudtl.dat",
+      "[CLEANUP]/tmp_tmp_1/icudtl.dat"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/chrome_200_percent.pak",
+      "[CLEANUP]/tmp_tmp_1/chrome_200_percent.pak"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/chrome_100_percent.pak",
+      "[CLEANUP]/tmp_tmp_1/chrome_100_percent.pak"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/crashpad_handler",
+      "[CLEANUP]/tmp_tmp_1/crashpad_handler"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (9)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/headless_lib.pak",
+      "[CLEANUP]/tmp_tmp_1/headless_lib.pak"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy file (10)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CACHE]/builder/src/out/Release/locales",
+      "[CLEANUP]/tmp_tmp_1/locales"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy folder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CACHE]/builder/src/out/Release/swiftshader",
+      "[CLEANUP]/tmp_tmp_1/swiftshader"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy folder (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CACHE]/builder/src/out/Release/WidevineCdm",
+      "[CLEANUP]/tmp_tmp_1/WidevineCdm"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Generic Archiving Steps.Copy folder (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
@@ -804,7 +1085,7 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "Generic Archiving Steps.Create generic archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/nacl_irt_x86_64.nexe\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/resources.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/nacl_helper\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/chrome\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/snapshot_blob.bin\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/chrome_200_percent.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/chrome_100_percent.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/crashpad_handler\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Release/headless_lib.pak\", \"type\": \"file\"}, {\"path\": \"[CACHE]/builder/src/out/Release/locales\", \"type\": \"dir\"}, {\"path\": \"[CACHE]/builder/src/out/Release/swiftshader\", \"type\": \"dir\"}, {\"path\": \"[CACHE]/builder/src/out/Release/WidevineCdm\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tmp_tmp_1/artifact.zip\", \"root\": \"[CACHE]/builder/src/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/nacl_irt_x86_64.nexe\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/resources.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/nacl_helper\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/chrome\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/snapshot_blob.bin\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/chrome_200_percent.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/chrome_100_percent.pak\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/crashpad_handler\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tmp_tmp_1/headless_lib.pak\", \"type\": \"file\"}, {\"path\": \"[CLEANUP]/tmp_tmp_1/locales\", \"type\": \"dir\"}, {\"path\": \"[CLEANUP]/tmp_tmp_1/swiftshader\", \"type\": \"dir\"}, {\"path\": \"[CLEANUP]/tmp_tmp_1/WidevineCdm\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tmp_tmp_2/artifact.zip\", \"root\": \"[CLEANUP]/tmp_tmp_1\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -818,7 +1099,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_1/artifact.zip",
+      "[CLEANUP]/tmp_tmp_2/artifact.zip",
       "gs://lacros-bucket/lacros-amd64-generic-rel/571/lacros.zip"
     ],
     "env": {

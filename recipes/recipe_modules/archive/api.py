@@ -732,6 +732,10 @@ class ArchiveApi(recipe_api.RecipeApi):
                 'specify |dirs|')
           uploads = {base_path.join(d): gcs_path for d in archive_data.dirs}
           gcs_args += ['-R']
+        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
+          archive_file = self.m.path.mkdtemp().join('image.squash')
+          self.m.squashfs.mksquashfs(base_path, archive_file)
+          uploads = {archive_file: gcs_path}
         else:
           archive_file = self._create_zip_archive_for_upload(
               base_path, expanded_files, archive_data.dirs)

@@ -84,6 +84,11 @@ message ArchiveData {
     // "gs://{bucket}/test", resulting in {bucket}/test/VERSION. Directories
     // are not supported.
     ARCHIVE_TYPE_FLATTEN_FILES = 5;
+
+    // Similar to ARCHIVE_TYPE_ZIP. But using squashfs tool to compress image.
+    // See https://github.com/plougher/squashfs-tools for more information
+    // about squashfs format.
+    ARCHIVE_TYPE_SQUASHFS = 6;
   }
   ArchiveType archive_type = 5;
   // When set, system will update the latest file.
