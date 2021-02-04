@@ -53,10 +53,14 @@ class _ChangeDetails(object):
     if 'reviewers' in change:
       if 'REVIEWER' in change['reviewers']:
         for reviewer in change['reviewers']['REVIEWER']:
-          self.cc.append(reviewer['email'])
+          # Check 'email' here since some account does not have an email address
+          if 'email' in reviewer:
+            self.cc.append(reviewer['email'])
       if 'CC' in change['reviewers']:
         for reviewer in change['reviewers']['CC']:
-          self.cc.append(reviewer['email'])
+          # Check 'email' here since some account does not have an email address
+          if 'email' in reviewer:
+            self.cc.append(reviewer['email'])
 
 
 def _RunUntracedMemberAnalyzer(api, src_dir, affected):
