@@ -77,6 +77,13 @@ CHROME_REQUIRED_FILES = {
     'Google Chrome.app',
     'Google Chrome.app/*',
   ],
+  'fuchsia': [
+    'chromedriver',
+    'cast_runner.far',
+    'http.far',
+    'web_engine_shell.far'
+    'web_runner.far',
+  ],
 }
 
 CHROME_WHITELIST_FILES = {
