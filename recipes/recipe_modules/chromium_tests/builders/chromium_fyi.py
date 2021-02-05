@@ -234,6 +234,20 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'lacros-amd64-generic-rel-fyi':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARDS': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
     'linux-paeverywhere-x64-fyi-dbg':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
