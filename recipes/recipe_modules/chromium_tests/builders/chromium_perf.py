@@ -243,6 +243,13 @@ _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
 _AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
                      'android_arm64-builder-perf')
 
+_AddIsolatedTestSpec('android-pixel4-perf', 'android',
+                     'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel4_webview-perf', 'android',
+                     'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel4_weblayer-perf', 'android',
+                     'android_arm64-builder-perf')
+
 _AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
                      'android_arm64-builder-perf')
 
