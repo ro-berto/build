@@ -35,22 +35,6 @@ class RtsApi(recipe_api.RecipeApi):
 
     return model_dest_dir
 
-  def _ensure_exec(self, rts_chromium_version='latest'):
-    """Ensures the RTS binary is installed from CIPD.
-
-    Args:
-      rts_chromium_version (str): The version of rts-chromium to install.
-
-    Returns:
-      The path to the rts-chromium binary
-    """
-    exec_path = self.m.cipd.ensure_tool(
-        'chromium/rts/rts-chromium/${platform}',
-        rts_chromium_version,
-        executable_path='rts-chromium')
-
-    return exec_path
-
   def select_tests_to_skip(self,
                            spec,
                            changed_files,
@@ -73,8 +57,8 @@ class RtsApi(recipe_api.RecipeApi):
       assert 0 < spec.target_change_recall < 1, \
          'target_change_recall must be a number between 0 and 1.'
 
-      rts_exec = self._ensure_exec(spec.rts_chromium_version)
       model_dir = self._ensure_model(spec.model_version)
+      rts_exec = model_dir.join('rts-chromium')
 
       # Write changed_files
       changed_files_path = self.m.path.mkstemp()
