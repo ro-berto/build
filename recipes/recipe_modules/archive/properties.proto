@@ -26,10 +26,11 @@ message ArchiveData {
   // relative to the build directory, which is passed alongside this proto to
   // the archiving code.
   repeated string files = 1;
-  // Rename files. This happends before achiving. e.g. If the compiled target
+  // Rename files. Internally renaming happens after copying all files to a
+  // temporary folder and before archiving. e.g. If the compiled target
   // has a file named "foo.zoo", and you want it to be "foo" in the zip file,
   // then you can have:
-  //   files = ["foo"]
+  //   files = ["foo.zoo"]
   //   rename_files = [{ "from_file":"foo.zoo", "to_file":"foo" }]
   repeated ArchiveFileRename rename_files = 10;
   // A list of globs that will be expanded to files that should be archived. All
