@@ -21,7 +21,6 @@ def _migration_validation(builder_id, builder_spec):
     assert builder_id.group in (
         'chrome.pgo',
         'chromium.clang',
-        'chromium.fyi',
         'chromium.perf',
         'chromium.perf.fyi',
         'chromium.webrtc',
