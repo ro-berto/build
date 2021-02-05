@@ -66,15 +66,11 @@ class TryMirror(object):
     * TryMirror - The input is returned.
     * BuilderId - A TryMirror with `builder_id` set to the input is
       returned.
-    * A mapping containing the keys 'builder_group' and 'buildername' and
-      optionally 'tester' and 'tester_group' - The input is
-      expanded as keyword arguments to TryMirror.create.
     """
     if isinstance(mirror, chromium.BuilderId):
       return cls(builder_id=mirror)
-    if isinstance(mirror, TryMirror):
-      return mirror
-    return cls.create(**mirror)
+    assert isinstance(mirror, TryMirror)
+    return mirror
 
 
 @attrs()
@@ -153,19 +149,6 @@ class TrySpec(object):
         ],
         **kwargs)
 
-  @classmethod
-  def normalize(cls, spec):
-    """Converts various representations of a try spec to TrySpec.
-
-    The incoming representation can have one of the following forms:
-    * TrySpec - The input is returned.
-    * A mapping containing keys that match the field names of TrySpec -
-      The input is expanded as keyword arguments to TrySpec.create.
-    """
-    if isinstance(spec, TrySpec):
-      return spec
-    return cls.create(**spec)
-
 
 @attrs()
 class TryDatabase(collections.Mapping):
@@ -185,9 +168,9 @@ class TryDatabase(collections.Mapping):
     Args:
       trybots_dict - The mapping containing the information to create
         the database from. The keys of the mapping are the names of the
-        try groups. The values of the mapping provide the information
-        for the group and must be in a form that can be passed to
-        TryGroupSpec.normalize.
+        try groups. The values of the mapping are themselves mappings
+        with the keys being builder names and the values TryMirror
+        instances for the associated builder.
 
     Returns:
     A new BotDatabase instance providing access to the information in
@@ -202,33 +185,9 @@ class TryDatabase(collections.Mapping):
 
       for builder_name, try_spec in trybots_for_group.iteritems():
         builder_id = chromium.BuilderId.create_for_group(group, builder_name)
-        try:
-          try_spec = TrySpec.normalize(try_spec)
-        except Exception as e:
-          # Re-raise the exception with information that identifies the group
-          # that is problematic
-          message = '{} while creating try spec for builder {!r}'.format(
-              e.message, builder_id)
-          raise type(e)(message), None, sys.exc_info()[2]
-
         db[builder_id] = try_spec
 
     return cls(db)
-
-  @classmethod
-  def normalize(cls, try_db):
-    """Converts representations of try database to TryDatabase.
-
-    The incoming representation can have one of the following forms:
-    * TryDatabase - The input is returned.
-    * A mapping containing keys with try group names and values
-      representing try group specs that can be normalized via
-      TryGroupSpec.normalize - The input is passed to
-      TryDatabase.create.
-    """
-    if isinstance(try_db, TryDatabase):
-      return try_db
-    return cls.create(try_db)
 
   def __getitem__(self, key):
     return self._db[key]

@@ -20,6 +20,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     Args:
       builders - A BotDatabase to replace chromium_tests.builders.
     """
+    assert isinstance(builders, bot_db.BotDatabase)
     return builders
 
   @recipe_test_api.mod_test_data
@@ -30,6 +31,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     Args:
       trybots - A TryDatabase to replace chromium_tests.trybots.
     """
+    assert isinstance(trybots, try_spec.TryDatabase)
     return trybots
 
   @recipe_test_api.mod_test_data

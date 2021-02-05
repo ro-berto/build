@@ -4,27 +4,28 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
 ]
 
-BUILDERS = {
+BUILDERS = bot_db.BotDatabase.create({
     'fake-group': {
-        'fake-builder': {}
+        'fake-builder': bot_spec.BotSpec.create(),
     },
-}
+})
 
-TRYBOTS = {
+TRYBOTS = try_spec.TryDatabase.create({
     'fake-try-group': {
-        'fake-try-builder': {
-            'mirrors': [{
-                'builder_group': 'fake-group',
-                'buildername': 'fake-builder',
-            }],
-        },
+        'fake-try-builder':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='fake-group',
+                buildername='fake-builder',
+            ),
     },
-}
+})
 
 
 def RunSteps(api):

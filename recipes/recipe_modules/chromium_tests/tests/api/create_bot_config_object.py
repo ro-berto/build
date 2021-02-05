@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
     'chromium',
@@ -14,9 +15,11 @@ DEPS = [
 def RunSteps(api):
   api.chromium_tests.create_bot_config_object(
       [api.chromium.get_builder_id()],
-      builders={'chromium.foo': {
-              'Foo Builder': {}
-      }})
+      builders=bot_db.BotDatabase.create({
+          'chromium.foo': {
+              'Foo Builder': bot_spec.BotSpec.create(),
+          },
+      }))
 
 
 def GenTests(api):

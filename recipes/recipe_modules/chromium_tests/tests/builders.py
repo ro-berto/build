@@ -15,6 +15,7 @@ from recipe_engine.recipe_api import Property
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import bot_spec
 from RECIPE_MODULES.build.chromium_tests import builders
+from RECIPE_MODULES.build.chromium_tests import try_spec
 
 DEPS = [
     'chromium',
@@ -95,9 +96,11 @@ def GenTests(api):
         # We want any errors when creating the BotConfig to be surfaced
         # directly to the test rather than creating a failing step
         api.chromium_tests.handle_bot_config_errors(False),
-        api.chromium_tests.platform([{
-            'builder_group': builder_group,
-            'buildername': buildername
-        }]),
+        api.chromium_tests.platform([
+            try_spec.TryMirror.create(
+                builder_group=builder_group,
+                buildername=buildername,
+            )
+        ]),
         api.post_process(post_process.DropExpectation),
     )

@@ -134,6 +134,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     presentation.logs.setdefault('stdout', []).append(message)
 
   def create_bot_config_object(self, builder_ids_or_bot_mirrors, builders=None):
+    if builders:
+      assert isinstance(builders, bot_db.BotDatabase), \
+          'Expected BotDatabase, got {}'.format(type(builders))
     try:
       return bot_config_module.BotConfig.create(builders or self.builders,
                                                 builder_ids_or_bot_mirrors)
@@ -1713,8 +1716,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     #   'execution_mode': None
     # }
     # See ChromiumTestsApi for more details.
-    try_db = try_spec_module.TryDatabase.normalize(mirrored_bots or
-                                                   self.trybots)
+    if mirrored_bots:
+      assert isinstance(mirrored_bots, try_spec_module.TryDatabase), \
+          'Expected TryDatabase, got {}'.format(type(mirrored_bots))
+    try_db = mirrored_bots or self.trybots
     builder_id = builder_id or self.m.chromium.get_builder_id()
     mirrored_builders = self._get_mirroring_try_builders(builder_id, try_db)
     try_spec = try_db.get(builder_id)
@@ -1723,11 +1728,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Some trybots do not mirror a CI bot. In this case, return a
       # configuration that uses the same <group, buildername> of the
       # triggering trybot.
-      try_spec = {
-          'mirrors': [builder_id],
-      }
-
-    try_spec = try_spec_module.TrySpec.normalize(try_spec)
+      try_spec = try_spec_module.TrySpec.create([builder_id])
 
     # contains build/test settings for the bot
     settings = self.create_bot_config_object(

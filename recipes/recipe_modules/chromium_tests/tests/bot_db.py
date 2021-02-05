@@ -19,26 +19,31 @@ def RunSteps(api):
 
   db = bot_db.BotDatabase.create({
       'group-1': {
-          'builder-1-a': {},
-          'builder-1-b': {
-              'parent_buildername': 'builder-1-a',
-              'execution_mode': bot_spec.TEST,
-          },
+          'builder-1-a':
+              bot_spec.BotSpec.create(),
+          'builder-1-b':
+              bot_spec.BotSpec.create(
+                  parent_buildername='builder-1-a',
+                  execution_mode=bot_spec.TEST,
+              ),
       },
       'group-2': {
-          'builder-2': {
-              'parent_builder_group': 'group-1',
-              'parent_buildername': 'builder-1-a',
-              'execution_mode': bot_spec.TEST,
-          },
+          'builder-2':
+              bot_spec.BotSpec.create(
+                  parent_builder_group='group-1',
+                  parent_buildername='builder-1-a',
+                  execution_mode=bot_spec.TEST,
+              ),
       },
       'group-3': {
           'builder-3-a':
               bot_spec.BotSpec.create(
                   parent_buildername='builder-3-c',
                   execution_mode=bot_spec.TEST),
-          'builder-3-b': {},
-          'builder-3-c': {},
+          'builder-3-b':
+              bot_spec.BotSpec.create(),
+          'builder-3-c':
+              bot_spec.BotSpec.create(),
       },
   })
 

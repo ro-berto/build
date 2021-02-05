@@ -13,7 +13,8 @@ DEPS = [
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, steps,
+                                                 try_spec)
 
 from PB.recipe_modules.build.chromium_tests.properties import InputProperties
 
@@ -65,14 +66,16 @@ def GenTests(api):
   yield api.test(
       'trigger-with-fixed-revisions',
       api.chromium.ci_build(builder_group='fake-group', builder='fake-tester'),
-      api.chromium_tests.builders({
-          'fake-group': {
-              'fake-tester': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-tester':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          },
-      }),
+          })),
       api.properties(
           **{
               '$build/chromium_tests':
@@ -94,31 +97,35 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-try-builder',
       ),
-      api.chromium_tests.builders({
-          'fake-group': {
-              'fake-builder': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          },
-          'fake-tester-group': {
-              'fake-tester': {
-                  'execution_mode': bot_spec.PROVIDE_TEST_SPEC,
+              'fake-tester-group': {
+                  'fake-tester':
+                      bot_spec.BotSpec.create(
+                          execution_mode=bot_spec.PROVIDE_TEST_SPEC,),
               },
-          },
-      }),
-      api.chromium_tests.trybots({
-          'fake-try-group': {
-              'fake-try-builder': {
-                  'mirrors': [{
-                      'builder_group': 'fake-group',
-                      'buildername': 'fake-builder',
-                      'tester_group': 'fake-tester-group',
-                      'tester': 'fake-tester',
-                  }],
+          })),
+      api.chromium_tests.trybots(
+          try_spec.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      try_spec.TrySpec.create(mirrors=[
+                          try_spec.TryMirror.create(
+                              builder_group='fake-group',
+                              buildername='fake-builder',
+                              tester_group='fake-tester-group',
+                              tester='fake-tester',
+                          )
+                      ]),
               },
-          },
-      }),
+          })),
       api.post_process(post_process.MustRun,
                        'read test spec (fake-tester-group.json)'),
       api.post_process(post_process.DropExpectation),
@@ -130,14 +137,16 @@ def GenTests(api):
           builder_group='fake-group',
           builder='fake-builder',
       ),
-      api.chromium_tests.builders({
-          'fake-group': {
-              'fake-builder': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          },
-      }),
+          })),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': 'invalid-spec',
       }),
@@ -152,20 +161,23 @@ def GenTests(api):
           builder_group='fake-group',
           builder='fake-builder',
       ),
-      api.chromium_tests.builders({
-          'fake-group': {
-              'fake-builder': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+                  'fake-builder-with-bad-spec':
+                      bot_spec.BotSpec.create(
+                          execution_mode=bot_spec.TEST,
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          parent_buildername='fake-builder',
+                      ),
               },
-              'fake-builder-with-bad-spec': {
-                  'execution_mode': bot_spec.TEST,
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
-                  'parent_buildername': 'fake-builder',
-              },
-          },
-      }),
+          })),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {},
           'fake-builder-with-bad-spec': 'invalid-spec',
@@ -181,18 +193,21 @@ def GenTests(api):
           builder_group='fake-group',
           builder='fake-builder',
       ),
-      api.chromium_tests.builders({
-          'fake-group': {
-              'fake-builder': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+                  'fake-builder-with-bad-spec':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-              'fake-builder-with-bad-spec': {
-                  'chromium_config': 'chromium',
-                  'gclient_config': 'chromium',
-              },
-          },
-      }),
+          })),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {},
           'fake-builder-with-bad-spec': 'invalid-spec',

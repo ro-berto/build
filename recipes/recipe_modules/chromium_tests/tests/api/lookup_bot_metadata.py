@@ -4,6 +4,9 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -14,24 +17,23 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium_tests.lookup_bot_metadata(
-      builders={
+      builders=bot_db.BotDatabase.create({
           'chromium.foo': {
-              'foo-rel': {}
+              'foo-rel': bot_spec.BotSpec.create(),
           },
           'tryserver.chromium.foo': {
-              'foo-dbg': {}
+              'foo-dbg': bot_spec.BotSpec.create(),
           },
-      },
-      mirrored_bots={
+      }),
+      mirrored_bots=try_spec.TryDatabase.create({
           'tryserver.chromium.foo': {
-              'foo-rel': {
-                  'mirrors': [{
-                      'builder_group': 'chromium.foo',
-                      'buildername': 'foo-rel'
-                  }],
-              }
+              'foo-rel':
+                  try_spec.TrySpec.create(mirrors=[
+                      chromium.BuilderId.create_for_group(
+                          'chromium.foo', 'foo-rel'),
+                  ]),
           }
-      })
+      }))
 
 
 def GenTests(api):

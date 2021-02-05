@@ -12,7 +12,7 @@ from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as archive_properties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
 
 DEPS = [
     'chromium',
@@ -218,10 +218,10 @@ def RunSteps(api, fail_compile):
 def GenTests(api):
   yield api.test(
       'builder',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.linux',
-          'buildername': 'Linux Builder'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.linux', buildername='Linux Builder'),
+      ]),
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
       api.override_step_data(
@@ -248,10 +248,12 @@ def GenTests(api):
 
   yield api.test(
       'tester',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.linux',
-          'buildername': 'Linux Tests'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.linux',
+              buildername='Linux Tests',
+          )
+      ]),
       api.chromium.ci_build(
           builder_group='chromium.linux',
           builder='Linux Tests',
@@ -276,10 +278,10 @@ def GenTests(api):
   input_properties.archive_datas.extend([archive_data])
   yield api.test(
       'archive_builder_no_chrome_version',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.linux',
-          'buildername': 'Linux Builder'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.linux', buildername='Linux Builder')
+      ]),
       api.properties(
           chrome_version=None, **{'$build/archive': input_properties}),
       api.chromium.ci_build(
@@ -295,10 +297,10 @@ def GenTests(api):
 
   yield api.test(
       'archive_builder_with_chrome_version',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.linux',
-          'buildername': 'Linux Builder'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.linux', buildername='Linux Builder')
+      ]),
       api.properties(
           chrome_version='2.2.2.2', **{'$build/archive': input_properties}),
       api.chromium.ci_build(
@@ -696,10 +698,10 @@ def GenTests(api):
   }
   yield api.test(
       'skip_retrying_logic_is_limited_to_try_jobs',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.linux',
-          'buildername': 'Linux Tests'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.linux', buildername='Linux Tests'),
+      ]),
       api.chromium.ci_build(
           builder_group='chromium.linux',
           builder='Linux Tests',

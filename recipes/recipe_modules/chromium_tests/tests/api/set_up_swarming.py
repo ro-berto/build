@@ -15,22 +15,22 @@ DEPS = [
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium.types import BuilderId
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
       [BuilderId.create_for_group('test_group', 'test_buildername')],
-      builders={
+      builders=bot_db.BotDatabase.create({
           'test_group': {
-              'test_buildername': {
-                  'isolate_server': 'https://example/isolate',
-                  'swarming_server': 'https://example/swarming',
-                  'swarming_dimensions': {
-                      'os': 'Ubuntu-14.04'
-                  },
-              },
+              'test_buildername':
+                  bot_spec.BotSpec.create(
+                      isolate_server='https://example/isolate',
+                      swarming_server='https://example/swarming',
+                      swarming_dimensions={'os': 'Ubuntu-14.04'},
+                  ),
           },
-      })
+      }))
 
   api.chromium_tests.set_up_swarming(bot_config)
   api.assertions.assertEqual(api.chromium_swarming.swarming_server,

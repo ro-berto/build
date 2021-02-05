@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -12,15 +14,9 @@ DEPS = [
 ]
 
 
-PROPERTIES = {
-    'builders': recipe_api.Property(kind=dict),
-}
-
-
-def RunSteps(api, builders):
+def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  bot_config = api.chromium_tests.create_bot_config_object([builder_id],
-                                                           builders=builders)
+  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(bot_config)
   update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.package_build(
@@ -32,16 +28,17 @@ def GenTests(api):
       'standard',
       api.chromium.ci_build(
           builder_group='chromium.fake', builder='fake-builder'),
-      api.properties(
-          builders={
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
               'chromium.fake': {
-                  'fake-builder': {
-                      'build_gs_bucket': 'sample-bucket',
-                      'chromium_config': 'chromium',
-                      'gclient_config': 'chromium',
-                  },
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          build_gs_bucket='sample-bucket',
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          }),
+          })),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
       api.post_process(
@@ -55,16 +52,17 @@ def GenTests(api):
       'perf-upload',
       api.chromium.ci_build(
           builder_group='chromium.perf', builder='fake-perf-builder'),
-      api.properties(
-          builders={
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
               'chromium.perf': {
-                  'fake-perf-builder': {
-                      'build_gs_bucket': 'sample-bucket',
-                      'chromium_config': 'chromium',
-                      'gclient_config': 'chromium',
-                  },
+                  'fake-perf-builder':
+                      bot_spec.BotSpec.create(
+                          build_gs_bucket='sample-bucket',
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          }),
+          })),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
       api.post_process(post_process.StepCommandContains, 'package build',
@@ -77,17 +75,18 @@ def GenTests(api):
       'bisect',
       api.chromium.ci_build(
           builder_group='chromium.perf', builder='fake-bisect-builder'),
-      api.properties(
-          builders={
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
               'chromium.perf': {
-                  'fake-bisect-builder': {
-                      'bisect_archive_build': True,
-                      'bisect_gs_bucket': 'sample-bisect-bucket',
-                      'chromium_config': 'chromium',
-                      'gclient_config': 'chromium',
-                  },
+                  'fake-bisect-builder':
+                      bot_spec.BotSpec.create(
+                          bisect_archive_build=True,
+                          bisect_gs_bucket='sample-bisect-bucket',
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
-          }),
+          })),
       api.post_process(post_process.MustRun, 'package build for bisect'),
       api.post_process(post_process.DoesNotRun, 'package build'),
       api.post_process(

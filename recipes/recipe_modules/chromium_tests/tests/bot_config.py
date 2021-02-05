@@ -6,7 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import bot_config as bot_config_module
-from RECIPE_MODULES.build.chromium_tests import bot_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
 
 DEPS = [
     'recipe_engine/assertions',
@@ -14,22 +14,8 @@ DEPS = [
 
 
 def RunSteps(api):
-  # Test failed normalization of bot specs
-  spec = {'execution_mode': bot_spec.TEST}
-  builders = {
-      'fake-group': {
-          'fake-builder': spec,
-      },
-  }
-  builder_id = chromium.BuilderId.create_for_group('fake-group', 'fake-builder')
-  with api.assertions.assertRaises(AssertionError) as caught:
-    bot_config_module.BotConfig.create(builders, [builder_id])
-  message = ('Test-only builder must specify a parent builder '
-             "while creating spec for builder {!r}".format(builder_id))
-  api.assertions.assertEqual(message, caught.exception.message)
-
   # Set up data for testing bot_config methods
-  builders = {
+  builders = bot_db.BotDatabase.create({
       'fake-group': {
           'fake-builder':
               bot_spec.BotSpec.create(),
@@ -48,20 +34,18 @@ def RunSteps(api):
                   parent_buildername='fake-builder',
               ),
       },
-  }
+  })
 
   # Test builders_id method
   bot_config = bot_config_module.BotConfig.create(builders, [
-      {
-          'builder_group': 'fake-group',
-          'buildername': 'fake-builder',
-          'tester': 'fake-tester'
-      },
-      {
-          'builder_group': 'fake-group2',
-          'buildername': 'fake-builder2',
-          'tester': 'fake-tester2'
-      },
+      try_spec.TryMirror.create(
+          builder_group='fake-group',
+          buildername='fake-builder',
+          tester='fake-tester'),
+      try_spec.TryMirror.create(
+          builder_group='fake-group2',
+          buildername='fake-builder2',
+          tester='fake-tester2'),
   ])
   api.assertions.assertEqual(bot_config.builder_ids, (
       chromium.BuilderId.create_for_group('fake-group', 'fake-builder'),

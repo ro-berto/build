@@ -5,7 +5,7 @@
 from recipe_engine import post_process
 from recipe_engine.post_process import Filter
 
-from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
 
 DEPS = [
     'chromium',
@@ -16,21 +16,19 @@ DEPS = [
     'recipe_engine/raw_io',
 ]
 
-BASIC_CONFIG = {
-  'android_config': 'main_builder_mb',
-  'chromium_config': 'chromium',
-  'gclient_config': 'chromium',
-  'test_results_config': 'public_server',
-}
-
-BUILDERS = {
+BUILDERS = bot_db.BotDatabase.create({
     'fake.group': {
         'Test Version':
-            dict(BASIC_CONFIG, **{
-                'android_version': 'chrome/Version',
-            }),
+            bot_spec.BotSpec.create(
+                android_config='main_builder_mb',
+                chromium_config='chromium',
+                gclient_config='chromium',
+                test_results_config='public_server',
+                android_version='chrome/Version',
+            ),
     },
-}
+})
+
 
 def RunSteps(api):
   tests = []

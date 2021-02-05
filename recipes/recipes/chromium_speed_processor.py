@@ -15,7 +15,7 @@ DEPS = [
 
 from recipe_engine import post_process
 from PB.recipes.build.chromium_speed_processor import InputProperties
-from RECIPE_MODULES.build.chromium_tests import bot_spec
+from RECIPE_MODULES.build.chromium_tests import bot_spec, try_spec
 
 PROPERTIES = InputProperties
 
@@ -83,10 +83,12 @@ MOCK_PROR_JSON_STRING = """
 def GenTests(api):
   yield api.test(
       'recipe-coverage',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.perf',
-          'buildername': 'linux-perf',
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.perf',
+              buildername='linux-perf',
+          )
+      ]),
       api.chromium.ci_build(
           builder_group='chromium.perf',
           builder='linux-perf',
@@ -101,10 +103,12 @@ def GenTests(api):
 
   yield api.test(
       'builder-coverage',
-      api.chromium_tests.platform([{
-          'builder_group': 'chromium.perf',
-          'buildername': 'linux-builder-perf'
-      }]),
+      api.chromium_tests.platform([
+          try_spec.TryMirror.create(
+              builder_group='chromium.perf',
+              buildername='linux-builder-perf',
+          )
+      ]),
       api.chromium.ci_build(
           builder_group='chromium.perf', builder='linux-builder-perf'),
       api.post_process(post_process.StatusException),

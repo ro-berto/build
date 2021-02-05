@@ -42,12 +42,6 @@ class BotSpec(object):
   """
 
   @classmethod
-  def normalize(cls, spec):
-    if isinstance(spec, cls):
-      return spec
-    return cls.create(**spec)
-
-  @classmethod
   def create(cls, **kwargs):
     """Create a BotSpec.
 

@@ -65,82 +65,19 @@ def RunSteps(api):
   api.assertions.assertEqual(
       mirror, try_spec_module.TryMirror.create('fake-group', 'fake-builder'))
 
-  # Normalization of a dictionary
-  d = {
-      'builder_group': 'fake-group',
-      'buildername': 'fake-builder',
-      'tester': 'fake-tester',
-      'tester_group': 'fake-tester-group',
-  }
-  mirror = try_spec_module.TryMirror.normalize(d)
-  api.assertions.assertEqual(
-      mirror,
-      try_spec_module.TryMirror.create('fake-group', 'fake-builder',
-                                       'fake-tester', 'fake-tester-group'))
-
-  # TrySpec normalization ******************************************************
-
-  # Normalization of a TrySpec
-  try_spec = try_spec_module.TrySpec.create(mirrors=[{
-      'builder_group': 'fake-group',
-      'buildername': 'fake-builder',
-  }])
-  try_spec2 = try_spec_module.TrySpec.normalize(try_spec)
-  api.assertions.assertIs(try_spec2, try_spec)
-
-  # Normalization of a dictionary
-  d = {
-      'mirrors': [{
-          'builder_group': 'fake-group',
-          'buildername': 'fake-builder',
-      }],
-  }
-  try_spec = try_spec_module.TrySpec.normalize(d)
-  api.assertions.assertEqual(
-      try_spec,
-      try_spec_module.TrySpec.create(mirrors=[{
-          'builder_group': 'fake-group',
-          'buildername': 'fake-builder',
-      }]))
-
-  # TryDatabase validation *****************************************************
-  d = {
-      'fake-try-group': {
-          'fake-try-builder': {
-              'mirrors': [{
-                  'builder_group': 'fake-group',
-                  'buildername': 'fake-builder',
-              },],
-              'foo': 'bar'
-          },
-      },
-  }
-  builder_id = chromium.BuilderId.create_for_group('fake-try-group',
-                                                   'fake-try-builder')
-  with api.assertions.assertRaises(TypeError) as caught:
-    try_spec_module.TryDatabase.create(d)
-  api.assertions.assertEqual(
-      caught.exception.message,
-      "__init__() got an unexpected keyword argument 'foo'"
-      ' while creating try spec for builder {!r}'.format(builder_id))
-
   # TryDatabase mapping interface **********************************************
   db = try_spec_module.TryDatabase.create({
       'fake-try-group-1': {
-          'fake-try-builder-1': {
-              'mirrors': [{
-                  'builder_group': 'group-1',
-                  'buildername': 'builder-1',
-              }],
-          },
+          'fake-try-builder-1':
+              try_spec_module.TrySpec.create(mirrors=[
+                  chromium.BuilderId.create_for_group('group-1', 'builder-1'),
+              ]),
       },
       'fake-try-group-2': {
-          'fake-try-builder-2': {
-              'mirrors': [{
-                  'builder_group': 'group-2',
-                  'buildername': 'builder-2',
-              }],
-          },
+          'fake-try-builder-2':
+              try_spec_module.TrySpec.create(mirrors=[
+                  chromium.BuilderId.create_for_group('group-2', 'builder-2'),
+              ]),
       },
   })
 
@@ -162,36 +99,6 @@ def RunSteps(api):
           try_spec_module.TryMirror.create(
               builder_group='group-2', buildername='builder-2')
       ]))
-
-  # TryDatabase normalization **************************************************
-
-  # Normalization of a TryDatabase
-  try_db = try_spec_module.TryDatabase.create({
-      'fake-try-group': {
-          'fake-try-builder': {
-              'mirrors': [{
-                  'builder_group': 'group',
-                  'buildername': 'builder',
-              }],
-          },
-      },
-  })
-  try_db2 = try_spec_module.TryDatabase.normalize(try_db)
-  api.assertions.assertIs(try_db2, try_db)
-
-  # Normalization of a dictionary
-  d = {
-      'fake-try-group': {
-          'fake-try-builder': {
-              'mirrors': [{
-                  'builder_group': 'group',
-                  'buildername': 'builder',
-              }],
-          },
-      },
-  }
-  try_db = try_spec_module.TryDatabase.normalize(d)
-  api.assertions.assertEqual(try_db, try_spec_module.TryDatabase.create(d))
 
 
 def GenTests(api):

@@ -42,7 +42,6 @@ class BotConfig(object):
   @classmethod
   def create(cls, bot_db, builder_ids_or_bot_mirrors):
     assert len(builder_ids_or_bot_mirrors) >= 1
-    bot_db = bot_db_module.BotDatabase.normalize(bot_db)
     bot_mirrors = tuple(
         try_spec_module.TryMirror.normalize(b)
         for b in builder_ids_or_bot_mirrors)

@@ -68,9 +68,9 @@ class BotDatabase(collections.Mapping):
     Args:
       bots_dict - The mapping containing the information to create the
         database from. The keys of the mapping are the names of the
-        groups. The values of the mapping provide the information for
-        the group and must be in a form that can be passed to
-        GroupSpec.normalize.
+        groups. The values of the mapping are themselves mappings with
+        the keys being builder names and the values BotSpec instances
+        for the associated builder.
 
     Returns:
     A new BotDatabase instance providing access to the information in
@@ -86,16 +86,8 @@ class BotDatabase(collections.Mapping):
 
       builders_for_group = dict(builders_for_group)
       for builder_name, builder_spec in builders_for_group.iteritems():
+        assert isinstance(builder_spec, bot_spec_module.BotSpec), builder_spec
         builder_id = BuilderId.create_for_group(group, builder_name)
-        try:
-          builder_spec = bot_spec_module.BotSpec.normalize(builder_spec)
-        except Exception as e:
-          # Re-raise the exception with information that identifies the group
-          # that is problematic
-          message = '{} while creating spec for builder {!r}'.format(
-              e.message, builder_id)
-          raise type(e)(message), None, sys.exc_info()[2]
-
         _migration_validation(builder_id, builder_spec)
 
         builders_for_group[builder_name] = builder_spec
@@ -104,20 +96,6 @@ class BotDatabase(collections.Mapping):
       builders_by_group[group] = builders_for_group
 
     return cls(db, builders_by_group)
-
-  @classmethod
-  def normalize(cls, bot_db):
-    """Converts representations of bot database to BotDatabase.
-
-    The incoming representation can have one of the following forms:
-    * BotDatabase - The input is returned.
-    * A mapping containing keys with groups and values representing
-      group specs that can be normalized via GroupSpec.normalize - The
-      input is passed to BotDatabase.create.
-    """
-    if isinstance(bot_db, BotDatabase):
-      return bot_db
-    return cls.create(bot_db)
 
   @cached_property
   def bot_graph(self):
