@@ -242,7 +242,7 @@ SPEC = {
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARDS': 'amd64-generic',
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
