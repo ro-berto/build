@@ -1005,17 +1005,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     return clang_revision
 
   def ensure_goma(self, client_type='release'):
-    no_goma_compiler = self.c.compile_py.compiler or ''
-    if no_goma_compiler == 'goma-clang':
-      no_goma_compiler = 'clang'
-    elif no_goma_compiler == 'goma':
-      no_goma_compiler = None
-
-    if (self.c.use_gyp_env and 'use_goma' in self.c.gyp_env.GYP_DEFINES and
-        self.c.gyp_env.GYP_DEFINES['use_goma'] == 0):
-      self.c.compile_py.compiler = no_goma_compiler
-      return
-
     goma_dir = self.m.goma.ensure_goma(client_type=client_type)
 
     if self.c.use_gyp_env:

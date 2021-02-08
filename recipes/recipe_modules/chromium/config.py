@@ -257,11 +257,6 @@ def mb_no_luci_auth(c):
   c.project_generator.use_luci_auth = False
 
 
-@config_ctx()
-def win_analyze(c):
-  c.gyp_env.GYP_DEFINES['use_goma'] = 0  # Read by api.py.
-
-
 @config_ctx(group='builder')
 def ninja(c):
   c.build_dir = c.CHECKOUT_PATH.join('out')

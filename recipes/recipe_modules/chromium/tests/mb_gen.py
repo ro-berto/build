@@ -52,11 +52,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'win',
-      api.properties(chromium_apply_config=['win_analyze']),
-  )
-
-  yield api.test(
       'mac',
       api.platform('mac', 64),
       api.properties(target_platform='mac'),
