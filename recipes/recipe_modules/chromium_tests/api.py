@@ -1254,6 +1254,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     bot = self.lookup_bot_metadata(builders)
+    mirrored_builders = self._get_mirroring_try_builders(
+        bot.builder_id, self.trybots)
+    self.report_builders(bot.settings, mirrored_builders)
     self.configure_build(bot.settings)
     # TODO(crbug.com/1019824): We fetch tags here because |no_fetch_tags|
     # is not specified as True. Since chromium has 10k+ tags this can be slow.
@@ -1721,7 +1724,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'Expected TryDatabase, got {}'.format(type(mirrored_bots))
     try_db = mirrored_bots or self.trybots
     builder_id = builder_id or self.m.chromium.get_builder_id()
-    mirrored_builders = self._get_mirroring_try_builders(builder_id, try_db)
     try_spec = try_db.get(builder_id)
 
     if not try_spec:
@@ -1739,8 +1741,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       ), ('builder {} has execution mode {!r},'
           ' which should only appear as a tester in a mirror configuration'
           .format(b, bot_spec_module.PROVIDE_TEST_SPEC))
-
-    self._report_builders(settings, mirrored_builders=mirrored_builders)
 
     return BotMetadata(builder_id, try_spec, settings)
 
@@ -1877,6 +1877,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         Configuration of the build/test.
     """
     bot = self.lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
+    self.report_builders(bot.settings)
 
     self.configure_build(bot.settings)
 
@@ -1972,7 +1973,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return raw_result, Task(bot, tests, bot_update_step, affected_files)
 
-  def _report_builders(self, bot_config, mirrored_builders=None):
+  def report_builders(self, bot_config, mirrored_builders=None):
     """Reports the builders being executed by the bot."""
 
     def bot_type(execution_mode):

@@ -21,6 +21,7 @@ PROPERTIES = InputProperties
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     bot = api.chromium_tests.lookup_bot_metadata(builders=None)
+    api.chromium_tests.report_builders(bot.settings)
     execution_mode = bot.settings.execution_mode
     if execution_mode != bot_spec.TEST:
       api.python.infra_failing_step(

@@ -25,6 +25,8 @@ def RunSteps(api):
             builder_to_trigger['builder_group'],
             builder_to_trigger['buildername']))
 
+    api.chromium_tests.report_builders(bot.settings)
+
     api.chromium_tests.configure_build(bot.settings)
     _, build_config = api.chromium_tests.prepare_checkout(
         bot.settings, timeout=3600, add_blamelists=True)
