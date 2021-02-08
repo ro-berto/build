@@ -783,36 +783,32 @@ def GenTests(api):
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))
   )
 
-  # Test that certain dimensions are reset on Mac and Android.
-  def test_dimension_reset(os, dim):
-    test_spec = """
-      {
-        "swarming_dimensions": {
-          "os": "%s",
+  # Test that cpu and gpu dimensions are reset when triggering Android bots.
+  android_test_spec = """
+    {
+      "swarming_dimensions": {
+        "os": "Android",
+      },
+      "tests": [
+        {
+          "name": "mjsunit",
         },
-        "tests": [
-          {
-            "name": "mjsunit",
-          },
-        ],
-      }
-    """.strip() % os
-    return (
-        api.v8.test(
-            'client.v8',
-            'V8 Foobar',
-            '%s_%s' % (os, dim),
-            parent_test_spec=test_spec,
-            swarm_hashes={'mjsunit': 'hash'},
-        ) +
-        api.v8.check_not_in_any_arg(
-            'trigger tests.[trigger] Mjsunit on %s' % os, dim) +
-        api.post_process(DropExpectation)
-    )
-
-  yield test_dimension_reset('Android', 'gpu')
-  yield test_dimension_reset('Android', 'cpu')
-  yield test_dimension_reset('Mac-10.15', 'gpu')
+      ],
+    }
+  """.strip()
+  yield (
+    api.v8.test(
+        'client.v8',
+        'Android bot',
+        parent_test_spec=android_test_spec,
+        swarm_hashes={'mjsunit': 'hash'},
+    ) +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
+                                'cpu') +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
+                                'gpu') +
+    api.post_process(DropExpectation)
+  )
 
   # Test reading pyl test configs and build configs from a separate checkout.
   extra_test_config = """

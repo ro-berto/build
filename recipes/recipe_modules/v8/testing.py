@@ -414,10 +414,6 @@ def _trigger_swarming_task(api, task, test_step_config):
     task_dimensions['cpu'] = None
     task_dimensions['gpu'] = None
 
-  # Override gpu for Mac to enable using bots with and without GPUs.
-  if task_dimensions['os'] and task_dimensions['os'].startswith('Mac'):
-    task_dimensions['gpu'] = None
-
   task_slice = task_slice.with_dimensions(**task_dimensions)
 
   # Override attributes with per-test settings.
