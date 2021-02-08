@@ -833,6 +833,19 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Linux TSan Builder (goma cache silo)':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium_tsan2',
+            chromium_apply_config=['mb', 'goma_enable_cache_silo'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+            build_gs_bucket='chromium-memory-archive',
+        ),
     # Shadow of 'Linux TSan Builder' that runs on re-client
     # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/builders/chromium_memory.py;l=142-153;drc=f0bea90284b4f79199b3f4e7b577e6b31d395680
     # Add it as an FYI builder, so that its failure doesn't notify anyone.
