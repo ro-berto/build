@@ -44,6 +44,7 @@ class ReclientApi(recipe_api.RecipeApi):
 
     self._props = props
     self._instance = None
+    self._metrics_project = None
     DEFAULT_SERVICE = 'remotebuildexecution.googleapis.com:443'
     self._service = props.service or DEFAULT_SERVICE
     # Initialization is delayed until the first call for reclient exe
@@ -72,6 +73,14 @@ class ReclientApi(recipe_api.RecipeApi):
       self._instance = 'projects/%s/instances/default_instance' % self._instance
 
     return self._instance
+
+  @property
+  def metrics_project(self):
+    if self._metrics_project:
+      return self._metrics_project
+
+    self._metrics_project = self._props.metrics_project
+    return self._metrics_project
 
   @property
   def jobs(self):
@@ -192,13 +201,15 @@ class ReclientApi(recipe_api.RecipeApi):
     Args:
       reclient_log_dir: Directory to hold the logs produced by reclient.
     """
-    self.m.step(
-        'shutdown reproxy via bootstrap', [
-            self._bootstrap_bin_path, '-shutdown', '-server_address',
+    args = [self._bootstrap_bin_path, '-shutdown', '-server_address',
             self.server_address, '-proxy_log_dir', reclient_log_dir,
-            '-output_dir', reclient_log_dir
-        ],
-        infra_step=True)
+            '-output_dir', reclient_log_dir]
+
+    if self.metrics_project:
+      args += ['-metrics_project', self.metrics_project, '-metrics_prefix',
+               'go.chromium.org']
+
+    self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
 
   def _upload_rbe_metrics(self, reclient_log_dir):
     bq_pb = rbe_metrics_bq.RbeMetricsBq()

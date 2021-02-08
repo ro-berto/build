@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
-// NEXT ID TO USE: 5
+// NEXT ID TO USE: 6
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -25,4 +25,7 @@ message InputProperties {
   // but it can't include usage specific values such as RBE_exec_root
   // and RBE_platform.
   map<string, string> rewrapper_env = 4;
+
+  // The GCP project to which reclient should publish metrics.
+  string metrics_project = 5;
 }

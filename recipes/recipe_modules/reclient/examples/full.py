@@ -24,6 +24,7 @@ def RunSteps(api):
     api.step(_NINJA_STEP_NAME, ninja_command)
   _ = api.reclient.instance  # for code coverage
   _ = api.reclient.rewrapper_path
+  _ = api.reclient.metrics_project
   _ = api.reclient.jobs
 
 
@@ -33,6 +34,8 @@ def GenTests(api):
   yield (api.test('override instance') +
          api.reclient.properties(instance='goma') +
          api.post_process(post_process.DropExpectation))
+  yield (api.test('override_metrics_project') +
+         api.reclient.properties(metrics_project='goma'))
 
   def env_checker(check, steps):
     env = steps[_NINJA_STEP_NAME].env

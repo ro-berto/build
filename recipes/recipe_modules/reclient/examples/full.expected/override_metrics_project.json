@@ -1,0 +1,287 @@
+[
+  {
+    "cmd": [],
+    "name": "preprocess for reclient"
+  },
+  {
+    "cmd": [
+      "[TMP_BASE]/checkout/buildtools/reclient/bootstrap",
+      "-output_dir",
+      "[CLEANUP]/reclient_log_tmp_1"
+    ],
+    "env": {
+      "RBE_instance": "projects/example/instances/default_instance",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_re_proxy": "[TMP_BASE]/checkout/buildtools/reclient/reproxy",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
+      "RBE_service": "remotebuildexecution.googleapis.com:443",
+      "RBE_use_application_default_credentials": "false",
+      "RBE_use_gce_credentials": "true"
+    },
+    "infra_step": true,
+    "name": "preprocess for reclient.start reproxy via bootstrap",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--cloudtail-project-id",
+      "goma-logs",
+      "--cloudtail-log-path",
+      "[CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "infra_step": true,
+    "name": "preprocess for reclient.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "ninja",
+      "-C",
+      "out/Release"
+    ],
+    "env": {
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
+    },
+    "name": "compile (reclient)"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess for reclient"
+  },
+  {
+    "cmd": [
+      "[TMP_BASE]/checkout/buildtools/reclient/bootstrap",
+      "-shutdown",
+      "-server_address",
+      "unix:///[TMP_BASE]/reproxy.sock",
+      "-proxy_log_dir",
+      "[CLEANUP]/reclient_log_tmp_1",
+      "-output_dir",
+      "[CLEANUP]/reclient_log_tmp_1",
+      "-metrics_project",
+      "goma",
+      "-metrics_prefix",
+      "go.chromium.org"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.shutdown reproxy via bootstrap",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/reclient_log_tmp_1/rbe_metrics.pb",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.load rbe_metrics.pb",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "postprocess for reclient.install infra/tools/bqupload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/cipd/infra/tools/bqupload/latest"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.install infra/tools/bqupload.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/cipd/infra/tools/bqupload/latest",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.install infra/tools/bqupload.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/bqupload/latest/bqupload",
+      "goma-logs.experimental_rbe_metrics.rbe_metrics"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.upload RBE metrics to BigQuery",
+    "stdin": "{\"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@{@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  \"created_at\": \"2012-05-14T12:53:21.500Z\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  \"stats\": {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@    \"environment\": [@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"value\": \"false\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"key\": \"foo\"@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      }, @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      {@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"value\": \"42\", @@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@        \"key\": \"bar\"@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@      }@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@    ]@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  }@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@}@@@",
+      "@@@STEP_LOG_END@rbe_metrics@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "out/Release/.ninja_log",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.read ninja log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@.ninja_log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "fake gzip data",
+      "[TMP_BASE]/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.create ninja log gzip",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@fake gzip data@@@",
+      "@@@STEP_LOG_END@ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
+      "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@",
+      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/reclient_log_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.cleanup reclient log dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
