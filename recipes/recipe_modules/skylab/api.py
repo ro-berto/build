@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
+
 from google.protobuf import json_format
 
 from recipe_engine import recipe_api
@@ -60,10 +62,10 @@ class SkylabApi(recipe_api.RecipeApi):
         # is available by TLS.
         test_args = ['dummy=crbug.com/984103']
         if s.tast_expr:
-          # Skylab has multiple layers before this arg could land to tast.
-          # To keep the arg intact, use comma to replace space. Our autotest
-          # wrapper reverses it to required form.
-          test_args.append('tast_expr=%s' % s.tast_expr.replace(' ', ','))
+          # Due to crbug/1173329, skylab does not support arbitrary tast
+          # expressions. As a workaround, we encode the user's expression
+          # in base64.
+          test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
         if s.lacros_gcs_path:
           test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
         autotest_to_create.autotest.test_args = ' '.join(test_args)

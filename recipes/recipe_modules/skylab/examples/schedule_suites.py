@@ -9,6 +9,9 @@ DEPS = [
     'skylab',
 ]
 
+import re
+import base64
+
 from RECIPE_MODULES.build.skylab import structs
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
@@ -18,12 +21,14 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
+LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
+
 
 def gen_skylab_req(tag):
   return structs.SkylabRequest.create(
       request_tag=tag,
       board='eve',
-      tast_expr='lacros.Basic',
+      tast_expr=LACROS_TAST_EXPR,
       lacros_gcs_path='gs://fake_bucket/lacros.zip',
       cros_img='eve-release/R88-13545.0.0')
 
@@ -69,19 +74,30 @@ def GenTests(api):
                 [task_passed, task_failed, task_aborted]),
     }
 
+  def _args_to_dict(arg_line):
+    arg_re = re.compile(r'(\w+)[:=](.*)$')
+    args_dict = {}
+    for arg in arg_line.split(' '):
+      match = arg_re.match(arg)
+      if match:
+        args_dict[match.group(1).lower()] = match.group(2)
+    return args_dict
+
   def check_has_req_tag(check, steps, tag):
     req = api.json.loads(
         steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     check(tag in properties['requests'])
 
-  def check_test_arg(check, steps, test_arg):
+  def check_test_arg(check, steps, lacros_gcs_path, tast_expr):
     req = api.json.loads(
         steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     for req in properties['requests'].values():
       test = req['testPlan']['test'][0]
-      check(test_arg in test['autotest']['testArgs'])
+      got = _args_to_dict(test['autotest']['testArgs'])
+      check(lacros_gcs_path == got['lacros_gcs_path'])
+      check(tast_expr == base64.b64decode(got['tast_expr_b64']))
 
   yield api.test(
       'basic',
@@ -94,7 +110,6 @@ def GenTests(api):
           step_name='collect skylab results.buildbucket.collect'),
       api.post_check(check_has_req_tag, 'm88_lacros'),
       api.post_check(check_has_req_tag, 'm87_lacros'),
-      api.post_check(check_test_arg, 'tast_expr=lacros.Basic '),
-      api.post_check(check_test_arg,
-                     ' lacros_gcs_path=gs://fake_bucket/lacros.zip'),
+      api.post_check(check_test_arg, 'gs://fake_bucket/lacros.zip',
+                     LACROS_TAST_EXPR),
   )
