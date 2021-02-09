@@ -605,6 +605,20 @@
   {
     "cmd": [
       "git",
+      "show"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show"
+  },
+  {
+    "cmd": [
+      "git",
       "cl",
       "upload",
       "-f",

@@ -4,6 +4,7 @@
 
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
+from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -25,6 +26,18 @@ DEPS = [
   'recipe_engine/url',
   'v8',
 ]
+
+PROPERTIES = {
+    # Configuration of the auto-roller in the form of a dictionary similar with
+    # current BOT_CONFIGS values
+    'autoroller_config':
+        Property(
+            # TODO(liviurau): expand the specification and documentation of this
+            # dictionary when BOT_CONFIGS gets fully migrated
+            kind=dict,
+            default={},
+        ),
+}
 
 GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
 BASE_URL = 'https://chromium.googlesource.com/'
@@ -135,14 +148,14 @@ CHROMIUM_PINS = {
 }
 
 
-def GetDEPS(api, name, project_name):
+def GetDEPS(api, name, project_name, base_url):
   # Make a fake spec. Gclient is not nice to us when having two solutions
   # side by side. The latter checkout kills the former's gclient file.
   spec = ('solutions=[{'
-      '\'managed\':False,'
-      '\'name\':\'%s\','
-      '\'url\':\'%s\','
-      '\'deps_file\':\'DEPS\'}]' % (name, BASE_URL + project_name))
+          '\'managed\':False,'
+          '\'name\':\'%s\','
+          '\'url\':\'%s\','
+          '\'deps_file\':\'DEPS\'}]' % (name, base_url + project_name))
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
@@ -241,23 +254,42 @@ def roll_chromium_pin(api):
             ['setdep', '--var=%s=%d' % (var_name, new_number)])
 
 
-def create_gclient_config(api, target_config):
+def create_gclient_config(api, target_config, base_url):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = target_config['solution_name']
-  soln.url = BASE_URL + target_config['project_name']
+  soln.url = base_url + target_config['project_name']
   soln.revision = 'HEAD'
   return src_cfg
 
 
-def RunSteps(api):
+def get_key_mapper(autoroller_config):
+  custom_mapping = autoroller_config.get('deps_key_mapping', {})
+  if custom_mapping:
+    # Mapper that looks-up the key in the dictionary
+    # or return the key as the default value
+    return lambda key: custom_mapping.get(key, key)
+  else:
+    # Identity mapper (no mapping)
+    return lambda key: key
+
+
+def RunSteps(api, autoroller_config):
   # Configure this particular instance of the auto-roller.
-  bot_config = BOT_CONFIGS[api.buildbucket.builder_name]
-  target_config = bot_config['target_config']
+
+  # Fall back on local stored configurations
+  autoroller_config = autoroller_config or BOT_CONFIGS[
+      api.buildbucket.builder_name]
+
+  target_config = autoroller_config['target_config']
+
+  # Look for overrides for the default base and gerrit locations
+  target_gerrit_base_url = target_config.get('gerrit_base_url', GERRIT_BASE_URL)
+  target_base_url = target_config.get('base_url', BASE_URL)
 
   # Bail out on existing roll. Needs to be manually closed.
   commits = api.gerrit.get_changes(
-      GERRIT_BASE_URL,
+      target_gerrit_base_url,
       query_params=[
           ('project', target_config['project_name']),
           # TODO(sergiyb): Use api.service_account.default().get_email() when
@@ -270,11 +302,11 @@ def RunSteps(api):
   )
   for commit in commits:
     # The auto-roller might have a CL open for a particular roll config.
-    if commit['subject'] == bot_config['subject']:
-      api.gerrit.abandon_change(
-          GERRIT_BASE_URL, commit['_number'], 'stale roll')
+    if commit['subject'] == autoroller_config['subject']:
+      api.gerrit.abandon_change(target_gerrit_base_url, commit['_number'],
+                                'stale roll')
 
-  api.gclient.c = create_gclient_config(api, target_config)
+  api.gclient.c = create_gclient_config(api, target_config, target_base_url)
   api.gclient.apply_config('chromium')
 
   # Allow rolling all os deps.
@@ -305,16 +337,19 @@ def RunSteps(api):
     api.git('new-branch', 'roll')
 
   # Get chromium's and the target repo's deps information.
-  cr_deps = GetDEPS(
-      api, 'src', CR_PROJECT_NAME)
-  target_deps = GetDEPS(
-      api, target_config['solution_name'], target_config['project_name'])
+  cr_deps = GetDEPS(api, 'src', CR_PROJECT_NAME, BASE_URL)
+  target_deps = GetDEPS(api, target_config['solution_name'],
+                        target_config['project_name'], target_base_url)
 
   commit_message = []
 
   # White/blacklist certain deps keys.
-  blacklist = bot_config.get('blacklist')
-  whitelist = bot_config.get('whitelist')
+  # TODO: remove insensitive terms
+  blacklist = autoroller_config.get('blacklist')
+  whitelist = autoroller_config.get('whitelist')
+
+  # Map deps keys between destination and source
+  key_mapper = get_key_mapper(autoroller_config)
 
   # Iterate over all target deps.
   failed_deps = []
@@ -330,7 +365,7 @@ def RunSteps(api):
 
     target_loc, target_ver = SplitValue(
         target_config['solution_name'], target_deps[name])
-    cr_value = cr_deps.get(name)
+    cr_value = cr_deps.get(key_mapper(name))
     is_cipd_dep = target_loc.startswith(CIPD_DEP_URL_PREFIX)
     if cr_value:
       # Use the given revision from chromium's DEPS file.
@@ -387,14 +422,14 @@ def RunSteps(api):
             repo = repo[:-len('.git')]
           commit_message.append(target_config['log_template'] % (
               name, repo, target_ver[:7], new_ver[:7]))
-          if bot_config['show_commit_log']:
+          if autoroller_config['show_commit_log']:
             commit_message.extend(commit_messages_log_entries(
                 api, repo, target_ver, new_ver))
       else:
         step_result.presentation.status = api.step.WARNING
 
   # Roll pinned Chromium binaries.
-  if bot_config.get('roll_chromium_pin', False):
+  if autoroller_config.get('roll_chromium_pin', False):
     roll_chromium_pin(api)
 
   # Check for a difference. If no deps changed, the diff is empty.
@@ -405,21 +440,22 @@ def RunSteps(api):
 
   # Commit deps change and send to CQ.
   if diff:
-    args = ['commit', '-a', '-m', bot_config['subject']]
+    args = ['commit', '-a', '-m', autoroller_config['subject']]
     for message in commit_message:
       args.extend(['-m', message])
-    args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
+    args.extend(['-m', 'TBR=%s' % ','.join(autoroller_config['reviewers'])])
     kwargs = {'stdout': api.raw_io.output_text()}
     with api.context(
         cwd=api.path['checkout'],
         env_prefixes={'PATH': [api.v8.depot_tools_path]}):
       api.git(*args, **kwargs)
+      api.git('show')
       upload_args = [
           'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
           '--send-mail'
       ]
-      if 'bugs' in bot_config:
-        upload_args += ['-b', bot_config['bugs']]
+      if 'bugs' in autoroller_config:
+        upload_args += ['-b', autoroller_config['bugs']]
       api.git(*upload_args)
 
   if failed_deps:
@@ -515,6 +551,35 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       template('devtools', 'Auto-roll - devtools deps', 'devtools-frontend') +
       api.post_process(Filter('git commit', 'git cl'))
   )
+
+  yield (template('p1-roller', 'New roller', 'p1') + api.post_process(
+      Filter('git commit', 'git cl')
+  ) + api.properties(
+      autoroller_config={
+          "target_config": {
+              "solution_name":
+                  "p1",
+              "project_name":
+                  "p1/p1",
+              "account":
+                  "p1-autoroll@chops-service-accounts.iam.gserviceaccount.com",
+              "log_template":
+                  "Rolling %s: %s/+log/%s..%s",
+              "cipd_log_template":
+                  "Rolling %s: %s..%s",
+              "gerrit_base_url":
+                  "https://other-review.com",
+              "base_url":
+                  "https://other-source.com/",
+          },
+          "subject": "Update DevTools New DEPS.",
+          "reviewers": ["liviurau@chromium.org"],
+          "deps_key_mapping": {
+              "dep1": "third_party/dep1/src"
+          },
+          "show_commit_log": False,
+          "bugs": "none",
+      }))
 
   # Test updating chromium pins in devtools DEPS file. The test data for
   # checking the latest number returns 123 by default. Hence only linux should
