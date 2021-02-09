@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 """ Set of basic operations/utilities that are used by the build. """
+from __future__ import print_function
 
 from contextlib import contextmanager
 import ast
@@ -57,7 +58,7 @@ try:
     # slightly odd tactic of using #2 and #3, but not #1 and #4. That is,
     # hardlinks for files, but symbolic links for directories.
     def _WIN_LINK_FUNC(src, dst):
-      print 'linking %s -> %s' % (src, dst)
+      print('linking %s -> %s' % (src, dst))
       if os.path.isdir(src):
         if not ctypes.windll.kernel32.CreateSymbolicLinkA(
             str(dst), str(os.path.abspath(src)), 1):
@@ -379,9 +380,9 @@ def MakeWorldReadable(path):
   perms = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
   if os.path.isdir(path):
     # Directories need read and exec.
-    os.chmod(path, perms | 0555)
+    os.chmod(path, perms | 0o555)
   else:
-    os.chmod(path, perms | 0444)
+    os.chmod(path, perms | 0o444)
 
 
 def MakeParentDirectoriesWorldReadable(path):
@@ -397,9 +398,9 @@ def MakeParentDirectoriesWorldReadable(path):
 
   while path != os.path.dirname(path):
     current_permissions = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
-    if current_permissions & 0555 == 0555:
+    if current_permissions & 0o555 == 0o555:
       break
-    os.chmod(path, current_permissions | 0555)
+    os.chmod(path, current_permissions | 0o555)
     path = os.path.dirname(path)
 
 
@@ -408,7 +409,7 @@ def MaybeMakeDirectory(*path):
   file_path = os.path.join(*path)
   try:
     os.makedirs(file_path)
-  except OSError, e:
+  except OSError as e:
     if e.errno != errno.EEXIST:
       raise
 
@@ -428,7 +429,7 @@ def RemoveFile(*path):
   file_path = os.path.join(*path)
   try:
     os.remove(file_path)
-  except OSError, e:
+  except OSError as e:
     if e.errno != errno.ENOENT:
       raise
 
@@ -438,7 +439,7 @@ def MoveFile(path, new_path):
   try:
     RemoveFile(new_path)
     os.rename(path, new_path)
-  except OSError, e:
+  except OSError as e:
     if e.errno != errno.ENOENT:
       raise
 
@@ -460,7 +461,7 @@ def RemoveFilesWildcards(file_wildcard, root=os.curdir):
   for item in LocateFiles(file_wildcard, root):
     try:
       os.remove(item)
-    except OSError, e:
+    except OSError as e:
       if e.errno != errno.ENOENT:
         raise
 
@@ -508,11 +509,13 @@ def RemoveDirectory(*path):
     # Give up and use cmd.exe's rd command.
     file_path = os.path.normcase(file_path)
     for _ in xrange(3):
-      print 'RemoveDirectory running %s' % (' '.join(
-          ['cmd.exe', '/c', 'rd', '/q', '/s', file_path]))
+      print(
+          'RemoveDirectory running %s' %
+          (' '.join(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]))
+      )
       if not subprocess.call(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]):
         break
-      print '  Failed'
+      print('  Failed')
       time.sleep(3)
     return
 
@@ -550,7 +553,7 @@ def RemoveDirectory(*path):
       if exception_value.errno == errno.ENOENT:
         # File does not exist, and we're trying to delete, so we can ignore the
         # failure.
-        print 'WARNING:  Failed to list %s during rmtree.  Ignoring.\n' % path
+        print('WARNING:  Failed to list %s during rmtree.  Ignoring.\n' % path)
       else:
         raise
     else:
@@ -559,7 +562,7 @@ def RemoveDirectory(*path):
   for root, dirs, files in os.walk(file_path, topdown=False):
     # For POSIX:  making the directory writable guarantees removability.
     # Windows will ignore the non-read-only bits in the chmod value.
-    os.chmod(root, 0770)
+    os.chmod(root, 0o770)
     for name in files:
       remove_with_retry(os.remove, os.path.join(root, name))
     for name in dirs:
@@ -636,26 +639,30 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   start_time = time.time()
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
-  print 'output_dir: %s, archive_name: %s' % (output_dir, archive_name)
-  print 'archive_dir: %s, remove_archive_directory: %s, exists: %s' % (
-      archive_dir, remove_archive_directory, os.path.exists(archive_dir))
+  print('output_dir: %s, archive_name: %s' % (output_dir, archive_name))
+  print(
+      'archive_dir: %s, remove_archive_directory: %s, exists: %s' %
+      (archive_dir, remove_archive_directory, os.path.exists(archive_dir))
+  )
   if remove_archive_directory and os.path.exists(archive_dir):
     # Move it even if it's not a directory as expected. This can happen with
     # FILES.cfg archive creation where we create an archive staging directory
     # that is the same name as the ultimate archive name.
     if not os.path.isdir(archive_dir):
-      print 'Moving old "%s" file to create same name directory.' % archive_dir
+      print('Moving old "%s" file to create same name directory.' % archive_dir)
       previous_archive_file = '%s.old' % archive_dir
       MoveFile(archive_dir, previous_archive_file)
     else:
-      print 'Removing %s' % archive_dir
+      print('Removing %s' % archive_dir)
       RemoveDirectory(archive_dir)
-      print 'Now, os.path.exists(%s): %s' % (
-          archive_dir, os.path.exists(archive_dir))
+      print(
+          'Now, os.path.exists(%s): %s' %
+          (archive_dir, os.path.exists(archive_dir))
+      )
   MaybeMakeDirectory(archive_dir)
   for needed_file in file_list:
     needed_file = needed_file.rstrip()
-    print 'Copying: %s' % needed_file
+    print('Copying: %s' % needed_file)
     # These paths are relative to the file_relative_dir.  We need to copy
     # them over maintaining the relative directories, where applicable.
     src_path = os.path.join(file_relative_dir, needed_file)
@@ -685,7 +692,9 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       if raise_error:
         raise
   end_time = time.time()
-  print 'Took %f seconds to create archive directory.' % (end_time - start_time)
+  print(
+      'Took %f seconds to create archive directory.' % (end_time - start_time)
+  )
 
   # Pack the zip file.
   output_file = '%s.zip' % archive_dir
@@ -702,7 +711,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   # easier then trying to do that with ZipInfo options.
   start_time = time.time()
   if IsWindows() and not windows_zip_cmd:
-    print 'Creating %s' % output_file
+    print('Creating %s' % output_file)
 
     def _Addfiles(to_zip_file, dirname, files_to_add):
       for this_file in files_to_add:
@@ -716,7 +725,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
           else:
             compress_method = zipfile.ZIP_DEFLATED
           to_zip_file.write(this_path, archive_name, compress_method)
-          print 'Adding %s' % archive_name
+          print('Adding %s' % archive_name)
+
     zip_file = zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED,
                                allowZip64=True)
     try:
@@ -737,7 +747,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       raise ExternalError('zip failed: %s => %s' %
                           (str(command), result))
   end_time = time.time()
-  print 'Took %f seconds to create zip.' % (end_time - start_time)
+  print('Took %f seconds to create zip.' % (end_time - start_time))
   return (archive_dir, output_file)
 
 
@@ -783,12 +793,14 @@ def ExtractZip(filename, output_dir, verbose=True):
     # TODO(hinoka): This can be multiprocessed.
     for name in zf.namelist():
       if verbose:
-        print 'Extracting %s' % name
+        print('Extracting %s' % name)
       zf.extract(name, output_dir)
       if IsMac():
         # Restore permission bits.
-        os.chmod(os.path.join(output_dir, name),
-                 zf.getinfo(name).external_attr >> 16L)
+        os.chmod(
+            os.path.join(output_dir, name),
+            zf.getinfo(name).external_attr >> 16
+        )
 
 
 def WindowsPath(path):
@@ -939,7 +951,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       # Wait for kill signal or timeout.
       if kill_event.wait(timeout):
         break
-    print threading.currentThread(), 'TimedFlush: Finished'
+    print(threading.currentThread(), 'TimedFlush: Finished')
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
@@ -980,10 +992,10 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
             writefh.write(in_line.getvalue())
           in_line = cStringIO.StringIO()
         if debug and proc.poll() is not None:
-          print 'Child process has terminated'
+          print('Child process has terminated')
         in_byte = proc.stdout.read(1)
 
-      print threading.currentThread(), 'ProcessRead: proc.stdout finished.'
+      print(threading.currentThread(), 'ProcessRead: proc.stdout finished.')
 
       if log_event and in_line.getvalue():
         log_event.set()
@@ -1001,19 +1013,19 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
         if in_line.getvalue():
           writefh.write(in_line.getvalue())
     finally:
-      print threading.currentThread(), 'ProcessRead: cleaning up.'
+      print(threading.currentThread(), 'ProcessRead: cleaning up.')
       kill_event.set()
       flush_thread.join()
       writefh.flush()
-      print  threading.currentThread(), 'ProcessRead: finished.'
+      print(threading.currentThread(), 'ProcessRead: finished.')
 
   pipes = pipes or []
 
   # Print the given command (which should be a list of one or more strings).
   if print_cmd:
-    print '\n' + subprocess.list2cmdline(command) + '\n',
+    print('\n' + subprocess.list2cmdline(command) + '\n', end=' ')
     for pipe in pipes:
-      print '     | ' + subprocess.list2cmdline(pipe) + '\n',
+      print('     | ' + subprocess.list2cmdline(pipe) + '\n', end=' ')
 
   sys.stdout.flush()
   sys.stderr.flush()
@@ -1090,13 +1102,18 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
           killed = term_then_kill(proc_handles[0], 0.1, 5, 1)
 
           if message:
-            print >> sys.stderr, message
+            print(message, file=sys.stderr)
 
           if not killed:
-            print >> sys.stderr, 'could not kill pid %d!' % proc_handles[0].pid
+            print(
+                'could not kill pid %d!' % proc_handles[0].pid, file=sys.stderr
+            )
           else:
-            print >> sys.stderr, 'program finished with exit code %d' % (
-                proc_handles[0].returncode)
+            print(
+                'program finished with exit code %d' %
+                (proc_handles[0].returncode),
+                file=sys.stderr
+            )
 
           # Prevent other timeouts from double-killing.
           del proc_handles[:]
@@ -1707,7 +1724,7 @@ def IsClangWinBuild(build_dir, target):
 
   gn_file = os.path.join(build_dir, target, 'args.gn')
   if not os.path.isfile(gn_file):
-    print 'WARNING:  Unable to find the args.gn file.'
+    print('WARNING:  Unable to find the args.gn file.')
     return False
   # Matches e.g. "gn_arg = value"
   gn_arg_re = re.compile(r'^(?P<flag>[^= ]+)\s*=\s*(?P<value>[^ \n]+)$')

@@ -166,7 +166,7 @@ class Synchronous(HybridBase):
         try:
           while True:
             result = gen.send(result)
-        except _HybridReturnValue, e:
+        except _HybridReturnValue as e:
           return e.value
         except StopIteration:
           return None
@@ -225,7 +225,7 @@ class InlineCallbackInvocation(object):
         if isinstance(result, type(self)):
           result = result(context)
         result = yield result
-      except _HybridReturnValue, e:
+      except _HybridReturnValue as e:
         result = e.value
         g = None
       except StopIteration:

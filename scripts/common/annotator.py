@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 """Contains the parsing system of the Chromium Buildbot Annotator."""
+from __future__ import print_function
 
 import os
 import sys
@@ -72,7 +73,7 @@ OLD_STYLE_ANNOTATIONS = set((
 def emit(line, stream, flush_before=None):
   if flush_before:
     flush_before.flush()
-  print >> stream
+  print(file=stream)
   # WinDOS can only handle 64kb of output to the console at a time, per process.
   if sys.platform.startswith('win'):
     lim = 2**15
@@ -81,7 +82,7 @@ def emit(line, stream, flush_before=None):
       stream.write(to_print)
     stream.write('\n')
   else:
-    print >> stream, line
+    print(line, file=stream)
   stream.flush()
 
 

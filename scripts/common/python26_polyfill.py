@@ -290,9 +290,10 @@ if sys.version_info < (2, 7):
         return load_tests(self, tests, None)
       return tests
   unittest.defaultTestLoader = SupportTestLoaderProtocol()
-  old_defaults = unittest.main.__init__.im_func.func_defaults
+  old_defaults = unittest.main.__init__.__func__.__defaults__
   # Default arguments bind at declaration-time, and main binds to the old
   # defaultTestLoader instance. Apply hacks.
-  unittest.main.__init__.im_func.func_defaults = tuple(
-    (unittest.defaultTestLoader if isinstance(x, unittest.TestLoader) else x)
-    for x in old_defaults)
+  unittest.main.__init__.__func__.__defaults__ = tuple(
+      (unittest.defaultTestLoader if isinstance(x, unittest.TestLoader) else x)
+      for x in old_defaults
+  )

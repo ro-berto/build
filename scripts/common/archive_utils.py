@@ -7,6 +7,7 @@
 Note: These utilities are also used by the official builders. Their code is
 internal-only, unindexed, and can be found here: http://shortn/_4BbqNNVTgX
 """
+from __future__ import print_function
 
 import glob
 import os
@@ -293,7 +294,7 @@ def CreateArchive(build_dir, staging_dir, files_list, archive_name,
   copied to and the full path of the zip file in a tuple.
   """
 
-  print 'Creating archive %s ...' % archive_name
+  print('Creating archive %s ...' % archive_name)
 
   files_list = ExpandWildcards(build_dir, files_list)
   if allow_missing:
@@ -305,7 +306,7 @@ def CreateArchive(build_dir, staging_dir, files_list, archive_name,
 
   if not filtered_file_list:
     # We have no files to archive, don't create an empty zip file.
-    print 'WARNING: No files to archive.'
+    print('WARNING: No files to archive.')
     return ('', '')
 
   if archive_name.endswith('.zip'):
@@ -324,6 +325,6 @@ def CreateArchive(build_dir, staging_dir, files_list, archive_name,
   if os.path.basename(zip_file) != archive_name:
     orig_zip = zip_file
     zip_file = os.path.join(os.path.dirname(orig_zip), archive_name)
-    print 'Renaming archive: "%s" -> "%s"' % (orig_zip, zip_file)
+    print('Renaming archive: "%s" -> "%s"' % (orig_zip, zip_file))
     chromium_utils.MoveFile(orig_zip, zip_file)
   return (zip_dir, zip_file)

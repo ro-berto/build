@@ -28,6 +28,7 @@ The goal is to deploy this module universally among Chrome-Infra scripts,
 BuildBot configurations, tool invocations, and tests to ensure that they all
 execute with the same centrally-defined environment.
 """
+from __future__ import print_function
 
 import argparse
 import collections
@@ -139,7 +140,7 @@ def ExtendPath(base, root_dir, with_third_party):
 
   # Execute the enviornment extension.
   try:
-    exec extension in extension_module.__dict__
+    exec (extension, extension_module.__dict__)
 
     extend_func = getattr(extension_module, 'Extend', None)
     assert extend_func, (
@@ -383,7 +384,7 @@ def _Command_Print(args, path):
     path (PythonPath): The python path to use.
   """
   for component in path:
-    print >>args.output, component
+    print(component, file=args.output)
   return 0
 
 

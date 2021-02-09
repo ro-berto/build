@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import print_function
 import optparse
 import os
 import shutil
@@ -178,7 +179,7 @@ def FetchSvn(cfg_path, svn=None):
 def DiffFilesCfg(cfg_path, svn):
   """Parse local FILES.cfg and show changes so they can be manually verified."""
 
-  print '\nDiff parsing "%s" ...' % cfg_path
+  print('\nDiff parsing "%s" ...' % cfg_path)
   d = difflib.Differ()
   def CompareLists(svnlist, newlist, msg):
     diffs = []
@@ -188,8 +189,8 @@ def DiffFilesCfg(cfg_path, svn):
       elif x.startswith('+ '):
         diffs.append('  ADDITION: %s' % x[2:])
     if diffs:
-      print msg
-      print '\n'.join(diffs)
+      print(msg)
+      print('\n'.join(diffs))
 
   svn_cfg = FetchSvn(RealFilesCfgTest.SVNBASE + cfg_path, svn)
   svnparser = archive_utils.FilesCfgParser(svn_cfg, None, None)
@@ -201,9 +202,9 @@ def DiffFilesCfg(cfg_path, svn):
   archs = []
   buildtypes = []
   groups = []
-# pylint: disable=W0212
+  # pylint: disable=W0212
   for item in newparser._files_cfg + svnparser._files_cfg:
-# pylint: enable=W0212
+    # pylint: enable=W0212
     if item.get('arch'):
       archs.extend(item['arch'])
     if item.get('buildtype'):
@@ -215,7 +216,7 @@ def DiffFilesCfg(cfg_path, svn):
   groups = set(groups)
 
   # Legacy list handling (i.e. default filegroup).
-  print '\nChecking ParseLegacyList() ...'
+  print('\nChecking ParseLegacyList() ...')
   for arch, buildtype in itertools.product(archs, buildtypes):
     msg = '%s:%s' % (arch, buildtype)
     newparser.arch = svnparser.arch = arch
@@ -224,7 +225,7 @@ def DiffFilesCfg(cfg_path, svn):
     new_legacy_list = newparser.ParseLegacyList()
     CompareLists(svn_legacy_list, new_legacy_list, msg)
 
-  print '\nChecking ParseGroup() ...'
+  print('\nChecking ParseGroup() ...')
   for group, arch, buildtype in itertools.product(groups, archs, buildtypes):
     msg = '%s:%s:%s' % (group, arch, buildtype)
     newparser.arch = svnparser.arch = arch
@@ -233,7 +234,7 @@ def DiffFilesCfg(cfg_path, svn):
     new_group_list = newparser.ParseGroup(group)
     CompareLists(svn_group_list, new_group_list, msg)
 
-  print '\nChecking Archives() ...'
+  print('\nChecking Archives() ...')
   for arch, buildtype in itertools.product(archs, buildtypes):
     newparser.arch = svnparser.arch = arch
     newparser.buildtype = svnparser.buildtype = buildtype
