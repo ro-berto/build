@@ -223,6 +223,7 @@ SPEC.update({
 })
 
 _AddBuildSpec('linux-builder-perf', 'linux', bisect_archive_build=True)
+_AddBuildSpec('linux-builder-perf-rel', 'linux')
 
 # Android: Clank, Webview, WebLayer
 _AddIsolatedTestSpec(
@@ -270,6 +271,7 @@ _AddIsolatedTestSpec(
     'mac-m1_mini_2020-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
+_AddIsolatedTestSpec('linux-perf-rel', 'linux', 'linux-builder-perf-rel')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
