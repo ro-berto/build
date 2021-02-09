@@ -17,6 +17,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/file',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -47,14 +48,37 @@ def RunSteps(api, properties):
   api.path.mock_add_paths(androidx_dir.join('cipd.yaml'))
 
   yaml_path = androidx_dir.join('cipd.yaml')
+  yaml_lines = api.file.read_text('read cipd.yaml', yaml_path).split('\n')
+
+  api.step('extract version', None)
   version = 'cr-' + str(math.floor(api.time.time() / 60 / 60 / 24))
-  api.cipd.create_from_yaml(
-      yaml_path,
-      tags={
-          'version': version,
-          'details0': 'version-' + version
-      },
-      refs=['latest'])
+  for yaml_line in yaml_lines:
+    tokens = yaml_line.split()
+    if len(tokens) == 2 and tokens[0] == 'package:':
+      package = tokens[1]
+    if len(tokens) == 3 and yaml_line.startswith('# version: cr-'):
+      version = tokens[2]
+
+  cipd_search_name = 'cipd search %s %s' % (package, version)
+  cipd_search_cmd = [
+      'cipd',
+      'search',
+      package,
+      '-tag',
+      'version:' + version,
+      '-json-output',
+      api.json.output()
+  ]
+  cipd_search_results = api.step(
+      cipd_search_name, cipd_search_cmd, ok_ret='any').json.output['result']
+  if not cipd_search_results or not 'instance_id' in cipd_search_results[0]:
+    api.cipd.create_from_yaml(
+        yaml_path,
+        tags={
+            'version': version,
+            'details0': 'version-' + version
+        },
+        refs=['latest'])
 
 
 def GenTests(api):
@@ -70,6 +94,11 @@ def GenTests(api):
       api.path.exists(
           androidx_dir.join('fetch_all_androidx.py'),
           androidx_sample_lib.join('README.chromium')),
+      api.override_step_data(
+          'read cipd.yaml',
+          api.file.read_text('# version: cr-1\npackage: package1')),
+      api.override_step_data('cipd search package1 cr-1',
+                             api.cipd.example_error('error')),
       api.post_process(post_process.MustRun, 'fetch_all'),
       api.post_process(post_process.MustRun, 'create cipd.yaml'),
       api.post_process(post_process.StatusSuccess),
@@ -88,5 +117,45 @@ def GenTests(api):
       api.override_step_data('check libs empty',
                              api.file.listdir(['androidx_dino/cipd.yaml'])),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'version_already_uploaded',
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='android-androidx-packager'),
+      api.path.exists(
+          androidx_dir.join('fetch_all_androidx.py'),
+          androidx_sample_lib.join('README.chromium')),
+      api.override_step_data(
+          'read cipd.yaml',
+          api.file.read_text('# version: cr-1\npackage: package1')),
+      api.override_step_data('cipd search package1 cr-1',
+                             api.cipd.example_search('package1', instances=1)),
+      api.post_process(post_process.MustRun, 'fetch_all'),
+      api.post_process(post_process.DoesNotRun, 'create cipd.yaml'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'version_not_in_yaml',
+      api.time.seed(314159),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='android-androidx-packager'),
+      api.path.exists(
+          androidx_dir.join('fetch_all_androidx.py'),
+          androidx_sample_lib.join('README.chromium')),
+      api.override_step_data('read cipd.yaml',
+                             api.file.read_text('package: package1')),
+      api.override_step_data('cipd search package1 cr-3.0',
+                             api.cipd.example_error('error')),
+      api.post_process(post_process.MustRun, 'fetch_all'),
+      api.post_process(post_process.MustRun, 'create cipd.yaml'),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
