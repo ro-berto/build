@@ -1167,7 +1167,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_spec.build_gs_bucket,
           extra_url_components=self.m.builder_group.for_current)
 
-  def get_common_args_for_scripts(self, bot_config=None):
+  def get_common_args_for_scripts(self):
     args = []
 
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
@@ -1182,18 +1182,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties = {}
     # TODO(phajdan.jr): Remove buildnumber when no longer used.
 
-    builder_group = self.m.builder_group.for_current
-    if not bot_config:
-      buildername = self.m.buildbucket.builder_name
-      group_dict = self.builders.get(builder_group, {})
-      bot_config = group_dict.get('builders', {}).get(buildername, {})
-
     properties['buildername'] = self.m.buildbucket.builder_name
     properties['buildnumber'] = self.m.buildbucket.build.number
     properties['bot_id'] = self.m.swarming.bot_id
     properties['slavename'] = self.m.swarming.bot_id
     # TODO(gbeaty) Audit scripts and remove/update this as necessary
-    properties['mastername'] = builder_group
+    properties['mastername'] = self.m.builder_group.for_current
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
 
@@ -1201,7 +1195,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return args
 
-  def get_compile_targets_for_scripts(self, bot_config=None):
+  def get_compile_targets_for_scripts(self):
     """This gets the combined compile_targets information from the
     //testing/scripts/get_compile_targets.py script.
 
@@ -1230,7 +1224,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             '--output',
             self.m.json.output(),
             '--',
-        ] + self.get_common_args_for_scripts(bot_config),
+        ] + self.get_common_args_for_scripts(),
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 

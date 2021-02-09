@@ -106,7 +106,7 @@ class BotConfig(object):
 
     def scripts_compile_targets_fn():
       if not memo:
-        memo.append(chromium_tests_api.get_compile_targets_for_scripts(self))
+        memo.append(chromium_tests_api.get_compile_targets_for_scripts())
       return memo[0]
 
     source_side_specs = self._get_source_side_specs(chromium_tests_api)

@@ -17,7 +17,8 @@ def RunSteps(api):
   api.python(
       'sample script',
       api.path['checkout'].join('testing', 'scripts', 'example.py'),
-      api.chromium_tests.get_common_args_for_scripts(bot_config))
+      api.chromium_tests.get_common_args_for_scripts(),
+  )
 
 
 def GenTests(api):
