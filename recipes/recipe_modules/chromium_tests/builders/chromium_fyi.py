@@ -373,6 +373,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='android',
             chromium_apply_config=['mb'],
+            chromium_tests_apply_config=['use_cas'],
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
