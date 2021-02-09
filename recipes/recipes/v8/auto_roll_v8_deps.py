@@ -68,7 +68,7 @@ BOT_CONFIGS = {
         'target_config': TARGET_CONFIG_DEVTOOLS,
         'subject': 'Update DevTools Chromium DEPS.',
         # Don't roll any of the other dependencies.
-        'whitelist': [],
+        'includes': [],
         'reviewers': [
             'machenbach@chromium.org',
             'liviurau@chromium.org',
@@ -90,7 +90,7 @@ BOT_CONFIGS = {
     'Auto-roll - test262': {
         'target_config': TARGET_CONFIG_V8,
         'subject': 'Update Test262.',
-        'whitelist': [
+        'includes': [
             # Only roll these dependencies (list without solution name prefix).
             'test/test262/data',
         ],
@@ -103,7 +103,7 @@ BOT_CONFIGS = {
     'Auto-roll - v8 deps': {
         'target_config': TARGET_CONFIG_V8,
         'subject': 'Update V8 DEPS.',
-        'blacklist': [
+        'excludes': [
             # https://crrev.com/c/1547863
             'third_party/perfetto',
             'third_party/protobuf',
@@ -126,7 +126,7 @@ BOT_CONFIGS = {
     'Auto-roll - wasm-spec': {
         'target_config': TARGET_CONFIG_V8,
         'subject': 'Update wasm-spec.',
-        'whitelist': [
+        'includes': [
             # Only roll these dependencies (list without solution name prefix).
             'test/wasm-js/data',
         ],
@@ -343,10 +343,9 @@ def RunSteps(api, autoroller_config):
 
   commit_message = []
 
-  # White/blacklist certain deps keys.
-  # TODO: remove insensitive terms
-  blacklist = autoroller_config.get('blacklist')
-  whitelist = autoroller_config.get('whitelist')
+  # Include/exclude certain deps keys.
+  excludes = autoroller_config.get('excludes')
+  includes = autoroller_config.get('includes')
 
   # Map deps keys between destination and source
   key_mapper = get_key_mapper(autoroller_config)
@@ -354,9 +353,9 @@ def RunSteps(api, autoroller_config):
   # Iterate over all target deps.
   failed_deps = []
   for name in sorted(target_deps.keys()):
-    if blacklist is not None and name in blacklist:
+    if excludes is not None and name in excludes:
       continue
-    if whitelist is not None and name not in whitelist:
+    if includes is not None and name not in includes:
       continue
     def SplitValue(solution_name, value):
       assert '@' in value, (
