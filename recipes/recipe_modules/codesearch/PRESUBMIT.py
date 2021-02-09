@@ -13,6 +13,7 @@ import os
 def CheckChangeOnCommit(input_api, output_api):
   # Run unit tests for the scripts in resources/.
   return input_api.canned_checks.RunUnitTestsInDirectory(
-      input_api, output_api,
+      input_api,
+      output_api,
       os.path.join(input_api.PresubmitLocalPath(), 'resources'),
-      whitelist=[r'.+_test\.py$'])
+      files_to_check=[r'.+_test\.py$'])
