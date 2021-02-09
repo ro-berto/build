@@ -1005,12 +1005,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     return clang_revision
 
   def ensure_goma(self, client_type='release'):
-    goma_dir = self.m.goma.ensure_goma(client_type=client_type)
-
-    if self.c.use_gyp_env:
-      self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-      self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
-    self.c.compile_py.goma_dir = goma_dir
+    self.c.compile_py.goma_dir = self.m.goma.ensure_goma(
+        client_type=client_type)
 
   def get_mac_toolchain_installer(self):
     assert self.c.mac_toolchain.installer_cipd_package

@@ -98,7 +98,7 @@
     ],
     "env": {
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "name": "analyze",
     "~followup_annotations": [

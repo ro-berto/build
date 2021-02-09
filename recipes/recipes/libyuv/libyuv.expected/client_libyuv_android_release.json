@@ -146,7 +146,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "target_arch=arm",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {

@@ -262,7 +262,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
@@ -577,7 +577,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
@@ -1411,7 +1411,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
@@ -2245,7 +2245,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
@@ -3079,7 +3079,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
