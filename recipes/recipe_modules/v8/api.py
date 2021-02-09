@@ -413,7 +413,6 @@ class V8Api(recipe_api.RecipeApi):
   def set_up_swarming(self):
     self.m.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
     self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
-    self.m.chromium_swarming.set_default_dimension('gpu', 'none')
     # TODO(machenbach): Investigate if this is causing a priority inversion
     # with tasks not specifying cores=8. See http://crbug.com/735388
     # self.m.chromium_swarming.set_default_dimension('cores', '8')

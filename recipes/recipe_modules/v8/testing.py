@@ -408,11 +408,10 @@ def _trigger_swarming_task(api, task, test_step_config):
   # Override with per-test dimensions.
   task_dimensions.update(test_step_config.swarming_dimensions or {})
 
-  # Override cpu and gpu defaults for Android as such devices don't have these
-  # dimensions.
+  # Override cpu defaults for Android as such devices don't have this
+  # dimension.
   if task_dimensions['os'] == 'Android':
     task_dimensions['cpu'] = None
-    task_dimensions['gpu'] = None
 
   task_slice = task_slice.with_dimensions(**task_dimensions)
 

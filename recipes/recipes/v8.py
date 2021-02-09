@@ -783,7 +783,7 @@ def GenTests(api):
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))
   )
 
-  # Test that cpu and gpu dimensions are reset when triggering Android bots.
+  # Test that the cpu dimension is reset when triggering Android bots.
   android_test_spec = """
     {
       "swarming_dimensions": {
@@ -805,8 +805,6 @@ def GenTests(api):
     ) +
     api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
                                 'cpu') +
-    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
-                                'gpu') +
     api.post_process(DropExpectation)
   )
 
