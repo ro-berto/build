@@ -1272,7 +1272,6 @@ BUILDERS = freeze({
                     'os': 'Ubuntu-16.04',
                     'cpu': 'x86-64',
                 },
-                'use_cas': True,
                 # TODO(crbug/1018836): Use distro specific name instead of
                 # Linux.
                 'baremetal_swarming_dimensions': {

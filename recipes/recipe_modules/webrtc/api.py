@@ -79,11 +79,6 @@ class Bot(object):
   def should_upload_perf_results(self):
     return bool(self.config.get('perf_id'))
 
-  # TODO(bugs.webrtc.org/12072): Remove once the migration to CAS is completed.
-  @property
-  def should_use_cas(self):
-    return self.config.get('use_cas', False)
-
 
 class WebRTCApi(recipe_api.RecipeApi):
   WEBRTC_GS_BUCKET = WEBRTC_GS_BUCKET
@@ -611,7 +606,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
           targets=self._isolated_targets,
-          use_cas=self.bot.should_use_cas,
+          use_cas=True,
           swarm_hashes_property_name=swarm_hashes_property_name)
 
       # Upload the isolate file to the pinpoint server.
@@ -625,7 +620,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
           targets=self._isolated_targets,
-          use_cas=self.bot.should_use_cas)
+          use_cas=True)
 
   def find_swarming_command_lines(self):
     step_result = self.m.python(
