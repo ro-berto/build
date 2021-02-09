@@ -200,7 +200,7 @@ def GenTests(api):
     archive_data.files.extend([
         'folder1/chrome',
         'folder2/snapshot_blob.bin',
-        'after_rename_file',
+        'before_rename_file',
     ])
     if include_dirs:
       archive_data.dirs.extend([

@@ -4,6 +4,7 @@
 
 import re
 import sys
+import os
 
 # pylint: disable=relative-import
 import manual_bisect_files
@@ -676,13 +677,17 @@ class ArchiveApi(recipe_api.RecipeApi):
         # Copy all files to a temporary directory. Keeping the structure.
         # This directory will be used for archiving.
         temp_dir = self.m.path.mkdtemp()
-        self.m.file.ensure_directory('create temp dir', temp_dir)
         for filename in expanded_files:
-          self.m.file.copy("Copy file", self.m.path.join(base_path, filename),
-                           self.m.path.join(temp_dir, filename))
+          tmp_file_path = self.m.path.join(temp_dir, filename)
+          tmp_file_dir = self.m.path.dirname(tmp_file_path)
+          if str(tmp_file_dir) != str(temp_dir):
+            self.m.file.ensure_directory(
+                'Create temp dir %s' % os.path.dirname(filename), tmp_file_dir)
+          self.m.file.copy("Copy file %s" % filename,
+                           self.m.path.join(base_path, filename), tmp_file_path)
 
         for directory in archive_data.dirs:
-          self.m.file.copytree("Copy folder",
+          self.m.file.copytree("Copy folder %s" % directory,
                                self.m.path.join(base_path, directory),
                                self.m.path.join(temp_dir, directory))
 
@@ -691,6 +696,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         base_path = temp_dir
 
         for rename_file in archive_data.rename_files:
+          expanded_files.remove(rename_file.from_file)
+          expanded_files.add(rename_file.to_file)
           self.m.file.move("Move file",
                            self.m.path.join(base_path, rename_file.from_file),
                            self.m.path.join(base_path, rename_file.to_file))
