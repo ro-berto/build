@@ -237,7 +237,7 @@
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "-v",
-      "//out/Debug_x64",
+      "//out/Debug",
       "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json",
       "--json-output",

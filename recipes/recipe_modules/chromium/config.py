@@ -198,10 +198,6 @@ config_ctx = config_item_context(BaseConfig)
 @config_ctx(is_root=True)
 def BASE(c):
   c.build_config_fs = c.BUILD_CONFIG
-  if c.HOST_PLATFORM == 'win':
-    if c.TARGET_BITS == 64:
-      # Windows requires 64-bit builds to be in <dir>_x64.
-      c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
   c.source_side_spec_dir = c.CHECKOUT_PATH.join('testing', 'buildbot')
   # Test runner memory tools that are not compile-time based.
