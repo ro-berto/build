@@ -94,12 +94,6 @@ class TrySpec(object):
   # Contains all the config for RTS, if it is to be used
   rts_spec = attrib(RTSSpec, default=None)
 
-  # Where task output should go when running `swarming collect`. By default it
-  # downloads the entire stdout and prints it to the stdout of the collection
-  # script. See the `swarming` binary for all options. This option is meant to
-  # be temporary; it should be obseleted by https://crbug.com/1135718.
-  task_output_stdout = attrib(str, default='all')
-
   @classmethod
   def create(cls, mirrors, **kwargs):
     """Create a TrySpec.

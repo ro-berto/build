@@ -1889,8 +1889,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         root_solution_revision=root_solution_revision)
 
     self.configure_swarming(
-        self.m.tryserver.is_tryserver,
-        task_output_stdout=bot.config.task_output_stdout)
+        self.m.tryserver.is_tryserver, task_output_stdout='none')
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True

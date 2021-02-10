@@ -767,7 +767,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
-                task_output_stdout='none',
                 analyze_deps_autorolls=True,
             ),
         # crbug.com/1149606: Experimental builder to test pre-warming
@@ -889,7 +888,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
-                task_output_stdout='none',
                 analyze_deps_autorolls=True,
                 rts_spec=RTSSpec(
                     rts_chromium_version='latest',
@@ -932,7 +930,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Optional Linux Release (Intel HD 630)',
                     ),
                 ],
-                task_output_stdout='none',
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
@@ -1133,7 +1130,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-rel',
                 analyze_deps_autorolls=True,
-                task_output_stdout='none',
             ),
        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1259,7 +1255,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Mac Retina Release (AMD)',
                 ),
             ],
-            task_output_stdout='none',
             ),
         'mac-rel':
             try_spec.TrySpec.create([
@@ -1280,7 +1275,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ],
             analyze_deps_autorolls=True,
-            task_output_stdout='none',
             ),
         'mac_chromium_10.11_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1569,7 +1563,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Win10 x64 Release (NVIDIA)',
                 ),
             ],
-            task_output_stdout='none',
             analyze_deps_autorolls=True,
             ),
         'win_chromium_compile_dbg_ng':
