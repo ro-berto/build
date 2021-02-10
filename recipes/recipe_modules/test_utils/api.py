@@ -1338,20 +1338,22 @@ class SkylabGroup(TestGroup):
     cros_test_platform(CTP) supports multiple request in a single build.
     With batch request, tests can run concurrently.
     """
-    reqs = []
-    for t in self._test_suites:
-      reqs.append(t.skylab_req)
-      self.ctp_build_timeout_sec = max(self.ctp_build_timeout_sec,
-                                       t.spec.timeout_sec)
+    reqs = [t.skylab_req for t in self._test_suites if t.skylab_req]
     if reqs:
+      # Respect timeout of each test run by this CTP build.
+      build_timeout = max([r.timeout_sec for r in reqs])
+      if build_timeout > self.ctp_build_timeout_sec:
+        self.ctp_build_timeout_sec = build_timeout
       self.ctp_build_id = caller_api.skylab.schedule_suites(
           'schedule tests on skylab', reqs)
 
   def run(self, caller_api, suffix):
     """Fetch the responses for each test request."""
-    if self._test_suites:
-      tag_resp = caller_api.skylab.wait_on_suites(
+    tag_resp = {}
+    if self.ctp_build_id:
+      build_resp = caller_api.skylab.wait_on_suites(
           self.ctp_build_id, timeout_seconds=self.ctp_build_timeout_sec)
-      for t in self._test_suites:
-        t.ctp_responses = tag_resp.responses.get(t.name, [])
-        self._run_func(t, t.run, caller_api, suffix, True)
+      tag_resp = build_resp.responses
+    for t in self._test_suites:
+      t.ctp_responses = tag_resp.get(t.name, [])
+      self._run_func(t, t.run, caller_api, suffix, True)

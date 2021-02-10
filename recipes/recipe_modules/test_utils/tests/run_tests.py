@@ -8,6 +8,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -22,14 +23,19 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build import skylab
 from RECIPE_MODULES.build.chromium_tests import steps
 
+from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
+                                                       builds_service_pb2)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
                                                        rdb_invocation)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        rdb_test_result)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
+
+from PB.test_platform.taskstate import TaskState
+from PB.test_platform.steps.execution import ExecuteResponse
 
 PROPERTIES = {
     'abort_on_failure': Property(default=False),
@@ -94,6 +100,8 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
     ]
 
   tests = [s.get_test() for s in test_specs]
+  for t in [test for test in tests if test.is_skylabtest]:
+    t.lacros_gcs_path = 'gs://dummy/lacros.zip'
 
   _, failed_tests = api.test_utils.run_tests(
       api.chromium_tests.m,
@@ -204,6 +212,29 @@ def GenTests(api):
           }],
           test_skylab=True,
       ),
+      api.buildbucket.simulated_schedule_output(
+          builds_service_pb2.BatchResponse(
+              responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
+          step_name=(
+              'test_pre_run.schedule tests on skylab.buildbucket.schedule')),
+      api.buildbucket.simulated_collect_output(
+          [
+              api.skylab.test_with_multi_response(
+                  1234, {
+                      'basic_EVE_TOT':
+                          api.skylab.gen_json_execution_response([
+                              api.skylab.gen_task_result(
+                                  'lacros.Basic',
+                                  [
+                                      ExecuteResponse.TaskResult.TestCaseResult(
+                                          name='green_case',
+                                          verdict=TaskState.VERDICT_PASSED)
+                                  ],
+                              )
+                          ]),
+                  }),
+          ],
+          step_name='collect skylab results.buildbucket.collect'),
   )
 
   yield api.test(

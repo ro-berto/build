@@ -338,7 +338,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"cros_img\": \"eve-release/R89-13631.0.0\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"basic_EVE_TOT\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {}, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tast_expr\": \"(\\\"group:mainline\\\" && \\\"dep:lacros\\\")\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tast_expr\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"test\": \"basic\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"timeout_sec\": 7200@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
@@ -1096,240 +1096,9 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run.schedule tests on skylab",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@suite link@https://cr-buildbucket.appspot.com/build/1234@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "bb",
-      "batch",
-      "-host",
-      "cr-buildbucket.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test_pre_run.schedule tests on skylab.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:(\\\"group:mainline\\\" && \\\"dep:lacros\\\")\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}], \"time\": {\"maximumDuration\": \"7200s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://lacros/lacros-amd64-generic-rel/571/lacros.zip\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"scheduleBuild\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@request@{@@@",
-      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@request@    {@@@",
-      "@@@STEP_LOG_LINE@request@      \"scheduleBuild\": {@@@",
-      "@@@STEP_LOG_LINE@request@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@request@          \"bucket\": \"testplatform\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"builder\": \"cros_test_platform\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"project\": \"chromeos\"@@@",
-      "@@@STEP_LOG_LINE@request@        }, @@@",
-      "@@@STEP_LOG_LINE@request@        \"experimental\": \"NO\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"gitilesCommit\": {@@@",
-      "@@@STEP_LOG_LINE@request@          \"host\": \"chromium.googlesource.com\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"project\": \"chromium/src\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/master\"@@@",
-      "@@@STEP_LOG_LINE@request@        }, @@@",
-      "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
-      "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@request@          \"requests\": {@@@",
-      "@@@STEP_LOG_LINE@request@            \"basic_EVE_TOT\": {@@@",
-      "@@@STEP_LOG_LINE@request@              \"params\": {@@@",
-      "@@@STEP_LOG_LINE@request@                \"decorations\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@request@                    \"tast-expr:(\\\"group:mainline\\\" && \\\"dep:lacros\\\")\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"suite:tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"label-board:eve\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"label-pool:DUT_POOL_QUOTA\"@@@",
-      "@@@STEP_LOG_LINE@request@                  ]@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"metadata\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", @@@",
-      "@@@STEP_LOG_LINE@request@                  \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"scheduling\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"managedPool\": \"MANAGED_POOL_QUOTA\", @@@",
-      "@@@STEP_LOG_LINE@request@                  \"qsAccount\": \"lacros\"@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"softwareAttributes\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"buildTarget\": {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"name\": \"eve\"@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"softwareDependencies\": [@@@",
-      "@@@STEP_LOG_LINE@request@                  {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"chromeosBuild\": \"eve-release/R89-13631.0.0\"@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                ], @@@",
-      "@@@STEP_LOG_LINE@request@                \"time\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"maximumDuration\": \"7200s\"@@@",
-      "@@@STEP_LOG_LINE@request@                }@@@",
-      "@@@STEP_LOG_LINE@request@              }, @@@",
-      "@@@STEP_LOG_LINE@request@              \"testPlan\": {@@@",
-      "@@@STEP_LOG_LINE@request@                \"test\": [@@@",
-      "@@@STEP_LOG_LINE@request@                  {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
-      "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://lacros/lacros-amd64-generic-rel/571/lacros.zip\"@@@",
-      "@@@STEP_LOG_LINE@request@                    }@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                ]@@@",
-      "@@@STEP_LOG_LINE@request@              }@@@",
-      "@@@STEP_LOG_LINE@request@            }@@@",
-      "@@@STEP_LOG_LINE@request@          }@@@",
-      "@@@STEP_LOG_LINE@request@        }, @@@",
-      "@@@STEP_LOG_LINE@request@        \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@request@          {@@@",
-      "@@@STEP_LOG_LINE@request@            \"key\": \"parent_buildbucket_id\", @@@",
-      "@@@STEP_LOG_LINE@request@            \"value\": \"8945511751514863184\"@@@",
-      "@@@STEP_LOG_LINE@request@          }, @@@",
-      "@@@STEP_LOG_LINE@request@          {@@@",
-      "@@@STEP_LOG_LINE@request@            \"key\": \"user_agent\", @@@",
-      "@@@STEP_LOG_LINE@request@            \"value\": \"recipe\"@@@",
-      "@@@STEP_LOG_LINE@request@          }@@@",
-      "@@@STEP_LOG_LINE@request@        ]@@@",
-      "@@@STEP_LOG_LINE@request@      }@@@",
-      "@@@STEP_LOG_LINE@request@    }@@@",
-      "@@@STEP_LOG_LINE@request@  ]@@@",
-      "@@@STEP_LOG_LINE@request@}@@@",
-      "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "collect skylab results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@return value@basic_EVE_TOT@@@",
-      "@@@STEP_LOG_END@return value@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "collect skylab results.buildbucket.collect",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "bb",
-      "collect",
-      "-host",
-      "cr-buildbucket.appspot.com",
-      "-interval",
-      "60s",
-      "1234"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "collect skylab results.buildbucket.collect.wait",
-    "timeout": 7200,
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "bb",
-      "batch",
-      "-host",
-      "cr-buildbucket.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "collect skylab results.buildbucket.collect.get",
-    "stdin": "{\"requests\": [{\"getBuild\": {\"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"id\": \"1234\"}}]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"getBuild\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"output\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJzNj71KxEAUhZnNFmFQCWmELS2FZDa4+BNQq221CXYSbmavyWCSO8y9y76Wrc8g7BP4MC7KsmBt\\nYXmK833npB+RPm6Ana2XT8u6eqzS9yidxipRs7dIb1V614l4Lo2xXaABiTPeQBjc2ObgPXuS3NJg\\nBPj13q1uF1cFXF409sYurot5MZ9NY5+os1PbIQrXDyTuxVkQR2OFLOfPezwLuLFH5h0u+Lwlanv8\\nRjeBNowHP6yFZNfNAvK6Fzb7QdlvuSlPtG4D4lhbYEyU/vybQ5P/cqg80nHA1U+afAHTc5pT\\n\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          }@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@request@{@@@",
-      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@request@    {@@@",
-      "@@@STEP_LOG_LINE@request@      \"getBuild\": {@@@",
-      "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"id\": \"1234\"@@@",
-      "@@@STEP_LOG_LINE@request@      }@@@",
-      "@@@STEP_LOG_LINE@request@    }@@@",
-      "@@@STEP_LOG_LINE@request@  ]@@@",
-      "@@@STEP_LOG_LINE@request@}@@@",
-      "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "basic_EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "basic_EVE_TOT.attempt: #1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>1 passed, 0 failed (1 total)@@@",
-      "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",
-      "@@@STEP_LOG_LINE@Test Cases@green_case@@@",
-      "@@@STEP_LOG_LINE@Test Cases@@@@",
-      "@@@STEP_LOG_END@Test Cases@@@",
-      "@@@STEP_LINK@Test Run@https://chromeos-swarming.appspot.com/task?id=471a63bc9c481010@@@",
-      "@@@STEP_LINK@Logs(stainless)@https://stainless.corp.google.com/browse/chromeos-autotest-results/swarming-471a63bc9c481010/@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "basic_EVE_TOT.attempt: #2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>1 passed, 1 failed (2 total)@@@",
-      "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",
-      "@@@STEP_LOG_LINE@Test Cases@green_case@@@",
-      "@@@STEP_LOG_LINE@Test Cases@@@@",
-      "@@@STEP_LOG_LINE@Test Cases@FAILED:@@@",
-      "@@@STEP_LOG_LINE@Test Cases@red_case@@@",
-      "@@@STEP_LOG_END@Test Cases@@@",
-      "@@@STEP_LINK@Test Run@https://chromeos-swarming.appspot.com/task?id=471a63bc9c481010@@@",
-      "@@@STEP_LINK@Logs(stainless)@https://stainless.corp.google.com/browse/chromeos-autotest-results/swarming-471a63bc9c481010/@@@",
+      "@@@STEP_TEXT@Test was not scheduled because tast_expr was not set.@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1344,7 +1113,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed because of:\n\n- red_case"
+      "humanReason": "1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed."
     },
     "name": "$result"
   }

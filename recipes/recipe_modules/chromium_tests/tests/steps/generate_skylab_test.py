@@ -32,7 +32,7 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  def boilerplate():
+  def boilerplate(skylab_gcs, tast_expr):
     builder_group = 'chromium.chromiumos'
     builder = 'lacros-amd64-generic-rel'
     return sum([
@@ -49,7 +49,7 @@ def GenTests(api):
                         bot_spec.BotSpec.create(
                             chromium_config='chromium',
                             gclient_config='chromium',
-                            skylab_gs_bucket='lacros-bucket',
+                            skylab_gs_bucket=skylab_gcs,
                         ),
                 }
             })),
@@ -61,7 +61,7 @@ def GenTests(api):
                         'cros_board': 'eve',
                         'cros_img': 'eve-release/R89-13631.0.0',
                         'name': 'basic_EVE_TOT',
-                        'tast_expr': 'group:mainline,&&,dep:lacros',
+                        'tast_expr': tast_expr,
                         'swarming': {},
                         'test': 'basic',
                         'timeout_sec': 7200
@@ -120,7 +120,7 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      boilerplate(),
+      boilerplate('lacros', '("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED, TASK_FAILED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
@@ -130,4 +130,20 @@ def GenTests(api):
       api.post_process(post_process.StepTextContains,
                        'basic_EVE_TOT.attempt: #2',
                        ['1 passed, 1 failed (2 total)']),
+  )
+
+  yield api.test(
+      'not scheduled for absent skylab gcs',
+      boilerplate('', '("group:mainline" && "dep:lacros")'),
+      api.post_process(
+          post_process.StepTextContains, 'basic_EVE_TOT',
+          ['Test was not scheduled because of absent lacros_gcs_path.']),
+  )
+
+  yield api.test(
+      'not scheduled for absent tast expr',
+      boilerplate('lacros', ''),
+      api.post_process(
+          post_process.StepTextContains, 'basic_EVE_TOT',
+          ['Test was not scheduled because tast_expr was not set.']),
   )

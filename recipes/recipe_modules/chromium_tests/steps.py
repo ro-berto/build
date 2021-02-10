@@ -3544,6 +3544,8 @@ class SkylabTest(Test):
 
   @property
   def skylab_req(self):
+    if not self._should_schedule():
+      return None
     return skylab.structs.SkylabRequest.create(
         request_tag=self.name,
         tast_expr=self.spec.tast_expr,
@@ -3552,6 +3554,19 @@ class SkylabTest(Test):
         lacros_gcs_path=self.lacros_gcs_path,
         timeout_sec=self.spec.timeout_sec,
     )
+
+  def _should_schedule(self):
+    """Return true if lacros_gcs_path and tast_expr are set.
+
+    If the lacros_gcs_path is empty, skylab runs the test on the chrome
+    bundled in the OS image. This is valueless to kick it off from
+    browser infra, because it was tested by OS side.
+    If the tast expr is not specified, the task runs all tast tests, which
+    is NOT preferred. Because it consumes our skylab DUT time silently.
+    Overall, we schedule this skylab request iff both of the variables
+    are set.
+    """
+    return self.lacros_gcs_path and self.spec.tast_expr
 
   def _find_valid_result(self):
     """Return the first deterministic result from the responses.
@@ -3578,9 +3593,18 @@ class SkylabTest(Test):
       total_tests_ran = len(result.test_cases)
 
     with api.step.nest(self.name) as step:
+      step_failure_msg = None
       if not self.ctp_responses:
+        step_failure_msg = 'Invalid test result.'
+      if not self.lacros_gcs_path:
+        step_failure_msg = (
+            'Test was not scheduled because of absent lacros_gcs_path.')
+      if not self.spec.tast_expr:
+        step_failure_msg = (
+            'Test was not scheduled because tast_expr was not set.')
+      if step_failure_msg:
         step.presentation.status = api.step.FAILURE
-        step.presentation.step_text = 'Invalid test result.'
+        step.presentation.step_text = step_failure_msg
         self.update_test_run(api, suffix,
                              api.test_utils.canonical.result_format())
         return self._test_runs[suffix]
