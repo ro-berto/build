@@ -843,9 +843,8 @@ class AndroidApi(recipe_api.RecipeApi):
     build_dir = self.m.path['checkout'].join('out',
                                              self.m.chromium.c.BUILD_CONFIG)
     log_file = build_dir.join('full_log')
-    target_arch = self.m.chromium.c.gyp_env.GYP_DEFINES['target_arch']
-    # gyp converts ia32 to x86, bot needs to do the same
-    target_arch = {'ia32': 'x86'}.get(target_arch) or target_arch
+
+    target_arch = self.m.chromium.get_build_target_arch()
 
     # --output-directory hasn't always exited on these scripts, so use the
     # CHROMIUM_OUTPUT_DIR environment variable to avoid unrecognized flag

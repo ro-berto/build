@@ -290,7 +290,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -662,7 +662,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -2177,7 +2177,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -3335,7 +3335,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -4485,7 +4485,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 target_arch=x64",
+      "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {

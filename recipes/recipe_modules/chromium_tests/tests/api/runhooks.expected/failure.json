@@ -239,8 +239,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "target_arch=x64"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [
@@ -429,8 +428,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "target_arch=x64"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [

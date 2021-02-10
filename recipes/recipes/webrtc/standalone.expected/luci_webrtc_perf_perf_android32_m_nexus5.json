@@ -217,8 +217,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "target_arch=arm"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [

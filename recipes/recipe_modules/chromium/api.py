@@ -1630,3 +1630,15 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_annotate_by_test_name(self, _):
     return 'graphing'
+
+  def get_build_target_arch(self):
+    return {
+        ('intel', 32): 'x86',
+        ('intel', 64): 'x64',
+        ('arm', 32): 'arm',
+        ('arm', 64): 'arm64',
+        ('mips', 32): 'mips',
+        ('mips', 64): 'mips64',
+        ('mipsel', 32): 'mipsel',
+        ('mipsel', 64): 'mips64el',
+    }[self.m.chromium.c.TARGET_ARCH, self.m.chromium.c.TARGET_BITS]

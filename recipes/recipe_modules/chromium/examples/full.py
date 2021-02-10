@@ -29,6 +29,8 @@ def RunSteps(api):
     bot_config = api.chromium_tests.create_bot_config_object([builder_id])
     api.chromium_tests.configure_build(bot_config)
 
+    api.chromium.get_build_target_arch()
+
     if failfast:
       api.chromium.apply_config('goma_failfast')
 

@@ -261,7 +261,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "target_arch=arm",
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "env_suffixes": {

@@ -146,7 +146,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=0 target_arch=x64"
+      "GYP_DEFINES": "clang=0"
     },
     "env_suffixes": {
       "PATH": [
