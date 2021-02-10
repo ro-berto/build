@@ -50,120 +50,113 @@ TRYBOT_SPEC = freeze({
 })
 
 SPEC = freeze({
-  # The builders have the following parameters:
-  # - compile_targets: the compile targets.
-  # - platform: The platform for which the code is compiled.
-  # - experimental: Whether to mark Kythe uploads as experimental.
-  # - sync_generated_files: Whether to sync generated files into a git repo.
-  # - corpus: Kythe corpus to specify in the kzip.
-  # - build_config: Kythe build config to specify in the kzip.
-  # - gen_repo_branch: Which branch in the generated files repo to sync to.
-  # - gen_repo_out_dir: Which directory under src/out to write gen files to.
-  'builders': {
-    'codesearch-gen-chromium-android': {
-      'compile_targets': [
-        'all',
-      ],
-      'platform': 'android',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/android-Debug/gen.
-      'gen_repo_out_dir': 'android-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'android',
+    # The builders have the following parameters:
+    # - compile_targets: the compile targets.
+    # - platform: The platform for which the code is compiled.
+    # - experimental: Whether to mark Kythe uploads as experimental.
+    # - sync_generated_files: Whether to sync generated files into a git repo.
+    # - corpus: Kythe corpus to specify in the kzip.
+    # - build_config: Kythe build config to specify in the kzip.
+    # - gen_repo_branch: Which branch in the generated files repo to sync to.
+    # - gen_repo_out_dir: Which directory under src/out to write gen files to.
+    'builders': {
+        'codesearch-gen-chromium-android': {
+            'compile_targets': ['all',],
+            'platform': 'android',
+            'sync_generated_files': True,
+            'gen_repo_branch': 'master',
+            # Generated files will end up in out/android-Debug/gen.
+            'gen_repo_out_dir': 'android-Debug',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'android',
+        },
+        'codesearch-gen-chromium-lacros': {
+            'compile_targets': [
+                # TODO(https://crbug.com/1105242): Compile all targets when they
+                # are fixed. See https://crbug.com/1106980.
+                'chrome',
+            ],
+            'platform': 'chromeos',
+            'sync_generated_files': True,
+            'gen_repo_branch': 'master',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'lacros',
+        },
+        'codesearch-gen-chromium-linux': {
+            'compile_targets': ['all',],
+            'platform': 'linux',
+            'sync_generated_files': True,
+            'gen_repo_branch': 'master',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'linux',
+        },
+        'codesearch-gen-chromium-fuchsia': {
+            'compile_targets': ['all',],
+            'platform': 'fuchsia',
+            # Don't sync generated files for Fuchsia until they're verified.
+            'sync_generated_files': False,
+            'gen_repo_branch': 'master',
+            # Generated files will end up in out/fuchsia-Debug/gen.
+            'gen_repo_out_dir': 'fuchsia-Debug',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'fuchsia',
+        },
+        'codesearch-gen-chromium-chromiumos': {
+            # TODO(emso): Get the below compile targets.
+            # from the chromium_tests recipe module.
+            # Compile targets used by the 'Linux ChromiumOS Full' builder
+            # (2016-12-16)
+            'compile_targets': [
+                'app_list_unittests',
+                'base_unittests',
+                'browser_tests',
+                'chromeos_unittests',
+                'components_unittests',
+                'compositor_unittests',
+                'content_browsertests',
+                'content_unittests',
+                'crypto_unittests',
+                'dbus_unittests',
+                'device_unittests',
+                'gcm_unit_tests',
+                'google_apis_unittests',
+                'gpu_unittests',
+                'interactive_ui_tests',
+                'ipc_tests',
+                'jingle_unittests',
+                'media_unittests',
+                'message_center_unittests',
+                'nacl_loader_unittests',
+                'net_unittests',
+                'ppapi_unittests',
+                'printing_unittests',
+                'remoting_unittests',
+                'sandbox_linux_unittests',
+                'sql_unittests',
+                'ui_base_unittests',
+                'unit_tests',
+                'url_unittests',
+                'views_unittests',
+            ],
+            'platform': 'chromeos',
+            'sync_generated_files': True,
+            'gen_repo_branch': 'master',
+            # Generated files will end up in out/chromeos-Debug/gen.
+            'gen_repo_out_dir': 'chromeos-Debug',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'chromeos',
+        },
+        'codesearch-gen-chromium-win': {
+            'compile_targets': ['all',],
+            'platform': 'win',
+            'sync_generated_files': True,
+            'gen_repo_branch': 'master',
+            # Generated files will end up in out/win-Debug/gen.
+            'gen_repo_out_dir': 'win-Debug',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'win',
+        },
     },
-    'codesearch-gen-chromium-lacros': {
-      'compile_targets': [
-        # TODO(https://crbug.com/1105242): Compile all targets when they are
-        # fixed. See https://crbug.com/1106980.
-        'chrome',
-      ],
-      'platform': 'lacros',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'lacros',
-    },
-    'codesearch-gen-chromium-linux': {
-      'compile_targets': [
-        'all',
-      ],
-      'platform': 'linux',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'linux',
-    },
-    'codesearch-gen-chromium-fuchsia': {
-      'compile_targets': [
-        'all',
-      ],
-      'platform': 'fuchsia',
-      # Don't sync generated files for Fuchsia until they're verified.
-      'sync_generated_files': False,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/fuchsia-Debug/gen.
-      'gen_repo_out_dir': 'fuchsia-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'fuchsia',
-    },
-    'codesearch-gen-chromium-chromiumos': {
-      # TODO(emso): Get the below compile targets.
-      # from the chromium_tests recipe module.
-      # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
-      'compile_targets': [
-        'app_list_unittests',
-        'base_unittests',
-        'browser_tests',
-        'chromeos_unittests',
-        'components_unittests',
-        'compositor_unittests',
-        'content_browsertests',
-        'content_unittests',
-        'crypto_unittests',
-        'dbus_unittests',
-        'device_unittests',
-        'gcm_unit_tests',
-        'google_apis_unittests',
-        'gpu_unittests',
-        'interactive_ui_tests',
-        'ipc_tests',
-        'jingle_unittests',
-        'media_unittests',
-        'message_center_unittests',
-        'nacl_loader_unittests',
-        'net_unittests',
-        'ppapi_unittests',
-        'printing_unittests',
-        'remoting_unittests',
-        'sandbox_linux_unittests',
-        'sql_unittests',
-        'ui_base_unittests',
-        'unit_tests',
-        'url_unittests',
-        'views_unittests',
-      ],
-      'platform': 'chromeos',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/chromeos-Debug/gen.
-      'gen_repo_out_dir': 'chromeos-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'chromeos',
-    },
-    'codesearch-gen-chromium-win': {
-      'compile_targets': [
-        'all',
-      ],
-      'platform': 'win',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/win-Debug/gen.
-      'gen_repo_out_dir': 'win-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'win',
-    },
-  },
 })
 
 PROPERTIES = {
