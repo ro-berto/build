@@ -1942,7 +1942,7 @@ TRYBOTS = try_spec.TryDatabase.create({
            try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-rel',
-                tester='mac10.13-updater-tester-rel',
+                tester='mac10.15-updater-tester-rel',
             ),
         'win-updater-try-builder-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1954,7 +1954,7 @@ TRYBOTS = try_spec.TryDatabase.create({
            try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-dbg',
-                tester='mac10.13-updater-tester-dbg',
+                tester='mac10.15-updater-tester-dbg',
             ),
     },
     'tryserver.v8': {

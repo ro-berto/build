@@ -105,7 +105,7 @@ SPEC = {
             parent_buildername='win32-updater-builder-dbg'),
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
-    'mac10.13-updater-tester-dbg':
+    'mac10.15-updater-tester-dbg':
         CreateBuilderConfig(
             'mac',
             execution_mode=bot_spec.TEST,
