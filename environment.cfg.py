@@ -43,9 +43,6 @@ def Extend(pythonpath, cwd, with_third_party):
       'python-rsa',
       'requests_2_10_0',
       'setuptools-0.6c11',
-      'sqlalchemy_0_7_1',
-      'sqlalchemy_migrate_0_7_1',
-      'tempita_0_5',
       'twisted_10_2',
       'uritemplate',
 
