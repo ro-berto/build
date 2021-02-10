@@ -1533,36 +1533,21 @@ class ChromiumApi(recipe_api.RecipeApi):
     return gn_args
 
   @_with_chromium_layout
-  def mb_isolate_everything(self,
-                            builder_id,
-                            use_goma=True,
-                            mb_path=None,
-                            mb_config_path=None,
-                            name=None,
-                            build_dir=None,
-                            android_version_code=None,
-                            android_version_name=None,
-                            phase=None,
-                            **kwargs):
+  def mb_isolate_everything(self, builder_id, build_dir=None, phase=None):
     args = []
 
     args.extend(self._mb_isolate_map_file_args())
 
     args.extend(self._mb_build_dir_args(build_dir))
 
-    name = name or 'generate .isolate files'
+    name = 'generate .isolate files'
     self.run_mb_cmd(
         name,
         'isolate-everything',
         builder_id,
-        mb_path=mb_path,
-        mb_config_path=mb_config_path,
         phase=phase,
-        use_goma=use_goma,
-        android_version_code=android_version_code,
-        android_version_name=android_version_name,
-        additional_args=args,
-        **kwargs)
+        use_goma=True,
+        additional_args=args)
 
   @contextlib.contextmanager
   def mb_failure_handler(self, name):
