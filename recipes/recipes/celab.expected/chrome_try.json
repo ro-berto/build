@@ -292,7 +292,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release_x64"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -309,7 +309,7 @@
       "/path/to/tmp/json",
       "copy",
       "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
-      "[CACHE]\\builder\\src\\out\\Release\\CR_COMPILE_GUARD.txt"
+      "[CACHE]\\builder\\src\\out\\Release_x64\\CR_COMPILE_GUARD.txt"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -439,7 +439,7 @@
       "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Release_x64"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -460,7 +460,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\out\\Release\\gn_logs.txt",
+      "[CACHE]\\builder\\src\\out\\Release_x64\\gn_logs.txt",
       "/path/to/tmp/"
     ],
     "env": {
@@ -576,7 +576,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
       "chrome/installer/mini_installer",
@@ -595,7 +595,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
       "chrome/installer/mini_installer",
@@ -717,9 +717,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 80, \"chrome/installer/mini_installer\", \"chromedriver\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 80, \"chrome/installer/mini_installer\", \"chromedriver\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -793,7 +793,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CACHE]\\builder\\src\\out\\Release\\CR_COMPILE_GUARD.txt"
+      "[CACHE]\\builder\\src\\out\\Release_x64\\CR_COMPILE_GUARD.txt"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -959,7 +959,7 @@
       "--noprogress",
       "-v",
       "1",
-      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release\\chromedriver.exe --no_external_access=True"
+      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe --no_external_access=True"
     ],
     "cwd": "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e",
     "env_suffixes": {

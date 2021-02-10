@@ -333,7 +333,7 @@
       "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Release_x64"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -355,13 +355,13 @@
       "boringssl_crypto_tests",
       "boringssl_ssl_tests",
       "-c",
-      "[CACHE]\\builder\\src\\out\\Release\\base_unittests",
+      "[CACHE]\\builder\\src\\out\\Release_x64\\base_unittests",
       "-c",
-      "[CACHE]\\builder\\src\\out\\Release\\boringssl_crypto_tests",
+      "[CACHE]\\builder\\src\\out\\Release_x64\\boringssl_crypto_tests",
       "-c",
-      "[CACHE]\\builder\\src\\out\\Release\\boringssl_ssl_tests",
+      "[CACHE]\\builder\\src\\out\\Release_x64\\boringssl_ssl_tests",
       "-b",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-o",
       "[CACHE]\\builder\\src\\out\\clang_tot_coverage_report",
       "--coverage-tools-dir",

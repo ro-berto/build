@@ -270,7 +270,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release_x64"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -341,7 +341,7 @@
       "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Release_x64"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -364,7 +364,7 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "//testing/libfuzzer:libfuzzer_main"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -386,7 +386,7 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -536,7 +536,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
       "target2",
@@ -555,7 +555,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
       "target2",
@@ -677,9 +677,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 80, \"target2\", \"v8_target3\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 80, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -766,7 +766,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]\\resources\\filter_build_files.py",
       "--dir",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "--platform",
       "win",
       "--output",
@@ -793,9 +793,9 @@
       "python",
       "RECIPE_MODULE[build::archive]\\resources\\zip_archive.py",
       "[CLEANUP]\\chrome_staging",
-      "libfuzzer-win32-release-170242",
+      "libfuzzer-win32-release_x64-170242",
       "[\"file1\", \"file2\"]",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release_x64"
     ],
     "infra_step": true,
     "name": "zipping"
@@ -815,13 +815,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]\\chrome_staging\\libfuzzer-win32-release-170242.zip",
-      "gs://chromium-browser-libfuzzer/win32-release-asan/libfuzzer-win32-release-170242.zip"
+      "[CLEANUP]\\chrome_staging\\libfuzzer-win32-release_x64-170242.zip",
+      "gs://chromium-browser-libfuzzer/win32-release_x64-asan/libfuzzer-win32-release_x64-170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/win32-release-asan/libfuzzer-win32-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/win32-release_x64-asan/libfuzzer-win32-release_x64-170242.zip@@@"
     ]
   },
   {
@@ -832,10 +832,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CLEANUP]\\chrome_staging\\libfuzzer-win32-release-170242.zip"
+      "[CLEANUP]\\chrome_staging\\libfuzzer-win32-release_x64-170242.zip"
     ],
     "infra_step": true,
-    "name": "libfuzzer-win32-release-170242.zip"
+    "name": "libfuzzer-win32-release_x64-170242.zip"
   },
   {
     "name": "$result"
