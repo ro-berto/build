@@ -81,7 +81,7 @@ CHROME_REQUIRED_FILES = {
     'chromedriver',
     'cast_runner.far',
     'http.far',
-    'web_engine_shell.far'
+    'web_engine_shell.far',
     'web_runner.far',
   ],
 }
