@@ -176,6 +176,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android.fyi',
                 buildername='android-pie-arm64-wpt-rel-non-cq',
             ),
+        'android-weblayer-pie-x86-wpt-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android.fyi',
+                buildername='android-weblayer-pie-x86-wpt-fyi-rel',
+            ),
         'android-pie-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
