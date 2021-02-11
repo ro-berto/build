@@ -84,7 +84,11 @@ _AddBuildSpec(
     bisect_archive_build=True,
     target_bits=64,
     target_arch='arm',
-    extra_gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'])
+    extra_gclient_apply_config=[
+        'fuchsia_arm64',
+        'fuchsia_arm64_host',
+        'fuchsia_internal',
+    ])
 
 _AddIsolatedTestSpec(
     'fuchsia-perf-fyi',
