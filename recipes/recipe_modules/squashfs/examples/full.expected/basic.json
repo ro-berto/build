@@ -1,6 +1,34 @@
 [
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/squashfs",
+      "-ensure-file",
+      "infra/3pp/tools/squashfs/linux-amd64 yGR4iGjoP3vDBNoniQnRJIDNMxN75xoE6-FsjyRIS1AC",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-yGR4iGjoP3vDBNon\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/3pp/tools/squashfs/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -10,7 +38,7 @@
       "python",
       "RECIPE_MODULE[build::squashfs]/resources/squashfs_invoke.py",
       "--binary-path",
-      "RECIPE_REPO[build]/third_party/squashfs/squashfs-tools/mksquashfs",
+      "[START_DIR]/squashfs/squashfs-tools/mksquashfs",
       "--folder",
       "some/folder",
       "--output-file",

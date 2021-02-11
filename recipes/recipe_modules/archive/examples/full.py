@@ -33,9 +33,9 @@ def RunSteps(api):
     return
 
   if 'generic_archive' in api.properties:
-    api.path.mock_add_paths(
-        api.squashfs.repo_resource('third_party', 'squashfs', 'squashfs-tools',
-                                   'mksquashfs'))
+    api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
+                                                       'squashfs-tools',
+                                                       'mksquashfs'))
     api.archive.generic_archive(
         build_dir=api.m.path.mkdtemp(),
         update_properties=api.properties.get('update_properties'),

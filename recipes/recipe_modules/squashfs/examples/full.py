@@ -14,9 +14,9 @@ DEPS = [
 
 def RunSteps(api):
   if 'binary_not_found' not in api.properties:
-    api.path.mock_add_paths(
-        api.squashfs.repo_resource('third_party', 'squashfs', 'squashfs-tools',
-                                   'mksquashfs'))
+    api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
+                                                       'squashfs-tools',
+                                                       'mksquashfs'))
   api.squashfs.mksquashfs('some/folder', 'out.squash')
 
 

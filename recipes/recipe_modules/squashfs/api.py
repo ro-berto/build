@@ -7,6 +7,14 @@ from recipe_engine import recipe_api
 
 class SquashfsApi(recipe_api.RecipeApi):
 
+  def _get_squashfs_path(self):
+    squashfs_dir = self.m.path['start_dir'].join('squashfs')
+    ensure_file = self.m.cipd.EnsureFile().add_package(
+        'infra/3pp/tools/squashfs/linux-amd64',
+        'yGR4iGjoP3vDBNoniQnRJIDNMxN75xoE6-FsjyRIS1AC')
+    self.m.cipd.ensure(squashfs_dir, ensure_file)
+    return squashfs_dir
+
   def mksquashfs(self, folder_path, output_file_path):
     """Archive a folder to a file using squashfs format.
 
@@ -24,8 +32,8 @@ class SquashfsApi(recipe_api.RecipeApi):
       self.m.python.failing_step('Mksquashfs only supports linux',
                                  'Only use this for linux builds.')
 
-    binary_path = self.repo_resource('third_party', 'squashfs',
-                                     'squashfs-tools', 'mksquashfs')
+    squashfs_dir = self._get_squashfs_path()
+    binary_path = squashfs_dir.join('squashfs-tools', 'mksquashfs')
     if not self.m.path.exists(binary_path):
       self.m.python.failing_step('Mksquashfs is not found',
                                  'Binary not found at %s.' % binary_path)
