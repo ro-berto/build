@@ -233,6 +233,23 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "run",
+      "[START_DIR]/boringssl/util/check_filenames.go"
+    ],
+    "cwd": "[START_DIR]/boringssl",
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
+    "name": "check filenames"
+  },
+  {
+    "cmd": [
       "sudo",
       "xcode-select",
       "--reset"

@@ -1,71 +1,15 @@
 [
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:9a1adc55bf4a1173784da3ba2f8cb06421606748",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
+      "uname",
+      "-a"
     ],
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
     },
-    "infra_step": true,
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:9a1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "9f2000",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "env": {
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
-    },
-    "infra_step": true,
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "env": {
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
-    },
-    "infra_step": true,
-    "name": "select XCode"
+    "name": "uname"
   },
   {
     "cmd": [
@@ -73,7 +17,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang': 'True', 'checkout_fuzzer': True}, 'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
@@ -200,11 +144,13 @@
       "python",
       "-u",
       "[START_DIR]/boringssl/util/bot/go/env.py",
-      "[START_DIR]/boringssl/util/bot/cmake-mac/bin/cmake",
+      "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
+      "-DCMAKE_CXX_COMPILER=[START_DIR]/boringssl/util/bot/llvm-build/bin/clang++",
+      "-DCMAKE_C_COMPILER=[START_DIR]/boringssl/util/bot/llvm-build/bin/clang",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
-      "-DCMAKE_OSX_ARCHITECTURES=arm64",
-      "-DCMAKE_OSX_SYSROOT=iphoneos",
+      "-DFUZZ=1",
+      "-DLIBFUZZER_FROM_DEPS=1",
       "[START_DIR]/boringssl"
     ],
     "cwd": "[START_DIR]/boringssl/build",
@@ -250,17 +196,54 @@
   },
   {
     "cmd": [
-      "sudo",
-      "xcode-select",
-      "--reset"
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "run",
+      "util/all_tests.go",
+      "-json-output",
+      "/path/to/tmp/json"
     ],
+    "cwd": "[START_DIR]/boringssl",
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
     },
-    "infra_step": true,
-    "name": "reset XCode"
+    "name": "unit tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@test_utils.test_results (invalid)@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@test_utils.test_results (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "test",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-pipe",
+      "-fuzzer",
+      "-shim-config",
+      "fuzzer_mode.json"
+    ],
+    "cwd": "[START_DIR]/boringssl/ssl/test/runner",
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath"
+    },
+    "name": "ssl tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@test_utils.test_results (invalid)@@@",
+      "@@@STEP_LOG_LINE@test_utils.test_results (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@test_utils.test_results (exception)@@@"
+    ]
   },
   {
     "name": "$result"
