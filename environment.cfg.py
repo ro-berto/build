@@ -43,7 +43,6 @@ def Extend(pythonpath, cwd, with_third_party):
       'python-rsa',
       'requests_2_10_0',
       'setuptools-0.6c11',
-      'twisted_10_2',
       'uritemplate',
 
       'site-packages',

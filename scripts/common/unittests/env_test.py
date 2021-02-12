@@ -195,14 +195,6 @@ class InfraPythonPathTestCase(unittest.TestCase):
           env.SplitPath(requests.__file__)[-4:-1],
           ['third_party', 'requests_2_10_0', 'requests'])
 
-  def testTwistedLoads(self):
-    # NOTE: Update this if 'twisted' version changes.
-    with env.GetInfraPythonPath().Enter():
-      import twisted
-      self.assertEqual(
-          env.SplitPath(twisted.__file__)[-4:-1],
-          ['third_party', 'twisted_10_2', 'twisted'])
-
 
 class InfraPythonPathWithNoBuildInternalTestCase(InfraPythonPathTestCase):
 
