@@ -48,7 +48,7 @@ class IsolateApi(recipe_api.RecipeApi):
     with self.m.step.nest('check swarm_hashes'):
       if self._test_data.enabled:
         self._isolated_tests = {
-          target: '[dummy hash for %s]' % target for target in targets}
+          target: '[dummy hash for %s/1]' % target for target in targets}
 
       isolated_tests = self.isolated_tests
       missing = [t for t in targets if not isolated_tests.get(t)]

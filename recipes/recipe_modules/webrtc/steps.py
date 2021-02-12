@@ -311,16 +311,6 @@ class WebRtcIsolatedGtest(object):
   def runs_on_swarming(self):
     return True
 
-  # TODO(bugs.webrtc.org/12072): remove this after isolate shutdown.
-  def _get_isolated_or_cas_input_root(self, task_input):
-    """
-    This checks format of |task_input| and returns appropriate value as
-    (isolated, cas_input_root).
-    """
-    if '/' in task_input:
-      return '', task_input  # pragma: no cover
-    return task_input, ''
-
   def pre_run(self, api):
     """Launches the test on Swarming."""
     assert self._task is None, (
@@ -353,13 +343,11 @@ class WebRtcIsolatedGtest(object):
     return step_result
 
   def create_task(self, api, task_input):
-    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
     task = api.chromium_swarming.task(
         name=self.step_name,
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,
-        isolated=isolated,
-        cas_input_root=cas_input_root)
+        cas_input_root=task_input)
 
     task_slice = task.request[0]
     task.request = task.request.with_slice(0, task_slice)
