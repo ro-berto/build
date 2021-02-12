@@ -72,6 +72,8 @@ def cronet_builder(c):
   c.gn_args.append('use_hashed_jni_names=true')
   c.gn_args.append('use_partition_alloc=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
+  c.gn_args.append('media_use_ffmpeg=false')
+  c.gn_args.append('media_use_libvpx=false')
   c.compile_py.default_targets=[
       'cronet_package',
       'cronet_perf_test_apk',
