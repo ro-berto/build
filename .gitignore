@@ -3,8 +3,3 @@
 /scripts/gsd_generate_index
 /scripts/private/data/reliability
 /third_party/gsutil
-/third_party/infra_libs
-/third_party/pyasn1
-/third_party/pyasn1-modules
-/third_party/python-rsa
-/third_party/xvfb

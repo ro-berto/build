@@ -193,7 +193,7 @@ class InfraPythonPathTestCase(unittest.TestCase):
       import requests
       self.assertEqual(
           env.SplitPath(requests.__file__)[-4:-1],
-          ['third_party', 'requests_2_10_0', 'requests'])
+          ['python2.7', 'site-packages', 'requests'])
 
 
 class InfraPythonPathWithNoBuildInternalTestCase(InfraPythonPathTestCase):
