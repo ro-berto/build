@@ -195,10 +195,8 @@ def _get_builders_to_check(api, affected_files, repo_path):
         and the value identifies the related builder and the alternative
         bucket that the builder was based on.
   """
-  cl_footers = api.tryserver.get_footers() or {}
-  footer_builders = cl_footers.get(BUILDER_FOOTER)
-
-  if footer_builders is not None:
+  footer_builders = api.tryserver.get_footer(BUILDER_FOOTER)
+  if bool(footer_builders):
     return False, _process_footer_builders(api, footer_builders)
 
   prefix = str(repo_path) + '/'
