@@ -144,12 +144,3 @@ _AddIsolatedTestSpec(
     target_bits=32,
     target_arch='arm',
     cros_boards='kevin')
-
-_AddIsolatedTestSpec(
-    'lacros-eve-perf-fyi',
-    'chromeos',
-    parent_buildername='chromeos-amd64-generic-lacros-builder-perf',
-    parent_builder_group='chromium.perf',
-    target_bits=64,
-    target_arch='intel',
-    cros_boards='amd64-generic:eve')

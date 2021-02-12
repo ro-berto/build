@@ -150,12 +150,14 @@ def _AddIsolatedTestSpec(name,
                          platform,
                          parent_buildername,
                          target_bits=64,
-                         target_arch=None):
+                         target_arch=None,
+                         cros_boards=None):
   spec = TestSpec(
       'chromium_perf',
       platform,
       target_bits,
       parent_buildername=parent_buildername,
+      cros_boards=cros_boards,
       target_arch=target_arch)
   SPEC[name] = spec
 
@@ -272,6 +274,14 @@ _AddIsolatedTestSpec(
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
 _AddIsolatedTestSpec('linux-perf-rel', 'linux', 'linux-builder-perf-rel')
+
+_AddIsolatedTestSpec(
+    'lacros-eve-perf',
+    'chromeos',
+    'chromeos-amd64-generic-lacros-builder-perf',
+    target_bits=64,
+    target_arch='intel',
+    cros_boards='amd64-generic:eve')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
