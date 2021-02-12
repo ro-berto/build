@@ -8,7 +8,8 @@ paths.
 
 import os
 
-def Extend(pythonpath, cwd, with_third_party):
+
+def Extend(pythonpath, cwd):
   """Path extension function (see common.env).
 
   In this invocation, 'cwd' is the <build> directory.
@@ -20,13 +21,5 @@ def Extend(pythonpath, cwd, with_third_party):
       os.path.join(cwd, 'scripts'),
       os.path.join(cwd, 'recipes'),
       os.path.join(cwd, 'site_config'),
-  ]
-  if not with_third_party:
-    return pythonpath.Append(*build_path)
-
-  # Add 'BUILD/third_party' paths.
-  third_party_base = os.path.join(cwd, 'third_party')
-  build_path += [
-      third_party_base,
   ]
   return pythonpath.Append(*build_path)
