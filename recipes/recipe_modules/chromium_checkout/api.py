@@ -8,11 +8,13 @@ from RECIPE_MODULES.build import chromium
 
 
 class ChromiumCheckoutApi(recipe_api.RecipeApi):
-  def __init__(self, *args, **kwargs):
+
+  def __init__(self, input_properties, *args, **kwargs):
     super(ChromiumCheckoutApi, self).__init__(*args, **kwargs)
     # Keep track of working directory (which contains the checkout).
     # None means "default value".
     self._working_dir = None
+    self._timeout = input_properties.timeout
 
   # TODO(gbeaty) Switch callers to use checkout_dir
   @property
@@ -23,6 +25,10 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     """
     # TODO(phajdan.jr): assert ensure_checkout has been called.
     return self._working_dir
+
+  @property
+  def timeout(self):
+    return self._timeout
 
   @property
   def checkout_dir(self):
@@ -79,8 +85,11 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       files[i] = files[i].replace('\\', '/')
     return files
 
-  def ensure_checkout(self, bot_config=None, **kwargs):
+  def ensure_checkout(self, bot_config=None, timeout=None, **kwargs):
     """Wrapper for bot_update.ensure_checkout with chromium-specific additions.
+
+    Args:
+      timeout: (seconds) for tiemout of bot_update.ensure_checkout.
     """
     bot_config = bot_config or chromium.BuilderSpec.create()
 
@@ -89,11 +98,12 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
     self._working_dir = self.get_checkout_dir(bot_config)
 
+    timeout = int(self.timeout) if self.timeout else timeout
+
     # Bot Update re-uses the gclient configs.
     with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
-          clobber=bot_config.clobber,
-          **kwargs)
+          clobber=bot_config.clobber, timeout=timeout, **kwargs)
 
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed

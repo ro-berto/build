@@ -1,0 +1,13 @@
+// Copyright 2021 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipe_modules.build.chromium_checkout;
+
+message InputProperties {
+  // Time (in seconds) it'll take to timeout from the bot_update step.
+  // Any value provided here takes precedence over what's provided
+  // through ensure_checkout().
+  string timeout = 1;
+}

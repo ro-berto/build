@@ -1,3 +1,5 @@
+from PB.recipe_modules.build.chromium_checkout import properties
+
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
@@ -12,3 +14,5 @@ DEPS = [
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
+
+PROPERTIES = properties.InputProperties
