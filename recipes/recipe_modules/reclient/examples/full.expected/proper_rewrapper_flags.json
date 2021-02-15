@@ -181,7 +181,7 @@
   {
     "cmd": [
       "[CACHE]/cipd/infra/tools/bqupload/latest/bqupload",
-      "goma-logs.experimental_rbe_metrics.rbe_metrics"
+      "goma-logs.rbe_metrics.builds"
     ],
     "infra_step": true,
     "name": "postprocess for reclient.upload RBE metrics to BigQuery",

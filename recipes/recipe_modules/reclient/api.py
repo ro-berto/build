@@ -234,7 +234,7 @@ class ReclientApi(recipe_api.RecipeApi):
 
     bqupload_cipd_path = self.m.cipd.ensure_tool(
         'infra/tools/bqupload/${platform}', 'latest')
-    BQ_TABLE_NAME = 'goma-logs.experimental_rbe_metrics.rbe_metrics'
+    BQ_TABLE_NAME = 'goma-logs.rbe_metrics.builds'
     # `bqupload`'s expected JSON proto format is different from that of the
     # protobuf's native MessageToJson, so we have to dump this json to string on
     # our own.
