@@ -15,7 +15,6 @@ import mock
 import test_env
 
 from common import chromium_utils
-from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
 
 FAILURES = ['NavigationControllerTest.Reload',
