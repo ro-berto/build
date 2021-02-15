@@ -5,6 +5,7 @@
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.recipe_api import Property
+from recipe_engine.config import ConfigGroup, Dict, Single, List
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -28,14 +29,55 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    # Configuration of the auto-roller in the form of a dictionary similar with
-    # current BOT_CONFIGS values
+    # Configuration of the auto-roller
     'autoroller_config':
         Property(
-            # TODO(liviurau): expand the specification and documentation of this
-            # dictionary when BOT_CONFIGS gets fully migrated
-            kind=dict,
-            default={},
+            kind=ConfigGroup(
+              # Subject of the rolling CL
+              subject=Single(basestring),
+              # Configuration parameters of the project where dependencies will
+              # be rolled in. The source is always Chromium project.
+              target_config=ConfigGroup(
+                # Solution name to be used for project checkout
+                solution_name=Single(str, required=True),
+                # Project name. Together with the 'base_url' it will form the
+                # location for the project
+                project_name=Single(basestring, required=True),
+                # The name of the account used to create the roll CL
+                account=Single(str),
+                # Template for the commit message used with regular
+                # dependencies
+                log_template=Single(basestring),
+                # Template for the commit message used with cipd dependencies
+                cipd_log_template=Single(basestring),
+                # Gerrit URL to be used for rolling CL review
+                gerrit_base_url=Single(basestring, required=True,
+                  empty_val='https://chromium-review.googlesource.com'),
+                # Repo base URL together with 'project_name' to locate the repo
+                # where the rolling CL will be landed
+                base_url=Single(basestring, required=True,
+                  empty_val='https://chromium.googlesource.com/'),
+              ),
+              # List of (target side) dependencies to be expcluded from rolling
+              # with the current config
+              excludes=Single(list, empty_val=None),
+              # List of (target side) dependencies to be included when rolling
+              # with the current config
+              includes=Single(list, empty_val=None),
+              # Mapping between the dependency name in the target project and
+              # the name in the source project
+              deps_key_mapping=Dict(value_type=str),
+              # List of reviewers of the roll CL
+              reviewers=List(str),
+              # Add extra log entries to the commit message.
+              show_commit_log=Single(bool),
+              # Flag for rolling the binary chromium pin in target project
+              roll_chromium_pin=Single(bool, empty_val=False),
+              # Bugs included in roll CL description
+              # TODO(liviurau): Remove obsolete feature from configs and
+              # remove the parameters here afterwards
+              bugs=Single(basestring),
+            ),
         ),
 }
 
@@ -45,98 +87,6 @@ CR_PROJECT_NAME = 'chromium/src'
 MAX_COMMIT_LOG_ENTRIES = 8
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 
-TARGET_CONFIG_DEVTOOLS = {
-  'solution_name': 'devtools-frontend',
-  'project_name': 'devtools/devtools-frontend',
-  'account': 'devtools-ci-autoroll-builder@'
-             'chops-service-accounts.iam.gserviceaccount.com',
-  'log_template': 'Rolling %s: %s/+log/%s..%s',
-  'cipd_log_template': 'Rolling %s: %s..%s',
-}
-
-TARGET_CONFIG_V8 = {
-  'solution_name': 'v8',
-  'project_name': 'v8/v8',
-  'account': 'v8-ci-autoroll-builder@'
-             'chops-service-accounts.iam.gserviceaccount.com',
-  'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
-  'cipd_log_template': 'Rolling v8/%s: %s..%s',
-}
-
-BOT_CONFIGS = {
-    'Auto-roll - devtools chromium': {
-        'target_config': TARGET_CONFIG_DEVTOOLS,
-        'subject': 'Update DevTools Chromium DEPS.',
-        # Don't roll any of the other dependencies.
-        'includes': [],
-        'reviewers': [
-            'machenbach@chromium.org',
-            'liviurau@chromium.org',
-        ],
-        'show_commit_log': False,
-        'roll_chromium_pin': True,
-        'bugs': 'none',
-    },
-    'Auto-roll - devtools deps': {
-        'target_config': TARGET_CONFIG_DEVTOOLS,
-        'subject': 'Update DevTools DEPS.',
-        'reviewers': [
-            'machenbach@chromium.org',
-            'liviurau@chromium.org',
-        ],
-        'show_commit_log': False,
-        'bugs': 'none',
-    },
-    'Auto-roll - test262': {
-        'target_config': TARGET_CONFIG_V8,
-        'subject': 'Update Test262.',
-        'includes': [
-            # Only roll these dependencies (list without solution name prefix).
-            'test/test262/data',
-        ],
-        'reviewers': [
-            'adamk@chromium.org',
-            'gsathya@chromium.org',
-        ],
-        'show_commit_log': True,
-    },
-    'Auto-roll - v8 deps': {
-        'target_config': TARGET_CONFIG_V8,
-        'subject': 'Update V8 DEPS.',
-        'excludes': [
-            # https://crrev.com/c/1547863
-            'third_party/perfetto',
-            'third_party/protobuf',
-            # Skip these dependencies (list without solution name prefix).
-            'test/mozilla/data',
-            'test/simdjs/data',
-            'test/test262/data',
-            'test/wasm-js/data',
-            'testing/gtest',
-            'third_party/WebKit/Source/platform/inspector_protocol',
-            'third_party/blink/renderer/platform/inspector_protocol',
-        ],
-        'reviewers': [
-            'machenbach@chromium.org',
-            'tmrts@chromium.org',
-            'v8-waterfall-sheriff@grotations.appspotmail.com',
-        ],
-        'show_commit_log': False,
-    },
-    'Auto-roll - wasm-spec': {
-        'target_config': TARGET_CONFIG_V8,
-        'subject': 'Update wasm-spec.',
-        'includes': [
-            # Only roll these dependencies (list without solution name prefix).
-            'test/wasm-js/data',
-        ],
-        'reviewers': [
-            'ahaas@chromium.org',
-            'clemensh@chromium.org',
-        ],
-        'show_commit_log': True,
-    },
-}
 
 # DEPS configuration of pinned Devtools-Frontend Chromium versions.
 STORAGE_URL = ('https://commondatastorage.googleapis.com/'
@@ -275,12 +225,6 @@ def get_key_mapper(autoroller_config):
 
 
 def RunSteps(api, autoroller_config):
-  # Configure this particular instance of the auto-roller.
-
-  # Fall back on local stored configurations
-  autoroller_config = autoroller_config or BOT_CONFIGS[
-      api.buildbucket.builder_name]
-
   target_config = autoroller_config['target_config']
 
   # Look for overrides for the default base and gerrit locations
@@ -482,6 +426,27 @@ src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-pac
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001"""
   bad_cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
 src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762"""
+  target_config_v8 = {
+    'solution_name': 'v8',
+    'project_name': 'v8/v8',
+    'account': 'v8-ci-autoroll-builder@'
+              'chops-service-accounts.iam.gserviceaccount.com',
+    'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
+    'cipd_log_template': 'Rolling v8/%s: %s..%s',
+  }
+  v8_deps_config = {
+        'target_config': target_config_v8,
+        'subject': 'Update V8 DEPS.',
+        'excludes': [
+            'third_party/protobuf',
+            'test/test262/data',
+        ],
+        'reviewers': [
+            'anybody@chromium.org',
+            'ciciobello@chromium.org',
+        ],
+        'show_commit_log': False,
+    }
 
   def template(testname, buildername, solution_name='v8'):
     return api.test(
@@ -508,6 +473,7 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
 
   yield (
       template('roll', 'Auto-roll - v8 deps') +
+      api.properties(autoroller_config=v8_deps_config) +
       api.override_step_data(
           'gclient setdep base_trace_event_common',
           retcode=1,
@@ -529,7 +495,8 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='Auto-roll - v8 deps',
           revision='',
-      ),
+      ) +
+      api.properties(autoroller_config=v8_deps_config),
       api.override_step_data(
           'gclient get src deps',
           api.raw_io.stream_output(bad_cr_deps_info, stream='stdout'),
@@ -538,16 +505,23 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
   )
 
   yield (
-      template('test262', 'Auto-roll - test262') +
+      template('commit log', 'Roll with commit log') +
+      api.properties(autoroller_config={
+          'target_config': target_config_v8,
+          'subject': 'Update Test262.',
+          'includes': [
+              # Only roll these dependencies (list without solution name prefix).
+              'test/test262/data',
+          ],
+          'reviewers': [
+              'anybody@chromium.org',
+          ],
+          'show_commit_log': True,
+      }) +
       api.override_step_data(
           'look up test_test262_data',
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       ) +
-      api.post_process(Filter('git commit', 'git cl'))
-  )
-
-  yield (
-      template('devtools', 'Auto-roll - devtools deps', 'devtools-frontend') +
       api.post_process(Filter('git commit', 'git cl'))
   )
 
@@ -580,13 +554,12 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           "bugs": "none",
       }))
 
-  # Test updating chromium pins in devtools DEPS file. The test data for
-  # checking the latest number returns 123 by default. Hence only linux should
-  # be updated here.
+  # Test updating chromium pins. The test data for checking the latest number
+  # returns 123 by default. Hence only linux should be updated here.
   important_steps = Filter().include_re(
       r'.*(?:chromium_linux|chromium_win|chromium_mac).*')
   yield (
-      template('devtools_chromium', 'Auto-roll - devtools chromium', 'devtools-frontend') +
+      template('roll chromium linux pin', 'Auto-roll - chromium somewhere', 'somewhere') +
       api.override_step_data(
           'gclient get chromium_linux deps',
           api.raw_io.stream_output('122', stream='stdout'),
@@ -595,6 +568,23 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           'gclient get chromium_win deps',
           api.raw_io.stream_output('123', stream='stdout'),
       ) +
+      api.properties(autoroller_config={
+          'target_config': {
+            'solution_name': 'somewhere',
+            'project_name': 'home/somewhere',
+            'account': 'somebot@chops-service-accounts.iam.gserviceaccount.com',
+            'log_template': 'Rolling %s: %s/+log/%s..%s',
+            'cipd_log_template': 'Rolling %s: %s..%s',
+          },
+          'subject': 'Update Somewhere Chromium DEPS.',
+          # Don't roll any of the other dependencies.
+          'includes': [],
+          'reviewers': [
+              'neicanimeni@chromium.org',
+          ],
+          'show_commit_log': False,
+          'roll_chromium_pin': True,
+      }) +
       api.override_step_data(
           'gclient get chromium_mac deps',
           api.raw_io.stream_output('124', stream='stdout'),
@@ -610,7 +600,9 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
-          builder='Auto-roll - v8 deps'),
+          builder='Auto-roll - v8 deps'
+          ) +
+      api.properties(autoroller_config=v8_deps_config),
       api.override_step_data(
           'gerrit changes',
           api.json.output([{
