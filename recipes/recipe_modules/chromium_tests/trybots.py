@@ -1470,6 +1470,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.perf',
                 buildername='android_arm64-builder-perf',
             ),
+        'Fuchsia Builder Perf':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.perf.fyi',
+                buildername='fuchsia-builder-perf-fyi',
+                tester='fuchsia-perf-fyi',
+            ),
         'Lacros Builder Perf':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.perf',
