@@ -4,10 +4,6 @@
 #   https://chrome-internal.googlesource.com/chrome/tools/build/master.DEPS
 #   https://chrome-internal.googlesource.com/chrome/tools/build/internal.DEPS
 deps = {
-  'build/scripts/gsd_generate_index':
-    'https://chromium.googlesource.com/chromium/tools/gsd_generate_index.git',
-  'build/scripts/private/data/reliability':
-    'https://chromium.googlesource.com/chromium/src/chrome/test/data/reliability.git',
   'depot_tools':
     'https://chromium.googlesource.com/chromium/tools/depot_tools.git',
 }

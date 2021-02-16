@@ -20,7 +20,6 @@ def GetFilesToSkip(input_api):
       r'.*scripts/release/.*',
       r'.*recipes/recipes.py$',
       r'.*recipes/recipes/.*_autogen.py$',
-      r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
       r'.*masters/.*/public_html/.*\.html$',
