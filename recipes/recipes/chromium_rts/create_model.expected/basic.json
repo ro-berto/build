@@ -183,50 +183,38 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "install chromium/rts/rts-chromium"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest"
-    ],
-    "infra_step": true,
-    "name": "install chromium/rts/rts-chromium.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest",
-      "-ensure-file",
-      "chromium/rts/rts-chromium/${platform} latest",
-      "-max-threads",
-      "0",
+      "describe",
+      "chromium/rts/rts-chromium/linux-amd64",
+      "-version",
+      "latest",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "infra_step": true,
-    "name": "install chromium/rts/rts-chromium.ensure_installed",
+    "name": "cipd describe chromium/rts/rts-chromium/linux-amd64",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pin\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"chromium/rts/rts-chromium/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"refs\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromium/rts/rts-chromium/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"modified_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"modified_ts\": 1446574210, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"latest\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"registered_ts\": 1446574210, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574210, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"tag\": \"git_revision:c1ee0e03d15281730ebedf1f7151474f7a523001\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -236,7 +224,47 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest/rts-chromium",
+      "cipd",
+      "ensure",
+      "-root",
+      "[CLEANUP]/rts-chromium",
+      "-ensure-file",
+      "@Subdir linux-amd64\nchromium/rts/rts-chromium/linux-amd64 git_revision:c1ee0e03d15281730ebedf1f7151474f7a523001\n@Subdir mac-amd64\nchromium/rts/rts-chromium/mac-amd64 git_revision:c1ee0e03d15281730ebedf1f7151474f7a523001\n@Subdir windows-amd64\nchromium/rts/rts-chromium/windows-amd64 git_revision:c1ee0e03d15281730ebedf1f7151474f7a523001",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "install RTS executables",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"linux-amd64\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:c1e\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromium/rts/rts-chromium/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"mac-amd64\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:c1e\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromium/rts/rts-chromium/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"windows-amd64\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:c1e\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromium/rts/rts-chromium/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",
       "fetch-rejections",
       "-out",
       "[CLEANUP]/rts-chromium-model-data/rejections",
@@ -249,7 +277,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest/rts-chromium",
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",
       "fetch-durations",
       "-frac",
       "0.010",
@@ -264,7 +292,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest/rts-chromium",
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",
       "create-model",
       "-checkout",
       "[CACHE]/builder/src",
@@ -278,6 +306,34 @@
     "name": "create-model"
   },
   {
+    "cmd": [],
+    "name": "Create CIPD packages"
+  },
+  {
+    "cmd": [],
+    "name": "Create CIPD packages.Upload CIPD package - linux-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CLEANUP]/rts-chromium-model",
+      "[CLEANUP]/model-pkg-dir/linux-amd64"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - linux-amd64.Copy the model files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
     "cmd": [
       "vpython",
       "-u",
@@ -285,18 +341,21 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/cipd/chromium/rts/rts-chromium/latest/rts-chromium",
-      "[CLEANUP]/rts-chromium-model/rts-chromium"
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-executable",
+      "[CLEANUP]/model-pkg-dir/linux-amd64/rts-executable"
     ],
     "infra_step": true,
-    "name": "add rts-chromium to the model"
+    "name": "Create CIPD packages.Upload CIPD package - linux-amd64.Include the executable",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
   },
   {
     "cmd": [
       "cipd",
       "create",
       "-pkg-def",
-      "{\"data\": [], \"install_mode\": \"\", \"package\": \"chromium/rts/model\", \"root\": \"[CLEANUP]/rts-chromium-model\"}",
+      "{\"data\": [{\"dir\": \".\", \"exclude\": []}], \"install_mode\": \"\", \"package\": \"chromium/rts/model/linux-amd64\", \"root\": \"[CLEANUP]/model-pkg-dir/linux-amd64\"}",
       "-hash-algo",
       "sha256",
       "-ref",
@@ -306,16 +365,155 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "create chromium/rts/model",
+    "name": "Create CIPD packages.Upload CIPD package - linux-amd64.create chromium/rts/model/linux-amd64",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/+/40-chars-fake-of-the-package-instance_id@@@"
+      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/linux-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CLEANUP]/rts-chromium-model",
+      "[CLEANUP]/model-pkg-dir/windows-amd64"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Copy the model files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/rts-chromium/windows-amd64/rts-executable.exe",
+      "[CLEANUP]/model-pkg-dir/windows-amd64/rts-executable.exe"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Include the executable",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "create",
+      "-pkg-def",
+      "{\"data\": [{\"dir\": \".\", \"exclude\": []}], \"install_mode\": \"\", \"package\": \"chromium/rts/model/windows-amd64\", \"root\": \"[CLEANUP]/model-pkg-dir/windows-amd64\"}",
+      "-hash-algo",
+      "sha256",
+      "-ref",
+      "latest",
+      "-tag",
+      "build:https://ci.chromium.org/b/0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.create chromium/rts/model/windows-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/windows-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Create CIPD packages.Upload CIPD package - mac-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CLEANUP]/rts-chromium-model",
+      "[CLEANUP]/model-pkg-dir/mac-amd64"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - mac-amd64.Copy the model files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/rts-chromium/mac-amd64/rts-executable",
+      "[CLEANUP]/model-pkg-dir/mac-amd64/rts-executable"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - mac-amd64.Include the executable",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "create",
+      "-pkg-def",
+      "{\"data\": [{\"dir\": \".\", \"exclude\": []}], \"install_mode\": \"\", \"package\": \"chromium/rts/model/mac-amd64\", \"root\": \"[CLEANUP]/model-pkg-dir/mac-amd64\"}",
+      "-hash-algo",
+      "sha256",
+      "-ref",
+      "latest",
+      "-tag",
+      "build:https://ci.chromium.org/b/0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Create CIPD packages.Upload CIPD package - mac-amd64.create chromium/rts/model/mac-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/mac-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {
