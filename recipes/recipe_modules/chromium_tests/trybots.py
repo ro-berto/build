@@ -572,7 +572,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                     try_spec.TryMirror.create(
                         builder_group='chromium.angle',
-                        buildername='win-angle-chromium-x64-builder',
+                        buildername='win-angle-x64-builder',
                         tester='win10-angle-x64-nvidia',
                     ),
                 ],
