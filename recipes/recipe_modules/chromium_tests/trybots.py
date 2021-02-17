@@ -500,6 +500,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
+        'win-angle-chromium-x64-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='win-angle-chromium-x64-builder',
+                        tester='win10-angle-chromium-x64-intel',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='win-angle-chromium-x64-builder',
+                        tester='win10-angle-chromium-x64-nvidia',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         'win-angle-rel-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -542,6 +558,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.gpu.fyi',
                         buildername='GPU FYI Win x64 dEQP Builder',
                         tester='Win10 FYI x64 dEQP Release (Intel HD 630)',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
+        'win-angle-x64-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='win-angle-x64-builder',
+                        tester='win10-angle-x64-intel',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='win-angle-chromium-x64-builder',
+                        tester='win10-angle-x64-nvidia',
                     ),
                 ],
                 retry_failed_shards=False,
