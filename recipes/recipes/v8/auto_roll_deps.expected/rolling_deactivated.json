@@ -14,8 +14,8 @@
     "name": "check roll status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Rolling deactivated@@@",
-      "@@@STEP_LOG_LINE@stdout@0@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_LINE@output@0@@@",
+      "@@@STEP_LOG_END@output@@@"
     ]
   },
   {

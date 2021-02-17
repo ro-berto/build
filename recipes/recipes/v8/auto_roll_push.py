@@ -27,7 +27,7 @@ def RunSteps(api):
       step_name='check roll status',
       default_test_data='1',
     ).output
-  api.step.active_result.presentation.logs['stdout'] = output.splitlines()
+  api.step.active_result.presentation.logs['output'] = output.splitlines()
   if output.strip() != '1':
     api.step.active_result.presentation.step_text = "Pushing deactivated"
     return

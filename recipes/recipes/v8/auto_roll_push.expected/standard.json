@@ -100,8 +100,8 @@
     "name": "check roll status",
     "~followup_annotations": [
       "@@@STEP_TEXT@Pushing activated@@@",
-      "@@@STEP_LOG_LINE@stdout@1@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_LOG_LINE@output@1@@@",
+      "@@@STEP_LOG_END@output@@@"
     ]
   },
   {
