@@ -111,15 +111,19 @@ class ReclientApi(recipe_api.RecipeApi):
 
   @property
   def rewrapper_path(self):
-    return self._get_exe_path('rewrapper')
+    return self._get_reclient_exe_path('rewrapper')
 
   @property
   def _bootstrap_bin_path(self):
-    return self._get_exe_path('bootstrap')
+    return self._get_reclient_exe_path('bootstrap')
 
-  def _get_exe_path(self, exe_name):
+  def _get_platform_exe_name(self, exe_name):
     if self.m.platform.is_win:
       exe_name += '.exe'
+    return exe_name
+
+  def _get_reclient_exe_path(self, exe_name):
+    exe_name = self._get_platform_exe_name(exe_name)
     if self._reclient_cipd_dir is None:
       # This depends on where the reclient CIPD is checked out in DEPS,
       # https://source.chromium.org/chromium/chromium/src/+/master:DEPS;l=452-461;drc=6b88cf228d9d27f49e89f7c4d9ffb582771daa48
@@ -153,8 +157,9 @@ class ReclientApi(recipe_api.RecipeApi):
 
       # TODO: Shall we use the same project providing the RBE workers?
       cloudtail_project_id = 'goma-logs'
-      self._start_cloudtail(cloudtail_project_id,
-                            reclient_log_dir.join('reproxy.INFO'))
+      log_path = reclient_log_dir.join(
+          self._get_platform_exe_name('reproxy') + '.INFO')
+      self._start_cloudtail(cloudtail_project_id, log_path)
     p = BuildResultReceiver()
     try:
       with self.m.context(env=self.rewrapper_env):
@@ -177,7 +182,7 @@ class ReclientApi(recipe_api.RecipeApi):
                         Specifically, it contains the .rpl file, which can be of
                         several GB. 
     """
-    reproxy_bin_path = self._get_exe_path('reproxy')
+    reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
         'RBE_instance': self.instance,
         'RBE_log_dir': reclient_log_dir,
