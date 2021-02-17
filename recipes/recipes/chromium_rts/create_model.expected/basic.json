@@ -341,8 +341,8 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]/rts-chromium/linux-amd64/rts-executable",
-      "[CLEANUP]/model-pkg-dir/linux-amd64/rts-executable"
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",
+      "[CLEANUP]/model-pkg-dir/linux-amd64/rts-chromium"
     ],
     "infra_step": true,
     "name": "Create CIPD packages.Upload CIPD package - linux-amd64.Include the executable",
@@ -410,8 +410,8 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]/rts-chromium/windows-amd64/rts-executable.exe",
-      "[CLEANUP]/model-pkg-dir/windows-amd64/rts-executable.exe"
+      "[CLEANUP]/rts-chromium/windows-amd64/rts-chromium.exe",
+      "[CLEANUP]/model-pkg-dir/windows-amd64/rts-chromium.exe"
     ],
     "infra_step": true,
     "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Include the executable",
@@ -479,8 +479,8 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]/rts-chromium/mac-amd64/rts-executable",
-      "[CLEANUP]/model-pkg-dir/mac-amd64/rts-executable"
+      "[CLEANUP]/rts-chromium/mac-amd64/rts-chromium",
+      "[CLEANUP]/model-pkg-dir/mac-amd64/rts-chromium"
     ],
     "infra_step": true,
     "name": "Create CIPD packages.Upload CIPD package - mac-amd64.Include the executable",

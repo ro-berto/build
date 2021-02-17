@@ -101,7 +101,7 @@ def create_cipd_package(api, platform, exec_pkg_dir, model_dir):
 
     # Add the executable to the model.
     exe_ext = '.exe' if platform.startswith('windows-') else ''
-    exe_base_name = 'rts-executable' + exe_ext
+    exe_base_name = 'rts-chromium' + exe_ext
     api.file.copy(
         'Include the executable',
         exec_pkg_dir.join(exe_base_name),
