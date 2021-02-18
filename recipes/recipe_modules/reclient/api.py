@@ -7,6 +7,7 @@ import contextlib
 import gzip
 import io
 import json
+import re
 import socket
 import time
 
@@ -211,8 +212,12 @@ class ReclientApi(recipe_api.RecipeApi):
             '-output_dir', reclient_log_dir]
 
     if self.metrics_project:
-      args += ['-metrics_project', self.metrics_project, '-metrics_prefix',
-               'go.chromium.org']
+      rbe_project = re.match('projects/(.+)/instances/.+',
+                             self.instance).group(1)
+      args += [
+          '-metrics_project', self.metrics_project, '-metrics_prefix',
+          rbe_project
+      ]
 
     self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
 

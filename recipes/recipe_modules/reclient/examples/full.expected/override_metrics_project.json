@@ -80,7 +80,7 @@
       "-metrics_project",
       "goma",
       "-metrics_prefix",
-      "go.chromium.org"
+      "example"
     ],
     "infra_step": true,
     "name": "postprocess for reclient.shutdown reproxy via bootstrap",
