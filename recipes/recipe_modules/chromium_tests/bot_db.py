@@ -35,6 +35,7 @@ def _migration_validation(builder_id, builder_spec):
 
   elif builder_spec.swarming_dimensions:
     assert builder_id.group in (
+        'chromium.clang',
         'chromium.fyi',
         'chromium.webrtc',
 
