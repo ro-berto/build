@@ -156,4 +156,4 @@ class LibyuvApi(recipe_api.RecipeApi):
           # This is fine, since these tests are not sandbox aware, it is
           # just self.m.chromium.runtest that adds the flag.
           self.m.chromium.runtest(
-              'libyuv_unittest', args=['--undefok="--no-sandbox"'])
+              'libyuv_unittest', args=['--undefok="no-sandbox"'])

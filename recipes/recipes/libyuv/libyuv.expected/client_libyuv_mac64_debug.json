@@ -561,7 +561,7 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "libyuv_unittest",
-      "--undefok=\"--no-sandbox\""
+      "--undefok=\"no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {

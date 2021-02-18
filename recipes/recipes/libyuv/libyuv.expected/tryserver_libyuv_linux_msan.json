@@ -573,7 +573,7 @@
       "--build-number=1337",
       "--enable-msan",
       "libyuv_unittest",
-      "--undefok=\"--no-sandbox\""
+      "--undefok=\"no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {

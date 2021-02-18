@@ -525,7 +525,7 @@
       "--build-number=1337",
       "--enable-tsan",
       "libyuv_unittest",
-      "--undefok=\"--no-sandbox\""
+      "--undefok=\"no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {

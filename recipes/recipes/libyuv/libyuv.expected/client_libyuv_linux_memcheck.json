@@ -503,7 +503,7 @@
       "libyuv_unittest",
       "--tool",
       "memcheck",
-      "--undefok=\"--no-sandbox\""
+      "--undefok=\"no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {
