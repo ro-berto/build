@@ -182,10 +182,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWinOfficial')
-            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -207,10 +203,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWinThinLTO64')
-            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -386,10 +378,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin'),
-            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -410,10 +398,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin(dbg)'),
-            ],
         ),
     'ToTWin(dll)':
         _chromium_clang_spec(
@@ -428,10 +412,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin(dll)'),
-            ],
         ),
     'ToTWin64':
         _chromium_clang_spec(
@@ -447,10 +427,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin64'),
-            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -485,10 +461,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin64(dbg)'),
-            ],
         ),
     'ToTWin64(dll)':
         _chromium_clang_spec(
@@ -503,10 +475,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            test_specs=[
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTWin64(dll)'),
-            ],
         ),
 }
 
