@@ -62,6 +62,11 @@ PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
         'unit': '(absl_hardening|boringssl_crypto|boringssl_ssl|crashpad'
                 '|cronet|ipc|.*unit).*test.*',
         'overall': '.+'
+    },
+    'win': {
+        'unit': '(absl_hardening|boringssl_crypto|boringssl_ssl|crashpad'
+                '|cronet|ipc|vr_pixel|.*unit).*test.*',
+        'overall': '.+'
     }
 }
 PLATFORM_TO_TARGET_NAME_PATTERN_MAP[

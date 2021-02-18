@@ -181,6 +181,34 @@ class ConstantsTest(unittest.TestCase):
         non_unit_test_targets)
     self.assertEqual(0, len(filtered_non_unit_tests))
 
+  def test_win_unit_tests_pattern(self):
+    """Tests correct targets are matched by win unit test pattern.
+       Only a few representative test suites are tested for.
+    """
+    win_unit_test_target_pattern = (
+        constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP['win']['unit'])
+
+    unit_test_targets = [
+        'absl_hardening_tests', 'boringssl_crypto_tests', 'boringssl_ssl_tests',
+        'crashpad_tests', 'cronet_tests', 'ipc_tests', 'vr_pixeltests',
+        'perfetto_unittests', 'unit_tests'
+    ]
+    filtered_unit_tests = filter(
+        lambda s: re.match(win_unit_test_target_pattern, s), unit_test_targets)
+    self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
+
+    non_unit_test_targets = [
+        'browser_tests',
+        'content_browsertests',
+        'components_browsertests',
+        'headless_browsertests',
+        'sync_integration_tests',
+    ]
+    filtered_non_unit_tests = filter(
+        lambda s: re.match(win_unit_test_target_pattern, s),
+        non_unit_test_targets)
+    self.assertEqual(0, len(filtered_non_unit_tests))
+
 
 if __name__ == '__main__':
   unittest.main()
