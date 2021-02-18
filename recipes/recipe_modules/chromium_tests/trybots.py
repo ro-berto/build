@@ -479,6 +479,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
+        'mac-angle-chromium-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-chromium-builder',
+                        tester='mac-angle-chromium-amd',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-chromium-builder',
+                        tester='mac-angle-chromium-intel',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         'mac-angle-rel':
             try_spec.TrySpec.create(
                 mirrors=[
@@ -496,6 +512,27 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.gpu.fyi',
                         buildername='GPU FYI Mac Builder',
                         tester='ANGLE GPU Mac Retina Release (AMD)',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
+        'mac-angle-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-builder',
+                        tester='mac-angle-amd',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-builder',
+                        tester='mac-angle-intel',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-builder',
+                        tester='mac-angle-nvidia',
                     ),
                 ],
                 retry_failed_shards=False,
