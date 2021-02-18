@@ -163,7 +163,7 @@
       "--root=[CACHE]\\builder\\src",
       "gen",
       "//out/Debug_x64",
-      "--args=is_clang=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
+      "--args=is_clang=true is_component_build=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

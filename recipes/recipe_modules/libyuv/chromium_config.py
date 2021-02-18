@@ -23,6 +23,11 @@ def libyuv(c):
 @CONFIG_CTX(includes=['chromium_clang'])
 def libyuv_clang(c):
   _libyuv_common(c)
+  # TODO(https://bugs.chromium.org/p/libyuv/issues/detail?id=883): After
+  # switching to absl/flags, component builds are not working correctly
+  # see crbug.com/1166430 for a way to fix.
+  _libyuv_static_build(c)
+
 
 @CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
 def libyuv_gcc(c):
