@@ -609,7 +609,8 @@
       "--slave-name=bot_id",
       "--build-number=1337",
       "--enable-asan",
-      "libyuv_unittest"
+      "libyuv_unittest",
+      "--undefok=\"--no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {

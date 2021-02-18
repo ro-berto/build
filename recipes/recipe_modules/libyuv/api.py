@@ -151,4 +151,9 @@ class LibyuvApi(recipe_api.RecipeApi):
           self.m.chromium_android.stack_tool_steps(force_latest_version=True)
           self.m.chromium_android.test_report()
         else:
-          self.m.chromium.runtest('libyuv_unittest')
+          # Ignoring --no-sandbox because libyuv uses absl/flags which
+          # raises an error when flags are unknown to the binary.
+          # This is fine, since these tests are not sandbox aware, it is
+          # just self.m.chromium.runtest that adds the flag.
+          self.m.chromium.runtest(
+              'libyuv_unittest', args=['--undefok="--no-sandbox"'])

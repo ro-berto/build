@@ -560,7 +560,8 @@
       "--builder-name=Mac64 Release",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "libyuv_unittest"
+      "libyuv_unittest",
+      "--undefok=\"--no-sandbox\""
     ],
     "cwd": "[CACHE]/builder",
     "env": {

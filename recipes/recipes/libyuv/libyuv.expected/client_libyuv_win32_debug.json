@@ -498,7 +498,8 @@
       "--builder-name=Win32 Debug",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "libyuv_unittest.exe"
+      "libyuv_unittest.exe",
+      "--undefok=\"--no-sandbox\""
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

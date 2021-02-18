@@ -546,7 +546,8 @@
       "--builder-name=win",
       "--slave-name=bot_id",
       "--build-number=1337",
-      "libyuv_unittest.exe"
+      "libyuv_unittest.exe",
+      "--undefok=\"--no-sandbox\""
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
