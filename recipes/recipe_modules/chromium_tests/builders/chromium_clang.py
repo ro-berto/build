@@ -301,10 +301,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='mac',
-            test_specs={
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTMac')
-            },
         ),
     'ToTMacOfficial':
         _chromium_clang_spec(
@@ -327,10 +323,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='mac',
-            test_specs={
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTMacOfficial')
-            },
         ),
     'ToTMac (dbg)':
         _chromium_clang_spec(
@@ -345,10 +337,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='mac',
-            test_specs={
-                steps.SizesStepSpec.create(
-                    results_url=RESULTS_URL, perf_id='ToTMac (dbg)')
-            },
         ),
     'ToTMacASan':
         _chromium_clang_spec(
