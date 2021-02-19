@@ -17,6 +17,7 @@ DEPS = [
     'recipe_engine/futures',
     'recipe_engine/path',
     'recipe_engine/platform',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/time',
 ]
@@ -114,13 +115,17 @@ def create_cipd_package(api, platform, exec_pkg_dir, model_dir):
         package_root=pkg_dir,
     )
     pkg.add_dir(pkg_dir)
-    api.cipd.create_from_pkg(
-        pkg,
-        refs=['latest'],
-        tags={
-            'build': 'https://ci.chromium.org/b/%d' % api.buildbucket.build.id,
-        },
-    )
+
+    # Skip the actual upload if it is an experimental build.
+    if not api.runtime.is_experimental:  # pragma: no branch
+      api.cipd.create_from_pkg(
+          pkg,
+          refs=['latest'],
+          tags={
+              'build':
+                  'https://ci.chromium.org/b/%d' % api.buildbucket.build.id,
+          },
+      )
 
 
 def install_rts_executables(api):
