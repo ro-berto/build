@@ -151,11 +151,13 @@ def install_rts_executables(api):
 def pick_executable_version(api):
   """Returns the CIPD version of rts-executable CIPD packages to use."""
 
-  # Find the git_revision of the latest linux-amd64 package.
-  # This guarantees that packages for all platforms are built from the same
-  # source code.
+  # Find the git_revision of the latest mac-amd64 package.
+  # Using the git revision guarantees that packages for all platforms are built
+  # from the same source code.
+  # Use Mac because it is slower than other packagers, so it is likely that
+  # all other are already built.
   descr = api.cipd.describe(
-      RTS_EXEC_CIPD_PREFIX + 'linux-amd64',
+      RTS_EXEC_CIPD_PREFIX + 'mac-amd64',
       'latest',
       test_data_tags=['git_revision:c1ee0e03d15281730ebedf1f7151474f7a523001'],
   )

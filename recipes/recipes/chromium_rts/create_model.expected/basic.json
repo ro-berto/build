@@ -186,19 +186,19 @@
     "cmd": [
       "cipd",
       "describe",
-      "chromium/rts/rts-chromium/linux-amd64",
+      "chromium/rts/rts-chromium/mac-amd64",
       "-version",
       "latest",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "cipd describe chromium/rts/rts-chromium/linux-amd64",
+    "name": "cipd describe chromium/rts/rts-chromium/mac-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"pin\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"chromium/rts/rts-chromium/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"chromium/rts/rts-chromium/mac-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"refs\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
