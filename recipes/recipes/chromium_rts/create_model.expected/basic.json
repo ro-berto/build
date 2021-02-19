@@ -517,6 +517,43 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/rts-chromium-model/git-file-graph/config.json",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read thresholds",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@config.json@{@@@",
+      "@@@STEP_LOG_LINE@config.json@  \"thresholds\": [@@@",
+      "@@@STEP_LOG_LINE@config.json@    {@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"changeRecall\": 0.97,@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"savings\": 0.5@@@",
+      "@@@STEP_LOG_LINE@config.json@    },@@@",
+      "@@@STEP_LOG_LINE@config.json@    {@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"changeRecall\": 0.98,@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"savings\": 0.4@@@",
+      "@@@STEP_LOG_LINE@config.json@    },@@@",
+      "@@@STEP_LOG_LINE@config.json@    {@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"changeRecall\": 0.99,@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"savings\": 0.3@@@",
+      "@@@STEP_LOG_LINE@config.json@    },@@@",
+      "@@@STEP_LOG_LINE@config.json@    {@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"changeRecall\": 1.0,@@@",
+      "@@@STEP_LOG_LINE@config.json@      \"savings\": 0.2@@@",
+      "@@@STEP_LOG_LINE@config.json@    }@@@",
+      "@@@STEP_LOG_LINE@config.json@  ]@@@",
+      "@@@STEP_LOG_LINE@config.json@}@@@",
+      "@@@STEP_LOG_END@config.json@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

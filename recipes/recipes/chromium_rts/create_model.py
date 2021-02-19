@@ -6,6 +6,9 @@
 
 import datetime
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 DEPS = [
     'chromium',  # to import gclient configs
     'chromium_checkout',
@@ -90,6 +93,11 @@ def RunSteps(api):
   # Check success.
   for f in futures:
     f.result()
+
+  return result_pb2.RawResult(
+      status=common_pb.SUCCESS,
+      summary_markdown=compose_build_summary(api, model_dir),
+  )
 
 
 def create_cipd_package(api, platform, exec_pkg_dir, model_dir):
@@ -232,6 +240,45 @@ def _date_range_flags(date_range):
     '-from', from_date.strftime('%Y-%m-%d'), \
     '-to', to_date.strftime('%Y-%m-%d'),
   ]
+
+
+def compose_build_summary(api, model_dir):
+  cfg = api.file.read_json(
+      'read thresholds',
+      model_dir.join('git-file-graph', 'config.json'),
+      test_data={
+          'thresholds': [
+              {
+                  'changeRecall': 0.97,
+                  'savings': 0.5
+              },
+              {
+                  'changeRecall': 0.98,
+                  'savings': 0.4
+              },
+              {
+                  'changeRecall': 0.99,
+                  'savings': 0.3
+              },
+              {
+                  'changeRecall': 1.00,
+                  'savings': 0.2
+              },
+          ]
+      },
+  )
+
+  # Format of the file is GitBasedStrategyConfig in
+  # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/rts/cmd/rts-chromium/rts-chromium.proto
+
+  # Note: this is essentially HTML, not plaintext, so whitespace is collapsed.
+  lines = ['ChangeRecall | Savings']
+  lines += [
+      '%.2f | %.2f' % (th['changeRecall'], th['savings'])
+      for th in cfg['thresholds']  # note: thresholds are already sorted
+      if th['changeRecall'] >= 0.9
+  ]
+  return '<br>'.join(lines)
 
 
 def GenTests(api):
