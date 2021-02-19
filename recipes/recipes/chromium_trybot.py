@@ -158,7 +158,7 @@ def GenTests(api):
       api.platform.name('mac'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
-              'Mac10.13 Tests': {
+              'Mac10.15 Tests': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
