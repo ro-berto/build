@@ -20,7 +20,7 @@
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@Mac10.13 Tests@https://ci.chromium.org/p/chromium/builders/ci/Mac10.13 Tests@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.mac:mac_chromium_10.13_rel_ng\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.mac:mac-rel\", \"tryserver.chromium.mac:mac-inverse-fieldtrials-fyi-rel\", \"tryserver.chromium.mac:mac_chromium_10.13_rel_ng\"]@@@"
     ]
   },
   {
