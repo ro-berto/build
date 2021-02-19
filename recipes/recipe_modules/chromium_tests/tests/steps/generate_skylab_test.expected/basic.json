@@ -1078,7 +1078,7 @@
       "----",
       "cp",
       "[CLEANUP]/tmp_tmp_2/artifact.zip",
-      "gs://lacros/lacros-amd64-generic-rel/571/lacros.zip"
+      "gs://chrome-test-builds/lacros/lacros-amd64-generic-rel/571/lacros.zip"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1087,7 +1087,7 @@
     "name": "Generic Archiving Steps.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/lacros/lacros-amd64-generic-rel/571/lacros.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/lacros/lacros-amd64-generic-rel/571/lacros.zip@@@"
     ]
   },
   {
@@ -1115,7 +1115,7 @@
     },
     "infra_step": true,
     "name": "test_pre_run.schedule tests on skylab.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:(\\\"group:mainline\\\" && \\\"dep:lacros\\\")\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}], \"time\": {\"maximumDuration\": \"7200s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://lacros/lacros-amd64-generic-rel/571/lacros.zip\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:(\\\"group:mainline\\\" && \\\"dep:lacros\\\")\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}], \"time\": {\"maximumDuration\": \"7200s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://chrome-test-builds/lacros/lacros-amd64-generic-rel/571/lacros.zip\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1186,7 +1186,7 @@
       "@@@STEP_LOG_LINE@request@                  {@@@",
       "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
       "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://lacros/lacros-amd64-generic-rel/571/lacros.zip\"@@@",
+      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=KCJncm91cDptYWlubGluZSIgJiYgImRlcDpsYWNyb3MiKQ== lacros_gcs_path=gs://chrome-test-builds/lacros/lacros-amd64-generic-rel/571/lacros.zip\"@@@",
       "@@@STEP_LOG_LINE@request@                    }@@@",
       "@@@STEP_LOG_LINE@request@                  }@@@",
       "@@@STEP_LOG_LINE@request@                ]@@@",

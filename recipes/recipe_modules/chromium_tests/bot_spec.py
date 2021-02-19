@@ -267,6 +267,10 @@ class BotSpec(object):
   # The Google Storage bucket used by lacros on skylab pipeline.
   skylab_gs_bucket = attrib(str, default=None)
 
+  # Additional URL components to add to the Google Storage URL for lacros on
+  # skylab pipeline.
+  skylab_gs_extra = attrib(str, default=None)
+
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
 

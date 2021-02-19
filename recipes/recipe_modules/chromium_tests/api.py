@@ -2085,6 +2085,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return
     gcs_path = '{}/{}/lacros.zip'.format(self.m.buildbucket.builder_name,
                                          self.m.buildbucket.build.number)
+    if bot_spec.skylab_gs_extra:
+      gcs_path = '{}/{}'.format(bot_spec.skylab_gs_extra, gcs_path)
     # TODO(crbug/1114161): Package the chrome build via squashfs(crbug/1163747)
     # once cros_test_platform provides Lacros provision feature.
     # Archived files are hardcoded here only for POC.

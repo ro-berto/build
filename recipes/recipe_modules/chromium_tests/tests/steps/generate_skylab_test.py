@@ -50,6 +50,7 @@ def GenTests(api):
                             chromium_config='chromium',
                             gclient_config='chromium',
                             skylab_gs_bucket=skylab_gcs,
+                            skylab_gs_extra='lacros',
                         ),
                 }
             })),
@@ -120,7 +121,7 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      boilerplate('lacros', '("group:mainline" && "dep:lacros")'),
+      boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED, TASK_FAILED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
@@ -142,7 +143,7 @@ def GenTests(api):
 
   yield api.test(
       'not scheduled for absent tast expr',
-      boilerplate('lacros', ''),
+      boilerplate('chrome-test-builds', ''),
       api.post_process(
           post_process.StepTextContains, 'basic_EVE_TOT',
           ['Test was not scheduled because tast_expr was not set.']),
