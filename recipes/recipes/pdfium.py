@@ -25,15 +25,6 @@ DEPS = [
 
 from recipe_engine.recipe_api import Property
 
-# DM_JSON is the file that gathers results for ingestion into Gold.
-DM_JSON = 'dm.json'
-
-# GS_BUCKET is the GS bucket to hold Gold Results.
-GS_BUCKET = 'skia-pdfium-gm'
-
-# Number of times the upload routine will retry to upload Gold results.
-UPLOAD_ATTEMPTS = 5
-
 PROPERTIES = {
     'clang': Property(default=False, kind=bool),
     'component': Property(default=False, kind=bool),
@@ -296,13 +287,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
         except api.step.StepFailure as e:
           test_exception = e
 
-  # Setup uploading results to Gold after the javascript tests, since they do
-  # not produce interesting result images
-  ignore_hashes_file = _get_gold_ignore_hashes(api, out_dir)
-  if ignore_hashes_file:
-    script_args.extend(['--gold_ignore_hashes',
-                        ignore_hashes_file])  # pragma: no cover
-
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
@@ -311,8 +295,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
       api.python('pixel tests', pixel_tests_path, script_args + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
-  # Upload immediately, since tests below will overwrite the output directory
-  _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
   if v8:
     with api.context(cwd=api.path['checkout'], env=env):
@@ -323,8 +305,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                    script_args + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
-    # Upload immediately, since tests below will overwrite the output directory
-    _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
     if xfa:
       with api.context(cwd=api.path['checkout'], env=env):
@@ -335,9 +315,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                      script_args + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
-      # Upload immediately, since tests below will overwrite the output
-      # directory
-      _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
@@ -348,8 +325,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                  script_args + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
-  # Upload immediately, since tests below will overwrite the output directory
-  _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
   if v8:
     with api.context(cwd=api.path['checkout'], env=env):
@@ -360,8 +335,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                    script_args + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
-    # Upload immediately, since tests below will overwrite the output directory
-    _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
     if xfa:
       with api.context(cwd=api.path['checkout'], env=env):
@@ -372,7 +345,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                      script_args + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
-      _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
@@ -477,126 +449,6 @@ def _gold_build_config(args):
               break
           build_config[k] = v
   return build_config
-
-
-def _get_gold_ignore_hashes(api, out_dir):
-  """Downloads a list of MD5 hashes from Gold and
-  writes them to a file. That file is then used by the
-  test runner in the pdfium repository to ignore already
-  known hashes.
-  """
-  host_hashes_file = api.path['checkout'].join('out', out_dir,
-                                               'ignore_hashes.txt')
-  try:
-    with api.context(cwd=api.path['checkout']):
-      api.m.python.inline(
-          'get uninteresting hashes',
-          program='''
-        import contextlib
-        import math
-        import socket
-        import sys
-        import time
-        import urllib2
-
-        HASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'
-        RETRIES = 5
-        TIMEOUT = 60
-        WAIT_BASE = 15
-
-        socket.setdefaulttimeout(TIMEOUT)
-        for retry in range(RETRIES):
-          try:
-            with contextlib.closing(
-                urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:
-              hashes = w.read()
-              with open(sys.argv[1], 'w') as f:
-                f.write(hashes)
-                break
-          except Exception as e:
-            print 'Failed to get uninteresting hashes from %s:' % HASHES_URL
-            print e
-            if retry == RETRIES:
-              raise
-            waittime = WAIT_BASE * math.pow(2, retry)
-            print 'Retry in %d seconds.' % waittime
-            time.sleep(waittime)
-        ''',
-          args=[host_hashes_file],
-          infra_step=True)
-  except api.step.StepFailure:
-    # Swallow the exception. The step will still show up as
-    # failed, but processing will continue.
-    pass
-
-  if api.path.exists(host_hashes_file):
-    return host_hashes_file
-  return None
-
-
-def _upload_dm_results(api, results_dir, revision, test_type):
-  """Uploads results of the tests to Gold.
-  This assumes that results_dir contains a JSON file and a set of PNGs.
-  Adapted from:
-  https://skia.googlesource.com/skia/+/master/infra/bots/recipes/upload_dm_results.py
-  test_type is expected to be 'corpus', 'javascript', or 'pixel'
-  """
-  builder_name = api.m.buildbucket.builder_name.strip()
-
-  # Upload the images.
-  files_to_upload = api.file.glob_paths(
-      'find images', results_dir, '*.png', test_data=['someimage.png'])
-
-  if len(files_to_upload) > 0:
-    _gs_cp(
-        api,
-        'images',
-        results_dir.join('*.png'),
-        'dm-images-v1',
-        multithreaded=True)
-
-  # Upload the JSON summary and verbose.log.
-  sec_str = str(int(api.time.time()))
-  now = api.time.utcnow()
-  summary_dest_path = '/'.join([
-      'dm-json-v1',
-      str(now.year).zfill(4),
-      str(now.month).zfill(2),
-      str(now.day).zfill(2),
-      str(now.hour).zfill(2), revision, builder_name, sec_str, test_type
-  ])
-
-  # Trybot results are further siloed by issue/patchset.
-  if api.m.tryserver.gerrit_change:
-    summary_dest_path = '/'.join(('trybot', summary_dest_path,
-                                  str(api.m.tryserver.gerrit_change.change),
-                                  str(api.m.tryserver.gerrit_change.patchset)))
-
-  summary_dest_path = '/'.join([summary_dest_path, DM_JSON])
-  local_dmjson = results_dir.join(DM_JSON)
-  _gs_cp(
-      api,
-      'JSON',
-      local_dmjson,
-      summary_dest_path,
-      extra_args=['-z', 'json,log'])
-
-
-def _gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
-  """Copy the src to dst in Google storage."""
-  name = 'upload %s' % name
-  for i in xrange(UPLOAD_ATTEMPTS):
-    try:
-      args = extra_args if extra_args else []
-      full_dest = 'gs://%s/%s' % (GS_BUCKET, dst)
-      api.gsutil(
-          ['cp'] + args + [src, full_dest],
-          name=name,
-          multithreaded=multithreaded)
-      break
-    except api.step.StepFailure:  # pragma: no cover
-      if i == UPLOAD_ATTEMPTS - 1:
-        raise
 
 
 def _gen_ci_build(api, builder):
@@ -920,25 +772,6 @@ def GenTests(api):
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_slave', target_os='android', skip_test=True),
       _gen_ci_build(api, 'android'),
-  )
-
-  yield api.test(
-      'success-download-hashes-file',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(v8=False, bot_id='test_slave', target_os='android'),
-      _gen_ci_build(api, 'android'),
-      api.path.exists(api.path['cache'].join('builder', 'pdfium', 'out',
-                                             'debug', 'ignore_hashes.txt')),
-  )
-
-  yield api.test(
-      'fail-download-hashes-file',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_slave', target_os='android'),
-      _gen_ci_build(api, 'android'),
-      api.step_data('get uninteresting hashes', retcode=1),
   )
 
   yield api.test(
