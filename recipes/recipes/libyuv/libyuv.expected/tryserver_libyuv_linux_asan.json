@@ -574,7 +574,7 @@
       "--enable-asan",
       "--enable-lsan",
       "libyuv_unittest",
-      "--undefok=\"no-sandbox\""
+      "--undefok=no-sandbox"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
