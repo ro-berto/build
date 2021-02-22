@@ -39,6 +39,9 @@ def config(name,
     cfg['android_config'] = android_config
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     cfg['gclient_apply_config'].append('android')
+    cfg['test_specs'] = {
+        steps.SizesStepSpec.create(results_url=RESULTS_URL, perf_id=name)
+    }
 
   if official:
     cfg['gclient_apply_config'].append('chrome_internal')
