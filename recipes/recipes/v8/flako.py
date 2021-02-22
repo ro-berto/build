@@ -358,13 +358,12 @@ class Runner(object):
         task.request = (task.request.with_priority(
                           max(task.request.priority + 10, 255)))
 
-      # Override cpu and gpu defaults for Android as such devices don't have
-      # these dimensions.
+      # Override cpu defaults for Android as such devices don't have this
+      # dimension.
       task_slice = task.request[0]
       task_dimensions = task_slice.dimensions
       if task_dimensions['os'] == 'Android':
         task_dimensions['cpu'] = None
-        task_dimensions['gpu'] = None
 
       task_slice = task_slice.with_dimensions(**task_dimensions)
       task.request = task.request.with_slice(0, task_slice)
@@ -528,7 +527,6 @@ def setup_swarming(
   api.chromium_swarming.default_user = 'v8-flake-bisect'
   api.chromium_swarming.add_default_tag('purpose:v8-flake-bisect')
   api.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
-  api.chromium_swarming.set_default_dimension('gpu', 'none')
   api.chromium_swarming.task_output_stdout = 'all'
 
   for item in swarming_dimensions:
@@ -802,7 +800,6 @@ def GenTests(api):
             '[trigger] check mjsunit/foobar at #0 - shard 0 on Android')
     if check(step in steps):
       check(all(arg != 'cpu' for arg in steps[step].cmd))
-      check(all(arg != 'gpu' for arg in steps[step].cmd))
 
   yield (test('android_dimensions') + api.properties(
       repro_only=True,
