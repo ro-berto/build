@@ -77,6 +77,7 @@ def RunSteps(api):
         '-rejections', str(rejections_dir), \
         '-durations', str(durations_dir), \
         '-model-dir', str(model_dir),
+        '-log-furthest', '30',
       ],
   )
 

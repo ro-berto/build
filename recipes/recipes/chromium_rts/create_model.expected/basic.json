@@ -301,7 +301,9 @@
       "-durations",
       "[CLEANUP]/rts-chromium-model-data/durations",
       "-model-dir",
-      "[CLEANUP]/rts-chromium-model"
+      "[CLEANUP]/rts-chromium-model",
+      "-log-furthest",
+      "30"
     ],
     "name": "create-model"
   },
