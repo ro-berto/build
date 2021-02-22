@@ -864,6 +864,36 @@ SPEC = {
             simulation_platform='linux',
             build_gs_bucket='chromium-memory-archive',
         ),
+    'TSAN Release (reclient)':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            # Set archive build to false since this is a shadow.
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
+    'TSAN Debug (reclient)':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+            },
+            # Set archive_build to false since this is a shadow.
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
 }
 
 SPEC.update([
