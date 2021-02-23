@@ -76,7 +76,7 @@ SPEC = freeze({
                 # are fixed. See https://crbug.com/1106980.
                 'chrome',
             ],
-            'platform': 'chromeos',
+            'platform': 'lacros',
             'sync_generated_files': True,
             'gen_repo_branch': 'master',
             'corpus': 'chromium.googlesource.com/chromium/src',
