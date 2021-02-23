@@ -275,7 +275,7 @@ def compose_build_summary(api, model_dir):
   # Note: this is essentially HTML, not plaintext, so whitespace is collapsed.
   lines = ['ChangeRecall | Savings']
   lines += [
-      '%.2f | %.2f' % (th['changeRecall'], th['savings'])
+      '%.4f | %.2f' % (th['changeRecall'], th['savings'])
       for th in cfg['thresholds']  # note: thresholds are already sorted
       if th['changeRecall'] >= 0.9
   ]
