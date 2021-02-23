@@ -67,7 +67,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       use_gyp_env=Single(bool, empty_val=True, required=False),
       env=ConfigGroup(
           PATH=List(Path),
-          LLVM_FORCE_HEAD_REVISION=Single(basestring, required=False),
           GOMA_SERVER_HOST=Single(basestring, required=False),
           GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
           GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),

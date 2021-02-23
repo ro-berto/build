@@ -42,8 +42,6 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
       coverage=Single(bool, required=False, empty_val=False),
       chrome_specific_wipe=Single(bool, required=False, empty_val=False),
       incremental_coverage=Single(bool, required=False, empty_val=False),
-      env=ConfigGroup(
-          LLVM_FORCE_HEAD_REVISION=Single(basestring, required=False),),
       use_devil_adb=Single(bool, required=False, empty_val=False),
       # TODO(crbug.com/708171): Remove this once everything has switched to
       # devil provisioning.
@@ -83,19 +81,6 @@ def clang_builder(_):  # pragma: no cover
 @config_ctx()
 def clang_builder_mb(_):
   pass
-
-@config_ctx(config_vars={'BUILD_CONFIG': 'Release'},
-            includes=['asan_symbolize'])
-def clang_asan_tot_release_builder(c):  # pragma: no cover
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
-
-@config_ctx(config_vars={'BUILD_CONFIG': 'Debug'})
-def clang_tot_debug_builder(c):  # pragma: no cover
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
-
-@config_ctx(config_vars={'BUILD_CONFIG': 'Release'})
-def clang_tot_release_builder(c):  # pragma: no cover
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
 @config_ctx(includes=['x64_builder_mb'])
 def clang_builder_mb_x64(_):
