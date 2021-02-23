@@ -270,6 +270,8 @@
       "12",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
+      "--target_ref",
+      "refs/heads/master",
       "--gerrit_fetch",
       "--dry_run",
       "--root",
