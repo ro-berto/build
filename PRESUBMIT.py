@@ -92,7 +92,8 @@ def CommitChecks(input_api, output_api):
   output.extend(input_api.RunTests(tests))
 
   output.extend(input_api.canned_checks.PanProjectChecks(
-      input_api, output_api, excluded_paths=GetFilesToSkip(input_api)))
+      input_api, output_api, excluded_paths=GetFilesToSkip(input_api),
+      owners_check=False))
   return output
 
 
@@ -116,6 +117,8 @@ def CheckChangeOnUpload(input_api, output_api):
           input_api, output_api, check_clang_format=False
       )
   )
+  output.extend(input_api.canned_checks.CheckOwners(
+      input_api, output_api, allow_tbr=False))
   return output
 
 
