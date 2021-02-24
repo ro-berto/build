@@ -12,6 +12,7 @@
     "env": {
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
       "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_format": "reducedtext",
       "RBE_proxy_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
       "RBE_re_proxy": "[TMP_BASE]\\checkout\\buildtools\\reclient\\reproxy.exe",
       "RBE_server_address": "pipe://reproxy.pipe",
@@ -71,12 +72,14 @@
     "cmd": [
       "[TMP_BASE]\\checkout\\buildtools\\reclient\\bootstrap.exe",
       "-shutdown",
-      "-server_address",
-      "pipe://reproxy.pipe",
+      "-log_format",
+      "reducedtext",
+      "-output_dir",
+      "[CLEANUP]\\reclient_log_tmp_1",
       "-proxy_log_dir",
       "[CLEANUP]\\reclient_log_tmp_1",
-      "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "-server_address",
+      "pipe://reproxy.pipe"
     ],
     "infra_step": true,
     "name": "postprocess for reclient.shutdown reproxy via bootstrap",
@@ -254,11 +257,51 @@
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
     "infra_step": true,
-    "name": "postprocess for reclient.gsutil upload",
+    "name": "postprocess for reclient.gsutil upload ninja_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@",
       "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::reclient]\\resources\\generate_rpl_gzip.py",
+      "--reclient-log-dir",
+      "[CLEANUP]\\reclient_log_tmp_1",
+      "--output-gzip-path",
+      "[TMP_BASE]\\reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.gzip reproxy RPL",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]\\reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.gsutil upload reproxy RPL",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
     ]
   },
   {
