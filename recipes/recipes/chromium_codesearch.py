@@ -222,7 +222,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   if platform == 'android':
     gclient_config.target_os = ['android']
-  elif platform == 'chromeos':
+  elif platform == 'chromeos' or platform == 'lacros':
     gclient_config.target_os = ['chromeos']
   elif platform == 'fuchsia':
     gclient_config.target_os = ['fuchsia']
