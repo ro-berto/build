@@ -1219,6 +1219,24 @@
   },
   {
     "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "0",
+      "1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "query test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "import sys; sys.exit(0)"

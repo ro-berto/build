@@ -1471,6 +1471,24 @@
   },
   {
     "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "0"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "test r1.query test results (r1)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
@@ -2571,6 +2589,24 @@
     "name": "test r0.Upload to test-results [test r0.gl_tests (r0)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "1"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "test r0.query test results (r0)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

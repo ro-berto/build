@@ -305,11 +305,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
      bad_results_dict['failed']) = self._retrieve_bad_results(
          test_suites, suffix)
 
-    if (self.m.buildbucket.build.builder.project != 'chromium' or
-        self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
-      # Only derives results on chromium ci/try builders.
-      # Note: this is a temporary change for ResultDB to control the builders it
-      # gets test results from.
+    if not self.m.resultdb.enabled:
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
     # Query swarming test results to ResultDB.
@@ -332,14 +328,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         variants_with_unexpected_results=True,
         step_name=query_step_name,
     )
-
-    if not self.m.resultdb.enabled:
-      # Checks if resultdb integration is enabled.
-      # Temporary workaround to make sure led builds don't fail because of
-      # this.
-      # Should be removed when led v2 starts to create invocations.
-      return invocation_dict, bad_results_dict['invalid'], bad_results_dict[
-          'failed']
 
     if suffix != 'without patch':
       # Include the derived invocations in the build's invocation.

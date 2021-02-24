@@ -1163,6 +1163,26 @@
   },
   {
     "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "0"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "query test results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
@@ -1488,6 +1508,26 @@
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28retry%20shards%20with%20patch%29/layout-test-results/results.html@@@",
       "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/571/blink_web_tests%20%28retry%20shards%20with%20patch%29/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "query test results (retry shards with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

@@ -151,27 +151,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test(
-      'non_chromium_builder',
-      api.builder_group.for_current('g'),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          is_swarming_test=True,
-      ),
-      api.buildbucket.try_build('project', 'try', 'linux-rel'),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=False)),
-      api.post_process(post_process.DoesNotRun,
-                       'query test results (with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   inv_bundle_with_failures = {
       'invid':
           api.resultdb.Invocation(
@@ -255,7 +234,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'resultdb_unenabled',
+      'resultdb_disabled',
       api.builder_group.for_current('g'),
       api.properties(
           swarm_hashes={
@@ -288,22 +267,8 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=True),
               shards=2,
               failure=True)),
-      api.resultdb.query(
-          inv_bundle_with_failures,
-          step_name='query test results (with patch)',
-      ),
-      api.resultdb.query(
-          inv_bundle_with_failures,
-          step_name='query test results (retry shards with patch)',
-      ),
-      api.resultdb.query(
-          inv_bundle_with_failures,
-          step_name='query test results (without patch)',
-      ),
       api.post_process(post_process.DoesNotRun,
-                       'include derived test results (with patch)'),
-      api.post_process(post_process.DoesNotRun,
-                       'exonerate unexpected without patch results'),
+                       'query test results (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
