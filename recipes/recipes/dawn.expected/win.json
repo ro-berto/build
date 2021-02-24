@@ -856,6 +856,16 @@
     "name": "Run the Dawn end2end tests with SwiftShader"
   },
   {
+    "cmd": [
+      "[CACHE]\\builder\\dawn\\out\\release_component\\dawn_end2end_tests",
+      "--backend=opengles"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Run the Dawn end2end tests with ANGLE/SwiftShader"
+  },
+  {
     "name": "$result"
   }
 ]

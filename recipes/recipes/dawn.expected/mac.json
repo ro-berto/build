@@ -827,6 +827,13 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/dawn/out/release_component/dawn_end2end_tests",
+      "--backend=opengles"
+    ],
+    "name": "Run the Dawn end2end tests with ANGLE/SwiftShader"
+  },
+  {
+    "cmd": [
       "sudo",
       "xcode-select",
       "--reset"

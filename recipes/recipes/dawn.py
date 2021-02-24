@@ -136,6 +136,12 @@ def _run_swiftshader_end2end_tests(api, out_dir):
            [test_path, '--adapter-vendor-id=0x1AE0'])
 
 
+def _run_swangle_end2end_tests(api, out_dir):
+  test_path = api.path['checkout'].join('out', out_dir, 'dawn_end2end_tests')
+  api.step('Run the Dawn end2end tests with ANGLE/SwiftShader',
+           [test_path, '--backend=opengles'])
+
+
 def RunSteps(api, target_cpu, debug, clang):
   env = {}
   if api.platform.is_win:
@@ -177,6 +183,7 @@ def RunSteps(api, target_cpu, debug, clang):
       _build_steps(api, out_dir_component, clang, use_goma,
                    'dawn_end2end_tests')
       _run_swiftshader_end2end_tests(api, out_dir_component)
+      _run_swangle_end2end_tests(api, out_dir_component)
 
 
 def GenTests(api):
