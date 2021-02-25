@@ -160,8 +160,6 @@
       "12",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
-      "--target_ref",
-      "refs/heads/master",
       "--gerrit_fetch",
       "--root",
       "[CACHE]/builder/build_presubmit/build",

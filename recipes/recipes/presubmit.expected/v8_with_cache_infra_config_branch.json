@@ -162,8 +162,6 @@
       "12",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
-      "--target_ref",
-      "refs/heads/infra/config",
       "--gerrit_fetch",
       "--root",
       "[CACHE]/builder/v8_presubmit_infra_config/v8",
