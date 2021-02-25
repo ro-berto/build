@@ -165,6 +165,8 @@
       "7",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
+      "--target_ref",
+      "refs/branch-heads/3987",
       "--gerrit_fetch",
       "--root",
       "[CACHE]/builder/chromium_presubmit/s",
