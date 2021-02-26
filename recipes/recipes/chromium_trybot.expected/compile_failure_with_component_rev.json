@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/v8/builders/ci/V8 Linux GN@@@"
+      "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/v8/builders/ci/V8%20Linux%20GN@@@"
     ]
   },
   {

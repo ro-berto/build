@@ -341,7 +341,7 @@
     "name": "build.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
     ]
   },
   {
@@ -995,7 +995,7 @@
     "name": "Bisect a0.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a0.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobar/a0.json@@@"
     ]
   },
   {
@@ -1472,7 +1472,7 @@
     "name": "Bisect a2.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a2.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobar/a2.json@@@"
     ]
   },
   {
@@ -1991,7 +1991,7 @@
     "name": "Bisect a1.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/a1.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobar/a1.json@@@"
     ]
   },
   {

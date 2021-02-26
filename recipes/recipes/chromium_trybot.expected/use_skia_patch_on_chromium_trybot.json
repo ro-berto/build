@@ -21,8 +21,8 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7 Tests (1)@@@",
-      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win Builder@@@"
+      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7%20Tests%20(1)@@@",
+      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win%20Builder@@@"
     ]
   },
   {

@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux FYI Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux FYI Release (NVIDIA)@@@",
+      "@@@STEP_LINK@Linux FYI Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux%20FYI%20Release%20(NVIDIA)@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel\"]@@@"
     ]
   },

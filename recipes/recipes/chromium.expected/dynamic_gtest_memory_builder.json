@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux ASan LSan Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux ASan LSan Builder@@@",
+      "@@@STEP_LINK@Linux ASan LSan Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20ASan%20LSan%20Builder@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux_chromium_asan_rel_ng\"]@@@"
     ]
   },

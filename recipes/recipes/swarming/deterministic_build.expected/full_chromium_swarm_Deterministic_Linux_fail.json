@@ -1180,7 +1180,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic Linux/571/deterministic_build_diffs.tgz@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic%20Linux/571/deterministic_build_diffs.tgz@@@"
     ]
   },
   {

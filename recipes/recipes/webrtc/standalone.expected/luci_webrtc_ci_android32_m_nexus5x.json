@@ -5338,7 +5338,7 @@
     "infra_step": true,
     "name": "gsutil upload (2)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32 (M Nexus5X)/AppRTCMobile_apk_170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32%20(M%20Nexus5X)/AppRTCMobile_apk_170242.zip@@@"
     ]
   },
   {

@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux ASan Tests (sandboxed)@https://ci.chromium.org/p/chromium/builders/ci/Linux ASan Tests (sandboxed)@@@"
+      "@@@STEP_LINK@Linux ASan Tests (sandboxed)@https://ci.chromium.org/p/chromium/builders/ci/Linux%20ASan%20Tests%20(sandboxed)@@@"
     ]
   },
   {

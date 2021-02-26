@@ -569,7 +569,7 @@
     "name": "upload fake tests 1.app.gsutil upload fake tests 1.tar.gz",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@fake tests 1.tar.gz@https://storage.cloud.google.com/fake-bucket-1/ios/20120514125321/fake tests 1.tar.gz@@@"
+      "@@@STEP_LINK@fake tests 1.tar.gz@https://storage.cloud.google.com/fake-bucket-1/ios/20120514125321/fake%20tests%201.tar.gz@@@"
     ]
   },
   {
@@ -587,7 +587,7 @@
     "infra_step": true,
     "name": "gsutil upload fake tests 2.app",
     "~followup_annotations": [
-      "@@@STEP_LINK@fake tests 2.app@https://storage.cloud.google.com/fake-bucket-2/ios/20120514125321/fake tests 2.app@@@"
+      "@@@STEP_LINK@fake tests 2.app@https://storage.cloud.google.com/fake-bucket-2/ios/20120514125321/fake%20tests%202.app@@@"
     ]
   },
   {

@@ -301,7 +301,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobaz/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobaz/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
     ]
   },
   {

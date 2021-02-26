@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/builders/ci/Lollipop Phone Tester@@@",
+      "@@@STEP_LINK@Lollipop Phone Tester@https://ci.chromium.org/p/chromium/builders/ci/Lollipop%20Phone%20Tester@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:linux_android_dbg_ng\"]@@@"
     ]
   },
@@ -850,7 +850,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop Phone Tester/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop%20Phone%20Tester/571@@@"
     ]
   },
   {

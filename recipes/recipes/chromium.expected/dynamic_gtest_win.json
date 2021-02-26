@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7 Tests (1)@@@",
+      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7%20Tests%20(1)@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.win:win7-rel\"]@@@"
     ]
   },

@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Mac ASan 64 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Mac ASan 64 Tests (1)@@@",
+      "@@@STEP_LINK@Mac ASan 64 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Mac%20ASan%2064%20Tests%20(1)@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.mac:mac_chromium_asan_rel_ng\"]@@@"
     ]
   },

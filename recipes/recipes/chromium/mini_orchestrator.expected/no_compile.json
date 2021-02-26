@@ -19,7 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux Builder@@@"
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Builder@@@"
     ]
   },
   {

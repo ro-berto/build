@@ -341,7 +341,7 @@
     "name": "build.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8%20Foobar/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
     ]
   },
   {
