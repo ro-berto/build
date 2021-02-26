@@ -251,8 +251,12 @@ class ReclientApi(recipe_api.RecipeApi):
       rbe_project = re.match('projects/(.+)/instances/.+',
                              self.instance).group(1)
       args += [
-          '-metrics_project', self.metrics_project, '-metrics_prefix',
-          rbe_project
+          '-metrics_project',
+          self.metrics_project,
+          '-metrics_prefix',
+          'go.chromium.org',
+          '-metrics_namespace',
+          rbe_project,
       ]
 
     self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
