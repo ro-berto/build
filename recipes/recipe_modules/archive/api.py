@@ -697,10 +697,15 @@ class ArchiveApi(recipe_api.RecipeApi):
 
         for rename_file in archive_data.rename_files:
           expanded_files.remove(rename_file.from_file)
-          expanded_files.add(rename_file.to_file)
+
+          # Support placeholder replacement for file renames.
+          new_filename = self._replace_placeholders(update_properties,
+                                                    custom_vars,
+                                                    rename_file.to_file)
+          expanded_files.add(new_filename)
           self.m.file.move("Move file",
                            self.m.path.join(base_path, rename_file.from_file),
-                           self.m.path.join(base_path, rename_file.to_file))
+                           self.m.path.join(base_path, new_filename))
 
         # Get map of local file path to upload -> destination file path in GCS
         # bucket.

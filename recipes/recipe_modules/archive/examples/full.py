@@ -209,7 +209,7 @@ def GenTests(api):
       ])
     rename_file = properties.ArchiveFileRename()
     rename_file.from_file = "before_rename_file"
-    rename_file.to_file = "after_rename_file"
+    rename_file.to_file = "after_rename_file_{%timestamp%}"
     archive_data.rename_files.extend([rename_file])
     archive_data.file_globs.append('glob*.txt')
     if include_dirs:
@@ -230,6 +230,12 @@ def GenTests(api):
             },
             **{'$build/archive': input_properties}),
         api.post_process(post_process.StatusSuccess),
+        api.post_process(
+            post_process.StepCommandContains,
+            "Generic Archiving Steps.Move file", [
+                "move", "[CLEANUP]/tmp_tmp_2/before_rename_file",
+                "[CLEANUP]/tmp_tmp_2/after_rename_file_20120514125323"
+            ]),
         api.post_process(post_process.DropExpectation),
     )
 
