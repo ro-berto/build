@@ -97,6 +97,7 @@ def _retry_url_open(url):
   Returns:
     The response if status code is 200, otherwise, exception is raised.
   """
+  logging.info('Sending request to Gerrit: %s', url)
   tries = _HTTP_NUM_RETRY
   delay_seconds = 1
   while True:

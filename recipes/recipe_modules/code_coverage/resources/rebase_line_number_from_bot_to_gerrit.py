@@ -86,7 +86,8 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
           'git', 'diff', '--no-index', local_file_path, gerrit_file_path
       ]
       diff_output = None
-
+      logging.info('Calculating diff b/w bot file %s and gerrit file %s',
+                   local_file_path, gerrit_file_path)
       # 'diff' command returns 0 if two files are the same, 1 if differences are
       # found, >1 if an error occurred.
       diff_output = subprocess.check_output(diff_cmd)
