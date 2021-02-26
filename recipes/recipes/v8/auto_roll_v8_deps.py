@@ -257,18 +257,6 @@ def RunSteps(api, autoroller_config):
   api.gclient.c.target_os.add('android')
   api.gclient.c.target_os.add('win')
 
-  # Skip large repos.
-  s = api.gclient.c.solutions[1]
-  s.custom_deps.update({
-    'src/chrome/test/data/pdf_private': None,
-    'src/native_client': None,
-    'src/third_party/blink': None,
-    'src/third_party/skia': None,
-    'src/third_party/webrtc': None,
-    'src/third_party/WebKit': None,
-    'src/tools/valgrind': None,
-    'src/v8': None,
-  })
   api.v8.checkout(ignore_input_commit=True)
 
   # Enforce a clean state.
