@@ -92,6 +92,10 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
     ),
     _config(
+        'linux-chromeos-js-code-coverage',
+        isolate_server='https://isolateserver.appspot.com',
+        gclient_apply_config=['use_clang_coverage']),
+    _config(
         'linux-lacros-builder-rel',
         isolate_server='https://isolateserver.appspot.com'),
     _config(

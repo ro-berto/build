@@ -1210,6 +1210,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-chromeos-rel',
                 analyze_deps_autorolls=True,
             ),
+        'linux-chromeos-js-code-coverage':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-chromeos-js-code-coverage',
+            ),
        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
