@@ -165,6 +165,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='android-code-coverage-native',
             ),
+        'android-pie-arm64-coverage-experimental-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-pie-arm64-coverage-experimental-rel',
+                analyze_deps_autorolls=True,
+            ),
         'android-pie-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',

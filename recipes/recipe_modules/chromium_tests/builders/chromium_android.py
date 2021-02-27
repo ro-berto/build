@@ -457,6 +457,11 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
+        'android-pie-arm64-coverage-experimental-rel',
+        isolate_server='https://isolateserver.appspot.com',
+        gclient_apply_config=['android', 'use_clang_coverage'],
+        chromium_config_kwargs={'TARGET_BITS': 64}),
+    stock_config(
         'android-pie-arm64-rel',
         isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
