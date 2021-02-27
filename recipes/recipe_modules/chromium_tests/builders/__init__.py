@@ -23,6 +23,7 @@ from . import chromium_memory
 from . import chromium_mojo
 from . import chromium_perf
 from . import chromium_perf_fyi
+from . import chromium_perf_calibration
 from . import chromium_swangle
 from . import chromium_swarm
 from . import chromium_updater
@@ -79,6 +80,8 @@ BUILDERS = bot_db.BotDatabase.create({
         chromium_perf.SPEC,
     'chromium.perf.fyi':
         chromium_perf_fyi.SPEC,
+    'chromium.perf.calibration':
+        chromium_perf_calibration.SPEC,
     'chromium.swangle':
         chromium_swangle.SPEC,
     'chromium.staging':
