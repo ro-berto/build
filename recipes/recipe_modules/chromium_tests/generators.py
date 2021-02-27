@@ -3,10 +3,13 @@
 # found in the LICENSE file.
 
 import collections
+import json
 import string
 import textwrap
 
 from . import steps
+
+from recipe_engine import types
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build import skylab
@@ -18,6 +21,7 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
   workspace. This function provides the following build properties in
   the form of variable substitutions in the tests' argument lists:
 
+      buildbucket_project
       buildbucket_build_id
       builder_group
       buildername
@@ -42,23 +46,25 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
   continuous builders compared to tryjobs. This is useful when the
   waterfall bots generate some reference data that is tested against
   during tryjobs.
+
+  This function also supports more general conditional arguments, where
+  one of the substitution variables and a target value is specified. If
+  the value of that variable is equal to the target value, then the
+  associated arguments are added.
   """
 
-  args = raw_test_spec.get('args', [])
-  extra_args = None
+  args = list(raw_test_spec.get('args', []))
   if chromium_tests_api.m.tryserver.is_tryserver:
-    extra_args = raw_test_spec.get('precommit_args', [])
+    args.extend(raw_test_spec.get('precommit_args', []))
   else:
-    extra_args = raw_test_spec.get('non_precommit_args', [])
-  # Only add the extra args if there were any to prevent cases of mixed
-  # tuple/list concatenation caused by assuming type
-  if extra_args:
-    args = args + extra_args
+    args.extend(raw_test_spec.get('non_precommit_args', []))
 
   # Perform substitution of known variables.
   build = chromium_tests_api.m.buildbucket.build
   cl = (build.input.gerrit_changes or [None])[0]
   substitutions = {
+      'buildbucket_project':
+          build.builder.project,
       'buildbucket_build_id':
           build.id,
       'builder_group':
@@ -92,6 +98,27 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
       'xcode_build_version':
           api.chromium.xcode_build_version
   }
+
+  for conditional in raw_test_spec.get('conditional_args', []):
+
+    def get_variable():
+      if 'variable' not in conditional:
+        error_message = "Conditional has no 'variable' key"
+      else:
+        variable = conditional['variable']
+        if variable in substitutions:
+          return substitutions[variable]
+        error_message = "Unknown variable '{}'".format(conditional['variable'])
+      chromium_tests_api.m.python.infra_failing_step(
+          'Invalid conditional',
+          'Test spec has invalid conditional: {}\n{}'.format(
+              error_message, json.dumps(types.thaw(raw_test_spec), indent=2)))
+
+    variable = get_variable()
+    value = conditional.get('value', '')
+    if (variable == value) == (not conditional.get('invert', False)):
+      args.extend(conditional.get('args', []))
+
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 

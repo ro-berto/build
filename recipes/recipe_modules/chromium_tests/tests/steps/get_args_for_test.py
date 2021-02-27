@@ -33,7 +33,7 @@ def RunSteps(api):
 
   test_args = generators.get_args_for_test(api, api.chromium_tests, test_spec,
                                            update_step)
-  if api.properties.get('expected_args'):
+  if 'expected_args' in api.properties:
     # For some reason, we get expected_args as a tuple instead of a list
     api.assertions.assertEqual(
         list(api.properties.get('expected_args')), test_args)
@@ -88,5 +88,121 @@ def GenTests(api):
           expected_args=[u'8945511751514863184'],
       ),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'conditional args added',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'conditional_args': [{
+                  'variable': 'buildbucket_project',
+                  'value': 'chromium',
+                  'args': ['foo', 'bar'],
+              }],
+          },
+          expected_args=['foo', 'bar'],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'conditional args not added',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'conditional_args': [{
+                  'variable': 'buildbucket_project',
+                  'value': 'chrome',
+                  'args': ['foo', 'bar'],
+              }],
+          },
+          expected_args=[],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'inverted conditional args added',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'conditional_args': [{
+                  'variable': 'buildbucket_project',
+                  'value': 'chrome',
+                  'invert': True,
+                  'args': ['foo', 'bar'],
+              }],
+          },
+          expected_args=['foo', 'bar'],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'inverted conditional args not added',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'conditional_args': [{
+                  'variable': 'buildbucket_project',
+                  'value': 'chromium',
+                  'invert': True,
+                  'args': ['foo', 'bar'],
+              }],
+          },
+          expected_args=[],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'conditional args without variable',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'conditional_args': [{}],
+      }),
+      api.post_process(post_process.StatusException),
+      api.post_check(lambda check, steps: \
+          check("Conditional has no 'variable' key"
+                in steps['Invalid conditional'].step_text)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'conditional args with unknown variable',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'conditional_args': [{
+              'variable': 'foobar',
+          }],
+      }),
+      api.post_process(post_process.StatusException),
+      api.post_check(lambda check, steps: \
+          check("Unknown variable 'foobar'"
+                in steps['Invalid conditional'].step_text)),
       api.post_process(post_process.DropExpectation),
   )
