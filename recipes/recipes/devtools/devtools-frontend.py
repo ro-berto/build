@@ -5,6 +5,7 @@
 from contextlib import contextmanager
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from recipe_engine import post_process
+from recipe_engine.recipe_api import Property
 import json
 
 DEPS = [
@@ -26,11 +27,27 @@ DEPS = [
     'recipe_engine/step',
 ]
 
+PROPERTIES = {
+    'builder_config': Property(
+            kind=str,
+            help='Configuration name for the builder (Debug/Release)',
+            default='Release'),
+    'is_official_build': Property(
+            kind=bool,
+            help='Turn the is_official_build gn flag on (default off)',
+            default=False),
+    'clobber': Property(
+            kind=bool,
+            help='Should the builder clean up the out/ folder before building',
+            default=False),
+}
+
+
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
-def RunSteps(api):
-  _configure(api)
+def RunSteps(api, builder_config, is_official_build, clobber):
+  _configure(api, builder_config, is_official_build)
 
   with _in_builder_cache(api):
     api.bot_update.ensure_checkout()
@@ -39,43 +56,35 @@ def RunSteps(api):
 
   with _depot_on_path(api):
     api.chromium.ensure_goma()
-    clean_out_dir(api)
+    clean_out_dir(api, builder_config, clobber)
     api.chromium.run_gn(use_goma=True)
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
 
-    run_unit_tests(api)
-    publish_coverage_points(api)
+    run_unit_tests(api, builder_config)
+    publish_coverage_points(api, builder_config)
 
-    if is_debug_builder(api):
+    if _is_debug(builder_config):
       return
 
     run_lint_check(api)
     run_localization_check(api)
-    run_e2e(api)
-    run_interactions(api)
+    run_e2e(api, builder_config)
+    run_interactions(api, builder_config)
 
     if can_run_experimental_teps(api):
       # Place here any unstable steps that you want to be performed on
       # builders with property run_experimental_steps == True
       pass
 
-def builder_config(api):
-  return api.properties.get('builder_config', 'Release')
+def _is_debug(builder_config):
+  return builder_config == 'Debug'
 
 
-def is_debug_builder(api):
-  return builder_config(api) == 'Debug'
-
-
-def is_clobber(api):
-  return api.properties.get('clobber', False)
-
-
-def _configure(api):
+def _configure(api, builder_config, is_official_build):
   _configure_source(api)
-  _configure_build(api)
+  _configure_build(api, builder_config, is_official_build)
 
 
 def _configure_source(api):
@@ -88,11 +97,12 @@ def _configure_source(api):
   api.gclient.c = src_cfg
 
 
-def _configure_build(api):
-  config_name = builder_config(api)
-  build_cfg = api.chromium.make_config(BUILD_CONFIG=config_name)
-  build_cfg.build_config_fs = config_name
+def _configure_build(api, builder_config, is_official_build):
+  build_cfg = api.chromium.make_config(BUILD_CONFIG=builder_config)
+  build_cfg.build_config_fs = builder_config
   build_cfg.compile_py.compiler = 'goma'
+  if is_official_build:
+    build_cfg.gn_args.append('is_official_build=true')
   api.chromium.c = build_cfg
 
 
@@ -111,9 +121,9 @@ def run_node_script(api, step_name, script, args=None):
     api.python(step_name, sc_path, args=node_args)
 
 
-def run_unit_tests(api):
+def run_unit_tests(api, builder_config):
   run_script(api, 'Unit Tests', 'run_unittests.py', [
-      '--target=' +  builder_config(api),
+      '--target=' +  builder_config,
       '--coverage',
     ])
 
@@ -126,14 +136,14 @@ def run_localization_check(api):
   run_script(api, 'Localization Check', 'run_localization_check.py')
 
 
-def run_e2e(api):
+def run_e2e(api, builder_config):
   run_script(api, 'E2E tests', 'run_test_suite.py',
-             ['--target=' +  builder_config(api), '--test-suite=e2e'])
+             ['--target=' +  builder_config, '--test-suite=e2e'])
 
 
-def run_interactions(api):
+def run_interactions(api, builder_config):
   run_script(api, 'Interactions', 'run_test_suite.py',
-             ['--target=' +  builder_config(api), '--test-suite=interactions'])
+             ['--target=' +  builder_config, '--test-suite=interactions'])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
@@ -143,10 +153,10 @@ def _git_clean(api):
     api.git('clean', '-xf', '--', 'front_end')
 
 
-def clean_out_dir(api):
-  if is_clobber(api):
+def clean_out_dir(api, builder_config, clobber):
+  if clobber:
     dir_to_clean = 'Release'
-  elif is_debug_builder(api):
+  elif _is_debug(builder_config):
     dir_to_clean = 'Debug'
   else:
     return
@@ -190,8 +200,8 @@ def test_cov_data():
       }
   }
 
-def publish_coverage_points(api):
-  if api.tryserver.is_tryserver or not is_debug_builder(api):
+def publish_coverage_points(api, builder_config):
+  if api.tryserver.is_tryserver or not _is_debug(builder_config):
     return
 
   dimensions = ["lines", "statements", "functions", "branches"]
@@ -304,4 +314,12 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'clean outdir'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'official build',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
+      api.properties(is_official_build=True),
+      api.post_process(post_process.Filter('gn'))
   )
