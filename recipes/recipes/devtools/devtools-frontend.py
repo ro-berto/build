@@ -28,25 +28,37 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    'builder_config': Property(
+    'builder_config':
+        Property(
             kind=str,
             help='Configuration name for the builder (Debug/Release)',
             default='Release'),
-    'is_official_build': Property(
+    'is_official_build':
+        Property(
             kind=bool,
             help='Turn the is_official_build gn flag on (default off)',
             default=False),
-    'clobber': Property(
+    'clobber':
+        Property(
             kind=bool,
             help='Should the builder clean up the out/ folder before building',
             default=False),
+    'e2e_env':
+        Property(
+            kind=dict,
+            help='A set of environment variables to be used when running e2e'
+            'stress tests. If set we only compile and run e2e tests.'
+            'Example vars:  the subset of tests to be run, number of'
+            'iterations, etc.',
+            default=None)
 }
 
 
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
-def RunSteps(api, builder_config, is_official_build, clobber):
+
+def RunSteps(api, builder_config, is_official_build, clobber, e2e_env):
   _configure(api, builder_config, is_official_build)
 
   with _in_builder_cache(api):
@@ -61,6 +73,15 @@ def RunSteps(api, builder_config, is_official_build, clobber):
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
+
+    # TODO(liviurau): move this logic in a separate recipe
+    # to maybe even add bysection later on
+    if e2e_env and api.buildbucket.builder_name.startswith("e2e"):
+      # run only e2e stress tests
+      # TODO(liviurau): use parameters rahter than ENV vars
+      with api.context(env=e2e_env):
+        run_e2e(api, builder_config)
+      return
 
     run_unit_tests(api, builder_config)
     publish_coverage_points(api, builder_config)
@@ -322,4 +343,16 @@ def GenTests(api):
       ci_build(builder='linux'),
       api.properties(is_official_build=True),
       api.post_process(post_process.Filter('gn'))
+  )
+
+  yield api.test(
+      'e2e stress test',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      try_build(builder='e2e_stressor_linux'),
+      api.properties(e2e_env={
+          'ITERATIONS': '100',
+          'SUITE': 'flaky suite'
+      }),
+      api.post_process(post_process.DoesNotRun, 'Unit Tests'),
+      api.post_process(post_process.Filter('E2E tests')),
   )
