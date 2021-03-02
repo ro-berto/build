@@ -451,6 +451,13 @@ def GenTests(api):
               '/path/to/some/file.txt.sig',
               'gs://any-bucket/dest_dir/path/to/some/file.txt.sig',
           ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.attestation', [
+              '/path/to/some/file.txt.attestation',
+              'gs://any-bucket/dest_dir/path/to/some/file.txt.attestation',
+          ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -475,6 +482,14 @@ def GenTests(api):
           'dest_dir/path/to/some/file.txt.sig', [
               '/path/to/some/file.txt.sig',
               'gs://any-bucket/experimental/dest_dir/path/to/some/file.txt.sig',
+          ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.attestation', [
+              '/path/to/some/file.txt.attestation',
+              ('gs://any-bucket/experimental/dest_dir/path/to/'
+               'some/file.txt.attestation'),
           ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

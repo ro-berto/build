@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
 import sys
 import os
@@ -663,7 +664,9 @@ class ArchiveApi(recipe_api.RecipeApi):
 
         if archive_data.verifiable_key_path:
           sig_paths = set()
-          for f in expanded_files:
+          # Immutable list of files to attach provenance.
+          files_to_verify = set(expanded_files)
+          for f in files_to_verify:
             # Files are relative to the base_path, so this generates the .sig
             # file next to the original.
             self.m.cloudkms.sign(archive_data.verifiable_key_path,
@@ -673,6 +676,32 @@ class ArchiveApi(recipe_api.RecipeApi):
             # in GCS as well.
             sig_paths.add(f + '.sig')
           expanded_files = expanded_files.union(sig_paths)
+
+          # Generates provenance to built artifacts at BCID L1. Note that this
+          # does not record the top level source for the build.
+          attestation_paths = set()
+          provenance_manifest = {
+            'recipe': self.m.properties.get('recipe'),
+            'exp': 0,
+          }
+          for f in files_to_verify:
+            # Files are relative to the base_path, so this generates the
+            # .attestation file next to the original.
+            file_hash = self.m.file.file_hash(base_path.join(f),
+                                              test_data='deadbeef')
+            provenance_manifest['subjectHash'] = file_hash
+            temp_dir = self.m.path.mkdtemp('tmp')
+            manifest_path = self.m.path.join(temp_dir, 'manifest.json')
+            self.m.file.write_text('Provenance manifest', manifest_path,
+                                   json.dumps(provenance_manifest))
+            self.m.provenance.generate(archive_data.verifiable_key_path,
+                                       manifest_path,
+                                       base_path.join(f + '.attestation'))
+            # This file path is appended directly to the provided gcs_path for
+            # uploads. We'll uploaded this .attestation next to the original
+            # in GCS as well.
+            attestation_paths.add(f + '.attestation')
+          expanded_files = expanded_files.union(attestation_paths)
 
         # Copy all files to a temporary directory. Keeping the structure.
         # This directory will be used for archiving.
