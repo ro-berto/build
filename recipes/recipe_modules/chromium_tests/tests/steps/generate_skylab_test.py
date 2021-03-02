@@ -108,8 +108,9 @@ def GenTests(api):
     return test_data
 
   def archive_gsuri_should_match_skylab_req(check, steps):
-    archive_link = steps['Generic Archiving Steps.gsutil upload'].links[
-        'gsutil.upload']
+    archive_link = steps[
+        'Generic Archiving Steps.gsutil upload '
+        'lacros/lacros-amd64-generic-rel/571/lacros.zip'].links['gsutil.upload']
     gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
     build_req = api.json.loads(
         steps['test_pre_run.schedule tests on skylab.buildbucket.schedule']

@@ -1084,7 +1084,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "Generic Archiving Steps.gsutil upload",
+    "name": "Generic Archiving Steps.gsutil upload lacros/lacros-amd64-generic-rel/571/lacros.zip",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-test-builds/lacros/lacros-amd64-generic-rel/571/lacros.zip@@@"

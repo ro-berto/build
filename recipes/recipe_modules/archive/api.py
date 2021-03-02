@@ -758,7 +758,8 @@ class ArchiveApi(recipe_api.RecipeApi):
               file_path,
               bucket=gcs_bucket,
               dest=uploads[file_path],
-              args=gcs_args)
+              args=gcs_args,
+              name="upload {}".format(str(uploads[file_path])))
 
         if archive_data.HasField('latest_upload'):
           if (not archive_data.latest_upload.gcs_file_content or
@@ -778,4 +779,5 @@ class ArchiveApi(recipe_api.RecipeApi):
           self.m.gsutil.upload(
               output_file,
               bucket=gcs_bucket,
-              dest=archive_data.latest_upload.gcs_path)
+              dest=archive_data.latest_upload.gcs_path,
+              name="upload {}".format(archive_data.latest_upload.gcs_path))

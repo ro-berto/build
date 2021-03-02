@@ -265,9 +265,10 @@ def GenTests(api):
       }),
   )
 
-  def check_gs_url_equals(check, steps, expected):
-    check('Generic Archiving Steps.gsutil upload' in steps)
-    check(expected == steps['Generic Archiving Steps.gsutil upload'].cmd[-1])
+  def check_gs_url_equals(check, steps, dest, expected):
+    step_name = 'Generic Archiving Steps.gsutil upload %s' % dest
+    check(step_name in steps)
+    check(expected == steps[step_name].cmd[-1])
 
   input_properties = archive_properties.InputProperties()
   archive_data = archive_properties.ArchiveData()
@@ -289,7 +290,7 @@ def GenTests(api):
           builder='Linux Builder',
           revision='refs/tags/1.2.3.4',
           git_ref='refs/tags/1.2.3.4'),
-      api.post_process(check_gs_url_equals,
+      api.post_process(check_gs_url_equals, 'x86/1.2.3.4/chrome',
                        'gs://any-bucket/x86/1.2.3.4/chrome'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -308,7 +309,7 @@ def GenTests(api):
           builder='Linux Builder',
           revision='refs/tags/1.2.3.4',
           git_ref='refs/tags/1.2.3.4'),
-      api.post_process(check_gs_url_equals,
+      api.post_process(check_gs_url_equals, 'x86/2.2.2.2/chrome',
                        'gs://any-bucket/x86/2.2.2.2/chrome'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

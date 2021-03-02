@@ -379,7 +379,8 @@ def GenTests(api):
           update_properties={},
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StepCommandContains,
-                       'Generic Archiving Steps.gsutil upload', ['-R']),
+                       'Generic Archiving Steps.gsutil upload dest_dir/',
+                       ['-R']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -443,11 +444,13 @@ def GenTests(api):
                            '-output',
                            '/path/to/some/file.txt.sig',
                        ]),
-      api.post_process(post_process.StepCommandContains,
-                       'Generic Archiving Steps.gsutil upload (2)', [
-                           '/path/to/some/file.txt.sig',
-                           'gs://any-bucket/dest_dir/path/to/some/file.txt.sig',
-                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.sig', [
+              '/path/to/some/file.txt.sig',
+              'gs://any-bucket/dest_dir/path/to/some/file.txt.sig',
+          ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -468,7 +471,8 @@ def GenTests(api):
                        ]),
       api.post_process(
           post_process.StepCommandContains,
-          'Generic Archiving Steps.gsutil upload (2)', [
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.sig', [
               '/path/to/some/file.txt.sig',
               'gs://any-bucket/experimental/dest_dir/path/to/some/file.txt.sig',
           ]),
