@@ -13,9 +13,6 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 
       # TODO(martiniss): Remove this and all uses
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
-      # TODO(crbug.com/chrome-operations/49):
-      # Remove once all tasks are switched to `cas`
-      use_cas=Single(bool, empty_val=False),
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -29,8 +26,3 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
-
-
-@config_ctx()
-def use_cas(c):
-  c.use_cas = True

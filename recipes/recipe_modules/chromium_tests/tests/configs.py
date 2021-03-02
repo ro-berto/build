@@ -28,9 +28,3 @@ def GenTests(api):
           chromium_config='chromium_perf_clang'),
       api.post_process(post_process.DropExpectation),
   )
-
-  yield api.test(
-      'use_cas',
-      api.properties(chromium_tests_config='use_cas'),
-      api.post_process(post_process.DropExpectation),
-  )

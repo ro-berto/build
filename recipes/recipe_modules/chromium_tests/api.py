@@ -424,6 +424,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     args = self.m.gn.parse_gn_args(gn_args)
     return args.get('use_rbe') == 'true'
 
+  def _use_cas(self, bot_config):
+    return (bot_config.isolate_use_cas or "luci.swarming.use_rbe_cas" in
+            self.m.buildbucket.build.input.experiments)
+
   def compile_specific_targets(self,
                                bot_config,
                                update_step,
@@ -521,8 +525,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             suffix=name_suffix,
             targets=list(set(isolated_targets)),
             verbose=True,
-            use_cas=self.c.use_cas or "luci.swarming.use_rbe_cas" in
-            self.m.buildbucket.build.input.experiments,
+            use_cas=self._use_cas(bot_config),
             swarm_hashes_property_name=swarm_hashes_property_name)
 
         self.set_test_command_lines(tests_including_triggered, name_suffix)
@@ -992,11 +995,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def _build_and_isolate_failing_tests(self, failing_tests, bot_update_step,
-                                       suffix):
+  def _build_and_isolate_failing_tests(self, bot_config, failing_tests,
+                                       bot_update_step, suffix):
     """Builds and isolates test suites in |failing_tests|.
 
     Args:
+      bot_config: A BotConfig wth the configuration for the running bot.
       failing_tests: An iterable of test_suites that need to be rebuilt.
       bot_update_step: Contains information about the current checkout. Used to
                        set swarming properties.
@@ -1039,8 +1043,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.chromium.output_dir,
             failing_swarming_tests,
             suffix=' (%s)' % suffix,
-            use_cas=self.c.use_cas or "luci.swarming.use_rbe_cas" in
-            self.m.buildbucket.build.input.experiments,
+            use_cas=self._use_cas(bot_config),
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
@@ -1133,7 +1136,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           task.bot_update_step, task.bot.config.rts_spec and
           task.bot.config.rts_spec.skip_test_files_path or '')
       raw_result = self._build_and_isolate_failing_tests(
-          failing_test_suites, task.bot_update_step, 'without patch')
+          task.bot.settings, failing_test_suites, task.bot_update_step,
+          'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result, []
 

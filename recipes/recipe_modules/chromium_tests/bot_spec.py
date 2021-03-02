@@ -163,6 +163,10 @@ class BotSpec(object):
   # `None` rather than something like the public server to avoid accidentally
   # uploading private isolates to the public server.
   isolate_server = attrib(str, default=None)
+  # Whether to use CAS when creating isolates
+  # TODO(crbug.com/chrome-operations/49):
+  # Remove once all tasks are switched to `cas`
+  isolate_use_cas = attrib(bool, default=False)
 
   # Dimensions to apply to all created swarming tasks
   # Deprecated: Swarming dimensions should be specified in the source side spec

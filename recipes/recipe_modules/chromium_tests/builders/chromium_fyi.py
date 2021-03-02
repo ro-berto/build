@@ -48,8 +48,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=['use_xcode_12_beta'],
             chromium_config_kwargs={
@@ -64,8 +64,8 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -220,8 +220,8 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_cas'],
             isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -252,7 +252,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_cas'],
+            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -318,7 +318,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_cas'],
+            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -373,7 +373,7 @@ SPEC = {
         bot_spec.BotSpec.create(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            chromium_tests_apply_config=['use_cas'],
+            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
