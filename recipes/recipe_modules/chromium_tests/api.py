@@ -687,24 +687,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     Returns:
       A dict where the keys are the project name and the values are a
-      list of `BuilderId` identifying the builders within the project to
-      trigger.
+      list of names of the builders within the project to trigger.
     """
-    to_trigger = collections.defaultdict(list)
+    to_trigger = collections.defaultdict(set)
     for child_id in sorted(bot_config.bot_db.bot_graph[builder_id]):
       child_spec = bot_config.bot_db[child_id]
       luci_project = self._project_trigger_overrides.get(
           child_spec.luci_project, child_spec.luci_project)
-      to_trigger[luci_project].append(child_id)
-    return to_trigger
+      to_trigger[luci_project].add(child_id.builder)
+    return {
+        luci_project: sorted(builders)
+        for luci_project, builders in to_trigger.iteritems()
+    }
 
   def _trigger_led_builds(self, to_trigger, properties):
     """Trigger builders using led.
 
     Args:
       * to_trigger - A dict where the keys are the project name and the
-        values are a list of `BuilderId` identifying the builders within
-        the project to trigger.
+        values are a list of names of the builders within the project to
+        trigger.
     """
     property_args = []
     for k, v in properties.iteritems():
@@ -719,8 +721,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # TODO(https://crbug.com/1140621) Use command-line option instead of
       # changing environment.
       with self.m.context(env={'SWARMING_TASK_ID': None}):
-        for child_project, builder_ids in to_trigger.iteritems():
-          for b in builder_ids:
+        for child_project, builders in to_trigger.iteritems():
+          for child_builder in builders:
             # We don't actually know the bucket for child builders because our
             # config objects don't store anything about the bucket, but we
             # haven't had a reason to trigger builders in other buckets yet and
@@ -729,7 +731,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             # configuration is src-side and the bucket information can be
             # supplied by the starlark generation.
             child_bucket = self.m.buildbucket.build.builder.bucket
-            child_builder = b.builder
 
             child_builder_name = '{}/{}/{}'.format(child_project, child_bucket,
                                                    child_builder)
@@ -765,10 +766,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       else:
         scheduler_triggers = []
-        for project, builder_ids in to_trigger.iteritems():
+        for project, builders in to_trigger.iteritems():
           trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
-          jobs = [b.builder for b in builder_ids]
-          scheduler_triggers.append((trigger, project, jobs))
+          scheduler_triggers.append((trigger, project, builders))
         self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
   def _get_trigger_properties(self,
