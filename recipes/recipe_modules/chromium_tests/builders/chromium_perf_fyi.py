@@ -86,7 +86,6 @@ _AddBuildSpec(
     target_arch='arm',
     extra_gclient_apply_config=[
         'fuchsia_arm64',
-        'fuchsia_arm64_host',
         'fuchsia_internal',
     ])
 
