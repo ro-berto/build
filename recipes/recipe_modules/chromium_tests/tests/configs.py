@@ -16,8 +16,6 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config(api.properties.get('gclient_config', 'chromium'))
   api.chromium.set_config(api.properties.get('chromium_config', 'chromium'))
-  api.chromium_tests.set_config(
-      api.properties.get('chromium_tests_config', 'chromium'))
 
 
 def GenTests(api):

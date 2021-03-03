@@ -50,7 +50,6 @@ PROPERTIES = {
 def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
              retry_failed_shards, retry_invalid_shards):
   api.chromium.set_config('chromium')
-  api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
@@ -81,7 +80,6 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
         MockSwarmingTestSpec.create(name=test_name + '_2'),
         steps.MockTestSpec.create(name='test3')
     ]
-    api.chromium_tests.set_config('staging')
   elif test_skylab:
     test_specs = []
     for spec in api.properties['src_spec']:

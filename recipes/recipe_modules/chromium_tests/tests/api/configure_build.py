@@ -11,19 +11,16 @@ DEPS = [
     'chromium_tests',
 ]
 
-BASIC_CONFIG = bot_spec.BotSpec.create(
-    android_config='main_builder_mb',
-    chromium_config='chromium',
-    gclient_config='chromium',
-    test_results_config='public_server',
-)
-
 BUILDERS = bot_db.BotDatabase.create({
     'fake.group': {
         'Android Apply Config Builder':
-            BASIC_CONFIG.evolve(android_apply_config=['use_devil_provision']),
-        'Chromium Tests Apply Config Builder':
-            BASIC_CONFIG.evolve(chromium_tests_apply_config=['staging']),
+            bot_spec.BotSpec.create(
+                android_config='main_builder_mb',
+                chromium_config='chromium',
+                gclient_config='chromium',
+                test_results_config='public_server',
+                android_apply_config=['use_devil_provision'],
+            ),
     },
 })
 
@@ -39,13 +36,5 @@ def GenTests(api):
       'android_apply_config',
       api.chromium.ci_build(
           builder_group='fake.group', builder='Android Apply Config Builder'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'chromium_tests_apply_config',
-      api.chromium.ci_build(
-          builder_group='fake.group',
-          builder='Chromium Tests Apply Config Builder'),
       api.post_process(post_process.DropExpectation),
   )

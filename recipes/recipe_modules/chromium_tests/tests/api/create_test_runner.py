@@ -18,8 +18,6 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
-  api.chromium_tests.set_config(
-      api.properties.get('chromium_tests_config', 'chromium'))
   api.test_results.set_config('public_server')
 
   test_runner = api.chromium_tests.create_test_runner(

@@ -144,10 +144,6 @@ class BotSpec(object):
   # The keyword arguments used when setting the config for the chromium recipe
   # module
   chromium_config_kwargs = mapping_attrib(str, default={})
-  # The name of the config to use for the chromium_tests recipe module
-  chromium_tests_config = attrib(str, default='chromium')
-  # The name of additional configs to apply for the chromium_tests recipe module
-  chromium_tests_apply_config = sequence_attrib(str, default=())
   # The name of the config to use for the gclient recipe module
   gclient_config = attrib(str, default=None)
   # The names of additional configs to apply for the gclient recipe module

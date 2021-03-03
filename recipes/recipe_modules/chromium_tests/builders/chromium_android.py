@@ -371,13 +371,11 @@ SPEC = {
 def stock_config(name,
                  config='Release',
                  chromium_apply_config=None,
-                 chromium_tests_apply_config=None,
                  chromium_config_kwargs=None,
                  **kwargs):
   bot_config = {
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],
-      'chromium_tests_apply_config': chromium_tests_apply_config or [],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -404,9 +402,6 @@ def stock_cronet_config(name, config='Release', **kwargs):
       name,
       config=config,
       chromium_apply_config=['cronet_builder'],
-      chromium_tests_apply_config=[
-          'staging',
-      ],
       isolate_server='https://isolateserver.appspot.com',
       **kwargs)
 

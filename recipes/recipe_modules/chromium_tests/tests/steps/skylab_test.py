@@ -31,7 +31,6 @@ DEPS = [
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
-  api.chromium_tests.set_config('chromium')
   test_spec = steps.SkylabTestSpec.create(
       name=api.properties.get('test_name', 'EVE_TOT'),
       tast_expr='lacros.Basic',

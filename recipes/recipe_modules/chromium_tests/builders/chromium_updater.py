@@ -10,13 +10,11 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_apply_config': ['mb',],
-      'chromium_tests_apply_config': [],
       'isolate_server': 'https://isolateserver.appspot.com',
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
       },
-      'chromium_tests_apply_config': [],
       'simulation_platform': platform,
   }
   bot_config.update(**kwargs)

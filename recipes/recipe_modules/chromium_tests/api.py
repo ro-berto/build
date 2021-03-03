@@ -148,9 +148,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'Incorrect or missing bot configuration', [traceback.format_exc()],
           as_log='details')
 
-  def get_config_defaults(self):
-    return {'CHECKOUT_PATH': self.m.path['checkout']}
-
   def _chromium_config(self, bot_config):
     chromium_config = self.m.chromium.make_config(
         bot_config.chromium_config, **bot_config.chromium_config_kwargs)
@@ -163,7 +160,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_build(self, bot_config):
     self.m.chromium.set_config(bot_config.chromium_config,
                                **bot_config.chromium_config_kwargs)
-    self.set_config(bot_config.chromium_tests_config)
 
     self.m.gclient.set_config(bot_config.gclient_config)
 
@@ -196,9 +192,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     for c in bot_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
-
-    for c in bot_config.chromium_tests_apply_config:
-      self.apply_config(c)
 
   def set_up_swarming(self, bot_config):
     if bot_config.isolate_server:

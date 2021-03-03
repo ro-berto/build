@@ -31,16 +31,10 @@ DEPS = [
 
 _TEST_BUILDERS = bot_db.BotDatabase.create({
     'chromium.test': {
-        'staging-chromium-rel':
+        'chromium-rel':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                chromium_tests_apply_config=['staging'],
-            ),
-        'staging-chromium-test-rel':
-            bot_spec.BotSpec.create(
-                gclient_config='chromium',
-                chromium_tests_apply_config=['staging'],
             ),
         'retry-shards':
             bot_spec.BotSpec.create(
@@ -75,18 +69,10 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
             ),
-        'staging-chromium-rel':
-            try_spec.TrySpec.create(mirrors=[
-                try_spec.TryMirror.create(
-                    builder_group='chromium.test',
-                    buildername='staging-chromium-rel',
-                    tester='staging-chromium-test-rel',
-                ),
-            ]),
         'rts-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.test',
-                buildername='staging-chromium-rel',
+                buildername='chromium-rel',
                 rts_spec=RTSSpec(
                     rts_chromium_version='latest',
                     model_version='latest',
@@ -129,25 +115,6 @@ def GenTests(api):
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'select tests to skip (rts).rts-chromium select'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'staging',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.test',
-          builder='staging-chromium-rel'),
-      api.chromium_tests.builders(_TEST_BUILDERS),
-      api.chromium_tests.trybots(_TEST_TRYBOTS),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.test', {
-              'staging-chromium-test-rel': {
-                  'gtest_tests': ['staging_base_unittests'],
-              },
-          }),
-      api.filter.suppress_analyze(),
-      api.post_process(post_process.MustRun,
-                       'staging_base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
