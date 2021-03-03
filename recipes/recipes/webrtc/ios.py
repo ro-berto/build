@@ -132,7 +132,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '14.0',
                     'host os': 'Mac-11.0',
                 },
@@ -151,7 +151,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '13.6',
                     'host os': 'Mac-11.0',
                 },
@@ -170,7 +170,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '12.4',
                     'host os': 'Mac-11.0',
                 },
@@ -264,7 +264,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '14.0',
                     'host os': 'Mac-11.0',
                 },
@@ -283,7 +283,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '13.6',
                     'host os': 'Mac-11.0',
                 },
@@ -302,7 +302,7 @@ BUILDERS = freeze({
                 },
                 'ensure_sdk': 'ios',
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone X',
                     'os': '12.4',
                     'host os': 'Mac-11.0',
                 },
