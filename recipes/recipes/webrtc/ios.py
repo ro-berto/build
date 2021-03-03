@@ -334,8 +334,8 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'device type': 'iPhone X',
+                    'os': '14.4',
                     'pool': 'chrome.tests',
                 },
             },
@@ -359,8 +359,8 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'device type': 'iPhone X',
+                    'os': '14.4',
                     'pool': 'chrome.tests',
                 },
             },
@@ -419,8 +419,8 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'device type': 'iPhone X',
+                    'os': '14.4',
                     'pool': 'chrome.tests',
                 },
             },
@@ -444,8 +444,8 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'device type': 'iPhone X',
+                    'os': '14.4',
                     'pool': 'chrome.tests',
                 },
             },
