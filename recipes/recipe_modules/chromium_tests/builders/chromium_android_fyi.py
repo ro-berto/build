@@ -13,6 +13,40 @@ def _chromium_android_fyi_spec(**kwargs):
 
 
 SPEC = {
+    'Android arm64 Builder (dbg) (reclient)':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android', 'enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='main_builder_mb',
+            simulation_platform='linux',
+        ),
+    'Android ASAN (dbg) (reclient)':
+        _chromium_android_fyi_spec(
+            chromium_config='android_clang',
+            chromium_apply_config=[
+                'errorprone',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android', 'enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='clang_builder_mb',
+            simulation_platform='linux',
+        ),
     'Android WebView P FYI (rel)':
         _chromium_android_fyi_spec(
             chromium_config='android',
