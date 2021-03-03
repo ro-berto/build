@@ -250,6 +250,11 @@ def RunSteps(api):
       calls.append(1)
       return self.x.upper()
 
+    @classmethod
+    def create(cls, **kwargs):
+      return cls(**kwargs)
+
+  # Test that the getter is executed only once
   x = CachedPropertyTest('foo')
   api.assertions.assertEqual(len(calls), 0)
 
@@ -259,8 +264,33 @@ def RunSteps(api):
   api.assertions.assertEqual(x.y, 'FOO')
   api.assertions.assertEqual(len(calls), 1)
 
+  # Test that the property cannot be set
   with api.assertions.assertRaises(AttributeError):
     x.y = 'bar'
+
+  # Test that the inheritance hierarchy is not affected by attrs/cached_property
+  @attrs()
+  class InheritedCachedPropertyTest(CachedPropertyTest):
+    z = attrib(str)
+
+    @cached_property
+    def w(self):
+      return self.z.upper()  # pragma: no cover
+
+    @classmethod
+    def create(cls, **kwargs):
+      return super(InheritedCachedPropertyTest, cls).create(x='foo', **kwargs)
+
+  # If attrs uses inheritance to manage cached properties, then the
+  # class hierarchy will be:
+  # * attrs-created InheritedCachedPropertyTest
+  # * InheritedCachedPropertyTest
+  # * attrs-created CachedPropertyTest
+  # * CachedPropertyTest
+  # This causes InheritedCachedPropertyTest.create to be called twice, resulting
+  # in a TypeError due to multiple values for keyword argument 'x'
+  x = InheritedCachedPropertyTest.create(z='bar')
+  api.assertions.assertEqual(x.x, 'foo')
 
 
 def GenTests(api):

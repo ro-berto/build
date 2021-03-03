@@ -244,31 +244,6 @@ def callable_attrib(default=_NOTHING):
   return _attrib(default, validator=validators.is_callable())
 
 
-@attr.s(frozen=True)
-class _CachedProperty(object):
-  """Descriptor for computing cached properties.
-
-  See https://docs.python.org/3/howto/descriptor.html for a description
-  of how descriptors in python work (information is applicable to
-  python2).
-
-  This class implements a non-data descriptor that when invoked for an
-  instance will call its getter to get its value. It will then set the
-  value on the instance's attribute. Because it is a non-data
-  descriptor, instance attributes take precedence, so it will not be
-  invoked again for the same instance.
-  """
-  getter = attr.ib()
-
-  def __get__(self, obj, type_=None):
-    # Used if someone attempts to access the class attribute
-    if obj is None:  # pragma: no cover
-      return self
-    value = freeze(self.getter(obj))
-    object.__setattr__(obj, self.getter.__name__, value)
-    return value
-
-
 def cached_property(getter):
   """Decorator for a method to create a property calculated only once.
 
@@ -289,7 +264,30 @@ def cached_property(getter):
   what the value will be/what the state was that led to the returned
   value.
   """
-  return _CachedProperty(getter)
+
+  cache = {}
+
+  class CachedProperty(object):
+
+    def __get__(self, obj, objtype=None):
+      """Descriptor for computing cached properties.
+
+      See https://docs.python.org/3/howto/descriptor.html for a
+      description of how descriptors in python work (information is
+      applicable to python2).
+      """
+      del objtype
+      # Used if someone attempts to access the class attribute
+      if obj is None:  # pragma: no cover
+        return self
+      not_set = object()
+      value = cache.get(obj, not_set)
+      if value is not_set:
+        value = freeze(getter(obj))
+        cache[obj] = value
+      return value
+
+  return CachedProperty()
 
 
 def attrs(slots=True, **kwargs):
@@ -304,18 +302,11 @@ def attrs(slots=True, **kwargs):
     to undeclared attributes.
   """
 
+  # Implementation note: avoid using inheritance to provide any functionality as
+  # it can interfere with super calls for staticmethods and classmethods that
+  # modify signatures
   def inner(cls):
-    cached_properties = None
-    # If the class is using slots, then we need to take extra steps so that
-    # there are slots for the cached properties
-    if slots:
-      cached_properties = {
-          a for a, val in cls.__dict__.iteritems()
-          if isinstance(val, _CachedProperty)
-      }
     cls = attr.s(frozen=True, slots=slots, **kwargs)(cls)
-    if slots and cached_properties:
-      cls = type(cls.__name__, (cls,), {'slots': cached_properties})
     for a in attr.fields(cls):
       if a.validator is not None and a.default is not _NOTHING:
         try:
