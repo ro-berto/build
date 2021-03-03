@@ -566,43 +566,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Win7 ANGLE Tryserver (AMD)',
                 retry_failed_shards=False,
             ),
-        'win-angle-rel-64':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Win x64 Builder',
-                        tester='ANGLE GPU Win10 x64 Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Win x64 Builder',
-                        tester='ANGLE GPU Win10 x64 Release (Intel HD 630)',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
         'win-angle-deqp-rel-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Win dEQP Builder',
                 tester='Win7 FYI dEQP Release (AMD)',
-                retry_failed_shards=False,
-            ),
-        'win-angle-deqp-rel-64':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Win x64 dEQP Builder',
-                        tester='Win10 FYI x64 dEQP Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Win x64 dEQP Builder',
-                        tester='Win10 FYI x64 dEQP Release (Intel HD 630)',
-                    ),
-                ],
                 retry_failed_shards=False,
             ),
         'win-angle-x64-try':
@@ -1723,12 +1691,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Win Builder',
                 tester='Win7 FYI Release (AMD)',
             ),
-        'gpu-fyi-try-win7-nvidia-dqp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 dEQP Builder',
-                tester='Win7 FYI x64 dEQP Release (NVIDIA)',
-            ),
         'gpu-fyi-try-win7-nvidia-rel-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1747,12 +1709,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Win x64 Builder',
                 tester='Win10 FYI x64 Release (AMD RX 5500 XT)',
             ),
-        'gpu-fyi-try-win10-intel-dqp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 dEQP Builder',
-                tester='Win10 FYI x64 dEQP Release (Intel HD 630)',
-            ),
         'gpu-fyi-try-win10-intel-exp-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1770,12 +1726,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Win x64 Builder (dbg)',
                 tester='Win10 FYI x64 Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-dqp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 dEQP Builder',
-                tester='Win10 FYI x64 dEQP Release (NVIDIA)',
             ),
         'gpu-fyi-try-win10-nvidia-dx12vk-dbg-64':
             try_spec.TrySpec.create_for_single_mirror(

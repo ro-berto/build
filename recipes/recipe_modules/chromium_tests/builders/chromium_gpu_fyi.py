@@ -196,31 +196,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'GPU FYI Win x64 dEQP Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='win',
-            # When trybots are set up which mirror this configuration,
-            # compiling might induce a clobber build if the pinned
-            # buildtools version is different from Chromium's default. This
-            # is a risk we're willing to take because checkouts take a lot
-            # of disk space, and this is expected to be a corner case rather
-            # than the common case.
-        ),
     'GPU FYI Win x64 DX12 Vulkan Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -432,38 +407,6 @@ SPEC = {
             simulation_platform='win',
             serialize_tests=True,
         ),
-    'Win10 FYI x64 dEQP Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Win x64 dEQP Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
-    'Win10 FYI x64 dEQP Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Win x64 dEQP Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
     'Win7 FYI x64 Release (NVIDIA)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -477,22 +420,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='GPU FYI Win x64 Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
-    'Win7 FYI x64 dEQP Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Win x64 dEQP Builder',
             simulation_platform='win',
             serialize_tests=True,
         ),
@@ -1660,10 +1587,6 @@ SPEC = {
     'ANGLE GPU Mac Retina Release (NVIDIA)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
     'ANGLE GPU Mac Retina Release (AMD)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Win10 x64 Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Win10 x64 Release (Intel HD 630)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
     'Win7 ANGLE Tryserver (AMD)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
