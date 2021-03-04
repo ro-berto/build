@@ -57,7 +57,7 @@ def RunSteps(api, target_testername, revision, isolated_targets):
 
   bot_config = api.m.chromium_tests.create_bot_config_object([bot_mirror])
   bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
-      bot_config, root_solution_revision=revision)
+      bot_config, root_solution_revision=revision, report_cache_state=False)
 
   # Find the matching test targets.
   tests = [

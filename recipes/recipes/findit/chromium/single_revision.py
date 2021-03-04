@@ -63,7 +63,7 @@ def RunSteps(api, properties):
 
   # 2. Check out the code.
   bot_update_step, build_config = api.chromium_tests.prepare_checkout(
-      bot_config)
+      bot_config, report_cache_state=False)
 
   # 3. Configure swarming
   api.chromium_swarming.configure_swarming('chromium', precommit=False)

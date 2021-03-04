@@ -58,7 +58,7 @@ def GenTests(api):
   yield api.test('noop_because_of_analyze', api.binary_size.build(),
                  api.post_check(has_binary_size_property),
                  api.post_process(post_process.MustRun, 'analyze'),
-                 api.post_process(post_process.DoesNotRunRE, r'.*build'),
+                 api.post_process(post_process.DoesNotRunRE, r'.*compile'),
                  api.post_process(post_process.DropExpectation))
   yield api.test('compile_failure', api.binary_size.build(), override_analyze(),
                  api.override_step_data('compile (with patch)', retcode=1),

@@ -94,7 +94,7 @@ def RunSteps(api):
         'Checkout is ~%f seconds old' % checkout_age_seconds] = []
     refresh_checkout = checkout_age_seconds > NOT_FRESH
   if refresh_checkout:
-    api.chromium_tests.prepare_checkout(bot_config)
+    api.chromium_tests.prepare_checkout(bot_config, report_cache_state=False)
 
 
 def GenTests(api):

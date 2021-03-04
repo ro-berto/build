@@ -72,7 +72,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
     # Checkout code at the given revision to recompile.
     bot_config = api.chromium_tests.create_bot_config_object([builder_id])
     bot_update_step, build_config = api.chromium_tests.prepare_checkout(
-        bot_config, root_solution_revision=revision)
+        bot_config, root_solution_revision=revision, report_cache_state=False)
 
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
@@ -140,8 +140,7 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
       bot_config)
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
-      bot_config,
-      root_solution_revision=bad_revision)
+      bot_config, root_solution_revision=bad_revision, report_cache_state=False)
 
   # Retrieve revisions in the regression range. The returned revisions are in
   # order from oldest to newest.

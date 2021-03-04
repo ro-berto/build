@@ -20,6 +20,31 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "builder cache",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>builder cache is absent, expect a slow build@@@",
+      "@@@SET_BUILD_PROPERTY@is_cached@false@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "builder cache.check if empty",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
     "cmd": [
       "vpython",
       "-u",

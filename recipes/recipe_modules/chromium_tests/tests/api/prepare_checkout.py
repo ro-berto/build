@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -51,6 +52,29 @@ def GenTests(api):
       'basic',
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
+  )
+
+  yield api.test(
+      'has cache',
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Builder'),
+      api.step_data('builder cache.check if empty',
+                    api.file.listdir(['foo', 'bar'])),
+      api.post_check(lambda check, steps: check(
+          'builder cache is present' in steps['builder cache'].step_text)),
+      api.post_check(post_process.PropertyEquals, 'is_cached', True),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'does not have cache',
+      api.chromium.ci_build(
+          builder_group='chromium.linux', builder='Linux Builder'),
+      api.step_data('builder cache.check if empty', api.file.listdir([])),
+      api.post_check(lambda check, steps: check(
+          'builder cache is absent' in steps['builder cache'].step_text)),
+      api.post_check(post_process.PropertyEquals, 'is_cached', False),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

@@ -196,7 +196,7 @@ class FinditApi(recipe_api.RecipeApi):
       # TODO(stgao): refactor this out.
       bot_config = self.m.chromium_tests.create_bot_config_object([bot_mirror])
       bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
-          bot_config, root_solution_revision=revision)
+          bot_config, root_solution_revision=revision, report_cache_state=False)
 
       # Figure out which test steps to run.
       requested_tests_to_run = [
@@ -366,7 +366,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     # Sync code.
     self.m.chromium_tests.prepare_checkout(
-        bot_config, root_solution_revision=revision)
+        bot_config, root_solution_revision=revision, report_cache_state=False)
 
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
     self.m.chromium_swarming.configure_swarming('chromium', precommit=False)

@@ -214,7 +214,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  def prepare_checkout(self, bot_config, **kwargs):
+  def prepare_checkout(self, bot_config, report_cache_state=True, **kwargs):
+    if report_cache_state:
+      with self.m.step.nest('builder cache') as presentation:
+        contents = self.m.file.listdir('check if empty',
+                                       self.m.chromium_checkout.checkout_dir)
+        is_cached = bool(contents)
+        presentation.properties['is_cached'] = is_cached
+        if is_cached:
+          presentation.step_text = (
+              '\nbuilder cache is present, '
+              'build may or may not be fast depending on state of cache')
+        else:
+          presentation.step_text = (
+              '\nbuilder cache is absent, expect a slow build')
+
     update_step = self.m.chromium_checkout.ensure_checkout(bot_config, **kwargs)
 
     if (self.m.chromium.c.compile_py.compiler and
