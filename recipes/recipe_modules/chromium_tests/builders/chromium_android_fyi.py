@@ -214,6 +214,8 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1172440): Remove both testers below and their parent
+    # builder after they begin running in the main waterfall
     'android-weblayer-oreo-x86-rel-tests':
         _chromium_android_fyi_spec(
             chromium_config='android',
