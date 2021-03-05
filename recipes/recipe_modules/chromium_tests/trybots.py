@@ -5,7 +5,6 @@
 from recipe_engine.types import freeze
 
 from RECIPE_MODULES.build.chromium_tests import try_spec
-from RECIPE_MODULES.build.rts_chromium.rts_spec import RTSSpec
 
 
 TRYBOTS = try_spec.TryDatabase.create({
@@ -956,11 +955,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
                 analyze_deps_autorolls=True,
-                rts_spec=RTSSpec(
-                    rts_chromium_version='latest',
-                    model_version='latest',
-                    target_change_recall=0.9,
-                ),
             ),
         'linux-viz-rel':
             try_spec.TrySpec.create_for_single_mirror(

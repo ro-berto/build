@@ -8,7 +8,6 @@ import sys
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
                                              mapping_attrib, sequence_attrib)
-from RECIPE_MODULES.build.rts_chromium.rts_spec import RTSSpec
 
 COMPILE_AND_TEST = 'compile/test'
 COMPILE = 'compile'
@@ -91,8 +90,6 @@ class TrySpec(object):
   retry_failed_shards = attrib(bool, default=True)
   # Whether or not to analyze DEPS autorolls by git diffing the changed repos
   analyze_deps_autorolls = attrib(bool, default=False)
-  # Contains all the config for RTS, if it is to be used
-  rts_spec = attrib(RTSSpec, default=None)
 
   @classmethod
   def create(cls, mirrors, **kwargs):

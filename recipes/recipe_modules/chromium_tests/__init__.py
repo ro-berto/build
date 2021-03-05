@@ -48,7 +48,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'recipe_engine/time',
-    'rts_chromium',
     'skylab',
     'test_results',
     'test_utils',
