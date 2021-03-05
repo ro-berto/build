@@ -67,6 +67,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       use_gyp_env=Single(bool, empty_val=True, required=False),
       env=ConfigGroup(
           PATH=List(Path),
+          GOMA_SERVER_HOST=Single(basestring, required=False),
           GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
           GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),
           GOMA_STORE_ONLY=Single(bool, empty_val=False, required=False),
@@ -289,6 +290,12 @@ def goma_latest_client(c):
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
   c.compile_py.show_ninja_stats = True
+
+
+@config_ctx()
+def goma_staging(c):
+  c.compile_py.goma_failfast = True
+  c.env.GOMA_SERVER_HOST = 'sandbox.google.com'
 
 
 @config_ctx()
