@@ -30,7 +30,7 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  api.webrtc.ensure_xcode("12a7209")
+  api.webrtc.ensure_xcode("12d4e")
 
   build_script = api.path['checkout'].join('tools_webrtc', 'ios',
                                            'build_ios_libs.py')

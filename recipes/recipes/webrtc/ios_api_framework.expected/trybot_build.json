@@ -137,7 +137,7 @@
     "cmd": [],
     "name": "ensure xcode",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 12a7209 in [CACHE]/xcode_ios_12a7209.app@@@"
+      "@@@STEP_TEXT@Ensuring Xcode version 12d4e in [CACHE]/xcode_ios_12d4e.app@@@"
     ]
   },
   {
@@ -176,9 +176,9 @@
       "-kind",
       "ios",
       "-xcode-version",
-      "12a7209",
+      "12d4e",
       "-output-dir",
-      "[CACHE]/xcode_ios_12a7209.app"
+      "[CACHE]/xcode_ios_12d4e.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -191,7 +191,7 @@
       "sudo",
       "xcode-select",
       "-switch",
-      "[CACHE]/xcode_ios_12a7209.app"
+      "[CACHE]/xcode_ios_12d4e.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.select xcode",
