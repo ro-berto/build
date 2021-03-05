@@ -199,7 +199,7 @@ _AddBuildSpec(
     'mac',
     bisect_archive_build=True,
     target_arch='arm',
-    gclient_apply_config=['use_xcode_12_beta'])
+)
 
 # Adapted from 'chromeos-amd64-generic-lacros-internal' to measure binary size.
 SPEC.update({
