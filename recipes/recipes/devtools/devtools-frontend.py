@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
+
 import json
 
 DEPS = [
@@ -50,7 +51,14 @@ PROPERTIES = {
             'stress tests. If set we only compile and run e2e tests.'
             'Example vars:  the subset of tests to be run, number of'
             'iterations, etc.',
-            default=None)
+            default=None),
+    # TODO: remove e2e_env property once the runner gets updated
+    'runner_args':
+        Property(
+            kind=str,
+            help='Parameters to be passed down to the test runner for running'
+            ' stess e2e tests. If set we only compile and run e2e tests.',
+            default=None),
 }
 
 
@@ -58,7 +66,8 @@ PROPERTIES = {
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
 
-def RunSteps(api, builder_config, is_official_build, clobber, e2e_env):
+def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
+             runner_args):
   _configure(api, builder_config, is_official_build)
 
   with _in_builder_cache(api):
@@ -76,11 +85,15 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env):
 
     # TODO(liviurau): move this logic in a separate recipe
     # to maybe even add bysection later on
-    if e2e_env and api.buildbucket.builder_name.startswith("e2e"):
+    builder_name = api.buildbucket.builder_name
+    if (e2e_env or runner_args) and builder_name.startswith("e2e"):
       # run only e2e stress tests
       # TODO(liviurau): use parameters rahter than ENV vars
-      with api.context(env=e2e_env):
-        run_e2e(api, builder_config)
+      if e2e_env:
+        with api.context(env=e2e_env):
+          run_e2e(api, builder_config)
+      else:
+        run_e2e(api, builder_config, runner_args.split())
       return
 
     run_unit_tests(api, builder_config)
@@ -157,9 +170,9 @@ def run_localization_check(api):
   run_script(api, 'Localization Check', 'run_localization_check.py')
 
 
-def run_e2e(api, builder_config):
+def run_e2e(api, builder_config, args=None):
   run_script(api, 'E2E tests', 'run_test_suite.py',
-             ['--target=' +  builder_config, '--test-suite=e2e'])
+             ['--target=' + builder_config, '--test-suite=e2e'] + (args or []))
 
 
 def run_interactions(api, builder_config):
@@ -353,6 +366,15 @@ def GenTests(api):
           'ITERATIONS': '100',
           'SUITE': 'flaky suite'
       }),
+      api.post_process(post_process.DoesNotRun, 'Unit Tests'),
+      api.post_process(post_process.Filter('E2E tests')),
+  )
+
+  yield api.test(
+      'e2e stress test with parameters',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      try_build(builder='e2e_stressor_linux'),
+      api.properties(runner_args="--ITERATIONS=100 --SUITE=flaky/suite"),
       api.post_process(post_process.DoesNotRun, 'Unit Tests'),
       api.post_process(post_process.Filter('E2E tests')),
   )

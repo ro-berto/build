@@ -1,0 +1,19 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
+      "--target=Release",
+      "--test-suite=e2e",
+      "--ITERATIONS=100",
+      "--SUITE=flaky/suite"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "name": "E2E tests"
+  }
+]
