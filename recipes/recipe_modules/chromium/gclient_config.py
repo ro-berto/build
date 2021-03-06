@@ -76,6 +76,13 @@ def chromium(c):
   s = c.solutions[0]
   s.custom_deps = mirror_only(c, {})
 
+
+@CONFIG_CTX(includes=['chromium'])
+def chromium_rts(c):
+  s = c.solutions[0]
+  s.custom_vars['checkout_rts_model'] = True
+
+
 @CONFIG_CTX(includes=['chromium'])
 def chromium_lkgr(c):
   s = c.solutions[0]

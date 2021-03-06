@@ -90,6 +90,8 @@ class TrySpec(object):
   retry_failed_shards = attrib(bool, default=True)
   # Whether or not to analyze DEPS autorolls by git diffing the changed repos
   analyze_deps_autorolls = attrib(bool, default=False)
+  # See http://bit.ly/chromium-rts
+  use_regression_test_selection = attrib(bool, default=False)
 
   @classmethod
   def create(cls, mirrors, **kwargs):

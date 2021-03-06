@@ -1451,6 +1451,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              gn_args_location=None,
              gn_args_max_text_lines=None,
              recursive_lookup=False,
+             use_rts=False,
              **kwargs):
     """Generate the build files in the source tree.
 
@@ -1509,6 +1510,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       mb_args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
 
     mb_args.extend(self._mb_build_dir_args(build_dir))
+    if use_rts:
+      mb_args += ['--use-rts']
 
     name = name or 'generate_build_files'
     with self.mb_failure_handler(name):

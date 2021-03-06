@@ -89,6 +89,22 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'GPU Linux Builder RTS':
+        _chromium_gpu_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'goma_high_parallel',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium_rts',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'GPU Linux Builder (dbg)':
         _chromium_gpu_spec(
             chromium_config='chromium',

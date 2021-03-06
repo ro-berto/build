@@ -945,16 +945,17 @@ TRYBOTS = try_spec.TryDatabase.create({
                 mirrors=[
                     try_spec.TryMirror.create(
                         builder_group='chromium.linux',
-                        buildername='Linux Builder',
+                        buildername='Linux Builder RTS',
                         tester='Linux Tests',
                     ),
                     try_spec.TryMirror.create(
                         builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
+                        buildername='GPU Linux Builder RTS',
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
                 analyze_deps_autorolls=True,
+                use_regression_test_selection=True
             ),
         'linux-viz-rel':
             try_spec.TrySpec.create_for_single_mirror(

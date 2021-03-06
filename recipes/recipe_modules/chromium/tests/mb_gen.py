@@ -39,7 +39,8 @@ def RunSteps(api):
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,
-      android_version_name='example')
+      android_version_name='example',
+      use_rts=api.properties.get('use_rts', False))
 
 
 def GenTests(api):
@@ -162,4 +163,9 @@ def GenTests(api):
                        '--luci-auth'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'use_rts',
+      api.properties(use_rts=True),
   )

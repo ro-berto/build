@@ -442,7 +442,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                mb_phase=None,
                                mb_config_path=None,
                                mb_recursive_lookup=True,
-                               override_execution_mode=None):
+                               override_execution_mode=None,
+                               use_rts=False):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used.
@@ -502,7 +503,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           mb_recursive_lookup=mb_recursive_lookup,
           android_version_code=android_version_code,
-          android_version_name=android_version_name)
+          android_version_name=android_version_name,
+          use_rts=use_rts)
 
       if raw_result.status != common_pb.SUCCESS:
         self.m.tryserver.set_compile_failure_tryjob_result()
@@ -839,7 +841,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          mb_config_path=None,
                          mb_recursive_lookup=False,
                          android_version_code=None,
-                         android_version_name=None):
+                         android_version_name=None,
+                         use_rts=False):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
@@ -854,7 +857,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             name='generate_build_files%s' % name_suffix,
             recursive_lookup=mb_recursive_lookup,
             android_version_code=android_version_code,
-            android_version_name=android_version_name)
+            android_version_name=android_version_name,
+            use_rts=use_rts)
         use_reclient = self._use_reclient(gn_args)
         if use_reclient:
           use_goma_module = False
@@ -1940,7 +1944,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           build_config,
           compile_targets,
           tests_including_triggered,
-          override_execution_mode=bot_spec_module.COMPILE_AND_TEST)
+          override_execution_mode=bot_spec_module.COMPILE_AND_TEST,
+          use_rts=bot.config.use_regression_test_selection)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on
