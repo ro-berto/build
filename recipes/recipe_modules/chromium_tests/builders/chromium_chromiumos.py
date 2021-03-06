@@ -81,7 +81,7 @@ SPEC.update([
     _config(
         'lacros-amd64-generic-rel',
         isolate_server='https://isolateserver.appspot.com',
-        cros_boards='amd64-generic',
+        cros_boards_with_qemu_images='amd64-generic',
     ),
     _config(
         'linux-chromeos-rel',
