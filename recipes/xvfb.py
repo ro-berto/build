@@ -151,26 +151,7 @@ def StopVirtualX(slave_build_name):
     print 'Stopping Xvfb with pid %d ...' % xvfb_pid
     # If the process doesn't exist, we raise an exception that we can ignore.
     try:
-      if slave_build_name == 'build11-b9':
-        print('[crbug.com/1071006] - Running `ps aux`.')
-        processes = subprocess.check_output(['ps', 'aux']).splitlines()
-        for line in processes:
-          print('[crbug.com/1071006] - %s' % line)
-
-        for i in range(60):
-          time.sleep(1)
-          print(
-              '[crbug.com/1071006] - Killing Xvfb PID %s, iteration %d' %
-              (xvfb_pid, i)
-          )
       os.kill(xvfb_pid, signal.SIGKILL)
-      if slave_build_name == 'build11-b9':
-        for i in range(60):
-          time.sleep(1)
-          print(
-              '[crbug.com/1071006] - Killed Xvfb PID %s, iteration %d.' %
-              (xvfb_pid, i)
-          )
     except OSError:
       print '... killing failed, presuming unnecessary.'
     os.remove(xvfb_pid_filename)
