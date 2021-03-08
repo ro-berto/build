@@ -341,6 +341,13 @@ class Runner(object):
     step_prefix = 'check %s at #%d' % (self.command.label, offset)
 
     def trigger_task(path, shard):
+      # TODO(machenbach): Allow legacy isolate hashes for a grace period to not
+      # break flake bisection. Flip this permanently to true mid Q2 2021.
+      kwargs = {}
+      if '/' in isolated_hash:
+        kwargs['cas_input_root'] = isolated_hash
+      else:
+        kwargs['isolated'] = isolated_hash
       # TODO(machenbach): Would be nice to just use 'shard X' as step names for
       # trigger/collect. But swarming enforces unique task titles and we can't
       # use our optimization to not collect some tasks. Either properly
@@ -348,9 +355,9 @@ class Runner(object):
       # override the step names.
       task = self.api.chromium_swarming.task(
           name='%s - shard %d' % (step_prefix, shard),
-          isolated=isolated_hash,
           task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
+          **kwargs
       )
 
       # Use lower swarming priority given the increased time of the task.
@@ -631,6 +638,14 @@ def GenTests(api):
         ),
     )
 
+  def switched_to_cas(offset):
+    return api.step_data(
+        'calibration attempt 1.gsutil get isolates for #%d' % offset,
+        api.json.output(
+            {'foo_isolated': '[dummy hash for foo_isolated]/123'}
+        ),
+    )
+
   def isolated_lookup(offset, exists):
     return api.step_data(
         'gsutil lookup isolates for #%d' % offset,
@@ -710,7 +725,11 @@ def GenTests(api):
       is_flaky(2, 0, 3) +
       # Bisect into a5..a2.
       is_flaky(3, 0, 3) +
-      verify_suspects(5, 3)
+      verify_suspects(5, 3) +
+      # TODO(machenbach): This simulates a new build that has switched to CAS
+      # while older builds have not yet. Remove this as soon as we switch CAS
+      # on by default.
+      switched_to_cas(1)
   )
 
   # Similar to above but fewer corner cases. This is for simulating bisection

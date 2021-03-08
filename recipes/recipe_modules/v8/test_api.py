@@ -452,7 +452,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             stream='stdout'),
     )
 
-  def _make_dummy_swarm_hashes(self, test_names):
+  def _make_dummy_swarm_hashes(self, test_names, use_cas):
     """Makes dummy isolate hashes for all tests of a bot.
 
     Either an explicit isolate target must be defined or the naming
@@ -466,8 +466,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         for test in config.get('tests', []):
           yield test
 
+    hsh_suffix = '/123' if use_cas else ''
     return dict(
-        (target, '[dummy hash for %s]' % target)
+        (target, '[dummy hash for %s]%s' % (target, hsh_suffix))
         for test_name in test_names
         for target in gen_isolate_targets(test_name)
     )
@@ -489,6 +490,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
            parent_buildername=None,
            parent_bot_config=None,
            git_ref='refs/heads/master',
+           use_cas=False,
            **kwargs):
     """Convenience method to generate test data for V8 recipe runs.
 
@@ -531,6 +533,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.m.builder_group.for_current(builder_group),
         self.m.platform('linux', 64),
     )
+    if use_cas:
+      test += self.m.properties(**{'$build/v8': {'use_cas': True}})
     if parent_buildername:
       test += self.m.properties(
           parent_got_revision='deafbeef'*5,
@@ -548,7 +552,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         # parent_test_spec property.
         buider_spec = kwargs.get('parent_test_spec', {})
         swarm_hashes = self._make_dummy_swarm_hashes(
-            test[0] for test in buider_spec.get('tests', []))
+            (test[0] for test in buider_spec.get('tests', [])), use_cas)
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=swarm_hashes,

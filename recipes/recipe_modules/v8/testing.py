@@ -237,6 +237,11 @@ class BaseTest(object):
     assert isolated_hash
     return isolated_hash
 
+  def create_task(self, test, **kwargs):
+    isolated_key = 'cas_input_root' if self.api.v8.use_cas else 'isolated'
+    kwargs[isolated_key] = self._get_isolated_hash(test)
+    return self.api.chromium_swarming.task(**kwargs)
+
   @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
@@ -492,12 +497,13 @@ class V8SwarmingTest(V8Test):
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
-    self.task = self.api.chromium_swarming.task(
+    self.task = self.create_task(
+        self.test,
         name=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
-        isolated=self._get_isolated_hash(self.test),
         shards=shards,
-        raw_cmd= [command] + extra_args,
+        raw_cmd=[command] + extra_args,
+        **kwargs
     )
     self.task.collect_step = self._v8_collect_step
 
@@ -557,11 +563,12 @@ class V8GenericSwarmingTest(BaseTest):
 
   def pre_run(self, test=None, **kwargs):
     self.test = test or self.api.v8.test_configs[self.name]
-    self.task = self.api.chromium_swarming.task(
+    self.task = self.create_task(
+        self.test,
         name=self.title,
-        isolated=self._get_isolated_hash(self.test),
         task_output_dir=self.task_output_dir,
         raw_cmd=self.command or [],
+        **kwargs
     )
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)

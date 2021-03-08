@@ -103,7 +103,7 @@ class V8Api(recipe_api.RecipeApi):
   EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
   TEST_SPEC = v8_builders.TestSpec
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, properties, *args, **kwargs):
     super(V8Api, self).__init__(*args, **kwargs)
     self.test_configs = {}
     self.bot_config = None
@@ -115,6 +115,7 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
+    self.use_cas = properties.get('use_cas', False)
 
   def bot_config_by_buildername(
       self, builders=None, use_goma=True):
@@ -581,6 +582,8 @@ class V8Api(recipe_api.RecipeApi):
           verbose=True,
           swarm_hashes_property_name=None,
           step_name='isolate tests (perf)',
+          # TODO(machenbach): Add use_cas property for switching perf tests
+          # separately.
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
       if not self.m.tryserver.is_tryserver:
@@ -599,6 +602,7 @@ class V8Api(recipe_api.RecipeApi):
           targets=isolate_targets,
           verbose=True,
           swarm_hashes_property_name=None,
+          use_cas=self.use_cas,
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
 
@@ -855,12 +859,13 @@ class V8Api(recipe_api.RecipeApi):
 
   def download_isolated_json(self, revision):
     archive = 'gs://' + self.isolated_archive_path + '/%s.json' % revision
+    hsh_suffix = '/123' if self.use_cas else ''
     self.m.gsutil.download_url(
         archive,
         self.m.json.output(),
         name='download isolated json',
         step_test_data=lambda: self.m.json.test_api.output(
-            {'bot_default': '[dummy hash for bisection]'}),
+            {'bot_default': '[dummy hash for bisection]' + hsh_suffix}),
     )
     step_result = self.m.step.active_result
     self.isolated_tests = step_result.json.output

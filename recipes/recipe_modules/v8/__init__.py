@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
+from recipe_engine.config import ConfigGroup, Single
+
 DEPS = [
     'archive',
     'build',
@@ -40,6 +43,17 @@ DEPS = [
     'test_utils',
 ]
 
+PROPERTIES = {
+  '$build/v8': Property(
+    help='Properties specifically for the v8 module',
+    param_name='properties',
+    kind=ConfigGroup(
+      # Whether or not to use CAS.
+      use_cas=Single(bool),
+    ),
+    default={},
+  ),
+}
 
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
 DISABLE_STRICT_COVERAGE = True
