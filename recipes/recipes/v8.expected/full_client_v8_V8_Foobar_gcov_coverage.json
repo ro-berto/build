@@ -94,7 +94,7 @@
       "third_party/*",
       "testing/gtest/*",
       "testing/gmock/*",
-      "/usr/include/*",
+      "/usr/*",
       "--output-file",
       "[CLEANUP]/gcov_coverage_tmp_1/app.info"
     ],

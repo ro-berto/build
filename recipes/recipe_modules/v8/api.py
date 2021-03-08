@@ -929,7 +929,7 @@ class V8Api(recipe_api.RecipeApi):
           'third_party/*',
           'testing/gtest/*',
           'testing/gmock/*',
-          '/usr/include/*',
+          '/usr/*',
           '--output-file', output_file,
         ],
         dir_mapping,
