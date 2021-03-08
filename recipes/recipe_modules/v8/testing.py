@@ -238,8 +238,11 @@ class BaseTest(object):
     return isolated_hash
 
   def create_task(self, test, **kwargs):
-    isolated_key = 'cas_input_root' if self.api.v8.use_cas else 'isolated'
-    kwargs[isolated_key] = self._get_isolated_hash(test)
+    # TODO(machenbach): We infer if CAS or isolate was used when building.
+    # Hardcode this to CAS once all builders have switched.
+    digest = self._get_isolated_hash(test)
+    isolated_key = 'cas_input_root' if '/' in digest else 'isolated'
+    kwargs[isolated_key] = digest
     return self.api.chromium_swarming.task(**kwargs)
 
   @property
