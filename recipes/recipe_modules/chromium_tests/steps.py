@@ -1370,13 +1370,13 @@ class SizesStep(Test):
     # |failures| one.
     return True
 
-  def failures(self, suffix):
+  def failures(self, suffix):  # pragma: no cover
     return []
 
-  def deterministic_failures(self, suffix):
+  def deterministic_failures(self, suffix):  # pragma: no cover
     return []
 
-  def findit_notrun(self, suffix):
+  def findit_notrun(self, suffix):  # pragma: no cover
     return set()
 
   def pass_fail_counts(self, suffix):  # pragma: no cover

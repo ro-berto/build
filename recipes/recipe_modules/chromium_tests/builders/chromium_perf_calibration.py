@@ -23,7 +23,6 @@ def _AddCalibrationTestSpec(name, platform, target_bits):
       config_name='chromium_perf',
       platform=platform,
       target_bits=target_bits,
-      test_specs=[],
   )
 
   kwargs['bisect_archive_build'] = False

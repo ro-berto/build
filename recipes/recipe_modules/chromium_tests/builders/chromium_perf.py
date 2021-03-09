@@ -32,8 +32,7 @@ def chromium_perf(c):
   c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
-def _common_kwargs(execution_mode, config_name, platform, target_bits,
-                   test_specs):
+def _common_kwargs(execution_mode, config_name, platform, target_bits):
   spec = {
       'execution_mode':
           execution_mode,
@@ -49,8 +48,6 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits,
       'simulation_platform':
           'linux' if platform in ('android', 'chromeos',
                                   'fuchsia') else platform,
-      'test_specs':
-          test_specs,
   }
 
   if platform == 'android':
@@ -76,26 +73,15 @@ def BuildSpec(config_name,
               platform,
               target_bits,
               bisect_archive_build=False,
-              run_sizes=True,
               cros_boards=None,
               target_arch=None,
               extra_gclient_apply_config=None):
-  test_specs = []
-  # TODO: Run sizes on Android.
-  # TODO (crbug.com/953108): do not run test for chromeos for now
-  # TODO (crbug.com/1169851): do not run test for fuchsia for now.
-  if run_sizes and not platform in ('android', 'chromeos', 'fuchsia'):
-    test_specs = [
-        steps.SizesStepSpec.create(
-            results_url='https://chromeperf.appspot.com', perf_id=config_name)
-    ]
 
   kwargs = _common_kwargs(
       execution_mode=bot_spec.COMPILE_AND_TEST,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      test_specs=test_specs,
   )
 
   kwargs['perf_isolate_upload'] = True
@@ -123,7 +109,6 @@ def TestSpec(config_name,
              platform,
              target_bits,
              parent_buildername,
-             test_specs=None,
              cros_boards=None,
              target_arch=None):
   kwargs = _common_kwargs(
@@ -131,7 +116,6 @@ def TestSpec(config_name,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      test_specs=test_specs or [],
   )
 
   kwargs['parent_buildername'] = parent_buildername
