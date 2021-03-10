@@ -254,6 +254,20 @@ def GenTests(api):
     api.post_process(Filter('trigger'))
   )
 
+  # Test experimental builder
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_foobar_rel_exp',
+        'test_experimental_builder',
+    ) +
+    api.v8.test_spec_in_checkout('v8_foobar_rel_ng_triggered', test_spec) +
+    api.post_process(MustRun, 'Test262') +
+    api.v8.check_param_equals(
+        'build.generate_build_files', '-b', 'v8_foobar_rel_ng') +
+    api.post_process(DropExpectation)
+  )
+
   # Test using extra flags with a bot that already uses some extra flags as
   # positional argument.
   yield (

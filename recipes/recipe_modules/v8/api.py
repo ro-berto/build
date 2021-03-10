@@ -24,6 +24,7 @@ from . import bisection
 from . import builders as v8_builders
 from . import testing
 
+from RECIPE_MODULES.build import chromium
 
 MILO_HOST = 'luci-milo.appspot.com'
 V8_URL = 'https://chromium.googlesource.com/v8/v8'
@@ -451,6 +452,13 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks(**kwargs)
 
+  def convert_exp_builder(self, triggered):
+    builder_name = self.m.buildbucket.builder_name
+    triggered_suffix = '_triggered' if triggered else ''
+    if builder_name.endswith('_exp'):
+      builder_name = builder_name.replace('_exp', '_ng' + triggered_suffix)
+    return builder_name
+
   @property
   def bot_type(self):
     if self.bot_config.get('triggers') or self.bot_config.get('triggers_proxy'):
@@ -461,9 +469,13 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def builderset(self):
-    """Returns a list of names of this builder and all its triggered testers."""
+    """
+    Returns a list of names of this builder and all its triggered testers.
+    It also converts the name of experimental builders to fit the naming
+    convention.
+    """
     return (
-        [self.m.buildbucket.builder_name] +
+        [self.convert_exp_builder(triggered=True)] +
         list(self.bot_config.get('triggers', []))
     )
 
@@ -490,11 +502,12 @@ class V8Api(recipe_api.RecipeApi):
 
   def extra_tests_from_test_spec(self, test_spec):
     """Returns runnable testing.BaseTest objects for each extra test specified
-    in the test spec of the current builder.
+    in the test spec of the current builder. Note that it converts experimental
+    builders name in order to fit the naming convention.
     """
     return [
       testing.create_test(test, self.m)
-      for test in test_spec.get_tests(self.m.buildbucket.builder_name)
+      for test in test_spec.get_tests(self.convert_exp_builder(triggered=True))
     ]
 
   def dedupe_tests(self, high_prec_tests, low_prec_tests):
@@ -687,6 +700,11 @@ class V8Api(recipe_api.RecipeApi):
     point.update(point_defaults)
     self.m.perf_dashboard.add_point([point], halt_on_failure=True)
 
+  def get_builder_id(self):
+    builder_group = self.m.builder_group.for_current
+    buildername = self.convert_exp_builder(triggered=False)
+    return chromium.BuilderId.create_for_group(builder_group, buildername)
+
   def compile(
       self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
       out_dir=None, **kwargs):
@@ -733,7 +751,7 @@ class V8Api(recipe_api.RecipeApi):
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
         gn_args = self.m.chromium.mb_gen(
-            self.m.chromium.get_builder_id(),
+            self.get_builder_id(),
             use_goma=use_goma,
             mb_config_path=(
                 mb_config_path or
