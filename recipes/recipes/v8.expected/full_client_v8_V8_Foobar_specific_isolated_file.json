@@ -6,15 +6,15 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
       "[CACHE]/builder/v8/out/build/run-num-fuzzer.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"run-num-fuzzer\": \"[dummy hash for run-num-fuzzer]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"run-num-fuzzer\": \"[dummy hash for run-num-fuzzer/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@"

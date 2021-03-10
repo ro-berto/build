@@ -116,7 +116,7 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
-    self.use_cas = properties.get('use_cas', False)
+    self.use_cas = properties.get('use_cas', True)
 
   def bot_config_by_buildername(
       self, builders=None, use_goma=True):

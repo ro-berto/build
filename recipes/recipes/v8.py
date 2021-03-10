@@ -218,7 +218,6 @@ def GenTests(api):
         parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
         blamelist=['dude@chromium.org'],
-        use_cas=True,
     )
   )
 
@@ -773,7 +772,6 @@ def GenTests(api):
         'V8 Foobar builder',
         'with_test_spec',
         triggers=['V8 Foobar'],
-        use_cas=True,
     ) +
     api.v8.test_spec_in_checkout(
         'V8 Foobar builder', test_spec, 'V8 Foobar') +
