@@ -589,19 +589,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\builder\\devtools-frontend\\scripts\\test\\run_localization_check.py"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]\\builder\\devtools-frontend\\third_party"
-      ]
-    },
-    "name": "Localization Check"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]\\builder\\devtools-frontend\\scripts\\test\\run_test_suite.py",
       "--target=Release",
       "--test-suite=e2e"
