@@ -106,7 +106,6 @@ def GenTests(api):
                                     tester='retry-shards-test',
                                 ),
                             ],
-                            analyze_deps_autorolls=True,
                         ),
                 }
             })),

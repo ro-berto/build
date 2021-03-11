@@ -1797,8 +1797,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # state on the results of previous test runs.
     return build_config.tests_in_scope(), build_config.all_tests()
 
-  def revise_affected_files_for_deps_autorolls(self, bot, affected_files,
-                                               build_config):
+  def revise_affected_files_for_deps_autorolls(self, affected_files):
     # When DEPS is autorolled, typically the change is an updated git revision.
     # We use the following logic to figure out which files really changed.
     # by checking out the old DEPS file and recursively running git diff on all
@@ -1810,8 +1809,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     owner = self.m.tryserver.gerrit_change_owner
     should_revise = (
         affected_files == ['DEPS'] and owner and
-        owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS and
-        bot.config.analyze_deps_autorolls)
+        owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS)
 
     if not should_revise:
       return affected_files
@@ -1900,7 +1898,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     is_deps_only_change = affected_files == ["DEPS"]
     affected_files = self.revise_affected_files_for_deps_autorolls(
-        bot, affected_files, build_config)
+        affected_files)
 
     # Must happen before without patch steps.
     if self.m.code_coverage.using_coverage:
