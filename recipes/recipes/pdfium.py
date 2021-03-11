@@ -249,15 +249,13 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
 
-  # Add the arguments needed to upload the resulting images.
+  # Add the arguments needed to upload the resulting images to Skia Gold.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
-  gold_props = _get_gold_props(api, build_config, revision)
   script_args.extend([
-      '--gold_properties',
-      gold_props,
       '--gold_output_dir',
       gold_output_dir,
   ])
+  _add_gold_args(api, revision, script_args)
 
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
@@ -350,38 +348,24 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     raise test_exception  # pylint: disable=E0702
 
 
-def _get_gold_props(api, build_config, revision):
-  """Get the --gold_properties parameter value to be passed
-  to the testing call to generate the dm.json file expected
-  by Gold and to upload the generated images.
-  The string can be passed directly into run_corpus_tests.py.
-  """
-  builder_name = api.m.buildbucket.builder_name.strip()
-  props = [
-      'gitHash',
+def _add_gold_args(api, revision, script_args):
+  """These arguments will be passed into goldctl."""
+  script_args.extend([
+      '--run-skia-gold',
+      '--git-revision',
       revision,
-      'master',
-      api.builder_group.for_current,
-      'builder',
-      builder_name,
-      'build_number',
-      str(api.m.buildbucket.build.number),
-  ]
+      '--buildbucket-id',
+      str(api.buildbucket.build.id),
+  ])
 
   # Add the trybot information if this is a trybot run.
   if api.m.tryserver.gerrit_change:
-    props.extend([
-        'issue',
+    script_args.extend([
+        '--gerrit-issue',
         str(api.m.tryserver.gerrit_change.change),
-        'patchset',
+        '--gerrit-patchset',
         str(api.m.tryserver.gerrit_change.patchset),
-        'patch_storage',
-        'gerrit',
-        'buildbucket_build_id',
-        str(api.buildbucket.build.id),
     ])
-
-  return ' '.join(props)
 
 
 def _get_modifiable_script_args(api,
