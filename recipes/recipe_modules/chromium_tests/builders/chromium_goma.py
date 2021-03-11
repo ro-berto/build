@@ -103,14 +103,6 @@ _WIN_CLOBBER_CONFIG = CreateStandardConfig('win', ['clobber'])
 _ANDROID32_CONFIG = CreateAndroidConfig(32)
 
 SPEC = {
-    # clients5
-    'Chromium Linux Goma Staging':
-        CreateStandardConfig('linux', ['goma_staging', 'clobber']),
-    'Chromium Mac Goma Staging':
-        CreateStandardConfig('mac', ['goma_staging', 'clobber']),
-    'CrWinGomaStaging':
-        CreateStandardConfig('win', ['goma_staging', 'clobber']),
-
     # Linux RBE
     # TODO(crbug.com/1040754): ToT builders have temporarily been made 'clobber'
     # to test ATS performance.
