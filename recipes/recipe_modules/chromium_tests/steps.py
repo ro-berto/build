@@ -313,6 +313,7 @@ class ResultDB(object):
            step_name=None,
            base_variant=None,
            base_tags=None,
+           require_build_inv=True,
            **kwargs):
     """Wraps the cmd with ResultSink and result_adapter, if conditions are met.
 
@@ -331,6 +332,8 @@ class ResultDB(object):
       * base_variant - Dict of variants to add to base_variant.
         If there are duplicate keys, the new variant value wins.
       * base_tags - List of tags to add to base_tags.
+      * require_build_inv - flag to control if the build is required to have
+        an invocation.
       * kwargs - Overrides for the rest of ResultDB attrs.
     """
     assert isinstance(cmd, (tuple, list)), "%s: %s" % (step_name, cmd)
@@ -375,6 +378,7 @@ class ResultDB(object):
         coerce_negative_duration=configs.coerce_negative_duration,
         test_id_prefix=configs.test_id_prefix,
         test_location_base=configs.test_location_base,
+        require_build_inv=require_build_inv,
     )
 
 

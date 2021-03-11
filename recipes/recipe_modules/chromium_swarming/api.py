@@ -883,6 +883,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                   task_slice.command,
                   step_name=step_name,
                   base_variant=var,
+                  require_build_inv=False,
               )))
 
     return req
