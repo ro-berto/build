@@ -40,7 +40,8 @@ def RunSteps(api):
       isolated_targets=['base_unittests_run'],
       android_version_code=3,
       android_version_name='example',
-      use_rts=api.properties.get('use_rts', False))
+      use_rts=api.properties.get('use_rts', False),
+      rts_recall=api.properties.get('rts_recall', None))
 
 
 def GenTests(api):
@@ -167,5 +168,5 @@ def GenTests(api):
 
   yield api.test(
       'use_rts',
-      api.properties(use_rts=True),
+      api.properties(use_rts=True, rts_recall=.98),
   )

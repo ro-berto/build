@@ -1450,6 +1450,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              gn_args_max_text_lines=None,
              recursive_lookup=False,
              use_rts=False,
+             rts_recall=None,
              **kwargs):
     """Generate the build files in the source tree.
 
@@ -1474,6 +1475,11 @@ class ChromiumApi(recipe_api.RecipeApi):
         in the step_text when using the default behavior for displaying GN args.
       recursive_lookup: Whether the lookup of the GN arguments should
         recursively expand imported args files.
+      use_rts - A boolean indicating whether to use regression test selection
+        (bit.ly/chromium-rts)
+      rts_recall - A float from (0 to 1] indicating what change recall rts
+        should aim for, 0 being the fastest and 1 being the safest, and
+        typically between .9 and 1
 
 
     Returns:
@@ -1510,6 +1516,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args.extend(self._mb_build_dir_args(build_dir))
     if use_rts:
       mb_args += ['--use-rts']
+
+      if rts_recall:
+        mb_args += ['--rts-target-change-recall', str(rts_recall)]
 
     name = name or 'generate_build_files'
     with self.mb_failure_handler(name):

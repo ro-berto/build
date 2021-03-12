@@ -937,7 +937,8 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
-                use_regression_test_selection=True
+                use_regression_test_selection=True,
+                regression_test_selection_recall=.97,
             ),
         'linux-viz-rel':
             try_spec.TrySpec.create_for_single_mirror(

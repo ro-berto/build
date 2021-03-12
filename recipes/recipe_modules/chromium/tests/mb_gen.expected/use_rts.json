@@ -122,7 +122,9 @@
       "--swarming-targets-file",
       "base_unittests_run\n",
       "//out/Release",
-      "--use-rts"
+      "--use-rts",
+      "--rts-target-change-recall",
+      "0.98"
     ],
     "cwd": "None",
     "env": {

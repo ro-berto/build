@@ -443,7 +443,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                mb_config_path=None,
                                mb_recursive_lookup=True,
                                override_execution_mode=None,
-                               use_rts=False):
+                               use_rts=False,
+                               rts_recall=None):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used.
@@ -469,6 +470,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         output will contain the include statement.
       override_execution_mode - An optional override to change the execution
         mode.
+      use_rts - A boolean indicating whether to use regression test selection
+        (bit.ly/chromium-rts)
+      rts_recall - A float from (0 to 1] indicating what change recall rts
+        should aim for, 0 being the fastest and 1 being the safest, and
+        typically between .9 and 1
 
     Returns:
       RawResult object with compile step status and failure message
@@ -504,7 +510,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_recursive_lookup=mb_recursive_lookup,
           android_version_code=android_version_code,
           android_version_name=android_version_name,
-          use_rts=use_rts)
+          use_rts=use_rts,
+          rts_recall=rts_recall)
 
       if raw_result.status != common_pb.SUCCESS:
         self.m.tryserver.set_compile_failure_tryjob_result()
@@ -842,7 +849,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          mb_recursive_lookup=False,
                          android_version_code=None,
                          android_version_name=None,
-                         use_rts=False):
+                         use_rts=False,
+                         rts_recall=None):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
@@ -858,7 +866,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             recursive_lookup=mb_recursive_lookup,
             android_version_code=android_version_code,
             android_version_name=android_version_name,
-            use_rts=use_rts)
+            use_rts=use_rts,
+            rts_recall=rts_recall)
         use_reclient = self._use_reclient(gn_args)
         if use_reclient:
           use_goma_module = False
@@ -1943,7 +1952,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           compile_targets,
           tests_including_triggered,
           override_execution_mode=bot_spec_module.COMPILE_AND_TEST,
-          use_rts=bot.config.use_regression_test_selection)
+          use_rts=bot.config.use_regression_test_selection,
+          rts_recall=bot.config.regression_test_selection_recall)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on
