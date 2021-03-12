@@ -558,6 +558,10 @@ def clang_tot_android_dbg(_):
   pass
 
 
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])
+def clang_tot_fuchsia(_):
+  pass
+
 # GYP_DEFINES must not include 'asan' or 'clang', else the tester bot will try
 # to compile clang.
 @config_ctx(includes=['chromium_no_goma'])

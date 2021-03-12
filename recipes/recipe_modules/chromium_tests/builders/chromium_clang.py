@@ -288,6 +288,44 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'ToTFuchsia x64':
+        _chromium_clang_spec(
+            chromium_config='clang_tot_fuchsia',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
+            gclient_config='chromium',
+            gclient_apply_config=['clang_tot', 'fuchsia_x64'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            # Serialize the tests to limit capacity usage.
+            serialize_tests=True,
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
+    'ToTFuchsiaOfficial':
+        _chromium_clang_spec(
+            chromium_config='clang_tot_fuchsia',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'clang_tot', 'fuchsia_arm64', 'fuchsia_arm64_host'
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            # Serialize the tests to limit capacity usage.
+            serialize_tests=True,
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
     'ToTMac':
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
