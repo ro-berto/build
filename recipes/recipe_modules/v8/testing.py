@@ -222,28 +222,18 @@ class BaseTest(object):
     """Identifier for deduping identical test configs."""
     return self.test_step_config.name + self.test_step_config.step_name_suffix
 
-  def _get_isolated_hash(self, test):
-    isolated = test.get('isolated_target')
-    if not isolated:
+  def create_task(self, test, **kwargs):
+    isolated_target = test.get('isolated_target')
+    if not isolated_target:
       # Normally we run only one test and the isolate name is the same as the
       # test name.
       assert len(test['tests']) == 1
-      isolated = test['tests'][0]
+      isolated_target = test['tests'][0]
 
-    isolated_hash = self.api.v8.isolated_tests.get(isolated)
+    cas_digest = self.api.v8.isolated_tests.get(isolated_target)
+    assert cas_digest
 
-    # TODO(machenbach): Maybe this is too hard. Implement a more forgiving
-    # solution.
-    assert isolated_hash
-    return isolated_hash
-
-  def create_task(self, test, **kwargs):
-    # TODO(machenbach): We infer if CAS or isolate was used when building.
-    # Hardcode this to CAS once all builders have switched.
-    digest = self._get_isolated_hash(test)
-    isolated_key = 'cas_input_root' if '/' in digest else 'isolated'
-    kwargs[isolated_key] = digest
-    return self.api.chromium_swarming.task(**kwargs)
+    return self.api.chromium_swarming.task(cas_input_root=cas_digest, **kwargs)
 
   @property
   def uses_swarming(self):

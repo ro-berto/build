@@ -815,7 +815,7 @@ def GenTests(api):
         'client.v8',
         'Android bot',
         parent_test_spec=android_test_spec,
-        swarm_hashes={'mjsunit': 'hash'},
+        swarm_hashes={'mjsunit': 'hash/123'},
     ) +
     api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
                                 'cpu') +
