@@ -30,7 +30,7 @@ def get_json_coverage_files(json_dir):
   """
   files = []
   for filename in os.listdir(json_dir):
-    if fnmatch.fnmatch(filename, '*.json'):
+    if fnmatch.fnmatch(filename, '*_javascript.json'):
       files.append(os.path.join(json_dir, filename))
 
   return files
@@ -533,10 +533,23 @@ def _parse_args(args):
       '--dir-metadata-path',
       type=str,
       help='absolute path to json file mapping dirs to metadata')
+  parser.add_argument(
+      '--source-files',
+      nargs='*',
+      type=str,
+      help='a list of source files to generate coverage data for.'
+      'path should be relative to the root of the code checkout.')
+  parser.add_argument(
+      '--diff-mapping-path',
+      type=str,
+      help='absolute path to the file that stores the diff mapping')
   params = parser.parse_args(args=args)
 
   if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
     parser.error('Dir metadata %s is missing' % params.dir_metadata_path)
+
+  if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
+    parser.error('Diff mapping %s is missing' % params.diff_mapping_path)
 
   return params
 
@@ -553,9 +566,17 @@ def main():
           if 'monorail' in md and 'component' in md['monorail']
       }
 
-  assert component_mapping, (
-      'component_mapping (for full-repo coverage) must be specified')
+  diff_mapping = None
+  if params.diff_mapping_path:
+    with open(params.diff_mapping_path) as f:
+      diff_mapping = json.load(f)
 
+  assert (component_mapping is None) != (diff_mapping is None), (
+      'Either component_mapping (for full-repo coverage) or diff_mapping '
+      '(for per-cl coverage) must be specified.')
+
+  # TODO(benreich): Use the diff_mapping and source_files whilst
+  #                 generating coverages.
   data = generate_json_coverage_metadata(params.coverage_dir, params.src_path,
                                          component_mapping)
 

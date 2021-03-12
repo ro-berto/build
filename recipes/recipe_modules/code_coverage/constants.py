@@ -18,7 +18,8 @@ TOOLS_TO_EXTENSIONS_MAP = {
         '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h',
         '.m', '.hxx'
     ],
-    'jacoco': ['.java']
+    'jacoco': ['.java'],
+    'v8': ['.js']
 }
 
 # Map exclude_sources property value to files that are to be excluded from

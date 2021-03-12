@@ -202,17 +202,47 @@ def GenTests(api):
   )
 
   yield api.test(
-      'javascript: per cl coverage unsupported',
+      'process javascript coverage for per-cl',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.chromiumos',
+          builder='linux-chromeos-js-code-coverage'),
       api.code_coverage(use_javascript_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.js',
           'some/other/path/to/file.js',
       ]),
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
+      api.post_process(post_process.MustRun, 'process javascript coverage'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'generate line number mapping from bot to Gerrit'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'Generate JavaScript coverage metadata'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'Generate JavaScript coverage metadata'),
+      api.post_process(
+          post_process.MustRun, 'process javascript coverage.'
+          'gsutil Upload JSON metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'javascript coverage skipped per-cl when no js files',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.chromiumos',
+          builder='linux-chromeos-js-code-coverage'),
+      api.code_coverage(use_javascript_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
       api.post_process(
           post_process.MustRun,
-          'per cl coverage is not supported for javascript code coverage'),
+          'skip processing coverage data because no source file changed'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
