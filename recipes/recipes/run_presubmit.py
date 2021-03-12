@@ -203,6 +203,8 @@ def _RunStepsInternal(api):
       api.tryserver.gerrit_change.patchset,
       '--gerrit_url',
       'https://%s' % api.tryserver.gerrit_change.host,
+      '--gerrit_project', api.tryserver.gerrit_change.project,
+      '--gerrit_branch', api.tryserver.gerrit_change_target_ref,
       '--gerrit_fetch',
   ]
   if api.cq.state == api.cq.DRY:
