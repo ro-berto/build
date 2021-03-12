@@ -188,10 +188,11 @@
     ],
     "infra_step": true,
     "name": "postprocess for reclient.upload RBE metrics to BigQuery",
-    "stdin": "{\"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
+    "stdin": "{\"build_id\": \"8945511751514863184\", \"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@rbe_metrics@{@@@",
+      "@@@STEP_LOG_LINE@rbe_metrics@  \"build_id\": \"8945511751514863184\", @@@",
       "@@@STEP_LOG_LINE@rbe_metrics@  \"created_at\": \"2012-05-14T12:53:21.500Z\", @@@",
       "@@@STEP_LOG_LINE@rbe_metrics@  \"stats\": {@@@",
       "@@@STEP_LOG_LINE@rbe_metrics@    \"environment\": [@@@",

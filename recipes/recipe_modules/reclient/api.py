@@ -258,6 +258,16 @@ class ReclientApi(recipe_api.RecipeApi):
           '-metrics_namespace',
           rbe_project,
       ]
+      labels = ''
+      builder_id = self.m.buildbucket.build.builder
+      if builder_id.project:
+        labels += 'project=' + re.sub(r'[=,]', '_', builder_id.project) + ','
+      if builder_id.bucket:
+        labels += 'bucket=' + re.sub(r'[=,]', '_', builder_id.bucket) + ','
+      if builder_id.builder:
+        labels += 'builder=' + re.sub(r'[=,]', '_', builder_id.builder) + ','
+      if labels != '':
+        args += ['-metrics_labels', labels]
 
     self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
 
