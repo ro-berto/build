@@ -493,27 +493,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
-        'mac-angle-rel':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder',
-                        tester='ANGLE GPU Mac Release (Intel)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder',
-                        tester='ANGLE GPU Mac Retina Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder',
-                        tester='ANGLE GPU Mac Retina Release (AMD)',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
         'mac-angle-try':
             try_spec.TrySpec.create(
                 mirrors=[
@@ -1395,12 +1374,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
             ),
         # Manually triggered GPU trybots.
-        'gpu-fyi-try-mac-amd-dqp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac dEQP Builder',
-                tester='Mac FYI dEQP Release AMD',
-            ),
         'gpu-fyi-try-mac-amd-pro-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1440,12 +1413,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Mac Builder (dbg)',
                 tester='Mac FYI Debug (Intel)',
-            ),
-        'gpu-fyi-try-mac-intel-dqp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac dEQP Builder',
-                tester='Mac FYI dEQP Release Intel',
             ),
         'gpu-fyi-try-mac-intel-exp':
             try_spec.TrySpec.create_for_single_mirror(

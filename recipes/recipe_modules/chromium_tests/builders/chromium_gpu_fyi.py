@@ -891,29 +891,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'GPU FYI Mac dEQP Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-            # When trybots are set up which mirror this configuration,
-            # compiling might induce a clobber build if the pinned
-            # buildtools version is different from Chromium's default. This
-            # is a risk we're willing to take because checkouts take a lot
-            # of disk space, and this is expected to be a corner case rather
-            # than the common case.
-        ),
     'Mac FYI Release (Intel)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -1125,46 +1102,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='mac',
-            serialize_tests=True,
-        ),
-    'Mac FYI dEQP Release AMD':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Mac dEQP Builder',
-            simulation_platform='mac',
-            serialize_tests=True,
-        ),
-    'Mac FYI dEQP Release Intel':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Mac dEQP Builder',
             simulation_platform='mac',
             serialize_tests=True,
         ),
@@ -1580,12 +1517,6 @@ SPEC = {
     'ANGLE GPU Linux Release (NVIDIA)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
     'ANGLE GPU Linux Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Mac Release (Intel)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Mac Retina Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Mac Retina Release (AMD)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
     'Win7 ANGLE Tryserver (AMD)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
