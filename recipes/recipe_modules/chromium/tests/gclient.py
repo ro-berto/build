@@ -106,8 +106,3 @@ def GenTests(api):
       api.properties(apply_gclient_config='enable_reclient'),
       api.post_process(post_process.DropExpectation),
   )
-  yield api.test(
-      'rts',
-      api.properties(apply_gclient_config='chromium_rts'),
-      api.post_process(post_process.DropExpectation),
-  )

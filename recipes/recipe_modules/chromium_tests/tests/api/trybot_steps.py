@@ -641,3 +641,16 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'basic dryrun',
+      api.properties(dry_run=True),
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.chromium_tests.read_source_side_spec('chromium.linux', {
+          'Linux Tests': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.filter.suppress_analyze(),
+  )

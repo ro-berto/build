@@ -44,6 +44,10 @@ RECIPE_CONFIG_PATHS = [
 # values of owner._account_id.
 # chromium and v8-ci-autorollers
 AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
+RTS_BETA_USERS = (
+    'nodir@chromium.org',
+    'guterman@google.com',
+)
 
 
 class BotMetadata(object):
@@ -154,7 +158,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return chromium_config
 
-  def configure_build(self, bot_config):
+  def configure_build(self, bot_config, use_rts=False):
     self.m.chromium.set_config(bot_config.chromium_config,
                                **bot_config.chromium_config_kwargs)
 
@@ -174,6 +178,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     for c in bot_config.gclient_apply_config:
       self.m.gclient.apply_config(c)
+
+    if use_rts:
+      self.m.gclient.c.solutions[0].custom_vars['checkout_rts_model'] = 'True'
 
     if (self.m.chromium.c.TARGET_CROS_BOARDS or
         self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES):
@@ -1883,7 +1890,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot = self.lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
     self.report_builders(bot.settings)
 
-    self.configure_build(bot.settings)
+    use_rts = (
+        self.m.properties.get('dry_run')
+        and self.get_first_tag('cq_triggerer') in RTS_BETA_USERS
+          or bot.config.use_regression_test_selection) \
+        and self.m.tryserver.get_footer('RTS') != 'disable'
+    step_result = self.m.step('use rts: %s' % use_rts, [])
+    step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
+    self.configure_build(bot.settings, use_rts)
 
     self.m.chromium.apply_config('trybot_flavor')
 
@@ -1904,7 +1918,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True
     )
-
     is_deps_only_change = affected_files == ["DEPS"]
     affected_files = self.revise_affected_files_for_deps_autorolls(
         affected_files)
@@ -1952,7 +1965,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           compile_targets,
           tests_including_triggered,
           override_execution_mode=bot_spec_module.COMPILE_AND_TEST,
-          use_rts=bot.config.use_regression_test_selection,
+          use_rts=use_rts,
           rts_recall=bot.config.regression_test_selection_recall)
     else:
       # Even though the patch doesn't require a compile on this platform,
@@ -1965,6 +1978,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests = []
 
     return raw_result, Task(bot, tests, bot_update_step, affected_files)
+
+  def get_first_tag(self, key):
+    '''Returns the first buildbucket tag value for a given key
+
+    Buildbucket tags can have multiple values for a single key, but in most
+    cases, we can assume just one value.
+
+    Args:
+      key: the key to look up
+    Returns:
+      the first value for this key or None
+    '''
+    for string_pair in self.m.buildbucket.build.tags:
+      if string_pair.key == key:
+        return string_pair.value
+
+    return None
 
   def report_builders(self, bot_config, mirrored_builders=None):
     """Reports the builders being executed by the bot."""

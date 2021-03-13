@@ -37,6 +37,7 @@ def GenTests(api):
         api.chromium.try_build(
             builder_group=builder_group,
             builder=buildername,
+            patch_set=1,
         ),
         # Supress analysis so that all targets show up as affected and we run
         # recipe code for each configured test

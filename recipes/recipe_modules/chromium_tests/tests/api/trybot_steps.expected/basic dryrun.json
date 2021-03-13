@@ -5,9 +5,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'<br/>running tester 'Linux Release (NVIDIA)' on group 'chromium.gpu' against builder 'GPU Linux Builder' on group 'chromium.gpu'@@@",
@@ -59,9 +56,6 @@
       "listdir",
       "[CACHE]/builder"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "builder cache.check if empty",
     "~followup_annotations": [
@@ -90,7 +84,6 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -139,7 +132,6 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "CHROME_HEADLESS": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
@@ -328,9 +320,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -361,9 +350,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed (2)",
     "~followup_annotations": [
@@ -407,9 +393,6 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.gpu.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "read test spec (chromium.gpu.json)",
     "~followup_annotations": [
@@ -426,23 +409,14 @@
       "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -459,9 +433,6 @@
       "--name-only"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "git diff to analyze patch",
     "~followup_annotations": [
@@ -478,9 +449,6 @@
       "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "read filter exclusion spec",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: Path([CHECKOUT], 'testing', 'buildbot', 'trybot_analyze_config.json')@@@",
@@ -514,7 +482,7 @@
       "--luci-auth",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"telemetry_gpu_unittests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -542,9 +510,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "analyze_matched_exclusion",
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
@@ -553,16 +518,16 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -580,9 +545,6 @@
       "0777",
       "[CACHE]/builder/src/out/Release"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "ensure output directory (with patch)"
   },
@@ -597,9 +559,6 @@
       "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
       "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "create compile guard (with patch)",
     "~followup_annotations": [
@@ -655,8 +614,6 @@
       "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "--swarming-targets-file",
-      "telemetry_gpu_unittests\n",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -667,9 +624,7 @@
     "name": "generate_build_files (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@telemetry_gpu_unittests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -683,9 +638,6 @@
       "[CACHE]/builder/src/out/Release/gn_logs.txt",
       "/path/to/tmp/"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "read gn_logs.txt",
     "~followup_annotations": [
@@ -798,7 +750,7 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "telemetry_gpu_unittests"
+      "base_unittests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -816,7 +768,7 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "telemetry_gpu_unittests",
+      "base_unittests",
       "-d",
       "explain",
       "-n"
@@ -933,7 +885,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"telemetry_gpu_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"base_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1009,54 +961,8 @@
       "remove",
       "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "infra_step": true,
     "name": "remove compile guard (with patch)"
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/src/tools/luci-go/isolate",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "[CACHE]/builder/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "isolate tests (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_with_patch@{\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "find command lines (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -1064,9 +970,6 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "mark: before_tests"
   },
   {
@@ -1075,10 +978,7 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "install infra/tools/run_annotations"
   },
   {
     "cmd": [
@@ -1090,16 +990,17 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[CACHE]/cipd/infra/tools/run_annotations/latest"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure package directory",
+    "name": "install infra/tools/run_annotations.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1107,9 +1008,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[CACHE]/cipd/infra/tools/run_annotations/latest",
       "-ensure-file",
-      "infra/tools/luci/swarming/${platform} swarming_module_pin",
+      "infra/tools/run_annotations/${platform} latest",
       "-max-threads",
       "0",
       "-json-output",
@@ -1117,18 +1018,19 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure_installed",
+    "name": "install infra/tools/run_annotations.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-swarming_module_\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -1138,124 +1040,10 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "spawn-tasks",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-json-input",
-      "{\"requests\": [{\"name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.linux\", \"buildername:linux-rel\", \"buildnumber:571\", \"data:[dummy hash for telemetry_gpu_unittests]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:telemetry_gpu_unittests\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:linux-rel\", \"stepname:telemetry_gpu_unittests (with patch)\", \"test_id_prefix:\", \"test_suite:telemetry_gpu_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash for telemetry_gpu_unittests]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] telemetry_gpu_unittests (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"telemetry_gpu_unittests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:linux-rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for telemetry_gpu_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"patch_project:chromium/src\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:linux-rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:telemetry_gpu_unittests (with patch)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:telemetry_gpu_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@      ], @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        {@@@",
-      "@@@STEP_LOG_LINE@json.input@          \"expiration_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"limit_processes\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"limit_total_committed_memory\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"lower_priority\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"cpu\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"x86-64\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu-16.04\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"ISOLATED_OUTDIR\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"${ISOLATED_OUTDIR}\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"inputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"[dummy hash for telemetry_gpu_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolatedserver\": \"https://example.isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@        }@@@",
-      "@@@STEP_LOG_LINE@json.input@      ]@@@",
-      "@@@STEP_LOG_LINE@json.input@    }@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: telemetry_gpu_unittests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://chromium-swarm.appspot.com/task?id=0@@@"
-    ]
-  },
-  {
-    "cmd": [
+      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "--output",
+      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
+      "--",
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -1263,407 +1051,39 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_1",
-      "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"recipe\": \"chromium_trybot\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}}",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "none",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"0\"}]}"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "name": "telemetry_gpu_unittests (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 1, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": true, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests (with patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "0"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "query test results (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "proceed with retry",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Migration mismatch (informational)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Legacy decision for retries had length 1<br/>New decision for retries had length 0@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Migration mismatch (retriable suites, informational)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Legacy retries calculation contained extra elements set([u'telemetry_gpu_unittests'])<br/>New retries calculation contained extra elements set([])@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "test_pre_run (retry shards with patch)"
-  },
-  {
-    "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "spawn-tasks",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-json-input",
-      "{\"requests\": [{\"name\": \"telemetry_gpu_unittests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", \"priority\": \"29\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.linux\", \"buildername:linux-rel\", \"buildnumber:571\", \"data:[dummy hash for telemetry_gpu_unittests]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:telemetry_gpu_unittests\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:linux-rel\", \"stepname:telemetry_gpu_unittests (retry shards with patch)\", \"test_id_prefix:\", \"test_suite:telemetry_gpu_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"command\": [\"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"inputs_ref\": {\"isolated\": \"[dummy hash for telemetry_gpu_unittests]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test_pre_run (retry shards with patch).[trigger] telemetry_gpu_unittests (retry shards with patch)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"telemetry_gpu_unittests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"telemetry_gpu_unittests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"29\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:linux-rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for telemetry_gpu_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"patch_project:chromium/src\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:linux-rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:telemetry_gpu_unittests (retry shards with patch)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:telemetry_gpu_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@      ], @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        {@@@",
-      "@@@STEP_LOG_LINE@json.input@          \"expiration_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"limit_processes\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"limit_total_committed_memory\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"lower_priority\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"cpu\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"x86-64\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu-16.04\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"ISOLATED_OUTDIR\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"${ISOLATED_OUTDIR}\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"inputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolated\": \"[dummy hash for telemetry_gpu_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"isolatedserver\": \"https://example.isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@        }@@@",
-      "@@@STEP_LOG_LINE@json.input@      ]@@@",
-      "@@@STEP_LOG_LINE@json.input@    }@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: telemetry_gpu_unittests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://chromium-swarm.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"dry_run\": true, \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"test_bot\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (with patch)",
+      "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_2",
-      "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"recipe\": \"chromium_trybot\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}}",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "none",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
+      "--builder-name=linux-rel",
+      "--slave-name=test_bot",
+      "--build-number=571",
+      "base_unittests"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1",
+      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TEMP": "[CLEANUP]/tmp_tmp_4",
+      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
+      "TMP": "[CLEANUP]/tmp_tmp_4",
+      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
     },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "name": "telemetry_gpu_unittests (retry shards with patch)",
+    "name": "base_unittests (with patch)",
+    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"PASS\\\"}, \\\"Test3\\\": {\\\"expected\\\": \\\"SKIP\\\", \\\"actual\\\": \\\"SKIP\\\"}, \\\"Test2\\\": {\\\"expected\\\": \\\"PASS TIMEOUT\\\", \\\"actual\\\": \\\"TIMEOUT\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"expected\\\": \\\"PASS\\\", \\\"actual\\\": \\\"FAIL FAIL PASS\\\"}}}, \\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\".\\\", \\\"version\\\": 3, \\\"seconds_since_epoch\\\": 14000000, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"SKIP\\\": 1, \\\"PASS\\\": 2}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests (retry shards with patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
+      "@@@STEP_LOG_END@step.sub_build@@@"
     ]
   },
   {
@@ -1672,7 +1092,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
       "--builder-group",
       "tryserver.chromium.linux",
       "--builder-name",
@@ -1680,38 +1100,23 @@
       "--build-number",
       "571",
       "--test-type",
-      "telemetry_gpu_unittests (retry shards with patch)",
+      "base_unittests",
       "--chrome-revision",
-      "170242",
+      "refs/heads/master@{#170242}",
       "--build-id",
       "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Upload to test-results [telemetry_gpu_unittests (retry shards with patch)]"
+    "name": "Upload to test-results [base_unittests]"
   },
   {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "1"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "query test results (retry shards with patch)",
+    "cmd": [],
+    "name": "[skipped] query test results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
     ]
   },
   {
@@ -1720,16 +1125,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Tests statistics",
+    "cwd": "[CACHE]/builder",
+    "name": "proceed with retry",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
     ]
   },
   {
