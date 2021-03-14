@@ -251,19 +251,23 @@ def compose_build_summary(api, model_dir):
           'thresholds': [
               {
                   'changeRecall': 0.97,
-                  'savings': 0.5
+                  'savings': 0.5,
+                  'maxDistance': 50,
               },
               {
                   'changeRecall': 0.98,
-                  'savings': 0.4
+                  'savings': 0.4,
+                  'maxDistance': 60,
               },
               {
                   'changeRecall': 0.99,
-                  'savings': 0.3
+                  'savings': 0.3,
+                  'maxDistance': 70,
               },
               {
                   'changeRecall': 1.00,
-                  'savings': 0.2
+                  'savings': 0.2,
+                  'maxDistance': 80,
               },
           ]
       },
@@ -273,9 +277,10 @@ def compose_build_summary(api, model_dir):
   # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/rts/cmd/rts-chromium/rts-chromium.proto
 
   # Note: this is essentially HTML, not plaintext, so whitespace is collapsed.
-  lines = ['ChangeRecall | Savings']
+  lines = ['ChangeRecall | Savings | Max distance']
   lines += [
-      '%.4f | %.2f' % (th['changeRecall'], th['savings'])
+      '%.4f | %.2f | %.2f' %
+      (th['changeRecall'], th['savings'], th['maxDistance'])
       for th in cfg['thresholds']  # note: thresholds are already sorted
       if th['changeRecall'] >= 0.9
   ]
