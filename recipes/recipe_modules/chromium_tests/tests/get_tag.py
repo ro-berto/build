@@ -29,3 +29,12 @@ def GenTests(api):
       api.properties(result='recipe_tests'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'not found',
+      api.buildbucket.try_build(tags=[
+          common_pb2.StringPair(key='not_lookup_key', value='recipe_tests')
+      ]),
+      api.properties(result=None),
+      api.post_process(post_process.DropExpectation),
+  )
