@@ -12,13 +12,15 @@ def _chromium_angle_spec(**kwargs):
   return bot_spec.BotSpec.create(**kwargs)
 
 
-def CreateAndroidBuilderConfig(target_bits):
+def CreateAndroidBuilderConfig(target_bits, internal):
+  gclient_apply_config = [
+      'android',
+      'angle_top_of_tree',
+  ]
+  if internal:
+    gclient_apply_config += ['angle_internal']
   return _chromium_angle_spec(
-      gclient_apply_config=[
-          'android',
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
+      gclient_apply_config=gclient_apply_config,
       chromium_config='android',
       android_config='main_builder_mb',
       chromium_config_kwargs={
@@ -47,13 +49,15 @@ def CreateAndroidPerfBuilderConfig(target_bits):
   )
 
 
-def CreateAndroidTesterConfig(target_bits, parent_builder):
+def CreateAndroidTesterConfig(target_bits, parent_builder, internal):
+  gclient_apply_config = [
+      'android',
+      'angle_top_of_tree',
+  ]
+  if internal:
+    gclient_apply_config += ['angle_internal']
   return _chromium_angle_spec(
-      gclient_apply_config=[
-          'android',
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
+      gclient_apply_config=gclient_apply_config,
       chromium_config='android',
       android_config='main_builder_mb',
       chromium_config_kwargs={
@@ -133,12 +137,14 @@ def CreateIOSTesterConfig(parent_builder):
   )
 
 
-def CreateBuilderConfig(platform, target_bits):
+def CreateBuilderConfig(platform, target_bits, internal):
+  gclient_apply_config = [
+      'angle_top_of_tree',
+  ]
+  if internal:
+    gclient_apply_config += ['angle_internal']
   return _chromium_angle_spec(
-      gclient_apply_config=[
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
+      gclient_apply_config=gclient_apply_config,
       chromium_config='chromium',
       chromium_apply_config=[
           'mb',
@@ -151,12 +157,14 @@ def CreateBuilderConfig(platform, target_bits):
   )
 
 
-def CreateTesterConfig(platform, target_bits, parent_builder):
+def CreateTesterConfig(platform, target_bits, parent_builder, internal):
+  gclient_apply_config = [
+      'angle_top_of_tree',
+  ]
+  if internal:
+    gclient_apply_config += ['angle_internal']
   return _chromium_angle_spec(
-      gclient_apply_config=[
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
+      gclient_apply_config=gclient_apply_config,
       chromium_config='chromium',
       chromium_apply_config=[
           'mb',
@@ -174,25 +182,30 @@ def CreateTesterConfig(platform, target_bits, parent_builder):
 
 SPEC = {
     'android-angle-arm64-builder':
-        CreateAndroidBuilderConfig(64),
+        CreateAndroidBuilderConfig(64, internal=True),
     'android-angle-arm64-nexus5x':
-        CreateAndroidTesterConfig(64, 'android-angle-arm64-builder'),
+        CreateAndroidTesterConfig(
+            64, 'android-angle-arm64-builder', internal=True),
     'android-angle-chromium-arm64-builder':
-        CreateAndroidBuilderConfig(64),
+        CreateAndroidBuilderConfig(64, internal=False),
     'android-angle-chromium-arm64-nexus5x':
-        CreateAndroidTesterConfig(64, 'android-angle-chromium-arm64-builder'),
+        CreateAndroidTesterConfig(
+            64, 'android-angle-chromium-arm64-builder', internal=False),
     'android-angle-perf-arm64-builder':
         CreateAndroidPerfBuilderConfig(64),
     'android-angle-perf-arm64-pixel2':
-        CreateAndroidTesterConfig(64, 'android-angle-perf-arm64-builder'),
+        CreateAndroidTesterConfig(
+            64, 'android-angle-perf-arm64-builder', internal=True),
     'android-angle-vk-arm-builder':
-        CreateAndroidBuilderConfig(32),
+        CreateAndroidBuilderConfig(32, internal=True),
     'android-angle-vk-arm-pixel2':
-        CreateAndroidTesterConfig(32, 'android-angle-vk-arm-builder'),
+        CreateAndroidTesterConfig(
+            32, 'android-angle-vk-arm-builder', internal=True),
     'android-angle-vk-arm64-builder':
-        CreateAndroidBuilderConfig(64),
+        CreateAndroidBuilderConfig(64, internal=True),
     'android-angle-vk-arm64-pixel2':
-        CreateAndroidTesterConfig(64, 'android-angle-vk-arm64-builder'),
+        CreateAndroidTesterConfig(
+            64, 'android-angle-vk-arm64-builder', internal=True),
     'fuchsia-angle-builder':
         CreateFuchsiaBuilderConfig(64),
     'ios-angle-builder':
@@ -200,55 +213,63 @@ SPEC = {
     'ios-angle-intel':
         CreateIOSTesterConfig('ios-angle-builder'),
     'linux-angle-builder':
-        CreateBuilderConfig('linux', 64),
+        CreateBuilderConfig('linux', 64, internal=True),
     'linux-angle-intel':
-        CreateTesterConfig('linux', 64, 'linux-angle-builder'),
+        CreateTesterConfig('linux', 64, 'linux-angle-builder', internal=True),
     'linux-angle-nvidia':
-        CreateTesterConfig('linux', 64, 'linux-angle-builder'),
+        CreateTesterConfig('linux', 64, 'linux-angle-builder', internal=True),
     'linux-angle-chromium-builder':
-        CreateBuilderConfig('linux', 64),
+        CreateBuilderConfig('linux', 64, internal=False),
     'linux-angle-chromium-intel':
-        CreateTesterConfig('linux', 64, 'linux-angle-chromium-builder'),
+        CreateTesterConfig(
+            'linux', 64, 'linux-angle-chromium-builder', internal=False),
     'linux-angle-chromium-nvidia':
-        CreateTesterConfig('linux', 64, 'linux-angle-chromium-builder'),
+        CreateTesterConfig(
+            'linux', 64, 'linux-angle-chromium-builder', internal=False),
     'linux-ozone-angle-builder':
-        CreateBuilderConfig('linux', 64),
+        CreateBuilderConfig('linux', 64, internal=True),
     'linux-ozone-angle-intel':
-        CreateTesterConfig('linux', 64, 'linux-ozone-angle-builder'),
+        CreateTesterConfig(
+            'linux', 64, 'linux-ozone-angle-builder', internal=True),
     'mac-angle-builder':
-        CreateBuilderConfig('mac', 64),
+        CreateBuilderConfig('mac', 64, internal=True),
     'mac-angle-amd':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder'),
+        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-intel':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder'),
+        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-nvidia':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder'),
+        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-chromium-builder':
-        CreateBuilderConfig('mac', 64),
+        CreateBuilderConfig('mac', 64, internal=False),
     'mac-angle-chromium-amd':
-        CreateTesterConfig('mac', 64, 'mac-angle-chromium-builder'),
+        CreateTesterConfig(
+            'mac', 64, 'mac-angle-chromium-builder', internal=False),
     'mac-angle-chromium-intel':
-        CreateTesterConfig('mac', 64, 'mac-angle-chromium-builder'),
+        CreateTesterConfig(
+            'mac', 64, 'mac-angle-chromium-builder', internal=False),
     'win-angle-chromium-x64-builder':
-        CreateBuilderConfig('win', 64),
+        CreateBuilderConfig('win', 64, internal=False),
     'win10-angle-chromium-x64-intel':
-        CreateTesterConfig('win', 64, 'win-angle-chromium-x64-builder'),
+        CreateTesterConfig(
+            'win', 64, 'win-angle-chromium-x64-builder', internal=False),
     'win10-angle-chromium-x64-nvidia':
-        CreateTesterConfig('win', 64, 'win-angle-chromium-x64-builder'),
+        CreateTesterConfig(
+            'win', 64, 'win-angle-chromium-x64-builder', internal=False),
     'win-angle-chromium-x86-builder':
-        CreateBuilderConfig('win', 32),
+        CreateBuilderConfig('win', 32, internal=False),
     'win7-angle-chromium-x86-amd':
-        CreateTesterConfig('win', 32, 'win-angle-chromium-x86-builder'),
+        CreateTesterConfig(
+            'win', 32, 'win-angle-chromium-x86-builder', internal=False),
     'win-angle-x64-builder':
-        CreateBuilderConfig('win', 64),
+        CreateBuilderConfig('win', 64, internal=True),
     'win7-angle-x64-nvidia':
-        CreateTesterConfig('win', 64, 'win-angle-x64-builder'),
+        CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win10-angle-x64-intel':
-        CreateTesterConfig('win', 64, 'win-angle-x64-builder'),
+        CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win10-angle-x64-nvidia':
-        CreateTesterConfig('win', 64, 'win-angle-x64-builder'),
+        CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win-angle-x86-builder':
-        CreateBuilderConfig('win', 32),
+        CreateBuilderConfig('win', 32, internal=True),
     'win7-angle-x86-amd':
-        CreateTesterConfig('win', 32, 'win-angle-x86-builder'),
+        CreateTesterConfig('win', 32, 'win-angle-x86-builder', internal=True),
 }
