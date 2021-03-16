@@ -89,11 +89,11 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
     if (e2e_env or runner_args) and builder_name.startswith("e2e"):
       # run only e2e stress tests
       # TODO(liviurau): use parameters rahter than ENV vars
-      if e2e_env:
-        with api.context(env=e2e_env):
+      with api.context(env=e2e_env):
+        if runner_args:
+          run_e2e(api, builder_config, runner_args.split())
+        else:
           run_e2e(api, builder_config)
-      else:
-        run_e2e(api, builder_config, runner_args.split())
       return
 
     run_unit_tests(api, builder_config)
@@ -106,9 +106,9 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
 
     # TODO(liviurau): temporary removal of localization check. We need to think
     # about making this configurable on the builder side to choose/add steps
-    # and configure script arguments 
+    # and configure script arguments
     #run_localization_check(api)
-    
+
     run_e2e(api, builder_config)
     run_interactions(api, builder_config)
 
