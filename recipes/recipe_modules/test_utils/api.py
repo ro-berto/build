@@ -623,6 +623,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return acc
 
   def _should_abort_tryjob(self, invocation_dict, failed_suites):
+    try:
+      skip_retry_footer = self.m.tryserver.get_footer(
+          self.m.tryserver.constants.SKIP_RETRY_FOOTER)
+    except self.m.step.StepFailure as e:
+      result = self.m.step('failure getting footers', [])
+      result.presentation.status = self.m.step.WARNING
+      result.presentation.logs['exception'] = (
+          self.m.traceback.format_exc().splitlines())
+    else:
+      if skip_retry_footer:
+        result = self.m.step('retries disabled', [])
+        result.presentation.step_text = (
+            '\nfooter {} disables suite-level retries'.format(
+                self.m.tryserver.constants.SKIP_RETRY_FOOTER))
+        return True
+
     informational_string = (
         'This step is information and of interest to infra' +
         ' maintainers only.\n')
