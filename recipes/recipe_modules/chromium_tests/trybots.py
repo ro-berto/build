@@ -1840,34 +1840,16 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-swangle-tot-angle-x64',
                 retry_failed_shards=False,
             ),
-        'linux-swangle-try-tot-angle-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-tot-angle-x86',
-                retry_failed_shards=False,
-            ),
         'linux-swangle-try-tot-swiftshader-x64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.swangle',
                 buildername='linux-swangle-tot-swiftshader-x64',
                 retry_failed_shards=False,
             ),
-        'linux-swangle-try-tot-swiftshader-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-tot-swiftshader-x86',
-                retry_failed_shards=False,
-            ),
         'linux-swangle-try-x64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.swangle',
                 buildername='linux-swangle-x64',
-                retry_failed_shards=False,
-            ),
-        'linux-swangle-try-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-x86',
                 retry_failed_shards=False,
             ),
         'mac-swangle-chromium-try-x64':
