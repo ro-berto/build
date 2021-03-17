@@ -2022,6 +2022,10 @@ def _clean_step_name(step_name, suffix):
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
+  def __init__(self):
+    super(LayoutTestResultsHandler, self).__init__()
+    self._layout_test_results = ''
+
   def upload_results(self, api, results, step_name, passed, step_suffix=None):
     # Also upload to standard JSON results handler
     JSONResultsHandler.upload_results(self, api, results, step_name, passed,
@@ -2074,10 +2078,16 @@ class LayoutTestResultsHandler(JSONResultsHandler):
             (sanitized_buildername, buildnumber))
     base += '/' + urllib.quote(step_name)
 
+    if 'with patch' in step_suffix:
+      self._layout_test_results = base + '/layout-test-results/results.html'
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')
     archive_result.presentation.links['(zip)'] = (
         base + '/layout-test-results.zip')
+
+  @property
+  def get_layout_results_url(self):
+    return self._layout_test_results
 
 
 @attrs()

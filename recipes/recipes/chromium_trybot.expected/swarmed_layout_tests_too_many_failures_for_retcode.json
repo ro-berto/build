@@ -3027,7 +3027,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed because of:\n\n- test2.Test2\n\n- test1.Test1"
+      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed:\n\nhttps://test-results.appspot.com/data/layout_results/linux-rel/571/blink_web_tests%20%28retry%20shards%20with%20patch%29/layout-test-results/results.html\n\n- test2.Test2\n\n- test1.Test1"
     },
     "name": "$result"
   }

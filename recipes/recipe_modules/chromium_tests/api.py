@@ -1667,6 +1667,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if deterministic_failures:
         test_suite_header = '**%s** failed because of:' % suite.name
 
+      # TODO(crbug.com/1174938): Remove this special case after
+      # crbug.com/1166761 is fixed.
+      if 'blink_web_tests' in suite.name:
+        test_suite_header = '**%s** failed:\n\n' % suite.name
+        test_suite_header = (
+            test_suite_header +
+            suite.spec.results_handler.get_layout_results_url)
+
       current_size += len(test_suite_header)
       if current_size >= size_limit:
         hint = '#### ...%d more test(s)...' % (test_size - index)
