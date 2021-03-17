@@ -1,0 +1,29 @@
+// Copyright 2021 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipes.build.branch_configuration.tester;
+
+message InputProperties {
+  // Required, the path within the repo to the branch script that can be used to
+  // set the branch type
+  //
+  // The script must be executable with a command of the form:
+  // <branch_script> set-type --type <branch_type>
+  // For each element <branch_type> in branch_types.
+  string branch_script = 1;
+
+  // Required, the branch types to verify
+  repeated string branch_types = 2;
+
+  // Required, the path within the repo to scripts to execute to verify each
+  // branch type
+  //
+  // For each branch type, after the project is reconfigured for the branch
+  // type, the verification scripts will be executed in the order they appear.
+  // The scripts will be executed without any arguments. If any of the scripts
+  // fails (exit code != 0), then the branch type will be considered a failure
+  // and the build's status will be failure.
+  repeated string verification_scripts = 3;
+}
