@@ -626,7 +626,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     try:
       skip_retry_footer = self.m.tryserver.get_footer(
           self.m.tryserver.constants.SKIP_RETRY_FOOTER)
-    except self.m.step.StepFailure as e:
+    except self.m.step.StepFailure:
       result = self.m.step('failure getting footers', [])
       result.presentation.status = self.m.step.WARNING
       result.presentation.logs['exception'] = (
@@ -639,65 +639,60 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 self.m.tryserver.constants.SKIP_RETRY_FOOTER))
         return True
 
-    informational_string = (
-        'This step is information and of interest to infra' +
-        ' maintainers only.\n')
-    failures_string = (
-        'skip retrying because there are >= {} test suites with test ' +
-        'failures and it most likely indicates a problem with the CL').format(
-            self._min_failed_suites_to_skip_retry)
-    unexpected_string = (
-        informational_string +
-        'skip retrying because there are >= {} test suites with unexpected '
-        'results and it most likely indicates a problem with the CL').format(
-            self._min_failed_suites_to_skip_retry)
-    success_string = (
-        'Fewer than {} failures/unexpected results, continue with retries'
-    ).format(self._min_failed_suites_to_skip_retry)
+    # Continue to use the list of failed suites as the source of truth for the
+    # decision of whether to retry
     old_should_abort = (
         len(failed_suites) >= self._min_failed_suites_to_skip_retry)
-    unexpected_count = -1  # Dummy value in case of exception
-    try:
-      unexpected_count = self._count_unexpected_invocations(invocation_dict)
-      new_should_abort = (
-          unexpected_count >= self._min_failed_suites_to_skip_retry)
-    except Exception as e:  #pragma: nocover
-      breakage = self.m.python.succeeding_step(
-          'Failure in ResultDB lookup',
-          'Querying for tryjob abort via ResultDB produced error {}'.format(e))
-      breakage.presentation.status = self.m.step.FAILURE
-      return old_decision
 
-    mismatch_string = (informational_string +
-                       'Legacy decision for trybot abort was {} based on' +
-                       ' {} failures.\n' +
-                       'New decision for trybot abort was {} based on' +
-                       ' {} unexpected results.').format(
-                           old_should_abort, len(failed_suites),
-                           new_should_abort, unexpected_count)
-    # Overall logic here:
-    #   - check if either source reports problems. If not, no messages needed.
-    #   - Check the source-of-truth first (currently the old verdict). If this
-    #       reports problems, set the message based on that. This order only
-    #       matters if both sources report problems.
-    #   - If the source of truth says it's fine but the other source disagrees,
-    #       then set the message based on the complaining source.
-    #   - If the two sources disagree, add an extra warning step saying so.
-    #   - Return the verdict purely based on the source of truth
-    if not old_should_abort and not new_should_abort:
-      self.m.python.succeeding_step('proceed with retry', success_string)
-      return False
     if old_should_abort:
-      result = self.m.python.succeeding_step('abort retry', failures_string)
+      result = self.m.step('abort retry', [])
       result.presentation.status = self.m.step.FAILURE
+      result.presentation.step_text = (
+          '\nskip retrying because there are >= {} test suites with test '
+          'failures and it most likely indicates a problem with the CL'.format(
+              self._min_failed_suites_to_skip_retry))
     else:
-      result = self.m.python.succeeding_step(
-          'abort retry (migration, informational)', unexpected_string)
-      result.presentation.status = self.m.step.WARNING
-    if new_should_abort != old_should_abort:
-      discrepancy = self.m.python.succeeding_step(
-          'Migration mismatch (informational)', mismatch_string)
-      discrepancy.presentation.status = self.m.step.WARNING
+      result = self.m.step('proceed with retry', [])
+      result.presentation.step_text = (
+          '\nfewer than {} failures, continue with retries'.format(
+              self._min_failed_suites_to_skip_retry))
+
+    unexpected_count = self._count_unexpected_invocations(invocation_dict)
+    new_should_abort = (
+        unexpected_count >= self._min_failed_suites_to_skip_retry)
+
+    # Report on migrating to using ResultDB for making the decision of whether
+    # to abort. For now, we simply report if we would have aborted using
+    # ResultDB and report if the decisions using the test suite results or
+    # ResultDB would differ.
+    with self.m.step.nest('ResultDB abort retry migration') as presentation:
+      presentation.step_text = (
+          '\nThis is an informational step for infra maintainers')
+
+      if new_should_abort:
+        result = self.m.step('abort retry', [])
+        result.presentation.status = self.m.step.WARNING
+        result.presentation.step_text = (
+            '\nskip retrying because there are >= {} test suites with '
+            'unexpected results and it most likely indicates a problem '
+            'with the CL'.format(self._min_failed_suites_to_skip_retry))
+      else:
+        result = self.m.step('proceed with retry', [])
+        result.presentation.step_text = (
+            '\nfewer than {} unexpected results, continue with retries'.format(
+                self._min_failed_suites_to_skip_retry))
+
+      if old_should_abort != new_should_abort:
+        result = self.m.step('mismatch', [])
+        result.presentation.status = self.m.step.WARNING
+        result.presentation.step_text = '\n'.join([
+            '',
+            'Legacy decision for trybot abort was {} based on {} failures',
+            ('New decision for trybot abort was {} based on {} '
+             'unexpected results'),
+        ]).format(old_should_abort, len(failed_suites), new_should_abort,
+                  unexpected_count)
+
     return old_should_abort
 
   def _extract_retriable_suites_from_invocations(self, invocation_dict,

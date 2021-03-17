@@ -751,15 +751,25 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder/src",
+    "cmd": [],
     "name": "proceed with retry",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Fewer than 5 failures/unexpected results, continue with retries@@@"
+      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ResultDB abort retry migration",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>This is an informational step for infra maintainers@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ResultDB abort retry migration.proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>fewer than 5 unexpected results, continue with retries@@@"
     ]
   },
   {
