@@ -34,6 +34,7 @@ from . import client_devtools_frontend_integration
 from . import client_openscreen_chromium
 from . import client_v8_chromium
 from . import client_v8_fyi
+from . import infra
 from . import tryserver_chromium_android
 from . import tryserver_chromium_linux
 from . import tryserver_devtools_frontend
@@ -104,6 +105,8 @@ BUILDERS = bot_db.BotDatabase.create({
         client_v8_chromium.SPEC,
     'client.v8.fyi':
         client_v8_fyi.SPEC,
+    'infra':
+        infra.SPEC,
     'tryserver.chromium.android':
         tryserver_chromium_android.SPEC,
     'tryserver.chromium.linux':
