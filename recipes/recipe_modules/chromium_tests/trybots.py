@@ -1505,6 +1505,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.perf',
                 buildername='mac-arm-builder-perf',
             ),
+        'mac-10_13_laptop_high_end-perf':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.perf',
+                buildername='mac-10_13_laptop_high_end-perf',
+            ),
         'Win Builder Perf':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.perf',
