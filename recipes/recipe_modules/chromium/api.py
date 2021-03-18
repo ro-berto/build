@@ -671,8 +671,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     target_output_dir = self.m.path.abspath(target_output_dir)
 
     ninja_path = self.m.depot_tools.ninja_path
-    if self.c.compile_py.use_autoninja:
-      ninja_path = self.m.depot_tools.autoninja_path
     command = [str(ninja_path), '-w', 'dupbuild=err', '-C', target_output_dir]
 
     if self.c.compile_py.show_ninja_stats:

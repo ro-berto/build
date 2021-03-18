@@ -23,8 +23,7 @@ def CreateStandardConfig(platform, apply_configs=None):
   return bot_spec.BotSpec.create(
       chromium_config='chromium',
       # Non-Android builder always uses regular mb.
-      chromium_apply_config=(['mb', 'goma_failfast', 'use_autoninja'] +
-                             apply_configs),
+      chromium_apply_config=(['mb', 'goma_failfast'] + apply_configs),
       isolate_server='https://isolateserver.appspot.com',
       gclient_config='chromium',
       chromium_config_kwargs={
@@ -50,7 +49,7 @@ def CreateAndroidConfig(bits, apply_configs=None):
 
   return bot_spec.BotSpec.create(
       chromium_config='chromium',
-      chromium_apply_config=['goma_failfast', 'use_autoninja'] + apply_configs,
+      chromium_apply_config=['goma_failfast'] + apply_configs,
       isolate_server='https://isolateserver.appspot.com',
       gclient_config='chromium',
       gclient_apply_config=['android'],
@@ -76,8 +75,8 @@ def CreateIosConfig():
   return bot_spec.BotSpec.create(
       chromium_config='chromium',
       chromium_apply_config=([
-          'mb', 'mac_toolchain', 'goma_failfast', 'use_autoninja',
-          'goma_client_candidate', 'clobber'
+          'mb', 'mac_toolchain', 'goma_failfast', 'goma_client_candidate',
+          'clobber'
       ]),
       isolate_server='https://isolateserver.appspot.com',
       gclient_config='ios',

@@ -54,7 +54,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           # recipe module property, configured per builder in
           # cr-buildbucket.cfg.
           goma_high_parallel=Single(bool, empty_val=False, required=False),
-          use_autoninja=Single(bool, empty_val=False, required=False),
           prune_venv=Single(bool, empty_val=False, required=False),
       ),
       gyp_env=ConfigGroup(
@@ -304,11 +303,6 @@ def goma_hermetic_fallback(c):
 @config_ctx()
 def goma_use_local(c):
   c.compile_py.goma_use_local = True
-
-
-@config_ctx()
-def use_autoninja(c):
-  c.compile_py.use_autoninja = True
 
 
 @config_ctx(group='builder')
