@@ -403,7 +403,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     # self.m.path['checkout'] is not set yet, so we get it from
     # chromium_checkout.
-    checkout_dir = self.m.chromium_checkout.get_checkout_dir(bot_config)
+    checkout_dir = self.m.chromium_checkout.checkout_dir
     full_checkout_path = checkout_dir.join(src_root)
     if not self.m.path.exists(full_checkout_path):
       return None, None

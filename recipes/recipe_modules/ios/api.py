@@ -122,7 +122,7 @@ class iOSApi(recipe_api.RecipeApi):
 
   def _ensure_checkout_dir(self):
     if not self._checkout_dir:
-      self._checkout_dir = self.m.chromium_checkout.get_checkout_dir({})
+      self._checkout_dir = self.m.chromium_checkout.checkout_dir
     return self._checkout_dir
 
   def checkout(self, gclient_apply_config=None, **kwargs):

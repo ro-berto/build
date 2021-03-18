@@ -630,7 +630,7 @@ class ArchiveApi(recipe_api.RecipeApi):
               '/'.join([x for x in f if x]))
 
     def _resolve_base_dir(base_dir):
-      return self.m.chromium_checkout.get_checkout_dir({}).join(base_dir)
+      return self.m.chromium_checkout.checkout_dir.join(base_dir)
 
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in config.archive_datas:

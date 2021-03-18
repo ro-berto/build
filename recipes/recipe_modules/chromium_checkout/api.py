@@ -49,10 +49,6 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # alternate location could result in goma cache bloating.
     return self.m.path['cache'].join('builder')
 
-  # TODO(gbeaty) Switch callers to use checkout_dir
-  def get_checkout_dir(self, bot_config):
-    return self.checkout_dir
-
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None,
                                   report_via_property=False):
     """Returns list of POSIX paths of files affected by patch for "analyze".
@@ -96,7 +92,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    self._working_dir = self.get_checkout_dir(bot_config)
+    self._working_dir = self.checkout_dir
 
     timeout = int(self.timeout) if self.timeout else timeout
 

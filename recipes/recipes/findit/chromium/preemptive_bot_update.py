@@ -76,7 +76,7 @@ def RunSteps(api):
       [chromium.BuilderId.create_for_group(*TargetGroupAndBuilder(api))])
   api.chromium_tests.configure_build(bot_config)
 
-  base_dir = api.chromium_checkout.get_checkout_dir(bot_config)
+  base_dir = api.chromium_checkout.checkout_dir
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
 
   refresh_checkout = True

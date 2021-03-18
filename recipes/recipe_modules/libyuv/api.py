@@ -82,7 +82,7 @@ class LibyuvApi(recipe_api.RecipeApi):
     return self.bot_config.get('parent_buildername')
 
   def checkout(self):
-    with self.m.context(cwd=self.m.chromium_checkout.get_checkout_dir({})):
+    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       update_step = self.m.bot_update.ensure_checkout()
       assert update_step.json.output['did_run']
       self.revision = update_step.presentation.properties['got_revision']
@@ -141,7 +141,7 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def runtests(self):
     """Add a suite of test steps."""
-    with self.m.context(cwd=self.m.chromium_checkout.get_checkout_dir({})):
+    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       with self.m.step.defer_results():
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           self.m.chromium_android.common_tests_setup_steps()

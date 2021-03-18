@@ -58,8 +58,7 @@ def RunSteps(api):
     builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
     api.chromium_checkout.ensure_checkout(bot_config)
-    checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config).join(
-        'src')
+    checkout_dir = api.chromium_checkout.checkout_dir.join('src')
     with api.context(cwd=checkout_dir):
       outdir = api.chromium.output_dir
 

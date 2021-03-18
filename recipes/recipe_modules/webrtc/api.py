@@ -465,7 +465,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       raise self.m.step.InfraFailure(
          'Testers must not be started without providing revision information.')
 
-    self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
+    self._working_dir = self.m.chromium_checkout.checkout_dir
 
     is_chromium = self.m.tryserver.gerrit_change_repo_url == CHROMIUM_REPO
 

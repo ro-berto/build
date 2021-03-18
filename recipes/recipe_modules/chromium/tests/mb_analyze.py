@@ -18,7 +18,7 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
   api.chromium_checkout.ensure_checkout()
-  with api.context(cwd=api.chromium_checkout.get_checkout_dir({})):
+  with api.context(cwd=api.chromium_checkout.checkout_dir):
     api.chromium.mb_analyze(
         api.chromium.get_builder_id(), {
             'files': ['base/test/launcher/test_launcher.cc'],

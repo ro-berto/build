@@ -67,7 +67,7 @@ SAMPLE_TARGETS = [
 
 def RunSteps(api):
   builder_id, bot_config = api.m.chromium.configure_bot(BUILDERS, ['mb'])
-  with api.m.context(cwd=api.m.chromium_checkout.get_checkout_dir(bot_config)):
+  with api.m.context(cwd=api.m.chromium_checkout.checkout_dir):
     _RunStepsInBuilderCacheDir(api, builder_id, bot_config)
 
 
