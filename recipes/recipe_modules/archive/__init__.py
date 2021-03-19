@@ -15,6 +15,7 @@ DEPS = [
     'infra/cloudkms',
     'infra/provenance',
     'recipe_engine/buildbucket',
+    'recipe_engine/cipd',
     'recipe_engine/commit_position',
     'recipe_engine/file',
     'recipe_engine/json',

@@ -117,7 +117,33 @@ message ArchiveData {
   string base_dir = 9;
 }
 
+message Compression {
+  // compression_level ([0-9]) - Deflate compression level.
+  // (0 - disable, 1 - best speed, 9 - best compression).
+  int32 compression_level = 1;
+}
+
+// Next id: 6
+message CIPDArchiveData {
+  // Relative path to a YAML package definition file.
+  string yaml_file = 1;
+
+  // A list of ref names to set for the package instance.
+  repeated string refs = 2;
+
+  // A map of tag name -> value to set for the package instance.
+  map<string, string> tags = 3;
+
+  // A map of var name -> value to use for vars referenced in package
+  // definition file.
+  map<string, string> pkg_vars = 4;
+
+  // Sets the compression level.
+  Compression compression = 5;
+}
+
 // Next id: 2
 message InputProperties {
   repeated ArchiveData archive_datas = 1;
+  repeated CIPDArchiveData cipd_archive_datas = 2;
 }

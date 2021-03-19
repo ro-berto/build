@@ -599,7 +599,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                       update_properties,
                       custom_vars=None,
                       config=None):
-    """Archives one or multiple packages to google cloud storage.
+    """Archives one or multiple packages to either google cloud storage or CIPD.
 
     The exact configuration of the archive is specified by InputProperties. See
     archive/properties.proto.
@@ -620,8 +620,38 @@ class ArchiveApi(recipe_api.RecipeApi):
     if config is None:
       config = self._default_config
 
-    if not config.archive_datas:
+    if not config.archive_datas and not config.cipd_archive_datas:
       return
+
+    with self.m.step.nest('Generic Archiving Steps'):
+      for archive_data in config.archive_datas:
+        self.gcs_archive(build_dir, update_properties, archive_data,
+                         custom_vars)
+      for cipd_archive_data in config.cipd_archive_datas:
+        self.cipd_archive(update_properties, custom_vars, cipd_archive_data)
+
+  def gcs_archive(self,
+                  build_dir,
+                  update_properties,
+                  archive_data,
+                  custom_vars=None):
+    """Archives a single package to google cloud storage.
+
+    The exact configuration of the archive is specified by InputProperties. See
+    archive/properties.proto.
+
+    Args:
+      build_dir: The absolute path to the build output directory, e.g.
+                 [slave-build]/src/out/Release
+      update_properties: The properties from the bot_update step (containing
+                         commit information).
+      archive_data: An instance of
+                    archive/properties.proto:InputProperties.archive_datas.
+      custom_vars: Dict of custom string substitution for gcs paths.
+                   E.g. custom_vars={'chrome_version':'1.2.3.4'}, then
+                   gcs_path='gcs/{%chrome_version%}/path' will be replaced to
+                   'gcs/1.2.3.4/path'.
+    """
 
     def _sanitize_gcs_path(gcs_path, file_path):
       gcs = gcs_path.split('/')
@@ -632,181 +662,236 @@ class ArchiveApi(recipe_api.RecipeApi):
     def _resolve_base_dir(base_dir):
       return self.m.chromium_checkout.checkout_dir.join(base_dir)
 
-    with self.m.step.nest('Generic Archiving Steps'):
-      for archive_data in config.archive_datas:
-        base_path = build_dir
-        if archive_data.base_dir:
-          base_path = _resolve_base_dir(archive_data.base_dir)
+    base_path = build_dir
+    if archive_data.base_dir:
+      base_path = _resolve_base_dir(archive_data.base_dir)
 
-        # Perform dynamic configuration from placeholders, if necessary.
-        gcs_path = self._replace_placeholders(update_properties, custom_vars,
-                                              archive_data.gcs_path)
+    # Perform dynamic configuration from placeholders, if necessary.
+    gcs_path = self._replace_placeholders(update_properties, custom_vars,
+                                          archive_data.gcs_path)
 
-        gcs_bucket = archive_data.gcs_bucket
-        experimental = self.m.runtime.is_experimental
-        if experimental:
-          gcs_bucket += "/experimental"
+    gcs_bucket = archive_data.gcs_bucket
+    experimental = self.m.runtime.is_experimental
+    if experimental:
+      gcs_bucket += "/experimental"
 
-        gcs_args = []
-        expanded_files = set(archive_data.files)
-        for filename in archive_data.file_globs:
-          for f in self.m.file.glob_paths(
-              'expand file globs',
-              base_path,
-              filename,
-              test_data=('glob1.txt', 'glob2.txt')):
-            # Turn the returned Path object back into a string relative to
-            # base_path.
-            assert base_path.base == f.base
-            assert base_path.is_parent_of(f)
-            common_pieces = f.pieces[len(base_path.pieces):]
-            expanded_files.add('/'.join(common_pieces))
+    gcs_args = []
+    expanded_files = set(archive_data.files)
+    for filename in archive_data.file_globs:
+      for f in self.m.file.glob_paths(
+          'expand file globs',
+          base_path,
+          filename,
+          test_data=('glob1.txt', 'glob2.txt')):
+        # Turn the returned Path object back into a string relative to
+        # base_path.
+        assert base_path.base == f.base
+        assert base_path.is_parent_of(f)
+        common_pieces = f.pieces[len(base_path.pieces):]
+        expanded_files.add('/'.join(common_pieces))
 
-        if archive_data.verifiable_key_path:
-          sig_paths = set()
-          # Immutable list of files to attach provenance.
-          files_to_verify = set(expanded_files)
-          for f in files_to_verify:
-            # Files are relative to the base_path, so this generates the .sig
-            # file next to the original.
-            self.m.cloudkms.sign(archive_data.verifiable_key_path,
-                                 base_path.join(f), base_path.join(f + '.sig'))
-            # This file path is appended directly to the provided gcs_path for
-            # uploads. We'll uploaded this .sig next to the original
-            # in GCS as well.
-            sig_paths.add(f + '.sig')
-          expanded_files = expanded_files.union(sig_paths)
+    if archive_data.verifiable_key_path:
+      sig_paths = set()
+      # Immutable list of files to attach provenance.
+      files_to_verify = set(expanded_files)
+      for f in files_to_verify:
+        # Files are relative to the base_path, so this generates the .sig
+        # file next to the original.
+        self.m.cloudkms.sign(archive_data.verifiable_key_path,
+                             base_path.join(f), base_path.join(f + '.sig'))
+        # This file path is appended directly to the provided gcs_path for
+        # uploads. We'll uploaded this .sig next to the original
+        # in GCS as well.
+        sig_paths.add(f + '.sig')
+      expanded_files = expanded_files.union(sig_paths)
 
-          # Generates provenance to built artifacts at BCID L1. Note that this
-          # does not record the top level source for the build.
-          attestation_paths = set()
-          provenance_manifest = {
-            'recipe': self.m.properties.get('recipe'),
-            'exp': 0,
-          }
-          for f in files_to_verify:
-            # Files are relative to the base_path, so this generates the
-            # .attestation file next to the original.
-            file_hash = self.m.file.file_hash(base_path.join(f),
-                                              test_data='deadbeef')
-            provenance_manifest['subjectHash'] = file_hash
-            temp_dir = self.m.path.mkdtemp('tmp')
-            manifest_path = self.m.path.join(temp_dir, 'manifest.json')
-            self.m.file.write_text('Provenance manifest', manifest_path,
-                                   json.dumps(provenance_manifest))
-            self.m.provenance.generate(archive_data.verifiable_key_path,
-                                       manifest_path,
-                                       base_path.join(f + '.attestation'))
-            # This file path is appended directly to the provided gcs_path for
-            # uploads. We'll uploaded this .attestation next to the original
-            # in GCS as well.
-            attestation_paths.add(f + '.attestation')
-          expanded_files = expanded_files.union(attestation_paths)
+      # Generates provenance to built artifacts at BCID L1. Note that this
+      # does not record the top level source for the build.
+      attestation_paths = set()
+      provenance_manifest = {
+          'recipe': self.m.properties.get('recipe'),
+          'exp': 0,
+      }
+      for f in files_to_verify:
+        # Files are relative to the base_path, so this generates the
+        # .attestation file next to the original.
+        file_hash = self.m.file.file_hash(
+            base_path.join(f), test_data='deadbeef')
+        provenance_manifest['subjectHash'] = file_hash
+        temp_dir = self.m.path.mkdtemp('tmp')
+        manifest_path = self.m.path.join(temp_dir, 'manifest.json')
+        self.m.file.write_text('Provenance manifest', manifest_path,
+                               json.dumps(provenance_manifest))
+        self.m.provenance.generate(archive_data.verifiable_key_path,
+                                   manifest_path,
+                                   base_path.join(f + '.attestation'))
+        # This file path is appended directly to the provided gcs_path for
+        # uploads. We'll uploaded this .attestation next to the original
+        # in GCS as well.
+        attestation_paths.add(f + '.attestation')
+      expanded_files = expanded_files.union(attestation_paths)
 
-        # Copy all files to a temporary directory. Keeping the structure.
-        # This directory will be used for archiving.
-        temp_dir = self.m.path.mkdtemp()
-        for filename in expanded_files:
-          tmp_file_path = self.m.path.join(temp_dir, filename)
-          tmp_file_dir = self.m.path.dirname(tmp_file_path)
-          if str(tmp_file_dir) != str(temp_dir):
-            self.m.file.ensure_directory(
-                'Create temp dir %s' % os.path.dirname(filename), tmp_file_dir)
-          self.m.file.copy("Copy file %s" % filename,
-                           self.m.path.join(base_path, filename), tmp_file_path)
+      # Generates provenance to built artifacts at BCID L1. Note that this
+      # does not record the top level source for the build.
+      attestation_paths = set()
+      provenance_manifest = {
+          'recipe': self.m.properties.get('recipe'),
+          'exp': 0,
+      }
+      for f in files_to_verify:
+        # Files are relative to the base_path, so this generates the
+        # .attestation file next to the original.
+        file_hash = self.m.file.file_hash(
+            base_path.join(f), test_data='deadbeef')
+        provenance_manifest['subjectHash'] = file_hash
+        temp_dir = self.m.path.mkdtemp('tmp')
+        manifest_path = self.m.path.join(temp_dir, 'manifest.json')
+        self.m.file.write_text('Provenance manifest', manifest_path,
+                               json.dumps(provenance_manifest))
+        self.m.provenance.generate(archive_data.verifiable_key_path,
+                                   manifest_path,
+                                   base_path.join(f + '.attestation'))
+        # This file path is appended directly to the provided gcs_path for
+        # uploads. We'll uploaded this .attestation next to the original
+        # in GCS as well.
+        attestation_paths.add(f + '.attestation')
+      expanded_files = expanded_files.union(attestation_paths)
 
-        for directory in archive_data.dirs:
-          self.m.file.copytree("Copy folder %s" % directory,
-                               self.m.path.join(base_path, directory),
-                               self.m.path.join(temp_dir, directory))
+    # Copy all files to a temporary directory. Keeping the structure.
+    # This directory will be used for archiving.
+    temp_dir = self.m.path.mkdtemp()
+    for filename in expanded_files:
+      tmp_file_path = self.m.path.join(temp_dir, filename)
+      tmp_file_dir = self.m.path.dirname(tmp_file_path)
+      if str(tmp_file_dir) != str(temp_dir):
+        self.m.file.ensure_directory(
+            'Create temp dir %s' % os.path.dirname(filename), tmp_file_dir)
+      self.m.file.copy("Copy file %s" % filename,
+                       self.m.path.join(base_path, filename), tmp_file_path)
 
-        # Starting here, we will only need to care about the temporary folder
-        # which holds the files. So reset the base_path to temp_dir.
-        base_path = temp_dir
+    for directory in archive_data.dirs:
+      self.m.file.copytree("Copy folder %s" % directory,
+                           self.m.path.join(base_path, directory),
+                           self.m.path.join(temp_dir, directory))
 
-        for rename_file in archive_data.rename_files:
-          expanded_files.remove(rename_file.from_file)
+    # Starting here, we will only need to care about the temporary folder
+    # which holds the files. So reset the base_path to temp_dir.
+    base_path = temp_dir
 
-          # Support placeholder replacement for file renames.
-          new_filename = self._replace_placeholders(update_properties,
-                                                    custom_vars,
-                                                    rename_file.to_file)
-          expanded_files.add(new_filename)
-          self.m.file.move("Move file",
-                           self.m.path.join(base_path, rename_file.from_file),
-                           self.m.path.join(base_path, new_filename))
+    for rename_file in archive_data.rename_files:
+      expanded_files.remove(rename_file.from_file)
 
-        # Get map of local file path to upload -> destination file path in GCS
-        # bucket.
-        if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
-          if archive_data.dirs:
-            self.m.python.failing_step(
-                'ARCHIVE_TYPE_FILES does not support dirs',
-                'archive_data properties with |archive_type| '
-                'ARCHIVE_TYPE_FILES must have empty |dirs|')
-          uploads = {
-              base_path.join(f): _sanitize_gcs_path(gcs_path, f)
-              for f in expanded_files
-          }
-        elif (archive_data.archive_type ==
-              ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES):
-          if archive_data.dirs:
-            self.m.python.failing_step(
-                'ARCHIVE_TYPE_FLATTEN_FILES does not support dirs',
-                'archive_data properties with |archive_type| '
-                'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
-          uploads = {
-              base_path.join(f): _sanitize_gcs_path(gcs_path,
-                                                    self.m.path.basename(f))
-              for f in expanded_files
-          }
-        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
-          archive_file = self._create_targz_archive_for_upload(
-              base_path, expanded_files, archive_data.dirs)
-          uploads = {archive_file: gcs_path}
-        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
-          if not archive_data.dirs:
-            self.m.python.failing_step(
-                'ARCHIVE_TYPE_RECURSIVE does not support '
-                'empty dirs', 'archive_data properties with '
-                '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
-                'specify |dirs|')
-          uploads = {base_path.join(d): gcs_path for d in archive_data.dirs}
-          gcs_args += ['-R']
-        elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
-          archive_file = self.m.path.mkdtemp().join('image.squash')
-          self.m.squashfs.mksquashfs(base_path, archive_file)
-          uploads = {archive_file: gcs_path}
-        else:
-          archive_file = self._create_zip_archive_for_upload(
-              base_path, expanded_files, archive_data.dirs)
-          uploads = {archive_file: gcs_path}
+      # Support placeholder replacement for file renames.
+      new_filename = self._replace_placeholders(update_properties, custom_vars,
+                                                rename_file.to_file)
+      expanded_files.add(new_filename)
+      self.m.file.move("Move file",
+                       self.m.path.join(base_path, rename_file.from_file),
+                       self.m.path.join(base_path, new_filename))
 
-        for file_path in uploads:
-          self.m.gsutil.upload(
-              file_path,
-              bucket=gcs_bucket,
-              dest=uploads[file_path],
-              args=gcs_args,
-              name="upload {}".format(str(uploads[file_path])))
+    # Get map of local file path to upload -> destination file path in GCS
+    # bucket.
+    if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
+      if archive_data.dirs:
+        self.m.python.failing_step(
+            'ARCHIVE_TYPE_FILES does not support dirs',
+            'archive_data properties with |archive_type| '
+            'ARCHIVE_TYPE_FILES must have empty |dirs|')
+      uploads = {
+          base_path.join(f): _sanitize_gcs_path(gcs_path, f)
+          for f in expanded_files
+      }
+    elif (archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES):
+      if archive_data.dirs:
+        self.m.python.failing_step(
+            'ARCHIVE_TYPE_FLATTEN_FILES does not support dirs',
+            'archive_data properties with |archive_type| '
+            'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
+      uploads = {
+          base_path.join(f): _sanitize_gcs_path(gcs_path,
+                                                self.m.path.basename(f))
+          for f in expanded_files
+      }
+    elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
+      archive_file = self._create_targz_archive_for_upload(
+          base_path, expanded_files, archive_data.dirs)
+      uploads = {archive_file: gcs_path}
+    elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
+      if not archive_data.dirs:
+        self.m.python.failing_step(
+            'ARCHIVE_TYPE_RECURSIVE does not support '
+            'empty dirs', 'archive_data properties with '
+            '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
+            'specify |dirs|')
+      uploads = {base_path.join(d): gcs_path for d in archive_data.dirs}
+      gcs_args += ['-R']
+    elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
+      archive_file = self.m.path.mkdtemp().join('image.squash')
+      self.m.squashfs.mksquashfs(base_path, archive_file)
+      uploads = {archive_file: gcs_path}
+    else:
+      archive_file = self._create_zip_archive_for_upload(
+          base_path, expanded_files, archive_data.dirs)
+      uploads = {archive_file: gcs_path}
 
-        if archive_data.HasField('latest_upload'):
-          if (not archive_data.latest_upload.gcs_file_content or
-              not archive_data.latest_upload.gcs_path):
-            self.m.python.failing_step(
-                'latest_upload.gcs_path or latest_upload.gcs_file_content'
-                ' not declared', 'Both latest_gcs_path and '
-                'latest_gcs_file_content must be non-empty.')
-          content = self._replace_placeholders(
-              update_properties, custom_vars,
-              archive_data.latest_upload.gcs_file_content)
-          content_ascii = content.encode('ascii', 'ignore')
-          temp_dir = self.m.path.mkdtemp()
-          output_file = temp_dir.join('latest.txt')
-          self.m.file.write_text('Write latest file', output_file,
-                                 content_ascii)
-          self.m.gsutil.upload(
-              output_file,
-              bucket=gcs_bucket,
-              dest=archive_data.latest_upload.gcs_path,
-              name="upload {}".format(archive_data.latest_upload.gcs_path))
+    for file_path in uploads:
+      self.m.gsutil.upload(
+          file_path,
+          bucket=gcs_bucket,
+          dest=uploads[file_path],
+          args=gcs_args,
+          name="upload {}".format(str(uploads[file_path])))
+
+    if archive_data.HasField('latest_upload'):
+      if (not archive_data.latest_upload.gcs_file_content or
+          not archive_data.latest_upload.gcs_path):
+        self.m.python.failing_step(
+            'latest_upload.gcs_path or latest_upload.gcs_file_content'
+            ' not declared', 'Both latest_gcs_path and '
+            'latest_gcs_file_content must be non-empty.')
+      content = self._replace_placeholders(
+          update_properties, custom_vars,
+          archive_data.latest_upload.gcs_file_content)
+      content_ascii = content.encode('ascii', 'ignore')
+      temp_dir = self.m.path.mkdtemp()
+      output_file = temp_dir.join('latest.txt')
+      self.m.file.write_text('Write latest file', output_file, content_ascii)
+      self.m.gsutil.upload(
+          output_file,
+          bucket=gcs_bucket,
+          dest=archive_data.latest_upload.gcs_path,
+          name="upload {}".format(archive_data.latest_upload.gcs_path))
+
+  def cipd_archive(self, update_properties, custom_vars, cipd_archive_data):
+    """Archives one package to CIPD.
+
+    Args:
+      update_properties: The properties from the bot_update step (containing
+                         commit information).
+      custom_vars: Dict of custom string substitution for value used in
+                   pkg_vars and tags.
+      cipd_archive_data: An instance of archive/properties.proto:
+                         InputProperties.cipd_archive_datas.
+    """
+    tags = dict(cipd_archive_data.tags)
+    for key in tags:
+      tags[key] = self._replace_placeholders(update_properties, custom_vars,
+                                             tags[key])
+
+    pkg_vars = dict(cipd_archive_data.pkg_vars)
+    for key in pkg_vars:
+      pkg_vars[key] = self._replace_placeholders(update_properties, custom_vars,
+                                                 pkg_vars[key])
+
+    pkg_def = self.m.path['checkout'].join(cipd_archive_data.yaml_file)
+
+    compression_level = None
+    if cipd_archive_data.HasField('compression'):
+      compression_level = cipd_archive_data.compression.compression_level
+
+    self.m.cipd.create_from_yaml(
+        pkg_def=pkg_def,
+        refs=list(cipd_archive_data.refs),
+        tags=tags,
+        pkg_vars=pkg_vars,
+        compression_level=compression_level)

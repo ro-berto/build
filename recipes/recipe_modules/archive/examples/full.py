@@ -32,10 +32,17 @@ def RunSteps(api):
         target=api.path['checkout'].join('/Release/out'))
     return
 
-  if 'generic_archive' in api.properties:
+  if 'gcs_archive' in api.properties:
     api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
                                                        'squashfs-tools',
                                                        'mksquashfs'))
+    api.archive.generic_archive(
+        build_dir=api.m.path.mkdtemp(),
+        update_properties=api.properties.get('update_properties'),
+        custom_vars=api.properties.get('custom_vars'))
+    return
+
+  if 'cipd_archive' in api.properties:
     api.archive.generic_archive(
         build_dir=api.m.path.mkdtemp(),
         update_properties=api.properties.get('update_properties'),
@@ -187,6 +194,37 @@ def GenTests(api):
                              api.json.output(['chrome', 'resources'])),
   )
 
+  input_properties = properties.InputProperties()
+  cipd_archive_data = properties.CIPDArchiveData()
+  cipd_archive_data.yaml_file = '/temp_base/foo'
+  cipd_archive_data.tags['version'] = 'version/{%chrome_version%}'
+  cipd_archive_data.pkg_vars['version'] = '{%chrome_version%}'
+  cipd_archive_data.compression.compression_level = 8
+  input_properties.cipd_archive_datas.extend([cipd_archive_data])
+
+  yield api.test(
+      'generic_archive_with_cipd_archive_data',
+      api.properties(
+          cipd_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+          },
+          custom_vars={
+              'chrome_version': '1.2.3.4',
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', '/temp_base/foo', '-hash-algo',
+              'sha256', '-tag', 'version:version/1.2.3.4', '-pkg-var',
+              'version:1.2.3.4', '-compression-level', '8', '-json-output',
+              '/path/to/tmp/json'
+          ]),
+      api.post_process(post_process.DropExpectation),
+  )
+
   for archive_type, archive_filename, include_dirs in (
       (properties.ArchiveData.ARCHIVE_TYPE_UNSPECIFIED, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_ZIP, 'any-path.zip', True),
@@ -223,7 +261,7 @@ def GenTests(api):
     yield api.test(
         'generic_archive_{}'.format(archive_type),
         api.properties(
-            generic_archive=True,
+            gcs_archive=True,
             update_properties={
                 'got_revision': TEST_HASH_MAIN,
                 'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
@@ -242,7 +280,7 @@ def GenTests(api):
     yield api.test(
         'generic_archive_missing_got_revision_cp_{}'.format(archive_type),
         api.properties(
-            generic_archive=True,
+            gcs_archive=True,
             update_properties={
                 'got_revision': TEST_HASH_MAIN,
             },
@@ -254,7 +292,7 @@ def GenTests(api):
     yield api.test(
         'generic_archive_missing_got_revision_{}'.format(archive_type),
         api.properties(
-            generic_archive=True,
+            gcs_archive=True,
             update_properties={
                 'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
             },
@@ -266,7 +304,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_nothing_to_archive',
       api.properties(
-          generic_archive=True, update_properties={}, **{'$build/archive': {}}),
+          gcs_archive=True, update_properties={}, **{'$build/archive': {}}),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -285,7 +323,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_{}_with_update_latest',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
@@ -308,7 +346,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_{}_no_latest_gcs_content',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
@@ -329,7 +367,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_with_custom_vars',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
@@ -352,7 +390,7 @@ def GenTests(api):
   yield api.test(
       'generic_archive_with_wrong_custom_vars',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
@@ -375,7 +413,7 @@ def GenTests(api):
   yield api.test(
       'Raw dir archive',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={},
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StepCommandContains,
@@ -394,7 +432,7 @@ def GenTests(api):
   yield api.test(
       'No dirs for ARCHIVE_TYPE_RECURSIVE',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={},
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StatusFailure),
@@ -415,7 +453,7 @@ def GenTests(api):
     yield api.test(
         'generic_archive_dirs unsupported for %s' % archive_type,
         api.properties(
-            generic_archive=True,
+            gcs_archive=True,
             update_properties={},
             **{'$build/archive': input_properties}),
         api.post_process(post_process.StatusFailure),
@@ -434,7 +472,7 @@ def GenTests(api):
   yield api.test(
       'verifiable_key_path',
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={},
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StepCommandContains,
@@ -466,7 +504,7 @@ def GenTests(api):
       'experimental',
       api.runtime(is_experimental=True),
       api.properties(
-          generic_archive=True,
+          gcs_archive=True,
           update_properties={},
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StepCommandContains,
