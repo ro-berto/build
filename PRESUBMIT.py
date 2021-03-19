@@ -117,8 +117,6 @@ def CheckChangeOnUpload(input_api, output_api):
           input_api, output_api, check_clang_format=False
       )
   )
-  output.extend(input_api.canned_checks.CheckOwners(
-      input_api, output_api, allow_tbr=False))
   return output
 
 

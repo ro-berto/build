@@ -1,7 +1,7 @@
 # README.recipes.md is auto-generated, so all owners of recipes need access.
 per-file README.recipes.md=*
 
-# Recipes.py is auto-copied by the recipe roller.
+# recipes.py is auto-copied by the recipe roller.
 per-file recipes.py=recipe-mega-autoroller@chops-service-accounts.iam.gserviceaccount.com
 
 per-file goma_utils.py=file://recipes/goma/GOMA_OWNERS
