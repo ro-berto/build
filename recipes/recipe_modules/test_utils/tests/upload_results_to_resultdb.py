@@ -89,11 +89,9 @@ def GenTests(api):
       api.post_process(post_process.StepSuccess,
                        'query test results (with patch)'),
       api.post_process(post_process.MustRun,
-                       'include derived test results (with patch)'),
+                       'include task invocations (with patch)'),
       api.post_process(post_process.StepSuccess,
-                       'include derived test results (with patch)'),
-      api.post_process(post_process.DoesNotRun,
-                       'include derived test results (without patch)'),
+                       'include task invocations (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 

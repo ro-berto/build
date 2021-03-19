@@ -297,6 +297,24 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for group in groups:
         group.pre_run(caller_api, suffix)
 
+    invocation_names = []
+    if self.m.resultdb.enabled:
+      for t in swarming_test_suites:
+        task = t.get_task(suffix)
+        invocation_names.extend(task.get_invocation_names())
+
+      if invocation_names and suffix != 'without patch':
+        # Include the task invocations in the build's invocation.
+        # Note that 'without patch' results are reported but not included in
+        # the builds' invocation, since the results are not related to the
+        # patch under test.
+        step_name = 'include task invocations'
+        if suffix:
+          step_name += ' (%s)' % suffix
+        self.m.resultdb.include_invocations(
+            self.m.resultdb.invocation_ids(invocation_names),
+            step_name=step_name)
+
     for group in groups:
       group.run(caller_api, suffix)
 
@@ -308,12 +326,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not self.m.resultdb.enabled:
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
-    # Query swarming test results to ResultDB.
-    invocation_names = []
-    for t in swarming_test_suites:
-      task = t.get_task(suffix)
-      invocation_names.extend(task.get_invocation_names())
-
+    # Query swarming test results from ResultDB.
     query_step_name = ('query test results (%s)' %
                        suffix if suffix else 'query test results')
     if not invocation_names:
@@ -328,16 +341,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         variants_with_unexpected_results=True,
         step_name=query_step_name,
     )
-
-    if suffix != 'without patch':
-      # Include the derived invocations in the build's invocation.
-      # Note that 'without patch' results are reported but not included in
-      # the builds' invocation, since the results are not related to the
-      # patch under test.
-      include_step_name = ('include derived test results (%s)' %
-                           suffix if suffix else 'include derived test results')
-      self.m.resultdb.include_invocations(
-          invocation_dict.keys(), step_name=include_step_name)
 
     test_variants = self._test_variants_with_unexpected_results(
         invocation_dict, suffix)
