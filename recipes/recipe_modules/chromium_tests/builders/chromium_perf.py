@@ -245,6 +245,7 @@ _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-perf', 'win', 'win64-builder-perf')
+_AddIsolatedTestSpec('win-10_amd-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('Win 7 Perf', 'win', 'win32-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
@@ -278,6 +279,7 @@ _AddIsolatedTestSpec('android-pixel2_webview-processor-perf', 'android',
 _AddIsolatedTestSpec('win-10-processor-perf', 'win', 'win-10-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-processor-perf', 'win',
                      'win-10_laptop_low_end-perf')
+_AddIsolatedTestSpec('win-10_amd-processor-perf', 'win', 'win-10_amd-perf')
 
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-processor-perf', 'mac',
                      'mac-10_12_laptop_low_end-perf')
