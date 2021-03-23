@@ -9,6 +9,7 @@ def _client_v8_chromium_spec(**kwargs):
   return bot_spec.BotSpec.create(
       build_gs_bucket='chromium-v8',
       luci_project='v8',
+      isolate_use_cas=True,
       **kwargs)
 
 
