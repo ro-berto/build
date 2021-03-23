@@ -1329,64 +1329,6 @@ class ExperimentalTest(TestWrapper):
     return {}
 
 
-@attrs()
-class SizesStepSpec(TestSpec):
-  """A spec for a test that runs the sizes script.
-
-  Attributes:
-    * results_url - The URL to upload the results to.
-    * perf_id - The ID to associate with the results.
-  """
-
-  results_url = attrib(str)
-  perf_id = attrib(str)
-
-  @classmethod
-  def create(cls, **kwargs):
-    """Create a SizesStepSpec.
-
-    Arguments:
-      * kwargs - Additional keyword arguments that will be used to
-        initialize the attributes of the returned spec. The `name`
-        attribute is fixed to `'sizes'`, so it cannot be specified.
-    """
-    return super(SizesStepSpec, cls).create(name='sizes', **kwargs)
-
-  @property
-  def test_class(self):
-    """The test class associated with the spec."""
-    return SizesStep
-
-
-class SizesStep(Test):
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    step_result = api.chromium.sizes(self.spec.results_url, self.spec.perf_id)
-    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    return step_result
-
-  def compile_targets(self):
-    return ['chrome']
-
-  def has_valid_results(self, suffix):
-    # TODO(sebmarchand): implement this function as well as the
-    # |failures| one.
-    return True
-
-  def failures(self, suffix):  # pragma: no cover
-    return []
-
-  def deterministic_failures(self, suffix):  # pragma: no cover
-    return []
-
-  def findit_notrun(self, suffix):  # pragma: no cover
-    return set()
-
-  def pass_fail_counts(self, suffix):  # pragma: no cover
-    return {}
-
-
 # TODO(gbeaty) Simplify ScriptTestSpec/ScriptTest to just have the compile
 # targets for the script rather than having a mapping with all compile targets
 # and optional override compile targets
