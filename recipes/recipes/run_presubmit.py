@@ -207,7 +207,7 @@ def _RunStepsInternal(api):
       '--gerrit_branch', api.tryserver.gerrit_change_target_ref,
       '--gerrit_fetch',
   ]
-  if api.cq.state == api.cq.DRY:
+  if api.cq.active and api.cq.run_mode == api.cq.DRY_RUN:
     presubmit_args.append('--dry_run')
 
   presubmit_args.extend([
@@ -402,7 +402,7 @@ def GenTests(api):
 
   yield api.test(
       'chromium_dry_run',
-      api.cq(dry_run=True),
+      api.cq(run_mode=api.cq.DRY_RUN),
       api.properties.tryserver(
           buildername='chromium_presubmit',
           repo_name='chromium',

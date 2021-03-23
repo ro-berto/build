@@ -1899,7 +1899,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.report_builders(bot.settings)
 
     use_rts = (
-        self.m.cq.state == self.m.cq.DRY
+        self.m.cq.active
+        and self.m.cq.run_mode == self.m.cq.DRY_RUN
         and self.get_first_tag('cq_cl_owner') in RTS_BETA_USERS
           or bot.config.use_regression_test_selection) \
         and self.m.tryserver.get_footer('Rts') != 'disable'
