@@ -38,7 +38,8 @@
     "cmd": [],
     "name": "use rts: False",
     "~followup_annotations": [
-      "@@@STEP_LINK@info@https://bit.ly/chromium-rts@@@"
+      "@@@STEP_LINK@info@https://bit.ly/chromium-rts@@@",
+      "@@@SET_BUILD_PROPERTY@rts_was_used@false@@@"
     ]
   },
   {

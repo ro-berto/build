@@ -1905,6 +1905,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         and self.m.tryserver.get_footer('Rts') != 'disable'
     step_result = self.m.step('use rts: %s' % use_rts, [])
     step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
+    step_result.presentation.properties['rts_was_used'] = use_rts
     self.configure_build(bot.settings, use_rts)
 
     self.m.chromium.apply_config('trybot_flavor')
