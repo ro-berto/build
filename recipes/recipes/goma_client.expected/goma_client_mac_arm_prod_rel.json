@@ -3,15 +3,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'client', 'url': 'https://chromium.googlesource.com/infra/goma/client'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'client', 'url': 'https://chromium.googlesource.com/infra/goma/client'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"client\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -76,10 +76,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\client",
+    "cwd": "[START_DIR]/client",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -89,46 +89,95 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:9a1adc55bf4a1173784da3ba2f8cb06421606748",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:9a1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "mac",
+      "-xcode-version",
+      "9f2000",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "install xcode"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "select XCode"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gn.py",
-      "--root=[START_DIR]\\client",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "--root=[START_DIR]/client",
       "gen",
-      "[START_DIR]\\client\\out\\Release",
-      "--args=is_debug=false enable_revision_check=true cpu_arch=\"x64\" use_link_time_optimization=true"
+      "[START_DIR]/client/out/Release",
+      "--args=is_debug=false enable_revision_check=true target_cpu=\"arm64\" use_link_time_optimization=true"
     ],
     "name": "gn"
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]\\client\\out\\Release"
+      "[START_DIR]/client/out/Release"
     ],
     "name": "build"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\client\\build\\run_unittest.py",
-      "--build-dir",
-      "[START_DIR]\\client\\out",
-      "--target",
-      "Release",
-      "--non-stop"
+      "sudo",
+      "xcode-select",
+      "--reset"
     ],
-    "name": "tests"
+    "infra_step": true,
+    "name": "reset XCode"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\client\\build\\archive.py",
+      "[START_DIR]/client/build/archive.py",
       "--platform",
-      "win",
+      "mac-arm64",
       "--build_dir",
-      "[START_DIR]\\client\\out",
+      "[START_DIR]/client/out",
       "--target_dir",
       "Release",
       "--dist_dir",
@@ -138,14 +187,14 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "pkg-build",
       "-in",
-      "[START_DIR]\\client\\out\\Release\\goma-win",
+      "[START_DIR]/client/out/Release/goma-mac-arm64",
       "-name",
-      "infra/goma/client/${platform}",
+      "infra/goma/client/mac-arm64",
       "-out",
-      "[TMP_BASE]\\package.cipd",
+      "[TMP_BASE]/package.cipd",
       "-hash-algo",
       "sha256",
       "-install-mode",
@@ -153,12 +202,12 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "build ${platform}",
+    "name": "build mac-arm64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/mac-arm64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -166,9 +215,9 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "pkg-register",
-      "[TMP_BASE]\\package.cipd",
+      "[TMP_BASE]/package.cipd",
       "-ref",
       "latest",
       "-tag",
@@ -176,16 +225,16 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "register infra/goma/client/${platform}",
+    "name": "register infra/goma/client/mac-arm64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/mac-arm64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@infra/goma/client/resolved-platform@https://chrome-infra-packages.appspot.com/p/infra/goma/client/resolved-platform/+/40-chars-fake-of-the-package-instance_id@@@"
+      "@@@STEP_LINK@infra/goma/client/mac-arm64@https://chrome-infra-packages.appspot.com/p/infra/goma/client/mac-arm64/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {

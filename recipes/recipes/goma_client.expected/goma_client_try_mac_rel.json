@@ -193,7 +193,7 @@
       "--root=[START_DIR]/client",
       "gen",
       "[START_DIR]/client/out/Release",
-      "--args=is_debug=false cpu_arch=\"x64\" enable_revision_check=true dcheck_always_on=true use_link_time_optimization=false"
+      "--args=is_debug=false enable_revision_check=true cpu_arch=\"x64\" dcheck_always_on=true use_link_time_optimization=false"
     ],
     "name": "gn"
   },

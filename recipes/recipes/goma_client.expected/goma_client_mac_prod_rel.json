@@ -148,7 +148,7 @@
       "--root=[START_DIR]/client",
       "gen",
       "[START_DIR]/client/out/Release",
-      "--args=is_debug=false cpu_arch=\"x64\" enable_revision_check=true use_link_time_optimization=true"
+      "--args=is_debug=false enable_revision_check=true cpu_arch=\"x64\" use_link_time_optimization=true"
     ],
     "name": "gn"
   },
