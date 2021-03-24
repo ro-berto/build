@@ -1,4 +1,4 @@
-# Copyright 2020 The Chromium Authors. All rights reserved.
+# Copyright 2020 The Chromium Authors. All Rights Reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -31,5 +31,3 @@ TEST_TIME = 1454371200
 TEST_BUILDER = 'android_binary_size'
 TEST_BUILDNUMBER = 200
 TEST_TIME_FMT = '2016/02/02'
-TEST_RECENT_UPLOAD_CP = 862979
-TEST_PATCH_PARENT_CP = 862960
