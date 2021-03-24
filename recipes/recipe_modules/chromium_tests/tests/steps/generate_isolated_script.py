@@ -491,3 +491,41 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'ci_test_on_ci_builder',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'name': 'script_test',
+              'ci_only': True,
+          },
+          swarm_hashes={
+              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'script_test'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_test_on_try_builder',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'name': 'script_test',
+              'ci_only': True,
+          },
+          swarm_hashes={
+              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DoesNotRun, 'script_test'),
+      api.post_process(post_process.DropExpectation),
+  )

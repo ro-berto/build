@@ -19,6 +19,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
@@ -65,4 +67,38 @@ def GenTests(api):
               'name': 'base_unittests',
               'script': 'gtest_test.py',
           },),
+  )
+
+  yield api.test(
+      'ci_only_on_ci_builder',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'name': 'base_unittests',
+              'ci_only': True,
+              'script': 'gtest_test.py',
+          },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'base_unittests'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_on_try_builder',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(
+          single_spec={
+              'name': 'base_unittests',
+              'ci_only': True,
+              'script': 'gtest_test.py',
+          },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DoesNotRun, 'base_unittests'),
+      api.post_process(post_process.DropExpectation),
   )

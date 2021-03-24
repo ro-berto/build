@@ -512,3 +512,33 @@ def GenTests(api):
       api.post_process(NotIdempotent, '[trigger] base_unittests'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'ci_only_test_on_tryserver',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'ci_only': True,
+          'test': 'gtest_test',
+      },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DoesNotRun, 'gtest_test'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_test_on_ci_builder',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'ci_only': True,
+          'test': 'gtest_test',
+      },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'gtest_test'),
+      api.post_process(post_process.DropExpectation),
+  )

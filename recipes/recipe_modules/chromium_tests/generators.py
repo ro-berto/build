@@ -362,6 +362,9 @@ def generate_gtests(api,
     ]
 
   for spec in get_tests(api):
+    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+      continue
+
     if spec.get('use_isolated_scripts_api'):
       generator = generate_isolated_script_tests_from_one_spec
     else:
@@ -441,13 +444,17 @@ def generate_junit_tests(api,
                          bot_update_step,
                          swarming_dimensions=None,
                          scripts_compile_targets_fn=None):
-  del chromium_tests_api, bot_update_step
+  del bot_update_step
   del swarming_dimensions, scripts_compile_targets_fn
 
   for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
+    if test.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+      continue
+
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
     resultdb = None
+
     if _result_sink_experiment_enabled(api, 'junit_tests'):
       # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
       # gets turned down.
@@ -473,9 +480,12 @@ def generate_script_tests(api,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
   # Unused arguments
-  del api, chromium_tests_api, bot_update_step, swarming_dimensions
+  del api, bot_update_step, swarming_dimensions
 
   for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
+    if (script_spec.get('ci_only') and
+        chromium_tests_api.m.tryserver.is_tryserver):
+      continue
     yield steps.ScriptTestSpec.create(
         str(script_spec['name']),
         script=script_spec['script'],
@@ -498,6 +508,9 @@ def generate_isolated_script_tests(api,
   del scripts_compile_targets_fn
 
   for spec in source_side_spec.get(buildername, {}).get('isolated_scripts', []):
+    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+      continue
+
     for test in generate_isolated_script_tests_from_one_spec(
         api, chromium_tests_api, builder_group, buildername, spec,
         bot_update_step, swarming_dimensions):
@@ -597,10 +610,12 @@ def generate_skylab_tests(api,
                           bot_update_step,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
-  del api, chromium_tests_api, scripts_compile_targets_fn, swarming_dimensions
+  del api, scripts_compile_targets_fn, swarming_dimensions
   del bot_update_step
 
   for spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
+    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+      continue
     yield generate_skylab_tests_from_one_spec(builder_group, buildername, spec)
 
 

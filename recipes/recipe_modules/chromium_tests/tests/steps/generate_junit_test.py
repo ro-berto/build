@@ -150,3 +150,35 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'ci_only_test_on_tryserver',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'ci_only': True,
+          'test': 'junit_test',
+      },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DoesNotRun, 'junit_test'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_test_on_ci_builder',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(single_spec={
+          'ci_only': True,
+          'test': 'junit_test',
+      },),
+      api.override_step_data('junit_test',
+                             api.test_utils.canned_gtest_output(True)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'junit_test'),
+      api.post_process(post_process.DropExpectation),
+  )

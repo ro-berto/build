@@ -149,3 +149,85 @@ def GenTests(api):
           post_process.StepTextContains, 'basic_EVE_TOT',
           ['Test was not scheduled because tast_expr was not set.']),
   )
+
+  yield api.test(
+      'ci_only_test_on_ci_builder',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'test_group': {
+                  'test_buildername':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          skylab_gs_bucket='chrome-test-builds',
+                          skylab_gs_extra='lacros',
+                      ),
+              }
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'test_group', {
+              'test_buildername': {
+                  'additional_compile_targets': ['chrome'],
+                  'skylab_tests': [{
+                      'ci_only': True,
+                      'cros_board': 'eve',
+                      'cros_img': 'eve-release/R89-13631.0.0',
+                      'name': 'basic_EVE_TOT',
+                      'tast_expr': '("group": "mainline" && "dep": "lacros")',
+                      'swarming': {},
+                      'test': 'basic',
+                      'timeout_sec': 7200
+                  }],
+              }
+          }),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      api.post_process(post_process.StepTextContains,
+                       'basic_EVE_TOT.attempt: #1',
+                       ['1 passed, 0 failed (1 total)']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_test_on_trybot',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'test_group': {
+                  'test_buildername':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          skylab_gs_bucket='chrome-test-builds',
+                          skylab_gs_extra='lacros',
+                      ),
+              }
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'test_group', {
+              'test_buildername': {
+                  'additional_compile_targets': ['chrome'],
+                  'skylab_tests': [{
+                      'ci_only': True,
+                      'cros_board': 'eve',
+                      'cros_img': 'eve-release/R89-13631.0.0',
+                      'name': 'basic_EVE_TOT',
+                      'tast_expr': '("group": "mainline" && "dep": "lacros")',
+                      'swarming': {},
+                      'test': 'basic',
+                      'timeout_sec': 7200
+                  }],
+              }
+          }),
+      api.post_process(
+          post_process.DoesNotRun,
+          'basic_EVE_TOT.attempt: #1',
+      ),
+      api.post_process(post_process.DropExpectation),
+  )
