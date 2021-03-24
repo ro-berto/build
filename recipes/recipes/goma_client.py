@@ -12,12 +12,18 @@ DEPS = [
     'recipe_engine/cipd',
     'recipe_engine/path',
     'recipe_engine/platform',
+    'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
 ]
 
+from recipe_engine.recipe_api import Property
 
-def RunSteps(api):
+PROPERTIES = {
+  'target_cpu': Property(default=None, kind=str),
+}
+
+def RunSteps(api, target_cpu):
   # 1. Checkout the source
   src_cfg = api.gclient.make_config()
   src_cfg.got_revision_mapping['client'] = 'got_revision'
@@ -37,7 +43,7 @@ def RunSteps(api):
     # 2-1. gn
     gn_args = ['is_debug=false', 'enable_revision_check=true']
     assert api.platform.bits == 64
-    if api.platform.arch == 'arm':
+    if target_cpu == 'arm64':
       gn_args += ['target_cpu="arm64"']
     else:
       gn_args += ['cpu_arch="x64"']
@@ -62,7 +68,7 @@ def RunSteps(api):
     # 3. Run test
     # Not on arm because we're cross-building and the intel builder can't run
     # arm test binaries.
-    if api.platform.arch != 'arm':
+    if target_cpu != 'arm64':
       api.python(
           name='tests',
           script=api.path['checkout'].join('build', 'run_unittest.py'),
@@ -71,7 +77,7 @@ def RunSteps(api):
 
   # 4. Create archive.
   platform = api.platform.name
-  if api.platform.arch == 'arm':
+  if target_cpu == 'arm64':
     platform += '-arm64'
   api.python(
       name='archive',
@@ -85,7 +91,7 @@ def RunSteps(api):
   # archive.py creates goma-<platform>/ in out/Release.
   root = build_out_dir.join(build_target, 'goma-%s' % platform)
   pkg_file = api.path['tmp_base'].join('package.cipd')
-  tag = '${platform}' if api.platform.arch == 'intel' else platform
+  tag = '${platform}' if target_cpu != 'arm64' else platform
   pkg_name = 'infra/goma/client/' + tag
   api.cipd.build(root, pkg_file, pkg_name, install_mode='copy')
 
@@ -98,16 +104,17 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ['linux', 'mac', 'win']:
-    archs = ['intel']
+    target_cpus = [None]
     if platform == 'mac':
-      archs += ['arm']
-    for arch in archs:
+      target_cpus += ['arm64']
+    for target_cpu in target_cpus:
       bot_name = platform
-      if arch != 'intel':
-        bot_name += '_' + arch
+      if target_cpu:
+        bot_name += '_' + target_cpu
       yield api.test(
           'goma_client_try_%s_rel' % bot_name,
-          api.platform(platform, 64, arch),
+          api.platform(platform, 64),
+          api.properties(target_cpu=target_cpu),
           api.buildbucket.try_build(
               builder='%s_rel' % platform,
               git_repo='chromium.googlesource.com/infra/goma/client',
@@ -117,7 +124,8 @@ def GenTests(api):
       for bucket in ['prod', 'luci.goma-client.ci']:
         yield api.test(
             'goma_client_%s_%s_rel' % (bot_name, bucket),
-            api.platform(platform, 64, arch),
+            api.properties(target_cpu=target_cpu),
+            api.platform(platform, 64),
             api.buildbucket.ci_build(
                 bucket=bucket,
                 git_repo='chromium.googlesource.com/infra/goma/client',
