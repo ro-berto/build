@@ -42,13 +42,6 @@ def RunSteps(api):
         custom_vars=api.properties.get('custom_vars'))
     return
 
-  if 'cipd_archive' in api.properties:
-    api.archive.generic_archive(
-        build_dir=api.m.path.mkdtemp(),
-        update_properties=api.properties.get('update_properties'),
-        custom_vars=api.properties.get('custom_vars'))
-    return
-
   if 'no_llvm' not in api.properties:
     llvm_bin_dir = api.path['checkout'].join('third_party', 'llvm-build',
                                              'Release+Asserts', 'bin')
@@ -192,37 +185,6 @@ def GenTests(api):
       ),
       api.override_step_data('filter build_dir',
                              api.json.output(['chrome', 'resources'])),
-  )
-
-  input_properties = properties.InputProperties()
-  cipd_archive_data = properties.CIPDArchiveData()
-  cipd_archive_data.yaml_file = '/temp_base/foo'
-  cipd_archive_data.tags['version'] = 'version/{%chrome_version%}'
-  cipd_archive_data.pkg_vars['version'] = '{%chrome_version%}'
-  cipd_archive_data.compression.compression_level = 8
-  input_properties.cipd_archive_datas.extend([cipd_archive_data])
-
-  yield api.test(
-      'generic_archive_with_cipd_archive_data',
-      api.properties(
-          cipd_archive=True,
-          update_properties={
-              'got_revision': TEST_HASH_MAIN,
-          },
-          custom_vars={
-              'chrome_version': '1.2.3.4',
-          },
-          **{'$build/archive': input_properties}),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(
-          post_process.StepCommandContains,
-          "Generic Archiving Steps.create foo", [
-              'cipd', 'create', '-pkg-def', '/temp_base/foo', '-hash-algo',
-              'sha256', '-tag', 'version:version/1.2.3.4', '-pkg-var',
-              'version:1.2.3.4', '-compression-level', '8', '-json-output',
-              '/path/to/tmp/json'
-          ]),
-      api.post_process(post_process.DropExpectation),
   )
 
   for archive_type, archive_filename, include_dirs in (

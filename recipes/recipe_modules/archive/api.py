@@ -553,6 +553,21 @@ class ArchiveApi(recipe_api.RecipeApi):
       _, position = self.m.commit_position.parse(commit_position)
       input_str = input_str.replace(position_placeholder, str(position))
 
+    arch_placeholder = '{%arch%}'
+    if arch_placeholder in input_str:
+      if (self.m.chromium.c.TARGET_ARCH == 'arm' and
+          self.m.chromium.c.TARGET_BITS in (64, 32)):
+        arch = 'arm' + str(self.m.chromium.c.TARGET_BITS)
+      elif (self.m.chromium.c.TARGET_ARCH == 'intel' and
+            self.m.chromium.c.TARGET_BITS == 64):
+        arch = 'amd64'
+      else:  # pragma: no cover
+        api.python.failing_step(
+            'Unresolved placeholder',
+            'Unsupported value for arch placeholder: %s-%d' %
+            (self.m.chromium.c.TARGET_ARCH, self.m.chromium.c.TARGET_BITS))
+      input_str = input_str.replace(arch_placeholder, arch)
+
     commit_placeholder = '{%commit%}'
     if commit_placeholder in input_str:
       commit = self._get_git_commit(update_properties, None)
@@ -628,7 +643,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         self.gcs_archive(build_dir, update_properties, archive_data,
                          custom_vars)
       for cipd_archive_data in config.cipd_archive_datas:
-        self.cipd_archive(update_properties, custom_vars, cipd_archive_data)
+        self.cipd_archive(build_dir, update_properties, custom_vars,
+                          cipd_archive_data)
 
   def gcs_archive(self,
                   build_dir,
@@ -836,10 +852,13 @@ class ArchiveApi(recipe_api.RecipeApi):
           dest=archive_data.latest_upload.gcs_path,
           name="upload {}".format(archive_data.latest_upload.gcs_path))
 
-  def cipd_archive(self, update_properties, custom_vars, cipd_archive_data):
-    """Archives one package to CIPD.
+  def cipd_archive(self, build_dir, update_properties, custom_vars,
+                   cipd_archive_data):
+    """Archives packages to CIPD.
 
     Args:
+      build_dir: The absolute path to the build output directory, e.g.
+                 [slave-build]/src/out/Release
       update_properties: The properties from the bot_update step (containing
                          commit information).
       custom_vars: Dict of custom string substitution for value used in
@@ -857,15 +876,15 @@ class ArchiveApi(recipe_api.RecipeApi):
       pkg_vars[key] = self._replace_placeholders(update_properties, custom_vars,
                                                  pkg_vars[key])
 
-    pkg_def = self.m.path['checkout'].join(cipd_archive_data.yaml_file)
-
     compression_level = None
     if cipd_archive_data.HasField('compression'):
       compression_level = cipd_archive_data.compression.compression_level
 
-    self.m.cipd.create_from_yaml(
-        pkg_def=pkg_def,
-        refs=list(cipd_archive_data.refs),
-        tags=tags,
-        pkg_vars=pkg_vars,
-        compression_level=compression_level)
+    for yaml_file in cipd_archive_data.yaml_files:
+      pkg_def = self.m.path.abs_to_path(build_dir).join(yaml_file)
+      self.m.cipd.create_from_yaml(
+          pkg_def=pkg_def,
+          refs=list(cipd_archive_data.refs),
+          tags=tags,
+          pkg_vars=pkg_vars,
+          compression_level=compression_level)

@@ -125,8 +125,8 @@ message Compression {
 
 // Next id: 6
 message CIPDArchiveData {
-  // Relative path to a YAML package definition file.
-  string yaml_file = 1;
+  // Path to YAML package definition files (relative to build directory).
+  repeated string yaml_files = 1;
 
   // A list of ref names to set for the package instance.
   repeated string refs = 2;
