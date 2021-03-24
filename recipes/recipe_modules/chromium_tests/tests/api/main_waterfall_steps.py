@@ -789,3 +789,33 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
       api.post_process(post_process.DropExpectation),
   )
+
+  # TODO(crbug.com/1174938): Remove this special case after
+  # crbug.com/1166761 is fixed.
+  yield api.test(
+      'blink-web-tests-without-layout-results-handler-failure',
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'isolated_scripts': [{
+                  'name': 'blink_web_tests',
+              }],
+          }
+      }),
+      api.override_step_data(
+          'blink_web_tests',
+          api.test_utils.canned_isolated_script_output(
+              passing=False, isolated_script_passing=False)),
+      api.post_check(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )

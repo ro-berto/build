@@ -2028,7 +2028,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
         base + '/layout-test-results.zip')
 
   @property
-  def get_layout_results_url(self):
+  def layout_results_url(self):
     return self._layout_test_results
 
 
