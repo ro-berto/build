@@ -546,8 +546,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "compile"
   },
@@ -586,8 +585,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "compile confirm no-op"
   },

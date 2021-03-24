@@ -474,8 +474,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     self.m.goma.start(goma_env)
 
-    if not self.c.compile_py.goma_use_local:
+    if not self.c.compile_py.goma_use_local and not self.m.platform.is_mac:
       # Do not allow goma to invoke local compiler.
+      # However, it is disabled on mac because GOMA_USE_LOCAL=false makes mac
+      # builders hangs. Please see crbug.com/1056935.
       ninja_env['GOMA_USE_LOCAL'] = 'false'
     if self.c.compile_py.goma_enable_cache_silo:
       ninja_env['RBE_cache_silo'] = self.m.buildbucket.builder_name

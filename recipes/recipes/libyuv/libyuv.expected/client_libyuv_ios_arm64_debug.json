@@ -393,8 +393,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile"
   },
@@ -413,8 +412,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "CHROME_HEADLESS": "1"
     },
     "name": "compile confirm no-op"
   },
