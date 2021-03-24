@@ -1271,15 +1271,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.builder_id, self.trybots)
     self.report_builders(bot.settings, mirrored_builders)
     self.configure_build(bot.settings)
-    # TODO(crbug.com/1019824): We fetch tags here because |no_fetch_tags|
-    # is not specified as True. Since chromium has 10k+ tags this can be slow.
-    # We should pass False here for bots that do not need tags. (Do any bots
-    # need tags?)
     update_step, build_config = self.prepare_checkout(
         bot.settings,
         timeout=3600,
         set_output_commit=bot.settings.set_output_commit,
         root_solution_revision=root_solution_revision,
+        no_fetch_tags=not bot.settings.fetch_tags,
         add_blamelists=True)
     if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(

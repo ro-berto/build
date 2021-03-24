@@ -155,6 +155,12 @@ class BotSpec(object):
   # The name of the config to use for the test_results recipe module
   test_results_config = attrib(str, default=None)
 
+  # Whether or not we should fetch tags for the repo being checked out
+  # TODO(https://crbug.com/1191617) Once bot_update will automatically fetch
+  # single tags when necessary, this can be removed and we can always pass
+  # no_fetch_tags=True
+  fetch_tags = attrib(bool, default=True)
+
   # URL to specify the isolate server to use. This is explicitly set to
   # `None` rather than something like the public server to avoid accidentally
   # uploading private isolates to the public server.
