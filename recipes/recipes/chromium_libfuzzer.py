@@ -28,17 +28,8 @@ class LibfuzzerSpec(chromium.BuilderSpec):
 
   archive_prefix = attrib(str, default='libfuzzer')
   v8_targets_only = attrib(bool, default=False)
-  # Fields without defaults can't be declared when inheriting from a type that
-  # has defaults for any fields
-  # TODO(gbeaty) Once we're on python3, we can switch these to be kwonly and not
-  # specify a default. For now, it's enforced in __attrs_post_init__, which gets
-  # run after the fields are initialized
-  upload_bucket = attrib(str, default=None)
-  upload_directory = attrib(str, default=None)
-
-  def __attrs_post_init__(self):
-    assert self.upload_bucket is not None
-    assert self.upload_directory is not None
+  upload_bucket = attrib(str)
+  upload_directory = attrib(str)
 
 
 BUILDERS = freeze({
