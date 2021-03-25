@@ -1734,7 +1734,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     #   'mirrors': {
     #                'builder_group': 'chromium.mac',
     #                'buildername': 'Mac Builder (dbg)',
-    #                'tester': 'Mac10.13 Tests (dbg)',
+    #                'tester': 'Mac10.15 Tests (dbg)',
     #              },
     #   'execution_mode': None
     # }

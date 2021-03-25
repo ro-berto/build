@@ -214,7 +214,7 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'Mac10.13 Tests (dbg)':
+    'Mac10.15 Tests (dbg)':
         _chromium_mac_spec(
             chromium_config='chromium',
             chromium_apply_config=[
