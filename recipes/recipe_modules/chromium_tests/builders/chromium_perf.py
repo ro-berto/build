@@ -211,6 +211,9 @@ SPEC.update({
 _AddBuildSpec('linux-builder-perf', 'linux', bisect_archive_build=True)
 _AddBuildSpec('linux-builder-perf-rel', 'linux')
 
+_AddBuildSpec(
+    'chromecast-linux-builder-perf', 'linux', bisect_archive_build=True)
+
 # Android: Clank, Webview, WebLayer
 _AddIsolatedTestSpec(
     'Android Nexus5 Perf', 'android', 'android-builder-perf', target_bits=32)
@@ -265,6 +268,9 @@ _AddIsolatedTestSpec(
     target_bits=64,
     target_arch='intel',
     cros_boards='amd64-generic:eve')
+
+_AddIsolatedTestSpec('chromecast-linux-perf', 'linux',
+                     'chromecast-linux-builder-perf')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')

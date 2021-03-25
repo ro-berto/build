@@ -1495,6 +1495,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.perf',
                 buildername='android_arm64-builder-perf',
             ),
+        'Chromecast Linux Builder Perf':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.perf',
+                buildername='chromecast-linux-builder-perf',
+            ),
         'Chromeos Amd64 Generic Lacros Builder Perf':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.perf',
