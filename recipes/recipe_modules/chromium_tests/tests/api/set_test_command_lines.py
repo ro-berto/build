@@ -392,7 +392,8 @@ def GenTests(api):
                   'os:Linux', '-var', 'test_suite:fake_test',
                   '-test-location-base', '//test/location', '-tag',
                   'step_name:%s on (nv) GPU on Linux' % fake_test,
-                  '-coerce-negative-duration', '--'
+                  '-coerce-negative-duration', '-location-tags-file',
+                  '../../testing/location_tags.json', '--'
               ] + fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
@@ -438,6 +439,7 @@ def GenTests(api):
                       '-var', 'builder:fake-tester', '-var', 'os:Ubuntu-16.04',
                       '-var', 'test_suite:fake_test', '-tag',
                       'step_name:%s' % fake_test, '-coerce-negative-duration',
+                      '-location-tags-file', '../../testing/location_tags.json',
                       '--', 'result_adapter', 'gtest', '-result-file',
                       '${ISOLATED_OUTDIR}/output.json', '-artifact-directory',
                       '${ISOLATED_OUTDIR}', '--'
@@ -496,8 +498,9 @@ def GenTests(api):
                   'os:Linux', '-var', 'test_suite:webgl_fake_test',
                   '-test-location-base', '//third_party/webgl/src/sdk/tests/',
                   '-tag', 'step_name:webgl_fake_test on (nv) GPU on Linux',
-                  '-coerce-negative-duration', '--', 'result_adapter', 'json',
-                  '-result-file', '${ISOLATED_OUTDIR}/output.json',
+                  '-coerce-negative-duration', '-location-tags-file',
+                  '../../testing/location_tags.json', '--', 'result_adapter',
+                  'json', '-result-file', '${ISOLATED_OUTDIR}/output.json',
                   '-artifact-directory', '${ISOLATED_OUTDIR}', '-test-location',
                   '--'
               ] + fake_command_lines[webgl_fake_test]))),

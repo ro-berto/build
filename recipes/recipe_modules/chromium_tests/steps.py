@@ -274,6 +274,7 @@ class ResultDB(object):
   test_id_prefix = attrib(str, default='')
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
   artifact_directory = attrib((str, Placeholder), default='${ISOLATED_OUTDIR}')
+  location_tags_file = attrib(str, default=None)
   # result_adapter binary is available in chromium checkout or
   # the swarming bot.
   #
@@ -378,6 +379,7 @@ class ResultDB(object):
         coerce_negative_duration=configs.coerce_negative_duration,
         test_id_prefix=configs.test_id_prefix,
         test_location_base=configs.test_location_base,
+        location_tags_file=configs.location_tags_file,
         require_build_inv=require_build_inv,
     )
 

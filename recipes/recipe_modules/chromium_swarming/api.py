@@ -42,6 +42,9 @@ BUILDER_GROUP_SWARMING_PRIORITIES.update({
     'client.v8.fyi': 35,
 })
 
+# Path to the location based tags file.
+LOCATION_TAGS_FILE = '../../testing/location_tags.json'
+
 
 def safe(f, *args, **kw):
   try:
@@ -884,6 +887,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                   step_name=step_name,
                   base_variant=var,
                   require_build_inv=False,
+                  location_tags_file=LOCATION_TAGS_FILE,
               )))
 
     return req
