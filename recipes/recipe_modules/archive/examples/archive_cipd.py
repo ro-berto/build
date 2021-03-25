@@ -18,9 +18,7 @@ DEPS = [
 
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  try_spec = api.chromium_tests.trybots.get(builder_id)
-  try_spec = try_spec_module.TrySpec.create(mirrors=[builder_id])
-  bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
+  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(bot_config)
   build_dir = api.path.abspath(
       api.path.join(api.path['checkout'], 'out',
@@ -35,6 +33,7 @@ def GenTests(api):
   input_properties = properties.InputProperties()
   cipd_archive_data = properties.CIPDArchiveData()
   cipd_archive_data.yaml_files.extend(['foo'])
+  cipd_archive_data.refs.extend(['{%channel%}'])
   cipd_archive_data.tags['version'] = '{%chrome_version%}'
   cipd_archive_data.pkg_vars['targetarch'] = '{%arch%}'
   cipd_archive_data.compression.compression_level = 8
@@ -51,14 +50,17 @@ def GenTests(api):
               'chrome_version': '1.2.3.4',
           },
           **{'$build/archive': input_properties}),
+      api.chromium.override_version(
+          major=91, step_name='Generic Archiving Steps.get version'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.StepCommandContains,
-                       "Generic Archiving Steps.create foo", [
-                           'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
-                           '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4',
-                           '-pkg-var', 'targetarch:arm64', '-compression-level',
-                           '8', '-json-output', '/path/to/tmp/json'
-                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+              '-hash-algo', 'sha256', '-ref', 'canary', '-tag',
+              'version:1.2.3.4', '-pkg-var', 'targetarch:arm64',
+              '-compression-level', '8', '-json-output', '/path/to/tmp/json'
+          ]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -73,14 +75,17 @@ def GenTests(api):
               'chrome_version': '1.2.3.4',
           },
           **{'$build/archive': input_properties}),
+      api.chromium.override_version(
+          major=90, step_name='Generic Archiving Steps.get version'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.StepCommandContains,
-                       "Generic Archiving Steps.create foo", [
-                           'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
-                           '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4',
-                           '-pkg-var', 'targetarch:amd64', '-compression-level',
-                           '8', '-json-output', '/path/to/tmp/json'
-                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+              '-hash-algo', 'sha256', '-ref', 'beta', '-tag', 'version:1.2.3.4',
+              '-pkg-var', 'targetarch:amd64', '-compression-level', '8',
+              '-json-output', '/path/to/tmp/json'
+          ]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -95,13 +100,16 @@ def GenTests(api):
               'chrome_version': '1.2.3.4',
           },
           **{'$build/archive': input_properties}),
+      api.chromium.override_version(
+          major=89, step_name='Generic Archiving Steps.get version'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.StepCommandContains,
-                       "Generic Archiving Steps.create foo", [
-                           'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
-                           '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4',
-                           '-pkg-var', 'targetarch:arm32', '-compression-level',
-                           '8', '-json-output', '/path/to/tmp/json'
-                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+              '-hash-algo', 'sha256', '-ref', 'stable', '-tag',
+              'version:1.2.3.4', '-pkg-var', 'targetarch:arm32',
+              '-compression-level', '8', '-json-output', '/path/to/tmp/json'
+          ]),
       api.post_process(post_process.DropExpectation),
   )

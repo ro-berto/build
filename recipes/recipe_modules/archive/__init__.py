@@ -10,6 +10,7 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'depot_tools/depot_tools',
+    'depot_tools/gitiles',
     'depot_tools/gsutil',
     'infra/zip',
     'infra/cloudkms',

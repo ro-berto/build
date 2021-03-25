@@ -151,16 +151,21 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         tags=tags,
         **kwargs)
 
-  def override_version(self, major=64, minor=0, build=3282, patch=0):
+  def override_version(self,
+                       major=64,
+                       minor=0,
+                       build=3282,
+                       patch=0,
+                       step_name='get version'):
     assert isinstance(major, int)
     assert isinstance(minor, int)
     assert isinstance(build, int)
     assert isinstance(patch, int)
+    assert isinstance(step_name, str)
     version_file_contents = 'MAJOR=%d\nMINOR=%d\nBUILD=%d\nPATCH=%d\n' % (
         major, minor, build, patch)
-    return self.override_step_data(
-        'get version',
-        self.m.file.read_text(version_file_contents))
+    return self.override_step_data(step_name,
+                                   self.m.file.read_text(version_file_contents))
 
   def gen_tests_for_builders(
       self, builder_dict,

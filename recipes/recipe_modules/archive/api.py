@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
 import json
 import re
 import sys
@@ -541,6 +542,35 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return output_path
 
+  def _get_channel_name(self):
+    base_name = '/'.join(['chrome', 'VERSION'])
+    mock_milestone_str = '\n'.join(
+        ['MAJOR=91', 'MINOR=0', 'BUILD=4458', 'PATCH=0'])
+    contents = self.m.gitiles.download_file(
+        "https://chromium.googlesource.com/chromium/src.git/",
+        base_name,
+        branch='refs/heads/master',
+        step_name='fetch milestone_branch',
+        step_test_data=lambda: self.m.json.test_api.output({
+            'value': base64.b64encode(mock_milestone_str),
+        }),
+    )
+    canary_milestone = int(contents.split('\n')[0].split('=')[1])
+    milestone = int(self.m.chromium.get_version()['MAJOR'])
+
+    # Compare the milestone of latest Chromium with the current build to
+    # determine the channel.
+    if milestone == canary_milestone:
+      return 'canary'
+    elif milestone + 1 == canary_milestone:
+      return 'beta'
+    elif milestone + 2 == canary_milestone:
+      return 'stable'
+    else:  # pragma: no cover
+      self.m.python.failing_step(
+          'Unknown channel',
+          'Can not find channel for milestone: %s' % milestone)
+
   def _replace_placeholders(self, update_properties, custom_vars, input_str):
     position_placeholder = '{%position%}'
     if position_placeholder in input_str:
@@ -553,6 +583,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       _, position = self.m.commit_position.parse(commit_position)
       input_str = input_str.replace(position_placeholder, str(position))
 
+    channel_placeholder = '{%channel%}'
+    if channel_placeholder in input_str:
+      channel = self._get_channel_name()
+      input_str = input_str.replace(channel_placeholder, channel)
+
     arch_placeholder = '{%arch%}'
     if arch_placeholder in input_str:
       if (self.m.chromium.c.TARGET_ARCH == 'arm' and
@@ -562,7 +597,7 @@ class ArchiveApi(recipe_api.RecipeApi):
             self.m.chromium.c.TARGET_BITS == 64):
         arch = 'amd64'
       else:  # pragma: no cover
-        api.python.failing_step(
+        self.m.python.failing_step(
             'Unresolved placeholder',
             'Unsupported value for arch placeholder: %s-%d' %
             (self.m.chromium.c.TARGET_ARCH, self.m.chromium.c.TARGET_BITS))
@@ -866,6 +901,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       cipd_archive_data: An instance of archive/properties.proto:
                          InputProperties.cipd_archive_datas.
     """
+    refs = []
+    for ref in cipd_archive_data.refs:
+      refs.append(
+          self._replace_placeholders(update_properties, custom_vars, ref))
+
     tags = dict(cipd_archive_data.tags)
     for key in tags:
       tags[key] = self._replace_placeholders(update_properties, custom_vars,
@@ -884,7 +924,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       pkg_def = self.m.path.abs_to_path(build_dir).join(yaml_file)
       self.m.cipd.create_from_yaml(
           pkg_def=pkg_def,
-          refs=list(cipd_archive_data.refs),
+          refs=refs,
           tags=tags,
           pkg_vars=pkg_vars,
           compression_level=compression_level)
