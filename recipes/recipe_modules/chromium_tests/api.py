@@ -1719,7 +1719,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             mirrors.add(try_builder_id)
           if try_mirror.tester_id == builder_id:
             mirrors.add(try_builder_id)
-    return ['%s:%s' % (b.group, b.builder) for b in mirrors]
+    return sorted(['%s:%s' % (b.group, b.builder) for b in mirrors])
 
   def lookup_bot_metadata(self,
                           builders=None,
