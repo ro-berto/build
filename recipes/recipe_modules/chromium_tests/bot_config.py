@@ -143,7 +143,7 @@ class BotConfig(object):
       self._report_test_spec_migration_state(chromium_tests_api,
                                              migration_state)
 
-    return BuildConfig(chromium_tests_api, self, source_side_specs, tests)
+    return BuildConfig(self, source_side_specs, tests)
 
   @staticmethod
   def _report_test_spec_migration_state(chromium_tests_api, migration_state):
@@ -178,11 +178,6 @@ class BuildConfig(object):
   referenced by a bot ID (and would thus be mirrored by trybots).
   """
 
-  # TODO(https://crbug.com/1071225) Remove this once we no longer need to track
-  # removal of recipe-side configuration values
-  # The type is looser than would be nice, but trying to make it a tighter match
-  # would cause an import cycle
-  _chromium_tests_api = attrib(recipe_api.RecipeApi)
   bot_config = attrib(BotConfig)
   _source_side_specs = mapping_attrib(str, FrozenDict)
   _tests = mapping_attrib(chromium.BuilderId, tuple)
