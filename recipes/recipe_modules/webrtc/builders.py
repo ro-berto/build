@@ -423,17 +423,6 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
             },
-            'Linux64 Release (GCC)': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'linux'
-                },
-            },
             'Linux Asan': {
                 'recipe_config': 'webrtc_clang',
                 'chromium_apply_config': ['asan', 'lsan'],
@@ -1377,17 +1366,6 @@ BUILDERS = freeze({
                     'os': 'Ubuntu-16.04',
                     'cpu': 'x86-64',
                 }
-            },
-            'linux_compile_gcc_rel': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'linux'
-                },
             },
             'linux_memcheck': {
                 'recipe_config': 'webrtc',
