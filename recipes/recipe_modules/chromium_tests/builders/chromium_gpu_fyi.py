@@ -51,31 +51,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'GPU FYI Win dEQP Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='win',
-            # When trybots are set up which mirror this configuration,
-            # compiling might induce a clobber build if the pinned
-            # buildtools version is different from Chromium's default. This
-            # is a risk we're willing to take because checkouts take a lot
-            # of disk space, and this is expected to be a corner case rather
-            # than the common case.
-        ),
     'Win7 FYI Debug (AMD)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -121,22 +96,6 @@ SPEC = {
             },
             execution_mode=bot_spec.TEST,
             parent_buildername='GPU FYI Win Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
-    'Win7 FYI dEQP Release (AMD)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Win dEQP Builder',
             simulation_platform='win',
             serialize_tests=True,
         ),
@@ -1517,7 +1476,5 @@ SPEC = {
     'ANGLE GPU Linux Release (NVIDIA)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
     'ANGLE GPU Linux Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
-    'Win7 ANGLE Tryserver (AMD)':
         _chromium_gpu_fyi_spec(execution_mode=bot_spec.PROVIDE_TEST_SPEC),
 }
