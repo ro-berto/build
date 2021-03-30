@@ -402,13 +402,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       ('mips', 32): 2,
   }
 
-  def get_android_version_details(self, bot_config, log_details=False):
-    version = bot_config.android_version
-    if not version:
+  def get_android_version_details(self, version_file, log_details=False):
+    if not version_file:
       return None, None
 
     version = self.m.chromium.get_version_from_file(
-        self.m.path['checkout'].join(version))
+        self.m.path['checkout'].join(version_file))
 
     chromium_config = self.m.chromium.c
     arch_id = chromium_config.TARGET_ARCH, chromium_config.TARGET_BITS
@@ -505,7 +504,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         name_suffix = ' (with patch)'
 
       android_version_name, android_version_code = (
-          self.get_android_version_details(bot_config, log_details=True))
+          self.get_android_version_details(
+              bot_config.android_version, log_details=True))
 
       raw_result = self.run_mb_and_compile(
           compile_targets,
@@ -2108,7 +2108,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                       builders=builders)
     parent_chromium_config = self._chromium_config(parent_bot_config)
     android_version_name, android_version_code = (
-        self.get_android_version_details(parent_bot_config))
+        self.get_android_version_details(parent_bot_config.android_version))
     self.m.chromium.mb_lookup(
         parent_builder_id,
         mb_config_path=mb_config_path,
