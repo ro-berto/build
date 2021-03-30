@@ -1,0 +1,146 @@
+[
+  {
+    "cmd": [],
+    "name": "symupload"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[TMP_BASE]",
+      "glob*.txt"
+    ],
+    "infra_step": true,
+    "name": "symupload.expand file globs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@glob@[TMP_BASE]/glob1.txt@@@",
+      "@@@STEP_LOG_LINE@glob@[TMP_BASE]/glob2.txt@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "encrypted_api_key",
+      "[CLEANUP]/symupload-api-key.encrypted"
+    ],
+    "infra_step": true,
+    "name": "symupload.write encrypted api key",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@symupload-api-key.encrypted@encrypted_api_key@@@",
+      "@@@STEP_LOG_END@symupload-api-key.encrypted@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "symupload.Prepare API key",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@api_key sanity check@8@@@",
+      "@@@STEP_LOG_END@api_key sanity check@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cloudkms",
+      "-ensure-file",
+      "infra/tools/luci/cloudkms/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "symupload.Prepare API key.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/cloudkms/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cloudkms/cloudkms",
+      "decrypt",
+      "-input",
+      "[CLEANUP]/symupload-api-key.encrypted",
+      "-output",
+      "[CLEANUP]/symupload-api-key.txt",
+      "some/path"
+    ],
+    "name": "symupload.Prepare API key.decrypt",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/symupload-api-key.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "symupload.Prepare API key.read decrypted api key",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::symupload]/resources/symupload.py",
+      "--artifacts",
+      "glob1.txt,glob2.txt,[TMP_BASE]/some_artifact.txt",
+      "--api-key-file",
+      "[CLEANUP]/symupload-api-key.txt",
+      "--binary-path",
+      "[TMP_BASE]/symupload",
+      "--platform",
+      "mac",
+      "--server-urls",
+      "https://some.url.com",
+      "--artifact_type",
+      "dsym"
+    ],
+    "name": "symupload.symupload_v2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]

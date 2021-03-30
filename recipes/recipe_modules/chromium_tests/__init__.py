@@ -49,6 +49,7 @@ DEPS = [
     'recipe_engine/swarming',
     'recipe_engine/time',
     'skylab',
+    'symupload',
     'test_results',
     'test_utils',
     'traceback',

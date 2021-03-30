@@ -1,0 +1,40 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipe_modules.build.symupload;
+
+// Next id: 8
+message SymuploadData {
+  // The artifact that should be uploaded by symupload. The artifact is relative
+  // to the build directory, which is passed alongside this proto to the
+  // symupload code.
+  // DEPRECATED: Use artifacts instead.
+  string artifact = 1;
+
+  // The artifact that should be uploaded by symupload. The artifact is relative
+  // to the build directory, which is passed alongside this proto to the
+  // symupload code.
+  repeated string artifacts = 4;
+
+  // A list of globs that will be expanded to files that should be archived. All
+  // globs are expanded relative to the build directory, which is passed
+  // alongside this proto to the archiving code.
+  repeated string file_globs = 3;
+
+  // The full url to pass to symupload.
+  string url = 2;
+
+  // Symbol Server API key.
+  string base64_api_key = 5;
+
+  // kms_key_path used to decrypt the api_key.
+  string kms_key_path = 6;
+
+  // The type of artifact being passed to symupload. One of ['macho', 'dsym'].
+  string artifact_type = 7;
+}
+
+// Next id: 2
+message InputProperties { repeated SymuploadData symupload_datas = 1; }
