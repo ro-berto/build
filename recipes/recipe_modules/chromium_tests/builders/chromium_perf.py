@@ -269,9 +269,6 @@ _AddIsolatedTestSpec(
     target_arch='intel',
     cros_boards='amd64-generic:eve')
 
-_AddIsolatedTestSpec('chromecast-linux-perf', 'linux',
-                     'chromecast-linux-builder-perf')
-
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
 
