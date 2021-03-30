@@ -2978,38 +2978,6 @@ class AndroidJunitTest(AndroidTest):
         resultdb=self.spec.resultdb)
 
 
-class IncrementalCoverageTest(Test):
-
-  def __init__(self, **kwargs):
-    super(IncrementalCoverageTest, self).__init__('incremental coverage',
-                                                  **kwargs)
-
-  @property
-  def uses_local_devices(self):
-    return True
-
-  def has_valid_results(self, suffix):
-    return True
-
-  def failures(self, suffix):
-    return []
-
-  def pass_fail_counts(self, suffix):  # pragma: no cover
-    return {}
-
-  def compile_targets(self):
-    """List of compile targets needed by this test."""
-    return []
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    step_result = api.chromium_android.coverage_report(upload=False)
-    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    api.chromium_android.get_changed_lines_for_revision()
-    api.chromium_android.incremental_coverage_report()
-    return step_result
-
-
 @attrs()
 class WebRTCPerfTestSpec(LocalGTestTestSpec):
   """Spec for a WebRTC perf test.
