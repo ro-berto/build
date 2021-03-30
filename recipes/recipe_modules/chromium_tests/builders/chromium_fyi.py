@@ -54,23 +54,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'Mac11.0 Tests':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='Mac Builder Next',
-            simulation_platform='mac',
-        ),
     'mac-arm64-rel-tests':
         bot_spec.BotSpec.create(
             chromium_config='chromium',

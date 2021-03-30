@@ -200,6 +200,24 @@ SPEC = {
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
+    'Mac11 Tests':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            isolate_use_cas=True,
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=bot_spec.TEST,
+            parent_buildername='Mac Builder',
+            simulation_platform='mac',
+        ),
     'Mac Builder (dbg)':
         _chromium_mac_spec(
             chromium_config='chromium',
