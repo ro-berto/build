@@ -149,15 +149,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'Incorrect or missing bot configuration', [traceback.format_exc()],
           as_log='details')
 
-  def _chromium_config(self, bot_config):
-    chromium_config = self.m.chromium.make_config(
-        bot_config.chromium_config, **bot_config.chromium_config_kwargs)
-
-    for c in bot_config.chromium_apply_config:
-      self.m.chromium.apply_config(c, chromium_config)
-
-    return chromium_config
-
   def configure_build(self, bot_config, use_rts=False):
     self.m.chromium.set_config(bot_config.chromium_config,
                                **bot_config.chromium_config_kwargs)
@@ -1280,10 +1271,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         add_blamelists=True)
     if bot.settings.execution_mode == bot_spec_module.TEST:
       self.lookup_builder_gn_args(
-          bot,
-          mb_config_path=mb_config_path,
-          mb_phase=mb_phase,
-          builders=builders)
+          bot, mb_config_path=mb_config_path, mb_phase=mb_phase)
 
     compile_targets = build_config.get_compile_targets(build_config.all_tests())
     compile_result = self.compile_specific_targets(
@@ -2097,18 +2085,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def lookup_builder_gn_args(self,
                              bot_meta_data,
                              mb_config_path=None,
-                             mb_phase=None,
-                             builders=None):
+                             mb_phase=None):
     # Lookup GN args for the associated builder
     parent_builder_id = chromium.BuilderId.create_for_group(
         bot_meta_data.settings.parent_builder_group or
         bot_meta_data.builder_id.group,
         bot_meta_data.settings.parent_buildername)
-    parent_bot_config = self.create_bot_config_object([parent_builder_id],
-                                                      builders=builders)
-    parent_chromium_config = self._chromium_config(parent_bot_config)
+    parent_builder_spec = bot_meta_data.settings.bot_db[parent_builder_id]
+
+    # Make the chromium config that the parent would use
+    parent_chromium_config = self.m.chromium.make_config(
+        parent_builder_spec.chromium_config,
+        **parent_builder_spec.chromium_config_kwargs)
+    for c in parent_builder_spec.chromium_apply_config:
+      self.m.chromium.apply_config(c, parent_chromium_config)
+
     android_version_name, android_version_code = (
-        self.get_android_version_details(parent_bot_config.android_version))
+        self.get_android_version_details(parent_builder_spec.android_version))
     self.m.chromium.mb_lookup(
         parent_builder_id,
         mb_config_path=mb_config_path,
