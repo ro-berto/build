@@ -308,6 +308,20 @@
     "name": "create-model"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE[build::chromium_rts/create_model].resources/integration_tests.py",
+      "--rts-exec",
+      "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",
+      "--model-dir",
+      "[CLEANUP]/rts-chromium-model",
+      "--chromium-checkout",
+      "[CACHE]/builder/src"
+    ],
+    "name": "integration_tests"
+  },
+  {
     "cmd": [],
     "name": "Create CIPD packages"
   },

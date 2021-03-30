@@ -20,6 +20,7 @@ DEPS = [
     'recipe_engine/futures',
     'recipe_engine/path',
     'recipe_engine/platform',
+    'recipe_engine/python',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/time',
@@ -80,6 +81,8 @@ def RunSteps(api):
         '-log-furthest', '30',
       ],
   )
+
+  run_integration_tests(api, exec_path, model_dir, checkout_dir)
 
   # TODO(crbug.com/1172372): ensure the new model is not significantly worse
   # than the current one.
@@ -285,6 +288,17 @@ def compose_build_summary(api, model_dir):
       if th['changeRecall'] >= 0.9
   ]
   return '<br>'.join(lines)
+
+
+def run_integration_tests(api, exec_path, model_dir, checkout_dir):
+  api.python(
+    'integration_tests',
+    api.resource('integration_tests.py'),
+    [
+        '--rts-exec', exec_path, \
+        '--model-dir', model_dir, \
+        '--chromium-checkout', checkout_dir, \
+    ])
 
 
 def GenTests(api):
