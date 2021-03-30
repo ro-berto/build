@@ -282,8 +282,8 @@ class GenerateJacocoReportTest(unittest.TestCase):
     self.assertEqual(len(device_dict), 2)
     self.assertEqual(len(host_dict), 3)
     self.assertNotIn('not_in_device_xml', device_dict)
-    combine_reports._add_missing_nodes(device_dict, host_dict,
-                                       self.dev_root_node, 'name')
+    combine_reports._add_missing_nodes_to_main(device_dict, host_dict,
+                                               self.dev_root_node, 'name')
     self.assertEqual(len(device_dict), 3)
     self.assertIn('not_in_device_xml', device_dict)
     self.assertEqual(len(self.dev_root_node.getElementsByTagName('package')), 3)
@@ -430,14 +430,14 @@ class GenerateJacocoReportTest(unittest.TestCase):
     host_counter_map = combine_reports._create_counter_map(
         host_package_counters)
     for metric in dev_counter_map:
-      combine_reports._set_higher_counter(dev_counter_map[metric],
-                                          host_counter_map[metric])
+      combine_reports._set_higher_counter_in_main(dev_counter_map[metric],
+                                                  host_counter_map[metric])
     ans_dict = {'instruction': ('2', '13')}
     self.verify_counters(dev_package, 6, ans_dict)
     ans_dict = {'instruction': ('2', '13')}
     self.verify_counters(host_package, 6, ans_dict)
 
-  def testUpdateAllNodesToHigherCoverage(self):
+  def testUpdateAllNodesInMainToHigherCoverage(self):
     dev_package = self.dev_root_node.getElementsByTagName('package')[0]
     host_package = self.host_root_node.getElementsByTagName('package')[0]
     dev_name_to_package_dict = {'package1': dev_package}
@@ -451,7 +451,7 @@ class GenerateJacocoReportTest(unittest.TestCase):
     }
     self.verify_counters(methods[0], 5, ans_dict)
 
-    combine_reports._update_all_nodes_to_higher_coverage(
+    combine_reports._update_all_nodes_in_main_to_higher_coverage(
         dev_name_to_package_dict, host_name_to_package_dict)
     self.assertEqual(len(dev_package.getElementsByTagName('class')), 3)
     self.assertEqual(len(methods), 2)
@@ -484,7 +484,7 @@ class GenerateJacocoReportTest(unittest.TestCase):
       self.assertEqual(covered, '5')
       self.assertEqual(missed, '1337')
 
-  def testUpdatePackageSourceFiles(self):
+  def testUpdatePackageSourceFilesInMain(self):
     dev_package = self.dev_root_node.getElementsByTagName('package')[0]
     host_package = self.host_root_node.getElementsByTagName('package')[0]
     dev_source_node = dev_package.getElementsByTagName('sourcefile')[0]
@@ -494,14 +494,15 @@ class GenerateJacocoReportTest(unittest.TestCase):
     self.assertIn('19', dev_line_dict)
 
     # The nr in host_package are now added to the dev_package.s
-    combine_reports._update_package_source_files(dev_package, host_package)
+    combine_reports._update_package_source_files_in_main(
+        dev_package, host_package)
     dev_line_dict = combine_reports._create_attribute_to_object_dict(
         dev_source_node.getElementsByTagName('line'), 'nr')
     self.assertEqual(len(dev_line_dict), 5)
     for num in [15, 19, 20, 190, 200]:
       self.assertIn(str(num), dev_line_dict)
 
-  def testUpdateSourceFileCounters(self):
+  def testUpdateSourceFileCountersInMain(self):
     dev_package = self.dev_root_node.getElementsByTagName('package')[0]
     host_package = self.host_root_node.getElementsByTagName('package')[0]
     dev_source_node = dev_package.getElementsByTagName('sourcefile')[0]
@@ -516,8 +517,8 @@ class GenerateJacocoReportTest(unittest.TestCase):
     self.assertEqual(dev_counter_dict['LINE'].getAttribute('missed'), '3')
 
     total_dict = {'ci': 101, 'mi': 202, 'cb': 303, 'mb': 404}
-    combine_reports._update_source_file_counters(dev_source_node,
-                                                 host_source_node, total_dict)
+    combine_reports._update_source_file_counters_in_main(
+        dev_source_node, host_source_node, total_dict)
     self.assertEqual(dev_counter_dict['INSTRUCTION'].getAttribute('covered'),
                      '101')
     self.assertEqual(dev_counter_dict['INSTRUCTION'].getAttribute('missed'),
