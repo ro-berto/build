@@ -16,23 +16,40 @@ following differences in behavior.
 * Parentheses must be used in the decorator even if no arguments are
   specified.
 
-It provides the following functions for defining attribute values on a
-class:
-* `attrib` - An attribute with an enforced type.
-* `enum_attrib` - An attribute that takes on a fixed set of values.
-* `sequence_attrib` - An attribute that takes a sequence of values,
-  optionally enforcing the type of elements of the sequence. The value
-  is converted to a tuple.
-* `command_args_attrib` - An attribute that takes a sequence of values,
-  enforcing that all values are of a type that can be passed to the step
-  API. The value is converted to a `tuple`.
-* `mapping_attrib` - An attribute that takes a mapping of keys to
-  values, optionally enforcing the type of keys and/or values. The value
-  is converted to a `FrozenDict`.
-* `callable_attrib` - An attribute that takes a callable object.
+The `attrib` method is provided for defining attributes on a class. It
+accepts an optional default and requires a constraint that can be
+applied to the values of the attribute. The constraint controls the
+acceptable values and converts them to a consistent form.
 
-All of the functions for defining attributes accept a `default` argument
-that has the same behavior:
+Constraints can be one of:
+* A type - values must be instances of the type
+* A tuple of types - values must be an instance of one of the types
+* An AttributeConstraint - the constraint determines the acceptable
+  values and any conversion that is applied before they are stored
+
+The following constraints are provided:
+* `enum` - Attribute values must be one of a fixed set of values.
+* `sequence` - Attribute values must be iterable and will be converted
+  to tuples. By default, no constraint is placed on the members of the
+  sequence. Constraints can be added using the index operator, e.g.
+  `sequence[int]` for a sequence of ints, `sequence[(str, Path)]` for a
+  sequence of strs and Paths or `sequence[enum('x', 'y', 'z')]` for a
+  sequence where each member is one of 'x', 'y' or 'z'.
+* `command_args` - Equivalent to `sequence` with the members
+  constrained to be of types that can be part of the command line for a
+  step.
+* `mapping` - Attribute values must be mappings and will be converted to
+  FrozenDicts. By default, no constraint is placed on the keys or values
+  of the mapping. Constraints can be added using the index operator,
+  e.g. `mapping[int, (str, Path)]` for a mapping from int to strs and
+  Paths or `mapping[str, sequence[int]]` for a mapping from strs to
+  sequences of ints. Ellipsis can be used in place of a constraint to
+  avoid placing a constraint on the keys or values, e.g. `mapping[str,
+  ...]` for a mapping from strs to any values or `mapping[..., int]` for
+  a mapping from any keys to ints.
+* `callable` - Attribute values must be callable objects.
+
+The treatment of the default is as follows:
 * If `default` is not specified, the attribute is required: a value must
   be provided for the attribute when creating an object. In contrast to
   `attr.ib`, a required attribute can appear after an optional attribute
@@ -43,7 +60,7 @@ that has the same behavior:
 * If `default` is `None`, the attribute is optional: a value does not
   need to be provided for the attribute when creating an object. `None`
   is an acceptable value in addition to any other values allowed by the
-  attribute and will be the default value.
+  constraint and will be the default value.
 * If `default` is not `None`, the attribute is optional: a value does
   not need to be provided for the attribute when creating an object.
   Values for the attribute will always conform to the definition; the
@@ -53,6 +70,26 @@ The following additional utilities are provided:
 * `cached_property` - Like property, but will only be executed once.
 * `FieldMapping` - Mixin to provide dict-like access to a class defined
   with `attrs`.
+
+The following deprecated functions define an attribute with a specific
+constraint, they should be replaced with the equivalent expression using
+constraints:
+* `enum_attrib`
+  * enum_attrib(<allowed-values>) -> attrib(enum(<allowed-values>))
+* `sequence_attrib`
+  * sequence_attrib() -> attrib(sequence)
+  * sequence_attrib(<member-type>) -> attrib(sequence[<member-type>])
+* `command_args_attrib`
+  * command_args_attrib() -> attrib(command_args)
+* `mapping_attrib`
+  * mapping_attrib() -> attrib(mapping)
+  * mapping_attrib(<key-type>) -> attrib(mapping[<key-type>])
+  * mapping_attrib(None, <value-type>) -> attrib(mapping[...,
+    <value-type>])
+  * mapping_attrib(<key-type>, <value-type>) ->
+    attrib(mapping[<key-type>, <value-type>])
+* `callable_attrib`
+  * callabe_attrib -> attrib(callable)
 """
 
 import collections
@@ -68,8 +105,6 @@ from recipe_engine.util import Placeholder
 
 _NOTHING = object()
 
-_SPECIAL_DEFAULTS = (None, _NOTHING)
-
 
 def _instance_of(type_, name_qualifier=''):
   """Replacement for validators.instance_of that allows for modifying the name.
@@ -77,62 +112,163 @@ def _instance_of(type_, name_qualifier=''):
   This allows for more helpful error messages when referring to subsidiary
   portions of values (e.g. keys of a dict).
   """
-  if type_ == str:
-    type_ = six.string_types[0]
+
+  def _handle_str_type(t):
+    return six.string_types[0] if t == str else t
+
+  if isinstance(type_, tuple):
+    type_ = tuple(_handle_str_type(t) for t in type_)
+    type_qualifier = 'one of '
+  else:
+    type_ = _handle_str_type(type_)
+    type_qualifier = ''
 
   def inner(obj, attribute, value):
     if not isinstance(value, type_):
-      raise TypeError("'{name}'{name_qualifier} must be {type!r} "
-                      '(got {value!r} that is a {actual!r}).'.format(
-                          name=attribute.name,
-                          name_qualifier=name_qualifier,
-                          type=type_,
-                          actual=type(value),
-                          value=value,
-                      ))
+      raise TypeError(
+          "{name_qualifier}'{name}' must be {type_qualifier}{type!r} "
+          '(got {value!r} that is a {actual!r}).'.format(
+              name=attribute.name,
+              name_qualifier=name_qualifier,
+              type=type_,
+              type_qualifier=type_qualifier,
+              actual=type(value),
+              value=value,
+          ))
 
   return inner
 
 
-def _attrib(default, validator, converter=None):
+def _attrib(default, constraint):
   if default is None:
-    validator = validators.optional(validator)
-    if converter is not None:
-      converter = converters.optional(converter)
+    validator = validators.optional(constraint.validate)
+    converter = converters.optional(constraint.convert)
   elif default is _NOTHING:
-    wrapped_validator = validator or (lambda o, a, v: None)
-
     def validator(obj, attribute, value):
       if value is _NOTHING:
         raise TypeError(
             "No value provided for required attribute '{name}'".format(
                 name=attribute.name))
-      wrapped_validator(obj, attribute, value)
+      constraint.validate(obj, attribute, value)
 
+    converter = constraint.convert
   else:
-    wrapped_converter = converter or (lambda x: x)
+    default = constraint.convert(default)
+    validator = constraint.validate
 
     def converter(x):
-      return wrapped_converter(converters.default_if_none(default)(x))
+      return constraint.convert(converters.default_if_none(default)(x))
 
   return attr.ib(default=default, validator=validator, converter=converter)
 
 
-def attrib(type_, default=_NOTHING):
-  """Declare an immutable scalar attribute.
+class AttributeConstraint(object):
+  """A constraint to be applied to the values of an attrib.
+
+  This allows for defining a common validation and conversion operation
+  to be applied to multiple attributes.
+  """
+
+  def validate(self, obj, attribute, value):
+    """Validate a value for an attrib.
+
+    Args:
+      * obj - The object that the attrib is being set on.
+      * attribute - The attr.ib defining the field.
+      * value - The provided value.
+    """
+    pass
+
+  def convert(self, value):
+    """Convert a provided value to an immutable value to store."""
+    return value
+
+  @staticmethod
+  def from_callables(validator=None, converter=None):
+    """Create a constraint from validator and/or converter callables."""
+    validator = validator or (lambda obj, attribute, value: None)
+    converter = converter or (lambda value: value)
+
+    class _CallableDelegatingAttributeConstraint(AttributeConstraint):
+
+      @staticmethod
+      def validate(obj, attribute, value):
+        validator(obj, attribute, value)
+
+      @staticmethod
+      def convert(value):
+        return converter(value)
+
+    return _CallableDelegatingAttributeConstraint()
+
+
+def _normalize_constraint(constraint,
+                          constraint_id,
+                          name_qualifier='',
+                          allow_ellipsis=False):
+  """Converts an input constraint to an AttributeConstraint.
+
+  Args:
+    * constraint - The provided constraint. One of a type, a tuple of
+      types or an AttributeConstraint. If allow_ellipsis is True,
+      constraint can also be Ellipsis to indicate a no-op constraint.
+    * constraint_id - The name of the parameter the constraint is being
+      normalized for.
+    * name_qualifier - A prefix to apply to the attribute name to
+      provide more precise error messages, e.g. 'keys of ' to identify
+      constraint validation errors on keys of an attribute.
+    * allow_ellipsis - Allows ellipsis to be passed for constraint to
+      produce a no-op constraint.
+  """
+  # Already have a constraint object, return it
+  if isinstance(constraint, AttributeConstraint):
+    return constraint
+
+  # If Ellipsis is allow and constraint is Ellipsis, use a no-op constraint
+  if allow_ellipsis and constraint is Ellipsis:
+    return AttributeConstraint()
+
+  # At this point, constraint should be a type or a tuple of types
+  if isinstance(constraint, tuple):
+    non_type_members = [e for e in constraint if not isinstance(e, type)]
+    if non_type_members:
+      raise TypeError('All members of constraint must be types, got {}'.format(
+          non_type_members))
+  elif not isinstance(constraint, type):
+    allowed = ['a type', 'a tuple of types', 'an AttributeConstraint']
+    if allow_ellipsis:
+      allowed.append('Ellipsis')
+    message = '{} must be one of {} or {}, got {}'.format(
+        constraint_id, ', '.join(allowed[:-1]), allowed[-1], constraint)
+    raise TypeError(message)
+
+  return AttributeConstraint.from_callables(
+      validator=_instance_of(constraint, name_qualifier))
+
+
+def attrib(constraint, default=_NOTHING):
+  """Declare an immutable attribute.
 
   Arguments:
-    * type_ - The type of the attribute. Attempting to assign a value
-      that is not an instance of type_ will fail (except None if default
-      is None).
+    * constraint - A constraint that defines the values that can be
+      provided and/or converts values to the form to store them in. Must
+      be provided in one of the following forms:
+      * An AttributeConstraint
+      * A type
+      * A tuple containing types
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  assert type_ is not None
-  validator = _instance_of(type_)
-  return _attrib(default, validator)
+  return _attrib(default, _normalize_constraint(constraint, 'constraint'))
 
 
+def enum(values):
+  """A constraint allowing only specific values."""
+  return AttributeConstraint.from_callables(
+      validator=validators.in_(tuple(values)))
+
+
+# TODO(gbeaty) Remove this once all uses are switched to attrib(enum())
 def enum_attrib(values, default=_NOTHING):
   """Declare an immutable attribute that can take one of a fixed set of
   values.
@@ -144,15 +280,49 @@ def enum_attrib(values, default=_NOTHING):
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  values = tuple(values)
-  validator = validators.in_(values)
-  return _attrib(default, validator)
+  return attrib(enum(values), default=default)
 
 
-def _null_validator(obj, attribute, value):
-  pass
+@attr.s(frozen=True, slots=True)
+class _Sequence(AttributeConstraint):
+
+  _member_constraint = attr.ib()
+
+  @classmethod
+  def create(cls, member_constraint=Ellipsis):
+    member_constraint = _normalize_constraint(
+        member_constraint,
+        constraint_id='member_constraint',
+        name_qualifier='members of ',
+        allow_ellipsis=True)
+    return cls(member_constraint)
+
+  def validate(self, obj, attribute, value):
+    validator = validators.deep_iterable(
+        iterable_validator=_instance_of(tuple),
+        member_validator=self._member_constraint.validate)
+    validator(obj, attribute, value)
+
+  def convert(self, value):
+    try:
+      itr = iter(value)
+    except TypeError:
+      # Let the validator provide a more helpful exception message
+      return value
+    return tuple(self._member_constraint.convert(x) for x in itr)
 
 
+class _UnparameterizedSequence(_Sequence):
+
+  @staticmethod
+  def __getitem__(member_constraint):
+    return _Sequence.create(member_constraint)
+
+
+sequence = _UnparameterizedSequence.create()
+
+
+# TODO(gbeaty) Remove this once all uses are switched to attrib(sequence)
 def sequence_attrib(member_type=None, default=_NOTHING):
   """Declare an immutable attribute containing a sequence of values.
 
@@ -166,22 +336,16 @@ def sequence_attrib(member_type=None, default=_NOTHING):
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  member_validator = _null_validator
-  if member_type is not None:
-    member_validator = _instance_of(member_type, ' members')
-  validator = validators.deep_iterable(
-      iterable_validator=_instance_of(tuple), member_validator=member_validator)
-
-  def converter(value):
-    try:
-      return tuple(value)
-    except TypeError:
-      # Let the validator provide a more helpful exception message
-      return value
-
-  return _attrib(default, validator, converter)
+  return attrib(_Sequence.create(member_type or Ellipsis), default=default)
 
 
+# The set of allowed types should be kept in sync with the types allowed by
+# _validate_cmd_list in
+# https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/step/api.py
+command_args = sequence[(int, long, basestring, Path, Placeholder)]
+
+
+# TODO(gbeaty) Remove this once all uses are switched to attrib(command_args)
 def command_args_attrib(default=_NOTHING):
   """Declare an immutable attribute containing a sequence of arguments.
 
@@ -194,13 +358,67 @@ def command_args_attrib(default=_NOTHING):
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  # The set of allowed types should be kept in sync with the types allowed by
-  # _validate_cmd_list in
-  # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/step/api.py
-  arg_types = (int, long, basestring, Path, Placeholder)
-  return sequence_attrib(member_type=arg_types, default=default)
+  return attrib(command_args, default=default)
 
 
+@attr.s(frozen=True, slots=True)
+class _Mapping(AttributeConstraint):
+
+  _key_constraint = attr.ib()
+  _value_constraint = attr.ib()
+
+  @classmethod
+  def create(cls, key_constraint=Ellipsis, value_constraint=Ellipsis):
+    key_constraint = _normalize_constraint(
+        key_constraint,
+        constraint_id='key_constraint',
+        name_qualifier='keys of ',
+        allow_ellipsis=True)
+    value_constraint = _normalize_constraint(
+        value_constraint,
+        constraint_id='value_constraint',
+        name_qualifier='values of ',
+        allow_ellipsis=True)
+    return cls(key_constraint, value_constraint)
+
+  def validate(self, obj, attribute, value):
+    validator = validators.deep_mapping(
+        mapping_validator=_instance_of(FrozenDict),
+        key_validator=self._key_constraint.validate,
+        value_validator=self._value_constraint.validate)
+    validator(obj, attribute, value)
+
+  def convert(self, value):
+    try:
+      itr = value.iteritems()
+    except AttributeError:
+      # Let the validator provide a more helpful exception message
+      return value
+    return freeze({
+        self._key_constraint.convert(k): self._value_constraint.convert(v)
+        for k, v in itr
+    })
+
+
+class _UnparameterizedMapping(_Mapping):
+
+  @staticmethod
+  def __getitem__(constraints):
+    # __getitem__ is interesting: for multiple parameters, they actually
+    # get packed up into a tuple
+    assert isinstance(constraints, tuple), \
+        ('constraints must be specified for both keys and values, '
+         'use ... for no constraint')
+    assert len(constraints) == 2, (
+        'expected exactly 2 constraints (keys and values), got {} {}'.format(
+            len(constraints), constraints))
+    return _Mapping.create(*constraints)
+
+
+mapping = _UnparameterizedMapping.create()
+
+
+# TODO(gbeaty) Remove this once all uses are switched to attrib(mapping)
 def mapping_attrib(key_type=None, value_type=None, default=_NOTHING):
   """Declare an immutable attribute containing a mapping of values.
 
@@ -219,21 +437,15 @@ def mapping_attrib(key_type=None, value_type=None, default=_NOTHING):
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  if default not in _SPECIAL_DEFAULTS:
-    default = freeze(dict(default))
-  key_validator = value_validator = _null_validator
-  if key_type is not None:
-    key_validator = _instance_of(key_type, ' keys')
-  if value_type is not None:
-    value_validator = _instance_of(value_type, ' values')
-  validator = validators.deep_mapping(
-      mapping_validator=_instance_of(FrozenDict),
-      key_validator=key_validator,
-      value_validator=value_validator)
-  converter = freeze
-  return _attrib(default, validator, converter)
+  return attrib(
+      mapping[key_type or Ellipsis, value_type or Ellipsis], default=default)
 
 
+callable = (  # pylint: disable=redefined-builtin
+    AttributeConstraint.from_callables(validator=validators.is_callable()))
+
+
+# TODO(gbeaty) Remove this once all uses are switched to attrib(callable)
 def callable_attrib(default=_NOTHING):
   """Declare an immutable attribute containing a callable object.
 
@@ -241,7 +453,7 @@ def callable_attrib(default=_NOTHING):
     * default - The default value of the attribute. See module
       documentation for description of the default behavior.
   """
-  return _attrib(default, validator=validators.is_callable())
+  return attrib(callable, default=default)
 
 
 def cached_property(getter):

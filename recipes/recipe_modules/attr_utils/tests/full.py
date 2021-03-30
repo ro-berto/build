@@ -12,7 +12,8 @@ from recipe_engine.util import Placeholder
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
                                              cached_property, callable_attrib,
                                              command_args_attrib, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+                                             mapping, mapping_attrib,
+                                             sequence_attrib)
 
 DEPS = [
     'recipe_engine/assertions',
@@ -21,11 +22,23 @@ DEPS = [
 
 def RunSteps(api):
   # attrib *********************************************************************
+  with api.assertions.assertRaises(TypeError) as caught:
+    attrib(1)
+  message = ('constraint must be one of a type, a tuple of types '
+             'or an AttributeConstraint, got 1')
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  with api.assertions.assertRaises(TypeError) as caught:
+    attrib((str, 1, 'x'))
+  message = "All members of constraint must be types, got [1, 'x']"
+  api.assertions.assertEqual(str(caught.exception), message)
+
   @attr.s(frozen=True)
   class AttribTest(object):
     required = attrib(str)
     optional = attrib(str, default=None)
     default = attrib(str, default='default')
+    multi_typed = attrib((str, int), default=None)
 
   # test requires arguments for attributes with no defaults
   with api.assertions.assertRaises(TypeError) as caught:
@@ -101,7 +114,7 @@ def RunSteps(api):
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
     SequenceAttribTest(value=[1, 2, 3], typed=[4, 5, 6])
-  message = ("'typed' members must be <type 'basestring'> "
+  message = ("members of 'typed' must be <type 'basestring'> "
              "(got 4 that is a <type 'int'>).")
   api.assertions.assertEqual(str(caught.exception), message)
 
@@ -121,7 +134,7 @@ def RunSteps(api):
 
   api.assertions.assertEqual(
       str(caught.exception),
-      ("'args' members must be (<type 'int'>, <type 'long'>, "
+      ("members of 'args' must be one of (<type 'int'>, <type 'long'>, "
        "<type 'basestring'>, <class 'recipe_engine.config_types.Path'>, "
        "<class 'recipe_engine.util.Placeholder'>) "
        "(got [] that is a <type 'list'>)."))
@@ -151,15 +164,15 @@ def RunSteps(api):
   # test validation of types of mapping keys
   with api.assertions.assertRaises(TypeError) as caught:
     MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={1: 1})
-  message = ("'typed' keys must be <type 'basestring'> "
+  message = ("keys of 'typed' must be <type 'basestring'> "
              "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of types of mapping values
   with api.assertions.assertRaises(TypeError) as caught:
     MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={'a': 'a'})
-  message = (
-      "'typed' values must be <type 'int'> (got 'a' that is a <type 'str'>).")
+  message = ("values of 'typed' must be <type 'int'> "
+             "(got 'a' that is a <type 'str'>).")
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
@@ -177,6 +190,38 @@ def RunSteps(api):
   )
   api.assertions.assertEqual(x.value, FrozenDict({1: 1, 2: 2, 3: 3}))
   api.assertions.assertEqual(x.typed, FrozenDict({'4': 4, '5': 5, '6': 6}))
+
+  # mapping ********************************************************************
+  with api.assertions.assertRaises(TypeError) as caught:
+    mapping[str, 1]  # pylint: disable=pointless-statement
+
+  message = ('value_constraint must be one of a type, a tuple of types, '
+             'an AttributeConstraint or Ellipsis, got 1')
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  @attr.s(frozen=True)
+  class MappingTest(object):
+    typed = attrib(mapping[str, int])
+    key_typed = attrib(mapping[str, ...])
+    value_typed = attrib(mapping[..., int])
+
+  x = MappingTest(
+      typed={
+          '1': 1,
+          '2': 2
+      },
+      key_typed={
+          '3': 3,
+          '4': '4'
+      },
+      value_typed={
+          '5': 5,
+          6: 6
+      },
+  )
+  api.assertions.assertEqual(x.typed, FrozenDict({'1': 1, '2': 2}))
+  api.assertions.assertEqual(x.key_typed, FrozenDict({'3': 3, '4': '4'}))
+  api.assertions.assertEqual(x.value_typed, FrozenDict({'5': 5, 6: 6}))
 
   # callable_attrib ************************************************************
   def test_callback():
