@@ -11,7 +11,7 @@ from . import bot_spec as bot_spec_module
 from recipe_engine.types import FrozenDict
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             mapping_attrib, sequence_attrib)
+                                             mapping)
 from RECIPE_MODULES.build.chromium.types import BuilderId
 
 
@@ -59,8 +59,9 @@ class BotDatabase(collections.Mapping):
   group_specs field, which maps group to GroupSpec.
   """
 
-  _db = mapping_attrib(BuilderId, bot_spec_module.BotSpec)
-  builders_by_group = mapping_attrib(str, FrozenDict)
+  _db = attrib(mapping[BuilderId, bot_spec_module.BotSpec])
+  builders_by_group = attrib(
+      mapping[str, mapping[str, bot_spec_module.BotSpec]])
 
   @classmethod
   def create(cls, bots_dict):
@@ -124,7 +125,7 @@ class BotGraph(collections.Mapping):
   of a set of keys.
   """
 
-  _graph = mapping_attrib(BuilderId, frozenset)
+  _graph = attrib(mapping[BuilderId, frozenset])
 
   @classmethod
   def create(cls, db):

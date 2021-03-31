@@ -9,11 +9,12 @@ from recipe_engine.types import FrozenDict, freeze
 
 from . import bot_db as bot_db_module
 from . import bot_spec as bot_spec_module
+from . import steps
 from . import try_spec as try_spec_module
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             mapping_attrib, sequence_attrib)
+                                             mapping, sequence)
 
 
 class BotConfigException(Exception):
@@ -37,7 +38,7 @@ class BotConfig(object):
   """
 
   bot_db = attrib(bot_db_module.BotDatabase)
-  bot_mirrors = sequence_attrib(try_spec_module.TryMirror)
+  bot_mirrors = attrib(sequence[try_spec_module.TryMirror])
 
   @classmethod
   def create(cls, bot_db, builder_ids_or_bot_mirrors):
@@ -179,8 +180,13 @@ class BuildConfig(object):
   """
 
   bot_config = attrib(BotConfig)
-  _source_side_specs = mapping_attrib(str, FrozenDict)
-  _tests = mapping_attrib(chromium.BuilderId, tuple)
+  # The values should be a mapping from builder name to the test specs
+  # for the builder (mapping[str, mapping[str, ...]]), but if we enforce
+  # that here, then a bad spec for one builder would cause all builders
+  # that read that file to fail, so we don't apply any constraints to
+  # the value here to limit the blast radius of bad changes
+  _source_side_specs = attrib(mapping[str, ...])
+  _tests = attrib(mapping[chromium.BuilderId, sequence[steps.Test]])
 
   # NOTE: All of the tests_in methods are returning mutable objects
   # (and we expect them to be mutated, e.g., to update the swarming

@@ -12,8 +12,7 @@ from recipe_engine.types import FrozenDict, freeze
 from . import steps
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             enum_attrib, mapping_attrib,
-                                             sequence_attrib)
+                                             enum, mapping, sequence)
 from RECIPE_MODULES.build import chromium
 
 COMPILE_AND_TEST = 'compile/test'
@@ -127,8 +126,9 @@ class BotSpec(object):
   # PROVIDE_TEST_SPEC - Cannot actually be executed, can only be specified as a
   #     tester in a trybot's mirror in order to provide an additional test spec
   #     to read
-  execution_mode = enum_attrib([COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC],
-                               default=COMPILE_AND_TEST)
+  execution_mode = attrib(
+      enum([COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC]),
+      default=COMPILE_AND_TEST)
 
   # An optional group of the bot's parent builder - if parent_buildername is
   # provided and parent_builder_group is not, the parent's builder_group is the
@@ -140,18 +140,18 @@ class BotSpec(object):
   # The name of the config to use for the chromium recipe module
   chromium_config = attrib(str, default=None)
   # The names of additional configs to apply for the chromium recipe module
-  chromium_apply_config = sequence_attrib(str, default=())
+  chromium_apply_config = attrib(sequence[str], default=())
   # The keyword arguments used when setting the config for the chromium recipe
   # module
-  chromium_config_kwargs = mapping_attrib(str, default={})
+  chromium_config_kwargs = attrib(mapping[str, ...], default={})
   # The name of the config to use for the gclient recipe module
   gclient_config = attrib(str, default=None)
   # The names of additional configs to apply for the gclient recipe module
-  gclient_apply_config = sequence_attrib(str, default=())
+  gclient_apply_config = attrib(sequence[str], default=())
   # The name of the config to use for the android recipe module
   android_config = attrib(str, default=None)
   # The names of additional configs to apply for the android recipe module
-  android_apply_config = sequence_attrib(str, default=())
+  android_apply_config = attrib(sequence[str], default=())
   # The name of the config to use for the test_results recipe module
   test_results_config = attrib(str, default=None)
 
@@ -176,7 +176,7 @@ class BotSpec(object):
   # Deprecation exception: If you're using the deprecated test_specs field, it
   # is acceptable to continue using this field so that it applies to both tests
   # in the test_specs field and the tests from the source side spec
-  swarming_dimensions = mapping_attrib(str, default={})
+  swarming_dimensions = attrib(mapping[str, ...], default={})
   # URL to override the swarming server to use
   swarming_server = attrib(str, default=None)
 
@@ -198,7 +198,7 @@ class BotSpec(object):
   # Specs for tests to be run for this builder
   # Deprecated: Tests should be specified in the source side spec for the
   # builder
-  test_specs = sequence_attrib(steps.TestSpec, default=())
+  test_specs = attrib(sequence[steps.TestSpec], default=())
   # A bool controlling whether swarming tests should be run serially
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity

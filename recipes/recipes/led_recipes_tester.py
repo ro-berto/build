@@ -14,7 +14,7 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.led.job import job as job_pb2
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             sequence_attrib)
+                                             sequence)
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -54,8 +54,8 @@ DEFAULT_BUILDERS = (
 
 @attrs()
 class PathBasedBuilderSet(object):
-  builders = sequence_attrib(str)
-  files = sequence_attrib(str)
+  builders = attrib(sequence[str])
+  files = attrib(sequence[str])
 
 
 # Builders that will be tested only if specific files are touched
@@ -219,7 +219,7 @@ class FilesToIgnore(object):
   # will be matched against the repo-root-relative paths of the affected files
   # (e.g. recipes/recipe_modules/chromium_tests/trybots.py). The patterns will
   # be implicitly anchored to match the entire relative path.
-  patterns = sequence_attrib(str)
+  patterns = attrib(sequence[str])
 
   # If any files match `ignore_patterns`, a step will be created with the name
   # `step_name` and the step text will combine `step_text` and the list of

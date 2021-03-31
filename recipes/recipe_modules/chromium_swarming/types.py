@@ -4,7 +4,7 @@
 
 from recipe_engine.config_types import Path
 
-from RECIPE_MODULES.build.attr_utils import attrib, attrs, command_args_attrib
+from RECIPE_MODULES.build.attr_utils import attrib, attrs, command_args
 
 
 @attrs()
@@ -36,7 +36,7 @@ class TriggerScript(object):
   """
 
   script = attrib(Path)
-  args = command_args_attrib(default=())
+  args = attrib(command_args, default=())
   # TODO(gbeaty) What does this field mean? Add documentation to class docstring
   requires_simultaneous_shard_dispatch = attrib(bool, default=False)
 
@@ -70,7 +70,7 @@ class MergeScript(object):
   """
 
   script = attrib(Path)
-  args = command_args_attrib(default=())
+  args = attrib(command_args, default=())
 
   @classmethod
   def create(cls, **kwargs):

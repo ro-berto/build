@@ -54,9 +54,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build import skylab
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             callable_attrib,
-                                             command_args_attrib, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+                                             callable_, command_args, enum,
+                                             mapping, sequence)
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -265,11 +264,11 @@ class ResultDB(object):
     * result_adapter_path - path to result_adapter binary.
   """
   enable = attrib(bool, default=False)
-  result_format = enum_attrib(['gtest', 'json', 'single'], default=None)
+  result_format = attrib(enum(['gtest', 'json', 'single']), default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
-  base_tags = sequence_attrib(tuple, default=None)
-  base_variant = mapping_attrib(str, str, default=None)
+  base_tags = attrib(sequence[tuple], default=None)
+  base_variant = attrib(mapping[str, str], default=None)
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
@@ -1350,9 +1349,9 @@ class ScriptTestSpec(TestSpec):
   """
 
   script = attrib(str)
-  all_compile_targets = mapping_attrib(str, tuple)
-  script_args = command_args_attrib(default=())
-  override_compile_targets = sequence_attrib(str, default=())
+  all_compile_targets = attrib(mapping[str, sequence[str]])
+  script_args = attrib(command_args, default=())
+  override_compile_targets = attrib(sequence[str], default=())
 
   @property
   def test_class(self):
@@ -1468,7 +1467,7 @@ class SetUpScript(object):
 
   name = attrib(str)
   script = attrib(Path)
-  args = command_args_attrib(default=())
+  args = attrib(command_args, default=())
 
   @classmethod
   def create(cls, **kwargs):
@@ -1488,7 +1487,7 @@ class TearDownScript(object):
 
   name = attrib(str)
   script = attrib(Path)
-  args = command_args_attrib(default=())
+  args = attrib(command_args, default=())
 
   @classmethod
   def create(cls, **kwargs):
@@ -1519,15 +1518,15 @@ class LocalGTestTestSpec(TestSpec):
     * tear_down - Scripts to run after running the test.
   """
 
-  args = command_args_attrib(default=())
-  override_compile_targets = sequence_attrib(str, default=())
+  args = attrib(command_args, default=())
+  override_compile_targets = attrib(sequence[str], default=())
   revision = attrib(str, default=None)
   webkit_revision = attrib(str, default=None)
   android_shard_timeout = attrib(int, default=None)
   commit_position_property = attrib(str, default='got_revision_cp')
   use_xvfb = attrib(bool, default=True)
-  set_up = sequence_attrib(SetUpScript, default=())
-  tear_down = sequence_attrib(TearDownScript, default=())
+  set_up = attrib(sequence[SetUpScript], default=())
+  tear_down = attrib(sequence[TearDownScript], default=())
 
   @property
   def test_class(self):
@@ -2087,23 +2086,23 @@ class SwarmingTestSpec(TestSpec):
   """
   # pylint: disable=abstract-method
 
-  cipd_packages = sequence_attrib(chromium_swarming.CipdPackage, default=())
+  cipd_packages = attrib(sequence[chromium_swarming.CipdPackage], default=())
   containment_type = attrib(str, default=None)
-  dimensions = mapping_attrib(str, default={})
+  dimensions = attrib(mapping[str, ...], default={})
   expiration = attrib(int, default=None)
-  optional_dimensions = mapping_attrib(int, collections.Mapping, default={})
+  optional_dimensions = attrib(mapping[int, mapping[str, ...]], default={})
   extra_suffix = attrib(str, default=None)
   hard_timeout = attrib(int, default=None)
   io_timeout = attrib(int, default=None)
   trigger_script = attrib(chromium_swarming.TriggerScript, default=None)
-  set_up = sequence_attrib(SetUpScript, default=())
-  tear_down = sequence_attrib(TearDownScript, default=())
+  set_up = attrib(sequence[SetUpScript], default=())
+  tear_down = attrib(sequence[TearDownScript], default=())
   merge = attrib(chromium_swarming.MergeScript, default=None)
-  args = command_args_attrib(default=())
+  args = attrib(command_args, default=())
   isolate_coverage_data = attrib(bool, False)
   isolate_profile_data = attrib(bool, False)
   ignore_task_failure = attrib(bool, False)
-  named_caches = mapping_attrib(str, str, default={})
+  named_caches = attrib(mapping[str, str], default={})
   shards = attrib(int, default=1)
   service_account = attrib(str, default=None)
   idempotent = attrib(bool, default=None)
@@ -2532,7 +2531,7 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
       the `target_name` attribute will be used.
   """
 
-  override_compile_targets = sequence_attrib(str, default=())
+  override_compile_targets = attrib(sequence[str], default=())
 
   @property
   def test_class(self):
@@ -2626,12 +2625,12 @@ class LocalIsolatedScriptTestSpec(TestSpec):
       execution.
   """
 
-  args = command_args_attrib(default=())
-  override_compile_targets = sequence_attrib(str, default=())
-  set_up = sequence_attrib(SetUpScript, default=())
-  tear_down = sequence_attrib(TearDownScript, default=())
-  results_handler_name = enum_attrib(
-      ALLOWED_RESULT_HANDLER_NAMES, default='default')
+  args = attrib(command_args, default=())
+  override_compile_targets = attrib(sequence[str], default=())
+  set_up = attrib(sequence[SetUpScript], default=())
+  tear_down = attrib(sequence[TearDownScript], default=())
+  results_handler_name = attrib(
+      enum(ALLOWED_RESULT_HANDLER_NAMES), default='default')
   isolate_coverage_data = attrib(bool, False)
   isolate_profile_data = attrib(bool, False)
 
@@ -2787,9 +2786,9 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
       * 'fake' - FakeCustomResultsHandler
   """
 
-  override_compile_targets = sequence_attrib(str, default=())
-  results_handler_name = enum_attrib(
-      ALLOWED_RESULT_HANDLER_NAMES, default='default')
+  override_compile_targets = attrib(sequence[str], default=())
+  results_handler_name = attrib(
+      enum(ALLOWED_RESULT_HANDLER_NAMES), default='default')
 
   @property
   def test_class(self):
@@ -2879,7 +2878,7 @@ class AndroidTestSpec(TestSpec):
   """
   # pylint: disable=abstract-method
 
-  compile_targets = sequence_attrib(str)
+  compile_targets = attrib(sequence[str])
 
 
 class AndroidTest(Test):
@@ -2936,7 +2935,7 @@ class AndroidJunitTestSpec(AndroidTestSpec):
     * additional_args - Additional arguments passed to the test.
   """
 
-  additional_args = command_args_attrib(default=())
+  additional_args = attrib(command_args, default=())
 
   @classmethod
   def create(cls, name, **kwargs):
@@ -2991,7 +2990,7 @@ class WebRTCPerfTestSpec(LocalGTestTestSpec):
 
   # Re-declare these fields from LocalGTestTestSpec to make them
   # required
-  args = command_args_attrib()
+  args = attrib(command_args)
   commit_position_property = attrib(str)
 
   perf_id = attrib(str)
@@ -3069,10 +3068,10 @@ class MockTestSpec(TestSpec):
   """
 
   abort_on_failure = attrib(bool, default=False)
-  failures = sequence_attrib(str, default=())
+  failures = attrib(sequence[str], default=())
   has_valid_results = attrib(bool, default=True)
-  per_suffix_failures = mapping_attrib(str, tuple, default={})
-  per_suffix_valid = mapping_attrib(str, bool, default={})
+  per_suffix_failures = attrib(mapping[str, sequence[str]], default={})
+  per_suffix_valid = attrib(mapping[str, bool], default={})
   runs_on_swarming = attrib(bool, default=False)
 
   @property
@@ -3167,11 +3166,11 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
       performance results from perf_result.json
   """
 
-  platform = enum_attrib(['device', 'simulator'], default=None)
-  config = mapping_attrib(str, default={})
-  task = mapping_attrib(str, default={})
+  platform = attrib(enum(['device', 'simulator']), default=None)
+  config = attrib(mapping[str, ...], default={})
+  task = attrib(mapping[str, ...], default={})
   upload_test_results = attrib(bool, default=False)
-  result_callback = callable_attrib(default=None)
+  result_callback = attrib(callable_, default=None)
 
   @classmethod
   def create(  # pylint: disable=arguments-differ

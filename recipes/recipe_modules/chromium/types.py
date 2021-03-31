@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
-                                             mapping_attrib, sequence_attrib)
+                                             mapping, sequence)
 
 
 @attrs()
@@ -50,12 +50,12 @@ class BuilderSpec(FieldMapping):
   # The name of the config to use for the chromium recipe module
   chromium_config = attrib(str, default=None)
   # The names of additional configs to apply for the chromium recipe module
-  chromium_apply_config = sequence_attrib(str, default=())
+  chromium_apply_config = attrib(sequence[str], default=())
   # The keyword arguments used when setting the config for the chromium recipe
   # module
-  chromium_config_kwargs = mapping_attrib(str, default={})
+  chromium_config_kwargs = attrib(mapping[str, ...], default={})
   # The names of additional configs to apply for the gclient recipe module
-  gclient_apply_config = sequence_attrib(str, default=())
+  gclient_apply_config = attrib(sequence[str], default=())
 
   # A bool controlling whether have bot_update perform a clobber of any
   # pre-existing build outputs

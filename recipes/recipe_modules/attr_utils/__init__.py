@@ -47,7 +47,7 @@ The following constraints are provided:
   avoid placing a constraint on the keys or values, e.g. `mapping[str,
   ...]` for a mapping from strs to any values or `mapping[..., int]` for
   a mapping from any keys to ints.
-* `callable` - Attribute values must be callable objects.
+* `callable_` - Attribute values must be callable objects.
 
 The treatment of the default is as follows:
 * If `default` is not specified, the attribute is required: a value must
@@ -70,26 +70,6 @@ The following additional utilities are provided:
 * `cached_property` - Like property, but will only be executed once.
 * `FieldMapping` - Mixin to provide dict-like access to a class defined
   with `attrs`.
-
-The following deprecated functions define an attribute with a specific
-constraint, they should be replaced with the equivalent expression using
-constraints:
-* `enum_attrib`
-  * enum_attrib(<allowed-values>) -> attrib(enum(<allowed-values>))
-* `sequence_attrib`
-  * sequence_attrib() -> attrib(sequence)
-  * sequence_attrib(<member-type>) -> attrib(sequence[<member-type>])
-* `command_args_attrib`
-  * command_args_attrib() -> attrib(command_args)
-* `mapping_attrib`
-  * mapping_attrib() -> attrib(mapping)
-  * mapping_attrib(<key-type>) -> attrib(mapping[<key-type>])
-  * mapping_attrib(None, <value-type>) -> attrib(mapping[...,
-    <value-type>])
-  * mapping_attrib(<key-type>, <value-type>) ->
-    attrib(mapping[<key-type>, <value-type>])
-* `callable_attrib`
-  * callabe_attrib -> attrib(callable)
 """
 
 import collections
@@ -268,21 +248,6 @@ def enum(values):
       validator=validators.in_(tuple(values)))
 
 
-# TODO(gbeaty) Remove this once all uses are switched to attrib(enum())
-def enum_attrib(values, default=_NOTHING):
-  """Declare an immutable attribute that can take one of a fixed set of
-  values.
-
-  Arguments:
-    * values - A container containing the allowed values of the
-      attributes. Attempting to assign a value that is not in values
-      will fail (except None if default is None).
-    * default - The default value of the attribute. See module
-      documentation for description of the default behavior.
-  """
-  return attrib(enum(values), default=default)
-
-
 @attr.s(frozen=True, slots=True)
 class _Sequence(AttributeConstraint):
 
@@ -322,43 +287,10 @@ class _UnparameterizedSequence(_Sequence):
 sequence = _UnparameterizedSequence.create()
 
 
-# TODO(gbeaty) Remove this once all uses are switched to attrib(sequence)
-def sequence_attrib(member_type=None, default=_NOTHING):
-  """Declare an immutable attribute containing a sequence of values.
-
-  The value will be converted to a tuple. Attempting to assign a value
-  that is not iterable will fail (except None if default is None).
-
-  Arguments:
-    * member_type - The type of all contained elements of the attribute.
-      If provided, attempting to assign a value with elements that are
-      not instances of member_type will fail.
-    * default - The default value of the attribute. See module
-      documentation for description of the default behavior.
-  """
-  return attrib(_Sequence.create(member_type or Ellipsis), default=default)
-
-
 # The set of allowed types should be kept in sync with the types allowed by
 # _validate_cmd_list in
 # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/step/api.py
 command_args = sequence[(int, long, basestring, Path, Placeholder)]
-
-
-# TODO(gbeaty) Remove this once all uses are switched to attrib(command_args)
-def command_args_attrib(default=_NOTHING):
-  """Declare an immutable attribute containing a sequence of arguments.
-
-  The value will be converted to a tuple. Attempting to assign a value
-  that is not iterable will fail (except None if default is None). The
-  allowable values for elements of the iterable are the same as for the
-  command line for a call to the step api.
-
-  Arguments:
-    * default - The default value of the attribute. See module
-      documentation for description of the default behavior.
-  """
-  return attrib(command_args, default=default)
 
 
 @attr.s(frozen=True, slots=True)
@@ -418,42 +350,8 @@ class _UnparameterizedMapping(_Mapping):
 mapping = _UnparameterizedMapping.create()
 
 
-# TODO(gbeaty) Remove this once all uses are switched to attrib(mapping)
-def mapping_attrib(key_type=None, value_type=None, default=_NOTHING):
-  """Declare an immutable attribute containing a mapping of values.
-
-  The value will be converted to a FrozenDict (with all contained keys
-  and values being converted to an immutable type via freeze).
-  Attempting to assign a value that cannot be used to initialize a dict
-  will fail.
-
-  Arguments:
-    * key_type - The type of all contained keys of the attribute. If
-      provided, attempting to assign a value with keys that are not
-      instances of key_type will fail.
-    * value_type - The type of all contained values of the attribute. If
-      provided, attempting to assign a value with values that are not
-      instances of value_type will fail.
-    * default - The default value of the attribute. See module
-      documentation for description of the default behavior.
-  """
-  return attrib(
-      mapping[key_type or Ellipsis, value_type or Ellipsis], default=default)
-
-
-callable = (  # pylint: disable=redefined-builtin
-    AttributeConstraint.from_callables(validator=validators.is_callable()))
-
-
-# TODO(gbeaty) Remove this once all uses are switched to attrib(callable)
-def callable_attrib(default=_NOTHING):
-  """Declare an immutable attribute containing a callable object.
-
-  Arguments:
-    * default - The default value of the attribute. See module
-      documentation for description of the default behavior.
-  """
-  return attrib(callable, default=default)
+callable_ = AttributeConstraint.from_callables(
+    validator=validators.is_callable())
 
 
 def cached_property(getter):

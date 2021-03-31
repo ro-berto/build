@@ -10,10 +10,9 @@ from recipe_engine.types import FrozenDict
 from recipe_engine.util import Placeholder
 
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
-                                             cached_property, callable_attrib,
-                                             command_args_attrib, enum_attrib,
-                                             mapping, mapping_attrib,
-                                             sequence_attrib)
+                                             cached_property, callable_,
+                                             command_args, enum, mapping,
+                                             sequence)
 
 DEPS = [
     'recipe_engine/assertions',
@@ -84,53 +83,53 @@ def RunSteps(api):
   x = RequiredTest(required='required')
   api.assertions.assertEqual(x.required, 'required')
 
-  # enum_attrib ****************************************************************
+  # enum ***********************************************************************
   @attr.s(frozen=True)
-  class EnumAttribTest(object):
-    value = enum_attrib([1, 2, 3])
+  class EnumTest(object):
+    value = attrib(enum([1, 2, 3]))
 
   # test validation of attribute value
   with api.assertions.assertRaises(ValueError) as caught:
-    EnumAttribTest(value=4)
+    EnumTest(value=4)
   message = "'value' must be in (1, 2, 3) (got 4)"
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
-  x = EnumAttribTest(value=1)
+  x = EnumTest(value=1)
   api.assertions.assertEqual(x.value, 1)
 
-  # sequence_attrib ************************************************************
+  # sequence *******************************************************************
   @attr.s(frozen=True)
-  class SequenceAttribTest(object):
-    value = sequence_attrib()
-    typed = sequence_attrib(str, default=None)
+  class SequenceTest(object):
+    value = attrib(sequence)
+    typed = attrib(sequence[str], default=None)
 
   # test validation of attribute value
   with api.assertions.assertRaises(TypeError) as caught:
-    SequenceAttribTest(value=1)
+    SequenceTest(value=1)
   message = "'value' must be <type 'tuple'> (got 1 that is a <type 'int'>)."
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
-    SequenceAttribTest(value=[1, 2, 3], typed=[4, 5, 6])
+    SequenceTest(value=[1, 2, 3], typed=[4, 5, 6])
   message = ("members of 'typed' must be <type 'basestring'> "
              "(got 4 that is a <type 'int'>).")
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
-  x = SequenceAttribTest(value=[1, 2, 3], typed=['4', '5', '6'])
+  x = SequenceTest(value=[1, 2, 3], typed=['4', '5', '6'])
   api.assertions.assertEqual(x.value, (1, 2, 3))
   api.assertions.assertEqual(x.typed, ('4', '5', '6'))
 
   # command_args ***************************************************************
   @attr.s(frozen=True)
-  class CommandArgsAttribTest(object):
-    args = command_args_attrib()
+  class CommandArgsTest(object):
+    args = attrib(command_args)
 
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
-    CommandArgsAttribTest([[]])
+    CommandArgsTest([[]])
 
   api.assertions.assertEqual(
       str(caught.exception),
@@ -145,66 +144,45 @@ def RunSteps(api):
       Path(NamedBasePath('fake-base-path')),
       Placeholder('fake-placeholder')
   ]
-  x = CommandArgsAttribTest(args)
+  x = CommandArgsTest(args)
   api.assertions.assertEqual(x.args, tuple(args))
-
-  # mapping_attrib *************************************************************
-  @attr.s(frozen=True)
-  class MappingAttribTest(object):
-    value = mapping_attrib()
-    typed = mapping_attrib(str, int, default=None)
-
-  # test validation of attribute value
-  with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(value=1)
-  message = ("'value' must be <class 'recipe_engine.types.FrozenDict'> "
-             "(got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  # test validation of types of mapping keys
-  with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={1: 1})
-  message = ("keys of 'typed' must be <type 'basestring'> "
-             "(got 1 that is a <type 'int'>).")
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  # test validation of types of mapping values
-  with api.assertions.assertRaises(TypeError) as caught:
-    MappingAttribTest(value={1: 1, 2: 2, 3: 3}, typed={'a': 'a'})
-  message = ("values of 'typed' must be <type 'int'> "
-             "(got 'a' that is a <type 'str'>).")
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  # test successful validation
-  x = MappingAttribTest(
-      value={
-          1: 1,
-          2: 2,
-          3: 3,
-      },
-      typed={
-          '4': 4,
-          '5': 5,
-          '6': 6,
-      },
-  )
-  api.assertions.assertEqual(x.value, FrozenDict({1: 1, 2: 2, 3: 3}))
-  api.assertions.assertEqual(x.typed, FrozenDict({'4': 4, '5': 5, '6': 6}))
 
   # mapping ********************************************************************
   with api.assertions.assertRaises(TypeError) as caught:
     mapping[str, 1]  # pylint: disable=pointless-statement
-
   message = ('value_constraint must be one of a type, a tuple of types, '
              'an AttributeConstraint or Ellipsis, got 1')
   api.assertions.assertEqual(str(caught.exception), message)
 
   @attr.s(frozen=True)
   class MappingTest(object):
-    typed = attrib(mapping[str, int])
-    key_typed = attrib(mapping[str, ...])
-    value_typed = attrib(mapping[..., int])
+    typed = attrib(mapping[str, int], default={})
+    key_typed = attrib(mapping[str, ...], default={})
+    value_typed = attrib(mapping[..., int], default={})
+    untyped = attrib(mapping, default={})
 
+  # test validation of attribute value
+  with api.assertions.assertRaises(TypeError) as caught:
+    MappingTest(typed=1)
+  message = ("'typed' must be <class 'recipe_engine.types.FrozenDict'> "
+             "(got 1 that is a <type 'int'>).")
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  # test validation of types of mapping keys
+  with api.assertions.assertRaises(TypeError) as caught:
+    MappingTest(typed={1: 1})
+  message = ("keys of 'typed' must be <type 'basestring'> "
+             "(got 1 that is a <type 'int'>).")
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  # test validation of types of mapping values
+  with api.assertions.assertRaises(TypeError) as caught:
+    MappingTest(typed={'a': 'a'})
+  message = ("values of 'typed' must be <type 'int'> "
+             "(got 'a' that is a <type 'str'>).")
+  api.assertions.assertEqual(str(caught.exception), message)
+
+  # test successful validation
   x = MappingTest(
       typed={
           '1': 1,
@@ -218,27 +196,31 @@ def RunSteps(api):
           '5': 5,
           6: 6
       },
-  )
+      untyped={
+          '7': 7,
+          8: '8',
+      })
   api.assertions.assertEqual(x.typed, FrozenDict({'1': 1, '2': 2}))
   api.assertions.assertEqual(x.key_typed, FrozenDict({'3': 3, '4': '4'}))
   api.assertions.assertEqual(x.value_typed, FrozenDict({'5': 5, 6: 6}))
+  api.assertions.assertEqual(x.untyped, FrozenDict({'7': 7, 8: '8'}))
 
-  # callable_attrib ************************************************************
+  # callable_ ******************************************************************
   def test_callback():
     print 'foo'  # pragma: no cover
 
   @attr.s(frozen=True)
-  class CallableAttribTest(object):
-    callback = callable_attrib()
+  class CallableTest(object):
+    callback = attrib(callable_)
 
   # test validation of attribute value
   with api.assertions.assertRaises(TypeError) as caught:
-    CallableAttribTest(callback='x')
+    CallableTest(callback='x')
   message = "'callback' must be callable (got 'x' that is a <type 'str'>)."
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
-  x = CallableAttribTest(callback=test_callback)
+  x = CallableTest(callback=test_callback)
   api.assertions.assertEqual(x.callback, test_callback)
 
   # attrs **********************************************************************

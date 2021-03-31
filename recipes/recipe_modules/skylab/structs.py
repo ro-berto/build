@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 """Define the interface to call Skylab module."""
 
-from RECIPE_MODULES.build.attr_utils import (attrs, attrib, enum_attrib,
-                                             sequence_attrib, mapping_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrs, attrib, enum, sequence,
+                                             mapping)
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
@@ -77,8 +77,8 @@ class SkylabTestCase(object):
     * verdict: test case result.
   """
   name = attrib(str, default=None)
-  verdict = enum_attrib(["PASSED", "FAILED", "UNSPECIFIED"],
-                        default="UNSPECIFIED")
+  verdict = attrib(
+      enum(["PASSED", "FAILED", "UNSPECIFIED"]), default="UNSPECIFIED")
 
   @classmethod
   def create(cls, **kwargs):
@@ -101,16 +101,17 @@ class SkylabResponse(object):
     * test_cases: List of test cases contained in this suite.
   """
   url = attrib(str, default=None)
-  status = enum_attrib([
-      common_pb2.STATUS_UNSPECIFIED, common_pb2.INFRA_FAILURE,
-      common_pb2.FAILURE, common_pb2.SUCCESS
-  ],
-                       default=common_pb2.STATUS_UNSPECIFIED)
+  status = attrib(
+      enum([
+          common_pb2.STATUS_UNSPECIFIED, common_pb2.INFRA_FAILURE,
+          common_pb2.FAILURE, common_pb2.SUCCESS
+      ]),
+      default=common_pb2.STATUS_UNSPECIFIED)
   tast_suite = attrib(str, default=None)
-  verdict = enum_attrib(["PASSED", "FAILED", "UNSPECIFIED"],
-                        default="UNSPECIFIED")
+  verdict = attrib(
+      enum(["PASSED", "FAILED", "UNSPECIFIED"]), default="UNSPECIFIED")
   log_url = attrib(str, default=None)
-  test_cases = sequence_attrib(SkylabTestCase, default=())
+  test_cases = attrib(sequence[SkylabTestCase], default=())
 
   @classmethod
   def create(cls, **kwargs):
@@ -127,7 +128,7 @@ class SkylabTaggedResponses(object):
     * status: Representation of the CTP build status.
   """
   build_id = attrib(int, default=0)
-  responses = mapping_attrib(str, tuple)
+  responses = attrib(mapping[str, sequence[SkylabResponse]])
   status = attrib(int, default=0)
 
   @classmethod

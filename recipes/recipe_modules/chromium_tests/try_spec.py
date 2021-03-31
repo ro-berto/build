@@ -6,8 +6,8 @@ import collections
 import sys
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
+                                             sequence)
 
 COMPILE_AND_TEST = 'compile/test'
 COMPILE = 'compile'
@@ -77,15 +77,15 @@ class TrySpec(object):
   """Immutable specification for the operation of a try builder."""
 
   # The specifications of the builders being mirrored by the try builder
-  mirrors = sequence_attrib(TryMirror)
+  mirrors = attrib(sequence[TryMirror])
   # The execution mode of the try builder.
   # * COMPILE_AND_TEST - Targets will be compiled and tests will be run.
   # * COMPILE - Targets will only be compiled, no tests will run
-  execution_mode = enum_attrib([COMPILE_AND_TEST, COMPILE],
-                               default=COMPILE_AND_TEST)
+  execution_mode = attrib(
+      enum([COMPILE_AND_TEST, COMPILE]), default=COMPILE_AND_TEST)
   # Additional names to add when analyzing the change to determine affected
   # targets
-  analyze_names = sequence_attrib(str, default=())
+  analyze_names = attrib(sequence[str], default=())
   # Whether or not failed shards of tests should be retried
   retry_failed_shards = attrib(bool, default=True)
   # See http://bit.ly/chromium-rts
@@ -151,7 +151,7 @@ class TryDatabase(collections.Mapping):
   using mapping access with BuilderId as keys and TrySpec as values.
   """
 
-  _db = mapping_attrib(chromium.BuilderId, TrySpec)
+  _db = attrib(mapping[chromium.BuilderId, TrySpec])
 
   @classmethod
   def create(cls, trybots_dict):
