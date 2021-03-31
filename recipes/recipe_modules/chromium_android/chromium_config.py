@@ -62,16 +62,25 @@ def mipsel_builder_mb(_):
 
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
-  c.gn_args.append('clang_use_default_sample_profile=false')
+  # From //tools/mb/mb_config.pyl's "cronet_common":
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('disable_ftp_support=true')
-  c.gn_args.append('enable_reporting=true')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('include_transport_security_state_preload_list=false')
   c.gn_args.append('use_crash_key_stubs=true')
-  c.gn_args.append('use_hashed_jni_names=true')
-  c.gn_args.append('use_partition_alloc=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
+
+  # From //tools/mb/mb_config.pyl's "cronet_android":
+  c.gn_args.append('use_partition_alloc=false')
+  c.gn_args.append('enable_reporting=true')
+  c.gn_args.append('use_hashed_jni_names=true')
+  c.gn_args.append('default_min_sdk_version=16')
+  c.gn_args.append('clang_use_default_sample_profile=false')
+  c.gn_args.append('media_use_ffmpeg=false')
+  c.gn_args.append('use_thin_lto=false')
+  c.gn_args.append('enable_resource_allowlist_generation=false')
+  c.gn_args.append('enable_jdk_library_desugaring=false')
+
   c.compile_py.default_targets=[
       'cronet_package',
       'cronet_perf_test_apk',
