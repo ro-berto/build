@@ -51,6 +51,13 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
                     },),
+            'mac_upload_clang_arm':
+                chromium.BuilderSpec.create(
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'mac',
+                        'TARGET_BITS': 64,
+                    },),
         },
     },
     'tryserver.chromium.win': {
@@ -79,11 +86,13 @@ def RunSteps(api):
 
   with api.osx_sdk('ios'):
     with api.depot_tools.on_path():
+      args = ['--upload']
+      if api.buildbucket.builder_name == 'mac_upload_clang_arm':
+        args += ['--build-mac-arm']
       api.python(
           'package clang',
-          api.path['checkout'].join(
-              'tools', 'clang', 'scripts', 'package.py'),
-          args=['--upload'])
+          api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
+          args=args)
 
 
 def GenTests(api):
