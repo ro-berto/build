@@ -355,7 +355,6 @@
       "[CACHE]/builder/src/out/chromeos-Debug",
       "-o",
       "[CACHE]/builder/src/out/chromeos-Debug/compile_commands.json",
-      "app_list_unittests",
       "base_unittests",
       "browser_tests",
       "chromeos_unittests",
