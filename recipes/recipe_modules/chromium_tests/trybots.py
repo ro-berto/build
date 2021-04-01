@@ -448,11 +448,33 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android FYI 64 dEQP Vk Release (Pixel 2)',
                 retry_failed_shards=False,
             ),
+        'fuchsia-angle-try':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.angle',
+                buildername='fuchsia-angle-builder',
+                execution_mode=try_spec.COMPILE,
+            ),
         'ios-angle-try-intel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
                 buildername='ios-angle-builder',
                 tester='ios-angle-intel',
+                retry_failed_shards=False,
+            ),
+        'linux-angle-chromium-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='linux-angle-chromium-builder',
+                        tester='linux-angle-chromium-intel',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='linux-angle-chromium-builder',
+                        tester='linux-angle-chromium-nvidia',
+                    ),
+                ],
                 retry_failed_shards=False,
             ),
         'linux-angle-rel':
@@ -471,11 +493,33 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
+        'linux-angle-try':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='linux-angle-builder',
+                        tester='linux-angle-intel',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='linux-angle-builder',
+                        tester='linux-angle-nvidia',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         # TODO(fjhenigman): Add Ozone testers when possible.
         'linux_angle_ozone_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Linux Ozone Builder',
+                execution_mode=try_spec.COMPILE,
+            ),
+        'linux-ozone-angle-try':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.angle',
+                buildername='linux-ozone-angle-builder',
                 execution_mode=try_spec.COMPILE,
             ),
         'linux_angle_deqp_rel_ng':
