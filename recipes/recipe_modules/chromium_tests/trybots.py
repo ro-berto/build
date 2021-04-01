@@ -966,6 +966,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 use_regression_test_selection=True,
                 regression_test_selection_recall=.97,
             ),
+        'linux-rel-reclient':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='Linux Builder (reclient)',
+            ),
         'linux-viz-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
