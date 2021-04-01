@@ -252,8 +252,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
                       test_suites,
                       suffix,
                       sort_by_shard=False):
-    """
-    Runs a set of tests once. Used as a helper function by run_tests.
+    """Runs a set of tests once. Used as a helper function by run_tests.
+
     Args:
       caller_api - caller's recipe API, may be different from self.m. See
         run_test for details.
@@ -263,10 +263,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
       sort_by_shard - if True, trigger tests in descending order by number of
         shards required to run the test. Performance optimization.
     Returns:
-      Triple, each a list.
-        invocations, api.resultdb.Invocation objects, for all tasks started
-        invalid suites, test_suites which were malformed or otherwise aborted
-        failed suites, test_suites which failed in any way. Superset of invalids
+      invocation_dict, dict of {invocation_id: api.resultdb.Invocation}
+          containing results of any test we ran that had unexpected results
+      invalid suites, list of test_suites which were malformed or otherwise
+          aborted
+      failed suites, list of test_suites which failed in any way. Superset of
+          invalids
    """
     local_test_suites = []
     swarming_test_suites = []
@@ -366,7 +368,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     This is a helper function to get test variants to exonerate.
 
-    To be consistent with the current recipe logic at http://shortn/_KibEsLgpJK,
+    To be consistent with the current recipe logic at
+    https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
+
       - test variants with unexpected failures in (without patch) steps will be
       exonerated.
       - test variants with unexpected passes in any step will be exonerated.
@@ -422,9 +426,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     for inv in invocations.values():
       for tr in inv.test_results:
         if suffix == 'without patch':
+          # pylint: disable=line-too-long
           # Unexpected results including unexpected failures in without patch
           # steps will not cause a build failure.
-          # See http://shortn/_KibEsLgpJK
+          # See https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
+          # pylint: enable=line-too-long
           should_exonerate = not tr.expected
         else:
           # Unexpected passes do not cause a build failure.
@@ -460,8 +466,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
     explanation_html = 'Unexpected passes do not cause a build failure'
     if suffix == 'without patch':
       explanation_html = (
-          'Unexpected results in (without patch) steps do not cause a build'
-          ' failure, including unexpected failures (http://shortn/_KibEsLgpJK)')
+          'Unexpected results in (without patch) steps do not cause a build '
+          'failure, including unexpected failures '
+          # pylint: disable=line-too-long
+          '(https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
+          # pylint: enable=line-too-long
+      )
     ret = []
     for test_id, variants in test_variants.iteritems():
       for v in variants:
@@ -626,6 +636,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return acc
 
   def _should_abort_tryjob(self, invocation_dict, failed_suites):
+    """Determines if the current recipe should skip its next retry phases.
+
+    Args:
+      invocations, api.resultdb.Invocation objects containing results of any
+          test we ran that had unexpected results.
+      failed_suites: list of test_suites which failed in any way.
+    Return:
+      True if we shold skip retries; False otherwise.
+    """
     try:
       skip_retry_footer = self.m.tryserver.get_footer(
           self.m.tryserver.constants.SKIP_RETRY_FOOTER)
