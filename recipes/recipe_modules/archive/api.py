@@ -921,7 +921,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       compression_level = cipd_archive_data.compression.compression_level
 
     for yaml_file in cipd_archive_data.yaml_files:
-      pkg_def = self.m.path.abs_to_path(build_dir).join(yaml_file)
+      pkg_def = build_dir.join(yaml_file)
       self.m.cipd.create_from_yaml(
           pkg_def=pkg_def,
           refs=refs,
