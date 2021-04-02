@@ -172,8 +172,6 @@
       "--verbose",
       "--skip_canned",
       "CheckTreeIsOpen",
-      "--skip_canned",
-      "CheckBuildbotPendingBuilds",
       "--upstream",
       "c812fca9479aacda33f5f5a74d588acef2b4fb02",
       "--json_output",
