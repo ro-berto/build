@@ -461,7 +461,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       metadata_path: Absolute location to all.json.gz
       data_type: Type of metadata supplied e.g. javascript_metadata
     """
-    gs_path = self._compose_gs_path_for_coverage_data(data_type)
+    mimic_builder_name = self._compose_current_mimic_builder_name()
+    gs_path = self._compose_gs_path_for_coverage_data(
+        data_type=data_type, mimic_builder_name=mimic_builder_name)
     self.m.gsutil.upload(
         source=metadata_path,
         bucket=self._gs_bucket,
@@ -470,7 +472,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         link_name='Coverage metadata',
         **kwargs)
     self._coverage_metadata_gs_paths.append(gs_path)
-    self._mimic_builder_names.append(self._compose_current_mimic_builder_name())
+    self._mimic_builder_names.append(mimic_builder_name)
 
   def process_java_coverage_data(self, **kwargs):
     """Generates metadata and JaCoCo HTML report to upload to storage bucket.
@@ -552,7 +554,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             source=output_zip,
             bucket=self._gs_bucket,
             dest=self._compose_gs_path_for_coverage_data(
-                'java_html_report/jacoco_html_report.zip'),
+                data_type='java_html_report/jacoco_html_report.zip',
+                mimic_builder_name=self._compose_current_mimic_builder_name()),
             link_name='JaCoCo HTML report',
             name='Upload zipped JaCoCo HTML report',
             **kwargs)
@@ -645,7 +648,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The uploaded profdata file is named "merged.profdata" regardless of test
     # type, since test types are already distinguished in builder part of gs
     # path.
-    gs_path = self._compose_gs_path_for_coverage_data('merged.profdata')
+    gs_path = self._compose_gs_path_for_coverage_data(
+        data_type='merged.profdata',
+        mimic_builder_name=self._compose_current_mimic_builder_name())
     upload_step = self.m.profiles.upload(
         self._gs_bucket, gs_path, merged_profdata, link_name=None)
     upload_step.presentation.links['merged.profdata'] = (
@@ -731,7 +736,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.resource('make_report.py'),
         args=args)
 
-    html_report_gs_path = self._compose_gs_path_for_coverage_data('html_report')
+    html_report_gs_path = self._compose_gs_path_for_coverage_data(
+        data_type='html_report',
+        mimic_builder_name=self._compose_current_mimic_builder_name())
     upload_step = self.m.gsutil.upload(
         self.report_dir,
         self._gs_bucket,
@@ -807,9 +814,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return chromium_swarming.MergeScript(
         script=self.m.profiles.merge_results_script, args=args)
 
-  def _compose_gs_path_for_coverage_data(self, data_type):
+  def _compose_gs_path_for_coverage_data(self, data_type, mimic_builder_name):
     build = self.m.buildbucket.build
-    mimic_builder_name = self._compose_current_mimic_builder_name()
     if build.input.gerrit_changes:
       # Assume that there is only one gerrit patchset which is true for
       # Chromium CQ in practice.
@@ -896,7 +902,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           args=args,
           venv=True)
     finally:
-      gs_path = self._compose_gs_path_for_coverage_data('metadata')
+      gs_path = self._compose_gs_path_for_coverage_data(
+          data_type='metadata',
+          mimic_builder_name=self._compose_current_mimic_builder_name())
       upload_step = self.m.gsutil.upload(
           self.metadata_dir,
           self._gs_bucket,
