@@ -218,8 +218,6 @@ def _RunStepsInternal(api):
       '--verbose',
       '--skip_canned',
       'CheckTreeIsOpen',
-      '--skip_canned',
-      'CheckBuildbotPendingBuilds',
       '--upstream',
       upstream,  # '' if not in bot_update mode.
   ])
