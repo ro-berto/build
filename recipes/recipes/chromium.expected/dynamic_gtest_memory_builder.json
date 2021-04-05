@@ -69,7 +69,8 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/master",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

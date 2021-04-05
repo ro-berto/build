@@ -159,7 +159,7 @@ class BotSpec(object):
   # TODO(https://crbug.com/1191617) Once bot_update will automatically fetch
   # single tags when necessary, this can be removed and we can always pass
   # no_fetch_tags=True
-  fetch_tags = attrib(bool, default=True)
+  fetch_tags = attrib(bool, default=False)
 
   # URL to specify the isolate server to use. This is explicitly set to
   # `None` rather than something like the public server to avoid accidentally

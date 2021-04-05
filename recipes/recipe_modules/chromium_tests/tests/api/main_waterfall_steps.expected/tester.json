@@ -63,7 +63,8 @@
       "--revision",
       "src@2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/master",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
