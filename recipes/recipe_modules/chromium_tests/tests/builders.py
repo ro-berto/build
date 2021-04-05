@@ -93,14 +93,12 @@ def GenTests(api):
     yield api.test(
         ('%s-%s' % (builder_group, buildername)).replace(' ', '_'),
         api.properties(builder_group=builder_group, buildername=buildername),
-        # We want any errors when creating the BotConfig to be surfaced
-        # directly to the test rather than creating a failing step
-        api.chromium_tests.handle_bot_config_errors(False),
         api.chromium_tests.platform([
             try_spec.TryMirror.create(
                 builder_group=builder_group,
                 buildername=buildername,
             )
         ]),
+        api.post_check(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
     )

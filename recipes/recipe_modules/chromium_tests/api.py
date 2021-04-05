@@ -141,13 +141,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     try:
       return bot_config_module.BotConfig.create(builders or self.builders,
                                                 builder_ids_or_bot_mirrors)
-    except bot_config_module.BotConfigException:
-      if (self._test_data.enabled and
-          not self._test_data.get('handle_bot_config_errors', True)):
-        raise  # pragma: no cover
+    except bot_config_module.BotConfigException as e:
       self.m.python.infra_failing_step(
-          'Incorrect or missing bot configuration', [traceback.format_exc()],
-          as_log='details')
+          str(e), [traceback.format_exc()], as_log='details')
 
   def configure_build(self, bot_config, use_rts=False):
     self.m.chromium.set_config(bot_config.chromium_config,

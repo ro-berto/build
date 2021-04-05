@@ -36,18 +36,6 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
 
   @recipe_test_api.mod_test_data
   @staticmethod
-  def handle_bot_config_errors(handle_bot_config_errors):
-    """Returns a TestData that controls handling BotConfig errors.
-
-    If BotConfig errors are handled, then any exceptions raised when creating a
-    BotConfig will result in the creation of a failing step. If BotConfig errors
-    are not handled, the exception will instead be propagated, allowing tests to
-    fail in the event of a bad configuration.
-    """
-    return handle_bot_config_errors
-
-  @recipe_test_api.mod_test_data
-  @staticmethod
   def change_size_limit(size_limit):
     """Returns an integer that limits test failure format size.
 

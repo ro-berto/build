@@ -42,8 +42,6 @@ def GenTests(api):
         # Supress analysis so that all targets show up as affected and we run
         # recipe code for each configured test
         api.filter.suppress_analyze(),
-        # We want any errors when creating the BotConfig to be surfaced
-        # directly to the test rather than creating a failing step
-        api.chromium_tests.handle_bot_config_errors(False),
+        api.post_check(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
     )
