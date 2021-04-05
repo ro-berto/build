@@ -421,6 +421,9 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
     kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
 
+    kwargs['annotate'] = raw_test_spec.get('annotate', 'gtest')
+    kwargs['perf_config'] = raw_test_spec.get('perf_config')
+
     # Enables resultdb if the build is picked for the experiment.
     # TODO(crbug.com/1108016): Enable resultdb globally.
     if _result_sink_experiment_enabled(api, 'gtests_local'):
