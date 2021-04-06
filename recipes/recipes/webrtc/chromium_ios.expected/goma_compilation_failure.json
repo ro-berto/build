@@ -49,11 +49,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['ios']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'False'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['ios']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
-      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
+      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_cr_revision\": \"src\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_libvpx_revision\": \"src/third_party/libvpx/source\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src/third_party/webrtc\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--cleanup-dir",
@@ -63,7 +63,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--revision",
+      "src/third_party/webrtc@HEAD"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -85,7 +87,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -107,6 +110,10 @@
       "@@@STEP_LOG_LINE@json.output@    \"src/third_party/dawn\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/dawn.git\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/libvpx/source\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/third_party/swiftshader\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
@@ -132,20 +139,22 @@
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision_cp\": \"refs/heads/master@{#11245}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#120644}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
@@ -178,6 +187,12 @@
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/dawn.git\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/libvpx/source\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"src/third_party/swiftshader\": {@@@",
@@ -214,20 +229,22 @@
       "@@@SET_BUILD_PROPERTY@got_angle_revision_cp@\"refs/heads/master@{#297276}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_buildtools_revision@\"f0319a328b2809876916353cb994259692140934\"@@@",
       "@@@SET_BUILD_PROPERTY@got_buildtools_revision_cp@\"refs/heads/master@{#182578}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_cr_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_cr_revision_cp@\"refs/heads/master@{#170242}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_dawn_revision@\"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
       "@@@SET_BUILD_PROPERTY@got_dawn_revision_cp@\"refs/heads/master@{#51819}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_libvpx_revision@\"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_libvpx_revision_cp@\"refs/heads/master@{#11245}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
       "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/master@{#274981}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#120644}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swarming_client_revision_cp@\"refs/heads/master@{#276089}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swiftshader_revision@\"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swiftshader_revision_cp@\"refs/heads/master@{#202157}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#43426}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_webrtc_revision_cp@\"refs/heads/master@{#120644}\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#43426}\"@@@"
     ]
   },
   {
@@ -246,20 +263,21 @@
       "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"goma_client_type\": \"candidate\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"6.1.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@candidate goma client is selected@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "ensure_goma"
   },
   {
     "cmd": [
@@ -268,7 +286,7 @@
       "-root",
       "[CACHE]/goma/client",
       "-ensure-file",
-      "infra_internal/goma/client/${platform} candidate",
+      "infra_internal/goma/client/${platform} release",
       "-max-threads",
       "0",
       "-json-output",
@@ -282,7 +300,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-candidate-------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -620,14 +638,18 @@
       "-C",
       "[CACHE]/builder/src/out/Release-iphoneos",
       "-j",
-      "50"
+      "50",
+      "fake test"
     ],
     "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "compile"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -731,9 +753,9 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release-iphoneos",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\", \"fake test\"]",
       "--build-exit-status",
-      "0",
+      "1",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",
@@ -788,185 +810,10 @@
     ]
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
-    ],
-    "infra_step": true,
-    "name": "remove compile guard"
-  },
-  {
-    "cmd": [],
-    "name": "bootstrap swarming"
-  },
-  {
-    "cmd": [],
-    "name": "isolate"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest), \"test_cases\": <(test_cases), \"restart\": <(restart), \"xcode_parallelization\": <(xcode_parallelization), \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--xcode-build-version', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)']}}",
-      "[CACHE]/builder/template.isolate"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "isolate.generate template.isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@template.isolate@{@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  \"variables\": {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"command\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--host-app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(host_app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"3\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(shards)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-build-version\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(xcode_version)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(wpr_tools_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(replay_path)\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ], @@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"files\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(additional_app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/.vpython\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@}@@@",
-      "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
-    "cmd": [],
-    "name": "test_pre_run (with patch)"
-  },
-  {
-    "cmd": [],
-    "name": "[skipped] query test results (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
-      "@@@STEP_LOG_END@stdout@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[depot_tools]/gerrit_client.py",
-      "changes",
-      "--host",
-      "https://chromium-review.googlesource.com",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--limit",
-      "1",
-      "-p",
-      "change=123456",
-      "-o",
-      "ALL_REVISIONS",
-      "-o",
-      "ALL_COMMITS"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('compile') (retcode: 1)"
     },
-    "infra_step": true,
-    "name": "gerrit changes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"123456\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[depot_tools]/git_footers.py",
-      "--json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "name": "parse description",
-    "stdin": "Change commit message",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "proceed with retry",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "ResultDB abort retry migration",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>This is an informational step for infra maintainers@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "ResultDB abort retry migration.proceed with retry",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>fewer than 5 unexpected results, continue with retries@@@"
-    ]
-  },
-  {
     "name": "$result"
   }
 ]

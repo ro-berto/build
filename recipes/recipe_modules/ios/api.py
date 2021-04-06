@@ -402,38 +402,10 @@ class iOSApi(recipe_api.RecipeApi):
       tests = sorted(set(test['app'] for test in self.__config['tests']))
 
       if self.compilation_targets is None:
-        if analyze:
-          with self.m.context(cwd=self.m.path['checkout']):
-            affected_files = (
-                self.m.chromium_checkout.get_files_affected_by_patch())
-
-          test_targets, self.compilation_targets = (
-              self.m.filter.analyze(
-                  affected_files,
-                  tests,
-                  self.__config['additional_compile_targets'],
-                  'trybot_analyze_config.json',
-                  additional_names=['chromium', 'ios'],
-                  builder_id=self.builder_id,
-                  # Don't re-use the build directory: filter.analyze ignores
-                  # goma and it calls 'mb analyze' which results in the args.gn
-                  # file having incorrect values for the goma variables
-                  build_output_dir='//out/%s-analysis' % build_sub_path,
-              ))
-
-          test_targets = set(test_targets)
-
-          for test in self.__config['tests']:
-            if test['app'] not in test_targets:
-              test['skip'] = True
-
-          if not self.compilation_targets:
-            return
-        else:
-          self.compilation_targets = []
-          self.compilation_targets.extend(tests)
-          self.compilation_targets.extend(
-              self.__config['additional_compile_targets'])
+        self.compilation_targets = []
+        self.compilation_targets.extend(tests)
+        self.compilation_targets.extend(
+            self.__config['additional_compile_targets'])
 
         self.compilation_targets.sort()
 
@@ -476,37 +448,6 @@ class iOSApi(recipe_api.RecipeApi):
     ]
     self.m.step('symupload %s' % artifact, cmd)
 
-  def upload_tgz(self, artifact, bucket, path):
-    """Tar gzips and uploads the given artifact to Google Storage.
-
-    Args:
-      artifact: Name of the artifact to upload. Will be found relative to the
-        out directory, so must have already been compiled.
-      bucket: Name of the Google Storage bucket to upload to.
-      path: Path to upload the artifact to relative to the bucket.
-    """
-    tgz = self.m.path.basename(path)
-    archive = self.m.path.mkdtemp('tgz').join(tgz)
-    cwd = self.most_recent_app_path
-    cmd = [
-        'tar',
-        '--create',
-        '--directory', cwd,
-        '--file', archive,
-        '--gzip',
-        '--verbose',
-        artifact,
-    ]
-    with self.m.context(cwd=cwd):
-      self.m.step('tar %s' % tgz, cmd)
-    self.m.gsutil.upload(
-        archive,
-        bucket,
-        path,
-        link_name=tgz,
-        name='upload %s' % tgz,
-    )
-
   def upload(self, base_path=None, revision=None):
     """Uploads built artifacts as instructed by this bot's build config."""
     assert self.__config
@@ -540,14 +481,6 @@ class iOSApi(recipe_api.RecipeApi):
 
       if artifact.get('symupload'):
         self.symupload(name, artifact['symupload'])
-      elif artifact.get('compress'):
-        with self.m.step.nest('upload %s' % name):
-          self.upload_tgz(
-              name,
-              artifact.get('bucket', self.bucket),
-              upload_path or
-              '%s/%s' % (base_path, '%s.tar.gz' % (name.split('.', 1)[0])),
-          )
       else:
         self.m.gsutil.upload(
             self.most_recent_app_path.join(name),
@@ -611,9 +544,6 @@ class iOSApi(recipe_api.RecipeApi):
         'xcode build version': test.get('xcode build version', ''),
     }
     self._ensure_xcode_version(task)
-
-    if task['skip']:
-      return task
 
     app = '%s.app' % test['app']
     host_app_path = 'NO_PATH'
