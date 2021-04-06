@@ -338,131 +338,57 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ]
       return {}, bad_results_dict['invalid'], bad_results_dict['failed']
 
-    invocation_dict = self.m.resultdb.query(
+    unexpected_result_invocations = self.m.resultdb.query(
         inv_ids=self.m.resultdb.invocation_ids(invocation_names),
         variants_with_unexpected_results=True,
         step_name=query_step_name,
     )
 
-    test_variants = self._test_variants_with_unexpected_results(
-        invocation_dict, suffix)
+    # If we encounter any unexpected test results that we believe aren't due to
+    # the CL under test, inform RDB of these tests so it keeps a record.
+    self._exonerate_unexpected_results(unexpected_result_invocations, suffix)
 
+    return (unexpected_result_invocations, bad_results_dict['invalid'],
+            bad_results_dict['failed'])
+
+  def _exonerate_unexpected_results(self, unexpected_result_invocations,
+                                    suffix):
+    """Notifies RDB of any unexpected test result that won't fail the build.
+
+    For more details, see http://go/resultdb-concepts#test-exoneration
+
+    Args:
+      unexpected_result_invocations: dict of
+        {invocation_id: api.resultdb.Invocation} containing results of any
+        test we ran that had unexpected results.
+      suffix: string specifying the stage/type of run, e.g. "without patch" or
+        "retry (with patch)".
+    """
     step_name = 'exonerate unexpected passes'
     if suffix == 'without patch':
       step_name = 'exonerate unexpected without patch results'
     elif suffix:
       step_name = '%s (%s)' % (step_name, suffix)
 
-    exonerations = self._test_exonerations_for_test_variants(
-        test_variants, suffix)
-    self.m.resultdb.exonerate(
-        test_exonerations=exonerations,
-        step_name=step_name,
-    )
-
-    return invocation_dict, bad_results_dict['invalid'], bad_results_dict[
-        'failed']
-
-  def _test_variants_with_unexpected_results(self, invocations, suffix):
-    """Gets test variants with unexpected results.
-
-    This is a helper function to get test variants to exonerate.
-
-    To be consistent with the current recipe logic at
-    https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
-
-      - test variants with unexpected failures in (without patch) steps will be
-      exonerated.
-      - test variants with unexpected passes in any step will be exonerated.
-
-    This is subject to change if other unexpected results besides above
-    mentioned cases should also be exonerated.
-
-    Args:
-      invocations (dict): A dict {invocation_id: api.resultdb.Invocation}.
-        Please refer to go/resultdb-concepts for more details.
-        An example below:
-        {
-          'invocation_id': api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED
-              ),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='ninja://chromium/tests:browser_tests/Test',
-                      variant={'def': {
-                          'key1': 'value1',
-                          'key2': 'value2'
-                      }},
-                      expected=False,
-                      status=test_result_pb2.FAIL,
-                  ),
-              ],
-          ),
-        }
-      suffix (str): suffix to add to the step name.
-
-    Returns:
-      A dict of test variants in the format:
-       {
-         'test_id1': [
-           {
-             'def': {
-               'key1': 'value1',
-               'key2': 'value2',
-             }
-           }
-         ],
-         'test_id2': [
-           {
-             'def': {
-               'key3': 'value3',
-             }
-           }
-         ]
-       }
-    """
-    res = {}
-    for inv in invocations.values():
+    # For each invocation, pull out the test variants for every test result
+    # that we should exonerate. Namely: exonerate every unexpected result
+    # except for unexpected failures during the "with patch" phase.
+    # Keep this logic in-sync with
+    # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
+    # until that can be removed in favor of RDB.
+    unexpected_result_variants = {}
+    for inv in unexpected_result_invocations.values():
       for tr in inv.test_results:
-        if suffix == 'without patch':
-          # pylint: disable=line-too-long
-          # Unexpected results including unexpected failures in without patch
-          # steps will not cause a build failure.
-          # See https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
-          # pylint: enable=line-too-long
-          should_exonerate = not tr.expected
-        else:
-          # Unexpected passes do not cause a build failure.
-          should_exonerate = (not tr.expected and
-                              tr.status == test_result_pb2.PASS)
-        if not should_exonerate:
-          continue
+        if tr.expected:
+          continue  # If the test was retried and passed, skip its PASS result.
+        if suffix != 'without patch' and tr.status != test_result_pb2.PASS:
+          continue  # Skip unexpected failures during the "with patch" phase.
 
-        res.setdefault(tr.test_id, [])
-        found = False
-        for v in res[tr.test_id]:
-          # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
-          if v == tr.variant:
-            found = True
-            break
+        unexpected_result_variants.setdefault(tr.test_id, [])
+        # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
+        if all(v != tr.variant for v in unexpected_result_variants[tr.test_id]):
+          unexpected_result_variants[tr.test_id].append(tr.variant)
 
-        if not found:
-          res[tr.test_id].append(tr.variant)
-
-    return res
-
-  def _test_exonerations_for_test_variants(self, test_variants, suffix):
-    """Gets test exonerations for ResultDB test variants.
-
-    Args:
-      test_variants (dict): A dict of test variants in the format.
-        See returned value of _test_variants_with_unexpected_failures.
-      suffix (str): suffix to add to the step name.
-
-    Returns:
-      A list of test_result_pb2.TestExoneration.
-    """
     explanation_html = 'Unexpected passes do not cause a build failure'
     if suffix == 'without patch':
       explanation_html = (
@@ -472,10 +398,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
           '(https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
           # pylint: enable=line-too-long
       )
-    ret = []
-    for test_id, variants in test_variants.iteritems():
+
+    exonerations = []
+    for test_id, variants in unexpected_result_variants.iteritems():
       for v in variants:
-        ret.append(
+        exonerations.append(
             test_result_pb2.TestExoneration(
                 test_id=test_id,
                 variant=v,
@@ -483,7 +410,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 #  display the exonerated test results.
                 explanation_html=explanation_html,
             ))
-    return ret
+
+    self.m.resultdb.exonerate(
+        test_exonerations=exonerations,
+        step_name=step_name,
+    )
 
   def _clean_failed_suite_list(self, failed_test_suites):
     """Returns a list of failed suites with flaky-fails-only suites excluded.
