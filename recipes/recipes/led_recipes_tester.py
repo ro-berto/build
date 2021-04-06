@@ -49,6 +49,8 @@ DEFAULT_BUILDERS = (
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m89.try:linux-rel',
     'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m90.try:linux-rel',
+    'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
 )
 
 
@@ -64,6 +66,7 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
         'luci.chromium.try:ios-simulator',
         'luci.chromium-m88.try:ios-simulator',
         'luci.chromium-m89.try:ios-simulator',
+        'luci.chromium-m90.try:ios-simulator',
     ],
     files=[
         'scripts/slave/recipes/ios/try.py',
@@ -80,6 +83,7 @@ FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
 )
 
 # CL to use when testing a recipe which touches chromium source.
@@ -112,6 +116,12 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/2638008',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2638010',
+    },
+    'luci.chromium-m90.try': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2807827',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2807949',
     },
 }
 
@@ -897,6 +907,7 @@ def GenTests(api):
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
   )
 
   yield api.test(
@@ -908,4 +919,5 @@ def GenTests(api):
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
+      led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
   )
