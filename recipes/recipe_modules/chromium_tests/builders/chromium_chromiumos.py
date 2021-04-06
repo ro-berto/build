@@ -75,59 +75,40 @@ def _config(name,
 SPEC.update([
     _config(
         'lacros-amd64-generic-binary-size-rel',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards='amd64-generic',
     ),
     _config(
         'lacros-amd64-generic-rel',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards_with_qemu_images='amd64-generic',
     ),
-    _config(
-        'linux-chromeos-rel',
-        isolate_server='https://isolateserver.appspot.com',
-        gclient_apply_config=['use_clang_coverage']),
-    _config(
-        'linux-chromeos-dbg',
-        isolate_server='https://isolateserver.appspot.com',
-    ),
+    _config('linux-ash-chromium-generator-rel'),
+    _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
+    _config('linux-chromeos-dbg',),
     _config(
         'linux-chromeos-js-code-coverage',
-        isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['use_clang_coverage']),
-    _config(
-        'linux-lacros-builder-rel',
-        isolate_server='https://isolateserver.appspot.com'),
-    _config(
-        'linux-lacros-rel', isolate_server='https://isolateserver.appspot.com'),
+    _config('linux-lacros-builder-rel'),
+    _config('linux-lacros-rel'),
     _config(
         'linux-lacros-tester-rel',
-        isolate_server='https://isolateserver.appspot.com',
         execution_mode=bot_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
     _config(
         'chromeos-amd64-generic-asan-rel',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-dbg',
         isolate_server='https://isolateserver.appspot.com',
         cros_boards='amd64-generic'),
-    _config(
-        'chromeos-amd64-generic-lacros-dbg',
-        isolate_server='https://isolateserver.appspot.com',
-        cros_boards='amd64-generic'),
+    _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        cros_boards_with_qemu_images='amd64-generic',
-        isolate_server='https://isolateserver.appspot.com'),
+        cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-arm-generic-dbg',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards='arm-generic',
         target_arch='arm',
         target_bits=32),
@@ -135,8 +116,7 @@ SPEC.update([
         'chromeos-arm-generic-rel',
         cros_boards='arm-generic',
         target_arch='arm',
-        target_bits=32,
-        isolate_server='https://isolateserver.appspot.com'),
+        target_bits=32),
     _config(
         'chromeos-kevin-rel',
         cros_boards='kevin',
@@ -147,8 +127,6 @@ SPEC.update([
         # don't run the tests inside a luci-auth context to avoid having the
         # BOTO config setup for the task's service account.
         # TODO(crbug.com/1057152): Fix this.
-        chromium_apply_config=['mb_no_luci_auth'],
-        isolate_server='https://isolateserver.appspot.com'),
-    _config(
-        'linux-cfm-rel', isolate_server='https://isolateserver.appspot.com'),
+        chromium_apply_config=['mb_no_luci_auth']),
+    _config('linux-cfm-rel'),
 ])
