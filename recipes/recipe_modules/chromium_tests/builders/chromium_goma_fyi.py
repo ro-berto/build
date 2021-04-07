@@ -39,91 +39,31 @@ def no_archive(base_config):
 
 
 SPEC = {
-    'Win Builder Goma Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_canary', 'goma_use_local']),
-    'Win Builder (dbg) Goma Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
-                               ['goma_canary']),
-
-    'chromeos-amd64-generic-rel-goma-canary':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_canary']),
-    'Linux Builder Goma Canary':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_canary', 'goma_use_local']),
-    'linux-archive-rel-goma-canary':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['linux-archive-rel']), ['goma_canary']),
-    # RBE
-    'chromeos-amd64-generic-rel-goma-rbe-canary':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_canary']),
-    'Linux Builder Goma RBE Canary':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_canary', 'goma_use_local']),
+    # Canary RBE
     'linux-archive-rel-goma-rbe-canary':
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']), ['goma_canary']),
     'linux-archive-rel-goma-rbe-ats-canary':
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']), ['goma_canary']),
-    'Mac Builder Goma Canary':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder'],
-                               ['goma_canary']),
-    'Mac Builder (dbg) Goma Canary':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_canary']),
-    'mac-archive-rel-goma-canary':
+    'Linux Builder Goma RBE Canary':
+        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
+                               ['goma_canary', 'goma_use_local']),
+    'chromeos-amd64-generic-rel-goma-rbe-canary':
         chromium_apply_configs(
-            no_archive(chromium.SPEC['mac-archive-rel']), ['goma_canary']),
-    'Mac Builder (dbg) Goma Canary (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_canary', 'clobber']),
-    # RBE
+            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
+            ['goma_canary']),
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(
             no_archive(chromium.SPEC['mac-archive-rel']), ['goma_canary']),
     'Mac Builder (dbg) Goma RBE Canary (clobber)':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_canary', 'clobber']),
+    'ios-device-goma-rbe-canary-clobber':
+        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
+                               ['goma_canary', 'clobber']),
 
-    # Latest Goma Client
-    'Win Builder Goma Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
-    'Win Builder (dbg) Goma Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
-                               ['goma_latest_client']),
-    # RBE
-    'Win Builder Goma RBE Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
-    'Win Builder (dbg) Goma RBE Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
-                               ['goma_latest_client']),
-
-    'chromeos-amd64-generic-rel-goma-latest':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_latest_client']),
-    'Linux Builder Goma Latest Client':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
-    'linux-archive-rel-goma-latest':
-        chromium_apply_configs(
-            no_archive(chromium.SPEC['linux-archive-rel']),
-            ['goma_latest_client']),
-    # RBE
-    'chromeos-amd64-generic-rel-goma-rbe-latest':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_latest_client']),
-    'Linux Builder Goma RBE Latest Client':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
+    # Latest RBE
     'linux-archive-rel-goma-rbe-latest':
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']),
@@ -132,27 +72,30 @@ SPEC = {
         chromium_apply_configs(
             no_archive(chromium.SPEC['linux-archive-rel']),
             ['goma_latest_client']),
-    'Mac Builder Goma Latest Client':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder'],
-                               ['goma_latest_client']),
-    'Mac Builder (dbg) Goma Latest Client':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_latest_client']),
-    'mac-archive-rel-goma-latest':
+    'Linux Builder Goma RBE Latest Client':
+        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
+                               ['goma_latest_client', 'goma_use_local']),
+    'chromeos-amd64-generic-rel-goma-rbe-latest':
         chromium_apply_configs(
-            no_archive(chromium.SPEC['mac-archive-rel']),
+            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
             ['goma_latest_client']),
-    'Mac Builder (dbg) Goma Latest Client (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_latest_client', 'clobber']),
-    # RBE
-    'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_latest_client', 'clobber']),
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(
             no_archive(chromium.SPEC['mac-archive-rel']),
             ['goma_latest_client']),
+    'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
+        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
+                               ['goma_latest_client', 'clobber']),
+    'ios-device-goma-rbe-latest-clobber':
+        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
+                               ['goma_latest_client', 'clobber']),
+    'Win Builder Goma RBE Latest Client':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
+                               ['goma_latest_client', 'goma_use_local']),
+    'Win Builder (dbg) Goma RBE Latest Client':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
+                               ['goma_latest_client']),
+
     # This builder no longer exists, but keep it around so that
     # Goma's canary bots can copy its config.
     'Android Builder (dbg)':
@@ -171,25 +114,7 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'ios-device-goma-canary-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_canary', 'clobber']),
-    'ios-device-goma-latest-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_latest_client', 'clobber']),
-    'ios-device-goma-rbe-canary-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_canary', 'clobber']),
-    'ios-device-goma-rbe-latest-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_latest_client', 'clobber']),
 }
-
-SPEC['android-archive-dbg-goma-canary'] = chromium_apply_configs(
-    SPEC['Android Builder (dbg)'], ['goma_canary'])
-SPEC['android-archive-dbg-goma-latest'] = (
-    chromium_apply_configs(SPEC['Android Builder (dbg)'],
-                           ['goma_latest_client']))
 
 SPEC['android-archive-dbg-goma-rbe-canary'] = (
     chromium_apply_configs(SPEC['Android Builder (dbg)'], ['goma_canary']))
