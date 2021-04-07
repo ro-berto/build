@@ -41,9 +41,8 @@ def RunSteps(api):
     try_spec = api.chromium_tests.trybots[builder_id]
     bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   else:
-    builders = BUILDERS if 'fake.group' in builder_id.group else None
     bot_config = api.chromium_tests.create_bot_config_object(
-        [api.chromium.get_builder_id()], builders=builders)
+        [api.chromium.get_builder_id()])
   api.chromium_tests.configure_build(bot_config)
   update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
   return api.chromium_tests.compile_specific_targets(
@@ -121,4 +120,5 @@ def GenTests(api):
       'android_version',
       api.chromium.ci_build(builder_group='fake.group', builder='Test Version'),
       api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
+      api.chromium_tests.builders(BUILDERS),
   )
