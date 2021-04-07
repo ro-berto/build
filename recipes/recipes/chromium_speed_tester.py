@@ -20,7 +20,9 @@ PROPERTIES = InputProperties
 
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
-    bot = api.chromium_tests.lookup_bot_metadata(builders=None)
+    builder_id = api.chromium.get_builder_id()
+    bot = api.chromium_tests.lookup_bot_metadata(
+        builder_id=builder_id, builders=None)
     api.chromium_tests.report_builders(bot.settings)
     execution_mode = bot.settings.execution_mode
     if execution_mode != bot_spec.TEST:
@@ -31,10 +33,10 @@ def RunSteps(api, properties):
     api.chromium_tests.configure_build(bot.settings)
     update_step, build_config = api.chromium_tests.prepare_checkout(
         bot.settings, timeout=3600, no_fetch_tags=True)
-    api.chromium_tests.lookup_builder_gn_args(bot)
-    tests = build_config.tests_on(bot.builder_id)
+    api.chromium_tests.lookup_builder_gn_args(builder_id, bot)
+    tests = build_config.tests_on(builder_id)
     api.chromium_tests.download_command_lines_for_tests(tests, bot.settings)
-    test_failure_summary = api.chromium_tests.run_tests(bot, tests)
+    test_failure_summary = api.chromium_tests.run_tests(builder_id, bot, tests)
 
     task_groups = {
         t.get_task(NO_SUFFIX).request.name:
@@ -60,7 +62,7 @@ def RunSteps(api, properties):
     }
 
     api.chromium_tests.trigger_child_builds(
-        bot.builder_id,
+        builder_id,
         update_step,
         bot.settings,
         additional_properties=additional_trigger_properties)

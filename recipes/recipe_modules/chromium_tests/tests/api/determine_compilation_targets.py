@@ -15,11 +15,13 @@ DEPS = [
 
 
 def RunSteps(api):
+  builder_id = api.chromium.get_builder_id()
   bot = api.chromium_tests.lookup_bot_metadata()
   api.chromium_tests.configure_build(bot.settings)
   _, build_config = api.chromium_tests.prepare_checkout(bot.settings)
   affected_files = api.properties['affected_files']
-  api.chromium_tests._determine_compilation_targets(bot, affected_files,
+  api.chromium_tests._determine_compilation_targets(builder_id, bot,
+                                                    affected_files,
                                                     build_config)
 
 

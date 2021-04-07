@@ -24,11 +24,12 @@ def override_foo(c):
 
 
 def RunSteps(api):
+  builder_id = api.chromium.get_builder_id()
   bot = api.chromium_tests.lookup_bot_metadata()
   api.chromium_tests.configure_build(bot.settings)
   update_step, _ = api.chromium_tests.prepare_checkout(bot.settings)
   properties = api.chromium_tests._get_trigger_properties(
-      bot.builder_id, update_step)
+      builder_id, update_step)
   expected = types.thaw(api.properties['expected_trigger_properties'])
   for k, v in expected.iteritems():
     if k not in properties:  # pragma: no cover

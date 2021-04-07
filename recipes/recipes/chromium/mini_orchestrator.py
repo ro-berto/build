@@ -19,11 +19,10 @@ DEPS = [
 
 def RunSteps(api):
   builder_to_trigger = api.properties['builder_to_trigger']
+  builder_id = chromium.BuilderId.create_for_group(
+      builder_to_trigger['builder_group'], builder_to_trigger['buildername'])
   with api.chromium.chromium_layout():
-    bot = api.chromium_tests.lookup_bot_metadata(
-        builder_id=chromium.BuilderId.create_for_group(
-            builder_to_trigger['builder_group'],
-            builder_to_trigger['buildername']))
+    bot = api.chromium_tests.lookup_bot_metadata(builder_id=builder_id)
 
     api.chromium_tests.report_builders(bot.settings)
 
@@ -35,7 +34,7 @@ def RunSteps(api):
         report_via_property=True)
 
     _, compile_targets = api.chromium_tests._determine_compilation_targets(
-        bot, affected_files, build_config)
+        builder_id, bot, affected_files, build_config)
 
     if compile_targets:
       request = api.buildbucket.schedule_request(
