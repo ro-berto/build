@@ -1439,9 +1439,6 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
-                # This is specified in order to match the same configuration
-                # in 'chromium.android:Marshmallow Phone Tester (rel)'.
-                'goma_high_parallel',
             ],
             gclient_config='chromium',
             gclient_apply_config=['android'],

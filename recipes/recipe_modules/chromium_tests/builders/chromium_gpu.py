@@ -78,7 +78,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -108,7 +107,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -238,10 +236,6 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
-
-                # This is specified in order to match the same configuration
-                # in 'chromium.android:Marshmallow Phone Tester (rel)'.
-                'goma_high_parallel',
                 'mb',
             ],
             isolate_server='https://isolateserver.appspot.com',

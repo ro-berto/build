@@ -172,11 +172,6 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=[
                 'download_vr_test_apks',
-
-                # This is specified because 'android_n5x_swarming_rel'
-                # builder is one of the slowest builder in CQ
-                # (crbug.com/804251).
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -479,9 +474,6 @@ SPEC.update([
         'android-marshmallow-arm64-rel',
         chromium_apply_config=[
             'download_vr_test_apks',
-            # This is specified because 'android-marshmallow-arm64-rel' builder
-            # is one of the slowest builder in CQ (crbug.com/804251).
-            'goma_high_parallel'
         ],
         isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),

@@ -429,7 +429,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -512,7 +511,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -542,7 +540,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -767,7 +764,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',

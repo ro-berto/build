@@ -50,10 +50,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           goma_enable_global_file_stat_cache=Single(
               bool, empty_val=False, required=False),
           goma_enable_cache_silo=Single(bool, empty_val=False, required=False),
-          # TODO(tandrii): delete goma_high_parallel from here and use goma
-          # recipe module property, configured per builder in
-          # cr-buildbucket.cfg.
-          goma_high_parallel=Single(bool, empty_val=False, required=False),
           prune_venv=Single(bool, empty_val=False, required=False),
       ),
       gyp_env=ConfigGroup(
@@ -249,11 +245,6 @@ def ninja(c):
 @config_ctx()
 def goma_failfast(c):
   c.compile_py.goma_failfast = True
-
-
-@config_ctx()
-def goma_high_parallel(c):
-  c.compile_py.goma_high_parallel = True
 
 
 @config_ctx()

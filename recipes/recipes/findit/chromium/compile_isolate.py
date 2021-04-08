@@ -120,7 +120,6 @@ def GenTests(api):
                     chromium_config='chromium',
                     chromium_apply_config=[
                         'mb',
-                        'goma_high_parallel',
                     ],
                     gclient_config='chromium',
                     chromium_config_kwargs={

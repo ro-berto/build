@@ -192,10 +192,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-
-                # This is specified because 'linux-rel' builder
-                # is one of the slowest builder in CQ (crbug.com/804251).
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
@@ -225,7 +221,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=[
                 'mb',
-                'goma_high_parallel',
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',

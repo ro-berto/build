@@ -37,7 +37,7 @@ SPEC = {
             },
             # This doesn't affect the build, but ensures that trybots get
             # the right runtime flags.
-            chromium_apply_config=['lsan', 'mb', 'goma_high_parallel'],
+            chromium_apply_config=['lsan', 'mb'],
             isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
@@ -51,7 +51,7 @@ SPEC = {
             },
             # Enable LSan at runtime. This disables the sandbox in browser
             # tests. http://crbug.com/336218
-            chromium_apply_config=['lsan', 'mb', 'goma_high_parallel'],
+            chromium_apply_config=['lsan', 'mb'],
             isolate_server='https://isolateserver.appspot.com',
             execution_mode=bot_spec.TEST,
             parent_buildername='Linux ASan LSan Builder',
@@ -65,7 +65,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            chromium_apply_config=['mb', 'goma_high_parallel'],
+            chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             # We want to test ASan+sandbox as well, so run browser tests
             # again, this time with LSan disabled.

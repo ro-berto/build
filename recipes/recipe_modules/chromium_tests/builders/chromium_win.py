@@ -15,7 +15,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=[
-                'goma_high_parallel',
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
@@ -33,7 +32,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=[
-                'goma_high_parallel',
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
@@ -64,7 +62,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=[
-                'goma_high_parallel',
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
@@ -82,7 +79,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=[
-                'goma_high_parallel',
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
