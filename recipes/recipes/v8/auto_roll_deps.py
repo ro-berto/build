@@ -57,7 +57,7 @@ def is_gitiles_inconsistent(api):
   gitiles_deps = api.gitiles.download_file(
       'https://chromium.googlesource.com/chromium/src',
       'DEPS',
-      branch='refs/heads/master',
+      branch='refs/heads/main',
       step_test_data= lambda: api.json.test_api.output({
         'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
       }),
