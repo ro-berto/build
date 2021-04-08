@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from collections import defaultdict
 import itertools
 import json
 import urlparse
@@ -559,12 +560,49 @@ class TestUtilsApi(recipe_api.RecipeApi):
         set(old_invalid_suites).intersection(retried_invalid_suites))
     return still_invalid_swarming_suites + non_swarming_invalid_suites
 
-  def _count_unexpected_invocations(self, invocation_dict):
-    acc = 0
-    for i in invocation_dict.values():
-      if any(not r.expected for r in i.test_results):
-        acc += 1
-    return acc
+  def _count_suites_with_unexpected_failures(self,
+                                             unexpected_result_invocations):
+    """Counts the num of suites with unexpected failures.
+
+    unexpected_result_invocations will contain both unexpected passes as well
+    as unexpected failures. We only care about unexpected failures for the
+    purposes of retrying, so group the results by suites, and count how many
+    suites have unexpected failures.
+
+    Args:
+      unexpected_result_invocations: dict of
+        {invocation_id: api.resultdb.Invocation} containing results of any
+        test we ran that had unexpected results.
+    """
+    # RDB doesn't have the concept of "test suites". Rather, its API returns
+    # a flat list of the results for each individual test case. However, these
+    # test cases are tagged with a "variant" which describes the platform the
+    # test ran on. We can safely treat each unique variant as a different
+    # test suite ran during the build. So group each test result by the hash
+    # of their variant.
+    # pylint: disable=line-too-long
+    # For the list of attibutes that we put in a variant, see the link below.
+    # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_swarming/api.py;drc=9e2cb954;l=871
+    # pylint: enable=line-too-long
+
+    # Maps variant_hash -> test_id -> [results]
+    results_by_test_id_by_variant = defaultdict(lambda: defaultdict(list))
+    for inv in unexpected_result_invocations.values():
+      for tr in inv.test_results:
+        results_by_test_id_by_variant[tr.variant_hash][tr.test_id].append(tr)
+
+    unexpected_failures = 0
+    for results_by_test_id in results_by_test_id_by_variant.values():
+      for results in results_by_test_id.values():
+        # If there are no PASS results for the test, then it wasn't an
+        # unexpected pass.
+        if all(r.status != test_result_pb2.PASS for r in results):
+          unexpected_failures += 1
+          # Continue to the next test suite since we don't want to double
+          # count the same suite if it has more than one test case with
+          # failures.
+          break
+    return unexpected_failures
 
   def _should_abort_tryjob(self, invocation_dict, failed_suites):
     """Determines if the current recipe should skip its next retry phases.
@@ -610,7 +648,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           '\nfewer than {} failures, continue with retries'.format(
               self._min_failed_suites_to_skip_retry))
 
-    unexpected_count = self._count_unexpected_invocations(invocation_dict)
+    unexpected_count = self._count_suites_with_unexpected_failures(
+        invocation_dict)
     new_should_abort = (
         unexpected_count >= self._min_failed_suites_to_skip_retry)
 

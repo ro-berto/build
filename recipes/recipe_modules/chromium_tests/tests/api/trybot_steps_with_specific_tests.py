@@ -1337,15 +1337,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  results_with_success = {
-      'per_iteration_data': [{
-          'BaseTest.One': [{
-              'elapsed_time_ms': 0,
-              'output_snippet': '',
-              'status': 'SUCCESS',
-          },],
-      }]
-  }
   results_with_failure = {
       'per_iteration_data': [{
           'BaseTest.One': [{
@@ -1398,91 +1389,6 @@ def GenTests(api):
               ],
           ),
   }
-  inv_bundle_broken = {
-      'id1':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='name of no importance 1',
-                      expected=False,
-                      status=test_result_pb2.FAIL,
-                  ),
-              ],
-          ),
-      'id2':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='name of no importance 2',
-                      expected=False,
-                      status=test_result_pb2.FAIL,
-                  ),
-              ],
-          ),
-      'id3':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='name of no importance 3.a',
-                      expected=True,
-                      status=test_result_pb2.PASS,
-                  ),
-                  test_result_pb2.TestResult(
-                      test_id='name of no importance 3.b',
-                      expected=False,
-                      status=test_result_pb2.FAIL,
-                  ),
-              ],
-          ),
-  }
-  yield api.test(
-      'warn_for_retry_if_there_are_too_many_unexpected_results',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          retry_failed_shards=True,
-          additional_gtest_targets=['target1', 'target2', 'target3'],
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-              'target1': '1111111111111111111111111111111111111111',
-              'target2': '2222222222222222222222222222222222222222',
-              'target3': '3333333333333333333333333333333333333333',
-          },
-          **{
-              '$build/test_utils': {
-                  'min_failed_suites_to_skip_retry': 3,
-              },
-          }),
-      api.resultdb.query(
-          inv_bundle_broken, step_name='query test results (with patch)'),
-      api.override_step_data(
-          'target1 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_success), retcode=0),
-              failure=False)),
-      api.override_step_data(
-          'target2 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_success), retcode=0),
-              failure=False)),
-      api.override_step_data(
-          'target3 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_success), retcode=0),
-              failure=False)),
-      api.post_process(post_process.MustRun,
-                       'ResultDB abort retry migration.abort retry'),
-      api.post_process(post_process.DropExpectation),
-  )
 
   yield api.test(
       'skip_retrying_if_there_are_too_many_failed_test_suites',
@@ -1571,51 +1477,5 @@ def GenTests(api):
                        'ResultDB abort retry migration.mismatch'),
       api.post_process(post_process.DoesNotRunRE,
                        'target\d \(retry shards with patch\)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'retry_and_warn_if_unexpected_results_but_no_failures',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          retry_failed_shards=True,
-          additional_gtest_targets=['target1', 'target2', 'target3'],
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-              'target1': '1111111111111111111111111111111111111111',
-              'target2': '2222222222222222222222222222222222222222',
-              'target3': '3333333333333333333333333333333333333333',
-          },
-          **{
-              '$build/test_utils': {
-                  'min_failed_suites_to_skip_retry': 3,
-              },
-          }),
-      api.resultdb.query(
-          inv_bundle_broken, step_name='query test results (with patch)'),
-      api.override_step_data(
-          'target1 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_success), retcode=0),
-              failure=False)),
-      api.override_step_data(
-          'target2 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_failure), retcode=1),
-              failure=False)),
-      api.override_step_data(
-          'target3 (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(
-                  json.dumps(results_with_failure), retcode=1),
-              failure=False)),
-      api.post_process(post_process.MustRun, 'proceed with retry'),
-      api.post_process(post_process.MustRun,
-                       'ResultDB abort retry migration.abort retry'),
-      api.post_process(post_process.MustRun,
-                       'ResultDB abort retry migration.mismatch'),
       api.post_process(post_process.DropExpectation),
   )
