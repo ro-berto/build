@@ -964,8 +964,20 @@ class V8Api(recipe_api.RecipeApi):
     )
 
     # Upload report to google storage.
-    dest = '%s%d_gcov_rel/%s' % (
-        self.m.platform.name, self.target_bits, self.revision)
+    if self.m.tryserver.is_tryserver:
+      dest = 'tryserver/%s%d_gcov_rel/%d/%d' % (
+          self.m.platform.name,
+          self.target_bits,
+          self.m.tryserver.gerrit_change_number,
+          self.m.tryserver.gerrit_patchset_number,
+      )
+    else:
+      dest = '%s%d_gcov_rel/%s' % (
+          self.m.platform.name,
+          self.target_bits,
+          self.revision,
+      )
+
     result = self.m.gsutil(
         [
           '-m', 'cp', '-a', 'public-read', '-R', report_dir,

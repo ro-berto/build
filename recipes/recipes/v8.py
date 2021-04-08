@@ -983,6 +983,21 @@ def GenTests(api):
     ))
   )
 
+  # Cover running gcov coverage on tryserver.
+  yield (api.v8.test(
+      'tryserver.v8',
+      'v8_foobar',
+      'gcov_coverage',
+      clobber=True,
+      coverage='gcov',
+      enable_swarming=False,
+  ) + api.step_data('build.lookup GN args',
+                    api.raw_io.stream_output(fake_gn_args_x64)) +
+         api.v8.test_spec_in_checkout('v8_foobar',
+                                      '{"tests": [{"name": "v8testing"}]}') +
+         api.post_process(MustRun, 'initialization.clobber') +
+         api.post_process(Filter('gsutil coverage report',)))
+
   # Test using clobber_all property.
   yield (
     api.v8.test(
