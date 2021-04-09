@@ -88,6 +88,31 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fuchsia_cipd_archive_x64_legacy',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+      api.properties(
+          cipd_archive=True,
+          update_properties={},
+          custom_vars={
+              'chrome_version': '1.2.3.4',
+          },
+          **{'$build/archive': input_properties}),
+      api.chromium.override_version(
+          major=88, step_name='Generic Archiving Steps.get version'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+              '-hash-algo', 'sha256', '-ref', 'legacy88', '-tag',
+              'version:1.2.3.4', '-pkg-var', 'targetarch:amd64',
+              '-compression-level', '8', '-json-output', '/path/to/tmp/json'
+          ]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'android_cipd_archive_arm32',
       api.chromium.generic_build(
           builder_group='chromium.clang', builder='ToTAndroidASan'),

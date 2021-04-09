@@ -566,6 +566,9 @@ class ArchiveApi(recipe_api.RecipeApi):
       return 'beta'
     elif milestone + 2 == canary_milestone:
       return 'stable'
+    elif milestone + 10 >= canary_milestone:
+      # Channel name for old milestones set to legacy.
+      return 'legacy%s' % milestone
     else:  # pragma: no cover
       self.m.python.failing_step(
           'Unknown channel',
