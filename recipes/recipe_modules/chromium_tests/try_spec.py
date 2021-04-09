@@ -106,6 +106,7 @@ class TrySpec(object):
         from mirrors.
       * The remaining fields are initialized with the values passed in kwargs.
     """
+    assert mirrors
     mirrors = [TryMirror.normalize(m) for m in mirrors]
     return cls(mirrors=mirrors, **kwargs)
 

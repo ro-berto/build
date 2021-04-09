@@ -2,13 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import functools
-
-from recipe_engine import recipe_api
-from recipe_engine.types import FrozenDict, freeze
+import traceback
 
 from . import bot_db as bot_db_module
-from . import bot_spec as bot_spec_module
 from . import steps
 from . import try_spec as try_spec_module
 
@@ -38,15 +34,34 @@ class BotConfig(object):
   """
 
   bot_db = attrib(bot_db_module.BotDatabase)
-  bot_mirrors = attrib(sequence[try_spec_module.TryMirror])
+  _try_spec = attrib(try_spec_module.TrySpec)
 
   @classmethod
-  def create(cls, bot_db, builder_ids_or_bot_mirrors):
-    assert len(builder_ids_or_bot_mirrors) >= 1
-    bot_mirrors = tuple(
-        try_spec_module.TryMirror.normalize(b)
-        for b in builder_ids_or_bot_mirrors)
-    return cls(bot_db, bot_mirrors)
+  def create(cls, bot_db, try_spec, python_api=None):
+    """Create a BotConfig instance.
+
+    Args:
+      * bot_db - The BotDatabase containing the builders of
+        try_spec.mirrors.
+      * try_spec - A TrySpec instance that specifies the builders to
+        mirror and any try-specific settings.
+      * python_api - Optional python API. If provided, in the event that
+        a BotConfigException would be raised, an infra failing step will
+        be created with the details instead.
+
+    Raises:
+      * BotConfigException if there isn't configuration matching all of
+        builders in try_spec.mirrors and python_api is None.
+      * InfraFailure if there isn't configuration matching all of
+        builders in try_spec.mirrors and python_api is not None.
+    """
+    try:
+      return cls(bot_db, try_spec)
+    except BotConfigException as e:
+      if python_api is not None:
+        python_api.infra_failing_step(
+            str(e), [traceback.format_exc()], as_log='details')
+      raise
 
   def __attrs_post_init__(self):
     for mirror in self.bot_mirrors:
@@ -56,11 +71,39 @@ class BotConfig(object):
                 mirror.builder_id.group))
       if not mirror.builder_id in self.bot_db:
         raise BotConfigException(
-            'No configuration present for builder {}'.format(mirror.builder_id))
+            'No configuration present for builder {!r} in group {!r}'.format(
+                mirror.builder_id.builder, mirror.builder_id.group))
 
   @cached_property
   def builder_ids(self):
     return [m.builder_id for m in self.bot_mirrors]
+
+  @cached_property
+  def mirrors(self):
+    return self._try_spec.mirrors
+
+  # TODO(gbeaty) Remove this, update code to access mirrors instead
+  @cached_property
+  def bot_mirrors(self):
+    return self.mirrors
+
+  # TODO(gbeaty) Remove this, update code to use the bot config directly
+  @cached_property
+  def settings(self):
+    return self
+
+  # TODO(gbeaty) Remove this, update code to access try_spec instead
+  @cached_property
+  def config(self):
+    return self._try_spec
+
+  @cached_property
+  def retry_failed_shards(self):
+    return self._try_spec.retry_failed_shards
+
+  @cached_property
+  def is_compile_only(self):
+    return self._try_spec.execution_mode == try_spec_module.COMPILE
 
   @cached_property
   def root_keys(self):
