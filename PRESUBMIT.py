@@ -20,10 +20,6 @@ def GetFilesToSkip(input_api):
       r'.*scripts/release/.*',
       r'.*recipes/recipes.py$',
       r'.*recipes/recipes/.*_autogen.py$',
-      r'.*masters/.*/templates/.*\.html$',
-      r'.*masters/.*/templates/.*\.css$',
-      r'.*masters/.*/public_html/.*\.html$',
-      r'.*masters/.*/public_html/.*\.css$',
 
       # Exclude all "...recipe_deps" directories.
       #
@@ -58,7 +54,6 @@ def CommitChecks(input_api, output_api):
         # Initially, a separate run was done for unit tests but now that
         # pylint is fetched in memory with setuptools, it seems it caches
         # sys.path so modifications to sys.path aren't kept.
-        join('scripts', 'master', 'unittests'),
         join('recipes', 'unittests'),
         join('tests'),
       ]))

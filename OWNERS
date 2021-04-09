@@ -1,6 +1,6 @@
 # ATTENTION: If you're looking for chromium/src's //build/OWNERS file, you've
 # come to the wrong place. The correct location for that is:
-# https://chromium.googlesource.com/chromium/src/+/master/build/OWNERS
+# https://chromium.googlesource.com/chromium/src/+/HEAD/build/OWNERS
 
 bpastene@chromium.org
 bpastene@google.com

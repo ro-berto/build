@@ -7,23 +7,17 @@
 
 {
   'WATCHLIST_DEFINITIONS': {
-    'chromium_masters': {
-      'filepath': 'masters/master\.chromium.*(builders\.pyl|master\.cfg)$',
-    },
     'goma': {
-      'filepath': 'scripts/slave/recipe_modules/goma/.+',
+      'filepath': 'recipes/recipe_modules/goma/.+',
     },
     'chromium_tests': {
-      'filepath': 'scripts/slave/recipe_modules/chromium/.+',
-      'filepath': 'scripts/slave/recipe_modules/chromium_checkout/.+',
-      'filepath': 'scripts/slave/recipe_modules/chromium_tests/.+',
+      'filepath': 'recipes/recipe_modules/chromium/.+',
+      'filepath': 'recipes/recipe_modules/chromium_checkout/.+',
+      'filepath': 'recipes/recipe_modules/chromium_tests/.+',
     },
   },
 
   'WATCHLISTS': {
-    'chromium_masters': [
-      'hinoka+masters@chromium.org',
-    ],
     'chromium_tests': [
       'martiniss+cc@chromium.org',
     ],
