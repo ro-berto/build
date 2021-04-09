@@ -68,6 +68,12 @@ SPEC = {
     'Win Builder (dbg) Goma RBE Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
                                ['goma_canary']),
+    'Win Builder Goma RBE ATS Canary':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
+                               ['goma_canary', 'goma_use_local']),
+    'Win Builder (dbg) Goma RBE ATS Canary':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
+                               ['goma_canary']),
 
     # Latest RBE
     'linux-archive-rel-goma-rbe-latest':
