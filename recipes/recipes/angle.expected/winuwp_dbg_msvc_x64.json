@@ -11,9 +11,6 @@
       "0777",
       "[CACHE]\\builder"
     ],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "init cache if not exists"
   },
@@ -39,7 +36,6 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
@@ -99,9 +95,6 @@
       "runhooks"
     ],
     "cwd": "[CACHE]\\builder",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -121,9 +114,6 @@
       "--check"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "gn gen"
   },
   {
@@ -132,9 +122,6 @@
       "-C",
       "[CACHE]\\builder\\angle\\out\\debug_uwp"
     ],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "compile with ninja"
   },
   {

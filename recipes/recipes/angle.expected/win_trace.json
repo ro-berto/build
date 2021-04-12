@@ -11,9 +11,6 @@
       "0777",
       "[CACHE]\\builder"
     ],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "init cache if not exists"
   },
@@ -39,7 +36,6 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
@@ -99,9 +95,6 @@
       "runhooks"
     ],
     "cwd": "[CACHE]\\builder",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -126,9 +119,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -159,9 +149,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed (2)",
     "~followup_annotations": [
@@ -196,9 +183,6 @@
       "[CACHE]\\goma\\data\\windows"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -214,7 +198,6 @@
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
@@ -257,9 +240,6 @@
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -279,9 +259,6 @@
       "--depot-tools-path=RECIPE_REPO[depot_tools]"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "Run trace tests"
   },
   {
@@ -298,7 +275,6 @@
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
@@ -333,7 +309,6 @@
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
@@ -357,7 +332,6 @@
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows",
@@ -413,9 +387,6 @@
       "fake-bot-id"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,
     "~followup_annotations": [
@@ -442,9 +413,6 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
