@@ -96,7 +96,7 @@
     },
     "infra_step": true,
     "name": "gerrit fetch current CL info",
-    "timeout": 600,
+    "timeout": 60,
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -1422,6 +1422,7 @@
     },
     "infra_step": true,
     "name": "gerrit changes",
+    "timeout": 60,
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -2774,6 +2775,7 @@
     },
     "infra_step": true,
     "name": "gerrit changes (2)",
+    "timeout": 60,
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
