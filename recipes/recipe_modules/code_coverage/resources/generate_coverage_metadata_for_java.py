@@ -1,3 +1,4 @@
+#!/usr/bin/env vpython
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -377,12 +378,6 @@ def main():
     logging.info('Skip processing data as no source file was affected in CL')
     return
 
-  # JaCoCo XML report will be generated temporarily
-  # then parsed to json metadata to --output-file.
-  temp_dir = tempfile.mkdtemp()
-  temp_device_xml = os.path.join(temp_dir, 'temp_device.xml')
-  temp_host_xml = os.path.join(temp_dir, 'temp_host.xml')
-  temp_combined_xml = os.path.join(temp_dir, 'combined_host.xml')
   try:
     # TODO(crbug/1159938): Revert to using just cmd instead of this filtered
     # coverage file after verifying if this solves lapsed coverage issue.
@@ -391,44 +386,77 @@ def main():
         os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',
                      'jacococli.jar'), 'report'
     ]
-    dev_coverage_files = [
-        f for f in coverage_files if not f.endswith('junit_tests.exec')
+    device_unit_tests_coverage_files = [
+        f for f in coverage_files if 'unit_tests_only' in f
+    ]
+    device_not_unit_tests_coverage_files = [
+        f for f in coverage_files if 'unit_tests_excluded' in f
     ]
     host_coverage_files = [
         f for f in coverage_files if f.endswith('junit_tests.exec')
     ]
-    device_cmd = cmd + dev_coverage_files + _create_classfile_args(
-        class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX)
+
+    device_unit_tests_cmd = (
+        cmd + device_unit_tests_coverage_files +
+        _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
+    device_not_unit_tests_cmd = (
+        cmd + device_not_unit_tests_coverage_files +
+        _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
     host_cmd = cmd + host_coverage_files + _create_classfile_args(
         class_files, _HOST_CLASS_EXCLUDE_SUFFIX)
     # End of TODO changes.
 
-    device_cmd += ['--xml', temp_device_xml]
+    # JaCoCo XML report will be generated temporarily
+    # then parsed to json metadata to --output-file.
+    temp_dir = tempfile.mkdtemp()
+    temp_device_unit_tests_xml = os.path.join(temp_dir,
+                                              'temp_device_unit_tests.xml')
+    temp_device_not_unit_tests_xml = os.path.join(
+        temp_dir, 'temp_device_not_unit_tests.xml')
+    temp_host_xml = os.path.join(temp_dir, 'temp_host.xml')
+    device_unit_tests_cmd += ['--xml', temp_device_unit_tests_xml]
+    device_not_unit_tests_cmd += ['--xml', temp_device_not_unit_tests_xml]
     host_cmd += ['--xml', temp_host_xml]
 
-    cmd_output = subprocess.check_output(device_cmd)
-    logging.info('JaCoCo device XML report generated: %r', cmd_output)
+    cmd_output = subprocess.check_output(device_unit_tests_cmd)
+    logging.info(
+        'JaCoCo device XML report (inclusive of Unit Tests) generated: %r',
+        cmd_output)
+    cmd_output = subprocess.check_output(device_not_unit_tests_cmd)
+    logging.info(
+        'JaCoCo device XML report (exclusive of Unit Tests) generated: %r',
+        cmd_output)
     cmd_output = subprocess.check_output(host_cmd)
     logging.info('JaCoCo host XML report generated: %r', cmd_output)
-    combine_jacoco_reports.combine_xml_files(temp_combined_xml, temp_device_xml,
-                                             temp_host_xml)
 
-    # Command tends to exit with status 0 when it actually failed.
-    if not os.path.isfile(temp_combined_xml):
-      raise Exception('No JaCoCo XML report generated!')
-    tree = ElementTree.parse(temp_combined_xml)
+    temp_unit_tests_xml = os.path.join(temp_dir, 'temp_unit_tests.xml')
+    temp_overall_tests_xml = os.path.join(temp_dir, 'temp_overall_tests.xml')
+    combine_jacoco_reports.combine_xml_files(temp_unit_tests_xml,
+                                             temp_device_unit_tests_xml,
+                                             temp_host_xml)
+    combine_jacoco_reports.combine_xml_files(temp_overall_tests_xml,
+                                             temp_unit_tests_xml,
+                                             temp_device_not_unit_tests_xml)
+
+    def _export_as_json(xml, exported_filename):
+      # Command tends to exit with status 0 when it actually failed.
+      if not os.path.isfile(xml):
+        raise Exception("File %s doesn't exist" % xml)
+      root = ElementTree.parse(xml).getroot()
+      data = generate_json_coverage_metadata(params.src_path, root, source_dirs,
+                                             component_mapping, diff_mapping,
+                                             params.source_files)
+      logging.info('Writing fulfilled Java coverage metadata to %s',
+                   params.output_dir)
+      with open(os.path.join(params.output_dir, exported_filename), 'w') as f:
+        f.write(zlib.compress(json.dumps(data)))
+
+    _export_as_json(temp_unit_tests_xml, 'unit_tests.json.gz')
+    _export_as_json(temp_overall_tests_xml, 'overall_tests.json.gz')
+
   finally:
     shutil.rmtree(temp_dir)
 
-  root = tree.getroot()
-  data = generate_json_coverage_metadata(params.src_path, root, source_dirs,
-                                         component_mapping, diff_mapping,
-                                         params.source_files)
-
-  logging.info('Writing fulfilled Java coverage metadata to %s',
-               params.output_dir)
-  with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
-    f.write(zlib.compress(json.dumps(data)))
 
 
 if __name__ == '__main__':

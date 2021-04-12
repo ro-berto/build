@@ -120,8 +120,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def using_coverage(self):
     """Checks if the current build is running coverage-instrumented targets."""
-    return self.use_clang_coverage or self.use_java_coverage \
-           or self.use_javascript_coverage
+    return (self.use_clang_coverage or self.use_java_coverage or
+            self.use_javascript_coverage)
 
   def _get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.
@@ -158,10 +158,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       target = t.isolate_target
 
       # Do not get the test binary if it does not correspond to test type.
-      if self.platform in constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP \
-        and not re.search(
-          constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[self.platform][
-              self._current_processing_test_type], target):
+      if (self.platform in constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP and
+          not re.search(
+              constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[self.platform][
+                  self._current_processing_test_type], target)):
         continue
 
       patterns = [
@@ -481,29 +481,37 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """Uploads Jacoco coverage reports as html to GCS bucket.
 
     Uploades jacoco_html_report.zip which contains two html files, corresponding
-    to device and host tests each.
+    to self._current_processing_test_type.
 
     Args:
       coverage_dir: Root directory containing .exec files.
     """
     # Step 1: Generate html files corresponding to device and host tests.
-    jacoco_html_report_dir = coverage_dir.join('coverage_html')
+    jacoco_html_report_dir = coverage_dir.join(
+        'coverage_html_%s' % self._current_processing_test_type)
+    if self._current_processing_test_type == 'unit':
+      exec_filename_exclude = 'unit_tests_excluded'
+    else:
+      exec_filename_exclude = ''
     self.m.python(
-        'Generate JaCoCo HTML report',
+        'Generate JaCoCo HTML report (%s)' % self._current_processing_test_type,
         self.m.path['checkout'].join('build', 'android',
                                      'generate_jacoco_report.py'),
         args=[
             '--format', 'html', '--coverage-dir', coverage_dir,
             '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
-            jacoco_html_report_dir, '--cleanup'
+            jacoco_html_report_dir, '--exec-filename-excludes',
+            exec_filename_exclude, '--cleanup'
         ],
         **kwargs)
 
     # Step 2: Compress generated html files.
     # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
-    output_zip = coverage_dir.join('jacoco_html_report.zip')
+    output_zip = coverage_dir.join('jacoco_html_report_%s.zip' %
+                                   self._current_processing_test_type)
     self.m.zip.directory(
-        step_name='Zip generated JaCoCo HTML report files',
+        step_name='Zip generated JaCoCo HTML report files (%s)' %
+        self._current_processing_test_type,
         directory=jacoco_html_report_dir,
         output=output_zip)
 
@@ -514,8 +522,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         dest=self._compose_gs_path_for_coverage_data(
             data_type='java_html_report/jacoco_html_report.zip',
             mimic_builder_name=self._compose_current_mimic_builder_name()),
-        link_name='JaCoCo HTML report',
-        name='Upload zipped JaCoCo HTML report',
+        link_name='JaCoCo HTML report (%s)' %
+        self._current_processing_test_type,
+        name='Upload zipped JaCoCo HTML report (%s)' %
+        self._current_processing_test_type,
         **kwargs)
 
   def process_java_coverage_data(self, **kwargs):
@@ -568,17 +578,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             self.resource('generate_coverage_metadata_for_java.py'),
             args=args,
             **kwargs)
-        metadata_path = coverage_dir.join('all.json.gz')
-        if not self.m.path.exists(metadata_path):
-          self.m.python.succeeding_step(
-              'skip processing because no metadata was generated', '')
-          return
 
-        self._persist_coverage_data_as_json(
-            source=metadata_path, data_type='java_metadata', **kwargs)
-        self._persist_java_coverage_data_as_html(
-            coverage_dir=coverage_dir, **kwargs)
-
+        for self._current_processing_test_type in ('unit', 'overall'):
+          metadata_path = coverage_dir.join('%s_tests.json.gz' %
+                                            self._current_processing_test_type)
+          if not self.m.path.exists(metadata_path):
+            self.m.python.succeeding_step(
+                'skip processing because %s tests metadata was missing' %
+                self._current_processing_test_type, '')
+            return
+          self._persist_coverage_data_as_json(
+              source=metadata_path, data_type='java_metadata', **kwargs)
+          self._persist_java_coverage_data_as_html(
+              coverage_dir=coverage_dir, **kwargs)
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
