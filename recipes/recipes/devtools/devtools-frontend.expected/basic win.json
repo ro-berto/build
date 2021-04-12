@@ -601,21 +601,6 @@
     "name": "E2E tests"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\builder\\devtools-frontend\\scripts\\test\\run_test_suite.py",
-      "--target=Release",
-      "--test-suite=interactions"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]\\builder\\devtools-frontend\\third_party"
-      ]
-    },
-    "name": "Interactions"
-  },
-  {
     "name": "$result"
   }
 ]
