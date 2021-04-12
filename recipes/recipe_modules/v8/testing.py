@@ -233,7 +233,12 @@ class BaseTest(object):
     cas_digest = self.api.v8.isolated_tests.get(isolated_target)
     assert cas_digest
 
-    return self.api.chromium_swarming.task(cas_input_root=cas_digest, **kwargs)
+    # TODO(machenbach): Temporary fallback to allow fexibly switching to
+    # isolated until project completed: https://crbug.com/1154223
+    isolated_key = 'cas_input_root' if '/' in cas_digest else 'isolated'
+    kwargs[isolated_key] = cas_digest
+
+    return self.api.chromium_swarming.task(**kwargs)
 
   @property
   def uses_swarming(self):
