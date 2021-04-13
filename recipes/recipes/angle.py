@@ -50,9 +50,6 @@ def _CheckoutSteps(api):
     # hooks relative to the variable "root" which is set to . by default and
     # then to 'angle' on bots here:
     api.gclient.c.solutions[0].custom_vars['angle_root'] = 'angle'
-    # TODO (cnorthrop): Remove checkout_src_internal once ANGLE has been
-    # migrated to use the new var checkout_angle_internal (crbug.com/1034542)
-    api.gclient.c.solutions[0].custom_vars['checkout_src_internal'] = True
     api.gclient.c.solutions[0].custom_vars['checkout_angle_internal'] = True
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
