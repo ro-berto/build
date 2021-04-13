@@ -135,8 +135,7 @@ def _configure_source(api):
   soln = src_cfg.solutions.add()
   soln.name = 'devtools-frontend'
   soln.url = REPO_URL
-  commit_id = api.buildbucket.gitiles_commit.id
-  soln.revision = api.properties.get('revision', commit_id or 'HEAD')
+  soln.revision = api.buildbucket.gitiles_commit.id or 'HEAD'
   src_cfg.got_revision_mapping[soln.name] = 'got_revision'
   api.gclient.c = src_cfg
 
