@@ -3,13 +3,13 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'angle',
     'builder_group',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
-    'depot_tools/osx_sdk',
-    'goma',
     'depot_tools/gsutil',
+    'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -25,141 +25,19 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-    'clang': Property(default=None, kind=bool),
-    'debug': Property(default=False, kind=bool),
-    'target_cpu': Property(default=None, kind=str),
+    'clang': Property(default=True, kind=bool),
     'trace_tests': Property(default=False, kind=bool),
-    'uwp': Property(default=False, kind=bool),
 }
 
 
-def _IsGomaEnabled(clang):
-  return clang is None or clang
-
-
-def _CheckoutSteps(api):
-  # Checkout angle and its dependencies (specified in DEPS) using gclient.
-  solution_path = api.path['cache'].join('builder')
-  api.file.ensure_directory('init cache if not exists', solution_path)
-  with api.context(cwd=solution_path):
-    api.gclient.set_config('angle')
-    api.gclient.c.got_revision_mapping['angle'] = 'got_revision'
-    # Standalone developer angle builds want the angle checkout in the same
-    # directory the .gclient file is in.  Bots want it in a directory called
-    # 'angle'.  To make both cases work, the angle DEPS file pulls deps and runs
-    # hooks relative to the variable "root" which is set to . by default and
-    # then to 'angle' on bots here:
-    api.gclient.c.solutions[0].custom_vars['angle_root'] = 'angle'
-    api.gclient.c.solutions[0].custom_vars['checkout_angle_internal'] = True
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
-
-
-def _OutPath(target_cpu, debug, clang, uwp):
-  out_dir = 'debug' if debug else 'release'
-  if clang:
-    out_dir += '_clang'
-  if uwp:
-    out_dir += '_uwp'
-  if target_cpu:
-    out_dir += '_' + target_cpu
-  return out_dir
-
-
-# _GNGenBuilds calls 'gn gen'.
-def _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir):
-  gn_bool = {True: 'true', False: 'false'}
-
-  # Prepare the arguments to pass in.
-  args = [
-      'build_angle_gles1_conform_tests=true',
-      'build_angle_trace_perf_tests=true',
-      'is_debug=%s' % gn_bool[debug],
-      'is_component_build=false',
-  ]
-
-  if _IsGomaEnabled(clang):
-    api.goma.ensure_goma()
-    args.extend(['use_goma=true', 'goma_dir="%s"' % api.goma.goma_dir])
-  else:
-    # Goma implicitly sets symbol_level=1. Set explicitly here otherwise.
-    args.extend(['symbol_level=1'])
-
-  # Generate build files by GN.
-  checkout = api.path['checkout']
-  gn_cmd = api.depot_tools.gn_py_path
-
-  if clang is not None:
-    args.append('is_clang=%s' % gn_bool[clang])
-
-  if target_cpu:
-    args.append('target_cpu="%s"' % target_cpu)
-
-  if uwp:
-    args.append('target_os="winuwp"')
-
-  with api.context(cwd=checkout):
-    api.python('gn gen', gn_cmd,
-               ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
-                '--args=' + ' '.join(args), '--check'])
-
-
-def _BuildSteps(api, out_dir, clang):
-  debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
-
-  # TODO: Fix ANGLE linux-gcc build http://crbug.com/842146
-  if 'linux-gcc' in api.buildbucket.builder_name:
-    ninja_cmd.append('-n')
-
-  if _IsGomaEnabled(clang):
-    ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
-    api.goma.build_with_goma(
-        name='compile with ninja',
-        ninja_command=ninja_cmd,
-        ninja_log_outdir=debug_path,
-        ninja_log_compiler='clang')
-  else:
-    api.step('compile with ninja', ninja_cmd)
-
-
-def _TraceTestsStep(api, clang):
-  assert _IsGomaEnabled(clang)
-  api.goma.ensure_goma()
-  checkout = api.path['checkout']
-  with api.context(cwd=checkout):
-    cmd = [
-        'python3',
-        'src/tests/capture_replay_tests.py',
-        '--use-goma',
-        '--goma-dir=%s' % api.goma.goma_dir,
-        '--log',
-        'debug',
-        '--gtest_filter=*/ES2_Vulkan_SwiftShader',
-        '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
-        '--depot-tools-path=%s' % api.depot_tools.root,
-    ]
-
-    if api.platform.is_linux:
-      cmd += ['--xvfb']
-
-    # TODO(jmadill): Figure out why Linux is failing. http://anglebug.com/5530
-    if not api.platform.is_linux:
-      api.goma.start()
-      api.step('Run trace tests', cmd)
-      api.goma.stop(0)
-
-
-def RunSteps(api, clang, debug, target_cpu, trace_tests, uwp):
-  _CheckoutSteps(api)
+def RunSteps(api, clang, trace_tests):
+  angle = api.angle
+  angle.apply_bot_config(clang)
 
   if trace_tests:
-    _TraceTestsStep(api, clang)
+    angle.trace_tests(clang)
   else:
-    out_dir = _OutPath(target_cpu, debug, clang, uwp)
-    with api.osx_sdk('mac'):
-      _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir)
-      _BuildSteps(api, out_dir, clang)
+    angle.compile(clang)
 
 
 def GenTests(api):

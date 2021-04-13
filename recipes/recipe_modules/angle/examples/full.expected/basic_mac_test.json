@@ -89,6 +89,38 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
@@ -97,7 +129,9 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GYP_DEFINES": "clang=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [
@@ -220,9 +254,9 @@
       "[CACHE]/builder/angle/tools/mb/mb.py",
       "lookup",
       "-m",
-      "client.angle",
+      "angle",
       "-b",
-      "linux",
+      "ANGLE Test Mac Builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -232,6 +266,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -246,9 +281,9 @@
       "[CACHE]/builder/angle/tools/mb/mb.py",
       "gen",
       "-m",
-      "client.angle",
+      "angle",
       "-b",
-      "linux",
+      "ANGLE Test Mac Builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -262,6 +297,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
@@ -303,7 +339,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -328,7 +365,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux"
+      "[CACHE]/goma/data/ANGLE_Test_Mac_Builder"
     ],
     "cwd": "[CACHE]/builder/angle",
     "env": {
@@ -350,9 +387,10 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ANGLE_Test_Mac_Builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -424,7 +462,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "compile"
   },
@@ -444,7 +482,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "compile confirm no-op"
   },
@@ -569,12 +607,12 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"angle\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"ANGLE Test Mac Builder\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux",
+      "ANGLE Test Mac Builder",
       "--buildbot-mastername",
-      "client.angle",
+      "angle",
       "--buildbot-slavename",
       "fake-bot-id"
     ],

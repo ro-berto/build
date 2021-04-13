@@ -20,7 +20,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'angle_root': 'angle', 'checkout_angle_internal': True}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'angle_root': 'angle', 'checkout_angle_internal': True}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"angle\"}",
       "--git-cache-dir",
@@ -95,6 +95,10 @@
       "runhooks"
     ],
     "cwd": "[CACHE]\\builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "clang=0"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -104,25 +108,187 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder\\angle\\out\\Release"
+    ],
+    "infra_step": true,
+    "name": "ensure output directory"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
+      "[CACHE]\\builder\\angle\\out\\Release\\CR_COMPILE_GUARD.txt"
+    ],
+    "infra_step": true,
+    "name": "create compile guard",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
+      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gn.py",
-      "--root=[CACHE]\\builder\\angle",
-      "gen",
-      "//out/debug_uwp",
-      "--args=build_angle_gles1_conform_tests=true build_angle_trace_perf_tests=true is_debug=true is_component_build=false symbol_level=1 is_clang=false target_os=\"winuwp\"",
-      "--check"
+      "[CACHE]\\builder\\angle\\tools\\mb\\mb.py",
+      "lookup",
+      "-m",
+      "client.angle",
+      "-b",
+      "windows",
+      "--config-file",
+      "[CACHE]\\builder\\angle\\infra\\specs\\angle_mb_config.pyl",
+      "--quiet"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "name": "gn gen"
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "lookup GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\angle\\tools\\mb\\mb.py",
+      "gen",
+      "-m",
+      "client.angle",
+      "-b",
+      "windows",
+      "--config-file",
+      "[CACHE]\\builder\\angle\\infra\\specs\\angle_mb_config.pyl",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[CACHE]\\builder\\angle\\infra\\specs\\gn_isolate_map.pyl",
+      "//out/Release"
+    ],
+    "cwd": "[CACHE]\\builder\\angle",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]\\builder\\angle\\out\\Release\\gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]\\builder\\angle\\out\\Release"
+    ],
+    "cwd": "[CACHE]\\builder\\angle",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile"
   },
   {
     "cmd": [
       "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "-w",
+      "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\angle\\out\\debug_uwp"
+      "[CACHE]\\builder\\angle\\out\\Release",
+      "-d",
+      "explain",
+      "-n"
     ],
-    "name": "compile with ninja"
+    "cwd": "[CACHE]\\builder\\angle",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "compile confirm no-op"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]\\recipes\\upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[CACHE]\\builder\\angle\\out\\Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\angle\\\\out\\\\Release\"]",
+      "--build-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "unknown"
+    ],
+    "cwd": "[CACHE]\\builder\\angle",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]\\builder\\angle\\out\\Release\\CR_COMPILE_GUARD.txt"
+    ],
+    "infra_step": true,
+    "name": "remove compile guard"
   },
   {
     "name": "$result"
