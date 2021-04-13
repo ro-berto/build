@@ -791,6 +791,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Linux Release (NVIDIA)',
                 ),
             ]),
+        'linux-no-base-tracing-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='linux-no-base-tracing-rel',
+            ),
         'linux-ozone-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
