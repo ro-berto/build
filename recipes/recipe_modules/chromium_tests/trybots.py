@@ -509,19 +509,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
-        # TODO(fjhenigman): Add Ozone testers when possible.
-        'linux_angle_ozone_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Ozone Builder',
-                execution_mode=try_spec.COMPILE,
-            ),
-        'linux-ozone-angle-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='linux-ozone-angle-builder',
-                execution_mode=try_spec.COMPILE,
-            ),
         'linux_angle_deqp_rel_ng':
             try_spec.TrySpec.create(
                 mirrors=[

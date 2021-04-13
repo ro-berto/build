@@ -474,25 +474,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'GPU FYI Linux Ozone Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'GPU FYI Linux Builder (dbg)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -1398,22 +1379,6 @@ SPEC = {
             execution_mode=bot_spec.TEST,
             parent_buildername='GPU Fake Linux Builder',
             simulation_platform='linux',
-        ),
-    'Linux FYI Ozone (Intel)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Linux Ozone Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
         ),
 
     # The following machines don't actually exist. They are specified
