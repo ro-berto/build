@@ -1,8 +1,8 @@
-# scripts/slave
+# recipes
 
-This directory contains scripts which run on buildbot 'slave' machines.
-The primary form of these scripts is in [recipes][1], which live
-in the `recipes` and `recipe_modules` folders.
+This directory contains scripts which run on LUCI builders. These scripts take
+the form of [recipes][1], a command-execution DSL. The recipes in this repo live
+in the `recipes` and `recipe_modules` subdirectories.
 
 [1]: https://chromium.googlesource.com/infra/luci/recipes-py
 
@@ -39,10 +39,10 @@ expectation files match the current recipe code, but doesn't emit the new JSON
 files if it finds a descrepancy.
 
 ## Recipes documentation
+
 The recipe code in this directory (modules in `recipe_modules` and recipes in
 `recipes`) have some documentation in them, in the standard Python docstring
 style. You can view this documentation by reading the files. The recipe system
 also has a way to generate documentation for a set of recipes. Running
 `./recipes.py doc` from this directory will generate a `README.recipes.md` file.
 This file may be easier to use than directly browsing the files themselves.
-
