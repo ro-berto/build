@@ -166,6 +166,17 @@ class ReclientApi(recipe_api.RecipeApi):
   def _tmp_base_dir(self):
     return self.m.path['tmp_base']
 
+  @property
+  def base_cache_path_per_follower(self):
+    return self.m.path['cache'].join('reclient')
+
+  @property
+  def deps_cache_path(self):
+    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
+                              self.m.buildbucket.builder_name)
+    data_cache = self.base_cache_path_per_follower.join('deps')
+    return data_cache.join(safe_buildername)
+
   @contextlib.contextmanager
   def process(self, ninja_step_name, ninja_command):
     """Do preparation and cleanup steps for running the ninja command.
@@ -177,7 +188,8 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     reclient_log_dir = self.m.path.mkdtemp('reclient_log')
     with self.m.step.nest('preprocess for reclient'):
-      self._start_reproxy(reclient_log_dir)
+      self._make_reclient_cache_dir(self.deps_cache_path)
+      self._start_reproxy(reclient_log_dir, self.deps_cache_path)
 
       # TODO: Shall we use the same project providing the RBE workers?
       cloudtail_project_id = 'goma-logs'
@@ -201,7 +213,11 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_rpl(reclient_log_dir, gzip_name_maker)
         self.m.file.rmtree('cleanup reclient log dir', reclient_log_dir)
 
-  def _start_reproxy(self, reclient_log_dir):
+  def _make_reclient_cache_dir(self, reclient_cache_dir):
+    """Ensure that reclient_cache_exists, create it if it doesn't."""
+    self.m.file.ensure_directory('reclient cache directory', reclient_cache_dir)
+
+  def _start_reproxy(self, reclient_log_dir, reclient_cache_dir):
     """Starts the reproxy via bootstramp.
 
     Args:
@@ -211,6 +227,7 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
+        'RBE_deps_cache_dir': reclient_cache_dir,
         'RBE_instance': self.instance,
         'RBE_log_format': _REPROXY_LOG_FORMAT,
         'RBE_log_dir': reclient_log_dir,
