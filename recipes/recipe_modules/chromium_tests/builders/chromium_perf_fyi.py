@@ -2,23 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .. import bot_spec
 from . import chromium_perf
 
-from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
-from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
-
 SPEC = {}
-
-
-@CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official', 'mb'])
-def chromium_perf_clang(_):
-  pass
-
-
-@GCLIENT_CONFIG_CTX(includes=['chromium_perf'])
-def chromium_perf_clang(_):
-  pass
 
 
 def _AddBuildSpec(name,
