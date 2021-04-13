@@ -23,16 +23,16 @@ PROPERTIES = InputProperties
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     # 1. update the bot to have latest scripts
-    bot = api.chromium_tests.lookup_bot_metadata(builders=None)
-    execution_mode = bot.settings.execution_mode
+    _, bot_config = api.chromium_tests.lookup_builder()
+    execution_mode = bot_config.execution_mode
     if execution_mode != bot_spec.TEST:
       api.python.infra_failing_step(
           'chromium_speed_tester',
           'Unexpected execution mode. Expect: %s, Actual: %s' %
           (bot_spec.TEST, execution_mode))
-    api.chromium_tests.configure_build(bot.settings)
+    api.chromium_tests.configure_build(bot_config)
     api.chromium_tests.prepare_checkout(
-        bot.settings, timeout=3600, no_fetch_tags=True)
+        bot_config, timeout=3600, no_fetch_tags=True)
 
     # 2. run collect task for each group
     task_groups = api.json.loads(properties.tasks_groups)

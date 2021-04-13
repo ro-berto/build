@@ -34,8 +34,8 @@ DEST_BUCKET_LEGACY = 'chromium-owners'
 
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.
-  bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder')])
+  _, bot_config = api.chromium_tests.lookup_builder(
+      chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder'))
   # configure_build() is required by prepare-checkout
   api.chromium_tests.configure_build(bot_config)
   api.chromium_tests.prepare_checkout(bot_config, report_cache_state=False)

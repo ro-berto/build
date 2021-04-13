@@ -17,8 +17,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  builder_id = api.chromium.get_builder_id()
-  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
+  _, bot_config = api.chromium_tests.lookup_builder()
   api.chromium_tests.configure_build(bot_config)
   build_dir = api.chromium.output_dir
   api.archive.generic_archive(

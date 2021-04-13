@@ -26,9 +26,8 @@ BUILDERS = bot_db.BotDatabase.create({
 
 
 def RunSteps(api):
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium.get_builder_id()], builders=BUILDERS)
-  api.chromium_tests.configure_build(bot_config_object)
+  _, bot_config = api.chromium_tests.lookup_builder(bot_db=BUILDERS)
+  api.chromium_tests.configure_build(bot_config)
 
 
 def GenTests(api):

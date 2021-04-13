@@ -42,9 +42,9 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
 
 
 def RunSteps(api):
-  bot = api.chromium_tests.lookup_bot_metadata()
-  api.chromium_tests.configure_build(bot.settings)
-  api.chromium_tests.prepare_checkout(bot.settings)
+  _, bot_config = api.chromium_tests.lookup_builder()
+  api.chromium_tests.configure_build(bot_config)
+  api.chromium_tests.prepare_checkout(bot_config)
 
 
 def GenTests(api):

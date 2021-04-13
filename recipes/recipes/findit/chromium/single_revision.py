@@ -100,7 +100,7 @@ def _configure_builder(api, target_tester):
   bot_mirror = api.findit.get_bot_mirror_for_tester(
       chromium.BuilderId.create_for_group(
           target_tester.master or target_tester.group, target_tester.builder))
-  bot_config = api.chromium_tests.create_bot_config_object([bot_mirror])
+  bot_config = api.findit.get_bot_config_for_mirror(bot_mirror)
   api.chromium_tests.configure_build(bot_config)
 
   # If there is a problem with goma, rather than default to compiling locally

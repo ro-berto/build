@@ -19,9 +19,9 @@ from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 
 def RunSteps(api):
-  bot_config = api.chromium_tests.create_bot_config_object(
-      [BuilderId.create_for_group('test_group', 'test_buildername')],
-      builders=bot_db.BotDatabase.create({
+  _, bot_config = api.chromium_tests.lookup_builder(
+      BuilderId.create_for_group('test_group', 'test_buildername'),
+      bot_db=bot_db.BotDatabase.create({
           'test_group': {
               'test_buildername':
                   bot_spec.BotSpec.create(

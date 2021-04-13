@@ -70,7 +70,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
                              use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
-    bot_config = api.chromium_tests.create_bot_config_object([builder_id])
+    _, bot_config = api.chromium_tests.lookup_builder(builder_id)
     bot_update_step, build_config = api.chromium_tests.prepare_checkout(
         bot_config, root_solution_revision=revision, report_cache_state=False)
 
@@ -127,7 +127,7 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
   target_builder_group = api.builder_group.for_target
   builder_id = chromium.BuilderId.create_for_group(target_builder_group,
                                                    target_buildername)
-  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
+  _, bot_config = api.chromium_tests.lookup_builder(builder_id)
   api.chromium_tests.configure_build(bot_config)
 
   api.chromium.apply_config('goma_failfast')

@@ -36,10 +36,9 @@ def RunSteps(api):
   # Fake path, as the real one depends on having done a chromium checkout.
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium.get_builder_id()])
-  api.chromium_tests.configure_build(bot_config_object)
-  api.chromium_tests.prepare_checkout(bot_config_object)
+  _, bot_config = api.chromium_tests.lookup_builder()
+  api.chromium_tests.configure_build(bot_config)
+  api.chromium_tests.prepare_checkout(bot_config)
 
   test_repeat_count = api.properties.get('repeat_count')
   if api.properties.get('swarm_hashes'):

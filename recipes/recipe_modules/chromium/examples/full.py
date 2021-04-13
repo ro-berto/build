@@ -18,7 +18,6 @@ DEPS = [
 from recipe_engine import post_process
 
 def RunSteps(api):
-  builder_id = api.chromium.get_builder_id()
   use_goma_module = api.properties.get('use_goma_module', False)
   use_reclient = api.properties.get('use_reclient', False)
   out_dir = api.properties.get('out_dir', None)
@@ -26,7 +25,7 @@ def RunSteps(api):
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
-    bot_config = api.chromium_tests.create_bot_config_object([builder_id])
+    builder_id, bot_config = api.chromium_tests.lookup_builder()
     api.chromium_tests.configure_build(bot_config)
 
     api.chromium.get_build_target_arch()

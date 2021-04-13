@@ -62,16 +62,10 @@ def RunSteps(api):
             all_compile_targets={'script.py': ['compile_target']},
             script_args=['some', 'args'],
             override_compile_targets=['other_target']))
-  if api.tryserver.is_tryserver:
-    builder_id = api.chromium.get_builder_id()
-    try_spec = api.chromium_tests.trybots[builder_id]
-    bot_ids = try_spec.mirrors
-  else:
-    bot_ids = [api.chromium.get_builder_id()]
-  bot_config_object = api.chromium_tests.create_bot_config_object(bot_ids)
-  api.chromium_tests.configure_build(bot_config_object)
+  _, bot_config = api.chromium_tests.lookup_builder()
+  api.chromium_tests.configure_build(bot_config)
   tests = [s.get_test() for s in test_specs]
-  with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests=tests):
+  with api.chromium_tests.wrap_chromium_tests(bot_config, tests=tests):
     pass
 
 

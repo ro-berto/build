@@ -44,9 +44,9 @@ PROPERTIES = {
 def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
              expected_jsonish_result):
   assert api.tryserver.is_tryserver
-  bot = api.chromium_tests.lookup_bot_metadata(builders={})
+  _, bot_config = api.chromium_tests.lookup_builder()
 
-  api.chromium_tests.configure_build(bot.settings)
+  api.chromium_tests.configure_build(bot_config)
   api.chromium_swarming.configure_swarming(
       'chromium',
       precommit=True,
@@ -54,7 +54,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
       path_to_merge_scripts=api.path['start_dir'].join('checkout',
                                                        'merge_scripts'))
 
-  update_step, _build_config = api.chromium_tests.prepare_checkout(bot.settings)
+  update_step, _build_config = api.chromium_tests.prepare_checkout(bot_config)
 
   kwargs = {}
   if api.properties.get('shards'):
@@ -78,7 +78,8 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
-    task = api.chromium_tests.Task(bot, tests, update_step, affected_files)
+    task = api.chromium_tests.Task(bot_config, tests, update_step,
+                                   affected_files)
     task.should_retry_failures_with_changes = lambda: retry_failed_shards
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if fail_calculate_tests:

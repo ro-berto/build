@@ -20,23 +20,22 @@ PROPERTIES = InputProperties
 
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
-    builder_id = api.chromium.get_builder_id()
-    bot = api.chromium_tests.lookup_bot_metadata(
-        builder_id=builder_id, builders=None)
-    api.chromium_tests.report_builders(bot.settings)
-    execution_mode = bot.settings.execution_mode
+    builder_id, bot_config = api.chromium_tests.lookup_builder()
+    api.chromium_tests.report_builders(bot_config)
+    execution_mode = bot_config.execution_mode
     if execution_mode != bot_spec.TEST:
       api.python.infra_failing_step(
           'chromium_speed_tester',
           'Unexpected execution mode. Expect: %s, Actual: %s' %
           (bot_spec.TEST, execution_mode))
-    api.chromium_tests.configure_build(bot.settings)
+    api.chromium_tests.configure_build(bot_config)
     update_step, build_config = api.chromium_tests.prepare_checkout(
-        bot.settings, timeout=3600, no_fetch_tags=True)
-    api.chromium_tests.lookup_builder_gn_args(builder_id, bot)
+        bot_config, timeout=3600, no_fetch_tags=True)
+    api.chromium_tests.lookup_builder_gn_args(builder_id, bot_config)
     tests = build_config.tests_on(builder_id)
-    api.chromium_tests.download_command_lines_for_tests(tests, bot.settings)
-    test_failure_summary = api.chromium_tests.run_tests(builder_id, bot, tests)
+    api.chromium_tests.download_command_lines_for_tests(tests, bot_config)
+    test_failure_summary = api.chromium_tests.run_tests(builder_id, bot_config,
+                                                        tests)
 
     task_groups = {
         t.get_task(NO_SUFFIX).request.name:
@@ -64,7 +63,7 @@ def RunSteps(api, properties):
     api.chromium_tests.trigger_child_builds(
         builder_id,
         update_step,
-        bot.settings,
+        bot_config,
         additional_properties=additional_trigger_properties)
     return test_failure_summary
 

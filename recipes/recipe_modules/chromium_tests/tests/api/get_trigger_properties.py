@@ -25,9 +25,9 @@ def override_foo(c):
 
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  bot = api.chromium_tests.lookup_bot_metadata()
-  api.chromium_tests.configure_build(bot.settings)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot.settings)
+  builder_id, bot_config = api.chromium_tests.lookup_builder()
+  api.chromium_tests.configure_build(bot_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
   properties = api.chromium_tests._get_trigger_properties(
       builder_id, update_step)
   expected = types.thaw(api.properties['expected_trigger_properties'])

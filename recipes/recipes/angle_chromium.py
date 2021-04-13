@@ -51,8 +51,8 @@ def get_component_revision_from_deps(api, component, project, repository_url,
 
 
 def RunSteps(api):
-  bot = api.chromium_tests.lookup_bot_metadata()
-  is_angle_tot = 'angle_top_of_tree' in bot.settings.gclient_apply_config
+  _, bot_config = api.chromium_tests.lookup_builder()
+  is_angle_tot = 'angle_top_of_tree' in bot_config.gclient_apply_config
   if is_angle_tot:
     angle_revision = 'refs/heads/master'
   else:

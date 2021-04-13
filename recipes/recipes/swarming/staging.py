@@ -63,8 +63,7 @@ def RunSteps(api):
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
-  bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium.get_builder_id()])
+  _, bot_config = api.chromium_tests.lookup_builder()
   api.chromium_swarming.swarming_server = (
       bot_config.swarming_server or 'https://chromium-swarm-dev.appspot.com')
 

@@ -22,19 +22,19 @@ def RunSteps(api):
   builder_id = chromium.BuilderId.create_for_group(
       builder_to_trigger['builder_group'], builder_to_trigger['buildername'])
   with api.chromium.chromium_layout():
-    bot = api.chromium_tests.lookup_bot_metadata(builder_id=builder_id)
+    _, bot_config = api.chromium_tests.lookup_builder(builder_id=builder_id)
 
-    api.chromium_tests.report_builders(bot.settings)
+    api.chromium_tests.report_builders(bot_config)
 
-    api.chromium_tests.configure_build(bot.settings)
+    api.chromium_tests.configure_build(bot_config)
     _, build_config = api.chromium_tests.prepare_checkout(
-        bot.settings, timeout=3600, add_blamelists=True)
+        bot_config, timeout=3600, add_blamelists=True)
 
     affected_files = api.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
 
     _, compile_targets = api.chromium_tests._determine_compilation_targets(
-        builder_id, bot, affected_files, build_config)
+        builder_id, bot_config, affected_files, build_config)
 
     if compile_targets:
       request = api.buildbucket.schedule_request(

@@ -48,15 +48,14 @@ def validate_tester_config(api, builder_group, buildername, bot_config):
   parent_buildername = bot_config.parent_buildername
 
   parent_builder_group = bot_config.parent_builder_group or builder_group
-  parent_bot_config = api.chromium_tests.create_bot_config_object([
-      chromium.BuilderId.create_for_group(parent_builder_group,
-                                          parent_buildername)
-  ])
+  parent_builder_id = chromium.BuilderId.create_for_group(
+      parent_builder_group, parent_buildername)
+  parent_builder_spec = bot_config.bot_db[parent_builder_id]
 
   for a in ('chromium_config', 'chromium_apply_config',
             'chromium_config_kwargs', 'android_config'):
     tester_value = _normalize(getattr(bot_config, a))
-    builder_value = _normalize(getattr(parent_bot_config, a))
+    builder_value = _normalize(getattr(parent_builder_spec, a))
 
     validator = VALIDATORS.get(
         (builder_group, buildername, a), lambda tester_value, builder_value:
@@ -72,8 +71,7 @@ def validate_tester_config(api, builder_group, buildername, bot_config):
 
 
 def RunSteps(api):
-  builder_id = api.chromium.get_builder_id()
-  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
+  builder_id, bot_config = api.chromium_tests.lookup_builder()
 
   # For testers, check that various configs are equal to the builder's
   if bot_config.execution_mode == bot_spec.TEST:

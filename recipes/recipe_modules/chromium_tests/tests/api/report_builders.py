@@ -29,9 +29,9 @@ TRYBOTS = try_spec.TryDatabase.create({
 
 
 def RunSteps(api):
-  bot = api.chromium_tests.lookup_bot_metadata(
-      builders=BUILDERS, mirrored_bots=TRYBOTS)
-  api.chromium_tests.report_builders(bot.settings)
+  _, bot_config = api.chromium_tests.lookup_builder(
+      bot_db=BUILDERS, try_db=TRYBOTS)
+  api.chromium_tests.report_builders(bot_config)
 
 
 def check_link(check, steps, expected_link):

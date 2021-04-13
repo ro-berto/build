@@ -26,12 +26,7 @@ _NUM_TESTS = 7
 
 
 def RunSteps(api):
-  builder_id = api.chromium.get_builder_id()
-  try_spec = api.chromium_tests.trybots.get(builder_id)
-  if try_spec is None:
-    try_spec = try_spec_module.TrySpec.create(mirrors=[builder_id])
-
-  bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
+  builder_id, bot_config = api.chromium_tests.lookup_builder(use_try_db=True)
   api.chromium_tests.configure_build(bot_config)
   # Fake path.
   api.profiles._merge_scripts_dir = api.path['start_dir']

@@ -72,8 +72,8 @@ def TargetGroupAndBuilder(api):
 
 
 def RunSteps(api):
-  bot_config = api.chromium_tests.create_bot_config_object(
-      [chromium.BuilderId.create_for_group(*TargetGroupAndBuilder(api))])
+  builder_id = chromium.BuilderId.create_for_group(*TargetGroupAndBuilder(api))
+  _, bot_config = api.chromium_tests.lookup_builder(builder_id)
   api.chromium_tests.configure_build(bot_config)
 
   base_dir = api.chromium_checkout.checkout_dir

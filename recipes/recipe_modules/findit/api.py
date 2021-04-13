@@ -8,7 +8,9 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import bot_spec, steps, try_spec
+from RECIPE_MODULES.build.chromium_tests import (bot_spec, bot_config as
+                                                 bot_config_module, steps,
+                                                 try_spec as try_spec_module)
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -29,14 +31,21 @@ class FinditApi(recipe_api.RecipeApi):
     tester_spec = builders[tester_id]
 
     if tester_spec.parent_buildername is None:
-      return try_spec.TryMirror.create(
+      return try_spec_module.TryMirror.create(
           buildername=tester_id.builder, builder_group=tester_id.group)
 
-    return try_spec.TryMirror.create(
+    return try_spec_module.TryMirror.create(
         builder_group=tester_spec.parent_builder_group or tester_id.group,
         buildername=tester_spec.parent_buildername,
         tester=tester_id.builder,
         tester_group=tester_id.group)
+
+  def get_bot_config_for_mirror(self, mirror, builders=None):
+    try_spec = try_spec_module.TrySpec.create([mirror])
+    return bot_config_module.BotConfig.create(
+        builders or self.m.chromium_tests.builders,
+        try_spec,
+        python_api=self.m.python)
 
   def _calculate_repo_dir(self, solution_name):
     """Returns the relative path of the solution checkout to the root one."""
@@ -194,7 +203,7 @@ class FinditApi(recipe_api.RecipeApi):
     with self.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
       # TODO(stgao): refactor this out.
-      bot_config = self.m.chromium_tests.create_bot_config_object([bot_mirror])
+      bot_config = self.get_bot_config_for_mirror(bot_mirror)
       bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
           bot_config, root_solution_revision=revision, report_cache_state=False)
 
@@ -345,8 +354,7 @@ class FinditApi(recipe_api.RecipeApi):
         target_tester_id, builders=builders)
 
     # Configure to match the compile config on the builder.
-    bot_config = self.m.chromium_tests.create_bot_config_object(
-        [bot_mirror.builder_id], builders=builders)
+    bot_config = self.get_bot_config_for_mirror(bot_mirror, builders=builders)
     self.m.chromium_tests.configure_build(bot_config)
 
     # We rely on goma for fast compile. It's better to fail early if goma can't

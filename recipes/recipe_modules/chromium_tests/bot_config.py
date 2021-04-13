@@ -64,7 +64,7 @@ class BotConfig(object):
       raise
 
   def __attrs_post_init__(self):
-    for mirror in self.bot_mirrors:
+    for mirror in self.mirrors:
       if not mirror.builder_id.group in self.bot_db.builders_by_group:
         raise BotConfigException(
             'No configuration present for group {!r}'.format(
@@ -76,26 +76,15 @@ class BotConfig(object):
 
   @cached_property
   def builder_ids(self):
-    return [m.builder_id for m in self.bot_mirrors]
+    return [m.builder_id for m in self.mirrors]
 
   @cached_property
   def mirrors(self):
     return self._try_spec.mirrors
 
-  # TODO(gbeaty) Remove this, update code to access mirrors instead
   @cached_property
-  def bot_mirrors(self):
-    return self.mirrors
-
-  # TODO(gbeaty) Remove this, update code to use the bot config directly
-  @cached_property
-  def settings(self):
-    return self
-
-  # TODO(gbeaty) Remove this, update code to access try_spec instead
-  @cached_property
-  def config(self):
-    return self._try_spec
+  def analyze_names(self):
+    return self._try_spec.analyze_names
 
   @cached_property
   def retry_failed_shards(self):
@@ -106,10 +95,18 @@ class BotConfig(object):
     return self._try_spec.execution_mode == try_spec_module.COMPILE
 
   @cached_property
+  def use_regression_test_selection(self):
+    return self._try_spec.use_regression_test_selection
+
+  @cached_property
+  def regression_test_selection_recall(self):
+    return self._try_spec.regression_test_selection_recall
+
+  @cached_property
   def root_keys(self):
     keys = list(self.builder_ids)
     keys.extend(mirror.tester_id
-                for mirror in self.bot_mirrors
+                for mirror in self.mirrors
                 if mirror.tester_id is not None)
     return keys
 
