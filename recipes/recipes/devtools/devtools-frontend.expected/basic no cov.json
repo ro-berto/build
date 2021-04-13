@@ -587,21 +587,6 @@
       "-u",
       "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
       "--target=Release",
-      "--test-suite=e2e"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "name": "E2E tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
-      "--target=Release",
       "--test-suite=interactions"
     ],
     "env_prefixes": {
@@ -610,6 +595,21 @@
       ]
     },
     "name": "Interactions"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
+      "--target=Release",
+      "--test-suite=e2e"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "name": "E2E tests"
   },
   {
     "name": "$result"

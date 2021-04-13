@@ -108,17 +108,18 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
     # and configure script arguments
     #run_localization_check(api)
 
-    run_e2e(api, builder_config)
 
-    # TODO(liviurau): temporary removal of intercation tests on windows since
+    # TODO(liviurau): temporary removal of tests on windows since
     # they hang at Conductor boot https://crbug.com/1197538
     if not api.platform.is_win:
       run_interactions(api, builder_config)
+      run_e2e(api, builder_config)
 
     if can_run_experimental_steps(api):
       # Place here any unstable steps that you want to be performed on
       # builders with property run_experimental_steps == True
       run_interactions(api, builder_config)
+      run_e2e(api, builder_config)
 
 
 def _is_debug(builder_config):
