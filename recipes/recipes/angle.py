@@ -37,7 +37,7 @@ def RunSteps(api, clang, trace_tests):
   if trace_tests:
     angle.trace_tests(clang)
   else:
-    angle.compile(clang)
+    return angle.compile(clang)
 
 
 def GenTests(api):

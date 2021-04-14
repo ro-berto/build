@@ -37,10 +37,10 @@ class ANGLEApi(recipe_api.RecipeApi):
     if self.is_gcc(clang):
       return
     builder_id = self.m.chromium.get_builder_id()
-    self.m.chromium_tests.run_mb_and_compile(['all'],
-                                             None,
-                                             '',
-                                             builder_id=builder_id)
+    return self.m.chromium_tests.run_mb_and_compile(['all'],
+                                                    None,
+                                                    '',
+                                                    builder_id=builder_id)
 
   def trace_tests(self, api):
     self.checkout()
