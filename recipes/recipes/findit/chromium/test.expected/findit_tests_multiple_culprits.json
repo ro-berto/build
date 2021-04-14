@@ -22,7 +22,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -389,7 +389,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -1649,7 +1649,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -2846,7 +2846,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -4040,7 +4040,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -5226,7 +5226,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "300"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
