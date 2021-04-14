@@ -1680,12 +1680,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
-        'gpu-fyi-try-win7-amd-dbg-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win Builder (dbg)',
-                tester='Win7 FYI Debug (AMD)',
-            ),
         'gpu-fyi-try-win7-amd-rel-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',

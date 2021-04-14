@@ -32,41 +32,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'GPU FYI Win Builder (dbg)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='win',
-        ),
-    'Win7 FYI Debug (AMD)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
-            execution_mode=bot_spec.TEST,
-            parent_buildername='GPU FYI Win Builder (dbg)',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
     'Win7 FYI Release (AMD)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
