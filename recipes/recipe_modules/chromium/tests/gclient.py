@@ -106,3 +106,8 @@ def GenTests(api):
       api.properties(apply_gclient_config='enable_reclient'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'use_deps_cache_prototype_reclient',
+      api.properties(apply_gclient_config='use_deps_cache_prototype_reclient'),
+      api.post_process(post_process.DropExpectation),
+  )

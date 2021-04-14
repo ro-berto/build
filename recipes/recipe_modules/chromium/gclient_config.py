@@ -386,3 +386,10 @@ def enable_soda(c):
 @CONFIG_CTX()
 def enable_reclient(c):
   c.solutions[0].custom_vars['checkout_reclient'] = 'True'
+
+# This is a temporary configuration and will be removed once
+# performance data has been collected.
+@CONFIG_CTX()
+def use_deps_cache_prototype_reclient(c):
+  cv = c.solutions[0].custom_vars
+  cv['reclient_version'] = 're_client_version:0.27.0.6aeb539'

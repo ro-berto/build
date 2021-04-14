@@ -849,6 +849,23 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Linux Builder (deps-cache) (reclient)':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'Linux Builder (goma cache silo)':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -891,6 +908,24 @@ SPEC = {
             },
             simulation_platform='linux',
             build_gs_bucket='chromium-memory-archive',
+        ),
+    'TSAN Release (deps-cache) (reclient)':
+        bot_spec.BotSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            # Set archive build to false since this is a shadow.
+            cf_archive_build=False,
+            simulation_platform='linux',
         ),
     'TSAN Release (j-100) (reclient)':
         bot_spec.BotSpec.create(
