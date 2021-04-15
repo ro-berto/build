@@ -489,20 +489,18 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Step 1: Generate html files corresponding to device and host tests.
     jacoco_html_report_dir = coverage_dir.join(
         'coverage_html_%s' % self._current_processing_test_type)
+    args = [
+        '--format', 'html', '--coverage-dir', coverage_dir,
+        '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
+        jacoco_html_report_dir, '--cleanup'
+    ]
     if self._current_processing_test_type == 'unit':
-      exec_filename_exclude = 'unit_tests_excluded'
-    else:
-      exec_filename_exclude = ''
+      args.extend(['--exec-filename-excludes', 'unit_tests_excluded'])
     self.m.python(
         'Generate JaCoCo HTML report (%s)' % self._current_processing_test_type,
         self.m.path['checkout'].join('build', 'android',
                                      'generate_jacoco_report.py'),
-        args=[
-            '--format', 'html', '--coverage-dir', coverage_dir,
-            '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
-            jacoco_html_report_dir, '--exec-filename-excludes',
-            exec_filename_exclude, '--cleanup'
-        ],
+        args=args,
         **kwargs)
 
     # Step 2: Compress generated html files.
