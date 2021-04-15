@@ -1678,10 +1678,6 @@ def GenTests(api):
           }),
   )
 
-  def _check_migration_step(migration_type, test):
-    return 'test spec migration.{}.{}.{}.{}'.format(
-        migration_type, 'chromium.webrtc', 'WebRTC Chromium Mac Tester', test)
-
   yield api.test(
       'webrtc_chromium_mac_tester',
       api.chromium.ci_build(
@@ -1689,51 +1685,11 @@ def GenTests(api):
           builder='WebRTC Chromium Mac Tester',
           parent_buildername='WebRTC Chromium Mac Builder'),
       api.platform('mac', 64),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.webrtc',
-          {
-              'WebRTC Chromium Mac Tester': {
-                  'gtest_tests': [{
-                      'args': [
-                          '--gtest_filter=WebRtcWebcamBrowserTests*:'
-                          'WebRtcInternalsPerfBrowserTest.*:'
-                          'WebRtcStatsPerfBrowserTest.*:'
-                          'WebRtcVideoDisplayPerfBrowserTests*:'
-                          'WebRtcVideoHighBitrateBrowserTest*:'
-                          'WebRtcVideoQualityBrowserTests*', '--run-manual',
-                          '--ui-test-action-max-timeout=300000',
-                          '--test-launcher-timeout=350000',
-                          '--test-launcher-jobs=1', '--test-launcher-bot-mode',
-                          '--test-launcher-print-test-stdio=always'
-                      ],
-                      'merge': {
-                          'script':
-                              '//testing/merge_scripts/standard_gtest_merge.py'
-                      },
-                      'annotate': 'graphing',
-                      'perf_config': {
-                          'a_default_rev': 'r_webrtc_git',
-                          'r_webrtc_git': '${webrtc_got_rev}'
-                      },
-                      'swarming': {
-                          'can_use_on_swarming_builders': False
-                      },
-                      'test': 'browser_tests',
-                  }],
-              },
-          },
-      ),
       api.post_process(post_process.MustRun, 'ensure_installed'),
       api.post_process(post_process.StepSuccess, 'browser_tests'),
       api.post_process(post_process.StepSuccess,
                        'Upload to test-results [browser_tests]'),
       api.post_process(post_process.StatusSuccess),
-      api.post_check(
-          post_process.MustRun,
-          _check_migration_step(
-              'already migrated',
-              'browser_tests',
-          )),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1744,49 +1700,9 @@ def GenTests(api):
           builder='WebRTC Chromium Mac Tester',
           parent_buildername='WebRTC Chromium Mac Builder'),
       api.platform('mac', 64),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.webrtc',
-          {
-              'WebRTC Chromium Mac Tester': {
-                  'gtest_tests': [{
-                      'args': [
-                          '--gtest_filter=WebRtcWebcamBrowserTests*:'
-                          'WebRtcInternalsPerfBrowserTest.*:'
-                          'WebRtcStatsPerfBrowserTest.*:'
-                          'WebRtcVideoDisplayPerfBrowserTests*:'
-                          'WebRtcVideoHighBitrateBrowserTest*:'
-                          'WebRtcVideoQualityBrowserTests*', '--run-manual',
-                          '--ui-test-action-max-timeout=300000',
-                          '--test-launcher-timeout=350000',
-                          '--test-launcher-jobs=1', '--test-launcher-bot-mode',
-                          '--test-launcher-print-test-stdio=always'
-                      ],
-                      'merge': {
-                          'script':
-                              '//testing/merge_scripts/standard_gtest_merge.py'
-                      },
-                      'annotate': 'graphing',
-                      'perf_config': {
-                          'a_default_rev': 'r_webrtc_git',
-                          'r_webrtc_git': '${webrtc_got_rev}'
-                      },
-                      'swarming': {
-                          'can_use_on_swarming_builders': False
-                      },
-                      'test': 'browser_tests',
-                  }],
-              },
-          },
-      ),
       api.override_step_data('browser_tests',
                              api.legacy_annotation.failure_step),
       api.post_process(post_process.StepFailure, 'browser_tests'),
       api.post_process(post_process.StatusFailure),
-      api.post_check(
-          post_process.MustRun,
-          _check_migration_step(
-              'already migrated',
-              'browser_tests',
-          )),
       api.post_process(post_process.DropExpectation),
   )
