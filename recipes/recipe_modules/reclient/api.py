@@ -189,6 +189,7 @@ class ReclientApi(recipe_api.RecipeApi):
     reclient_log_dir = self.m.path.mkdtemp('reclient_log')
     with self.m.step.nest('preprocess for reclient'):
       self._make_reclient_cache_dir(self.deps_cache_path)
+      self._list_reclient_cache_dir(self.deps_cache_path)
       self._start_reproxy(reclient_log_dir, self.deps_cache_path)
 
       # TODO: Shall we use the same project providing the RBE workers?
@@ -216,6 +217,10 @@ class ReclientApi(recipe_api.RecipeApi):
   def _make_reclient_cache_dir(self, reclient_cache_dir):
     """Ensure that reclient_cache_exists, create it if it doesn't."""
     self.m.file.ensure_directory('reclient cache directory', reclient_cache_dir)
+
+  def _list_reclient_cache_dir(self, reclient_cache_dir):
+    """List contents of the reclient cache directory."""
+    self.m.file.listdir('list reclient cache directory', reclient_cache_dir)
 
   def _start_reproxy(self, reclient_log_dir, reclient_cache_dir):
     """Starts the reproxy via bootstramp.
