@@ -582,7 +582,7 @@ def RunSteps(api):
       with api.step.nest('bundle recipes'), api.context(
           cwd=repo_path, infra_steps=True):
         led_out = led_job.then('edit-recipe-bundle')
-      return led_out.result.user_payload.digest
+      return led_out.edit_rbh_value
 
     def apply(self, led_job):
       return led_job.then('edit', '-rbh', self._future.result())
