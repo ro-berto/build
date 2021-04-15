@@ -47,8 +47,6 @@ DEFAULT_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:linux-rel',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m89.try:linux-rel',
-    'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m90.try:linux-rel',
     'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
 )
@@ -65,7 +63,6 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
     builders=[
         'luci.chromium.try:ios-simulator',
         'luci.chromium-m88.try:ios-simulator',
-        'luci.chromium-m89.try:ios-simulator',
         'luci.chromium-m90.try:ios-simulator',
     ],
     files=[
@@ -82,7 +79,6 @@ PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
 FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m89.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
 )
 
@@ -110,12 +106,6 @@ CHROMIUM_SRC_TEST_CLS = {
             'https://chromium-review.googlesource.com/c/chromium/src/+/2537783',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2538112',
-    },
-    'luci.chromium-m89.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2638008',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2638010',
     },
     'luci.chromium-m90.try': {
         'slow':
@@ -906,7 +896,6 @@ def GenTests(api):
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
   )
 
@@ -918,6 +907,5 @@ def GenTests(api):
       default_builders(),
       led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m88.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m89.try:ios-simulator', 'ios/try'),
       led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
   )
