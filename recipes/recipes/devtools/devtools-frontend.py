@@ -109,18 +109,13 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
     #run_localization_check(api)
 
 
-    # TODO(liviurau): temporary removal of tests on windows since
-    # they hang at Conductor boot https://crbug.com/1197538
-    if not api.platform.is_win:
-      run_interactions(api, builder_config)
-      run_e2e(api, builder_config)
+    run_interactions(api, builder_config)
+    run_e2e(api, builder_config)
 
     if can_run_experimental_steps(api):
       # Place here any unstable steps that you want to be performed on
       # builders with property run_experimental_steps == True
-      run_interactions(api, builder_config)
-      run_e2e(api, builder_config)
-
+      pass
 
 def _is_debug(builder_config):
   return builder_config == 'Debug'
@@ -181,13 +176,21 @@ def run_localization_check(api): # pragma: no cover
 
 
 def run_e2e(api, builder_config, args=None):
-  run_script(api, 'E2E tests', 'run_test_suite.py',
-             ['--target=' + builder_config, '--test-suite=e2e'] + (args or []))
+  run_node_script(api, 'E2E tests', 'run_test_suite.js', [
+      "--test-suite-path=gen/test/e2e",
+      "--test-suite-source-dir=test/e2e",
+      "--test-server-type='hosted-mode'",
+      "--target=" + builder_config
+    ] + (args or []))
 
 
 def run_interactions(api, builder_config):
-  run_script(api, 'Interactions', 'run_test_suite.py',
-             ['--target=' +  builder_config, '--test-suite=interactions'])
+  run_node_script(api, 'Interactions', 'run_test_suite.js', [
+      "--test-suite-path=gen/test/interactions",
+      "--test-suite-source-dir=test/interactions",
+      "--test-server-type='component-docs'",
+      "--target=" + builder_config
+    ])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that

@@ -585,10 +585,15 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
-      "--target=Release",
-      "--test-suite=interactions"
+      "third_party/node/node.py",
+      "--output",
+      "scripts/test/run_test_suite.js",
+      "--test-suite-path=gen/test/interactions",
+      "--test-suite-source-dir=test/interactions",
+      "--test-server-type='component-docs'",
+      "--target=Release"
     ],
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"
@@ -600,10 +605,15 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
-      "--target=Release",
-      "--test-suite=e2e"
+      "third_party/node/node.py",
+      "--output",
+      "scripts/test/run_test_suite.js",
+      "--test-suite-path=gen/test/e2e",
+      "--test-suite-source-dir=test/e2e",
+      "--test-server-type='hosted-mode'",
+      "--target=Release"
     ],
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"

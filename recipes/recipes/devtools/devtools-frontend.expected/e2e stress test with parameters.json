@@ -3,12 +3,17 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/devtools-frontend/scripts/test/run_test_suite.py",
+      "third_party/node/node.py",
+      "--output",
+      "scripts/test/run_test_suite.js",
+      "--test-suite-path=gen/test/e2e",
+      "--test-suite-source-dir=test/e2e",
+      "--test-server-type='hosted-mode'",
       "--target=Release",
-      "--test-suite=e2e",
       "--ITERATIONS=100",
       "--SUITE=flaky/suite"
     ],
+    "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/devtools-frontend/third_party"
