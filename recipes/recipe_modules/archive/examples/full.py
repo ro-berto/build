@@ -36,10 +36,15 @@ def RunSteps(api):
     api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
                                                        'squashfs-tools',
                                                        'mksquashfs'))
-    api.archive.generic_archive(
-        build_dir=api.m.path.mkdtemp(),
-        update_properties=api.properties.get('update_properties'),
-        custom_vars=api.properties.get('custom_vars'))
+    build_dir = api.m.path.mkdtemp()
+    update_properties = api.properties.get('update_properties')
+    custom_vars = api.properties.get('custom_vars')
+    upload_results = api.archive.generic_archive(
+        build_dir=build_dir,
+        update_properties=update_properties,
+        custom_vars=custom_vars)
+    api.archive.generic_archive_after_tests(
+        build_dir=build_dir, upload_results=upload_results, test_success=True)
     return
 
   if 'no_llvm' not in api.properties:
@@ -280,6 +285,7 @@ def GenTests(api):
   archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
   archive_data.latest_upload.gcs_file_content = \
       '{%position%}_{%commit%}_{%timestamp%}'
+  archive_data.only_upload_on_tests_success = True
   input_properties.archive_datas.extend([archive_data])
 
   yield api.test(

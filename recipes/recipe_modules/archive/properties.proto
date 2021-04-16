@@ -20,7 +20,7 @@ message ArchiveFileRename {
   string to_file = 2;
 }
 
-// Next id: 11
+// Next id: 12
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -115,6 +115,9 @@ message ArchiveData {
   // This key is not required and simply defaults to build dir if
   // not provided.
   string base_dir = 9;
+
+  // If sets to true, only upload after tests are run successfully.
+  bool only_upload_on_tests_success = 11;
 }
 
 message Compression {
@@ -123,7 +126,7 @@ message Compression {
   int32 compression_level = 1;
 }
 
-// Next id: 6
+// Next id: 7
 message CIPDArchiveData {
   // Path to YAML package definition files (relative to build directory).
   repeated string yaml_files = 1;
@@ -140,6 +143,10 @@ message CIPDArchiveData {
 
   // Sets the compression level.
   Compression compression = 5;
+
+  // If sets to true, add refs to the build only after tests are run
+  // successfully.
+  bool only_set_refs_on_tests_success = 6;
 }
 
 // Next id: 2

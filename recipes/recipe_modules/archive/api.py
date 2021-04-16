@@ -669,20 +669,78 @@ class ArchiveApi(recipe_api.RecipeApi):
       config: An instance of archive/properties.proto:InputProperties.
               DEPRECATED: If None, this will default to the global property
               $build/archive.
+
+    Returns:
+      A dictionary that stores custom_vars and update_properties, as well as
+      the following keys:
+        gcs: A list of dictionaries of files and their respective upload
+             destination urls.
+        cipd: A dictionary containing information about unused references for
+              each package.
+
     """
+    upload_results = {}
+    upload_results['cipd'] = {}
+    upload_results['gcs'] = []
+    upload_results['update_properties'] = update_properties
+    upload_results['custom_vars'] = custom_vars
+
     if config is None:
       config = self._default_config
 
     if not config.archive_datas and not config.cipd_archive_datas:
-      return
+      return upload_results
 
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in config.archive_datas:
-        self.gcs_archive(build_dir, update_properties, archive_data,
-                         custom_vars)
+        if not archive_data.only_upload_on_tests_success:
+          upload_results['gcs'].extend(
+              self.gcs_archive(build_dir, update_properties, archive_data,
+                               custom_vars))
       for cipd_archive_data in config.cipd_archive_datas:
-        self.cipd_archive(build_dir, update_properties, custom_vars,
-                          cipd_archive_data)
+        upload_results['cipd'].update(
+            self.cipd_archive(build_dir, update_properties, custom_vars,
+                              cipd_archive_data))
+    return upload_results
+
+  def generic_archive_after_tests(self,
+                                  build_dir,
+                                  config=None,
+                                  upload_results=None,
+                                  test_success=False):
+    """ Additional archiving steps after tests run.
+
+    For google cloud storage packages, they will only be uploaded in this step
+    if test_success is True and only_upload_on_tests_success is set to True,
+
+    For CIPD packages, if test_success is True then refs will be added for each
+    package with only_set_refs_on_tests_success set to True.
+
+    Args:
+      upload_results: The upload results from generic_archive.
+
+    For information about other args see generic_archive.
+    """
+    if config is None:
+      config = self._default_config
+
+    if not upload_results or not test_success:
+      return
+
+    if not config.archive_datas and not config.cipd_archive_datas:
+      return
+
+    with self.m.step.nest('Generic Archiving Steps After Tests'):
+      for archive_data in config.archive_datas:
+        if archive_data.only_upload_on_tests_success:
+          self.gcs_archive(build_dir, upload_results['update_properties'],
+                           archive_data, upload_results['custom_vars'])
+      if upload_results['cipd']:
+        for pkg in upload_results['cipd']:
+          self.m.cipd.set_ref(
+              package_name=pkg,
+              version=upload_results['cipd'][pkg]['instance'],
+              refs=upload_results['cipd'][pkg]['refs'])
 
   def gcs_archive(self,
                   build_dir,
@@ -889,6 +947,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           bucket=gcs_bucket,
           dest=archive_data.latest_upload.gcs_path,
           name="upload {}".format(archive_data.latest_upload.gcs_path))
+    return uploads
 
   def cipd_archive(self, build_dir, update_properties, custom_vars,
                    cipd_archive_data):
@@ -923,11 +982,24 @@ class ArchiveApi(recipe_api.RecipeApi):
     if cipd_archive_data.HasField('compression'):
       compression_level = cipd_archive_data.compression.compression_level
 
+    pkg_refs = refs
+    if cipd_archive_data.only_set_refs_on_tests_success:
+      pkg_refs = None
+
+    upload_results = {}
     for yaml_file in cipd_archive_data.yaml_files:
       pkg_def = build_dir.join(yaml_file)
-      self.m.cipd.create_from_yaml(
+      create_results = self.m.cipd.create_from_yaml(
           pkg_def=pkg_def,
-          refs=refs,
+          refs=pkg_refs,
           tags=tags,
           pkg_vars=pkg_vars,
           compression_level=compression_level)
+      if cipd_archive_data.only_set_refs_on_tests_success:
+        # Store info needed for setting refs through calling
+        # generic_archive_after_tests.
+        upload_results[create_results[0]] = {
+            'refs': refs,
+            'instance': create_results[1]
+        }
+    return upload_results

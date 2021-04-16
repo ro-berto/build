@@ -20,10 +20,20 @@ def RunSteps(api):
   _, bot_config = api.chromium_tests.lookup_builder()
   api.chromium_tests.configure_build(bot_config)
   build_dir = api.chromium.output_dir
-  api.archive.generic_archive(
+  update_properties = api.properties.get('update_properties')
+  custom_vars = api.properties.get('custom_vars')
+
+  # Calling generic_archive_after_tests without generic_archive first
+  # should result in a no-op.
+  api.archive.generic_archive_after_tests(
+      build_dir=build_dir, test_success=False)
+
+  upload_results = api.archive.generic_archive(
       build_dir=build_dir,
-      update_properties=api.properties.get('update_properties'),
-      custom_vars=api.properties.get('custom_vars'))
+      update_properties=update_properties,
+      custom_vars=custom_vars)
+  api.archive.generic_archive_after_tests(
+      build_dir=build_dir, upload_results=upload_results, test_success=True)
 
 
 def GenTests(api):
@@ -111,6 +121,9 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  input_properties.cipd_archive_datas.remove(cipd_archive_data)
+  cipd_archive_data.only_set_refs_on_tests_success = True
+  input_properties.cipd_archive_datas.extend([cipd_archive_data])
   yield api.test(
       'android_cipd_archive_arm32',
       api.chromium.generic_build(
@@ -125,13 +138,18 @@ def GenTests(api):
       api.chromium.override_version(
           major=89, step_name='Generic Archiving Steps.get version'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(
-          post_process.StepCommandContains,
-          "Generic Archiving Steps.create foo", [
-              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
-              '-hash-algo', 'sha256', '-ref', 'stable', '-tag',
-              'version:1.2.3.4', '-pkg-var', 'targetarch:arm32',
-              '-compression-level', '8', '-json-output', '/path/to/tmp/json'
-          ]),
+      api.post_process(post_process.StepCommandContains,
+                       "Generic Archiving Steps.create foo", [
+                           'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+                           '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4',
+                           '-pkg-var', 'targetarch:arm32', '-compression-level',
+                           '8', '-json-output', '/path/to/tmp/json'
+                       ]),
+      api.post_process(post_process.StepCommandContains,
+                       "Generic Archiving Steps After Tests.cipd set-ref foo", [
+                           'cipd', 'set-ref', 'foo', '-version',
+                           '40-chars-fake-of-the-package-instance_id', '-ref',
+                           'stable', '-json-output', '/path/to/tmp/json'
+                       ]),
       api.post_process(post_process.DropExpectation),
   )

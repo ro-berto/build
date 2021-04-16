@@ -706,12 +706,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # The goal of generic archive is to eventually replace most of the custom
     # archive logic with InputProperties driven archiving.
     # https://crbug.com/1076679.
-    self.m.archive.generic_archive(
+    upload_results = self.m.archive.generic_archive(
         build_dir=self.m.chromium.output_dir,
         update_properties=update_step.presentation.properties,
         custom_vars=custom_vars)
 
     self.m.symupload(self.m.chromium.output_dir)
+    return upload_results
 
   def _get_chrome_version(self):
     chrome_version = self.m.properties.get('chrome_version')
@@ -1332,12 +1333,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         update_step,
         bot_config,
         additional_properties=additional_trigger_properties)
-    self.archive_build(builder_id, update_step, bot_config)
+
+    upload_results = self.archive_build(builder_id, update_step, bot_config)
 
     self.inbound_transfer(bot_config, builder_id, update_step, build_config)
 
     tests = build_config.tests_on(builder_id)
-    return self.run_tests(builder_id, bot_config, tests)
+    return self.run_tests(builder_id, bot_config, tests, upload_results)
 
   def outbound_transfer(self, builder_id, bot_config, bot_update_step,
                         build_config):
@@ -2147,7 +2149,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for t in tests:
       t.lacros_gcs_path = path
 
-  def run_tests(self, builder_id, bot_config, tests):
+  def run_tests(self, builder_id, bot_config, tests, upload_results=None):
     if not tests:
       return
 
@@ -2172,5 +2174,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.pgo.using_pgo:
         self.m.pgo.process_pgo_data(tests)
 
+      test_success = True
       if test_failure_summary:
-        return test_failure_summary
+        test_success = False
+
+      self.m.archive.generic_archive_after_tests(
+          build_dir=self.m.chromium.output_dir,
+          upload_results=upload_results,
+          test_success=test_success)
+
+      return test_failure_summary
