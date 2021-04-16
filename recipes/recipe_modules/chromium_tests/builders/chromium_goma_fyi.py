@@ -107,6 +107,12 @@ SPEC = {
     'Win Builder (dbg) Goma RBE Latest Client':
         chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
                                ['goma_latest_client']),
+    'Win Builder Goma RBE ATS Latest Client':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
+                               ['goma_latest_client', 'goma_use_local']),
+    'Win Builder (dbg) Goma RBE ATS Latest Client':
+        chromium_apply_configs(chromium_win.SPEC['Win Builder (dbg)'],
+                               ['goma_latest_client']),
 
     # This builder no longer exists, but keep it around so that
     # Goma's canary bots can copy its config.
