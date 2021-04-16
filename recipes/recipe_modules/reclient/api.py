@@ -173,7 +173,7 @@ class ReclientApi(recipe_api.RecipeApi):
 
   @property
   def base_cache_path_per_follower(self):
-    return self.m.path['cache'].join('reclient')
+    return self.m.path['cache'].join('builder').join('reclient')
 
   @property
   def deps_cache_path(self):
