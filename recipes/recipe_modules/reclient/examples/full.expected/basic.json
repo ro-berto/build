@@ -347,6 +347,81 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "listdir",
+      "[CLEANUP]/reclient_log_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.list reclient log directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/reproxy.INFO@@@",
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.read reclient log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@reproxy.INFO@fake@@@",
+      "@@@STEP_LOG_END@reproxy.INFO@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "fake tar contents",
+      "[TMP_BASE]/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.create reclient log tar",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@fake tar contents@@@",
+      "@@@STEP_LOG_END@reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz",
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.gsutil upload reclient logs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[CLEANUP]/reclient_log_tmp_1"
     ],
