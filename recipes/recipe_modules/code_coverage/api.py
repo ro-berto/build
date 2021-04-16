@@ -491,8 +491,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'coverage_html_%s' % self._current_processing_test_type)
     args = [
         '--format', 'html', '--coverage-dir', coverage_dir,
-        '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
-        jacoco_html_report_dir, '--cleanup'
+        '--sources-json-dir', self.m.chromium.output_dir,
+        '--output-dir', jacoco_html_report_dir
     ]
     if self._current_processing_test_type == 'unit':
       args.extend(['--exec-filename-excludes', 'unit_tests_excluded'])
