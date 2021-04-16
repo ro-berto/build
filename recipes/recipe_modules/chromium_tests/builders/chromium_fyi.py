@@ -810,7 +810,7 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'Linux Builder (j-100) (reclient)':
+    'Linux Builder (j-500) (reclient)':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
@@ -836,19 +836,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'Linux Builder (reclient)':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'Linux Builder (deps-cache) (reclient)':
         bot_spec.BotSpec.create(
             chromium_config='chromium',
@@ -860,19 +847,6 @@ SPEC = {
                 'enable_reclient',
                 'use_deps_cache_prototype_reclient',
             ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux Builder (goma cache silo)':
-        bot_spec.BotSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb', 'goma_enable_cache_silo'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
