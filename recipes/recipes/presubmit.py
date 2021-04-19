@@ -9,21 +9,20 @@ from recipe_engine import post_process
 import textwrap
 
 DEPS = [
-    'depot_tools/gclient',
-    'depot_tools/presubmit',
-    'recipe_engine/buildbucket',
-    'recipe_engine/context',
-    'recipe_engine/file',
-    'recipe_engine/json',
-    'recipe_engine/path',
-    'recipe_engine/properties',
-    'depot_tools/tryserver',
-    # The following recipe modules are not used here,
-    # but apparently set spooky gclient configs,
-    # which get used by this recipe through "api.gclient.set_config".
-    'angle',
-    'v8',
-    'webrtc',
+  'depot_tools/gclient',
+  'depot_tools/presubmit',
+  'recipe_engine/buildbucket',
+  'recipe_engine/context',
+  'recipe_engine/file',
+  'recipe_engine/json',
+  'recipe_engine/path',
+  'recipe_engine/properties',
+  'depot_tools/tryserver',
+  # The following two recipe modules are not used here,
+  # but apparently set spooky gclient configs,
+  # which get used by this recipe through "api.gclient.set_config".
+  'v8',
+  'webrtc',
 ]
 
 
@@ -79,7 +78,6 @@ def GenTests(api):
   )
 
   REPO_NAMES = [
-      'angle',
       'build',
       'build_internal',
       'build_internal_scripts_slave',
