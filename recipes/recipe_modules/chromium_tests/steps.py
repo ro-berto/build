@@ -2983,12 +2983,17 @@ class WebRTCPerfTestSpec(LocalGTestTestSpec):
 
   A WebRTC perf test is a locally run gtest-based test where perf
   reporting is enabled while running correctness tests.
+
+  Attributes:
+    * perf_id - The ID to use when uploading perf results.
   """
 
   # Re-declare these fields from LocalGTestTestSpec to make them
   # required
   args = attrib(command_args)
   commit_position_property = attrib(str)
+
+  perf_id = attrib(str)
 
   @property
   def test_class(self):
@@ -3022,6 +3027,11 @@ class WebRTCPerfTest(LocalGTestTest):
                 props.get('got_webrtc_revision', props['got_revision']),
         },
 
+        # TODO(kjellander): See if it's possible to rely on the build spec
+        # properties 'perf-id' and 'results-url' as set in the
+        # chromium_tests/chromium_perf.py. For now, set these to get an exact
+        # match of our current expectations.
+        'perf_id': self.spec.perf_id,
         'results_url': RESULTS_URL,
 
         # TODO(kjellander): See if perf_dashboard_id is still needed.
