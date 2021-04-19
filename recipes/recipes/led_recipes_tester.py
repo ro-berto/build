@@ -43,12 +43,16 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 # TODO(gbeaty) We should also ensure testing for the LTS branches
 DEFAULT_BUILDERS = (
+    'luci.chromium.try:chromium_presubmit',
     'luci.chromium.try:linux-rel',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m88.try:chromium_presubmit',
     'luci.chromium-m88.try:linux-rel',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m90.try:chromium_presubmit',
     'luci.chromium-m90.try:linux-rel',
     'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
+    'luci.chromium-m91.try:chromium_presubmit',
     'luci.chromium-m91.try:linux-rel',
     'luci.chromium-m91.try:win10_chromium_x64_rel_ng',
 )
@@ -77,9 +81,13 @@ IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
 PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
 
 
-# We run the fast CL on Windows to speed up cycle time. Most of the
-# recipe functionality is tested by the slow CL on Linux.
+# We run the fast CL on Windows, and with presubmit, to speed up cycle time.
+# Most of the recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = (
+    'luci.chromium.try:chromium_presubmit',
+    'luci.chromium-m88.try:chromium_presubmit',
+    'luci.chromium-m90.try:chromium_presubmit',
+    'luci.chromium-m91.try:chromium_presubmit',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m88.try:win10_chromium_x64_rel_ng',
     'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
