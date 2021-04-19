@@ -16,8 +16,7 @@ class ANGLEApi(recipe_api.RecipeApi):
       self.m.chromium.set_config('angle_clang')
     else:
       self.m.chromium.set_config('angle_non_clang')
-    # TODO(jmadill): Rename after depot tools update. http://anglebug.com/5114
-    self.m.gclient.set_config('angle_2')
+    self.m.gclient.set_config('angle')
 
   def is_gcc(self, clang):
     return not clang and self.m.platform.is_linux

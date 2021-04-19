@@ -8,7 +8,7 @@ from RECIPE_MODULES.depot_tools.gclient.config import ChromiumGitURL
 
 # TODO(jmadill): Rename after depot_tools update. http://anglebug.com/5114
 @CONFIG_CTX()
-def angle_2(c):
+def angle(c):
   soln = c.solutions.add()
   soln.name = 'angle'
   soln.url = ChromiumGitURL(c, 'angle', 'angle')
