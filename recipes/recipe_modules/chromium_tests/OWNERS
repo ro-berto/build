@@ -5,6 +5,5 @@ per-file trybots.py=kbr@chromium.org
 per-file trybots.py=hans@chromium.org
 per-file trybots.py=machenbach@chromium.org
 per-file trybots.py=mbonadei@chromium.org
-per-file trybots.py=simonhatch@chromium.org
 per-file trybots.py=thakis@chromium.org
 per-file trybots.py=ynovikov@chromium.org

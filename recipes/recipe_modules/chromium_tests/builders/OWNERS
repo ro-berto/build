@@ -19,7 +19,6 @@ per-file chromium_webrtc*.py=mbonadei@chromium.org
 per-file client_devtools_*=machenbach@chromium.org
 per-file client_openscreen*.py=file://recipes/recipes/openscreen.expected/OWNERS
 per-file client_v8_*=machenbach@chromium.org
-per-file tryserver_chromium_perf.py=simonhatch@chromium.org
 per-file tryserver_webrtc.py=mbonadei@chromium.org
 per-file tryserver_devtools_frontend.py=machenbach@chromium.org
 per-file tryserver_devtools_frontend.py=liviurau@chromium.org
