@@ -538,6 +538,12 @@ def RunSteps(api):
           step_text=('The following affected files'
                      ' do not contain production recipe code:'),
       ),
+      FilesToIgnore(
+          patterns=[r'(.+/)*[A-Z_]*OWNERS'],
+          step_name='ignoring OWNERS files',
+          step_text=(
+              'OWNERS files are repository metadata, not part of the recipes'),
+      ),
   ]
 
   # The builders and trybots files affect specific builders, so when changes
@@ -733,6 +739,22 @@ def GenTests(api):
           affected_recipes_input_files_does_not_contain,
           'recipes/recipe_modules/chromium_swarming/examples/full.py',
           'recipes/recipe_modules/chromium_tests/tests/builders.py'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'owners_files_ignored',
+      gerrit_change(),
+      affected_recipes(RECIPE),
+      affected_files(
+          'recipes/recipe_modules/chromium_tests/OWNERS',
+          'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
+      default_builders(),
+      api.post_check(post_process.MustRun, 'ignoring OWNERS files'),
+      api.post_check(
+          affected_recipes_input_files_does_not_contain,
+          'recipes/recipe_modules/chromium_tests/OWNERS',
+          'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
       api.post_process(post_process.DropExpectation),
   )
 
