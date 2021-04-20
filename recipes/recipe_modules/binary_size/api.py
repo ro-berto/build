@@ -10,6 +10,9 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import constants
 
+# Footer metadata keys for regular and gsubtreed mirrored commit positions.
+COMMIT_POSITION_FOOTER_KEY = 'Cr-Commit-Position'
+
 
 def _normalize_name(v):
   # The real normalization function is in the infra/infra repo in
@@ -33,6 +36,21 @@ class BinarySizeApi(recipe_api.RecipeApi):
     # Path relative to Chromium output directory.
     self._size_config_json = (
         properties.size_config_json or constants.DEFAULT_SIZE_CONFIG_JSON)
+
+  def get_commit_position(self, url, revision, for_uploaded_rev):
+    if for_uploaded_rev:
+      suffix = 'uploaded revision'
+    else:
+      suffix = 'patch\'s parent revision'
+    commit_message = self.m.gitiles.commit_log(
+        url, revision, step_name='Commit log for {}'.format(suffix))['message']
+    cp_footer = self.m.tryserver.get_footer(
+        COMMIT_POSITION_FOOTER_KEY, patch_text=commit_message)
+    # A patch's parent may be another CL that hasn't landed yet, so there's
+    # no commit position footer yet
+    if not cp_footer:
+      return None
+    return int(self.m.commit_position.parse(cp_footer[0])[1])
 
   def android_binary_size(self,
                           chromium_config,
@@ -100,11 +118,27 @@ class BinarySizeApi(recipe_api.RecipeApi):
           self.m.tryserver.get_footer('Binary-Size', patch_text=commit_message))
       allow_regressions = is_revert or has_size_footer
 
-      if use_gs_analysis:
+      if not use_gs_analysis:  # pragma: no cover
+        bot_update_step = self.m.chromium_checkout.ensure_checkout()
+      else:
         gs_zip_path = self._check_for_recent_tot_analysis()
         if gs_zip_path:
           recent_upload_revision = self._parse_gs_zip_path(gs_zip_path)[1]
-          self.m.gclient.c.solutions[0].revision = recent_upload_revision
+
+          # Check to see if the patch's parent revision is newer than the
+          # recently uploaded revision.
+          patch_parent_revision = revision_info['commit']['parents'][0][
+              'commit']
+          url = self.m.gclient.c.solutions[0].url
+          uploaded_cp = self.get_commit_position(
+              url, recent_upload_revision, for_uploaded_rev=True)
+          patch_cp = self.get_commit_position(
+              url, patch_parent_revision, for_uploaded_rev=False)
+          if not patch_cp or patch_cp > uploaded_cp:
+            use_gs_analysis = False
+
+          else:
+            self.m.gclient.c.solutions[0].revision = recent_upload_revision
 
         try:
           bot_update_step = self.m.chromium_checkout.ensure_checkout(
@@ -117,9 +151,6 @@ class BinarySizeApi(recipe_api.RecipeApi):
           self.m.gclient.c.solutions[0].revision = None
           use_gs_analysis = False
           bot_update_step = self.m.chromium_checkout.ensure_checkout()
-
-      else:  # pragma: no cover
-        bot_update_step = self.m.chromium_checkout.ensure_checkout()
 
       suffix = ' (with patch)'
       self.m.chromium.runhooks(name='runhooks' + suffix)

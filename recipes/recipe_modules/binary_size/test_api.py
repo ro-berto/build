@@ -15,7 +15,13 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
       assert hasattr(properties_pb.InputProperties, key)
     return self.m.properties(**{'$build/binary_size': kwargs})
 
-  def build(self, commit_message='message', size_footer=False, **kwargs):
+  def build(self,
+            commit_message='message',
+            size_footer=False,
+            recent_upload_cp=constants.TEST_RECENT_UPLOAD_CP,
+            patch_parent_cp=constants.TEST_PATCH_PARENT_CP,
+            override_commit_log=False,
+            **kwargs):
     kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     revision_info = {
         '_number': 1,
@@ -24,11 +30,53 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
                 'email': 'foo@bar.com',
             },
             'message': commit_message,
+            'parents': [{
+                'commit': 'deadveggie12345'
+            }],
         }
     }
     footer_json = {}
     if size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
+    commit_log_overrides = []
+    if override_commit_log:
+      recent_upload_commit_log = {
+          'message':
+              'Upload message\n\nCr-Commit-Position: refs/heads/main@{{#{}}}\n'
+              .format(recent_upload_cp)
+      }
+      recent_upload_footer = {
+          'Cr-Commit-Position': [
+              'refs/heads/main@{{#{}}}'.format(recent_upload_cp)
+          ]
+      }
+      commit_log_overrides = [
+          self.override_step_data('Commit log for uploaded revision',
+                                  self.m.json.output(recent_upload_commit_log)),
+          self.override_step_data('parse description (2)',
+                                  self.m.json.output(recent_upload_footer)),
+      ]
+
+      if patch_parent_cp:
+        patch_parent_commit_log = {
+            'message': 'Parent message\n\nCr-Commit-Position: '
+                       'refs/heads/main@{{#{}}}\n'.format(patch_parent_cp)
+        }
+        patch_parent_footer = {
+            'Cr-Commit-Position': [
+                'refs/heads/main@{{#{}}}'.format(patch_parent_cp)
+            ]
+        }
+      else:
+        patch_parent_commit_log = {'message': 'Parent message\n\n'}
+        patch_parent_footer = {}
+
+      commit_log_overrides.extend([
+          self.override_step_data('Commit log for patch\'s parent revision',
+                                  self.m.json.output(patch_parent_commit_log)),
+          self.override_step_data('parse description (3)',
+                                  self.m.json.output(patch_parent_footer)),
+      ])
     return sum([
         self.m.chromium.try_build(
             builder_group='tryserver.chromium.android',
@@ -47,7 +95,7 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
         self.override_step_data('parse description',
                                 self.m.json.output(footer_json)),
         self.m.time.seed(constants.TEST_TIME),
-    ], self.empty_test_data())
+    ] + commit_log_overrides, self.empty_test_data())
 
   def on_significant_binary_package_restructure(self):
     # Simulates manual clearing of the LATEST file.
