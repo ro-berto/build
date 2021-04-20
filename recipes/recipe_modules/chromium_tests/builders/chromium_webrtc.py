@@ -20,7 +20,7 @@ PERF_BROWSER_TESTS_FILTER = [
 ]
 
 
-def browser_perf_test(perf_id):
+def browser_perf_test(perf_builder_name_alias):
   return steps.WebRTCPerfTestSpec.create(
       name='browser_tests',
       # These tests needs --test-launcher-jobs=1 since some of them are
@@ -32,7 +32,7 @@ def browser_perf_test(perf_id):
           '--test-launcher-timeout=350000', '--test-launcher-jobs=1',
           '--test-launcher-bot-mode', '--test-launcher-print-test-stdio=always'
       ],
-      perf_id=perf_id,
+      perf_builder_name_alias=perf_builder_name_alias,
       commit_position_property='got_revision_cp')
 
 

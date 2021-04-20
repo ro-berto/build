@@ -1516,6 +1516,10 @@ class LocalGTestTestSpec(TestSpec):
       builders.
     * set_up - Scripts to run before running the test.
     * tear_down - Scripts to run after running the test.
+    * annotate - Specify which type of test to parse.
+    * perf_config - Source side configuration for perf test.
+    * perf_builder_name_alias - Previously perf-id, another ID to use
+                                when uploading perf results.
   """
 
   args = attrib(command_args, default=())
@@ -1527,6 +1531,9 @@ class LocalGTestTestSpec(TestSpec):
   use_xvfb = attrib(bool, default=True)
   set_up = attrib(sequence[SetUpScript], default=())
   tear_down = attrib(sequence[TearDownScript], default=())
+  annotate = attrib(str, default='gtest')
+  perf_config = attrib(mapping[str, ...], default={})
+  perf_builder_name_alias = attrib(str, default=None)
 
   @property
   def test_class(self):
@@ -1568,6 +1575,16 @@ class LocalGTestTest(Test):
     del api
     return {}
 
+  def _get_revision(self, api, conf):
+    substitutions = {
+        'webrtc_got_rev':
+            api.bot_update.last_returned_properties.get('got_webrtc_revision')
+    }
+    return {
+        k: string.Template(v).safe_substitute(substitutions)
+        for k, v in conf.items()
+    }
+
   @recipe_api.composite_step
   def run(self, api, suffix):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
@@ -1608,9 +1625,17 @@ class LocalGTestTest(Test):
     else:
       kwargs['xvfb'] = self.spec.use_xvfb
       kwargs['test_type'] = self.name
-      kwargs['annotate'] = 'gtest'
+      kwargs['annotate'] = self.spec.annotate
       kwargs['test_launcher_summary_output'] = gtest_results_file
       kwargs.update(self._get_runtest_kwargs(api))
+
+    if self.spec.perf_config:
+      kwargs['perf_config'] = self._get_revision(api, self.spec.perf_config)
+      kwargs['results_url'] = RESULTS_URL
+      kwargs['perf_dashboard_id'] = self.spec.name
+      # TODO(linxinan): perf_id was deprecated. Replace it with
+      # perf_builder_name_alias to reduce confusion.
+      kwargs['perf_id'] = self.spec.perf_builder_name_alias
 
     try:
       if is_android:
@@ -2985,71 +3010,35 @@ class WebRTCPerfTestSpec(LocalGTestTestSpec):
   reporting is enabled while running correctness tests.
 
   Attributes:
-    * perf_id - The ID to use when uploading perf results.
+    * perf_builder_name_alias - Previously perf-id, another ID to use
+                                when uploading perf results.
   """
 
   # Re-declare these fields from LocalGTestTestSpec to make them
   # required
   args = attrib(command_args)
   commit_position_property = attrib(str)
+  perf_builder_name_alias = attrib(str, default=None)
 
-  perf_id = attrib(str)
+  @classmethod
+  def create(cls, name, args, perf_builder_name_alias, commit_position_property,
+             **kwargs):
+    """Create a LocalGTestTest from WebRTCPerfTestSpec.
 
-  @property
-  def test_class(self):
-    """The test class associated with the spec."""
-    return WebRTCPerfTest
-
-
-class WebRTCPerfTest(LocalGTestTest):
-  """A LocalGTestTest reporting perf metrics.
-
-  WebRTC is the only project that runs correctness tests with perf reporting
-  enabled at the same time, which differs from the chromium.perf bots.
-  """
-
-  def _get_runtest_kwargs(self, api):
-    """Get additional keyword arguments to pass to runtest.
-
-    Additional keyword arguments are set to upload results to the perf
-    dashboard.
+    Temporary workaround to run 'test spec migration' step to check
+    the source side config before full migration.
     """
-    props = api.bot_update.last_returned_properties
-    return {
-        'perf_config': {
-            'a_default_rev':
-                'r_webrtc_git',
-            # 'got_webrtc_revision' property is present for bots in both
-            # chromium.webrtc and chromium.webrtc.fyi in reality, but due to
-            # crbug.com/713356, the latter don't get properly simulated.
-            # Fallback to got_revision then.
-            'r_webrtc_git':
-                props.get('got_webrtc_revision', props['got_revision']),
+    return LocalGTestTestSpec.create(
+        name,
+        args=args,
+        commit_position_property=commit_position_property,
+        annotate='graphing',
+        perf_builder_name_alias=perf_builder_name_alias,
+        perf_config={
+            'a_default_rev': 'r_webrtc_git',
+            'r_webrtc_git': '${webrtc_got_rev}',
         },
-
-        # TODO(kjellander): See if it's possible to rely on the build spec
-        # properties 'perf-id' and 'results-url' as set in the
-        # chromium_tests/chromium_perf.py. For now, set these to get an exact
-        # match of our current expectations.
-        'perf_id': self.spec.perf_id,
-        'results_url': RESULTS_URL,
-
-        # TODO(kjellander): See if perf_dashboard_id is still needed.
-        'perf_dashboard_id': self.spec.name,
-        'annotate': 'graphing',
-    }
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    result = super(WebRTCPerfTest, self).run(api, suffix)
-
-    # These runs do not return json data about which tests were executed
-    # as they report to ChromePerf dashboard.
-    # Here we just need to be sure that all tests have passed.
-    if result.retcode == 0:
-      self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format(valid=True))
-    return result
+        **kwargs)
 
 
 @attrs()

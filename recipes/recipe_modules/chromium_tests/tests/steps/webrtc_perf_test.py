@@ -28,7 +28,7 @@ def RunSteps(api):
   test_spec = steps.WebRTCPerfTestSpec.create(
       'test_name',
       args=['some', 'args'],
-      perf_id='test-perf-id',
+      perf_builder_name_alias='test-perf-alias',
       commit_position_property='got_revision_cp')
   test = test_spec.get_test()
 
