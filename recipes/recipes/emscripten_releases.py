@@ -25,27 +25,32 @@ PROPERTIES = {
     'archive': Property(default=True, kind=bool),
 }
 
-step_test_data = { "linux": {
-  "build_steps": [
-    {
-      "name": "Build Wabt",
-      "command": ["waterfall/src/build.py", "--no-sync",
-                  "--no-test", "--build-include=wabt"]
+step_test_data = {
+    "linux": {
+        "build_steps": [{
+            "name":
+                "Build Wabt",
+            "command": [
+                "src/build.py", "--no-sync", "--no-test", "--build-include=wabt"
+            ]
+        }],
+        "test_steps": [{
+            "name":
+                "Emscripten testsuite (upstream)",
+            "command": [
+                "src/build.py", "--no-sync", "--no-build",
+                "--test-include=emtest"
+            ]
+        }, {
+            "name":
+                "Emscripten testsuite (asm2wasm)",
+            "command": [
+                "src/build.py", "--no-sync", "--no-build",
+                "--test-include=emtest-asm"
+            ]
+        }]
     }
-  ],
-  "test_steps": [
-    {
-      "name": "Emscripten testsuite (upstream)",
-      "command": ["waterfall/src/build.py", "--no-sync",
-                  "--no-build", "--test-include=emtest"]
-    },
-    {
-      "name": "Emscripten testsuite (asm2wasm)",
-      "command": ["waterfall/src/build.py", "--no-sync",
-                  "--no-build", "--test-include=emtest-asm"]
-    }
-  ]
-}}
+}
 
 
 def RunSteps(api, archive):
@@ -66,7 +71,7 @@ def RunSteps(api, archive):
   api.file.ensure_directory('Ensure sync dir', sync_dir)
   build_dir = cache_dir.join('emscripten-releases', 'build')
   install_dir = api.path['start_dir'].join('install')
-  waterfall_build = sync_dir.join('waterfall', 'src', 'build.py')
+  ci_build = sync_dir.join('src', 'build.py')
   dir_flags = ['--sync-dir=%s' % sync_dir,
                '--build-dir=%s' % build_dir,
                '--prebuilt-dir=%s' % sync_dir,
@@ -107,7 +112,7 @@ def RunSteps(api, archive):
 
       if archive:
         # Upload the results before running the test.
-        api.python('Upload archive', waterfall_build,
+        api.python('Upload archive', ci_build,
                    build_only_flags + ['--build-include=archive'])
 
       with api.step.defer_results():
