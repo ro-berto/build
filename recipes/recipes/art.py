@@ -26,7 +26,7 @@ REPO_SYNC_JOBS = 16
 #
 # Values for commands running on target (device).
 # - Default value.
-TARGET_DEFAULT_MAKE_JOBS = 2
+TARGET_DEFAULT_MAKE_JOBS = 0  # Let the testrunner script choose the default.
 # - Lower value for Fugu (Nexus Player) devices.
 FUGU_MAKE_JOBS = 1
 #

@@ -155,7 +155,7 @@
   {
     "cmd": [
       "[START_DIR]/art/tools/run-gtests.sh",
-      "-j2"
+      "-j0"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -270,7 +270,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--optimizing",
       "--target",
       "--verbose",
@@ -389,7 +389,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--optimizing",
       "--debuggable",
       "--target",
@@ -509,7 +509,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--jit",
       "--debuggable",
       "--target",
@@ -629,7 +629,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--interpreter",
       "--target",
       "--verbose",
@@ -748,7 +748,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--baseline",
       "--target",
       "--verbose",
@@ -867,7 +867,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--jit",
       "--target",
       "--verbose",
@@ -986,7 +986,7 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j2",
+      "-j0",
       "--speed-profile",
       "--target",
       "--verbose",
