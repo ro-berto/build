@@ -853,6 +853,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
             ),
+        'linux_chromium_asan_rel_ng_bionic':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux ASan LSan (bionic)',
+            ),
         'linux_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
