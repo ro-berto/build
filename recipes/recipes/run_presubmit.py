@@ -24,9 +24,10 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'depot_tools/tryserver',
-    # The following three recipe modules are not used here,
+    # The following recipe modules are not used here,
     # but apparently set spooky gclient configs,
     # which get used by this recipe through "api.gclient.set_config".
+    'angle',
     'libyuv',
     'v8',
     'webrtc',
@@ -305,6 +306,7 @@ def GenTests(api):
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
   REPO_NAMES = [
+      'angle',
       'build',
       'build_internal',
       'build_internal_scripts_slave',
