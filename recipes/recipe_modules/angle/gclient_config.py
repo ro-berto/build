@@ -6,7 +6,6 @@ from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient.config import ChromiumGitURL
 
 
-# TODO(jmadill): Rename after depot_tools update. http://anglebug.com/5114
 @CONFIG_CTX()
 def angle(c):
   soln = c.solutions.add()
@@ -22,3 +21,8 @@ def angle(c):
   soln.custom_vars['checkout_angle_internal'] = True
 
   c.got_revision_mapping['angle'] = 'got_revision'
+
+
+@CONFIG_CTX(includes=['angle'])
+def angle_android(c):
+  c.target_os.add('android')

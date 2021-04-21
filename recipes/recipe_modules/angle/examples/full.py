@@ -14,20 +14,9 @@ DEPS = [
     'recipe_engine/path',
 ]
 
-PROPERTIES = {
-    'clang': Property(default=True, kind=bool),
-    'trace_tests': Property(default=False, kind=bool),
-}
 
-
-def RunSteps(api, clang, trace_tests):
-  angle = api.angle
-  angle.apply_bot_config(clang)
-
-  if trace_tests:
-    angle.trace_tests(clang)
-  else:
-    angle.compile(clang)
+def RunSteps(api):
+  api.angle.steps()
 
 
 def GenTests(api):
@@ -40,18 +29,20 @@ def GenTests(api):
         build_number=1234,
         git_repo='https://chromium.googlesource.com/angle/angle.git')
 
+  yield api.test('android_test', ci_build('ANGLE Test Android Builder'),
+                 api.properties(platform='android'))
   yield api.test('basic_test', ci_build('ANGLE Test Builder'))
   yield api.test('basic_mac_test', api.platform('mac', 64),
                  ci_build('ANGLE Test Mac Builder'))
   yield api.test('win_non_clang_test', api.platform('win', 64),
-                 api.properties(clang=False),
+                 api.properties(toolchain='msvc'),
                  ci_build(builder='ANGLE Test Win Non-Clang Builder'))
   yield api.test('linux_non_clang_test', api.platform('linux', 64),
-                 api.properties(clang=False),
+                 api.properties(toolchain='gcc', test_mode='checkout_only'),
                  ci_build(builder='ANGLE Test Linux Non-Clang Builder'))
   yield api.test('linux_trace_test', api.platform('linux', 64),
-                 api.properties(trace_tests=True),
+                 api.properties(test_mode='trace_tests'),
                  ci_build(builder='ANGLE Test Trace Linux Builder'))
   yield api.test('win_trace_test', api.platform('win', 64),
-                 api.properties(trace_tests=True),
+                 api.properties(test_mode='trace_tests'),
                  ci_build(builder='ANGLE Test Trace Win Builder'))

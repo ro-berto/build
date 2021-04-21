@@ -7,21 +7,21 @@ from recipe_engine import recipe_api
 
 class ANGLEApi(recipe_api.RecipeApi):
 
-  def __init__(self, **kwargs):
+  def __init__(self, properties, **kwargs):
     super(ANGLEApi, self).__init__(**kwargs)
 
-  def apply_bot_config(self, clang):
+  def _apply_bot_config(self, platform, toolchain):
     self.set_config('angle', optional=True)
-    if clang:
+    if toolchain == 'clang':
       self.m.chromium.set_config('angle_clang')
     else:
       self.m.chromium.set_config('angle_non_clang')
-    self.m.gclient.set_config('angle')
+    if platform == 'android':
+      self.m.gclient.set_config('angle_android')
+    else:
+      self.m.gclient.set_config('angle')
 
-  def is_gcc(self, clang):
-    return not clang and self.m.platform.is_linux
-
-  def checkout(self):
+  def _checkout(self):
     # Checkout angle and its dependencies (specified in DEPS) using gclient.
     solution_path = self.m.path['cache'].join('builder')
     self.m.file.ensure_directory('init cache if not exists', solution_path)
@@ -30,22 +30,17 @@ class ANGLEApi(recipe_api.RecipeApi):
       self.m.chromium.runhooks()
       return update_step
 
-  def compile(self, clang):
-    self.checkout()
-    # Don't compile with gcc
-    if self.is_gcc(clang):
-      return
+  def _compile(self, toolchain):
     builder_id = self.m.chromium.get_builder_id()
     raw_result = self.m.chromium_tests.run_mb_and_compile(['all'],
                                                           None,
                                                           '',
                                                           builder_id=builder_id)
-    if self.m.platform.is_win and not clang:
+    if self.m.platform.is_win and toolchain == 'msvc':
       self.m.chromium.taskkill()
     return raw_result
 
-  def trace_tests(self, clang):
-    self.checkout()
+  def _trace_tests(self):
     self.m.goma.ensure_goma()
     checkout = self.m.path['checkout']
     with self.m.context(cwd=checkout):
@@ -69,3 +64,17 @@ class ANGLEApi(recipe_api.RecipeApi):
         self.m.goma.start()
         self.m.step('Run trace tests', cmd)
         self.m.goma.stop(0)
+
+  def steps(self):
+    toolchain = self.m.properties.get('toolchain', 'clang')
+    platform = self.m.properties.get('platform', self.m.platform.name)
+    test_mode = self.m.properties.get('test_mode')
+    self._apply_bot_config(platform, toolchain)
+    self._checkout()
+    if test_mode == 'checkout_only':
+      pass
+    elif test_mode == 'trace_tests':
+      self._trace_tests()
+    else:
+      self._compile(toolchain)
+      # TODO(jmadill): Swarming tests. http://anglebug.com/5114
