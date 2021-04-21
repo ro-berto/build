@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 class ANGLEApi(recipe_api.RecipeApi):
@@ -76,5 +77,7 @@ class ANGLEApi(recipe_api.RecipeApi):
     elif test_mode == 'trace_tests':
       self._trace_tests()
     else:
-      self._compile(toolchain)
+      raw_result = self._compile(toolchain)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
       # TODO(jmadill): Swarming tests. http://anglebug.com/5114

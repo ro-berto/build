@@ -9,6 +9,7 @@ DEPS = [
     'angle',
     'chromium',
     'recipe_engine/buildbucket',
+    'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/path',
@@ -16,7 +17,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.angle.steps()
+  return api.angle.steps()
 
 
 def GenTests(api):
@@ -34,6 +35,9 @@ def GenTests(api):
   yield api.test('basic_test', ci_build('ANGLE Test Builder'))
   yield api.test('basic_mac_test', api.platform('mac', 64),
                  ci_build('ANGLE Test Mac Builder'))
+  yield api.test(
+      'compile_failed_test', ci_build('ANGLE Test Compile Failed Builder'),
+      api.step_data('compile', api.legacy_annotation.infra_failure_step))
   yield api.test('win_non_clang_test', api.platform('win', 64),
                  api.properties(toolchain='msvc'),
                  ci_build(builder='ANGLE Test Win Non-Clang Builder'))
