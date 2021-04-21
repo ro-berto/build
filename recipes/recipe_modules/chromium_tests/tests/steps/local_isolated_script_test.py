@@ -3,10 +3,16 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/python',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -21,10 +27,15 @@ def RunSteps(api):
 
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
 
+  enable_resultdb = api.resultdb.enabled
+  resultdb = steps.ResultDB(
+      enable=True, result_format='json') if enable_resultdb else None
   test_spec = steps.LocalIsolatedScriptTestSpec.create(
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'),
-      isolate_coverage_data=isolate_coverage_data)
+      isolate_coverage_data=isolate_coverage_data,
+      resultdb=resultdb)
+
   test = test_spec.get_test()
 
   assert not test.is_gtest and not test.runs_on_swarming
@@ -154,5 +165,19 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
       api.post_process(verify_isolate_flag),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'with_resultdb_enabled',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
+      api.post_process(post_process.StepCommandContains, 'base_unittests',
+                       ['rdb']),
       api.post_process(post_process.DropExpectation),
   )

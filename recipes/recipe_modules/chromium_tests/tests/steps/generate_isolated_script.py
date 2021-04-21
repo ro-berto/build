@@ -529,3 +529,21 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun, 'script_test'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'local_isolated_script_with_resultdb',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments={'chromium.resultdb.result_sink.json_local': True},
+      ),
+      api.properties(
+          single_spec={
+              'name': 'script_test',
+          },
+          swarm_hashes={
+              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

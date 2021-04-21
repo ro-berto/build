@@ -128,6 +128,7 @@ def _result_sink_experiment_enabled(api, test_class=''):
       '',
       'gtests_local',
       'junit_tests',
+      'json_local',
   }, 'invalid test_class %s' % test_class
   name = 'chromium.resultdb.result_sink'
   if test_class:
@@ -598,6 +599,14 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
 
   def isolated_script_local_delegate(raw_test_spec, **kwargs):
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
+    # Enables resultdb if the build has the experiment.
+    # TODO(crbug.com/1108016): Enable resultdb globally.
+    if _result_sink_experiment_enabled(
+        api, 'json_local') and not kwargs.get('resultdb'):
+      kwargs['resultdb'] = steps.ResultDB.create(
+          enable=True,
+          result_format='json',
+          test_id_prefix=raw_test_spec.get('test_id_prefix'))
     return steps.LocalIsolatedScriptTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec,

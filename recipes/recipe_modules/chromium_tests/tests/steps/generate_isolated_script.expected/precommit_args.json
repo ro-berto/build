@@ -232,6 +232,11 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
       "[START_DIR]/src/tools/swarming_client/run_isolated.py",
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
