@@ -386,14 +386,20 @@ def main():
         os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',
                      'jacococli.jar'), 'report'
     ]
-    device_unit_tests_coverage_files = [
-        f for f in coverage_files if 'unit_tests_only' in f
-    ]
-    device_not_unit_tests_coverage_files = [
-        f for f in coverage_files if 'unit_tests_excluded' in f
-    ]
     host_coverage_files = [
         f for f in coverage_files if f.endswith('junit_tests.exec')
+    ]
+    device_unit_tests_coverage_files = [
+        f for f in coverage_files
+        # TODO(crbug/1201005): Revisit this filter once the bug is fixed.
+        # First two conditions are for gtests which are unit tests
+        # Third one is for instrumentation tests which are batched as unit tests
+        if ('unittests_default' in f or 'unit_tests_default' in f or
+            'only_unit_tests' in f)
+    ]
+    device_not_unit_tests_coverage_files = [
+        f for f in coverage_files if (f not in host_coverage_files and
+                                      f not in device_unit_tests_coverage_files)
     ]
 
     device_unit_tests_cmd = (
