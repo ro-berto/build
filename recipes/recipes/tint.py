@@ -87,7 +87,7 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
 
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd, [
-        '--root=' + str(checkout), 'gen', '//out/' + out_dir,
+        '--root=' + str(checkout), 'gen', '//out/' + out_dir, '--check',
         '--args=' + ' '.join(args)
     ])
 
