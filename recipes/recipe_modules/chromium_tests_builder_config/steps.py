@@ -2770,15 +2770,16 @@ class LocalIsolatedScriptTest(Test):
       })
 
     # for local runs, result_adapter is available in chromium checkout.
+    temp = api.path.mkstemp()
     resultdb = attr.evolve(
         self.spec.resultdb,
-        artifact_directory='',
+        artifact_directory=api.path.dirname(temp),
         base_variant=dict(
             self.spec.resultdb.base_variant or {},
             test_suite=self.canonical_name),
         result_adapter_path=str(api.path['checkout'].join(
             'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(api.path.mkstemp()))
+        result_file=api.path.abspath(temp))
     if resultdb:
       kwargs['resultdb'] = resultdb
 
