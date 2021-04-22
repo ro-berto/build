@@ -929,6 +929,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux TSan Builder',
                 tester='Linux TSan Tests',
             ),
+         # TODO(crbug.com/1200904): Remove after migration
+        'linux_chromium_tsan_rel_ng_bionic':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux TSan (bionic)',
+            ),
         'linux_chromium_cfi_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',

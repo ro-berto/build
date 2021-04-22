@@ -165,6 +165,20 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1200904): Remove after migration
+    'Linux TSan (bionic)':
+        _chromium_memory_spec(
+            chromium_config='chromium_tsan2',
+            gclient_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.COMPILE_AND_TEST,
+            simulation_platform='linux',
+        ),
     'Linux TSan Tests':
         _chromium_memory_spec(
             chromium_config='chromium_tsan2',
