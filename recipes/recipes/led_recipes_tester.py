@@ -55,28 +55,6 @@ DEFAULT_BUILDERS = (
 )
 
 
-@attrs()
-class PathBasedBuilderSet(object):
-  builders = attrib(sequence[str])
-  files = attrib(sequence[str])
-
-
-# Builders that will be tested only if specific files are touched
-IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
-    builders=[
-        'luci.chromium.try:ios-simulator',
-        'luci.chromium-m90.try:ios-simulator',
-        'luci.chromium-m91.try:ios-simulator',
-    ],
-    files=[
-        'scripts/slave/recipes/ios/try.py',
-        'scripts/slave/recipe_modules/ios/api.py',
-    ],
-)
-
-PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
-
-
 # We run the fast CL on Windows, and with presubmit, to speed up cycle time.
 # Most of the recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = (
@@ -180,14 +158,13 @@ def _process_footer_builders(api, builders):
   return builder_map
 
 
-def _get_builders_to_check(api, affected_files, repo_path):
+def _get_builders_to_check(api):
   """Get the set of builders to test the recipe change against.
 
   If the CL has Led-Recipes-Tester-Builder footer in its description,
   then those builders will be the on tested, with branched versions of
   them provisonally included. Otherwise, a default set of builders will
-  be tested, with some additional testing of iOS builders if
-  iOS-specific recipe files are changed.
+  be tested.
 
   Args:
     api - The recipe API object.
@@ -211,17 +188,7 @@ def _get_builders_to_check(api, affected_files, repo_path):
   if bool(footer_builders):
     return False, _process_footer_builders(api, footer_builders)
 
-  prefix = str(repo_path) + '/'
-
-  def remove_prefix(f):
-    assert f.startswith(prefix)
-    return f[len(prefix):]
-
-  affected_files = set(remove_prefix(f) for f in affected_files)
   builders = list(DEFAULT_BUILDERS)
-  for builder_set in PATH_BASED_BUILDER_SETS:
-    if any(f in affected_files for f in builder_set.files):
-      builders.extend(builder_set.builders)
   return True, collections.OrderedDict.fromkeys(builders)
 
 
@@ -519,8 +486,7 @@ def RunSteps(api):
   with api.context(cwd=repo_path):
     affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
 
-  ignore_per_builder_config, builders = _get_builders_to_check(
-      api, affected_files, repo_path)
+  ignore_per_builder_config, builders = _get_builders_to_check(api)
 
   files_to_ignore = [
       FilesToIgnore(
@@ -673,10 +639,6 @@ def GenTests(api):
     build.input.properties['recipe'] = recipe
     build.infra.swarming.priority = 40
     return job
-
-  def led_set_builder_recipe(name, recipe):
-    return api.led.mock_get_builder(
-        led_job(recipe), *parse_legacy_buildername(name))
 
   def default_builders():
     return api.led.mock_get_builder(led_job(RECIPE))
@@ -908,39 +870,4 @@ def GenTests(api):
           led_get_builder_name('luci.chromium.try:arbitrary-builder')),
       api.post_check(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'cl_indirectly_affects_ios',
-      gerrit_change(),
-      affected_recipes(),
-      default_builders(),
-      api.post_check(
-          post_process.DoesNotRun,
-          *[led_get_builder_name(b) for b in IOS_PATH_BASED_BUILDERS.builders]),
-      api.post_check(post_process.DoesNotRunRE, 'test .*\.trigger'),
-      api.post_check(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'ios-recipe-module-change',
-      gerrit_change(),
-      affected_files('scripts/slave/recipe_modules/ios/api.py',),
-      affected_recipes('ios/try'),
-      default_builders(),
-      led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m91.try:ios-simulator', 'ios/try'),
-  )
-
-  yield api.test(
-      'ios-try-recipe-change',
-      gerrit_change(),
-      affected_files('scripts/slave/recipes/ios/try.py',),
-      affected_recipes('ios/try'),
-      default_builders(),
-      led_set_builder_recipe('luci.chromium.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m90.try:ios-simulator', 'ios/try'),
-      led_set_builder_recipe('luci.chromium-m91.try:ios-simulator', 'ios/try'),
   )
