@@ -387,6 +387,24 @@ def enable_soda(c):
 def enable_reclient(c):
   c.solutions[0].custom_vars['checkout_reclient'] = 'True'
 
+
+# This configuration overrides the default reclient version
+# with the staging version.  This is used for testing new
+# reclient releases.
+@CONFIG_CTX()
+def reclient_staging(c):
+  cv = c.solutions[0].custom_vars
+  cv['reclient_version'] = 're_client_version:0.27.0.ef33a2b'
+
+
+# This configuration overrides the default reclient version
+# with the test version.  This is used for testing new
+# reclient releases.
+@CONFIG_CTX()
+def reclient_test(c):
+  cv = c.solutions[0].custom_vars
+  cv['reclient_version'] = 're_client_version:0.27.0.ef33a2b'
+
 # This is a temporary configuration and will be removed once
 # performance data has been collected.
 @CONFIG_CTX()
