@@ -4,16 +4,14 @@
 
 import collections
 import contextlib
-import copy
 import difflib
 import itertools
 import json
-import os
 import re
 import traceback
 
 from recipe_engine.config_types import Path
-from recipe_engine.types import freeze, FrozenDict
+from recipe_engine.types import FrozenDict
 from recipe_engine import recipe_api
 
 from PB.recipe_engine import result as result_pb2
@@ -23,13 +21,9 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
 from . import bot_config as bot_config_module
-from . import bot_db as bot_db_module
 from . import bot_spec as bot_spec_module
-from . import builders as builders_module
 from . import generators
-from . import try_spec as try_spec_module
-from . import trybots as trybots_module
-from . import steps
+from . import target_config
 
 # Paths which affect recipe config and behavior in a way that survives
 # deapplying user's patch.
@@ -99,29 +93,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     super(ChromiumTestsApi, self).__init__(**kwargs)
     self._project_trigger_overrides = input_properties.project_trigger_overrides
     self._fixed_revisions = input_properties.fixed_revisions
-    self._builders = builders_module.BUILDERS
-    self._trybots = trybots_module.TRYBOTS
-    if self._test_data.enabled:
-      if 'builders' in self._test_data:
-        self._builders = self._test_data['builders']
-      if 'trybots' in self._test_data:
-        self._trybots = self._test_data['trybots']
 
     self._swarming_command_lines = {}
     self.filter_files_dir = None
-
-  @property
-  def builders(self):
-    return self._builders
-
-  @property
-  def trybots(self):
-    return self._trybots
 
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
 
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
+  # chromium_tests_builder_config.builder_db
+  @property
+  def builders(self):
+    return self.m.chromium_tests_builder_config.builder_db  # pragma: no cover
+
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
+  # chromium_tests_builder_config.try_db
+  @property
+  def trybots(self):
+    return self.m.chromium_tests_builder_config.try_db  # pragma: no cover
+
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
+  # chromium_tests_builder_config.lookup_builder
   def lookup_builder(self,
                      builder_id=None,
                      bot_db=None,
@@ -150,32 +143,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         * The BuilderID of the builder the BotConfig is for.
         * The BotConfig for the builder.
     """
-    assert bot_db is None or isinstance(bot_db, bot_db_module.BotDatabase), \
-        'Expected BotDatabase for bot_db, got {}'.format(type(bot_db))
-    assert try_db is None or isinstance(try_db, try_spec_module.TryDatabase), \
-        'Expected TryDatabase for try_db, got {}'.format(type(try_db))
-
-    builder_id = builder_id or self.m.chromium.get_builder_id()
-
-    if use_try_db is None:
-      use_try_db = self.m.tryserver.is_tryserver
-
-    try_spec = None
-    if use_try_db:
-      try_db = try_db or self.trybots
-      try_spec = try_db.get(builder_id)
-
-    # Some trybots do not mirror a CI bot. In this case, return a configuration
-    # that uses the same <group, buildername> of the triggering trybot.
-    if try_spec is None:
-      try_spec = try_spec_module.TrySpec.create([builder_id])
-
-    bot_db = bot_db or self.builders
-
-    bot_config = bot_config_module.BotConfig.create(
-        bot_db, try_spec, python_api=self.m.python)
-
-    return builder_id, bot_config
+    return self.m.chromium_tests_builder_config.lookup_builder(
+        builder_id, bot_db, try_db, use_try_db)
 
   def configure_build(self, bot_config, use_rts=False):
     self.m.chromium.set_config(bot_config.chromium_config,
@@ -236,6 +205,75 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         raise
     else:
       self.m.chromium.runhooks()
+
+  def create_target_config(self, builder_config, update_step):
+    # The scripts_compile_targets is indirected through a function so that we
+    # don't execute unnecessary steps if there are no scripts that need to be
+    # run
+    # Memoize the call to get_compile_targets_for_scripts so that we only
+    # execute the step once
+    memo = []
+
+    def scripts_compile_targets_fn():
+      if not memo:
+        memo.append(self.get_compile_targets_for_scripts())
+      return memo[0]
+
+    source_side_specs = {
+        group: self.read_source_side_spec(spec_file) for group, spec_file in
+        sorted(builder_config.source_side_spec_files.iteritems())
+    }
+    tests = {}
+    # migration type -> builder group -> builder -> test info
+    # migration type is one of 'already migrated', 'needs migration', 'mismatch'
+    # test info is a dict with key 'test' storing the name of the test and the
+    # optional key 'logs' containing logs to add to the migration tracking step
+    # for the test
+    migration_state = {}
+
+    for builder_id in builder_config.all_keys:
+      builder_spec = builder_config.builder_db[builder_id]
+      builder_tests, builder_migration_state = (
+          self.generate_tests_from_source_side_spec(
+              source_side_specs[builder_id.group],
+              builder_spec,
+              builder_id.builder,
+              builder_id.group,
+              builder_spec.swarming_dimensions,
+              scripts_compile_targets_fn,
+              update_step,
+          ))
+      tests[builder_id] = builder_tests
+
+      for key, migration_tests in builder_migration_state.iteritems():
+        if not migration_tests:
+          continue
+        migration_type_dict = migration_state.setdefault(key, {})
+        group_dict = migration_type_dict.setdefault(builder_id.group, {})
+        group_dict[builder_id.builder] = migration_tests
+
+    if migration_state:
+      self._report_test_spec_migration_state(migration_state)
+
+    return target_config.TargetConfig.create(
+        builder_config=builder_config,
+        source_side_specs=source_side_specs,
+        tests=tests)
+
+  def _report_test_spec_migration_state(self, migration_state):
+    with self.m.step.nest('test spec migration') as presentation:
+      presentation.step_text = (
+          '\nThis is an informational step for infra maintainers')
+      for key, groups in sorted(migration_state.iteritems()):
+        with self.m.step.nest(key):
+          for group, builders in sorted(groups.iteritems()):
+            with self.m.step.nest(group):
+              for builder, tests in sorted(builders.iteritems()):
+                with self.m.step.nest(builder):
+                  for t in sorted(tests, key=lambda t: t['test']):
+                    result = self.m.step(t['test'], [])
+                    for log, contents in sorted(t.get('logs', {}).iteritems()):
+                      result.presentation.logs[log] = contents
 
   def prepare_checkout(self, bot_config, report_cache_state=True, **kwargs):
     if report_cache_state:
@@ -1291,7 +1329,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     builder_id = self.m.chromium.get_builder_id()
     builder_id, bot_config = self.lookup_builder(bot_db=builders)
     mirrored_builders = self._get_mirroring_try_builders(
-        builder_id, self.trybots)
+        builder_id, self.m.chromium_tests_builder_config.try_db)
     self.report_builders(bot_config, mirrored_builders)
     self.configure_build(bot_config)
     update_step, build_config = self.prepare_checkout(

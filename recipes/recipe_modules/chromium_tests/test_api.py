@@ -5,34 +5,31 @@
 from recipe_engine import recipe_test_api
 
 from . import bot_config as bot_config_module
-from . import bot_db
 from . import builders as builders_module
 from . import try_spec
 
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
 
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def builders(builders):
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
+  # chromium_tests_builder_config.(generic|ci|try)_build
+  def builders(self, builders):
     """Override chromium_tests's builders for a test.
 
     Args:
       builders - A BotDatabase to replace chromium_tests.builders.
     """
-    assert isinstance(builders, bot_db.BotDatabase)
-    return builders
+    return self.m.chromium_tests_builder_config.builder_db(builders)
 
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def trybots(trybots):
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
+  # chromium_tests_builder_config.(generic|ci|try)_build
+  def trybots(self, trybots):
     """Override chromium_tests's builders for a test.
 
     Args:
       trybots - A TryDatabase to replace chromium_tests.trybots.
     """
-    assert isinstance(trybots, try_spec.TryDatabase)
-    return trybots
+    return self.m.chromium_tests_builder_config.try_db(trybots)
 
   @recipe_test_api.mod_test_data
   @staticmethod
@@ -44,6 +41,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     """
     return size_limit
 
+  # TODO(https://crbug.com/1193832) Remove this once all uses have been updated
+  # chromium_tests_builder_config.(generic|ci|try)_build
   def platform(self, bot_mirrors):
     bot_config = bot_config_module.BotConfig.create(
         builders_module.BUILDERS, try_spec.TrySpec.create(bot_mirrors))
