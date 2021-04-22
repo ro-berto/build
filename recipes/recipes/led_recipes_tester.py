@@ -235,8 +235,8 @@ def _get_builders_to_check(api, affected_files, repo_path):
 class FilesToIgnore(object):
   # A list of strings containing regex patterns of files to ignore. The patterns
   # will be matched against the repo-root-relative paths of the affected files
-  # (e.g. recipes/recipe_modules/chromium_tests/trybots.py). The patterns will
-  # be implicitly anchored to match the entire relative path.
+  # (e.g. recipes/recipe_modules/chromium_tests_builder_config/trybots.py). The
+  # patterns will be implicitly anchored to match the entire relative path.
   patterns = attrib(sequence[str])
 
   # If any files match `ignore_patterns`, a step will be created with the name
@@ -555,8 +555,8 @@ def RunSteps(api):
     files_to_ignore.append(
         FilesToIgnore(
             patterns=[
-                r'recipes/recipe_modules/chromium_tests/builders/.*\.py',
-                r'recipes/recipe_modules/chromium_tests/trybots\.py',
+                'recipes/recipe_modules/chromium_tests_builder_config/{}'
+                .format(f) for f in (r'builders/.*\.py', r'trybots\.py')
             ],
             step_name='ignoring per-builder config',
             step_text=(
@@ -710,19 +710,21 @@ def GenTests(api):
       default_builders(),
   )
 
+  def builder_config_path(p):
+    return 'recipes/recipe_modules/chromium_tests_builder_config/{}'.format(p)
+
   yield api.test(
       'per_builder_config_ignored',
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
-          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
-          'recipes/recipe_modules/chromium_tests/trybots.py'),
+          builder_config_path('builders/chromium.py'),
+          builder_config_path('trybots.py')),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring per-builder config'),
-      api.post_check(
-          affected_recipes_input_files_does_not_contain,
-          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
-          'recipes/recipe_modules/chromium_tests/trybots.py'),
+      api.post_check(affected_recipes_input_files_does_not_contain,
+                     builder_config_path('builders/chromium.py'),
+                     builder_config_path('trybots.py')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -732,13 +734,13 @@ def GenTests(api):
       affected_recipes(RECIPE),
       affected_files(
           'recipes/recipe_modules/chromium_swarming/examples/full.py',
-          'recipes/recipe_modules/chromium_tests/tests/builders.py'),
+          builder_config_path('tests/builders.py')),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring recipe tests'),
       api.post_check(
           affected_recipes_input_files_does_not_contain,
           'recipes/recipe_modules/chromium_swarming/examples/full.py',
-          'recipes/recipe_modules/chromium_tests/tests/builders.py'),
+          builder_config_path('tests/builders.py')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -747,13 +749,13 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
-          'recipes/recipe_modules/chromium_tests/OWNERS',
+          builder_config_path('OWNERS'),
           'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring OWNERS files'),
       api.post_check(
           affected_recipes_input_files_does_not_contain,
-          'recipes/recipe_modules/chromium_tests/OWNERS',
+          builder_config_path('OWNERS'),
           'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
       api.post_process(post_process.DropExpectation),
   )
@@ -880,14 +882,13 @@ def GenTests(api):
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
       affected_files(
-          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
-          'recipes/recipe_modules/chromium_tests/trybots.py'),
+          builder_config_path('builders/chromium.py'),
+          builder_config_path('trybots.py')),
       default_builders(),
       api.post_check(post_process.DoesNotRun, 'ignoring builder config'),
-      api.post_check(
-          affected_recipes_input_files_contains,
-          'recipes/recipe_modules/chromium_tests/builders/chromium.py',
-          'recipes/recipe_modules/chromium_tests/trybots.py'),
+      api.post_check(affected_recipes_input_files_contains,
+                     builder_config_path('builders/chromium.py'),
+                     builder_config_path('trybots.py')),
       api.post_process(post_process.DropExpectation),
   )
 
