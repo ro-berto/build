@@ -16,11 +16,7 @@ def _migration_validation(builder_id, builder_spec):
   if builder_spec.test_specs:
     assert builder_id.group in (
         'chrome.pgo',
-        'chromium.clang',
-        'chromium.perf',
-        'chromium.perf.fyi',
         'chromium.webrtc',
-        'official.chromeos.continuous',
 
         # Used for testing the migration
         'fake-group',
