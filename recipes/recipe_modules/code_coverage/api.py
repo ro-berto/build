@@ -477,55 +477,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._coverage_metadata_gs_paths.append(gs_path)
     self._mimic_builder_names.append(mimic_builder_name)
 
-  def _persist_java_coverage_data_as_html(self, coverage_dir, **kwargs):
-    """Uploads Jacoco coverage reports as html to GCS bucket.
-
-    Uploades jacoco_html_report.zip which contains two html files, corresponding
-    to self._current_processing_test_type.
-
-    Args:
-      coverage_dir: Root directory containing .exec files.
-    """
-    # Step 1: Generate html files corresponding to device and host tests.
-    jacoco_html_report_dir = coverage_dir.join(
-        'coverage_html_%s' % self._current_processing_test_type)
-    args = [
-        '--format', 'html', '--coverage-dir', coverage_dir,
-        '--sources-json-dir', self.m.chromium.output_dir,
-        '--output-dir', jacoco_html_report_dir
-    ]
-    if self._current_processing_test_type == 'unit':
-      args.extend(['--exec-filename-excludes', 'unit_tests_excluded'])
-    self.m.python(
-        'Generate JaCoCo HTML report (%s)' % self._current_processing_test_type,
-        self.m.path['checkout'].join('build', 'android',
-                                     'generate_jacoco_report.py'),
-        args=args,
-        **kwargs)
-
-    # Step 2: Compress generated html files.
-    # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
-    output_zip = coverage_dir.join('jacoco_html_report_%s.zip' %
-                                   self._current_processing_test_type)
-    self.m.zip.directory(
-        step_name='Zip generated JaCoCo HTML report files (%s)' %
-        self._current_processing_test_type,
-        directory=jacoco_html_report_dir,
-        output=output_zip)
-
-    # Step 3: Export compressed html files to gs
-    self.m.gsutil.upload(
-        source=output_zip,
-        bucket=self._gs_bucket,
-        dest=self._compose_gs_path_for_coverage_data(
-            data_type='java_html_report/jacoco_html_report.zip',
-            mimic_builder_name=self._compose_current_mimic_builder_name()),
-        link_name='JaCoCo HTML report (%s)' %
-        self._current_processing_test_type,
-        name='Upload zipped JaCoCo HTML report (%s)' %
-        self._current_processing_test_type,
-        **kwargs)
-
   def process_java_coverage_data(self, **kwargs):
     """Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -587,8 +538,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             return
           self._persist_coverage_data_as_json(
               source=metadata_path, data_type='java_metadata', **kwargs)
-          self._persist_java_coverage_data_as_html(
-              coverage_dir=coverage_dir, **kwargs)
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True

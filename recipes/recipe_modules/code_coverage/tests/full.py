@@ -457,24 +457,6 @@ def GenTests(api):
                        'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'gsutil Upload JSON metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Zip generated JaCoCo HTML report files (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload zipped JaCoCo HTML report (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report (unit)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Zip generated JaCoCo HTML report files (unit)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload zipped JaCoCo HTML report (unit)'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -516,24 +498,6 @@ def GenTests(api):
                        'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'gsutil Upload JSON metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Zip generated JaCoCo HTML report files (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload zipped JaCoCo HTML report (overall)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate JaCoCo HTML report (unit)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Zip generated JaCoCo HTML report files (unit)'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'gsutil Upload zipped JaCoCo HTML report (unit)'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
