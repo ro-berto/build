@@ -2,38 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .. import builder_spec, steps
-
-# TODO(crbug.com/888429): Add this test through test_suites.pyl instead.
-# The problem is that our performance-reporting gtest doesn't report results.
-BAREMETAL_BROWSER_TESTS_FILTER = [
-    # Runs hardware-exercising test.
-    'WebRtcWebcamBrowserTests*',
-]
-
-PERF_BROWSER_TESTS_FILTER = [
-    'WebRtcInternalsPerfBrowserTest.*',
-    'WebRtcStatsPerfBrowserTest.*',
-    'WebRtcVideoDisplayPerfBrowserTests*',
-    'WebRtcVideoHighBitrateBrowserTest*',
-    'WebRtcVideoQualityBrowserTests*',
-]
-
-
-def browser_perf_test(perf_builder_name_alias):
-  return steps.WebRTCPerfTestSpec.create(
-      name='browser_tests',
-      # These tests needs --test-launcher-jobs=1 since some of them are
-      # not able to run in parallel (they record system audio, etc).
-      args=[
-          '--gtest_filter=%s' %
-          ':'.join(BAREMETAL_BROWSER_TESTS_FILTER + PERF_BROWSER_TESTS_FILTER),
-          '--run-manual', '--ui-test-action-max-timeout=300000',
-          '--test-launcher-timeout=350000', '--test-launcher-jobs=1',
-          '--test-launcher-bot-mode', '--test-launcher-print-test-stdio=always'
-      ],
-      perf_builder_name_alias=perf_builder_name_alias,
-      commit_position_property='got_revision_cp')
+from .. import builder_spec
 
 
 def _chromium_webrtc_spec(**kwargs):
@@ -110,7 +79,6 @@ SPEC = {
             parent_buildername='WebRTC Chromium Linux Builder',
             test_results_config='public_server',
             simulation_platform='linux',
-            test_specs=[browser_perf_test('chromium-webrtc-rel-linux')],
         ),
     'WebRTC Chromium Mac Builder':
         _chromium_webrtc_spec(
@@ -140,7 +108,6 @@ SPEC = {
             parent_buildername='WebRTC Chromium Mac Builder',
             test_results_config='public_server',
             simulation_platform='mac',
-            test_specs=[browser_perf_test('chromium-webrtc-rel-mac')],
         ),
     'WebRTC Chromium Win Builder':
         _chromium_webrtc_spec(
@@ -170,7 +137,6 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            test_specs=[browser_perf_test('chromium-webrtc-rel-win10')],
         ),
     'WebRTC Chromium Win7 Tester':
         _chromium_webrtc_spec(
@@ -187,7 +153,6 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            test_specs=[browser_perf_test('chromium-webrtc-rel-7')],
         ),
     'WebRTC Chromium Win8 Tester':
         _chromium_webrtc_spec(
@@ -204,6 +169,5 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            test_specs=[browser_perf_test('chromium-webrtc-rel-win8')],
         ),
 }

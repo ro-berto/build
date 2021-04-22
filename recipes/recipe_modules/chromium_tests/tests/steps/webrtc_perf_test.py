@@ -25,9 +25,14 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  test_spec = steps.WebRTCPerfTestSpec.create(
+  test_spec = steps.LocalGTestTestSpec.create(
       'test_name',
       args=['some', 'args'],
+      annotate='graphing',
+      perf_config={
+          'a_default_rev': 'r_webrtc_git',
+          'r_webrtc_git': '${webrtc_got_rev}',
+      },
       perf_builder_name_alias='test-perf-alias',
       commit_position_property='got_revision_cp')
   test = test_spec.get_test()

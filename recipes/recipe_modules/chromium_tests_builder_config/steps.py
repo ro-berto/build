@@ -3023,45 +3023,6 @@ class AndroidJunitTest(AndroidTest):
 
 
 @attrs()
-class WebRTCPerfTestSpec(LocalGTestTestSpec):
-  """Spec for a WebRTC perf test.
-
-  A WebRTC perf test is a locally run gtest-based test where perf
-  reporting is enabled while running correctness tests.
-
-  Attributes:
-    * perf_builder_name_alias - Previously perf-id, another ID to use
-                                when uploading perf results.
-  """
-
-  # Re-declare these fields from LocalGTestTestSpec to make them
-  # required
-  args = attrib(command_args)
-  commit_position_property = attrib(str)
-  perf_builder_name_alias = attrib(str, default=None)
-
-  @classmethod
-  def create(cls, name, args, perf_builder_name_alias, commit_position_property,
-             **kwargs):
-    """Create a LocalGTestTest from WebRTCPerfTestSpec.
-
-    Temporary workaround to run 'test spec migration' step to check
-    the source side config before full migration.
-    """
-    return LocalGTestTestSpec.create(
-        name,
-        args=args,
-        commit_position_property=commit_position_property,
-        annotate='graphing',
-        perf_builder_name_alias=perf_builder_name_alias,
-        perf_config={
-            'a_default_rev': 'r_webrtc_git',
-            'r_webrtc_git': '${webrtc_got_rev}',
-        },
-        **kwargs)
-
-
-@attrs()
 class MockTestSpec(TestSpec):
   """Spec for a mock test.
 

@@ -1678,10 +1678,6 @@ def GenTests(api):
           }),
   )
 
-  def _check_migration_step(migration_type, test):
-    return 'test spec migration.{}.{}.{}.{}'.format(
-        migration_type, 'chromium.webrtc', 'WebRTC Chromium Mac Tester', test)
-
   yield api.test(
       'webrtc_chromium_mac_tester',
       api.chromium.ci_build(
@@ -1729,12 +1725,6 @@ def GenTests(api):
       api.post_process(post_process.StepSuccess,
                        'Upload to test-results [browser_tests]'),
       api.post_process(post_process.StatusSuccess),
-      api.post_check(
-          post_process.MustRun,
-          _check_migration_step(
-              'already migrated',
-              'browser_tests',
-          )),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1784,11 +1774,5 @@ def GenTests(api):
                              api.legacy_annotation.failure_step),
       api.post_process(post_process.StepFailure, 'browser_tests'),
       api.post_process(post_process.StatusFailure),
-      api.post_check(
-          post_process.MustRun,
-          _check_migration_step(
-              'already migrated',
-              'browser_tests',
-          )),
       api.post_process(post_process.DropExpectation),
   )
