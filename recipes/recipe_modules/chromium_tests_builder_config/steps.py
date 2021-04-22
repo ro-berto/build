@@ -1664,6 +1664,13 @@ class LocalGTestTest(Test):
       if not hasattr(step_result, 'test_utils'):  # pragma: no cover
         self.update_test_run(api, suffix,
                              api.test_utils.canonical.result_format())
+      # For perf tests, these runs do not return json data about
+      # which tests were executed as they report to ChromePerf
+      # dashboard.
+      # Here we just need to be sure that all tests have passed.
+      elif step_result.retcode == 0 and self.spec.perf_config:
+        self.update_test_run(api, suffix,
+                             api.test_utils.canonical.result_format(valid=True))
       else:
         gtest_results = step_result.test_utils.gtest_results
         self.update_test_run(api, suffix,
