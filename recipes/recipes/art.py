@@ -91,7 +91,8 @@ def checkout(api):
 def clobber(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
-    api.file.rmtree('clobber', api.path['start_dir'].join('out'))
+    api.file.rmtree('clobber', api.context.cwd.join('out'))
+
 
 def setup_host_x86(api,
                    debug,
@@ -104,8 +105,8 @@ def setup_host_x86(api,
   checkout(api)
   clobber(api)
 
-  build_top_dir = api.path['start_dir']
-  art_tools = api.path['start_dir'].join('art', 'tools')
+  build_top_dir = api.context.cwd
+  art_tools = api.context.cwd.join('art', 'tools')
   # For host, the TARGET_PRODUCT isn't relevant.
   env = {
       'TARGET_PRODUCT':
@@ -263,8 +264,8 @@ def setup_target(api,
                  generational_cc=True,
                  heap_poisoning=False,
                  gcstress=False):
-  build_top_dir = api.path['start_dir']
-  art_tools = api.path['start_dir'].join('art', 'tools')
+  build_top_dir = api.context.cwd
+  art_tools = api.context.cwd.join('art', 'tools')
   # The path to the chroot directory on the device where ART and its
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
@@ -614,7 +615,9 @@ def RunSteps(api):
     if buildername in builder_config:
       builder_found = True
       builder_dict = builder_config[buildername]
-      _CONFIG_DISPATCH_MAP[builder_type](api, **builder_dict)
+      # Use the cached builder directory to enable incremental builds.
+      with api.context(cwd=api.path['cache'].join('builder')):
+        _CONFIG_DISPATCH_MAP[builder_type](api, **builder_dict)
       break
 
   if not builder_found: # pragma: no cover
