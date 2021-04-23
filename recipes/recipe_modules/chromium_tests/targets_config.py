@@ -9,19 +9,14 @@ from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 
 @attrs()
-class TargetConfig(object):
-  """"Dynamic" configuration for a bot.
+class TargetsConfig(object):
+  """Configuration about the targets to build and test for a builder.
 
-  BuildConfig provides access to information obtained from src-side files; for a
-  given recipe version BuildConfig information can change on a per-src-revision
-  basis. There could potentially be multiple BuildConfigs for the same build
-  that contain different information (e.g. a trybot running against a change
-  that modifies the src-side spec information).
-
-  This creates a directed acyclic builder graph, with the builders
-  described by the provided bot IDs as the root nodes and the builders
-  they trigger as their children. Nodes keep track of whether they're
-  referenced by a bot ID (and would thus be mirrored by trybots).
+  TargetsConfig provides access to information obtained from src-side files; for
+  a given recipe version TargetsConfig information can change on a
+  per-src-revision basis. There could potentially be multiple TargetsConfigs for
+  the same build that contain different information (e.g. a trybot running
+  against a change that modifies the src-side spec information).
   """
 
   builder_config = attrib(ctbc.BuilderConfig)
@@ -33,7 +28,7 @@ class TargetConfig(object):
   _source_side_specs = attrib(mapping[str, ...])
   # The elements of the values should be chromium_tests.steps.Test instances,
   # but that would cause an import cycle. It's not expected that anyone will be
-  # creating TargetConfigs manually, so don't enforce the type, just trust that
+  # creating TargetsConfigs manually, so don't enforce the type, just trust that
   # the chromium_tests generators will return back the correct type
   _tests = attrib(mapping[chromium.BuilderId, sequence])
 

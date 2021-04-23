@@ -180,6 +180,6 @@ class BuilderConfig(object):
     return {g: '{}.json'.format(g) for g in groups}
 
   # TODO(https://crbug.com/1193832) Remove this once all callers are migrated to
-  # use api.chromium_tests.create_target_config
+  # use api.chromium_tests.create_targets_config
   def create_build_config(self, chromium_tests_api, update_step):
-    return chromium_tests_api.create_target_config(self, update_step)
+    return chromium_tests_api.create_targets_config(self, update_step)

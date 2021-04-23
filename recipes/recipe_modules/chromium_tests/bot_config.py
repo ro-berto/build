@@ -7,4 +7,4 @@
 from RECIPE_MODULES.build.chromium_tests_builder_config import (BuilderConfig as
                                                                 BotConfig)
 
-from .target_config import TargetConfig as BuildConfig
+from .targets_config import TargetsConfig as BuildConfig

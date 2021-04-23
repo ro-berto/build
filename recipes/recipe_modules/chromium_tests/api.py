@@ -23,7 +23,7 @@ from RECIPE_MODULES.build import chromium
 from . import bot_config as bot_config_module
 from . import bot_spec as bot_spec_module
 from . import generators
-from . import target_config
+from . import targets_config
 
 # Paths which affect recipe config and behavior in a way that survives
 # deapplying user's patch.
@@ -206,7 +206,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  def create_target_config(self, builder_config, update_step):
+  def create_targets_config(self, builder_config, update_step):
     # The scripts_compile_targets is indirected through a function so that we
     # don't execute unnecessary steps if there are no scripts that need to be
     # run
@@ -255,7 +255,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if migration_state:
       self._report_test_spec_migration_state(migration_state)
 
-    return target_config.TargetConfig.create(
+    return targets_config.TargetsConfig.create(
         builder_config=builder_config,
         source_side_specs=source_side_specs,
         tests=tests)
