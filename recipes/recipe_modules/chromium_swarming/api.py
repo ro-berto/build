@@ -38,6 +38,7 @@ BUILDER_GROUP_SWARMING_PRIORITIES.update({
     'chromium.android.fyi': 35,
     'chromium.fyi': 35,
     'chromium.goma.fyi': 35,  # This should be lower than the CQ.
+    'chromium.reclient.fyi': 35,
     'client.v8.chromium': 35,
     'client.v8.fyi': 35,
 })
