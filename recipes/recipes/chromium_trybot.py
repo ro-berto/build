@@ -815,9 +815,8 @@ def GenTests(api):
           '6_isolated_tests', '10_gtest'
       ]),
       api.platform.name('linux'),
-      api.override_step_data(
-          'read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
               'Linux Tests': {
                   'gtest_tests': [
                       {
@@ -866,7 +865,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })),
+          }),
       api.filter.suppress_analyze(),
       api.post_process(check_ordering),
       api.post_process(DropExpectation),

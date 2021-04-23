@@ -23,7 +23,6 @@ DEPS = [
     'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
-    'recipe_engine/json',
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -560,9 +559,8 @@ def GenTests(api):
           build_number=123,
           bot_id='isolated_transfer_builder_tester_id'),
       api.chromium_tests.builders(CUSTOM_BUILDERS),
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer: mixed BT, isolated tester (BT)': {
                   'junit_tests': [{
                       'test': 'base_junit_tests',
@@ -577,7 +575,7 @@ def GenTests(api):
                       'test': 'base_unittests',
                   },],
               },
-          })),
+          }),
       api.post_process(post_process.DoesNotRun, 'package build'),
       api.post_process(
           TriggersBuilderWithProperties,
