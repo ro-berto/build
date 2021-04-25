@@ -815,6 +815,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux Builder (dbg)',
                 tester='Linux Tests (dbg)(1)',
             ),
+        'linux-1mbu-compile-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='Linux Builder',
+                execution_mode=try_spec.COMPILE,
+            ),
         'linux-clang-tidy-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
