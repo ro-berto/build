@@ -589,17 +589,13 @@ class V8Api(recipe_api.RecipeApi):
     if 'perf' in isolate_targets:
       isolate_targets.remove('perf')
       self.m.isolate.isolate_server = 'https://chrome-isolated.appspot.com'
-
-      # TODO(machenbach): Remove and set to True after testing this builder.
-      use_cas = self.m.buildbucket.builder_name == 'V8 Linux - builder - perf'
-
       self.m.isolate.isolate_tests(
           output_dir,
           targets=['perf'],
           verbose=True,
           swarm_hashes_property_name=None,
           step_name='isolate tests (perf)',
-          use_cas=use_cas,
+          use_cas=True,
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
       # https://crbug.com/944904
