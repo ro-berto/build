@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
 import json
 
 from recipe_engine import post_process
@@ -12,12 +11,13 @@ from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as archive_properties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'code_coverage',
     'pgo',
     'profiles',
@@ -35,11 +35,11 @@ PROPERTIES = {'fail_compile': Property(default=False, kind=bool)}
 
 
 def _builder_spec(**kwargs):
-  return bot_spec.BotSpec.create(
+  return ctbc.BuilderSpec.create(
       build_gs_bucket='chromium-example-archive', **kwargs)
 
 
-CUSTOM_BUILDERS = bot_db.BotDatabase.create({
+CUSTOM_BUILDERS = ctbc.BuilderDatabase.create({
     'chromium.example': {
         'Isolated Transfer Builder':
             _builder_spec(
@@ -54,7 +54,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Isolated Transfer Tester':
             _builder_spec(
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -78,7 +78,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Isolated Transfer: mixed builder, isolated tester (tester)':
             _builder_spec(
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -105,7 +105,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Isolated Transfer: mixed BT, isolated tester (tester)':
             _builder_spec(
                 android_config='main_builder_mb',
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_config='android',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -130,7 +130,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
             ),
         'Packaged Transfer Tester':
             _builder_spec(
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
@@ -158,7 +158,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Multiple Triggers: Mixed':
             _builder_spec(
                 android_config='main_builder',
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='android',
                 chromium_config_kwargs={
@@ -174,7 +174,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
         'Multiple Triggers: Isolated':
             _builder_spec(
                 android_config='main_builder',
-                execution_mode=bot_spec.TEST,
+                execution_mode=ctbc.TEST,
                 chromium_apply_config=['mb'],
                 chromium_config='android',
                 chromium_config_kwargs={
@@ -217,11 +217,7 @@ def RunSteps(api, fail_compile):
 def GenTests(api):
   yield api.test(
       'builder',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.linux', buildername='Linux Builder'),
-      ]),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
       api.override_step_data(
           'trigger',
@@ -247,13 +243,7 @@ def GenTests(api):
 
   yield api.test(
       'tester',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.linux',
-              buildername='Linux Tests',
-          )
-      ]),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
@@ -278,13 +268,9 @@ def GenTests(api):
   input_properties.archive_datas.extend([archive_data])
   yield api.test(
       'archive_builder_no_chrome_version',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.linux', buildername='Linux Builder')
-      ]),
       api.properties(
           chrome_version=None, **{'$build/archive': input_properties}),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux',
           builder='Linux Builder',
           revision='refs/tags/1.2.3.4',
@@ -297,13 +283,9 @@ def GenTests(api):
 
   yield api.test(
       'archive_builder_with_chrome_version',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.linux', buildername='Linux Builder')
-      ]),
       api.properties(
           chrome_version='2.2.2.2', **{'$build/archive': input_properties}),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux',
           builder='Linux Builder',
           revision='refs/tags/1.2.3.4',
@@ -462,12 +444,12 @@ def GenTests(api):
 
   yield api.test(
       'isolate_transfer_builder',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Isolated Transfer Builder',
           build_number=123,
-          bot_id='isolated_transfer_builder_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='isolated_transfer_builder_id',
+          builder_db=CUSTOM_BUILDERS),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
@@ -490,13 +472,13 @@ def GenTests(api):
 
   yield api.test(
       'isolate_transfer_tester',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Isolated Transfer Tester',
           parent_buildername='Isolated Transfer Builder',
           build_number=123,
-          bot_id='isolated_transfer_tester_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='isolated_transfer_tester_id',
+          builder_db=CUSTOM_BUILDERS),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
@@ -518,13 +500,13 @@ def GenTests(api):
 
   yield api.test(
       'isolated_transfer__mixed_builder_isolated_tester',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder=(
               'Isolated Transfer: mixed builder, isolated tester (builder)'),
           build_number=123,
-          bot_id='isolated_transfer_builder_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='isolated_transfer_builder_id',
+          builder_db=CUSTOM_BUILDERS),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer: mixed builder, isolated tester (builder)': {
@@ -553,12 +535,12 @@ def GenTests(api):
 
   yield api.test(
       'isolated_transfer__mixed_bt_isolated_tester',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Isolated Transfer: mixed BT, isolated tester (BT)',
           build_number=123,
-          bot_id='isolated_transfer_builder_tester_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='isolated_transfer_builder_tester_id',
+          builder_db=CUSTOM_BUILDERS),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer: mixed BT, isolated tester (BT)': {
@@ -586,12 +568,12 @@ def GenTests(api):
 
   yield api.test(
       'package_transfer_builder',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Packaged Transfer Builder',
           build_number=123,
-          bot_id='packaged_transfer_builder_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='packaged_transfer_builder_id',
+          builder_db=CUSTOM_BUILDERS),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
@@ -610,13 +592,13 @@ def GenTests(api):
 
   yield api.test(
       'package_transfer_tester',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Packaged Transfer Tester',
           parent_buildername='Packaged Transfer Builder',
           build_number=123,
-          bot_id='packaged_transfer_tester_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='packaged_transfer_tester_id',
+          builder_db=CUSTOM_BUILDERS),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
@@ -638,12 +620,12 @@ def GenTests(api):
 
   yield api.test(
       'multiple_triggers',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.example',
           builder='Multiple Triggers: Builder',
           build_number=123,
-          bot_id='multiple_triggers_builder_id'),
-      api.chromium_tests.builders(CUSTOM_BUILDERS),
+          bot_id='multiple_triggers_builder_id',
+          builder_db=CUSTOM_BUILDERS),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Multiple Triggers: Mixed': {
@@ -697,11 +679,7 @@ def GenTests(api):
   }
   yield api.test(
       'skip_retrying_logic_is_limited_to_try_jobs',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.linux', buildername='Linux Tests'),
-      ]),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux',
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
@@ -759,12 +737,13 @@ def GenTests(api):
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
       api.platform('linux', 64),
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_builder,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_builder:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           upload_isolates_but_do_not_run_tests=True,
@@ -792,12 +771,13 @@ def GenTests(api):
   # crbug.com/1166761 is fixed.
   yield api.test(
       'blink-web-tests-without-layout-results-handler-failure',
-      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),

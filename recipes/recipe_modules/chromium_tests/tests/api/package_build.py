@@ -3,35 +3,36 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine import recipe_api
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
   api.chromium_tests.package_build(
-      builder_id, update_step, bot_config, reasons=['for test coverage'])
+      builder_id, update_step, builder_config, reasons=['for test coverage'])
 
 
 def GenTests(api):
   yield api.test(
       'standard',
-      api.chromium.ci_build(
-          builder_group='chromium.fake', builder='fake-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.fake',
+          builder='fake-builder',
+          builder_db=ctbc.BuilderDatabase.create({
               'chromium.fake': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           build_gs_bucket='sample-bucket',
                           chromium_config='chromium',
                           gclient_config='chromium',
@@ -49,13 +50,13 @@ def GenTests(api):
 
   yield api.test(
       'perf-upload',
-      api.chromium.ci_build(
-          builder_group='chromium.perf', builder='fake-perf-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.perf',
+          builder='fake-perf-builder',
+          builder_db=ctbc.BuilderDatabase.create({
               'chromium.perf': {
                   'fake-perf-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           build_gs_bucket='sample-bucket',
                           chromium_config='chromium',
                           gclient_config='chromium',
@@ -72,13 +73,13 @@ def GenTests(api):
 
   yield api.test(
       'bisect',
-      api.chromium.ci_build(
-          builder_group='chromium.perf', builder='fake-bisect-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.perf',
+          builder='fake-bisect-builder',
+          builder_db=ctbc.BuilderDatabase.create({
               'chromium.perf': {
                   'fake-bisect-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           bisect_archive_build=True,
                           bisect_gs_bucket='sample-bisect-bucket',
                           chromium_config='chromium',

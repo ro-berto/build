@@ -6,9 +6,6 @@ import base64
 from recipe_engine import post_process
 
 from PB.recipe_modules.build.symupload import properties
-from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
-                                                 try_spec_module)
 
 DEPS = [
     'chromium',

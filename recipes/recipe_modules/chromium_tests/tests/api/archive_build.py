@@ -2,30 +2,33 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
 ]
 
 
 def RunSteps(api):
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.archive_build(builder_id, update_step, bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
+  api.chromium_tests.archive_build(builder_id, update_step, builder_config)
 
 
 def GenTests(api):
   yield api.test(
       'cf_archive_build',
-      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           cf_archive_build=True,

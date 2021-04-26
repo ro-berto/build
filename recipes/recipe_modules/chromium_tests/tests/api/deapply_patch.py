@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/buildbucket',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -12,9 +13,9 @@ DEPS = [
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
   api.chromium_tests.deapply_patch(update_step)
 
 

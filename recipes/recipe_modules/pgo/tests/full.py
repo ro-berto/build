@@ -4,13 +4,12 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
-                                                 try_spec_module)
+from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'code_coverage',
     'pgo',
     'profiles',
@@ -26,8 +25,8 @@ DEPS = [
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
   # Fake path.
   api.profiles._merge_scripts_dir = api.path['start_dir']
   # We're forcing the root profile dir to '/', such that the file.listdir

@@ -16,14 +16,12 @@ See more on forms in
 https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/tools/dirmd/proto/mapping.proto
 """
 
-import copy
-import re
-
 from RECIPE_MODULES.build import chromium
 
 
 DEPS = [
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/depot_tools',
     'recipe_engine/path',
     'recipe_engine/step',
@@ -34,11 +32,11 @@ DEST_BUCKET_LEGACY = 'chromium-owners'
 
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.
-  _, bot_config = api.chromium_tests.lookup_builder(
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder(
       chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder'))
   # configure_build() is required by prepare-checkout
-  api.chromium_tests.configure_build(bot_config)
-  api.chromium_tests.prepare_checkout(bot_config, report_cache_state=False)
+  api.chromium_tests.configure_build(builder_config)
+  api.chromium_tests.prepare_checkout(builder_config, report_cache_state=False)
 
   api.step('dirmd chromium-update', [
     api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),

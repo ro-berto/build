@@ -4,11 +4,12 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/platform',
     'recipe_engine/properties',
 ]
@@ -16,37 +17,37 @@ DEPS = [
 
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  _, build_config = api.chromium_tests.prepare_checkout(bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  _, targets_config = api.chromium_tests.prepare_checkout(builder_config)
   affected_files = api.properties['affected_files']
-  api.chromium_tests._determine_compilation_targets(builder_id, bot_config,
+  api.chromium_tests._determine_compilation_targets(builder_id, builder_config,
                                                     affected_files,
-                                                    build_config)
+                                                    targets_config)
 
 
 def GenTests(api):
 
   def affected_spec_file():
     return sum([
-        api.chromium.try_build(
-            builder_group='fake-try-group', builder='fake-try-builder'),
         api.properties(affected_files=['testing/buildbot/fake-group.json']),
-        api.chromium_tests.builders(
-            bot_db.BotDatabase.create({
+        api.chromium_tests_builder_config.try_build(
+            builder_group='fake-try-group',
+            builder='fake-try-builder',
+            builder_db=ctbc.BuilderDatabase.create({
                 'fake-group': {
                     'fake-builder':
-                        bot_spec.BotSpec.create(
+                        ctbc.BuilderSpec.create(
                             chromium_config='chromium',
                             gclient_config='chromium',
                         ),
                 },
-            })),
-        api.chromium_tests.trybots(
-            try_spec.TryDatabase.create({
+            }),
+            try_db=ctbc.TryDatabase.create({
                 'fake-try-group': {
                     'fake-try-builder':
-                        try_spec.TrySpec.create_for_single_mirror(
+                        ctbc.TrySpec.create_for_single_mirror(
                             'fake-group', 'fake-builder'),
                 },
             })),

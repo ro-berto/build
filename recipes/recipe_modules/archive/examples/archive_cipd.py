@@ -3,22 +3,21 @@
 # found in the LICENSE file.
 
 from PB.recipe_modules.build.archive import properties
-from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
-                                                 try_spec_module)
 from recipe_engine import post_process
 
 DEPS = [
     'archive',
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/path',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
   build_dir = api.chromium.output_dir
   update_properties = api.properties.get('update_properties')
   custom_vars = api.properties.get('custom_vars')

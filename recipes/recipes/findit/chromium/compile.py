@@ -9,14 +9,15 @@ from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import bot_spec
 
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'builder_group',
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'filter',
     'findit',
     'goma',
@@ -70,9 +71,12 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
                              use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
-    _, bot_config = api.chromium_tests.lookup_builder(builder_id)
+    _, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder(builder_id))
     bot_update_step, build_config = api.chromium_tests.prepare_checkout(
-        bot_config, root_solution_revision=revision, report_cache_state=False)
+        builder_config,
+        root_solution_revision=revision,
+        report_cache_state=False)
 
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
@@ -102,13 +106,13 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
       return CompileResult.SKIPPED
 
     failure = api.chromium_tests.compile_specific_targets(
-        bot_config,
+        builder_config,
         bot_update_step,
         build_config,
         compile_targets,
         tests_including_triggered=[],
         builder_id=builder_id,
-        override_execution_mode=bot_spec.COMPILE_AND_TEST)
+        override_execution_mode=ctbc.COMPILE_AND_TEST)
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED
     return CompileResult.PASSED
@@ -127,8 +131,9 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
   target_builder_group = api.builder_group.for_target
   builder_id = chromium.BuilderId.create_for_group(target_builder_group,
                                                    target_buildername)
-  _, bot_config = api.chromium_tests.lookup_builder(builder_id)
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder(builder_id))
+  api.chromium_tests.configure_build(builder_config)
 
   api.chromium.apply_config('goma_failfast')
 
@@ -137,10 +142,12 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
   api.goma.configure_enable_ats()
 
   checked_out_revision, cached_revision = api.findit.record_previous_revision(
-      bot_config)
+      builder_config)
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
-      bot_config, root_solution_revision=bad_revision, report_cache_state=False)
+      builder_config,
+      root_solution_revision=bad_revision,
+      report_cache_state=False)
 
   # Retrieve revisions in the regression range. The returned revisions are in
   # order from oldest to newest.

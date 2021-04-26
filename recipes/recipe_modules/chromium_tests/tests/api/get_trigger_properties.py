@@ -5,12 +5,13 @@
 from recipe_engine import post_process
 from recipe_engine import types
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/bot_update',
     'recipe_engine/assertions',
     'recipe_engine/json',
@@ -25,9 +26,10 @@ def override_foo(c):
 
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
   properties = api.chromium_tests._get_trigger_properties(
       builder_id, update_step)
   expected = types.thaw(api.properties['expected_trigger_properties'])
@@ -42,22 +44,21 @@ def GenTests(api):
   src_revision = api.bot_update.gen_revision('src')
   yield api.test(
       'overridden-dep',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-          revision=src_revision),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          revision=src_revision,
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           gclient_apply_config=['override_foo'],
                       ),
                   'fake-tester':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.TEST,
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
                           chromium_config='chromium',
                           gclient_config='chromium',
                           gclient_apply_config=['override_foo'],

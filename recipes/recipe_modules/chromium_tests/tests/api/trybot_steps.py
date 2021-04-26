@@ -3,15 +3,14 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine.recipe_api import Property
-import textwrap
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'code_coverage',
     'depot_tools/tryserver',
     'filter',
@@ -28,40 +27,40 @@ DEPS = [
     'test_utils',
 ]
 
-_TEST_BUILDERS = bot_db.BotDatabase.create({
+_TEST_BUILDERS = ctbc.BuilderDatabase.create({
     'chromium.test': {
         'chromium-rel':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
             ),
         'retry-shards':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
             ),
         'retry-shards-test':
-            bot_spec.BotSpec.create(
-                execution_mode=bot_spec.TEST,
+            ctbc.BuilderSpec.create(
+                execution_mode=ctbc.TEST,
                 parent_buildername='retry-shards',
             ),
     },
     'tryserver.chromium.unmirrored': {
         'unmirrored-chromium-rel':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
             ),
     },
 })
 
-_TEST_TRYBOTS = try_spec.TryDatabase.create({
+_TEST_TRYBOTS = ctbc.TryDatabase.create({
     'tryserver.chromium.test': {
         'retry-shards':
-            try_spec.TrySpec.create(
+            ctbc.TrySpec.create(
                 retry_failed_shards=True,
                 mirrors=[
-                    try_spec.TryMirror.create(
+                    ctbc.TryMirror.create(
                         builder_group='chromium.test',
                         buildername='retry-shards',
                         tester='retry-shards-test',
@@ -142,10 +141,11 @@ def GenTests(api):
 
   yield api.test(
       'unmirrored',
-      api.chromium.try_build(
+      api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.unmirrored',
-          builder='unmirrored-chromium-rel'),
-      api.chromium_tests.builders(_TEST_BUILDERS),
+          builder='unmirrored-chromium-rel',
+          builder_db=_TEST_BUILDERS,
+          try_db=None),
       api.chromium_tests.read_source_side_spec(
           'tryserver.chromium.unmirrored', {
               'unmirrored-chromium-rel': {
@@ -159,32 +159,30 @@ def GenTests(api):
 
   yield api.test(
       'dummy-tester',
-      api.chromium.try_build(
-          builder_group='fake-group', builder='fake-try-builder'),
-      api.chromium_tests.trybots(
-          try_spec.TryDatabase.create({
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-group', builder='fake-try-builder',
+          builder_db=ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                  ctbc.BuilderSpec.create(
+                      chromium_config='chromium',
+                      gclient_config='chromium',
+                  ),
+                  'fake-dummy-tester':
+                  ctbc.BuilderSpec.create(
+                      execution_mode=ctbc.PROVIDE_TEST_SPEC),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
               'fake-group': {
                   'fake-try-builder':
-                  try_spec.TrySpec.create(mirrors=[
-                      try_spec.TryMirror.create(
+                  ctbc.TrySpec.create(mirrors=[
+                      ctbc.TryMirror.create(
                           builder_group='fake-group',
                           buildername='fake-builder',
                           tester='fake-dummy-tester',
                       )
                   ]),
-              },
-          })),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                  bot_spec.BotSpec.create(
-                      chromium_config='chromium',
-                      gclient_config='chromium',
-                  ),
-                  'fake-dummy-tester':
-                  bot_spec.BotSpec.create(
-                      execution_mode=bot_spec.PROVIDE_TEST_SPEC),
               },
           })),
       api.filter.suppress_analyze(),
@@ -207,12 +205,11 @@ def GenTests(api):
   )
 
   CUSTOM_PROPS = sum([
-      api.chromium.try_build(
+      api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.test',
           builder='retry-shards',
-      ),
-      api.chromium_tests.builders(_TEST_BUILDERS),
-      api.chromium_tests.trybots(_TEST_TRYBOTS),
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},),
   ], api.empty_test_data())
@@ -280,10 +277,11 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.test', builder='retry-shards'),
-      api.chromium_tests.builders(_TEST_BUILDERS),
-      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='retry-shards',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.chromium_tests.read_source_side_spec(
@@ -313,10 +311,11 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid_retry',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.test', builder='retry-shards'),
-      api.chromium_tests.builders(_TEST_BUILDERS),
-      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='retry-shards',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.chromium_tests.read_source_side_spec(
@@ -350,10 +349,11 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_all_invalid_results',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.test', builder='retry-shards'),
-      api.chromium_tests.builders(_TEST_BUILDERS),
-      api.chromium_tests.trybots(_TEST_TRYBOTS),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='retry-shards',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS),
       api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.chromium_tests.read_source_side_spec(
@@ -589,30 +589,28 @@ def GenTests(api):
           config='Release',
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
       ),
-      api.platform('linux', 64),
-      api.chromium.try_build(
-          builder_group=fake_group, builder=fake_try_builder),
-      api.chromium_tests.trybots(
-          try_spec.TryDatabase.create({
-              fake_group: {
-                  fake_try_builder:
-                      try_spec.TrySpec.create(mirrors=[
-                          try_spec.TryMirror.create(
-                              builder_group=fake_group,
-                              buildername=fake_builder,
-                          )
-                      ])
-              }
-          })),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.try_build(
+          builder_group=fake_group,
+          builder=fake_try_builder,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_builder:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           upload_isolates_but_do_not_run_tests=True,
                       ),
+              }
+          }),
+          try_db=ctbc.TryDatabase.create({
+              fake_group: {
+                  fake_try_builder:
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
+                              builder_group=fake_group,
+                              buildername=fake_builder,
+                          )
+                      ])
               }
           })),
       api.chromium_tests.read_source_side_spec(

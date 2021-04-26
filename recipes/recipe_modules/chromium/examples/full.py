@@ -2,13 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter
-
-from RECIPE_MODULES.build.chromium_tests import bot_spec
-
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -25,8 +22,9 @@ def RunSteps(api):
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
-    builder_id, bot_config = api.chromium_tests.lookup_builder()
-    api.chromium_tests.configure_build(bot_config)
+    builder_id, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder())
+    api.chromium_tests.configure_build(builder_config)
 
     api.chromium.get_build_target_arch()
 
@@ -36,7 +34,7 @@ def RunSteps(api):
     for config in configs:
       api.chromium.apply_config(config)
 
-    api.chromium_tests.prepare_checkout(bot_config)
+    api.chromium_tests.prepare_checkout(builder_config)
 
     mb_config_path = api.properties.get('mb_config_path')
 

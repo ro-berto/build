@@ -4,10 +4,6 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
-                                                 try_spec_module)
-
 DEPS = [
     'profiles',
     'recipe_engine/assertions',

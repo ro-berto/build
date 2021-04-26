@@ -4,32 +4,8 @@
 
 from recipe_engine import recipe_test_api
 
-from . import bot_config as bot_config_module
-from . import builders as builders_module
-from . import try_spec
-
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
-
-  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
-  # chromium_tests_builder_config.(generic|ci|try)_build
-  def builders(self, builders):
-    """Override chromium_tests's builders for a test.
-
-    Args:
-      builders - A BotDatabase to replace chromium_tests.builders.
-    """
-    return self.m.chromium_tests_builder_config.builder_db(builders)
-
-  # TODO(https://crbug.com/1193832) Remove this once all uses have been switched
-  # chromium_tests_builder_config.(generic|ci|try)_build
-  def trybots(self, trybots):
-    """Override chromium_tests's builders for a test.
-
-    Args:
-      trybots - A TryDatabase to replace chromium_tests.trybots.
-    """
-    return self.m.chromium_tests_builder_config.try_db(trybots)
 
   @recipe_test_api.mod_test_data
   @staticmethod
@@ -40,15 +16,6 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
        the string returned from _format_unrecoverable_failures()
     """
     return size_limit
-
-  # TODO(https://crbug.com/1193832) Remove this once all uses have been updated
-  # chromium_tests_builder_config.(generic|ci|try)_build
-  def platform(self, bot_mirrors):
-    bot_config = bot_config_module.BotConfig.create(
-        builders_module.BUILDERS, try_spec.TrySpec.create(bot_mirrors))
-    return self.m.platform(
-        bot_config.simulation_platform,
-        bot_config.chromium_config_kwargs.get('TARGET_BITS', 64))
 
   def read_source_side_spec(self,
                             builder_group,

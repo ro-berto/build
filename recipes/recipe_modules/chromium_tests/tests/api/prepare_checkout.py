@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -14,15 +15,15 @@ DEPS = [
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, steps,
-                                                 try_spec)
+from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 from PB.recipe_modules.build.chromium_tests.properties import InputProperties
 
-DUMMY_BUILDERS = bot_db.BotDatabase.create({
+DUMMY_BUILDERS = ctbc.BuilderDatabase.create({
     'chromium.fake': {
         'cross-group-trigger-builder':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -32,8 +33,8 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
     },
     'chromium.fake.fyi': {
         'cross-group-trigger-tester':
-            bot_spec.BotSpec.create(
-                execution_mode=bot_spec.TEST,
+            ctbc.BuilderSpec.create(
+                execution_mode=ctbc.TEST,
                 parent_buildername='cross-group-trigger-builder',
                 parent_builder_group='chromium.fake',
             ),
@@ -42,9 +43,9 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  api.chromium_tests.prepare_checkout(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
+  api.chromium_tests.prepare_checkout(builder_config)
 
 
 def GenTests(api):
@@ -79,9 +80,10 @@ def GenTests(api):
 
   yield api.test(
       'cross_group_trigger',
-      api.chromium.ci_build(
-          builder_group='chromium.fake', builder='cross-group-trigger-builder'),
-      api.chromium_tests.builders(DUMMY_BUILDERS),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.fake',
+          builder='cross-group-trigger-builder',
+          builder_db=DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
                        'read test spec (chromium.fake.fyi.json)'),
       api.post_process(post_process.DropExpectation),
@@ -89,12 +91,13 @@ def GenTests(api):
 
   yield api.test(
       'trigger-with-fixed-revisions',
-      api.chromium.ci_build(builder_group='fake-group', builder='fake-tester'),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-tester':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
@@ -117,31 +120,28 @@ def GenTests(api):
 
   yield api.test(
       'mirror-with-non-child-tester',
-      api.chromium.try_build(
+      api.chromium_tests_builder_config.try_build(
           builder_group='fake-try-group',
           builder='fake-try-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
               },
               'fake-tester-group': {
                   'fake-tester':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.PROVIDE_TEST_SPEC,),
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.PROVIDE_TEST_SPEC),
               },
-          })),
-      api.chromium_tests.trybots(
-          try_spec.TryDatabase.create({
+          }),
+          try_db=ctbc.TryDatabase.create({
               'fake-try-group': {
                   'fake-try-builder':
-                      try_spec.TrySpec.create(mirrors=[
-                          try_spec.TryMirror.create(
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
                               builder_group='fake-group',
                               buildername='fake-builder',
                               tester_group='fake-tester-group',
@@ -157,15 +157,13 @@ def GenTests(api):
 
   yield api.test(
       'bad-spec',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
@@ -181,21 +179,19 @@ def GenTests(api):
 
   yield api.test(
       'bad-spec-on-related-builder',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
                   'fake-builder-with-bad-spec':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.TEST,
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
                           chromium_config='chromium',
                           gclient_config='chromium',
                           parent_buildername='fake-builder',
@@ -213,20 +209,18 @@ def GenTests(api):
 
   yield api.test(
       'bad-spec-on-unrelated-builder',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
                   'fake-builder-with-bad-spec':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
@@ -244,12 +238,13 @@ def GenTests(api):
   builder = 'fake-builder'
 
   def fake_builder(test_specs, builder_source_side_spec=None):
-    data = api.chromium.ci_build(builder_group=group, builder=builder)
-    data += api.chromium_tests.builders(
-        bot_db.BotDatabase.create({
+    data = api.chromium_tests_builder_config.ci_build(
+        builder_group=group,
+        builder=builder,
+        builder_db=ctbc.BuilderDatabase.create({
             group: {
                 builder:
-                    bot_spec.BotSpec.create(
+                    ctbc.BuilderSpec.create(
                         chromium_config='chromium',
                         gclient_config='chromium',
                         test_specs=test_specs,

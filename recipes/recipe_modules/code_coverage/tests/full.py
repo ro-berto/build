@@ -4,14 +4,13 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
-                                                 try_spec_module)
+from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'code_coverage',
     'profiles',
     'recipe_engine/json',
@@ -26,8 +25,9 @@ _NUM_TESTS = 7
 
 
 def RunSteps(api):
-  builder_id, bot_config = api.chromium_tests.lookup_builder(use_try_db=True)
-  api.chromium_tests.configure_build(bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
+  api.chromium_tests.configure_build(builder_config)
   # Fake path.
   api.profiles._merge_scripts_dir = api.path['start_dir']
 

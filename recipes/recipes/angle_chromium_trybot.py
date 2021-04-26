@@ -85,8 +85,8 @@ def RunSteps(api):
   if is_angle_cl:
     chromium_revision = get_chromium_revision_from_angle_cl(api)
   else:
-    _, bot_config = api.chromium_tests.lookup_builder()
-    is_angle_tot = 'angle_top_of_tree' in bot_config.gclient_apply_config
+    _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+    is_angle_tot = 'angle_top_of_tree' in builder_config.gclient_apply_config
     if is_angle_tot:
       angle_revision = 'refs/heads/master'
     else:

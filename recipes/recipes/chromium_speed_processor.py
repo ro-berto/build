@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -15,7 +16,7 @@ DEPS = [
 
 from recipe_engine import post_process
 from PB.recipes.build.chromium_speed_processor import InputProperties
-from RECIPE_MODULES.build.chromium_tests import bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 PROPERTIES = InputProperties
 
@@ -23,16 +24,16 @@ PROPERTIES = InputProperties
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     # 1. update the bot to have latest scripts
-    _, bot_config = api.chromium_tests.lookup_builder()
-    execution_mode = bot_config.execution_mode
-    if execution_mode != bot_spec.TEST:
+    _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+    execution_mode = builder_config.execution_mode
+    if execution_mode != ctbc.TEST:
       api.python.infra_failing_step(
           'chromium_speed_tester',
           'Unexpected execution mode. Expect: %s, Actual: %s' %
-          (bot_spec.TEST, execution_mode))
-    api.chromium_tests.configure_build(bot_config)
+          (ctbc.TEST, execution_mode))
+    api.chromium_tests.configure_build(builder_config)
     api.chromium_tests.prepare_checkout(
-        bot_config, timeout=3600, no_fetch_tags=True)
+        builder_config, timeout=3600, no_fetch_tags=True)
 
     # 2. run collect task for each group
     task_groups = api.json.loads(properties.tasks_groups)
@@ -83,13 +84,7 @@ MOCK_PROR_JSON_STRING = """
 def GenTests(api):
   yield api.test(
       'recipe-coverage',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.perf',
-              buildername='linux-perf',
-          )
-      ]),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.perf',
           builder='linux-perf',
           parent_buildername='linux-builder-perf'),
@@ -103,13 +98,7 @@ def GenTests(api):
 
   yield api.test(
       'builder-coverage',
-      api.chromium_tests.platform([
-          try_spec.TryMirror.create(
-              builder_group='chromium.perf',
-              buildername='linux-builder-perf',
-          )
-      ]),
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.perf', builder='linux-builder-perf'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),

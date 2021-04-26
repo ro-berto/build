@@ -25,12 +25,11 @@ DEPS = [
     'recipe_engine/time',
 ]
 
-from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-from RECIPE_MODULES.build.chromium_tests import bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 import re
 
@@ -207,7 +206,7 @@ def _CheckoutChromiumRepo(api):
   project = api.buildbucket.build.builder.project
 
   with api.chromium.chromium_layout():
-    bot_config = {
+    builder_config = {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
         'chromium_apply_config': ['mb'],
@@ -218,15 +217,15 @@ def _CheckoutChromiumRepo(api):
     }
 
     if project == 'chrome':
-      bot_config['gclient_apply_config'] = [
+      builder_config['gclient_apply_config'] = [
           'chrome_internal',
           'checkout_pgo_profiles',
       ]
 
-    bot_config = bot_spec.BotSpec.create(**bot_config)
+    builder_config = ctbc.BuilderSpec.create(**builder_config)
 
-    api.chromium_tests.configure_build(bot_config)
-    api.chromium_checkout.ensure_checkout(bot_config)
+    api.chromium_tests.configure_build(builder_config)
+    api.chromium_checkout.ensure_checkout(builder_config)
     api.chromium.runhooks()
 
   return api.path['checkout']

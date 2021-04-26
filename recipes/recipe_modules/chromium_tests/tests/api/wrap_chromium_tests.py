@@ -4,11 +4,13 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/path',
@@ -62,18 +64,18 @@ def RunSteps(api):
             all_compile_targets={'script.py': ['compile_target']},
             script_args=['some', 'args'],
             override_compile_targets=['other_target']))
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
   tests = [s.get_test() for s in test_specs]
-  with api.chromium_tests.wrap_chromium_tests(bot_config, tests=tests):
+  with api.chromium_tests.wrap_chromium_tests(builder_config, tests=tests):
     pass
 
 
 def GenTests(api):
-  test_builders = bot_db.BotDatabase.create({
+  test_builders = ctbc.BuilderDatabase.create({
       'chromium.example': {
           'android-basic':
-              bot_spec.BotSpec.create(
+              ctbc.BuilderSpec.create(
                   android_config='main_builder',
                   chromium_apply_config=[
                       'mb',
@@ -93,9 +95,10 @@ def GenTests(api):
 
   yield api.test(
       'require_device_steps',
-      api.chromium.ci_build(
-          builder_group='chromium.example', builder='android-basic'),
-      api.chromium_tests.builders(test_builders),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.example',
+          builder='android-basic',
+          builder_db=test_builders),
       api.properties(local_gtest=True),
       api.post_process(post_process.MustRun, 'device_recovery'),
       api.post_process(post_process.MustRun, 'provision_devices'),

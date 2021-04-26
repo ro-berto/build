@@ -10,9 +10,8 @@ be when the try builder runs.
 """
 
 from recipe_engine import post_process
-from recipe_engine.recipe_api import Property
 
-from RECIPE_MODULES.build.chromium_tests import trybots
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
@@ -27,7 +26,7 @@ def RunSteps(api):
   api.step('Success', ['echo', 'Success!'])
 
 def GenTests(api):
-  for builder_id in sorted(trybots.TRYBOTS):
+  for builder_id in sorted(ctbc.trybots.TRYBOTS):
     builder_group = builder_id.group
     buildername = builder_id.builder
     yield api.test(

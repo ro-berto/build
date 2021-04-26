@@ -4,17 +4,18 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
 ]
 
-BUILDERS = bot_db.BotDatabase.create({
+BUILDERS = ctbc.BuilderDatabase.create({
     'fake.group': {
         'Android Apply Config Builder':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 android_config='main_builder_mb',
                 chromium_config='chromium',
                 gclient_config='chromium',
@@ -26,8 +27,9 @@ BUILDERS = bot_db.BotDatabase.create({
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder(bot_db=BUILDERS)
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder(builder_db=BUILDERS))
+  api.chromium_tests.configure_build(builder_config)
 
 
 def GenTests(api):

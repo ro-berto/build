@@ -12,10 +12,8 @@ full roll out.
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
-from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build import chromium
 
 DEPS = [
     'builder_group',
@@ -23,6 +21,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/gclient',
     'isolate',
     'recipe_engine/buildbucket',
@@ -63,24 +62,27 @@ def RunSteps(api):
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
-  _, bot_config = api.chromium_tests.lookup_builder()
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_swarming.swarming_server = (
-      bot_config.swarming_server or 'https://chromium-swarm-dev.appspot.com')
+      builder_config.swarming_server or
+      'https://chromium-swarm-dev.appspot.com')
 
-  api.chromium_tests.configure_build(bot_config)
+  api.chromium_tests.configure_build(builder_config)
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
-  update_step = api.chromium_checkout.ensure_checkout(bot_config)
+  update_step = api.chromium_checkout.ensure_checkout(builder_config)
 
-  build_config = bot_config.create_build_config(api.chromium_tests, update_step)
-  compile_targets = build_config.get_compile_targets(build_config.all_tests())
+  targets_config = (
+      api.chromium_tests.create_targets_config(builder_config, update_step))
+  compile_targets = targets_config.get_compile_targets(
+      targets_config.all_tests())
 
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   raw_result = api.chromium_tests.compile_specific_targets(
-      bot_config, update_step, build_config, compile_targets,
-      build_config.all_tests())
+      builder_config, update_step, targets_config, compile_targets,
+      targets_config.all_tests())
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -94,9 +96,10 @@ def RunSteps(api):
     api.chromium_swarming.set_default_dimension('gpu', None)
     api.chromium_swarming.set_default_dimension('cpu', None)
 
-  test_runner = api.chromium_tests.create_test_runner(build_config.all_tests())
-  with api.chromium_tests.wrap_chromium_tests(bot_config,
-                                              build_config.all_tests()):
+  test_runner = api.chromium_tests.create_test_runner(
+      targets_config.all_tests())
+  with api.chromium_tests.wrap_chromium_tests(builder_config,
+                                              targets_config.all_tests()):
     return test_runner()
 
 

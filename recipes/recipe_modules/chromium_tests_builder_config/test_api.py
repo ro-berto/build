@@ -125,6 +125,10 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
   def builder_db(builder_db):
     """Override the default BuilderDatabase for a test.
 
+    Generally (generic|ci|try)_build should be preferred instead, use
+    this only for tests of recipes that directly access
+    chromium_tests_builder_config.builder_db.
+
     Args:
       * builder_db - A BuilderDatabase to replace
         chromium_tests_builder_config.builder_db.
@@ -132,11 +136,14 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     assert isinstance(builder_db, BuilderDatabase)
     return builder_db
 
-  # TODO(https://crbug.com/1193832) Switch callers to use (generic|ci|try)_build
   @recipe_test_api.mod_test_data
   @staticmethod
   def try_db(try_db):
     """Override the default TryDatabase for a test.
+
+    Generally (generic|ci|try)_build should be preferred instead, use
+    this only for tests of recipes that directly access
+    chromium_tests_builder_config.try_db.
 
     Args:
       * try_db - A TryDatabase to replace

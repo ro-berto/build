@@ -3,11 +3,13 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'chromium_swarming',
     'depot_tools/tryserver',
     'recipe_engine/json',
@@ -67,40 +69,37 @@ def GenTests(api):
 
   def common_props():
     return sum([
-        api.chromium.try_build(
+        api.chromium_tests_builder_config.try_build(
             builder_group='tryserver.chromium.test',
             builder='retry-shards',
-        ),
-        api.chromium_tests.builders(
-            bot_db.BotDatabase.create({
+            builder_db=ctbc.BuilderDatabase.create({
                 'chromium.test': {
                     'retry-shards':
-                        bot_spec.BotSpec.create(
+                        ctbc.BuilderSpec.create(
                             chromium_config='chromium',
                             gclient_config='chromium',
                         ),
                     'retry-shards-test':
-                        bot_spec.BotSpec.create(
-                            execution_mode=bot_spec.TEST,
+                        ctbc.BuilderSpec.create(
+                            execution_mode=ctbc.TEST,
                             parent_buildername='retry-shards',
                         ),
                 },
                 'tryserver.chromium.unmirrored': {
                     'unmirrored-chromium-rel':
-                        bot_spec.BotSpec.create(
+                        ctbc.BuilderSpec.create(
                             chromium_config='chromium',
                             gclient_config='chromium',
                         ),
                 },
-            })),
-        api.chromium_tests.trybots(
-            try_spec.TryDatabase.create({
+            }),
+            try_db=ctbc.TryDatabase.create({
                 'tryserver.chromium.test': {
                     'retry-shards':
-                        try_spec.TrySpec.create(
+                        ctbc.TrySpec.create(
                             retry_failed_shards=True,
                             mirrors=[
-                                try_spec.TryMirror.create(
+                                ctbc.TryMirror.create(
                                     builder_group='chromium.test',
                                     buildername='retry-shards',
                                     tester='retry-shards-test',

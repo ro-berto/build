@@ -3,14 +3,12 @@
 # found in the LICENSE file.
 
 from collections import defaultdict
-import json
 import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import (bot_spec, bot_config as
-                                                 bot_config_module, steps,
-                                                 try_spec as try_spec_module)
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests import steps
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -26,24 +24,24 @@ class FinditApi(recipe_api.RecipeApi):
     INFRA_FAILED = 'infra_failed'  # Infra failed.
 
   def get_bot_mirror_for_tester(self, tester_id, builders=None):
-    builders = builders or self.m.chromium_tests.builders
+    builders = builders or self.m.chromium_tests_builder_config.builder_db
 
     tester_spec = builders[tester_id]
 
     if tester_spec.parent_buildername is None:
-      return try_spec_module.TryMirror.create(
+      return ctbc.TryMirror.create(
           buildername=tester_id.builder, builder_group=tester_id.group)
 
-    return try_spec_module.TryMirror.create(
+    return ctbc.TryMirror.create(
         builder_group=tester_spec.parent_builder_group or tester_id.group,
         buildername=tester_spec.parent_buildername,
         tester=tester_id.builder,
         tester_group=tester_id.group)
 
-  def get_bot_config_for_mirror(self, mirror, builders=None):
-    try_spec = try_spec_module.TrySpec.create([mirror])
-    return bot_config_module.BotConfig.create(
-        builders or self.m.chromium_tests.builders,
+  def get_builder_config_for_mirror(self, mirror, builders=None):
+    try_spec = ctbc.TrySpec.create([mirror])
+    return ctbc.BuilderConfig.create(
+        builders or self.m.chromium_tests_builder_config.builder_db,
         try_spec,
         python_api=self.m.python)
 
@@ -203,9 +201,11 @@ class FinditApi(recipe_api.RecipeApi):
     with self.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
       # TODO(stgao): refactor this out.
-      bot_config = self.get_bot_config_for_mirror(bot_mirror)
+      builder_config = self.get_builder_config_for_mirror(bot_mirror)
       bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
-          bot_config, root_solution_revision=revision, report_cache_state=False)
+          builder_config,
+          root_solution_revision=revision,
+          report_cache_state=False)
 
       # Figure out which test steps to run.
       requested_tests_to_run = [
@@ -250,13 +250,13 @@ class FinditApi(recipe_api.RecipeApi):
 
       if actual_compile_targets:
         raw_result = self.m.chromium_tests.compile_specific_targets(
-            bot_config,
+            builder_config,
             bot_update_step,
             build_config,
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
             builder_id=bot_mirror.builder_id,
-            override_execution_mode=bot_spec.COMPILE_AND_TEST)
+            override_execution_mode=ctbc.COMPILE_AND_TEST)
 
         if raw_result.status != common_pb.SUCCESS:
           return None, None, raw_result
@@ -272,7 +272,7 @@ class FinditApi(recipe_api.RecipeApi):
           pass
 
       # Run the tests.
-      with self.m.chromium_tests.wrap_chromium_tests(bot_config,
+      with self.m.chromium_tests.wrap_chromium_tests(builder_config,
                                                      actual_tests_to_run):
         if skip_tests:
           # Not actually running any tests.
@@ -342,20 +342,21 @@ class FinditApi(recipe_api.RecipeApi):
                                     configuration from.
       revision (str): A string representing the commit hash of the revision to
                       test.
-      builders (BotDatabase): The database of builders.
+      builders (BuilderDatabase): The database of builders.
     Returns: (bot_mirror, checked_out_revision, cached_revision)
     """
     # Figure out which builder configuration we should match for compile config.
     # Sometimes, the builder itself runs the tests and there is no tester. In
     # such cases, just treat the builder as a "tester". Thus, we default to
     # the target tester.
-    builders = builders or self.m.chromium_tests.builders
+    builders = builders or self.m.chromium_tests_builder_config.builder_db
     bot_mirror = self.get_bot_mirror_for_tester(
         target_tester_id, builders=builders)
 
     # Configure to match the compile config on the builder.
-    bot_config = self.get_bot_config_for_mirror(bot_mirror, builders=builders)
-    self.m.chromium_tests.configure_build(bot_config)
+    builder_config = self.get_builder_config_for_mirror(
+        bot_mirror, builders=builders)
+    self.m.chromium_tests.configure_build(builder_config)
 
     # We rely on goma for fast compile. It's better to fail early if goma can't
     # start.
@@ -370,11 +371,13 @@ class FinditApi(recipe_api.RecipeApi):
 
     # Record the current revision of the checkout and HEAD of the git cache.
     checked_out_revision, cached_revision = self.record_previous_revision(
-        bot_config)
+        builder_config)
 
     # Sync code.
     self.m.chromium_tests.prepare_checkout(
-        bot_config, root_solution_revision=revision, report_cache_state=False)
+        builder_config,
+        root_solution_revision=revision,
+        report_cache_state=False)
 
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
     self.m.chromium_swarming.configure_swarming('chromium', precommit=False)
@@ -387,7 +390,7 @@ class FinditApi(recipe_api.RecipeApi):
 
     return bot_mirror, checked_out_revision, cached_revision
 
-  def record_previous_revision(self, bot_config):
+  def record_previous_revision(self, builder_config):
     """Records the latest checked out and cached revisions.
 
     Examines the checkout and records the latest available revision for the

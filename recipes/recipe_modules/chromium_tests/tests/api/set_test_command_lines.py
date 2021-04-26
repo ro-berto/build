@@ -4,13 +4,14 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'build',
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/bot_update',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
@@ -82,20 +83,20 @@ def GenTests(api):
 
   yield api.test(
       'combined_builder_tester',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(
@@ -109,20 +110,20 @@ def GenTests(api):
 
   yield api.test(
       'combined_builder_tester_use_swarming',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_check(
@@ -137,33 +138,33 @@ def GenTests(api):
 
   yield api.test(
       'combined_builder_tester_use_swarming_go_in_trigger_script',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.post_process(post_process.DropExpectation),
   )
 
-  fake_bot_db = bot_db.BotDatabase.create({
+  fake_builder_db = ctbc.BuilderDatabase.create({
       fake_group: {
           fake_builder:
-              bot_spec.BotSpec.create(
+              ctbc.BuilderSpec.create(
                   chromium_config='chromium', gclient_config='chromium'),
           fake_tester:
-              bot_spec.BotSpec.create(
-                  execution_mode=bot_spec.TEST,
+              ctbc.BuilderSpec.create(
+                  execution_mode=ctbc.TEST,
                   parent_buildername=fake_builder,
                   chromium_config='chromium',
                   gclient_config='chromium',
@@ -173,10 +174,11 @@ def GenTests(api):
 
   yield api.test(
       'build_only_builder_sets_command_line_hash_and_cwd_in_trigger',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_builder),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_builder,
+          builder_db=fake_builder_db),
       api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(fake_bot_db),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
       api.step_data('archive command lines to RBE-CAS',
@@ -190,13 +192,14 @@ def GenTests(api):
 
   yield api.test(
       'test_only_builder_gets_command_lines_hash_and_cwd_from_trigger',
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          builder_db=fake_builder_db),
       api.properties(
           swarm_hashes=fake_swarm_hashes,
           swarming_command_lines_digest=fake_command_lines_digest,
           swarming_command_lines_cwd='out/Release_x64'),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(fake_bot_db),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('read command lines',
                     api.file.read_json(fake_command_lines)),
@@ -210,12 +213,11 @@ def GenTests(api):
 
   yield api.test(
       'test_only_builder_with_no_isolates',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          parent_buildername=fake_builder),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(fake_bot_db),
+          parent_buildername=fake_builder,
+          builder_db=fake_builder_db),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -234,19 +236,15 @@ def GenTests(api):
 
   yield api.test(
       'trybot_with_test_failure',
-      api.chromium.try_build(
-          builder_group=fake_group, builder=fake_try_builder),
-      api.properties(
-          config='Release',
-          swarm_hashes=fake_swarm_hashes,
-      ),
-      api.platform('linux', 64),
-      api.chromium_tests.trybots(
-          try_spec.TryDatabase.create({
+      api.chromium_tests_builder_config.try_build(
+          builder_group=fake_group,
+          builder=fake_try_builder,
+          builder_db=fake_builder_db,
+          try_db=ctbc.TryDatabase.create({
               fake_group: {
                   fake_try_builder:
-                      try_spec.TrySpec.create(mirrors=[
-                          try_spec.TryMirror.create(
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
                               builder_group=fake_group,
                               buildername=fake_builder,
                               tester=fake_tester,
@@ -254,7 +252,10 @@ def GenTests(api):
                       ])
               }
           })),
-      api.chromium_tests.builders(fake_bot_db),
+      api.properties(
+          config='Release',
+          swarm_hashes=fake_swarm_hashes,
+      ),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.override_step_data(
           'read filter exclusion spec',
@@ -301,20 +302,20 @@ def GenTests(api):
 
   yield api.test(
       "ci_bot_with_experimental_test",
-      api.chromium.ci_build(builder_group=fake_group, builder=fake_tester),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+      api.chromium_tests_builder_config.ci_build(
+          builder_group=fake_group,
+          builder=fake_tester,
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -338,24 +339,22 @@ def GenTests(api):
 
   yield api.test(
       "ci_bot_with_rdb_enabled_swarming_test",
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
           # TODO(crbug.com/1108016): Remove experiments
-          experiments=['chromium.resultdb.result_sink']),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          experiments=['chromium.resultdb.result_sink'],
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -400,23 +399,21 @@ def GenTests(api):
 
   yield api.test(
       "ci_bot_with_default_resultdb_swarming_gtest",
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          experiments=['chromium.resultdb.result_sink']),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          experiments=['chromium.resultdb.result_sink'],
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -449,23 +446,21 @@ def GenTests(api):
 
   yield api.test(
       "ci_bot_with_rdb_enabled_swarming_webgl_test",
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          experiments=['chromium.resultdb.result_sink']),
-      api.properties(swarm_hashes=fake_swarm_hashes),
-      api.platform('linux', 64),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          experiments=['chromium.resultdb.result_sink'],
+          builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
+      api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {

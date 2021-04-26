@@ -8,14 +8,13 @@ This recipe is meant to be run on idle bots to keep their local checkouts up to
 date as much as possible so that when they are required to run culprit-finding
 jobs they have as low latency as possible in their bot_update steps."""
 
-from datetime import datetime
-
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
     'builder_group',
     'chromium_checkout',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/gclient',
     'depot_tools/git',
     'recipe_engine/buildbucket',
@@ -73,8 +72,9 @@ def TargetGroupAndBuilder(api):
 
 def RunSteps(api):
   builder_id = chromium.BuilderId.create_for_group(*TargetGroupAndBuilder(api))
-  _, bot_config = api.chromium_tests.lookup_builder(builder_id)
-  api.chromium_tests.configure_build(bot_config)
+  _, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder(builder_id))
+  api.chromium_tests.configure_build(builder_config)
 
   base_dir = api.chromium_checkout.checkout_dir
   checkout_dir = base_dir.join(api.gclient.c.solutions[0].name)
@@ -94,7 +94,8 @@ def RunSteps(api):
         'Checkout is ~%f seconds old' % checkout_age_seconds] = []
     refresh_checkout = checkout_age_seconds > NOT_FRESH
   if refresh_checkout:
-    api.chromium_tests.prepare_checkout(bot_config, report_cache_state=False)
+    api.chromium_tests.prepare_checkout(
+        builder_config, report_cache_state=False)
 
 
 def GenTests(api):

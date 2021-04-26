@@ -87,12 +87,6 @@ class BuilderDatabase(collections.Mapping):
 
     return cls(db, builders_by_group)
 
-  # TODO(https://crbug.com/1193832) Remove this once all callers are migrated to
-  # use builder_graph
-  @cached_property
-  def bot_graph(self):
-    return self.builder_graph  # pragma: no cover
-
   @cached_property
   def builder_graph(self):
     """The graph of all of the builders stored in the database."""

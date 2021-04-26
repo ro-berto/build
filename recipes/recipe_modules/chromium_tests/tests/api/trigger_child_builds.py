@@ -6,47 +6,48 @@ from recipe_engine import post_process
 
 from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.trigger_child_builds(builder_id, update_step, bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
+  api.chromium_tests.trigger_child_builds(builder_id, update_step,
+                                          builder_config)
 
 
 def GenTests(api):
 
   def builder_with_tester_to_trigger():
-    return sum([
-        api.chromium.ci_build(
-            builder_group='fake-group', builder='fake-builder'),
-        api.chromium_tests.builders(
-            bot_db.BotDatabase.create({
-                'fake-group': {
-                    'fake-builder':
-                        bot_spec.BotSpec.create(
-                            chromium_config='chromium',
-                            gclient_config='chromium',
-                        ),
-                    'fake-tester':
-                        bot_spec.BotSpec.create(
-                            execution_mode=bot_spec.TEST,
-                            chromium_config='chromium',
-                            gclient_config='chromium',
-                            parent_buildername='fake-builder',
-                        )
-                }
-            }))
-    ], api.empty_test_data())
+    return api.chromium_tests_builder_config.ci_build(
+        builder_group='fake-group',
+        builder='fake-builder',
+        builder_db=ctbc.BuilderDatabase.create({
+            'fake-group': {
+                'fake-builder':
+                    ctbc.BuilderSpec.create(
+                        chromium_config='chromium',
+                        gclient_config='chromium',
+                    ),
+                'fake-tester':
+                    ctbc.BuilderSpec.create(
+                        execution_mode=ctbc.TEST,
+                        chromium_config='chromium',
+                        gclient_config='chromium',
+                        parent_buildername='fake-builder',
+                    )
+            }
+        }))
 
   yield api.test(
       'scheduler',

@@ -19,8 +19,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@lacros-amd64-generic-rel@https://ci.chromium.org/p/chromium/builders/ci/lacros-amd64-generic-rel@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.chromiumos:lacros-amd64-generic-rel\"]@@@"
+      "@@@STEP_LINK@lacros-amd64-generic-rel@https://ci.chromium.org/p/chromium/builders/ci/lacros-amd64-generic-rel@@@"
     ]
   },
   {

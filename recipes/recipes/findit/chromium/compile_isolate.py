@@ -9,7 +9,6 @@ first one after ordering test target names alphabetically.
 """
 
 import json
-import re
 
 from recipe_engine import post_process
 from recipe_engine.config import List
@@ -18,12 +17,13 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'builder_group',
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'findit',
     'isolate',
     'recipe_engine/buildbucket',
@@ -55,9 +55,9 @@ def RunSteps(api, target_testername, revision, isolated_targets):
   bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(target_tester_id, revision))
 
-  bot_config = api.findit.get_bot_config_for_mirror(bot_mirror)
+  builder_config = api.findit.get_builder_config_for_mirror(bot_mirror)
   bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
-      bot_config, root_solution_revision=revision, report_cache_state=False)
+      builder_config, root_solution_revision=revision, report_cache_state=False)
 
   # Find the matching test targets.
   tests = [
@@ -86,13 +86,13 @@ def RunSteps(api, target_testername, revision, isolated_targets):
       assert compile_targets, 'Test %s has no compile target' % tests[0].name
 
       raw_result = api.m.chromium_tests.compile_specific_targets(
-          bot_config,
+          builder_config,
           bot_update_step,
           build_config,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
           builder_id=bot_mirror.builder_id,
-          override_execution_mode=bot_spec.COMPILE_AND_TEST)
+          override_execution_mode=ctbc.COMPILE_AND_TEST)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
 
@@ -113,10 +113,10 @@ def RunSteps(api, target_testername, revision, isolated_targets):
 def GenTests(api):
   def base(isolated_targets, tester_name):
     # TODO(crbug/1018836): Use distro specific name instead of Linux.
-    builders = bot_db.BotDatabase.create({
+    builders = ctbc.BuilderDatabase.create({
         'chromium.findit': {
             'findit_builder':
-                bot_spec.BotSpec.create(
+                ctbc.BuilderSpec.create(
                     chromium_config='chromium',
                     chromium_apply_config=[
                         'mb',
@@ -129,7 +129,7 @@ def GenTests(api):
                     simulation_platform='linux',
                 ),
             'findit_tester':
-                bot_spec.BotSpec.create(
+                ctbc.BuilderSpec.create(
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
                     gclient_config='chromium',
@@ -137,7 +137,7 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    execution_mode=bot_spec.TEST,
+                    execution_mode=ctbc.TEST,
                     parent_buildername='findit_builder',
                     simulation_platform='linux',
                     swarming_dimensions={
@@ -145,7 +145,7 @@ def GenTests(api):
                     },
                 ),
             'findit_builder_tester':
-                bot_spec.BotSpec.create(
+                ctbc.BuilderSpec.create(
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
                     gclient_config='chromium',
@@ -161,7 +161,7 @@ def GenTests(api):
         },
     })
     return sum([
-        api.chromium_tests.builders(builders),
+        api.chromium_tests_builder_config.builder_db(builders),
         api.chromium.ci_build(
             bucket='findit',
             builder='findit_variable',

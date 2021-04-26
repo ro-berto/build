@@ -10,6 +10,7 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -22,19 +23,20 @@ def RunSteps(api):
   builder_id = chromium.BuilderId.create_for_group(
       builder_to_trigger['builder_group'], builder_to_trigger['buildername'])
   with api.chromium.chromium_layout():
-    _, bot_config = api.chromium_tests.lookup_builder(builder_id=builder_id)
+    _, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder(builder_id=builder_id))
 
-    api.chromium_tests.report_builders(bot_config)
+    api.chromium_tests.report_builders(builder_config)
 
-    api.chromium_tests.configure_build(bot_config)
+    api.chromium_tests.configure_build(builder_config)
     _, build_config = api.chromium_tests.prepare_checkout(
-        bot_config, timeout=3600, add_blamelists=True)
+        builder_config, timeout=3600, add_blamelists=True)
 
     affected_files = api.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
 
     _, compile_targets = api.chromium_tests._determine_compilation_targets(
-        builder_id, bot_config, affected_files, build_config)
+        builder_id, builder_config, affected_files, build_config)
 
     if compile_targets:
       request = api.buildbucket.schedule_request(

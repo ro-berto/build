@@ -5,24 +5,29 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'chromium',
-  'chromium_tests',
-  'recipe_engine/buildbucket',
-  'recipe_engine/json',
-  'recipe_engine/properties',
+    'chromium',
+    'chromium_tests',
+    'chromium_tests_builder_config',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
   with api.chromium.chromium_layout():
-    _, bot_config = api.chromium_tests.lookup_builder(use_try_db=True)
+    _, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
 
-    api.chromium_tests.configure_build(bot_config)
-    update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
+    api.chromium_tests.configure_build(builder_config)
+    update_step, build_config = (
+        api.chromium_tests.prepare_checkout(builder_config))
     compile_targets = build_config.get_compile_targets(build_config.all_tests())
-    return api.chromium_tests.compile_specific_targets(
-        bot_config, update_step, build_config, compile_targets,
-        build_config.all_tests())
+    return api.chromium_tests.compile_specific_targets(builder_config,
+                                                       update_step,
+                                                       build_config,
+                                                       compile_targets,
+                                                       build_config.all_tests())
 
 
 def GenTests(api):

@@ -4,23 +4,24 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
 ]
 
-BUILDERS = bot_db.BotDatabase.create({
+BUILDERS = ctbc.BuilderDatabase.create({
     'fake-group': {
-        'fake-builder': bot_spec.BotSpec.create(),
+        'fake-builder': ctbc.BuilderSpec.create(),
     },
 })
 
-TRYBOTS = try_spec.TryDatabase.create({
+TRYBOTS = ctbc.TryDatabase.create({
     'fake-try-group': {
         'fake-try-builder':
-            try_spec.TrySpec.create_for_single_mirror(
+            ctbc.TrySpec.create_for_single_mirror(
                 builder_group='fake-group',
                 buildername='fake-builder',
             ),
@@ -29,9 +30,9 @@ TRYBOTS = try_spec.TryDatabase.create({
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder(
-      bot_db=BUILDERS, try_db=TRYBOTS)
-  api.chromium_tests.report_builders(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder(
+      builder_db=BUILDERS, try_db=TRYBOTS)
+  api.chromium_tests.report_builders(builder_config)
 
 
 def check_link(check, steps, expected_link):

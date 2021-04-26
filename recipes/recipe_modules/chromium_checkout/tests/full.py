@@ -10,6 +10,7 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/step',
@@ -17,12 +18,12 @@ DEPS = [
 
 
 def RunSteps(api):
-  _, bot_config = api.chromium_tests.lookup_builder(
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder(
       chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder'))
 
-  api.chromium_tests.configure_build(bot_config)
+  api.chromium_tests.configure_build(builder_config)
 
-  api.chromium_checkout.ensure_checkout(bot_config)
+  api.chromium_checkout.ensure_checkout(builder_config)
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [

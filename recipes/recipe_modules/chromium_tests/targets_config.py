@@ -36,12 +36,6 @@ class TargetsConfig(object):
   def create(cls, **kwargs):
     return cls(**kwargs)
 
-  # TODO(https://crbug.com/1193832) Remove this once all callers are migrated to
-  # use builder_config
-  @cached_property
-  def bot_config(self):
-    return self.builder_config  # pragma: no cover
-
   # NOTE: All of the tests_in methods are returning mutable objects
   # (and we expect them to be mutated, e.g., to update the swarming
   # command lines to use when we determine what they are).

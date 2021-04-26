@@ -4,20 +4,23 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/assertions',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  actual = api.chromium_tests._get_builders_to_trigger(builder_id, bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  actual = api.chromium_tests._get_builders_to_trigger(builder_id,
+                                                       builder_config)
 
   # Convert the mappings to comparable types
   actual = {k: sorted(v) for k, v in actual.iteritems()}
@@ -42,27 +45,26 @@ def GenTests(api):
 
   yield api.test(
       'dedup',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      # Multiple entries for 'fake-tester' in different builder groups, as would
-      # be the case when making a copy for changing the builder group
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          # Multiple entries for 'fake-tester' in different builder
+          # groups, as would be the case when making a copy for changing
+          # the builder group
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(luci_project='foo-project'),
+                      ctbc.BuilderSpec.create(luci_project='foo-project'),
                   'fake-tester':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.TEST,
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
                           parent_buildername='fake-builder',
                       ),
               },
               'fake-group2': {
                   'fake-tester':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.TEST,
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
                           parent_builder_group='fake-group',
                           parent_buildername='fake-builder',
                       ),
@@ -77,19 +79,17 @@ def GenTests(api):
 
   yield api.test(
       'luci-project-overridden-for-tester',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(),
+                      ctbc.BuilderSpec.create(),
                   'fake-tester':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           luci_project='fake-project',
-                          execution_mode=bot_spec.TEST,
+                          execution_mode=ctbc.TEST,
                           parent_buildername='fake-builder',
                       ),
               },
@@ -103,19 +103,17 @@ def GenTests(api):
 
   yield api.test(
       'same-project-trigger-override',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           project='bar-project',
           builder_group='fake-group',
           builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      bot_spec.BotSpec.create(luci_project='foo-project'),
+                      ctbc.BuilderSpec.create(luci_project='foo-project'),
                   'fake-tester':
-                      bot_spec.BotSpec.create(
-                          execution_mode=bot_spec.TEST,
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
                           parent_buildername='fake-builder',
                           luci_project='foo-project',
                       ),

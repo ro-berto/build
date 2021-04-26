@@ -5,21 +5,23 @@
 from recipe_engine import post_process
 from recipe_engine.post_process import Filter
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
 ]
 
-BUILDERS = bot_db.BotDatabase.create({
+BUILDERS = ctbc.BuilderDatabase.create({
     'fake.group': {
         'Test Version':
-            bot_spec.BotSpec.create(
+            ctbc.BuilderSpec.create(
                 android_config='main_builder_mb',
                 chromium_config='chromium',
                 gclient_config='chromium',
@@ -36,16 +38,17 @@ def RunSteps(api):
     tests.append(
         steps.SwarmingGTestTestSpec.create('base_unittests').get_test())
 
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
+  update_step, targets_config = (
+      api.chromium_tests.prepare_checkout(builder_config))
   return api.chromium_tests.compile_specific_targets(
-      bot_config,
+      builder_config,
       update_step,
-      build_config,
+      targets_config,
       compile_targets=['base_unittests'],
       tests_including_triggered=tests,
-      override_execution_mode=bot_spec.COMPILE_AND_TEST)
+      override_execution_mode=ctbc.COMPILE_AND_TEST)
 
 
 def GenTests(api):
@@ -59,7 +62,7 @@ def GenTests(api):
   yield api.test(
       'linux_tests_reclient',
       api.chromium.ci_build(
-          builder_group='chromium.fyi', 
+          builder_group='chromium.fyi',
           builder='Linux Builder (j-500) (reclient)'),
       api.properties(swarming_gtest=True),
       api.step_data('lookup GN args',
@@ -113,7 +116,9 @@ def GenTests(api):
 
   yield api.test(
       'android_version',
-      api.chromium.ci_build(builder_group='fake.group', builder='Test Version'),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake.group',
+          builder='Test Version',
+          builder_db=BUILDERS),
       api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
-      api.chromium_tests.builders(BUILDERS),
   )

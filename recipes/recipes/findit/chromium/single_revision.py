@@ -2,27 +2,22 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from collections import defaultdict
-import json
-
-from recipe_engine.config import Dict
-from recipe_engine.config import List
-from recipe_engine.config import Single
 from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
                                         StepCommandContains, StatusFailure,
-                                        StatusSuccess, ResultReason)
-from recipe_engine.recipe_api import Property
+                                        StatusSuccess)
 
 from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/tryserver',
     'filter',
     'findit',
@@ -58,19 +53,19 @@ def RunSteps(api, properties):
       properties.target_builder.builder), 'Target builder property is required'
 
   # 1. Configure the builder.
-  builder_id, bot_config, compile_kwargs = _configure_builder(
+  builder_id, builder_config, compile_kwargs = _configure_builder(
       api, properties.target_builder)
 
   # 2. Check out the code.
   bot_update_step, build_config = api.chromium_tests.prepare_checkout(
-      bot_config, report_cache_state=False)
+      builder_config, report_cache_state=False)
 
   # 3. Configure swarming
   api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
   # 4. Determine what to build and what to test.
   compile_targets, test_objects = _compute_targets_and_tests(
-      api, bot_config, build_config, builder_id, properties.tests,
+      api, builder_config, build_config, builder_id, properties.tests,
       properties.compile_targets, properties.skip_analyze)
 
   # 5. Build what's needed.
@@ -81,7 +76,7 @@ def RunSteps(api, properties):
 
   if compile_targets:
     compile_result = api.chromium_tests.compile_specific_targets(
-        bot_config,
+        builder_config,
         bot_update_step,
         build_config,
         compile_targets,
@@ -91,7 +86,7 @@ def RunSteps(api, properties):
       return compile_result
 
   # 6. Run the tests.
-  _run_tests(api, bot_config, test_objects, properties.tests,
+  _run_tests(api, builder_config, test_objects, properties.tests,
              properties.test_repeat_count)
 
 
@@ -100,8 +95,8 @@ def _configure_builder(api, target_tester):
   bot_mirror = api.findit.get_bot_mirror_for_tester(
       chromium.BuilderId.create_for_group(
           target_tester.master or target_tester.group, target_tester.builder))
-  bot_config = api.findit.get_bot_config_for_mirror(bot_mirror)
-  api.chromium_tests.configure_build(bot_config)
+  builder_config = api.findit.get_builder_config_for_mirror(bot_mirror)
+  api.chromium_tests.configure_build(builder_config)
 
   # If there is a problem with goma, rather than default to compiling locally
   # only, fail. This is important because findit relies on fast compile for
@@ -112,7 +107,8 @@ def _configure_builder(api, target_tester):
   api.chromium.apply_config('goma_failfast')
 
   if bot_mirror.tester_id:
-    tester_spec = api.chromium_tests.builders[bot_mirror.tester_id]
+    tester_spec = (
+        api.chromium_tests_builder_config.builder_db[bot_mirror.tester_id])
     for key, value in tester_spec.swarming_dimensions.iteritems():
       # Coercing str as json.loads creates unicode strings. This only matters
       # for testing.
@@ -120,12 +116,12 @@ def _configure_builder(api, target_tester):
 
   compile_kwargs = {
       'builder_id': bot_mirror.builder_id,
-      'override_execution_mode': bot_spec.COMPILE_AND_TEST,
+      'override_execution_mode': ctbc.COMPILE_AND_TEST,
   }
-  return bot_mirror.builder_id, bot_config, compile_kwargs
+  return bot_mirror.builder_id, builder_config, compile_kwargs
 
 
-def _compute_targets_and_tests(api, bot_config, build_config, builder_id,
+def _compute_targets_and_tests(api, builder_config, build_config, builder_id,
                                requested_tests, compile_targets, skip_analyze):
   if requested_tests:
     # Figure out which test steps to run.
@@ -179,7 +175,7 @@ def _compute_targets_and_tests(api, bot_config, build_config, builder_id,
   return existing_targets, []
 
 
-def _run_tests(api, bot_config, test_objects, requested_tests,
+def _run_tests(api, builder_config, test_objects, requested_tests,
                test_repeat_count):
   # Default to 20 repeats.
   test_repeat_count = test_repeat_count or 20
@@ -197,7 +193,7 @@ def _run_tests(api, bot_config, test_objects, requested_tests,
           run_disabled=bool(test_repeat_count))
 
   # Run the tests.
-  with api.chromium_tests.wrap_chromium_tests(bot_config, test_objects):
+  with api.chromium_tests.wrap_chromium_tests(builder_config, test_objects):
     return api.test_utils.run_tests(api.chromium_tests.m, test_objects, '')
 
 
@@ -236,10 +232,10 @@ def GenTests(api):
             }],
         }
     }
-    _default_builders = bot_db.BotDatabase.create({
+    _default_builders = ctbc.BuilderDatabase.create({
         'chromium.findit': {
             'fake-tester':
-                bot_spec.BotSpec.create(
+                ctbc.BuilderSpec.create(
                     parent_buildername='fake-builder',
                     swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
@@ -249,11 +245,11 @@ def GenTests(api):
                         'BUILD_CONFIG': 'Release',
                         'TARGET_BITS': 64,
                     },
-                    execution_mode=bot_spec.TEST,
+                    execution_mode=ctbc.TEST,
                     simulation_platform='linux',
                 ),
             'fake-builder':
-                bot_spec.BotSpec.create(
+                ctbc.BuilderSpec.create(
                     swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
@@ -288,7 +284,7 @@ def GenTests(api):
         ),
         api.properties(props_proto),
         api.chromium_tests.read_source_side_spec(*(spec or _default_spec)),
-        api.chromium_tests.builders(_default_builders),
+        api.chromium_tests_builder_config.builder_db(_default_builders),
     ], api.empty_test_data())
     return t
 

@@ -128,12 +128,6 @@ class BuilderConfig(object):
                           for k, v in per_builder_values.iteritems()))
     return values[0]
 
-  # TODO(https://crbug.com/1193832) Remove this once all uses are changed to
-  # builder_db
-  @cached_property
-  def bot_db(self):
-    return self.builder_db
-
   @cached_property
   def builder_ids(self):
     return [m.builder_id for m in self.mirrors]
@@ -178,8 +172,3 @@ class BuilderConfig(object):
   def source_side_spec_files(self):
     groups = set(key.group for key in self.all_keys)
     return {g: '{}.json'.format(g) for g in groups}
-
-  # TODO(https://crbug.com/1193832) Remove this once all callers are migrated to
-  # use api.chromium_tests.create_targets_config
-  def create_build_config(self, chromium_tests_api, update_step):
-    return chromium_tests_api.create_targets_config(self, update_step)

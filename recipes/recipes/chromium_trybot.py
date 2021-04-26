@@ -5,7 +5,6 @@
 from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
                                         StatusFailure, StatusSuccess,
                                         StepCommandContains)
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
   'build',

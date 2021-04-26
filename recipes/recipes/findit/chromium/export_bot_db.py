@@ -9,11 +9,10 @@ import json
 
 from recipe_engine import post_process, types
 
-from RECIPE_MODULES.build.chromium_tests import (bot_db as bot_db_module,
-                                                 bot_spec, steps)
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
-    'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/gsutil',
     'recipe_engine/raw_io',
     'recipe_engine/properties',
@@ -35,7 +34,7 @@ def _bot_db_to_json(bot_db):
 def RunSteps(api):
   bucket = api.properties['gs_bucket']
   object_path = api.properties['gs_object']
-  builders_json = _bot_db_to_json(api.chromium_tests.builders)
+  builders_json = _bot_db_to_json(api.chromium_tests_builder_config.builder_db)
   api.gsutil.upload(api.raw_io.input(builders_json), bucket, object_path)
 
 
@@ -43,11 +42,11 @@ def GenTests(api):
   yield api.test(
       'with_mock_bdb',
       api.properties(gs_bucket='bucket', gs_object='data.json'),
-      api.chromium_tests.builders(
-          bot_db_module.BotDatabase.create({
+      api.chromium_tests_builder_config.builder_db(
+          ctbc.BuilderDatabase.create({
               'mockgroup': {
                   'mockbuilder':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           chromium_apply_config=['foo', 'bar'],
                       ),

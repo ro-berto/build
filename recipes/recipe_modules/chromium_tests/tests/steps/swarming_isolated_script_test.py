@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/bot_update',
     'isolate',
     'profiles',
@@ -36,9 +37,9 @@ def RunSteps(api):
   # Fake path, as the real one depends on having done a chromium checkout.
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  api.chromium_tests.prepare_checkout(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
+  api.chromium_tests.prepare_checkout(builder_config)
 
   test_repeat_count = api.properties.get('repeat_count')
   if api.properties.get('swarm_hashes'):

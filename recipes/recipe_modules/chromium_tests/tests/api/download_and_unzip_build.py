@@ -7,15 +7,18 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/properties',
 ]
 
 def RunSteps(api):
-  builder_id, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.configure_build(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
   api.chromium_tests.download_and_unzip_build(
-      builder_id, update_step, bot_config, **api.properties.get('kwargs', {}))
+      builder_id, update_step, builder_config,
+      **api.properties.get('kwargs', {}))
 
 
 def GenTests(api):

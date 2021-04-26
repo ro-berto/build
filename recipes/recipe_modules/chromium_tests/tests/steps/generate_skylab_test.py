@@ -8,7 +8,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 from recipe_engine import post_process
 
@@ -16,6 +16,7 @@ DEPS = [
     'build',
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/platform',
@@ -36,17 +37,14 @@ def GenTests(api):
     builder_group = 'chromium.chromiumos'
     builder = 'lacros-amd64-generic-rel'
     return sum([
-        api.chromium.ci_build(
+        api.chromium_tests_builder_config.ci_build(
             builder_group=builder_group,
             builder=builder,
             parent_buildername='Linux Builder',
-        ),
-        api.platform('linux', 64),
-        api.chromium_tests.builders(
-            bot_db.BotDatabase.create({
+            builder_db=ctbc.BuilderDatabase.create({
                 builder_group: {
                     builder:
-                        bot_spec.BotSpec.create(
+                        ctbc.BuilderSpec.create(
                             chromium_config='chromium',
                             gclient_config='chromium',
                             skylab_gs_bucket=skylab_gcs,
@@ -156,15 +154,13 @@ def GenTests(api):
 
   yield api.test(
       'ci_only_test_on_ci_builder',
-      api.chromium.ci_build(
+      api.chromium_tests_builder_config.ci_build(
           builder_group='test_group',
           builder='test_buildername',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'test_group': {
                   'test_buildername':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           skylab_gs_bucket='chrome-test-builds',
@@ -196,22 +192,21 @@ def GenTests(api):
 
   yield api.test(
       'ci_only_test_on_trybot',
-      api.chromium.try_build(
+      api.chromium_tests_builder_config.try_build(
           builder_group='test_group',
           builder='test_buildername',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
+          builder_db=ctbc.BuilderDatabase.create({
               'test_group': {
                   'test_buildername':
-                      bot_spec.BotSpec.create(
+                      ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
                           skylab_gs_bucket='chrome-test-builds',
                           skylab_gs_extra='lacros',
                       ),
               }
-          })),
+          }),
+          try_db=None),
       api.chromium_tests.read_source_side_spec(
           'test_group', {
               'test_buildername': {

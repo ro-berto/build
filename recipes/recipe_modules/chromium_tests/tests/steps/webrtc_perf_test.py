@@ -9,6 +9,7 @@ from RECIPE_MODULES.build.chromium_tests import steps
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'chromium_checkout',
     'depot_tools/bot_update',
     'recipe_engine/json',
@@ -37,9 +38,9 @@ def RunSteps(api):
       commit_position_property='got_revision_cp')
   test = test_spec.get_test()
 
-  _, bot_config = api.chromium_tests.lookup_builder()
-  api.chromium_tests.configure_build(bot_config)
-  api.chromium_checkout.ensure_checkout(bot_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.chromium_tests.configure_build(builder_config)
+  api.chromium_checkout.ensure_checkout(builder_config)
 
   try:
     test.run(api, '')
