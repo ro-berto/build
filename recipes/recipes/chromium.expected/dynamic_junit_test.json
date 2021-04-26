@@ -20,7 +20,7 @@
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@android-marshmallow-arm64-rel@https://ci.chromium.org/p/chromium/builders/ci/android-marshmallow-arm64-rel@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:android-marshmallow-arm64-rel\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:android-marshmallow-arm64-rel\", \"tryserver.chromium.android:android-marshmallow-arm64-rel-dual-coverage\"]@@@"
     ]
   },
   {
