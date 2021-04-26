@@ -1,6 +1,26 @@
 [
   {
     "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running builder 'linux-builder' on group 'angle'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@linux-builder@https://ci.chromium.org/p/chromium/builders/ci/linux-builder@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -105,6 +125,22 @@
       ]
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/angle/infra/specs/angle.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "read test spec (angle.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/angle/infra/specs/angle.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -222,7 +258,7 @@
       "-m",
       "angle",
       "-b",
-      "ANGLE Test Builder",
+      "linux-builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -248,7 +284,7 @@
       "-m",
       "angle",
       "-b",
-      "ANGLE Test Builder",
+      "linux-builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -328,7 +364,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/ANGLE_Test_Builder"
+      "[CACHE]/goma/data/linux_builder"
     ],
     "cwd": "[CACHE]/builder/angle",
     "env": {
@@ -352,7 +388,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ANGLE_Test_Builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -569,10 +605,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"ANGLE Test Builder\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux-builder\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "ANGLE Test Builder",
+      "linux-builder",
       "--buildbot-mastername",
       "angle",
       "--buildbot-slavename",

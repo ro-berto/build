@@ -1,26 +1,6 @@
 [
   {
     "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "report builders",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'linux-builder' on group 'angle'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-builder\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@linux-builder@https://ci.chromium.org/p/angle/builders/ci/linux-builder@@@"
-    ]
-  },
-  {
-    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -125,22 +105,6 @@
       ]
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/angle/infra/specs/angle.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "read test spec (angle.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/angle/infra/specs/angle.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [
@@ -462,27 +426,28 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[CACHE]/builder/angle/out/Release",
-      "-j",
-      "80",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[CACHE]/builder/angle",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "compile confirm no-op"
+    "name": "compile",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
+      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -591,7 +556,7 @@
       "--ninja-log-command-file",
       "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/angle/out/Release\", \"-j\", 80]",
       "--build-exit-status",
-      "0",
+      "1",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
@@ -605,7 +570,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"linux-builder\", \"project\": \"angle\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux-builder\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
       "linux-builder",
@@ -669,6 +634,10 @@
     "name": "remove compile guard"
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+    },
     "name": "$result"
   }
 ]
