@@ -63,6 +63,17 @@ DEFAULT_BUILDERS = (
     BuilderToTrigger('luci.chromium.try:linux-rel'),
     BuilderToTrigger(
         'luci.chromium.try:win10_chromium_x64_rel_ng', cl_key='fast'),
+    # M88 is being kept alive with only fuchsia builders for an extended period
+    # of time for fuchsia's initial release. In order to provide some guard
+    # against recipe changes breaking M88 builds, try a build against one of the
+    # M88 fuchsia builders.
+    BuilderToTrigger(
+        'luci.chromium-m88.try:fuchsia_x64',
+        find_branched_versions=False,
+        cl_key='fast',
+        provisional_warning=(
+            'Builder does not exist. If M88 is still active, the configuration'
+            ' should be updated to trigger a different builder.')),
 )
 
 
@@ -218,6 +229,8 @@ def _expand_builders(builders):
     yield builder
   for bucket in CHROMIUM_SRC_TEST_CLS:
     for builder in builders:
+      if not builder.find_branched_versions:
+        continue
       builder_bucket, name = builder.name.split(':', 1)
       if builder_bucket == bucket:
         continue
