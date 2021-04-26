@@ -385,7 +385,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -412,7 +412,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True),
       api.override_step_data(
@@ -438,7 +438,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True),
       api.override_step_data(
@@ -466,7 +466,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -492,7 +492,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -518,7 +518,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
   )
 
@@ -532,7 +532,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -576,7 +576,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -605,7 +605,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -639,7 +639,7 @@ def GenTests(api):
           },
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           perf_dashboard_machine_group='ChromePerf',
           results_url='https://example/url'),
       api.override_step_data(
@@ -660,7 +660,7 @@ def GenTests(api):
           },
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
-          perf_id='test-perf-id',
+          perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',

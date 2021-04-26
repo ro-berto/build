@@ -210,7 +210,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def resource_sizes(self,
                      apk_path,
                      chartjson_file=False,
-                     perf_id=None,
+                     perf_builder_name_alias=None,
                      step_suffix=''):
     test_name = 'resource_sizes ({})'.format(self.m.path.basename(apk_path))
     resource_sizes_args = [str(apk_path)]
@@ -227,7 +227,8 @@ class AndroidApi(recipe_api.RecipeApi):
           test_type=test_name,
           annotate=self.m.chromium.get_annotate_by_test_name(test_name),
           results_url='https://chromeperf.appspot.com',
-          perf_id=perf_id or self.m.buildbucket.builder_name,
+          perf_builder_name_alias=(perf_builder_name_alias or
+                                   self.m.buildbucket.builder_name),
           chartjson_file=chartjson_file)
 
   def supersize_archive(self, apk_path, size_path, step_suffix=''):

@@ -371,7 +371,7 @@ def _ResultsDashboardDict(options):
   )
 
   fields = {
-      'system': _GetPerfID(options),
+      'system': _GetSystemName(options),
       'test': options.test_type,
       'url': options.results_url,
       'perf_dashboard_machine_group': perf_dashboard_machine_group,
@@ -451,11 +451,6 @@ def _SendResultsToDashboard(log_processor, args):
   Returns:
     True if no errors occurred.
   """
-  if args['system'] is None:
-    # perf_id not specified in build properties.
-    print 'Error: No system name (perf_id) specified when sending to dashboard.'
-    return True
-
   results = None
   as_histograms = False
   if log_processor.IsChartJson():
@@ -791,14 +786,12 @@ def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
   return isolate_command
 
 
-def _GetPerfID(options):
-  if options.perf_id:
-    perf_id = options.perf_id
+def _GetSystemName(options):
+  if options.perf_builder_name_alias:
+    result = options.perf_builder_name_alias
   else:
-    perf_id = options.build_properties.get('perf_id')
-    if options.build_properties.get('add_perf_id_suffix'):
-      perf_id += options.build_properties.get('perf_id_suffix')
-  return perf_id
+    result = options.build_properties.get('buildername')
+  return result
 
 
 def _GetSanitizerSymbolizeCommand(strip_path_prefix=None, json_file_name=None):
@@ -1639,7 +1632,12 @@ def main():
       help='The ID on the perf dashboard to add results '
       'to.'
   )
-  option_parser.add_option('--perf-id', default='', help='The perf builder id')
+  option_parser.add_option(
+      '--perf-builder-name-alias',
+      default='',
+      help='Another name to present metrics in perf dashboard, previouslly '
+      'perf-id.'
+  )
   option_parser.add_option(
       '--perf-config',
       default='',

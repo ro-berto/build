@@ -115,7 +115,7 @@
       "--annotate=graphing",
       "--results-url=https://example/url",
       "--perf-dashboard-id=sizes",
-      "--perf-id=test-perf-id",
+      "--perf-builder-name-alias=builder-name-alias",
       "--use-histograms",
       "--perf-config={'r_clang_rev': '123456-7'}",
       "None/infra/scripts/legacy/recipes/chromium/sizes.py",

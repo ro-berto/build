@@ -1633,9 +1633,7 @@ class LocalGTestTest(Test):
       kwargs['perf_config'] = self._get_revision(api, self.spec.perf_config)
       kwargs['results_url'] = RESULTS_URL
       kwargs['perf_dashboard_id'] = self.spec.name
-      # TODO(linxinan): perf_id was deprecated. Replace it with
-      # perf_builder_name_alias to reduce confusion.
-      kwargs['perf_id'] = self.spec.perf_builder_name_alias
+      kwargs['perf_builder_name_alias'] = self.spec.perf_builder_name_alias
 
     try:
       if is_android:

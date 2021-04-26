@@ -1219,7 +1219,7 @@
       "[CLEANUP]/perf_data_tmp_1/histograms.json",
       "--oauth-token-file",
       "\"extra.secret.token.should.not.be.logged\"",
-      "--perf-id",
+      "--perf-builder-name-alias",
       "android_cronet_m64_perf",
       "--results-url",
       "https://chromeperf.appspot.com",

@@ -80,23 +80,23 @@ class CronetApi(recipe_api.RecipeApi):
         name='upload_cronet_package',
         link_name='Cronet package')
 
-  def sizes(self, perf_id):
+  def sizes(self, perf_builder_name_alias):
     # Don't track sizes on experimental bots.
     if self.m.runtime.is_experimental:
       return
     # Measures native .so size.
     self.m.chromium.sizes(
         results_url=self.DASHBOARD_UPLOAD_URL,
-        perf_id=perf_id,
+        perf_builder_name_alias=perf_builder_name_alias,
         platform='android-cronet')
     if self.m.chromium.c.BUILD_CONFIG == 'Release':
       # Track apk metrics.
       self.m.chromium_android.resource_sizes(
           self.m.chromium.output_dir.join('apks', 'CronetSample.apk'),
           chartjson_file=True,
-          perf_id=perf_id)
+          perf_builder_name_alias=perf_builder_name_alias)
 
-  def run_perf_tests(self, perf_id):
+  def run_perf_tests(self, perf_builder_name_alias):
     # Don't track performance on experimental bots.
     if self.m.runtime.is_experimental:
       return
@@ -148,8 +148,8 @@ class CronetApi(recipe_api.RecipeApi):
         # in the step log, it will not be used after the upload is complete.
         '--oauth-token-file',
         self.m.json.input(oauth_token),
-        '--perf-id',
-        perf_id,
+        '--perf-builder-name-alias',
+        perf_builder_name_alias,
         '--results-url',
         self.DASHBOARD_UPLOAD_URL,
         '--name',

@@ -824,6 +824,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               webkit_revision=None,
               test_launcher_summary_output=None,
               perf_id=None,
+              perf_builder_name_alias=None,
               perf_config=None,
               chartjson_file=False,
               use_histograms=False,
@@ -854,8 +855,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--results-url=%s' % results_url)
     if perf_dashboard_id:
       full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
-    if perf_id:
-      full_args.append('--perf-id=%s' % perf_id)
+    # TODO(linxinan): remove this once the downstream recipe has migrated to
+    # perf-builder-name-alias.
+    if perf_id:  # pragma: no cover
+      full_args.append('--perf-builder-name-alias=%s' % perf_builder_name_alias)
+    if perf_builder_name_alias:
+      full_args.append('--perf-builder-name-alias=%s' % perf_builder_name_alias)
     if perf_config:
       full_args.extend(['--perf-config', self.m.json.dumps(perf_config)])
     if test_type:
@@ -931,7 +936,11 @@ class ChromiumApi(recipe_api.RecipeApi):
             step_name, runtest_path, args=full_args, **kwargs)
 
   @_with_chromium_layout
-  def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
+  def sizes(self,
+            results_url=None,
+            perf_builder_name_alias=None,
+            platform=None,
+            **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
     sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'sizes.py')
@@ -957,12 +966,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--run-python-script'
     ])
 
-    if perf_id:
+    if perf_builder_name_alias:
       assert results_url is not None
       run_tests_args.extend([
           '--annotate=graphing',
           '--results-url=%s' % results_url, '--perf-dashboard-id=sizes',
-          '--perf-id=%s' % perf_id
+          '--perf-builder-name-alias=%s' % perf_builder_name_alias
       ])
 
       # If we're on LUCI, we need to upload using the HistogramSet format

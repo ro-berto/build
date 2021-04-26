@@ -1058,7 +1058,7 @@
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (Example.apk)",
-      "--perf-id=resource_size_builder",
+      "--perf-builder-name-alias=resource_size_builder",
       "--test-type=resource_sizes (Example.apk)",
       "--step-name=resource_sizes (Example.apk)",
       "--chartjson-file",

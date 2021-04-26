@@ -46,7 +46,7 @@ def RunSteps(api):
       test_type='base_unittests',
       results_url='https://example/url',
       perf_dashboard_id='test_perf_dashboard_id',
-      perf_id='test_perf_id',
+      perf_builder_name_alias='builder_name_alias',
       perf_config={'a_default_rev': 'some_sha'},
       tee_stdout_file=api.path['tmp_base'].join('stdout.log'),
       **kwargs)

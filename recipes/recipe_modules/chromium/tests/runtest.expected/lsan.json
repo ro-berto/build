@@ -20,7 +20,7 @@
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"chromium_apply_config\": [\"lsan\"], \"chromium_config\": \"chromium_clang\", \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--results-url=https://example/url",
       "--perf-dashboard-id=test_perf_dashboard_id",
-      "--perf-id=test_perf_id",
+      "--perf-builder-name-alias=builder_name_alias",
       "--perf-config",
       "{\"a_default_rev\": \"some_sha\"}",
       "--test-type=base_unittests",

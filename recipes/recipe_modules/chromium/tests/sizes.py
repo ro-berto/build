@@ -21,7 +21,7 @@ def RunSteps(api):
 
   api.chromium.sizes(
       platform=api.properties.get('platform'),
-      perf_id='test-perf-id',
+      perf_builder_name_alias='builder-name-alias',
       results_url='https://example/url')
 
 
