@@ -197,7 +197,7 @@
     "name": "EVE_TOT",
     "~followup_annotations": [
       "@@@STEP_TEXT@Invalid test result.@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {

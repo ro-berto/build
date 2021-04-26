@@ -75,8 +75,14 @@ def GenTests(api):
       name='green_case', verdict=TaskState.VERDICT_PASSED)
 
   TASK_PASSED = api.skylab.gen_task_result(
-      'cheets_NotificationTest',
+      'tast.lacros',
       [GREEN_CASE],
+  )
+
+  TASK_NO_CASE = api.skylab.gen_task_result(
+      'tast.lacros',
+      [],
+      verdict=TaskState.VERDICT_FAILED,
   )
 
   def gen_tag_resp(api, tag, tasks):
@@ -119,6 +125,17 @@ def GenTests(api):
       api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['1 passed, 0 failed (1 total)']),
+  )
+
+  yield api.test(
+      'CTP response with empty test case result',
+      boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE]),
+      api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
+      api.post_process(archive_gsuri_should_match_skylab_req),
+      api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
+                       ['No test cases returned.']),
   )
 
   yield api.test(

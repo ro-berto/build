@@ -3464,31 +3464,28 @@ class SkylabTest(Test):
   def _find_valid_result(self):
     """Return the first deterministic result from the responses.
 
-    cros_test_platform has retry logic, thus the test result is evaluated
-    over the entire list of responses.
+    CTP responses contain a list of attempts for each CTP request.
+    Skip the attempt(s) failed due to infra_failure, which does
+    not have meaningful result for us.
     """
-    # TODO(crbug/1155016): revisit this implementation after we expose CTP
-    # retry option to Lacros users.
     for r in self.ctp_responses:
       if r.status in [common_pb2.SUCCESS, common_pb2.FAILURE]:
         return r
     return None
 
+  def _raise_failed_step(self, api, suffix, step, status, failure_msg):
+    step.presentation.status = status
+    step.presentation.step_text = failure_msg
+    self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
+    raise api.step.StepFailure(status)
+
   @recipe_api.composite_step
   def run(self, api, suffix):
     self._suffix_step_name_map[suffix] = self.name
     pass_fail_counts = {}
-    failures = []
-    total_tests_ran = 0
-    result = self._find_valid_result()
-    if result:
-      failures = [c.name for c in result.test_cases if c.verdict != "PASSED"]
-      total_tests_ran = len(result.test_cases)
 
     with api.step.nest(self.name) as step:
       step_failure_msg = None
-      if not result:
-        step_failure_msg = 'Invalid test result.'
       if not self.lacros_gcs_path:
         step_failure_msg = (
             'Test was not scheduled because of absent lacros_gcs_path.')
@@ -3496,11 +3493,13 @@ class SkylabTest(Test):
         step_failure_msg = (
             'Test was not scheduled because tast_expr was not set.')
       if step_failure_msg:
-        step.presentation.status = api.step.FAILURE
-        step.presentation.step_text = step_failure_msg
-        self.update_test_run(api, suffix,
-                             api.test_utils.canonical.result_format())
-        return self._test_runs[suffix]
+        return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
+                                       step_failure_msg)
+
+      result = self._find_valid_result()
+      if not result:
+        return self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
+                                       'Invalid test result.')
 
       # TODO(crbug/1155016): Transform test result to isolated test style, thus
       # we could reuse existing code to render the skylab result.
@@ -3510,6 +3509,10 @@ class SkylabTest(Test):
         step.links['Test Run'] = result.url
       if result.log_url:
         step.links['Logs(stainless)'] = result.log_url
+      if not result.test_cases:
+        return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
+                                       'No test cases returned.')
+
       passed_cases, failed_cases = [], []
       for tc in result.test_cases:
         pass_fail_counts.setdefault(tc.name, {'pass_count': 0, 'fail_count': 0})
@@ -3533,9 +3536,9 @@ class SkylabTest(Test):
 
     self.update_test_run(
         api, suffix, {
-            'failures': failures,
+            'failures': failed_cases,
             'valid': result is not None,
-            'total_tests_ran': total_tests_ran,
+            'total_tests_ran': len(result.test_cases),
             'pass_fail_counts': pass_fail_counts,
             'findit_notrun': set(),
         })
