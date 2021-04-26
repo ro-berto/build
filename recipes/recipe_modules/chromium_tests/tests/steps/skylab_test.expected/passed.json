@@ -194,13 +194,8 @@
   },
   {
     "cmd": [],
-    "name": "EVE_TOT"
-  },
-  {
-    "cmd": [],
-    "name": "EVE_TOT.attempt: #1",
+    "name": "EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>1 passed, 0 failed (1 total)@@@",
       "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",
       "@@@STEP_LOG_LINE@Test Cases@green_case@@@",

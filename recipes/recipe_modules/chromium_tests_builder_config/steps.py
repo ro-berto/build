@@ -3487,7 +3487,7 @@ class SkylabTest(Test):
 
     with api.step.nest(self.name) as step:
       step_failure_msg = None
-      if not self.ctp_responses:
+      if not result:
         step_failure_msg = 'Invalid test result.'
       if not self.lacros_gcs_path:
         step_failure_msg = (
@@ -3504,37 +3504,32 @@ class SkylabTest(Test):
 
       # TODO(crbug/1155016): Transform test result to isolated test style, thus
       # we could reuse existing code to render the skylab result.
-      for i, r in enumerate(self.ctp_responses, 1):
-        with api.step.nest('attempt: #' + str(i)) as attempt_step:
-          if r.verdict != "PASSED":
-            attempt_step.presentation.status = api.step.FAILURE
-          if r.url:
-            attempt_step.links['Test Run'] = r.url
-          if r.log_url:
-            attempt_step.links['Logs(stainless)'] = r.log_url
-          passed_cases, failed_cases = [], []
-          for tc in r.test_cases:
-            pass_fail_counts.setdefault(tc.name, {
-                'pass_count': 0,
-                'fail_count': 0
-            })
-            if tc.verdict == 'PASSED':
-              pass_fail_counts[tc.name]['pass_count'] += 1
-              passed_cases.append(tc.name)
-              continue
-            pass_fail_counts[tc.name]['fail_count'] += 1
-            failed_cases.append(tc.name)
-          step_log = []
-          if passed_cases:
-            step_log += ['PASSED:'] + passed_cases + ['']
-          if failed_cases:
-            step_log += ['FAILED:'] + failed_cases
-          attempt_step.logs['Test Cases'] = step_log if step_log else [
-              'No test cases found'
-          ]
-          attempt_step.step_text += (
-              '<br/>%s passed, %s failed (%s total)' %
-              (len(passed_cases), len(failed_cases), len(r.test_cases)))
+      if result.verdict != "PASSED":
+        step.presentation.status = api.step.FAILURE
+      if result.url:
+        step.links['Test Run'] = result.url
+      if result.log_url:
+        step.links['Logs(stainless)'] = result.log_url
+      passed_cases, failed_cases = [], []
+      for tc in result.test_cases:
+        pass_fail_counts.setdefault(tc.name, {'pass_count': 0, 'fail_count': 0})
+        if tc.verdict == 'PASSED':
+          pass_fail_counts[tc.name]['pass_count'] += 1
+          passed_cases.append(tc.name)
+          continue
+        pass_fail_counts[tc.name]['fail_count'] += 1
+        failed_cases.append(tc.name)
+      step_log = []
+      if passed_cases:
+        step_log += ['PASSED:'] + passed_cases + ['']
+      if failed_cases:
+        step_log += ['FAILED:'] + failed_cases
+      step.logs['Test Cases'] = step_log if step_log else [
+          'No test cases found'
+      ]
+      step.step_text += (
+          '<br/>%s passed, %s failed (%s total)' %
+          (len(passed_cases), len(failed_cases), len(result.test_cases)))
 
     self.update_test_run(
         api, suffix, {

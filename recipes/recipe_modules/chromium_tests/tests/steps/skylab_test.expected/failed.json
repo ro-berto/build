@@ -196,14 +196,6 @@
     "cmd": [],
     "name": "EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "EVE_TOT.attempt: #1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>0 passed, 1 failed (1 total)@@@",
       "@@@STEP_LOG_LINE@Test Cases@FAILED:@@@",
       "@@@STEP_LOG_LINE@Test Cases@red_case@@@",

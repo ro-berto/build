@@ -1301,7 +1301,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"output\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJzNj71KxEAUhZnNFmFQCWmELS2FZDa4+BNQq221CXYSbmavyWCSO8y9y76Wrc8g7BP4MC7KsmBt\\nYXmK833npB+RPm6Ana2XT8u6eqzS9yidxipRs7dIb1V614l4Lo2xXaABiTPeQBjc2ObgPXuS3NJg\\nBPj13q1uF1cFXF409sYurot5MZ9NY5+os1PbIQrXDyTuxVkQR2OFLOfPezwLuLFH5h0u+Lwlanv8\\nRjeBNowHP6yFZNfNAvK6Fzb7QdlvuSlPtG4D4lhbYEyU/vybQ5P/cqg80nHA1U+afAHTc5pT\\n\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJxdzk2KwkAQhmEaXEhACdkILl0KSRsU/8Bx5VY3YXYSKm2ZNCappqvEWw649QxziBFBhDnA97xf\\n9KuCXgFsTb773uXZIYseKup0VaiGdxX8qOirEnG81tpUnhokjvkGvrFtmYBz7EgSQ40W4MvWnjaz\\nRQrzaWFWZrZMJ+lk2Om6UI0GpkIUzvck9mwNiKU2Q5bx8c2zgG1rZH5y3iUlUVnjiy483Rg/fbgK\\nyXMbe+RrLazfh+L/cb3uB0HpEdvcAGOo/gCIm09c\\n\"@@@",
       "@@@STEP_LOG_LINE@json.output@          }@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"status\": \"SUCCESS\"@@@",
@@ -1328,14 +1328,6 @@
     "cmd": [],
     "name": "basic_EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "basic_EVE_TOT.attempt: #1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>1 passed, 0 failed (1 total)@@@",
       "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",
       "@@@STEP_LOG_LINE@Test Cases@green_case@@@",
@@ -1347,23 +1339,6 @@
   },
   {
     "cmd": [],
-    "name": "basic_EVE_TOT.attempt: #2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>1 passed, 1 failed (2 total)@@@",
-      "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",
-      "@@@STEP_LOG_LINE@Test Cases@green_case@@@",
-      "@@@STEP_LOG_LINE@Test Cases@@@@",
-      "@@@STEP_LOG_LINE@Test Cases@FAILED:@@@",
-      "@@@STEP_LOG_LINE@Test Cases@red_case@@@",
-      "@@@STEP_LOG_END@Test Cases@@@",
-      "@@@STEP_LINK@Test Run@https://chromeos-swarming.appspot.com/task?id=471a63bc9c481010@@@",
-      "@@@STEP_LINK@Logs(stainless)@https://stainless.corp.google.com/browse/chromeos-autotest-results/swarming-471a63bc9c481010/@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "[skipped] query test results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
@@ -1371,10 +1346,6 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed because of:\n\n- red_case"
-    },
     "name": "$result"
   }
 ]

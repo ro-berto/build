@@ -66,7 +66,7 @@ def GenTests(api):
 
   TASK_ABORTED = api.skylab.gen_task_result(
       'cheets_NotificationTest',
-      [GREEN_CASE],
+      [],
       life_cycle=TaskState.LIFE_CYCLE_ABORTED,
       verdict=TaskState.VERDICT_NO_VERDICT,
   )

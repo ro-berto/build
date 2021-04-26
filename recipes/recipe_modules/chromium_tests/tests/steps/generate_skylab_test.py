@@ -74,18 +74,9 @@ def GenTests(api):
   GREEN_CASE = ExecuteResponse.TaskResult.TestCaseResult(
       name='green_case', verdict=TaskState.VERDICT_PASSED)
 
-  RED_CASE = ExecuteResponse.TaskResult.TestCaseResult(
-      name='red_case', verdict=TaskState.VERDICT_FAILED)
-
   TASK_PASSED = api.skylab.gen_task_result(
       'cheets_NotificationTest',
       [GREEN_CASE],
-  )
-
-  TASK_FAILED = api.skylab.gen_task_result(
-      'cheets_NotificationTest',
-      [GREEN_CASE, RED_CASE],
-      verdict=TaskState.VERDICT_FAILED,
   )
 
   def gen_tag_resp(api, tag, tasks):
@@ -123,15 +114,11 @@ def GenTests(api):
   yield api.test(
       'basic',
       boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED, TASK_FAILED]),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
-      api.post_process(post_process.StepTextContains,
-                       'basic_EVE_TOT.attempt: #1',
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['1 passed, 0 failed (1 total)']),
-      api.post_process(post_process.StepTextContains,
-                       'basic_EVE_TOT.attempt: #2',
-                       ['1 passed, 1 failed (2 total)']),
   )
 
   yield api.test(
@@ -185,8 +172,7 @@ def GenTests(api):
               }
           }),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
-      api.post_process(post_process.StepTextContains,
-                       'basic_EVE_TOT.attempt: #1',
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['1 passed, 0 failed (1 total)']),
       api.post_process(post_process.DropExpectation),
   )
@@ -227,7 +213,7 @@ def GenTests(api):
           }),
       api.post_process(
           post_process.DoesNotRun,
-          'basic_EVE_TOT.attempt: #1',
+          'basic_EVE_TOT',
       ),
       api.post_process(post_process.DropExpectation),
   )
