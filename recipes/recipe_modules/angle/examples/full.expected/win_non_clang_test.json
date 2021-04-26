@@ -152,7 +152,7 @@
       "-m",
       "angle",
       "-b",
-      "win-builder",
+      "ANGLE Test Win Non-Clang Builder",
       "--config-file",
       "[CACHE]\\builder\\angle\\infra\\specs\\angle_mb_config.pyl",
       "--quiet"
@@ -175,7 +175,7 @@
       "-m",
       "angle",
       "-b",
-      "win-builder",
+      "ANGLE Test Win Non-Clang Builder",
       "--config-file",
       "[CACHE]\\builder\\angle\\infra\\specs\\angle_mb_config.pyl",
       "--json-output",

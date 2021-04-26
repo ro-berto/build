@@ -184,7 +184,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win_builder"
+      "[CACHE]\\goma\\data\\ANGLE_Test_Trace_Win_Builder"
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "infra_step": true,
@@ -204,7 +204,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\ANGLE_Test_Trace_Win_Builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -281,7 +281,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\ANGLE_Test_Trace_Win_Builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -315,7 +315,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\ANGLE_Test_Trace_Win_Builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -338,7 +338,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\ANGLE_Test_Trace_Win_Builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -381,10 +381,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"win-builder\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"ANGLE Test Trace Win Builder\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "win-builder",
+      "ANGLE Test Trace Win Builder",
       "--buildbot-mastername",
       "angle",
       "--buildbot-slavename",

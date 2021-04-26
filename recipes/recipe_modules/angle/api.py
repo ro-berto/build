@@ -3,25 +3,15 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
-
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-
-from RECIPE_MODULES.build.chromium_tests import try_spec as try_spec_module
-
-from . import builders as builders_module
-from . import trybots as trybots_module
 
 
 class ANGLEApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
     super(ANGLEApi, self).__init__(**kwargs)
-    self._trybots = None
-    self._builders = None
-    self._builder_id = None
-    self._bot_config = None
 
-  def _apply_bot_config(self, platform, toolchain, test_mode):
+  def _apply_bot_config(self, platform, toolchain):
     self.set_config('angle', optional=True)
     if toolchain == 'clang':
       self.m.chromium.set_config('angle_clang')
@@ -32,23 +22,6 @@ class ANGLEApi(recipe_api.RecipeApi):
     else:
       self.m.gclient.set_config('angle')
 
-    self._trybots = trybots_module.TRYBOTS
-    self._builders = builders_module.BUILDERS
-
-    if self._test_data.enabled:
-      if 'builders' in self._test_data:
-        self._builders = self._test_data['builders']
-      if 'trybots' in self._test_data:
-        self._trybots = self._test_data['trybots']
-
-    if test_mode == 'compile_and_test':
-      # contains build/test settings for the bot
-      self._builder_id, self._bot_config = self.m.chromium_tests.lookup_builder(
-          bot_db=self._builders, try_db=self._trybots)
-      self.m.chromium_tests.report_builders(self._bot_config)
-    else:
-      self._builder_id = self.m.chromium.get_builder_id()
-
   def _checkout(self):
     # Checkout angle and its dependencies (specified in DEPS) using gclient.
     solution_path = self.m.path['cache'].join('builder')
@@ -58,9 +31,12 @@ class ANGLEApi(recipe_api.RecipeApi):
       self.m.chromium.runhooks()
       return update_step
 
-  def _compile(self, toolchain, isolated_targets):
-    raw_result = self.m.chromium_tests.run_mb_and_compile(
-        ['all'], isolated_targets, '', builder_id=self._builder_id)
+  def _compile(self, toolchain):
+    builder_id = self.m.chromium.get_builder_id()
+    raw_result = self.m.chromium_tests.run_mb_and_compile(['all'],
+                                                          None,
+                                                          '',
+                                                          builder_id=builder_id)
     if self.m.platform.is_win and toolchain == 'msvc':
       self.m.chromium.taskkill()
     return raw_result
@@ -94,27 +70,14 @@ class ANGLEApi(recipe_api.RecipeApi):
     toolchain = self.m.properties.get('toolchain', 'clang')
     platform = self.m.properties.get('platform', self.m.platform.name)
     test_mode = self.m.properties.get('test_mode')
-    self._apply_bot_config(platform, toolchain, test_mode)
-    update_step = self._checkout()
+    self._apply_bot_config(platform, toolchain)
+    self._checkout()
     if test_mode == 'checkout_only':
       pass
     elif test_mode == 'trace_tests':
       self._trace_tests()
-    elif test_mode == 'compile_only':
-      raw_result = self._compile(toolchain, None)
+    else:
+      raw_result = self._compile(toolchain)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
-    else:
-      assert (test_mode == 'compile_and_test')
-      build_config = self._bot_config.create_build_config(
-          self.m.chromium_tests, update_step)
-      isolated_targets = [
-          t.isolate_target for t in build_config.all_tests() if t.uses_isolate
-      ]
-      isolated_targets = sorted(list(set(isolated_targets)))
-      compile_step = self._compile(toolchain, isolated_targets)
-      if compile_step.status != common_pb.SUCCESS:
-        return compile_step
-      self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir, targets=isolated_targets, verbose=True)
-      # TODO(jmadill): Trigger swarming tests. http://anglebug.com/5114
+      # TODO(jmadill): Swarming tests. http://anglebug.com/5114
