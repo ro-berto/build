@@ -4,17 +4,16 @@
 
 """Tests a recipe CL by running a chromium builder."""
 
+import attr
 import collections
-import contextlib
 import re
 
 from recipe_engine import post_process
-from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.led.job import job as job_pb2
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             sequence)
+                                             enum, sequence)
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -41,155 +40,30 @@ DEPS = [
 BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
-# TODO(gbeaty) We should also ensure testing for the LTS branches
-DEFAULT_BUILDERS = (
-    'luci.chromium.try:chromium_presubmit',
-    'luci.chromium.try:linux-rel',
-    'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m90.try:chromium_presubmit',
-    'luci.chromium-m90.try:linux-rel',
-    'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m91.try:chromium_presubmit',
-    'luci.chromium-m91.try:linux-rel',
-    'luci.chromium-m91.try:win10_chromium_x64_rel_ng',
-)
-
-
-# We run the fast CL on Windows, and with presubmit, to speed up cycle time.
-# Most of the recipe functionality is tested by the slow CL on Linux.
-FAST_BUILDERS = (
-    'luci.chromium.try:chromium_presubmit',
-    'luci.chromium-m90.try:chromium_presubmit',
-    'luci.chromium-m91.try:chromium_presubmit',
-    'luci.chromium.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m90.try:win10_chromium_x64_rel_ng',
-    'luci.chromium-m91.try:win10_chromium_x64_rel_ng',
-)
-
-# CL to use when testing a recipe which touches chromium source.
-# The first level of keys is the bucket of the builder. The second level of keys
-# is the type of CL: 'fast' or 'slow', with the value being the CL to use.
-CHROMIUM_SRC_TEST_CLS = {
-    # The slow CLs touch `DEPS` which causes analyze to compile and test all
-    # targets.
-
-    # The fast CLs touch `chrome/test/base/interactive_test_utils.cc`, resulting
-    # in just interactive_ui_tests being built and run. This is a relatively
-    # fast, but still swarmed w/ multiple shards, test suite. This fast
-    # verification is used for "upstream-only-changes" on the assumption that no
-    # upstream code would (should) have variable effects based on WHICH test
-    # suite is executed, so we just need to pick SOME test suite.
-    'luci.chromium.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
-    },
-    'luci.chromium-m88.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2537783',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2538112',
-    },
-    'luci.chromium-m90.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2807827',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2807949',
-    },
-    'luci.chromium-m91.try': {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2828623',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2828705',
-    },
-}
-
-
 @attrs()
-class RelatedBuilder(object):
-  """Type to record a related builder.
-
-  When a footer builder is requested, we will try to run the equivalent
-  builder for the release branches. This type is used to record the
-  original builder and the bucket variant.
-  """
-  original_builder = attrib(str)
-  bucket = attrib(str)
-
-
-def _get_recipe(led_builder):
-  build_proto = led_builder.result.buildbucket.bbagent_args.build
-  try:
-    return build_proto.input.properties['recipe']
-  except ValueError as ex:  # pragma: no cover
-    # If you see this in simulations, it's possible that you are missing a
-    # led_get_builder clause.
-    raise ValueError("build has no recipe set (%s): %r" % (ex, build_proto))
+class BuilderToTrigger(object):
+  # The buildbucket v1 style name of the builder
+  name = attrib(str)
+  # Whether or not to try and test versions of the builder for other branches
+  # If true, for each key in CHROMIUM_SRC_TEST_CLS, the buildbucket v1 bucket
+  # (e.g. luci.chromium.try) of this builder will be replaced with the key and
+  # that new builder will be executed if it exists
+  find_branched_versions = attrib(bool, default=True)
+  # The key of the CL to use when triggering the builder
+  cl_key = attrib(enum(['fast', 'slow']), default='slow')
+  # An optional message to display if the call to 'led get-builder' fails
+  # If provided, the steps for the builder will have a warning status and the
+  # build's status will be unaffected
+  # Otherwise, the build will be considered a failure
+  provisional_warning = attrib(str, default='')
 
 
-def _process_footer_builders(api, builders):
-  bad_builders = sorted(b for b in builders if ':' not in b)
-  if bad_builders:
-    step_name = 'bad builders'
-    result = api.step(step_name, [])
-    result.presentation.status = api.step.FAILURE
-    result.presentation.step_text = ''.join(['\n  ' + b for b in bad_builders])
-    raise api.step.StepFailure(step_name, result)
-  buckets = set(b.split(':', 1)[0] for b in builders)
-  unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
-  if unknown_buckets:
-    step_name = 'unknown buckets'
-    result = api.step(step_name, [])
-    result.presentation.status = api.step.FAILURE
-    result.presentation.step_text = ''.join(
-        ['\n  ' + b for b in sorted(unknown_buckets)])
-    raise api.step.StepFailure(step_name, result)
-
-  builder_map = collections.OrderedDict.fromkeys(builders)
-  # For each builder, add an entry for the version of the builder in each
-  # branch, with a RelatedBuilder indicating what it was computed from
-  for builder in builders:
-    name = builder.split(':', 1)[1]
-    for bucket in CHROMIUM_SRC_TEST_CLS:
-      builder_map.setdefault('{}:{}'.format(bucket, name),
-                             RelatedBuilder(builder, bucket))
-
-  return builder_map
-
-
-def _get_builders_to_check(api):
-  """Get the set of builders to test the recipe change against.
-
-  If the CL has Led-Recipes-Tester-Builder footer in its description,
-  then those builders will be the on tested, with branched versions of
-  them provisonally included. Otherwise, a default set of builders will
-  be tested.
-
-  Args:
-    api - The recipe API object.
-    affected_files - The set of files affected by the change.
-    repo_path - A Path object identifying the root of repo the change is
-      against.
-
-  Returns:
-    A 2-element tuple:
-      * A bool indicating whether or not the per-builder config files
-        should be ignored for the purposes of analyzing whether a recipe
-        is affected.
-      * An OrderedDict mapping builder name to None or a RelatedBuilder
-        instance. If the value is None, the associated builder should
-        exist and it will be considered an error if it does not. If the
-        value is not None, the associated builder may or may not exist
-        and the value identifies the related builder and the alternative
-        bucket that the builder was based on.
-  """
-  footer_builders = api.tryserver.get_footer(BUILDER_FOOTER)
-  if bool(footer_builders):
-    return False, _process_footer_builders(api, footer_builders)
-
-  builders = list(DEFAULT_BUILDERS)
-  return True, collections.OrderedDict.fromkeys(builders)
+DEFAULT_BUILDERS = (
+    BuilderToTrigger('luci.chromium.try:chromium_presubmit', cl_key='fast'),
+    BuilderToTrigger('luci.chromium.try:linux-rel'),
+    BuilderToTrigger(
+        'luci.chromium.try:win10_chromium_x64_rel_ng', cl_key='fast'),
+)
 
 
 @attrs()
@@ -217,6 +91,171 @@ class FilesToIgnore(object):
     # pattern, not just the first and last options.
     pattern = '^({})$'.format(pattern)
     return re.compile(pattern)
+
+
+# The builders and trybots files affect specific builders, so when changes only
+# affect these files, launching the default set of builders will only provide a
+# useful signal in the small percentage of CLs that affect those default
+# builders and unnecesarily consume resources and time in the rest of the CLs
+DEFAULT_FILES_TO_IGNORE = (FilesToIgnore(
+    patterns=[
+        'recipes/recipe_modules/chromium_tests_builder_config/{}'.format(r)
+        for r in (r'builders/.*\.py', r'trybots\.py')
+    ],
+    step_name='ignoring per-builder config',
+    step_text=('The following affected files are being ignored because they'
+               ' contain per-builder config that is unlikely to affect the'
+               ' default builders:'),
+),)
+
+FILES_TO_ALWAYS_IGNORE = (
+    FilesToIgnore(
+        patterns=[
+            r'(.+/)?recipe_modules/[^/]+/examples/.+',
+            r'(.+/)?recipe_modules/[^/]+/tests/.+',
+        ],
+        step_name='ignoring recipe tests',
+        step_text=('The following affected files'
+                   ' do not contain production recipe code:'),
+    ),
+    FilesToIgnore(
+        patterns=[r'(.+/)*[A-Z_]*OWNERS'],
+        step_name='ignoring OWNERS files',
+        step_text=('The following affected files are OWNERS files that are'
+                   ' repository metadata, not part of the recipes:'),
+    ),
+)
+
+# CL to use when testing a recipe which touches chromium source.
+# The first level of keys is the bucket of the builder. The second level of keys
+# is the type of CL: 'fast' or 'slow', with the value being the CL to use.
+# TODO(gbeaty) We should also ensure testing for the LTS branches
+CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
+    # The slow CLs touch `DEPS` which causes analyze to compile and test all
+    # targets.
+
+    # The fast CLs touch `chrome/test/base/interactive_test_utils.cc`, resulting
+    # in just interactive_ui_tests being built and run. This is a relatively
+    # fast, but still swarmed w/ multiple shards, test suite. This fast
+    # verification is used for "upstream-only-changes" on the assumption that no
+    # upstream code would (should) have variable effects based on WHICH test
+    # suite is executed, so we just need to pick SOME test suite.
+    ('luci.chromium.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
+    }),
+    ('luci.chromium-m88.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2537783',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2538112',
+    }),
+    ('luci.chromium-m90.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2807827',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2807949',
+    }),
+    ('luci.chromium-m91.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2828623',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2828705',
+    }),
+])
+
+
+def _get_recipe(led_builder):
+  build_proto = led_builder.result.buildbucket.bbagent_args.build
+  try:
+    return build_proto.input.properties['recipe']
+  except ValueError as ex:  # pragma: no cover
+    # If you see this in simulations, it's possible that you are missing a
+    # led_get_builder clause.
+    raise ValueError("build has no recipe set (%s): %r" % (ex, build_proto))
+
+
+def _process_footer_builders(api, builders):
+  bad_builders = sorted(b for b in builders if ':' not in b)
+  if bad_builders:
+    step_name = 'bad builders'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(['\n  ' + b for b in bad_builders])
+    raise api.step.StepFailure(step_name, result)
+
+  buckets = set(b.split(':', 1)[0] for b in builders)
+  unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
+  if unknown_buckets:
+    step_name = 'unknown buckets'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(
+        ['\n  ' + b for b in sorted(unknown_buckets)])
+    raise api.step.StepFailure(step_name, result)
+
+  return [BuilderToTrigger(builder) for builder in builders]
+
+
+def _expand_builders(builders):
+  """Expand the initial set of builders to trigger.
+
+  In addition to the initial set of builders to trigger, branched
+  versions of those builders will also be considered.
+
+  Yields:
+    BuilderToTrigger instances for all of the builders that the recipe
+    should attempt to trigger.
+  """
+  for builder in builders:
+    yield builder
+  for bucket in CHROMIUM_SRC_TEST_CLS:
+    for builder in builders:
+      builder_bucket, name = builder.name.split(':', 1)
+      if builder_bucket == bucket:
+        continue
+      yield attr.evolve(
+          builder,
+          name='{}:{}'.format(bucket, name),
+          find_branched_versions=False,
+          provisional_warning=(
+              'No equivalent to builder {} was found for bucket {}'.format(
+                  builder.name, bucket)))
+
+
+def _get_builders_to_check(api):
+  """Get the set of builders to test the recipe change against.
+
+  If the CL has Led-Recipes-Tester-Builder footer in its description,
+  then those builders will be the ones tested, otherwise a default set
+  of builders will be the ones tested. In both cases, branched versions
+  of the builders will be provisonally included.
+
+  Args:
+    * api - The recipe API object.
+
+  Returns:
+    A 2-element tuple:
+      * A sequence of BuilderToTrigger for the builders that should be
+        checked.
+      * A list of FilesToIgnore indicating files that should be ignored
+        when determining if a recipe is affected.
+  """
+  files_to_ignore = []
+
+  footer_builders = api.tryserver.get_footer(BUILDER_FOOTER)
+  if footer_builders:
+    builders = _process_footer_builders(api, footer_builders)
+  else:
+    builders = DEFAULT_BUILDERS
+    files_to_ignore.extend(DEFAULT_FILES_TO_IGNORE)
+
+  builders = list(_expand_builders(builders))
+  files_to_ignore.extend(FILES_TO_ALWAYS_IGNORE)
+
+  return builders, files_to_ignore
 
 
 def _ignore_affected_files(api, repo_path, affected_files, files_to_ignore):
@@ -260,12 +299,7 @@ def _get_led_builders(api, builders):
 
   Args:
     api - The recipe API object.
-    builders - A mapping that maps the builder name to a RelatedBuilder
-      or None. A RelatedBuilder object means that the builder named by
-      the key is a provisional builder that may or may not exist but
-      we're checking because we think it may exist based off of another
-      builder that's been requested. A None value indicates that we
-      expect the builder to exist and it is an error if it does not.
+    builders - A sequence of BuilderToTrigger.
 
   Returns:
     An OrderedDict mapping builder name to the led job definition for
@@ -279,21 +313,19 @@ def _get_led_builders(api, builders):
   led_builders = collections.OrderedDict()
 
   with api.step.nest('get led builders'):
-    for builder, related_builder in builders.iteritems():
+    for builder in builders:
       # Nest the led get-builder call because we don't get to control the step
       # name and having the step name identify the buidler we're getting is more
       # helpful than 'led get-builder', 'led get-builder (2)',
       # 'led get-builder (3)', etc.
-      with api.step.nest('get ' + builder):
+      with api.step.nest('get ' + builder.name):
         try:
-          led_builders[builder] = api.led('get-builder', builder)
+          led_builders[builder.name] = api.led('get-builder', builder.name)
         except api.step.StepFailure as e:
-          if related_builder is None:
+          if not builder.provisional_warning:
             raise
           e.result.presentation.status = api.step.WARNING
-          e.result.presentation.step_text = (
-              '\nNo equivalent to builder {} was found for bucket {}'.format(
-                  related_builder.original_builder, related_builder.bucket))
+          e.result.presentation.step_text = '\n' + builder.provisional_warning
 
   return led_builders
 
@@ -384,9 +416,7 @@ def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
     into CHROMIUM_SRC_TEST_CLS to get the CL to trigger.
   """
   if recipe in affected_recipes:
-    if builder in FAST_BUILDERS:
-      return 'fast'
-    return 'slow'
+    return builder.cl_key
 
   if str(recipes_cfg_path) in affected_files:
     return 'fast'
@@ -413,7 +443,7 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
     InfraFailure if any of the led calls fail.
     StepFailure if the triggered task failed.
   """
-  with api.step.nest('test {}'.format(builder)) as presentation:
+  with api.step.nest('test {}'.format(builder.name)) as presentation:
     cl_key = _get_cl_category_to_trigger(affected_files, affected_recipes,
                                          builder, _get_recipe(led_builder),
                                          recipes_cfg_path)
@@ -421,13 +451,13 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       presentation.step_text = (
           '\nNot running a tryjob for {!r}. The CL does not affect the '
           '{!r} recipe and the CL does not affect recipes.cfg'.format(
-              builder, _get_recipe(led_builder)))
+              builder.name, _get_recipe(led_builder)))
       return
 
     with api.step.nest('trigger'), api.context(infra_steps=True):
       # FIXME: We should check if the recipe we're testing tests patches to
       # chromium/src. For now just assume this works.
-      bucket = builder.split(':', 1)[0]
+      bucket = builder.name.split(':', 1)[0]
       cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
       ir = led_builder.then('edit-cr-cl', cl)
       # TODO(gbeaty) Once the recipe engine no longer supports annotations and
@@ -486,49 +516,12 @@ def RunSteps(api):
   with api.context(cwd=repo_path):
     affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
 
-  ignore_per_builder_config, builders = _get_builders_to_check(api)
-
-  files_to_ignore = [
-      FilesToIgnore(
-          patterns=[
-              r'(.+/)?recipe_modules/[^/]+/examples/.+',
-              r'(.+/)?recipe_modules/[^/]+/tests/.+',
-          ],
-          step_name='ignoring recipe tests',
-          step_text=('The following affected files'
-                     ' do not contain production recipe code:'),
-      ),
-      FilesToIgnore(
-          patterns=[r'(.+/)*[A-Z_]*OWNERS'],
-          step_name='ignoring OWNERS files',
-          step_text=(
-              'OWNERS files are repository metadata, not part of the recipes'),
-      ),
-  ]
-
-  # The builders and trybots files affect specific builders, so when changes
-  # only affect these files, launching the default set of builders will only
-  # provide a useful signal in the small percentage of CLs that affect those
-  # default builders and unnecesarily consume resources and time in the rest of
-  # the CLs
-  if ignore_per_builder_config:
-    files_to_ignore.append(
-        FilesToIgnore(
-            patterns=[
-                'recipes/recipe_modules/chromium_tests_builder_config/{}'
-                .format(f) for f in (r'builders/.*\.py', r'trybots\.py')
-            ],
-            step_name='ignoring per-builder config',
-            step_text=(
-                'The following affected files are being ignored because they'
-                ' contain per-builder config that is unlikely to affect the'
-                ' default builders:'),
-        ))
+  builders_to_trigger, files_to_ignore = _get_builders_to_check(api)
 
   affected_files = _ignore_affected_files(api, repo_path, affected_files,
                                           files_to_ignore)
 
-  led_builders = _get_led_builders(api, builders)
+  led_builders = _get_led_builders(api, builders_to_trigger)
   recipes = set(
       _get_recipe(led_builder) for led_builder in led_builders.values())
 
@@ -568,7 +561,10 @@ def RunSteps(api):
   api.futures.spawn_immediate(api.swarming.ensure_client)
 
   futures = []
-  for builder, led_builder in led_builders.iteritems():
+  for builder in builders_to_trigger:
+    if builder.name not in led_builders:
+      continue
+    led_builder = led_builders[builder.name]
     futures.append(
         api.futures.spawn(_test_builder, api, affected_files, affected_recipes,
                           builder, led_builder, recipes_cfg_path, bundle))
