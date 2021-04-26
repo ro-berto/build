@@ -129,7 +129,6 @@ FILES_TO_ALWAYS_IGNORE = (
 # CL to use when testing a recipe which touches chromium source.
 # The first level of keys is the bucket of the builder. The second level of keys
 # is the type of CL: 'fast' or 'slow', with the value being the CL to use.
-# TODO(gbeaty) We should also ensure testing for the LTS branches
 CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
     # The slow CLs touch `DEPS` which causes analyze to compile and test all
     # targets.
@@ -145,6 +144,12 @@ CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
             'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
+    }),
+    ('luci.chromium-m86.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2376025',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2375689',
     }),
     ('luci.chromium-m88.try', {
         'slow':
