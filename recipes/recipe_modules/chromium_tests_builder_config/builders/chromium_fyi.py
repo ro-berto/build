@@ -145,6 +145,7 @@ SPEC = {
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
+                'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
@@ -162,6 +163,7 @@ SPEC = {
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'fuchsia',
             },
