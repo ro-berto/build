@@ -286,8 +286,7 @@
       "--mode=host",
       "--variant=X32",
       "--debug",
-      "--vm-arg",
-      "-Xgc:gcstress"
+      "--gcstress"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

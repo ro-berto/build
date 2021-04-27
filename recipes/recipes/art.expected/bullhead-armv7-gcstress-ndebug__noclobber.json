@@ -1153,8 +1153,7 @@
       "[CACHE]/builder/art/tools/run-libcore-tests.sh",
       "--mode=device",
       "--variant=X32",
-      "--vm-arg",
-      "-Xgc:gcstress"
+      "--gcstress"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

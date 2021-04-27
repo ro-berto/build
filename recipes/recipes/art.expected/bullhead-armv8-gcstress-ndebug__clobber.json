@@ -1167,8 +1167,7 @@
       "[CACHE]/builder/art/tools/run-libcore-tests.sh",
       "--mode=device",
       "--variant=X64",
-      "--vm-arg",
-      "-Xgc:gcstress"
+      "--gcstress"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
