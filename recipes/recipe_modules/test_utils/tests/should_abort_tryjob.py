@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from collections import defaultdict
+
 from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
@@ -25,17 +27,18 @@ def RunSteps(api):
   num_failed_suites = api.properties.get('num_failed_suites', 1)
   failed_suites = ['fake_suite' + str(i) for i in range(num_failed_suites)]
 
-  invocation_dict = {}
+  results_by_test_id_by_variant = defaultdict(lambda: defaultdict(list))
   for suite in failed_suites:
-    invocation_dict[suite + '_inv_id'] = api.resultdb.Invocation(test_results=[
+    variant_hash = suite
+    test_id = suite + '_test_case',
+    results_by_test_id_by_variant[variant_hash][test_id].append(
         test_result_pb2.TestResult(
             test_id=suite + '_test_case',
             status=test_result_pb2.FAIL,
-            variant_hash=suite)
-    ])
+            variant_hash=suite))
 
-  should_abort = api.test_utils._should_abort_tryjob(invocation_dict,
-                                                     failed_suites)
+  should_abort = api.test_utils._should_abort_tryjob(
+      results_by_test_id_by_variant, failed_suites)
 
   expected_should_abort = api.properties.get('expected_should_abort', False)
   api.assertions.assertEqual(should_abort, expected_should_abort)
