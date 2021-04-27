@@ -40,3 +40,20 @@ def CheckNoBuildbotPropertiesMethods(input_api, output_api):
     return [output_api.PresubmitError('\n'.join(message + violations))]
 
   return []
+
+
+# Running the simulation tests in this repo is relatively slow, so only do it
+# when committing (hopefully the CL author would have already used train before
+# uploading)
+def CheckRecipesOnCommit(input_api, output_api):
+  recipes_py_path = input_api.os_path.join(
+      input_api.PresubmitLocalPath(), 'recipes.py'
+  )
+  return input_api.RunTests([
+      input_api.Command(
+          name='recipes test',
+          cmd=[input_api.python_executable, recipes_py_path, 'test', 'run'],
+          kwargs={},
+          message=output_api.PresubmitError,
+      )
+  ])
