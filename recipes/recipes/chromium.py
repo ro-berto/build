@@ -1692,7 +1692,6 @@ def GenTests(api):
                   'gtest_tests': [{
                       'args': [
                           '--gtest_filter=WebRtcWebcamBrowserTests*:'
-                          'WebRtcInternalsPerfBrowserTest.*:'
                           'WebRtcStatsPerfBrowserTest.*:'
                           'WebRtcVideoDisplayPerfBrowserTests*:'
                           'WebRtcVideoHighBitrateBrowserTest*:'
@@ -1742,7 +1741,6 @@ def GenTests(api):
                   'gtest_tests': [{
                       'args': [
                           '--gtest_filter=WebRtcWebcamBrowserTests*:'
-                          'WebRtcInternalsPerfBrowserTest.*:'
                           'WebRtcStatsPerfBrowserTest.*:'
                           'WebRtcVideoDisplayPerfBrowserTests*:'
                           'WebRtcVideoHighBitrateBrowserTest*:'
