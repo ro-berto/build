@@ -38,11 +38,13 @@ def RunSteps(api):
     tests.append(
         steps.SwarmingGTestTestSpec.create('base_unittests').get_test())
 
-  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   api.chromium_tests.configure_build(builder_config)
   update_step, targets_config = (
       api.chromium_tests.prepare_checkout(builder_config))
   return api.chromium_tests.compile_specific_targets(
+      builder_id,
       builder_config,
       update_step,
       targets_config,

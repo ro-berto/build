@@ -98,9 +98,11 @@ def RunSteps(api):
         api, 'chromium', 'ANGLE',
         'https://chromium.googlesource.com/angle/angle', angle_revision)
 
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps(
-        root_solution_revision=chromium_revision)
+        builder_id, builder_config, root_solution_revision=chromium_revision)
 
 
 def GenTests(api):

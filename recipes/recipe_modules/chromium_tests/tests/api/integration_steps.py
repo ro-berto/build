@@ -5,19 +5,23 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'chromium',
-  'chromium_swarming',
-  'chromium_tests',
-  'recipe_engine/buildbucket',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'test_utils',
+    'chromium',
+    'chromium_swarming',
+    'chromium_tests',
+    'chromium_tests_builder_config',
+    'recipe_engine/buildbucket',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'test_utils',
 ]
 
 
 def RunSteps(api):
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
-    return api.chromium_tests.integration_steps()
+    return api.chromium_tests.integration_steps(builder_id, builder_config)
+
 
 def GenTests(api):
 
@@ -32,7 +36,7 @@ def GenTests(api):
         swarm_hashes[test] = '[dummy hash for %s]' % test
 
     return sum([
-        api.chromium.ci_build(
+        api.chromium_tests_builder_config.ci_build(
             builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
@@ -44,7 +48,6 @@ def GenTests(api):
   yield api.test(
       'deapply_deps_after_failure',
       ci_props(extra_swarmed_tests=['blink_web_tests']),
-      api.platform.name('linux'),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Builder': {

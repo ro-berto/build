@@ -310,7 +310,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     results_basename = 'with_patch' if with_patch else 'without_patch'
 
     raw_result = self.m.chromium_tests.run_mb_and_compile(
-        self.compile_targets, None, suffix)
+        self.m.chromium.get_builder_id(), self.compile_targets, None, suffix)
 
     if raw_result.status != common_pb.SUCCESS:
       return None, raw_result

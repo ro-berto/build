@@ -3,9 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/tryserver',
     'filter',
     'profiles',
@@ -22,15 +22,17 @@ DEPS = [
 def RunSteps(api):
   assert api.tryserver.is_tryserver
   api.path.mock_add_paths(api.profiles.profile_dir().join('merged.profdata'))
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   raw_result = api.chromium_tests.trybot_steps_for_tests(
-      tests=api.properties.get('tests'))
+      builder_id, builder_config, tests=api.properties.get('tests'))
   return raw_result
 
 
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.try_build(
+      api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.linux',
           builder='linux-rel',
       ),

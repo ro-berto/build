@@ -62,7 +62,8 @@ def RunSteps(api):
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
-  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   api.chromium_swarming.swarming_server = (
       builder_config.swarming_server or
       'https://chromium-swarm-dev.appspot.com')
@@ -81,7 +82,7 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   raw_result = api.chromium_tests.compile_specific_targets(
-      builder_config, update_step, targets_config, compile_targets,
+      builder_id, builder_config, update_step, targets_config, compile_targets,
       targets_config.all_tests())
   if raw_result.status != common_pb.SUCCESS:
     return raw_result

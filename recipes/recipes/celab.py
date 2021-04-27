@@ -235,9 +235,10 @@ def _BuildChromiumFromSource(api, test_root):
   with api.chromium.chromium_layout():
     compile_targets = ['chrome/installer/mini_installer', 'chromedriver']
     raw_result = api.chromium_tests.run_mb_and_compile(
-      compile_targets,
-      isolated_targets=[],
-      name_suffix=' (with patch)')
+        api.chromium.get_builder_id(),
+        compile_targets,
+        isolated_targets=[],
+        name_suffix=' (with patch)')
 
   return api.chromium.output_dir, raw_result
 

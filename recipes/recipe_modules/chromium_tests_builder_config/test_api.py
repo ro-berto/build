@@ -73,6 +73,8 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     * use_try_db - Whether the try_db should be used for looking up the
       builder to set the platform.
     """
+    kwargs.setdefault('builder', 'Linux Builder')
+    kwargs.setdefault('builder_group', 'chromium.linux')
     kwargs.setdefault('use_try_db', False)
     ctbc_test_data, kwargs = self._test_data(**kwargs)
     return self.m.chromium.generic_build(**kwargs) + ctbc_test_data
@@ -96,6 +98,8 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
       default try database.
     """
     assert 'use_try_db' not in kwargs
+    kwargs.setdefault('builder', 'Linux Builder')
+    kwargs.setdefault('builder_group', 'chromium.linux')
     ctbc_test_data, kwargs = self._test_data(use_try_db=False, **kwargs)
     return self.m.chromium.ci_build(**kwargs) + ctbc_test_data
 
@@ -116,6 +120,8 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
       default try database.
     """
     assert 'use_try_db' not in kwargs
+    kwargs.setdefault('builder', 'linux-rel')
+    kwargs.setdefault('builder_group', 'tryserver.chromium.linux')
     ctbc_test_data, kwargs = self._test_data(use_try_db=True, **kwargs)
     return self.m.chromium.try_build(**kwargs) + ctbc_test_data
 

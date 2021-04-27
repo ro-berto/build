@@ -78,7 +78,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.
-  def config_override(**kwargs):
+  def config_override(builder_id, builder_config, **kwargs):
     task = api.chromium_tests.Task(builder_config, tests, update_step,
                                    affected_files)
     task.should_retry_failures_with_changes = lambda: retry_failed_shards
@@ -105,7 +105,9 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   if skip_deapply_patch:
     api.chromium_tests._should_retry_with_patch_deapplied = lambda x: False
 
-  result = api.chromium_tests.trybot_steps()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  result = api.chromium_tests.trybot_steps(builder_id, builder_config)
   if expected_jsonish_result is not None:
     api.assertions.assertDictEqual(
         expected_jsonish_result, json.loads(json_format.MessageToJson(result)))

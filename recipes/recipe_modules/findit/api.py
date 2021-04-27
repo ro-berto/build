@@ -250,12 +250,12 @@ class FinditApi(recipe_api.RecipeApi):
 
       if actual_compile_targets:
         raw_result = self.m.chromium_tests.compile_specific_targets(
+            bot_mirror.builder_id,
             builder_config,
             bot_update_step,
             build_config,
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
-            builder_id=bot_mirror.builder_id,
             override_execution_mode=ctbc.COMPILE_AND_TEST)
 
         if raw_result.status != common_pb.SUCCESS:

@@ -106,12 +106,12 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
       return CompileResult.SKIPPED
 
     failure = api.chromium_tests.compile_specific_targets(
+        builder_id,
         builder_config,
         bot_update_step,
         build_config,
         compile_targets,
         tests_including_triggered=[],
-        builder_id=builder_id,
         override_execution_mode=ctbc.COMPILE_AND_TEST)
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED

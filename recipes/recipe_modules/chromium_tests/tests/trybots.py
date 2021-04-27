@@ -14,15 +14,17 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
-    'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'filter',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
 def RunSteps(api):
-  api.chromium_tests.trybot_steps()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_tests.trybot_steps(builder_id, builder_config)
   api.step('Success', ['echo', 'Success!'])
 
 def GenTests(api):
@@ -33,7 +35,7 @@ def GenTests(api):
         ('%s-%s' % (builder_group, buildername)).replace(' ', '_'),
         (api.properties(xcode_build_version='11c29')
          if 'ios' in buildername else api.properties()),
-        api.chromium.try_build(
+        api.chromium_tests_builder_config.try_build(
             builder_group=builder_group,
             builder=buildername,
             patch_set=1,

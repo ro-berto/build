@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.recipe_api import Property
-from recipe_engine.config import ConfigGroup, Single
-
 from PB.recipe_modules.build.chromium_tests import properties
 
 DEPS = [
@@ -16,7 +13,6 @@ DEPS = [
     'chromium_android',
     'chromium_checkout',
     'chromium_swarming',
-    'chromium_tests_builder_config',
     'code_coverage',
     'depot_tools/bot_update',
     'depot_tools/gclient',
@@ -55,5 +51,13 @@ DEPS = [
     'test_utils',
     'traceback',
 ]
+
+# Avoid adding a dependency on the chromium_tests_builder_config module, the
+# builder config should be self-contained and should be provided to
+# chromium_tests; it shouldn't need to lookup any additional builders or access
+# the static DBs
+assert not any(
+    m in DEPS for m in ('chromium_tests_builder_config',
+                        'build/chromium_tests_builder_config'))
 
 PROPERTIES = properties.InputProperties

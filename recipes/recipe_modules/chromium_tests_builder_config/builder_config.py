@@ -32,10 +32,11 @@ class BuilderConfig(object):
   """
 
   builder_db = attrib(BuilderDatabase)
+  try_db = attrib(TryDatabase, default=TryDatabase.create({}))
   _try_spec = attrib(TrySpec)
 
   @classmethod
-  def create(cls, builder_db, try_spec, python_api=None):
+  def create(cls, builder_db, try_spec, try_db=None, python_api=None):
     """Create a BuilderConfig instance.
 
     Args:
@@ -54,7 +55,7 @@ class BuilderConfig(object):
         builders in try_spec.mirrors and python_api is not None.
     """
     try:
-      return cls(builder_db, try_spec)
+      return cls(builder_db, try_db, try_spec)
     except BuilderConfigException as e:
       if python_api is not None:
         python_api.infra_failing_step(
@@ -73,7 +74,12 @@ class BuilderConfig(object):
                 mirror.builder_id.builder, mirror.builder_id.group))
 
   @classmethod
-  def lookup(cls, builder_id, builder_db, try_db=None, python_api=None):
+  def lookup(cls,
+             builder_id,
+             builder_db,
+             try_db=None,
+             use_try_db=True,
+             python_api=None):
     """Create a BuilderConfig by looking up a builder.
 
     Args:
@@ -106,7 +112,7 @@ class BuilderConfig(object):
         'Expected TryDatabase for try_db, got {}'.format(type(try_db))
 
     try_spec = None
-    if try_db:
+    if use_try_db and try_db:
       try_spec = try_db.get(builder_id)
 
     # Some trybots do not mirror a CI bot. In this case, return a configuration
@@ -114,7 +120,8 @@ class BuilderConfig(object):
     if try_spec is None:
       try_spec = TrySpec.create([builder_id])
 
-    return cls.create(builder_db, try_spec, python_api=python_api)
+    return cls.create(
+        builder_db, try_db=try_db, try_spec=try_spec, python_api=python_api)
 
   def __getattr__(self, attr):
     per_builder_values = {}

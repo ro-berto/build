@@ -25,7 +25,9 @@ DEPS = [
 
 def RunSteps(api):
   assert api.tryserver.is_tryserver
-  raw_result = api.chromium_tests.trybot_steps()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  raw_result = api.chromium_tests.trybot_steps(builder_id, builder_config)
   return raw_result
 
 

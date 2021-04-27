@@ -375,6 +375,38 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'<br/>running tester 'Linux Release (NVIDIA)' on group 'chromium.gpu' against builder 'GPU Linux Builder' on group 'chromium.gpu'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.linux\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Tests\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_group\": \"chromium.linux\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }, @@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.gpu\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"GPU Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Linux Release (NVIDIA)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_group\": \"chromium.gpu\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Tests@@@",
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Builder@@@",
+      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Release%20(NVIDIA)@@@",
+      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/GPU%20Linux%20Builder@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "name": "mark: before_tests"
   },
   {

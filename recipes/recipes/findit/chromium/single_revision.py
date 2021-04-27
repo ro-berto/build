@@ -76,6 +76,7 @@ def RunSteps(api, properties):
 
   if compile_targets:
     compile_result = api.chromium_tests.compile_specific_targets(
+        builder_id,
         builder_config,
         bot_update_step,
         build_config,
@@ -115,7 +116,6 @@ def _configure_builder(api, target_tester):
       api.chromium_swarming.set_default_dimension(str(key), str(value))
 
   compile_kwargs = {
-      'builder_id': bot_mirror.builder_id,
       'override_execution_mode': ctbc.COMPILE_AND_TEST,
   }
   return bot_mirror.builder_id, builder_config, compile_kwargs

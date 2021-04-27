@@ -211,7 +211,9 @@ def RunSteps(api, fail_compile):
   if fail_compile:
     api.chromium_tests.compile_specific_targets = compile_override
 
-  return api.chromium_tests.main_waterfall_steps()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):

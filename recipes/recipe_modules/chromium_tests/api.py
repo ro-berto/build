@@ -454,12 +454,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.buildbucket.build.input.experiments)
 
   def compile_specific_targets(self,
+                               builder_id,
                                builder_config,
                                update_step,
                                targets_config,
                                compile_targets,
                                tests_including_triggered,
-                               builder_id=None,
                                mb_phase=None,
                                mb_config_path=None,
                                mb_recursive_lookup=True,
@@ -471,6 +471,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     Allows finer-grained control about exact compile targets used.
 
     Args:
+      builder_id - A BuilderId identifying the configuration to use when running
+        mb.
       builder_config - The configuration for the builder being executed.
       update_step - The StepResult from the bot_update step.
       targets_config - The configuration of the current build.
@@ -478,8 +480,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests_including_triggered - The list of tests that will be executed by
         this builder and any triggered builders. The compile operation will
         prepare and upload the isolates for the tests that use isolate.
-      builder_id - A BuilderId identifying the configuration to use when running
-        mb. If not provided, `chromium.get_builder_id()` will be used.
       mb_phase - A phase argument to be passed to mb. Must be provided if the
         configuration identified by `builder_id` uses phases and must not be
         provided if the configuration identified by `builder_id` does not use
@@ -523,10 +523,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               builder_config.android_version, log_details=True))
 
       raw_result = self.run_mb_and_compile(
+          builder_id,
           compile_targets,
           isolated_targets,
           name_suffix=name_suffix,
-          builder_id=builder_id,
           mb_phase=mb_phase,
           mb_config_path=mb_config_path,
           mb_recursive_lookup=mb_recursive_lookup,
@@ -867,10 +867,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return properties
 
   def run_mb_and_compile(self,
+                         builder_id,
                          compile_targets,
                          isolated_targets,
                          name_suffix,
-                         builder_id=None,
                          mb_phase=None,
                          mb_config_path=None,
                          mb_recursive_lookup=False,
@@ -881,7 +881,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
-        builder_id = builder_id or self.m.chromium.get_builder_id()
         use_goma_module = self._use_goma()
         gn_args = self.m.chromium.mb_gen(
             builder_id,
@@ -1031,8 +1030,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def _build_and_isolate_failing_tests(self, builder_config, failing_tests,
-                                       bot_update_step, suffix):
+  def _build_and_isolate_failing_tests(self, builder_id, builder_config,
+                                       failing_tests, bot_update_step, suffix):
     """Builds and isolates test suites in |failing_tests|.
 
     Args:
@@ -1055,7 +1054,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           t.isolate_target for t in failing_tests if t.uses_isolate
       ]
 
-      raw_result = self.run_mb_and_compile(compile_targets,
+      raw_result = self.run_mb_and_compile(builder_id, compile_targets,
                                            failing_swarming_tests,
                                            ' (%s)' % suffix)
       if raw_result:
@@ -1126,7 +1125,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         culpable_failures.append(t)
     return culpable_failures
 
-  def _run_tests_with_retries(self, task, deapply_changes):
+  def _run_tests_with_retries(self, builder_id, task, deapply_changes):
     """This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
 
@@ -1170,8 +1169,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       deapply_changes(task.bot_update_step)
       raw_result = self._build_and_isolate_failing_tests(
-          task.builder_config, failing_test_suites, task.bot_update_step,
-          'without patch')
+          builder_id, task.builder_config, failing_test_suites,
+          task.bot_update_step, 'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result, []
 
@@ -1269,9 +1268,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return result.json.output
 
   def main_waterfall_steps(self,
+                           builder_id,
+                           builder_config,
                            mb_config_path=None,
                            mb_phase=None,
-                           builders=None,
                            root_solution_revision=None):
     """Compiles and runs tests for chromium recipe.
 
@@ -1287,11 +1287,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         and a failure message if a failure occurred.
       - None if no failures
     """
-    builder_id, builder_config = (
-        self.m.chromium_tests_builder_config.lookup_builder(
-            builder_db=builders))
     mirrored_builders = self._get_mirroring_try_builders(
-        builder_id, self.m.chromium_tests_builder_config.try_db)
+        builder_id, builder_config.try_db)
     self.report_builders(builder_config, mirrored_builders)
     self.configure_build(builder_config)
     update_step, targets_config = self.prepare_checkout(
@@ -1311,6 +1308,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = (
         targets_config.get_compile_targets(targets_config.all_tests()))
     compile_result = self.compile_specific_targets(
+        builder_id,
         builder_config,
         update_step,
         targets_config,
@@ -1546,15 +1544,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # NOTE: "without patch" phrase is used to keep consistency with the API
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def integration_steps(self, builders=None, bots=None):
+  def integration_steps(self, builder_id, builder_config):
     return self.run_tests_with_and_without_changes(
-        builders=builders,
-        mirrored_bots=bots,
-        deapply_changes=self.deapply_deps)
+        builder_id, builder_config, deapply_changes=self.deapply_deps)
 
   def trybot_steps(self,
-                   builders=None,
-                   trybots=None,
+                   builder_id,
+                   builder_config,
                    root_solution_revision=None):
     """Compiles and runs tests for chromium recipe.
 
@@ -1571,25 +1567,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     return self.run_tests_with_and_without_changes(
-        builders=builders,
-        mirrored_bots=trybots,
+        builder_id,
+        builder_config,
         deapply_changes=self.deapply_patch,
         root_solution_revision=root_solution_revision)
 
-  def trybot_steps_for_tests(self, builders=None, trybots=None, tests=None):
+  def trybot_steps_for_tests(self, builder_id, builder_config, tests=None):
     """Similar to trybot_steps, but only runs certain tests.
 
     This is currently experimental code. Talk to martiniss@ if you want to
     use this."""
     return self.run_tests_with_and_without_changes(
-        builders=builders,
-        mirrored_bots=trybots,
+        builder_id,
+        builder_config,
         deapply_changes=self.deapply_patch,
         tests=tests)
 
   def run_tests_with_and_without_changes(self,
-                                         builders,
-                                         mirrored_bots,
+                                         builder_id,
+                                         builder_config,
                                          deapply_changes,
                                          tests=None,
                                          root_solution_revision=None):
@@ -1608,9 +1604,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure message if an error occurred.
       - None if no failures
     """
+    self.report_builders(builder_config)
     raw_result, task = self._calculate_tests_to_run(
-        builders=builders,
-        mirrored_bots=mirrored_bots,
+        builder_id,
+        builder_config,
         tests_to_run=tests,
         root_solution_revision=root_solution_revision)
     if raw_result and raw_result.status != common_pb.SUCCESS:
@@ -1623,7 +1620,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:
       compile_failure, unrecoverable_test_suites = self._run_tests_with_retries(
-          task, deapply_changes)
+          builder_id, task, deapply_changes)
       if compile_failure:
         return compile_failure
 
@@ -1860,8 +1857,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
   def _calculate_tests_to_run(self,
-                              builders=None,
-                              mirrored_bots=None,
+                              builder_id,
+                              builder_config,
                               tests_to_run=None,
                               root_solution_revision=None):
     """Determines which tests need to be run.
@@ -1881,11 +1878,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           and the failure message if it failed
         Configuration of the build/test.
     """
-    builder_id, builder_config = (
-        self.m.chromium_tests_builder_config.lookup_builder(
-            builder_db=builders, try_db=mirrored_bots))
-    self.report_builders(builder_config)
-
     use_rts = (
         self.m.cq.active
         and self.m.cq.run_mode == self.m.cq.DRY_RUN
@@ -1957,6 +1949,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       compile_targets = sorted(set(compile_targets))
       raw_result = self.compile_specific_targets(
+          builder_id,
           builder_config,
           bot_update_step,
           targets_config,

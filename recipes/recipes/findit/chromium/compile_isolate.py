@@ -86,12 +86,12 @@ def RunSteps(api, target_testername, revision, isolated_targets):
       assert compile_targets, 'Test %s has no compile target' % tests[0].name
 
       raw_result = api.m.chromium_tests.compile_specific_targets(
+          bot_mirror.builder_id,
           builder_config,
           bot_update_step,
           build_config,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
-          builder_id=bot_mirror.builder_id,
           override_execution_mode=ctbc.COMPILE_AND_TEST)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result

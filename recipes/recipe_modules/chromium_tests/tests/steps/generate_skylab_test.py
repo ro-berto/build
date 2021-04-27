@@ -28,7 +28,9 @@ DEPS = [
 
 def RunSteps(api):
   with api.chromium.chromium_layout():
-    return api.chromium_tests.main_waterfall_steps()
+    builder_id, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder())
+    return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):

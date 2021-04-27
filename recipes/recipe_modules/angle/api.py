@@ -33,10 +33,8 @@ class ANGLEApi(recipe_api.RecipeApi):
 
   def _compile(self, toolchain):
     builder_id = self.m.chromium.get_builder_id()
-    raw_result = self.m.chromium_tests.run_mb_and_compile(['all'],
-                                                          None,
-                                                          '',
-                                                          builder_id=builder_id)
+    raw_result = self.m.chromium_tests.run_mb_and_compile(
+        builder_id, ['all'], None, '')
     if self.m.platform.is_win and toolchain == 'msvc':
       self.m.chromium.taskkill()
     return raw_result

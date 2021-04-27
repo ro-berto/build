@@ -78,7 +78,9 @@ def RunSteps(api):
   api.path.mock_add_paths(api.profiles.profile_dir().join(
       api.pgo.TEMP_PROFDATA_FILENAME))
 
-  raw_result = api.chromium_tests.trybot_steps()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  raw_result = api.chromium_tests.trybot_steps(builder_id, builder_config)
   return raw_result
 
 

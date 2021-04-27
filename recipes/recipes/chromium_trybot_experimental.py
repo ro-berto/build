@@ -12,16 +12,22 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/properties',
 ]
 
 
-def RunSteps(api):  # pragma: no cover
+def RunSteps(api):
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps_for_tests(
-        tests=api.properties.get('tests'))
+        builder_id, builder_config, tests=api.properties.get('tests'))
 
 
 def GenTests(api):
-  yield api.test('basic', api.chromium.try_build(),
-                 api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'basic',
+      api.chromium_tests_builder_config.try_build(),
+      api.post_process(post_process.DropExpectation),
+  )

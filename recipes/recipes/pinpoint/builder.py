@@ -16,14 +16,15 @@ DEPS = [
 
 def RunSteps(api):
   with api.chromium.chromium_layout():
-    _, builder_config = (
+    builder_id, builder_config = (
         api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
 
     api.chromium_tests.configure_build(builder_config)
     update_step, build_config = (
         api.chromium_tests.prepare_checkout(builder_config))
     compile_targets = build_config.get_compile_targets(build_config.all_tests())
-    return api.chromium_tests.compile_specific_targets(builder_config,
+    return api.chromium_tests.compile_specific_targets(builder_id,
+                                                       builder_config,
                                                        update_step,
                                                        build_config,
                                                        compile_targets,

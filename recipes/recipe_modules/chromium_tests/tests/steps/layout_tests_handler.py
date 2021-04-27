@@ -6,13 +6,13 @@ DEPS = [
     'build',
     'chromium',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/bot_update',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
-    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
@@ -29,7 +29,9 @@ from recipe_engine import post_process
 
 def RunSteps(api):
   with api.chromium.chromium_layout():
-    return api.chromium_tests.main_waterfall_steps()
+    builder_id, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder())
+    return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):
@@ -38,14 +40,13 @@ def GenTests(api):
     builder_group = 'chromium.linux'
     builder = 'Linux Tests'
     return sum([
-        api.chromium.ci_build(
+        api.chromium_tests_builder_config.ci_build(
             builder_group=builder_group,
             builder=builder,
             parent_buildername='Linux Builder'),
         api.properties.generic(
             swarm_hashes={'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
             **kwargs),
-        api.platform('linux', 64),
         api.chromium_tests.read_source_side_spec(
             builder_group, {
                 builder: {

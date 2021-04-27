@@ -57,15 +57,18 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
     """
     builder_id = builder_id or self.m.chromium.get_builder_id()
 
-    builder_db = builder_db or self.builder_db
+    if builder_db is None:
+      assert try_db is None
+      builder_db = self.builder_db
+      try_db = self.try_db
 
     if use_try_db is None:
       use_try_db = self.m.tryserver.is_tryserver
-    if use_try_db:
-      try_db = try_db or self.try_db
-    else:
-      try_db = None
 
     builder_config = BuilderConfig.lookup(
-        builder_id, builder_db, try_db, python_api=self.m.python)
+        builder_id,
+        builder_db,
+        try_db,
+        use_try_db=use_try_db,
+        python_api=self.m.python)
     return builder_id, builder_config
