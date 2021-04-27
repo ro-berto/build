@@ -9,6 +9,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
+    'chromium_tests_builder_config',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/gerrit',
