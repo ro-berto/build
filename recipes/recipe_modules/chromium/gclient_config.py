@@ -394,7 +394,7 @@ def enable_reclient(c):
 @CONFIG_CTX()
 def reclient_staging(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.27.0.ef33a2b'
+  cv['reclient_version'] = 're_client_version:0.28.0.7416cfd'
 
 
 # This configuration overrides the default reclient version
