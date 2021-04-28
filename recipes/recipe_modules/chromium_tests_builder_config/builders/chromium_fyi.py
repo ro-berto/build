@@ -914,7 +914,10 @@ SPEC = {
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
