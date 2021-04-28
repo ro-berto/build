@@ -956,7 +956,7 @@
       "git",
       "fetch",
       "origin",
-      "master",
+      "main",
       "--progress"
     ],
     "cwd": "[CACHE]/generated",
@@ -1051,7 +1051,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "master",
+      "main",
       "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
@@ -1082,7 +1082,7 @@
       "git",
       "fetch",
       "origin",
-      "master",
+      "main",
       "--progress"
     ],
     "cwd": "[CACHE]/generated",
@@ -1177,7 +1177,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "master",
+      "main",
       "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],

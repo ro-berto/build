@@ -110,15 +110,19 @@ def copy_generated_files(source, dest, debug_dir):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--message', help='commit message', required=True)
-  parser.add_argument('--dest-branch',
-                      help='git branch in the destination repo to sync to',
-                      default='master')
-  parser.add_argument('--debug-dir',
-                      help='optional dir containing the gen folder to include '
-                           'in the checked-in repo',
-                      default='Debug')
-  parser.add_argument('--dry-run', action='store_true',
-                      help='if set, does a dry run of push to remote repo.')
+  parser.add_argument(
+      '--dest-branch',
+      help='git branch in the destination repo to sync to',
+      default='main')
+  parser.add_argument(
+      '--debug-dir',
+      help='optional dir containing the gen folder to include '
+      'in the checked-in repo',
+      default='Debug')
+  parser.add_argument(
+      '--dry-run',
+      action='store_true',
+      help='if set, does a dry run of push to remote repo.')
   parser.add_argument('source', help='directory to copy files from')
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()

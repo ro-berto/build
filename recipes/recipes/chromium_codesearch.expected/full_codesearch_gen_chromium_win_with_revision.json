@@ -972,7 +972,7 @@
       "git",
       "fetch",
       "origin",
-      "master",
+      "main",
       "--progress"
     ],
     "cwd": "[CACHE]/generated",
@@ -1069,7 +1069,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-win\" build 571, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--dest-branch",
-      "master",
+      "main",
       "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],

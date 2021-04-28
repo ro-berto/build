@@ -8,10 +8,17 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
-def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
-               EXPERIMENTAL=False, SYNC_GENERATED_FILES=False,
-               GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR='', CORPUS=None,
-               BUILD_CONFIG=None, **_kwargs):
+
+def BaseConfig(CHECKOUT_PATH,
+               COMPILE_TARGETS=None,
+               PLATFORM=None,
+               EXPERIMENTAL=False,
+               SYNC_GENERATED_FILES=False,
+               GEN_REPO_BRANCH='main',
+               GEN_REPO_OUT_DIR='',
+               CORPUS=None,
+               BUILD_CONFIG=None,
+               **_kwargs):
   """Filter out duplicate compilation units.
 
   Args:

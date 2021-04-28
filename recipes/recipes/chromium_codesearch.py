@@ -64,7 +64,7 @@ SPEC = freeze({
             'compile_targets': ['all',],
             'platform': 'android',
             'sync_generated_files': True,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             # Generated files will end up in out/android-Debug/gen.
             'gen_repo_out_dir': 'android-Debug',
             'corpus': 'chromium.googlesource.com/chromium/src',
@@ -78,7 +78,7 @@ SPEC = freeze({
             ],
             'platform': 'lacros',
             'sync_generated_files': True,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             'corpus': 'chromium.googlesource.com/chromium/src',
             'build_config': 'lacros',
         },
@@ -86,7 +86,7 @@ SPEC = freeze({
             'compile_targets': ['all',],
             'platform': 'linux',
             'sync_generated_files': True,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             'corpus': 'chromium.googlesource.com/chromium/src',
             'build_config': 'linux',
         },
@@ -95,7 +95,7 @@ SPEC = freeze({
             'platform': 'fuchsia',
             # Don't sync generated files for Fuchsia until they're verified.
             'sync_generated_files': False,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             # Generated files will end up in out/fuchsia-Debug/gen.
             'gen_repo_out_dir': 'fuchsia-Debug',
             'corpus': 'chromium.googlesource.com/chromium/src',
@@ -139,7 +139,7 @@ SPEC = freeze({
             ],
             'platform': 'chromeos',
             'sync_generated_files': True,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             # Generated files will end up in out/chromeos-Debug/gen.
             'gen_repo_out_dir': 'chromeos-Debug',
             'corpus': 'chromium.googlesource.com/chromium/src',
@@ -149,7 +149,7 @@ SPEC = freeze({
             'compile_targets': ['all',],
             'platform': 'win',
             'sync_generated_files': True,
-            'gen_repo_branch': 'master',
+            'gen_repo_branch': 'main',
             # Generated files will end up in out/win-Debug/gen.
             'gen_repo_out_dir': 'win-Debug',
             'corpus': 'chromium.googlesource.com/chromium/src',
