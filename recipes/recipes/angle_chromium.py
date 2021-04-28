@@ -52,7 +52,8 @@ def get_component_revision_from_deps(api, component, project, repository_url,
 
 
 def RunSteps(api):
-  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
   is_angle_tot = 'angle_top_of_tree' in builder_config.gclient_apply_config
   if is_angle_tot:
     angle_revision = 'refs/heads/master'
@@ -67,7 +68,7 @@ def RunSteps(api):
 
   with api.chromium.chromium_layout():
     return api.chromium_tests.main_waterfall_steps(
-        root_solution_revision=chromium_revision)
+        builder_id, builder_config, root_solution_revision=chromium_revision)
 
 
 def GenTests(api):
