@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
+                                                                builder_spec,
+                                                                try_spec)
+
 DEPS = [
     'angle',
     'builder_group',
@@ -27,18 +31,33 @@ def RunSteps(api):
   return api.angle.steps()
 
 
-def GenTests(api):
+_TEST_BUILDERS = builder_db.BuilderDatabase.create({
+    'angle': {
+        'linux-builder':
+            builder_spec.BuilderSpec.create(chromium_config='angle'),
+    },
+})
 
-  def ci_build(builder):
-    return api.buildbucket.ci_build(
-        project='angle',
-        builder=builder,
-        build_number=1234,
-        git_repo='https://chromium.googlesource.com/angle/angle.git')
+_TEST_TRYBOTS = try_spec.TryDatabase.create({
+    'angle': {
+        'linux-builder':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='angle',
+                        buildername='linux-builder',
+                    ),
+                ],),
+    }
+})
+
+
+def GenTests(api):
 
   yield api.test(
       'linux',
       api.platform('linux', 64),
-      ci_build(builder='linux'),
-      api.builder_group.for_current('client.angle'),
+      api.angle.ci_build(build_number=1234),
+      api.angle.builders(_TEST_BUILDERS),
+      api.angle.trybots(_TEST_TRYBOTS),
   )
