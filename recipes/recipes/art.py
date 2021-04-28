@@ -616,7 +616,7 @@ def RunSteps(api):
       builder_found = True
       builder_dict = builder_config[buildername]
       # Use the cached builder directory to enable incremental builds.
-      with api.context(cwd=api.path['cache'].join('builder')):
+      with api.context(cwd=api.path['cache'].join('art')):
         _CONFIG_DISPATCH_MAP[builder_type](api, **builder_dict)
       break
 

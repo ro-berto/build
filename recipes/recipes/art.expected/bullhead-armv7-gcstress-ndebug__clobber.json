@@ -8,7 +8,7 @@
       "-b",
       "master-art"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -24,7 +24,7 @@
       "-j16",
       "--no-tags"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -39,7 +39,7 @@
       "-o",
       "-"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -54,23 +54,23 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/out"
+      "[CACHE]/art/out"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "infra_step": true,
     "name": "clobber"
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-build.sh",
+      "[CACHE]/art/art/tools/buildbot-build.sh",
       "-j8",
       "--target"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -79,7 +79,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -91,13 +91,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-cleanup-device.sh"
+      "[CACHE]/art/art/tools/buildbot-cleanup-device.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -107,7 +107,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -119,14 +119,14 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-setup-device.sh",
+      "[CACHE]/art/art/tools/buildbot-setup-device.sh",
       "--verbose"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -136,7 +136,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -148,13 +148,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-sync.sh"
+      "[CACHE]/art/art/tools/buildbot-sync.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -163,7 +163,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -175,14 +175,14 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-gtests.sh",
+      "[CACHE]/art/art/tools/run-gtests.sh",
       "-j0"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -192,7 +192,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -210,11 +210,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -224,7 +224,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -236,13 +236,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -252,7 +252,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -268,11 +268,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -282,7 +282,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -302,11 +302,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -316,7 +316,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -334,11 +334,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -348,7 +348,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -360,13 +360,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -376,7 +376,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -392,11 +392,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -406,7 +406,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -427,11 +427,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -441,7 +441,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -459,11 +459,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -473,7 +473,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -485,13 +485,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -501,7 +501,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -517,11 +517,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -531,7 +531,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -552,11 +552,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -566,7 +566,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -584,11 +584,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -598,7 +598,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -610,13 +610,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -626,7 +626,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -642,11 +642,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -656,7 +656,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -676,11 +676,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -690,7 +690,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -708,11 +708,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -722,7 +722,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -734,13 +734,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -750,7 +750,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -766,11 +766,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -780,7 +780,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -800,11 +800,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -814,7 +814,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -832,11 +832,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -846,7 +846,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -858,13 +858,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -874,7 +874,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -890,11 +890,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -904,7 +904,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -924,11 +924,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -938,7 +938,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -956,11 +956,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -970,7 +970,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -982,13 +982,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -998,7 +998,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1014,11 +1014,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1028,7 +1028,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1048,11 +1048,11 @@
       "--ndebug",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1062,7 +1062,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1080,11 +1080,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1094,7 +1094,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1106,13 +1106,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1122,7 +1122,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1138,11 +1138,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1152,7 +1152,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1164,16 +1164,16 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-libcore-tests.sh",
+      "[CACHE]/art/art/tools/run-libcore-tests.sh",
       "--mode=device",
       "--variant=X32",
       "--gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1183,7 +1183,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1201,11 +1201,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1215,7 +1215,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1227,13 +1227,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1243,7 +1243,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1259,11 +1259,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1273,7 +1273,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1285,17 +1285,17 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-libjdwp-tests.sh",
+      "[CACHE]/art/art/tools/run-libjdwp-tests.sh",
       "--mode=device",
       "--variant=X32",
       "--vm-arg",
       "-Xgc:gcstress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1305,7 +1305,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1323,11 +1323,11 @@
       "-v",
       "threadtime"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1337,7 +1337,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1349,13 +1349,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-symbolize-crashes.sh"
+      "[CACHE]/art/art/tools/buildbot-symbolize-crashes.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1365,7 +1365,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1381,11 +1381,11 @@
       "logcat",
       "-c"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1395,7 +1395,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1407,13 +1407,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-teardown-device.sh"
+      "[CACHE]/art/art/tools/buildbot-teardown-device.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1423,7 +1423,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -1435,13 +1435,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-cleanup-device.sh"
+      "[CACHE]/art/art/tools/buildbot-cleanup-device.sh"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ADB": "[CACHE]/builder/prebuilts/runtime/adb",
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
-      "ANDROID_PRODUCT_OUT": "[CACHE]/builder/out/target/product/arm_krait",
+      "ADB": "[CACHE]/art/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
+      "ANDROID_PRODUCT_OUT": "[CACHE]/art/out/target/product/arm_krait",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_CHROOT": "/data/local/art-test-chroot",
@@ -1451,7 +1451,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/builder/prebuilts/runtime:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:[CACHE]/art/prebuilts/runtime:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",

@@ -8,7 +8,7 @@
       "-b",
       "master-art"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -24,7 +24,7 @@
       "-j16",
       "--no-tags"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -39,7 +39,7 @@
       "-o",
       "-"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -48,13 +48,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/buildbot-build.sh",
+      "[CACHE]/art/art/tools/buildbot-build.sh",
       "-j8",
       "--host"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -62,7 +62,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -78,9 +78,9 @@
       "-j8",
       "test-art-host-gtest64"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -88,7 +88,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -107,9 +107,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -117,7 +117,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -137,9 +137,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -147,7 +147,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -166,9 +166,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -176,7 +176,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -195,9 +195,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -205,7 +205,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -224,9 +224,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -234,7 +234,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -255,9 +255,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -265,7 +265,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -286,9 +286,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -296,7 +296,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -315,9 +315,9 @@
       "--debug",
       "--cdex-fast"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -325,7 +325,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -336,14 +336,14 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-libcore-tests.sh",
+      "[CACHE]/art/art/tools/run-libcore-tests.sh",
       "--mode=host",
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -351,7 +351,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -362,14 +362,14 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-libjdwp-tests.sh",
+      "[CACHE]/art/art/tools/run-libjdwp-tests.sh",
       "--mode=host",
       "--variant=X64",
       "--debug"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -377,7 +377,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -388,15 +388,15 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/art/tools/run-libjdwp-tests.sh",
+      "[CACHE]/art/art/tools/run-libjdwp-tests.sh",
       "--mode=host",
       "--variant=X64",
       "--debug",
       "--no-jit"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -404,7 +404,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
@@ -417,9 +417,9 @@
     "cmd": [
       "./dalvik/dx/tests/run-all-tests"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/art",
     "env": {
-      "ANDROID_BUILD_TOP": "[CACHE]/builder",
+      "ANDROID_BUILD_TOP": "[CACHE]/art",
       "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_KEEP_GOING": "true",
@@ -427,7 +427,7 @@
       "ART_USE_GENERATIONAL_CC": "true",
       "ART_USE_READ_BARRIER": "true",
       "LANG": "en_US.UTF-8",
-      "PATH": "[CACHE]/builder/out/host/linux-x86/bin:[CACHE]/builder/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "PATH": "[CACHE]/art/out/host/linux-x86/bin:[CACHE]/art/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_UNBUNDLED": "true",
