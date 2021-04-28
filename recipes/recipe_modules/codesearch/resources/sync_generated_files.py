@@ -137,11 +137,17 @@ def main():
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
   if opts.dry_run:
-    check_call(['git', 'push', '--dry-run', 'origin',
-                'HEAD:%s' % opts.dest_branch], cwd=opts.dest)
+    check_call([
+        'git', 'push', '-o', 'nokeycheck', '--dry-run', 'origin',
+        'HEAD:%s' % opts.dest_branch
+    ],
+               cwd=opts.dest)
   else:
-    check_call(['git', 'push', 'origin', 'HEAD:%s' % opts.dest_branch],
-                cwd=opts.dest)
+    check_call([
+        'git', 'push', '-o', 'nokeycheck', 'origin',
+        'HEAD:%s' % opts.dest_branch
+    ],
+               cwd=opts.dest)
 
 
 def check_call(cmd, cwd=None):
