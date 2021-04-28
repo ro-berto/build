@@ -360,6 +360,21 @@ SPEC = {
             android_apply_config=['remove_all_system_webviews'],
             simulation_platform='linux',
         ),
+    'android-weblayer-with-aosp-webview-x86-rel':
+        _chromium_android_spec(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='x86_builder',
+            simulation_platform='linux',
+        ),
     'android-weblayer-x86-rel':
         _chromium_android_spec(
             chromium_config='android',
@@ -372,6 +387,23 @@ SPEC = {
                 'TARGET_BITS': 32,
                 'TARGET_PLATFORM': 'android',
             },
+            android_config='x86_builder',
+            simulation_platform='linux',
+        ),
+    'android-weblayer-marshmallow-x86-rel-tests':
+        _chromium_android_spec(
+            chromium_config='android',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            parent_buildername='android-weblayer-with-aosp-webview-x86-rel',
+            execution_mode=builder_spec.TEST,
             android_config='x86_builder',
             simulation_platform='linux',
         ),

@@ -62,21 +62,6 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
-    'android-weblayer-x86-fyi-rel':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
     'android-weblayer-with-aosp-webview-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
@@ -242,6 +227,8 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1172440): Remove tester below and its parent
+    # builder after they begin running in the main waterfall
     'android-weblayer-marshmallow-x86-rel-tests':
         _chromium_android_fyi_spec(
             chromium_config='android',
@@ -255,42 +242,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             parent_buildername='android-weblayer-with-aosp-webview-x86-fyi-rel',
-            execution_mode=builder_spec.TEST,
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    # TODO(crbug.com/1172440): Remove both testers below and their parent
-    # builder after they begin running in the main waterfall
-    'android-weblayer-oreo-x86-rel-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-x86-fyi-rel',
-            execution_mode=builder_spec.TEST,
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-pie-x86-rel-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-x86-fyi-rel',
             execution_mode=builder_spec.TEST,
             android_config='x86_builder',
             simulation_platform='linux',
