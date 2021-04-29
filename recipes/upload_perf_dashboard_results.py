@@ -54,7 +54,7 @@ def _GetDashboardJson(options):
     # These are legacy results.
     dashboard_json = results_dashboard.MakeListOfPoints(
         results,
-        options.perf_id,
+        options.perf_builder_name_alias,
         stripped_test_name,
         options.buildername,
         options.buildnumber, {},
@@ -66,7 +66,7 @@ def _GetDashboardJson(options):
         results,
         revisions,
         stripped_test_name,
-        options.perf_id,
+        options.perf_builder_name_alias,
         options.buildername,
         options.buildnumber, {},
         reference_build,
@@ -105,7 +105,7 @@ def _GetDashboardHistogramData(options):
       options.results_file,
       options.chromium_checkout_dir,
       stripped_test_name,
-      options.perf_id,
+      options.perf_builder_name_alias,
       options.buildername,
       options.buildnumber,
       revisions,
@@ -122,7 +122,7 @@ def _CreateParser():
   parser.add_option('--output-json-file')
   parser.add_option('--got-revision-cp')
   parser.add_option('--build-dir')
-  parser.add_option('--perf-id')
+  parser.add_option('--perf-builder-name-alias')
   parser.add_option('--results-url')
   parser.add_option('--is-luci-builder', action='store_true', default=False)
   parser.add_option('--perf-dashboard-machine-group')
@@ -146,8 +146,8 @@ def main(args):
   # Validate options.
   if extra_args:
     parser.error('Unexpected command line arguments')
-  if not options.perf_id or not options.results_url:
-    parser.error('--perf-id and --results-url are required')
+  if not options.perf_builder_name_alias or not options.results_url:
+    parser.error('--perf-builder-name-alias and --results-url are required')
   if options.oauth_token_file:
     with open(options.oauth_token_file) as f:
       oauth_token = f.readline()
