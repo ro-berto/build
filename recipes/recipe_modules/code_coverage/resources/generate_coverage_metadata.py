@@ -403,6 +403,10 @@ def _show_system_resource_usage(proc):
                    bytes_to_gb(p_disk_io.read_bytes))
   except psutil.Error:  # The process might already have finished.
     pass
+  # TODO(crbug.com/1203700): Remove the except block after psutil is in a newer
+  # version.
+  except ValueError as error:
+    logging.warning('ValueError caught when showing system info: %s', error)
 
 
 def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,

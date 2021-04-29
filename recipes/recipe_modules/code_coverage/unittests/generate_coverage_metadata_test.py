@@ -811,6 +811,18 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertIn('binary1', summaries)
     self.assertEqual(summaries['binary1'], summary_data['data'][0]['totals'])
 
+  @mock.patch('psutil.Process')
+  def test_exception_in_show_system_resource_usage(self, mock_process):
+    psutil_process = mock_process.return_value
+
+    def side_effect_exception():
+      raise ValueError('ValueError in mock')
+
+    psutil_process.num_threads.side_effect = side_effect_exception
+
+    # Expection raised from num_threads() is caught and not further raised.
+    generator._show_system_resource_usage(psutil_process)
+
 
 if __name__ == '__main__':
   unittest.main()
