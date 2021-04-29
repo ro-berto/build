@@ -352,7 +352,7 @@
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "build and upload.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/archive-build/bin/node\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/node-mac-rel-50110-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/archive-build/bin/node\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/node-mac-rel-50110-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

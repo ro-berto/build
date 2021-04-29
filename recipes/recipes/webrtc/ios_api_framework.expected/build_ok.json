@@ -198,7 +198,7 @@
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[CACHE]/builder/src/out_ios_libs\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[CACHE]/builder/src/out_ios_libs\"}"
   },
   {
     "cmd": [
