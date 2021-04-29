@@ -48,7 +48,7 @@ def GenTests(api):
   yield api.test(
       'fuchsia_cipd_archive_arm64',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-arm64-size'),
+          builder_group='chromium.fyi', builder='fuchsia-fyi-arm64-rel'),
       api.properties(
           cipd_archive=True,
           update_properties={},
