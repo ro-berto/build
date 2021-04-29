@@ -8,7 +8,9 @@ from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (common as common_pb2)
 
+from RECIPE_MODULES.build.test_utils import util
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
 
@@ -27,18 +29,20 @@ def RunSteps(api):
   num_failed_suites = api.properties.get('num_failed_suites', 1)
   failed_suites = ['fake_suite' + str(i) for i in range(num_failed_suites)]
 
-  results_by_test_id_by_variant = defaultdict(lambda: defaultdict(list))
+  invocation_dict = {}
   for suite in failed_suites:
-    variant_hash = suite
-    test_id = suite + '_test_case',
-    results_by_test_id_by_variant[variant_hash][test_id].append(
+    var = common_pb2.Variant()
+    var_def = getattr(var, 'def')
+    var_def['test_suite'] = suite
+    invocation_dict[suite + '_inv_id'] = api.resultdb.Invocation(test_results=[
         test_result_pb2.TestResult(
             test_id=suite + '_test_case',
             status=test_result_pb2.FAIL,
-            variant_hash=suite))
-
-  should_abort = api.test_utils._should_abort_tryjob(
-      results_by_test_id_by_variant, failed_suites)
+            expected=False,
+            variant=var)
+    ])
+  rdb_results = util.RDBResults.create(invocation_dict)
+  should_abort = api.test_utils._should_abort_tryjob(rdb_results, failed_suites)
 
   expected_should_abort = api.properties.get('expected_should_abort', False)
   api.assertions.assertEqual(should_abort, expected_should_abort)
@@ -67,8 +71,31 @@ def GenTests(api):
   yield api.test(
       'resultdb-retry-abort',
       api.chromium.try_build(),
-      api.properties(num_failed_suites=10, expected_should_abort=True),
+      api.properties(
+          num_failed_suites=10,
+          expected_should_abort=True,
+          **{
+              '$build/test_utils': {
+                  'min_failed_suites_to_skip_retry': 10,
+              },
+          }),
       api.post_check(post_process.MustRun,
                      'ResultDB abort retry migration.abort retry'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'resultdb-retry-continue',
+      api.chromium.try_build(),
+      api.properties(
+          num_failed_suites=10,
+          expected_should_abort=False,
+          **{
+              '$build/test_utils': {
+                  'min_failed_suites_to_skip_retry': 11,
+              },
+          }),
+      api.post_check(post_process.MustRun,
+                     'ResultDB abort retry migration.proceed with retry'),
       api.post_process(post_process.DropExpectation),
   )

@@ -6,6 +6,11 @@ import collections
 
 from . import canonical
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
+
+from RECIPE_MODULES.build.attr_utils import attrib, attrs
+
 
 def convert_trie_to_flat_paths(trie, prefix, sep):
   # Cloned from webkitpy.layout_tests.layout_package.json_results_generator
@@ -344,3 +349,49 @@ class GTestResults(object):
         total_tests_ran=self.total_tests_ran,
         pass_fail_counts=self.pass_fail_counts,
         findit_notrun=self.findit_notrun)
+
+
+@attrs()
+class RDBResults(object):
+  """Like TestResults above, but used to handle results as returned by RDB.
+
+  But unlike TestResults, this class is not expected to track tests with
+  expected results. eg: If a test's expectations expect it to FAIL, and it
+  FAILs, we do not track that here.
+  """
+
+  unexpected_passing_suites = attrib(set)
+  unexpected_failing_suites = attrib(set)
+
+  @classmethod
+  def create(cls, invocations):
+    """
+    Args:
+      invocations, dict of {invocation_id: api.resultdb.Invocation} as
+          returned by resultdb recipe_module's query().
+    """
+    results_by_test_id_by_suite = collections.defaultdict(lambda: collections.
+                                                          defaultdict(list))
+    for inv in invocations.values():
+      for tr in inv.test_results:
+        variant_def = getattr(tr.variant, 'def')
+        suite_name = variant_def['test_suite']
+        results_by_test_id_by_suite[suite_name][tr.test_id].append(tr)
+
+    unexpected_failing_suites = set()
+    unexpected_passing_suites = set()
+    for suite_name, tests in results_by_test_id_by_suite.items():
+      for test_results in tests.values():
+        # This filters out any tests that were auto-retried within the
+        # invocation and finished with an expected result. eg: a test that's
+        # expected to CRASH and runs with results [FAIL, CRASH]. RDB returns
+        # these results, but we don't consider them interesting for the
+        # purposes of recipe retry/pass/fail decisions.
+        if any(tr.expected for tr in test_results):
+          continue
+        if all(tr.status != test_result_pb2.PASS for tr in test_results):
+          unexpected_failing_suites.add(suite_name)
+        else:
+          unexpected_passing_suites.add(suite_name)
+
+    return cls(unexpected_passing_suites, unexpected_failing_suites)

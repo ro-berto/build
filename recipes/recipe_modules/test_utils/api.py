@@ -11,7 +11,7 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
 from . import canonical
-from .util import GTestResults, TestResults
+from .util import GTestResults, RDBResults, TestResults
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
@@ -264,8 +264,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       sort_by_shard - if True, trigger tests in descending order by number of
         shards required to run the test. Performance optimization.
     Returns:
-      results_by_test_id_by_variant: test results as reported by RDB, in the
-        form of a dict of {variant_hash: {test_id: [results]}}
+      rdb_results: util.RDBResults instance for test results as reported by RDB
       invalid suites, list of test_suites which were malformed or otherwise
           aborted
       failed suites, list of test_suites which failed in any way. Superset of
@@ -327,7 +326,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
          test_suites, suffix)
 
     if not self.m.resultdb.enabled:
-      return {}, bad_results_dict['invalid'], bad_results_dict['failed']
+      return (RDBResults.create({}), bad_results_dict['invalid'],
+              bad_results_dict['failed'])
 
     # Query swarming test results from ResultDB.
     query_step_name = ('query test results (%s)' %
@@ -337,25 +337,21 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step_result.presentation.logs["stdout"] = [
           'No swarming test results to query.'
       ]
-      return {}, bad_results_dict['invalid'], bad_results_dict['failed']
+      return (RDBResults.create({}), bad_results_dict['invalid'],
+              bad_results_dict['failed'])
 
     unexpected_result_invocations = self.m.resultdb.query(
         inv_ids=self.m.resultdb.invocation_ids(invocation_names),
         variants_with_unexpected_results=True,
         step_name=query_step_name,
     )
+    rdb_results = RDBResults.create(unexpected_result_invocations)
 
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
     self._exonerate_unexpected_results(unexpected_result_invocations, suffix)
 
-    # Group the invocations by variant, then by test_id. This makes it easier
-    # to parse it for suite-level results.
-    results_by_test_id_by_variant = self._group_invocations_by_variant(
-        unexpected_result_invocations)
-
-    return (results_by_test_id_by_variant, bad_results_dict['invalid'],
-            bad_results_dict['failed'])
+    return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
   def _exonerate_unexpected_results(self, unexpected_result_invocations,
                                     suffix):
@@ -565,54 +561,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
         set(old_invalid_suites).intersection(retried_invalid_suites))
     return still_invalid_swarming_suites + non_swarming_invalid_suites
 
-  def _group_invocations_by_variant(self, unexpected_result_invocations):
-    """Groups RDB results by variant, then by test id.
-
-    RDB doesn't have the concept of "test suites". Rather, its API returns
-    a flat list of the results for each individual test case. However, these
-    test cases are tagged with a "variant" which describes the platform the
-    test ran on. We can safely treat each unique variant as a different
-    test suite ran during the build. So group each test result by the hash
-    of their variant. This makes it easier to make decisions based on what
-    suites passed/failed.
-    For the list of attibutes that we put in a variant, see the link below.
-    https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_swarming/api.py;drc=9e2cb954;l=871
-
-    Example of the returned dict:
-    {
-      'variant_hash_for_suite1': {
-        'flaky_failing_test': [
-          test_result_pb2.TestResult(status=FAIL),
-          test_result_pb2.TestResult(status=PASS),
-        ],
-      },
-      'variant_hash_for_suite2': {
-        'always_failing_test': [
-          test_result_pb2.TestResult(status=FAIL),
-          test_result_pb2.TestResult(status=FAIL),
-          test_result_pb2.TestResult(status=FAIL),
-        ]
-      },
-    }
-    Args:
-      unexpected_result_invocations: dict of
-        {invocation_id: api.resultdb.Invocation} containing results of any
-        test we ran that had unexpected results.
-    Returns:
-      results_by_test_id_by_variant: dict {variant_hash: {test_id: [results]}}
-    """
-    results_by_test_id_by_variant = defaultdict(lambda: defaultdict(list))
-    for inv in unexpected_result_invocations.values():
-      for tr in inv.test_results:
-        results_by_test_id_by_variant[tr.variant_hash][tr.test_id].append(tr)
-    return results_by_test_id_by_variant
-
-  def _should_abort_tryjob(self, results_by_test_id_by_variant, failed_suites):
+  def _should_abort_tryjob(self, rdb_results, failed_suites):
     """Determines if the current recipe should skip its next retry phases.
 
     Args:
-      results_by_test_id_by_variant: test results as reported by RDB, in the
-        form of a dict of {variant_hash: {test_id: [results]}}
+      rdb_results: util.RDBResults instance for test results as reported by RDB
       failed_suites: list of test_suites which failed in any way.
     Return:
       True if we shold skip retries; False otherwise.
@@ -651,17 +604,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           '\nfewer than {} failures, continue with retries'.format(
               self._min_failed_suites_to_skip_retry))
 
-    unexpected_count_new = 0
-    for results_by_test_id in results_by_test_id_by_variant.values():
-      for results in results_by_test_id.values():
-        # If there are no PASS results for the test, then it wasn't an
-        # unexpected pass.
-        if all(r.status != test_result_pb2.PASS for r in results):
-          unexpected_count_new += 1
-          # Continue to the next test suite since we don't want to double
-          # count the same suite if it has more than one test case with
-          # failures.
-          break
+    unexpected_count_new = len(rdb_results.unexpected_failing_suites)
     new_should_abort = (
         unexpected_count_new >= self._min_failed_suites_to_skip_retry)
 
@@ -699,8 +642,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return old_should_abort
 
-  def _extract_retriable_suites_from_invocations(self,
-                                                 results_by_test_id_by_variant,
+  def _extract_retriable_suites_from_invocations(self, rdb_results,
                                                  retry_failed_shards):
     """Examines tests results as reported by RDB for suites we want to retry.
 
@@ -708,30 +650,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     non-PASSing results.
 
     Args:
-      results_by_test_id_by_variant: test results as reported by RDB, in the
-        form of a dict of {variant_hash: {test_id: [results]}}
+      rdb_results: util.RDBResults instance for test results as reported by RDB
       retry_failed_shards: If True, retry suites that contain non-PASSing
         results.
     Return:
       Set of suite names containing tests we want to retry.
     """
-    failed_suites = set()
     if not retry_failed_shards:
-      return failed_suites
+      return set()
 
-    for variant in results_by_test_id_by_variant:
-      for test_results in results_by_test_id_by_variant[variant].values():
-        if all(tr.status != test_result_pb2.PASS for tr in test_results):
-          # All results in test_results are guaranteed to have identical
-          # variants since the dict is keyed based off of variant hash, so just
-          # pick the first result.
-          tr = test_results[0]
-          # We have to call getattr here since accessing 'def' directly
-          # confuses the python interpreter.
-          # TODO(crbug.com/1202283): Remove the getattr and access directly.
-          variant_def = getattr(tr.variant, 'def')
-          failed_suites.add(variant_def['test_suite'])
-    return failed_suites
+    return rdb_results.unexpected_failing_suites
 
   def _extract_retriable_suites_legacy(self, failed_suites, invalid_suites,
                                        retry_failed_shards,
@@ -818,12 +746,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.failing_step(
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
-    results_by_test_id_by_variant, invalid_test_suites, failed_test_suites = (
+    rdb_results, invalid_test_suites, failed_test_suites = (
         self._run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
 
     if self.m.tryserver.is_tryserver and self._should_abort_tryjob(
-        results_by_test_id_by_variant, failed_test_suites):
+        rdb_results, failed_test_suites):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
     if suffix == 'with patch':
@@ -840,7 +768,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         retry_invalid_shards)
     try:
       retry_list_new = self._extract_retriable_suites_from_invocations(
-          results_by_test_id_by_variant, retry_failed_shards)
+          rdb_results, retry_failed_shards)
       # RDB is unaware of suites with invalid results (eg: shards that never
       # ran). So we need to keep a channel open to swarming to record shards
       # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
