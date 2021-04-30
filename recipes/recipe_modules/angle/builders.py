@@ -73,11 +73,11 @@ _SPEC = {
         _create_builder_config('win', 64, internal=True),
     'win-x86-builder':
         _create_builder_config('win', 32, internal=True),
-    'win7-amd':
+    'win7-x86-amd':
         _create_tester_config('win', 32, 'win-x86-builder', internal=True),
-    'win10-intel':
+    'win10-x64-intel':
         _create_tester_config('win', 64, 'win-x64-builder', internal=True),
-    'win10-nvidia':
+    'win10-x64-nvidia':
         _create_tester_config('win', 64, 'win-x64-builder', internal=True),
 }
 

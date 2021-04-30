@@ -50,17 +50,12 @@ _SPEC = {
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='win-x64-builder',
-                    tester='win7-amd',
+                    tester='win10-x64-intel',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='win-x64-builder',
-                    tester='win10-intel',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='win-x64-builder',
-                    tester='win10-nvidia',
+                    tester='win10-x64-nvidia',
                 ),
             ],
             retry_failed_shards=False,
@@ -71,17 +66,7 @@ _SPEC = {
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='win-x86-builder',
-                    tester='win7-amd',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='win-x86-builder',
-                    tester='win10-intel',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='win-x86-builder',
-                    tester='win10-nvidia',
+                    tester='win7-x86-amd',
                 ),
             ],
             retry_failed_shards=False,
