@@ -150,6 +150,12 @@ SPEC = {
         _WIN_CONFIG,
     'Chromium Win Goma RBE Staging (clobber)':
         _WIN_CLOBBER_CONFIG,
+    'Chromium Win Goma RBE ATS ToT':
+        CreateStandardConfig('win', ['goma_client_candidate']),
+    'Chromium Win Goma RBE ATS Staging':
+        _WIN_CONFIG,
+    'Chromium Win Goma RBE ATS Staging (clobber)':
+        _WIN_CLOBBER_CONFIG,
 
     # iOS RBE
     'Chromium iOS Goma RBE ToT':
