@@ -69,6 +69,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/win_x64_clang_dbg/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },

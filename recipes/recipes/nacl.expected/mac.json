@@ -20,6 +20,7 @@
       "refs/heads/master"
     ],
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/mac-newlib-dbg-asan/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"

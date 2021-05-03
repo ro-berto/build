@@ -18,6 +18,7 @@
       "src@HEAD"
     ],
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/codesearch-gen-chromium-win/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
