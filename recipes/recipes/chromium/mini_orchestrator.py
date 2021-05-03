@@ -35,7 +35,7 @@ def RunSteps(api):
     affected_files = api.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
 
-    _, compile_targets = api.chromium_tests._determine_compilation_targets(
+    _, compile_targets = api.chromium_tests.determine_compilation_targets(
         builder_id, builder_config, affected_files, build_config)
 
     if compile_targets:

@@ -22,9 +22,9 @@ def RunSteps(api):
   api.chromium_tests.configure_build(builder_config)
   _, targets_config = api.chromium_tests.prepare_checkout(builder_config)
   affected_files = api.properties['affected_files']
-  api.chromium_tests._determine_compilation_targets(builder_id, builder_config,
-                                                    affected_files,
-                                                    targets_config)
+  api.chromium_tests.determine_compilation_targets(builder_id, builder_config,
+                                                   affected_files,
+                                                   targets_config)
 
 
 def GenTests(api):

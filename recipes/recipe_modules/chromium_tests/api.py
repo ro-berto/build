@@ -1746,8 +1746,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             mirrors.add(try_builder_id)
     return sorted(['%s:%s' % (b.group, b.builder) for b in mirrors])
 
-  def _determine_compilation_targets(self, builder_id, builder_config,
-                                     affected_files, targets_config):
+  def determine_compilation_targets(self, builder_id, builder_config,
+                                    affected_files, targets_config):
     compile_targets = (
         targets_config.get_compile_targets(targets_config.all_tests()))
     test_targets = sorted(
@@ -1920,7 +1920,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     tests, tests_including_triggered = self._gather_tests_to_run(
         builder_config, targets_config)
 
-    test_targets, compile_targets = self._determine_compilation_targets(
+    test_targets, compile_targets = self.determine_compilation_targets(
         builder_id, builder_config, affected_files, targets_config)
 
     if tests_to_run:
@@ -1943,8 +1943,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if compile_targets:
-      tests = self._tests_in_compile_targets(test_targets, tests)
-      tests_including_triggered = self._tests_in_compile_targets(
+      tests = self.tests_in_compile_targets(test_targets, tests)
+      tests_including_triggered = self.tests_in_compile_targets(
           test_targets, tests_including_triggered)
 
       compile_targets = sorted(set(compile_targets))
@@ -2064,7 +2064,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     _, ext = self.m.path.splitext(filepath)
     return ext in ['.c', '.cc', '.cpp', '.h', '.java', '.mm']
 
-  def _tests_in_compile_targets(self, compile_targets, tests):
+  def tests_in_compile_targets(self, compile_targets, tests):
     """Returns the tests in |tests| that have at least one of their compile
     targets in |compile_targets|."""
     result = []
