@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 DEPS = [
     'adb',
     'build',
@@ -72,4 +74,73 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  return []
+  yield api.test(
+      'linux-angle-chromium-intel',
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.angle',
+          builder='linux-angle-chromium-intel',
+          parent_buildername='linux-angle-chromium-builder',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.angle': {
+                  'linux-angle-chromium-intel':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'angle_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.angle',
+          {
+              'linux-angle-chromium-intel': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_gpu_integration_test',
+                      'name': 'webgl_conformance_gl_tests',
+                  }],
+              },
+          },
+      ),
+      api.step_data(
+          'fetch ANGLE DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+  )
+
+  yield api.test(
+      'linux-swangle-tot-swiftshader-x64',
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.swangle',
+          builder='linux-swangle-tot-swiftshader-x64',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.swangle': {
+                  'linux-swangle-tot-swiftshader-x64':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swangle',
+          {
+              'linux-swangle-tot-swiftshader-x64': {
+                  'gtest_tests': [{
+                      'test': 'angle_end2end_tests',
+                  }],
+              },
+          },
+      ),
+      api.step_data(
+          'fetch Chromium DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+      api.step_data(
+          'fetch ANGLE DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+  )

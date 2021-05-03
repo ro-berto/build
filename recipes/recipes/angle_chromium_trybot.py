@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 DEPS = [
     'build',
     'chromium',
@@ -106,4 +108,149 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  return []
+  yield api.test(
+      'linux-angle-chromium-try',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.angle',
+          builder='linux-angle-chromium-try',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.angle': {
+                  'linux-angle-chromium-builder':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'angle_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+                  'linux-angle-chromium-intel':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'angle_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'tryserver.chromium.angle': {
+                  'linux-angle-chromium-try':
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
+                              builder_group='chromium.angle',
+                              buildername='linux-angle-chromium-builder',
+                              tester='linux-angle-chromium-intel',
+                          ),
+                      ]),
+              },
+          }),
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.angle',
+          {
+              'linux-angle-chromium-intel': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_gpu_integration_test',
+                      'name': 'webgl_conformance_gl_tests',
+                  }],
+              },
+          },
+      ),
+      api.step_data(
+          'fetch ANGLE DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+  )
+
+  yield api.test(
+      'linux-swangle-try-tot-angle-x64',
+      api.chromium_tests_builder_config.try_build(
+          git_repo='https://chromium.googlesource.com/angle/angle/',
+          builder_group='tryserver.chromium.swangle',
+          builder='linux-swangle-try-tot-angle-x64',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.swangle': {
+                  'linux-swangle-tot-angle-x64':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'angle_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'tryserver.chromium.swangle': {
+                  'linux-swangle-try-tot-angle-x64':
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
+                              builder_group='chromium.swangle',
+                              buildername='linux-swangle-tot-angle-x64',
+                          ),
+                      ]),
+              },
+          }),
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swangle',
+          {
+              'linux-swangle-try-tot-angle-x64': {
+                  'gtest_tests': [{
+                      'test': 'angle_end2end_tests',
+                  }],
+              },
+          },
+      ),
+  )
+
+  yield api.test(
+      'linux-swangle-try-tot-swiftshader-x64',
+      api.chromium_tests_builder_config.try_build(
+          git_repo='https://swiftshader.googlesource.com/SwiftShader/',
+          builder_group='tryserver.chromium.swangle',
+          builder='linux-swangle-try-tot-swiftshader-x64',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.swangle': {
+                  'linux-swangle-tot-swiftshader-x64':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'swiftshader_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'tryserver.chromium.swangle': {
+                  'linux-swangle-try-tot-swiftshader-x64':
+                      ctbc.TrySpec.create(mirrors=[
+                          ctbc.TryMirror.create(
+                              builder_group='chromium.swangle',
+                              buildername='linux-swangle-tot-swiftshader-x64',
+                          ),
+                      ]),
+              },
+          }),
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swangle',
+          {
+              'linux-swangle-tot-swiftshader-x64': {
+                  'gtest_tests': [{
+                      'test': 'angle_end2end_tests',
+                  }],
+              },
+          },
+      ),
+      api.step_data(
+          'fetch Chromium DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+      api.step_data(
+          'fetch ANGLE DEPS',
+          api.gitiles.make_encoded_file('DEPS'),
+      ),
+  )
