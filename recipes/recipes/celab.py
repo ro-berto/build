@@ -176,7 +176,7 @@ def _BuildCelabFromSource(api, checkout):
   # Install Go & Protoc
   packages_root = api.path['start_dir'].join('packages')
   ensure_file = api.cipd.EnsureFile()
-  ensure_file.add_package('infra/3pp/tools/go/${platform}', 'version:1.15.10')
+  ensure_file.add_package('infra/3pp/tools/go/${platform}', 'version:2@1.16.3')
   ensure_file.add_package('infra/tools/protoc/${platform}',
                           'protobuf_version:v3.6.1')
   ensure_file.add_package('infra/third_party/cacert', 'date:2017-01-18')
