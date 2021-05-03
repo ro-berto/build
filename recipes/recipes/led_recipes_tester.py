@@ -132,8 +132,10 @@ FILES_TO_ALWAYS_IGNORE = (
     FilesToIgnore(
         patterns=[r'(.+/)*[A-Z_]*OWNERS'],
         step_name='ignoring OWNERS files',
-        step_text=('The following affected files are OWNERS files that are'
-                   ' repository metadata, not part of the recipes:'),
+        step_text=(
+            'The following affected files are being ignored because they are'
+            ' OWNERS files, which contain repository metadata and are not part'
+            ' of the recipes:'),
     ),
 )
 
@@ -306,8 +308,9 @@ def _ignore_affected_files(api, repo_path, affected_files, files_to_ignore):
     if files:
       step_result = api.step(i.step_name, [])
       message = ['\n' + i.step_text]
-      message.extend(sorted(files))
-      step_result.presentation.step_text = '\n  '.join(message)
+      message.extend('*   {}'.format(f.replace('*', r'\*').replace('_', r'\_'))
+                     for f in sorted(files))
+      step_result.presentation.step_text = '\n'.join(message)
 
   return new_affected_files
 
@@ -688,11 +691,15 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
+          builder_config_path('builders/__init__.py'),
           builder_config_path('builders/chromium.py'),
           builder_config_path('trybots.py')),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring per-builder config'),
+      api.post_check(post_process.StepTextContains,
+                     'ignoring per-builder config', [r'\_\_init\_\_.py']),
       api.post_check(affected_recipes_input_files_does_not_contain,
+                     builder_config_path('builders/__init__.py'),
                      builder_config_path('builders/chromium.py'),
                      builder_config_path('trybots.py')),
       api.post_process(post_process.DropExpectation),
