@@ -26,21 +26,6 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
-    # TODO(crbug.com/1200574): Remove this builder after experimentation.
-    'Linux ASan LSan (bionic)':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            # This doesn't affect the build, but ensures that trybots get
-            # the right runtime flags.
-            chromium_apply_config=['lsan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            simulation_platform='linux',
-        ),
     'Linux ASan LSan Builder':
         _chromium_memory_spec(
             chromium_config='chromium_asan',
