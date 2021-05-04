@@ -1,6 +1,26 @@
 [
   {
     "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running builder 'linux-builder' on group 'angle'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@linux-builder@https://ci.chromium.org/p/angle/builders/ci/linux-builder@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -20,7 +40,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'angle_root': 'angle', 'checkout_angle_internal': True}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'angle_root': 'angle', 'checkout_angle_internal': True}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"angle\"}",
       "--git-cache-dir",
@@ -36,7 +56,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/android-builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -106,6 +126,31 @@
       ]
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/angle/infra/specs/angle.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "read test spec (angle.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/angle/infra/specs/angle.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"linux-builder\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"basic_isolate\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"basic_isolate_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -223,7 +268,7 @@
       "-m",
       "angle",
       "-b",
-      "android-builder",
+      "linux-builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -249,7 +294,7 @@
       "-m",
       "angle",
       "-b",
-      "android-builder",
+      "linux-builder",
       "--config-file",
       "[CACHE]/builder/angle/infra/specs/angle_mb_config.pyl",
       "--goma-dir",
@@ -258,6 +303,8 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/angle/infra/specs/gn_isolate_map.pyl",
+      "--swarming-targets-file",
+      "basic_isolate\n",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/angle",
@@ -268,7 +315,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@basic_isolate@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -329,7 +378,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_builder"
+      "[CACHE]/goma/data/linux_builder"
     ],
     "cwd": "[CACHE]/builder/angle",
     "env": {
@@ -353,7 +402,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -570,10 +619,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"android-builder\", \"project\": \"angle\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux-builder\", \"project\": \"angle\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android-builder",
+      "linux-builder",
       "--buildbot-mastername",
       "angle",
       "--buildbot-slavename",
@@ -634,6 +683,88 @@
     "name": "remove compile guard"
   },
   {
+    "cmd": [
+      "[CACHE]/builder/angle/tools/luci-go/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[CACHE]/builder/angle/out/Release/basic_isolate.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"basic_isolate\": \"[dummy hash for basic_isolate]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"basic_isolate\": \"[dummy hash for basic_isolate]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/angle/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "[CACHE]/builder/angle/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "[dummy hash for basic_isolate]",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "--",
+      "--isolated-script-test-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "basic_isolate_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] query test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "1 Test Suite(s) failed.\n\n**basic_isolate_tests** failed."
+    },
     "name": "$result"
   }
 ]

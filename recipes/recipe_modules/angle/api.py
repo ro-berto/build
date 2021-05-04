@@ -4,6 +4,7 @@
 
 from recipe_engine import recipe_api
 
+from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import builders as builders_module
@@ -54,8 +55,8 @@ class ANGLEApi(recipe_api.RecipeApi):
     self.m.file.ensure_directory('init cache if not exists', solution_path)
     with self.m.context(cwd=solution_path):
       update_step = self.m.bot_update.ensure_checkout()
-      self.m.chromium.runhooks()
-      return update_step
+    self.m.chromium.runhooks()
+    return update_step
 
   def _compile(self, toolchain, isolated_targets):
     raw_result = self.m.chromium_tests.run_mb_and_compile(
@@ -105,15 +106,55 @@ class ANGLEApi(recipe_api.RecipeApi):
         return raw_result
     else:
       assert (test_mode == 'compile_and_test')
-      build_config = self.m.chromium_tests.create_targets_config(
+      script_dir = self.m.path.join(self.m.path['checkout'], 'testing',
+                                    'merge_scripts')
+      self.m.chromium_swarming.configure_swarming(
+          'angle',
+          self.m.tryserver.is_tryserver,
+          path_to_merge_scripts=script_dir)
+      targets_config = self.m.chromium_tests.create_targets_config(
           self._builder_config, update_step)
-      isolated_targets = [
-          t.isolate_target for t in build_config.all_tests() if t.uses_isolate
-      ]
-      isolated_targets = sorted(list(set(isolated_targets)))
-      compile_step = self._compile(toolchain, isolated_targets)
+
+      if self.m.tryserver.is_tryserver:
+        affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+            relative_to='angle/',
+            cwd=self.m.path['checkout'],
+            report_via_property=True)
+        test_targets, compile_targets = (
+            self.m.chromium_tests.determine_compilation_targets(
+                self._builder_id, self._builder_config, affected_files,
+                targets_config))
+
+        compile_targets = sorted(list(set(test_targets)))
+        tests = self.m.chromium_tests.tests_in_compile_targets(
+            compile_targets, targets_config.tests_in_scope())
+      else:
+        tests = targets_config.all_tests()
+        test_targets = [t.isolate_target for t in tests if t.uses_isolate]
+        compile_targets = sorted(list(set(test_targets)))
+
+      compile_step = self._compile(toolchain, compile_targets)
       if compile_step.status != common_pb.SUCCESS:
         return compile_step
+
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir, targets=isolated_targets, verbose=True)
-      # TODO(jmadill): Trigger swarming tests. http://anglebug.com/5114
+          self.m.chromium.output_dir, targets=compile_targets, verbose=True)
+      self.m.chromium_tests.set_test_command_lines(tests, "")
+      invalid_test_suites, failing_test_suites = (
+          self.m.test_utils.run_tests(self.m, tests, ""))
+
+      self.m.chromium_swarming.report_stats()
+
+      if invalid_test_suites:
+        return result_pb2.RawResult(
+            summary_markdown=self.m.chromium_tests
+            ._format_unrecoverable_failures(invalid_test_suites, ''),
+            status=common_pb.FAILURE)
+
+      if failing_test_suites:
+        return result_pb2.RawResult(
+            summary_markdown=self.m.chromium_tests
+            ._format_unrecoverable_failures(failing_test_suites, ''),
+            status=common_pb.FAILURE)
+
+      # TODO(jmadill): Summary text for failures. http://anglebug.com/5114

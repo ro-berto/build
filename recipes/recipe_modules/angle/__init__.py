@@ -16,10 +16,12 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
+    'depot_tools/tryserver',
     'gn',
     'goma',
     'isolate',
     'recipe_engine/buildbucket',
+    'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -30,6 +32,8 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'recipe_engine/time',
+    'test_results',
+    'test_utils',
 ]
 
 PROPERTIES = properties.InputProperties

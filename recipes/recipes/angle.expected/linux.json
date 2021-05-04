@@ -115,7 +115,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "clang=1"
@@ -668,6 +668,34 @@
     ],
     "infra_step": true,
     "name": "remove compile guard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/angle/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] query test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
   },
   {
     "name": "$result"
