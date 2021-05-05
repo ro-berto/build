@@ -101,6 +101,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -126,7 +127,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/angle",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",

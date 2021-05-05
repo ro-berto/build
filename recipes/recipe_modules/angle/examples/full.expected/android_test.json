@@ -95,7 +95,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/angle",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "clang=1"

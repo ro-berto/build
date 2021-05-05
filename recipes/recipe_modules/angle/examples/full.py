@@ -12,15 +12,12 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
 DEPS = [
     'angle',
     'chromium',
-    'chromium_swarming',
     'chromium_tests',
     'recipe_engine/buildbucket',
-    'recipe_engine/json',
     'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/path',
-    'test_utils',
 ]
 
 
@@ -124,42 +121,3 @@ def GenTests(api):
   yield api.test(
       'win_trace_test', api.platform('win', 64),
       ci_build(builder='win-builder', platform='win', test_mode='trace_tests'))
-  yield api.test(
-      'invalid_json_test',
-      ci_build('linux-builder'),
-      api.chromium_tests.read_source_side_spec(
-          'angle', {
-              'linux-builder': {
-                  'isolated_scripts': [{
-                      'isolate_name': 'basic_isolate',
-                      'name': 'basic_isolate_tests',
-                  },],
-              },
-          }),
-      api.override_step_data(
-          'basic_isolate_tests',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({'version': 2}))),
-  )
-  yield api.test(
-      'failed_json_test',
-      ci_build('linux-builder'),
-      api.chromium_tests.read_source_side_spec(
-          'angle', {
-              'linux-builder': {
-                  'isolated_scripts': [{
-                      'isolate_name': 'basic_isolate',
-                      'name': 'basic_isolate_tests',
-                  },],
-              },
-          }),
-      api.override_step_data(
-          'basic_isolate_tests',
-          api.test_utils.canned_isolated_script_output(
-              passing=False,
-              is_win=False,
-              swarming=False,
-              isolated_script_passing=False,
-              use_json_test_format=True),
-          retcode=0),
-  )

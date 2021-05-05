@@ -21,7 +21,6 @@ _SPEC = {
                     tester='linux-nvidia',
                 ),
             ],
-            analyze_names=['angle'],
             retry_failed_shards=False,
         ),
     'mac-rel':
@@ -43,7 +42,6 @@ _SPEC = {
                     tester='mac-nvidia',
                 ),
             ],
-            analyze_names=['angle'],
             retry_failed_shards=False,
         ),
     'win-clang-x64-rel':
@@ -71,7 +69,6 @@ _SPEC = {
                     tester='win7-x86-amd',
                 ),
             ],
-            analyze_names=['angle'],
             retry_failed_shards=False,
         ),
 }
