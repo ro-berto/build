@@ -1240,21 +1240,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ResultDB abort retry migration",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>This is an informational step for infra maintainers@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "ResultDB abort retry migration.proceed with retry",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>fewer than 5 unexpected results, continue with retries@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",

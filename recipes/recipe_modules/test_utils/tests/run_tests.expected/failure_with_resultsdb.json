@@ -630,9 +630,33 @@
     "infra_step": true,
     "name": "query test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_failed_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"invid\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invid\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_failed_results\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests_failed_results\"}}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Migration mismatch (informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy decision for retries had length 1<br/>New decision for retries had length 1@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Migration mismatch (retriable suites, informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy retries calculation contained extra elements set([u'base_unittests_failed_results'])<br/>New retries calculation contained extra elements set([u'base_unittests'])@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

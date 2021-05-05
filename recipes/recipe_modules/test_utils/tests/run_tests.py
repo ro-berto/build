@@ -13,6 +13,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'skylab',
@@ -355,26 +356,32 @@ def GenTests(api):
       api.override_step_data(
           'query test results',
           stdout=api.json.invalid(
-              api.resultdb.serialize({
-                  "invid":
-                      api.resultdb.Invocation(
-                          proto=rdb_invocation.Invocation(
-                              state=rdb_invocation.Invocation.FINALIZED,
-                              name='base_unittests_failed_results'),
-                          test_results=(rdb_test_result.TestResult(
-                              test_id='base_unittests_failed_results',
-                              variant=rdb_common.Variant(
-                                  **{
-                                      'def': {
-                                          'test_suite':
-                                              'base_unittests_failed_results'
-                                      }
-                                  }),
-                              expected=False,
-                              status=rdb_test_result.FAIL),),
-                      )
-              })),
-      ),
+              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_process(post_process.MustRun, 'test3'),
       api.post_process(post_process.StatusFailure),
+  )
+
+  yield api.test(
+      'abort_retry_too_many_failures',
+      api.chromium.try_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests': '[dummy hash for base_unittests]',
+              'base_unittests_2': '[dummy hash for base_unittests_2]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+          **{
+              '$build/test_utils': {
+                  'min_failed_suites_to_skip_retry': 1,
+              },
+          }),
+      api.override_step_data(
+          'query test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+      api.post_check(post_process.MustRun, 'abort retry'),
+      api.post_process(post_process.DropExpectation),
   )

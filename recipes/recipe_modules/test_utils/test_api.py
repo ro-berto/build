@@ -6,6 +6,12 @@ import json
 
 from recipe_engine import recipe_test_api
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
+                                                       rdb_invocation)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       rdb_test_result)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
+
 from .api import TestUtilsApi
 from .util import GTestResults, TestResults
 
@@ -475,3 +481,39 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     retcode = 1 if failed_test_names else 0
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))
+
+  def rdb_results(self, failing_suites=None):
+    """Returns a JSON blob used to override data for 'query test results'.
+
+    Args:
+      failing_suites: List of names of the failing suites to create results
+          for. Each suite will have a single test with a rdb_test_result.FAIL
+          result.
+    """
+
+    def _generate_invocation(suite, is_failure=False):
+      status = rdb_test_result.FAIL if is_failure else rdb_test_result.PASS
+      test_result = rdb_test_result.TestResult(
+          test_id=suite + '_test_case1',
+          variant=rdb_common.Variant(**{
+              'def': {
+                  'test_suite': suite,
+              },
+          }),
+          expected=not is_failure,
+          status=status)
+      return self.m.resultdb.Invocation(
+          proto=rdb_invocation.Invocation(
+              state=rdb_invocation.Invocation.FINALIZED,
+              name=suite + '_results'),
+          test_results=[test_result])
+
+    failing_suites = failing_suites or []
+    invocations = []
+    for suite in failing_suites:
+      invocations.append(_generate_invocation(suite, is_failure=True))
+
+    invocations_by_inv_id = {}
+    for i, inv in enumerate(invocations):
+      invocations_by_inv_id['inv%d' % i] = inv
+    return self.m.resultdb.serialize(invocations_by_inv_id)

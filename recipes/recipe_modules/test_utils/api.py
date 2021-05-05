@@ -586,61 +586,24 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 self.m.tryserver.constants.SKIP_RETRY_FOOTER))
         return True
 
-    # Continue to use the list of failed suites as the source of truth for the
-    # decision of whether to retry
-    old_should_abort = (
-        len(failed_suites) >= self._min_failed_suites_to_skip_retry)
-
-    if old_should_abort:
+    unexpected_count = len(rdb_results.unexpected_failing_suites)
+    should_abort = unexpected_count >= self._min_failed_suites_to_skip_retry
+    if should_abort:
       result = self.m.step('abort retry', [])
       result.presentation.status = self.m.step.FAILURE
       result.presentation.step_text = (
           '\nskip retrying because there are >= {} test suites with test '
-          'failures and it most likely indicates a problem with the CL'.format(
-              self._min_failed_suites_to_skip_retry))
+          'failures and it most likely indicates a problem with the CL. These '
+          'suites being:\n{}'.format(
+              self._min_failed_suites_to_skip_retry,
+              '\n'.join(rdb_results.unexpected_failing_suites)))
     else:
       result = self.m.step('proceed with retry', [])
       result.presentation.step_text = (
           '\nfewer than {} failures, continue with retries'.format(
               self._min_failed_suites_to_skip_retry))
 
-    unexpected_count_new = len(rdb_results.unexpected_failing_suites)
-    new_should_abort = (
-        unexpected_count_new >= self._min_failed_suites_to_skip_retry)
-
-    # Report on migrating to using ResultDB for making the decision of whether
-    # to abort. For now, we simply report if we would have aborted using
-    # ResultDB and report if the decisions using the test suite results or
-    # ResultDB would differ.
-    with self.m.step.nest('ResultDB abort retry migration') as presentation:
-      presentation.step_text = (
-          '\nThis is an informational step for infra maintainers')
-
-      if new_should_abort:
-        result = self.m.step('abort retry', [])
-        result.presentation.status = self.m.step.WARNING
-        result.presentation.step_text = (
-            '\nskip retrying because there are >= {} test suites with '
-            'unexpected results and it most likely indicates a problem '
-            'with the CL'.format(self._min_failed_suites_to_skip_retry))
-      else:
-        result = self.m.step('proceed with retry', [])
-        result.presentation.step_text = (
-            '\nfewer than {} unexpected results, continue with retries'.format(
-                self._min_failed_suites_to_skip_retry))
-
-      if old_should_abort != new_should_abort:
-        result = self.m.step('mismatch', [])
-        result.presentation.status = self.m.step.WARNING
-        result.presentation.step_text = '\n'.join([
-            '',
-            'Legacy decision for trybot abort was {} based on {} failures',
-            ('New decision for trybot abort was {} based on {} '
-             'unexpected results'),
-        ]).format(old_should_abort, len(failed_suites), new_should_abort,
-                  unexpected_count_new)
-
-    return old_should_abort
+    return should_abort
 
   def _extract_retriable_suites_from_invocations(self, rdb_results,
                                                  retry_failed_shards):

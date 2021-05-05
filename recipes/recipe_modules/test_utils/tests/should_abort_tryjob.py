@@ -79,8 +79,7 @@ def GenTests(api):
                   'min_failed_suites_to_skip_retry': 10,
               },
           }),
-      api.post_check(post_process.MustRun,
-                     'ResultDB abort retry migration.abort retry'),
+      api.post_check(post_process.MustRun, 'abort retry'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -95,7 +94,6 @@ def GenTests(api):
                   'min_failed_suites_to_skip_retry': 11,
               },
           }),
-      api.post_check(post_process.MustRun,
-                     'ResultDB abort retry migration.proceed with retry'),
+      api.post_check(post_process.MustRun, 'proceed with retry'),
       api.post_process(post_process.DropExpectation),
   )
