@@ -341,7 +341,12 @@ def _get_led_builders(api, builders):
       # 'led get-builder (3)', etc.
       with api.step.nest('get ' + builder.name):
         try:
-          led_builders[builder.name] = api.led('get-builder', builder.name)
+          # By default, the priority of the tasks will be increased by 10, but
+          # since this builder runs as part of CQ for the recipe repos, we want
+          # the builds to run at regular priority
+          led_builders[builder.name] = api.led('get-builder',
+                                               '-adjust-priority', '0',
+                                               builder.name)
         except api.step.StepFailure as e:
           if not builder.provisional_warning:
             raise
@@ -489,14 +494,6 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       presentation.links.update(step_result.presentation.links)
 
       ir = bundle.apply(ir)
-      # TODO(https://crbug.com/1138533): If a flag is added to prevent the
-      # priority modification, start using it and remove this code
-      # led get-builder automatically adds 10 to the priority, restore it to its
-      # previous value since this recipe blocks the build.git CQ
-      priority = (
-          ir.result.buildbucket.bbagent_args.build.infra.swarming.priority)
-      priority -= 10
-      ir = ir.then('edit-system', '-p', priority)
       # We used to set `is_experimental` to true, but the chromium recipe
       # currently uses that to deprioritize swarming tasks, which results in
       # very slow runtimes for the led task. Because this recipe blocks the
