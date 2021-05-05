@@ -815,7 +815,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'skip processing when more than one test type in per-cl coverage',
+      'process dual test types in per-cl coverage',
       api.chromium.try_build(
           builder_group='tryserver.chromium.mac', builder='ios-simulator'),
       api.code_coverage(
@@ -826,9 +826,28 @@ def GenTests(api):
       ]),
       api.post_process(
           post_process.MustRun,
+          'process clang code coverage data for unit test coverage'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'skip processing when wrong test type',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
+      api.code_coverage(
+          use_clang_coverage=True, coverage_test_types=['instrument']),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.post_process(
+          post_process.MustRun,
           'skip processing because of an exception when validating test types '
-          'to process: Only one test type is supported for per-cl coverage but '
-          '2 found in builder properties.'),
+          'to process: Unsupported test type instrument.'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

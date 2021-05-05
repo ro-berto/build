@@ -250,10 +250,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       if test_type not in constants.SUPPORTED_TEST_TYPES:
         raise Exception('Unsupported test type %s.' % test_type)
 
-    if self._is_per_cl_coverage and len(self._test_types) > 1:
-      raise Exception('Only one test type is supported for per-cl coverage '
-          'but %d found in builder properties.' % len(self._test_types))
-
   def _set_builder_output_properties_for_uploads(self):
     """Sets the output property of the builder."""
     result = self.m.python.succeeding_step('Set builder output properties', '')
