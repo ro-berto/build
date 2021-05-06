@@ -21,7 +21,11 @@ SPEC = {
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -38,7 +42,11 @@ SPEC = {
             ],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,

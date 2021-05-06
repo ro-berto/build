@@ -915,7 +915,10 @@ SPEC = {
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -999,7 +1002,10 @@ SPEC = {
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -1032,7 +1038,9 @@ SPEC = {
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -1065,7 +1073,10 @@ SPEC = {
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -1082,7 +1093,10 @@ SPEC = {
             chromium_apply_config=['mb', 'clobber'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -1096,7 +1110,10 @@ SPEC = {
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
+            gclient_apply_config=[
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -1131,7 +1148,10 @@ SPEC.update([
     stock_config('win10-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('VR Linux'),
     stock_config(
-        'VR Linux (reclient)', gclient_apply_config=['enable_reclient']),
+        'VR Linux (reclient)',
+        gclient_apply_config=[
+            'enable_reclient', 'use_deps_cache_prototype_reclient'
+        ]),
     stock_config('Linux Viz'),
     stock_config('linux-annotator-rel'),
     stock_config(
