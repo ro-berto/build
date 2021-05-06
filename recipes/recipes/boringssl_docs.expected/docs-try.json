@@ -120,6 +120,9 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/boringssl",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/try/docs/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

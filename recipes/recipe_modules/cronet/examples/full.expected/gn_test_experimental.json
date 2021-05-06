@@ -326,6 +326,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/gn_test/8945511751514863184",
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "env_suffixes": {

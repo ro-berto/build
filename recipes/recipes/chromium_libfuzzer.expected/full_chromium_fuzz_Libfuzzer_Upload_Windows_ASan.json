@@ -289,6 +289,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Libfuzzer Upload Windows ASan/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {

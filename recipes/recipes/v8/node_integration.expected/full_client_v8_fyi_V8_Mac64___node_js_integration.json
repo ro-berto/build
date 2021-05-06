@@ -151,6 +151,7 @@
     "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/V8 Mac64 - node.js integration/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },

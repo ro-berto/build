@@ -274,6 +274,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Afl Upload Linux ASan/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {

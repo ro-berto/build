@@ -80,6 +80,9 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/native_client",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/linux_64-newlib-arm_qemu-pnacl-dbg/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

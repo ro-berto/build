@@ -80,6 +80,7 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/win32_vs2017_clang/8945511751514863184",
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]\\gopath",

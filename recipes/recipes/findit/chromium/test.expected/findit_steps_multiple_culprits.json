@@ -290,6 +290,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/findit_variable/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
@@ -663,6 +664,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/findit_variable/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
@@ -2222,6 +2224,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/findit_variable/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
@@ -3423,6 +3426,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/findit_variable/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
@@ -4616,6 +4620,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/findit_variable/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"

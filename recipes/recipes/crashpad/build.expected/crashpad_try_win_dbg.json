@@ -75,6 +75,9 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "crashpad/ci/crashpad_try_win_dbg/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

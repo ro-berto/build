@@ -102,6 +102,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {

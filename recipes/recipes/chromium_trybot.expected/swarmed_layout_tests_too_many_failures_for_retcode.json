@@ -392,7 +392,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -2066,7 +2067,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [

@@ -195,6 +195,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "libyuv/try/linux_asan/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {

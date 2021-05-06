@@ -318,6 +318,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/ios/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },

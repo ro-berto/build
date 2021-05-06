@@ -150,7 +150,8 @@
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/try/v8_foobar_rel_ng/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [

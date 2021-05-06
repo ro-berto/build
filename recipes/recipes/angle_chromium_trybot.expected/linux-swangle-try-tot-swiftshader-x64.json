@@ -40,6 +40,9 @@
       "--var=angle_revision",
       "--deps-file=[CLEANUP]/Chromium_tmp_1/DEPS"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-swiftshader-x64/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -92,6 +95,9 @@
       "--var=chromium_revision",
       "--deps-file=[CLEANUP]/ANGLE_tmp_1/DEPS"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-swiftshader-x64/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -487,7 +493,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-swiftshader-x64/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [

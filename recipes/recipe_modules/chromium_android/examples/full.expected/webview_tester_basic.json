@@ -32,6 +32,9 @@
       "--spec",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/webview_tester/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -61,6 +64,9 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/webview_tester/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -126,6 +132,9 @@
       "user.name",
       "local_bot"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/webview_tester/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -145,6 +154,9 @@
       "user.email",
       "local_bot@example.com"
     ],
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/webview_tester/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -191,6 +203,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/webview_tester/8945511751514863184",
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "env_suffixes": {

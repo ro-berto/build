@@ -412,6 +412,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/ios/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "fake env var 1": "fake env value 1",

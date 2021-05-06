@@ -82,6 +82,7 @@
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/mac-newlib-dbg-asan/8945511751514863184",
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "env_suffixes": {

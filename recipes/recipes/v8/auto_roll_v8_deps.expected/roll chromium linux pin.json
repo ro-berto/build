@@ -8,6 +8,9 @@
       "--var=chromium_linux"
     ],
     "cwd": "[CACHE]/builder/somewhere",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Auto-roll - chromium somewhere/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -40,6 +43,9 @@
       "--var=chromium_linux=123"
     ],
     "cwd": "[CACHE]/builder/somewhere",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Auto-roll - chromium somewhere/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -57,6 +63,9 @@
       "--var=chromium_mac"
     ],
     "cwd": "[CACHE]/builder/somewhere",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Auto-roll - chromium somewhere/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -89,6 +98,9 @@
       "--var=chromium_win"
     ],
     "cwd": "[CACHE]/builder/somewhere",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Auto-roll - chromium somewhere/8945511751514863184"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

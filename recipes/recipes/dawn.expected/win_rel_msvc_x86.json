@@ -101,6 +101,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "dawn/ci/win/8945511751514863184",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "env_suffixes": {
