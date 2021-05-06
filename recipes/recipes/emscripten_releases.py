@@ -22,7 +22,6 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    'archive': Property(default=True, kind=bool),
 }
 
 step_test_data = {
@@ -53,7 +52,7 @@ step_test_data = {
 }
 
 
-def RunSteps(api, archive):
+def RunSteps(api):
   api.gclient.set_config('emscripten_releases')
   goma_dir = api.goma.ensure_goma()
   env = {
@@ -71,13 +70,11 @@ def RunSteps(api, archive):
   api.file.ensure_directory('Ensure sync dir', sync_dir)
   build_dir = cache_dir.join('emscripten-releases', 'build')
   install_dir = api.path['start_dir'].join('install')
-  ci_build = sync_dir.join('src', 'build.py')
   dir_flags = ['--sync-dir=%s' % sync_dir,
                '--build-dir=%s' % build_dir,
                '--prebuilt-dir=%s' % sync_dir,
                '--v8-dir=%s' % cache_dir.join('v8'),
                '--install-dir=%s' % install_dir]
-  build_only_flags = dir_flags + ['--no-sync', '--no-test']
 
   with api.osx_sdk('mac'):
     api.file.ensure_directory('Ensure install dir', install_dir)
@@ -109,11 +106,6 @@ def RunSteps(api, archive):
         exit_status = 0
       finally:
         api.goma.stop(build_exit_status=exit_status)
-
-      if archive:
-        # Upload the results before running the test.
-        api.python('Upload archive', ci_build,
-                   build_only_flags + ['--build-include=archive'])
 
       with api.step.defer_results():
         for step in bot_steps[builder]['test_steps']:
@@ -148,13 +140,6 @@ def GenTests(api):
       api.step_data('Emscripten testsuite (upstream)', retcode=1) +
       api.post_process(Filter('Emscripten testsuite (asm2wasm)',
                               '$result'))
-  )
-
-  yield (
-      test('linux_tests') +
-      api.properties(archive=False) +
-      api.post_process(DoesNotRun, 'Upload archive') +
-      api.post_process(DropExpectation)
   )
 
   yield (
