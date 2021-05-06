@@ -21,6 +21,7 @@ def angle(c):
   soln.custom_vars['checkout_angle_internal'] = True
 
   c.got_revision_mapping['angle'] = 'got_revision'
+  c.got_revision_reverse_mapping['got_angle_revision'] = 'angle'
 
 
 @CONFIG_CTX(includes=['angle'])

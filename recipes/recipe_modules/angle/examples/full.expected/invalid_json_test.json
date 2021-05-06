@@ -143,7 +143,16 @@
     "name": "read test spec (angle.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/angle/infra/specs/angle.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"linux-builder\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"basic_isolate\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"basic_isolate_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -298,6 +307,8 @@
       "/path/to/tmp/json",
       "--isolate-map-file",
       "[CACHE]/builder/angle/infra/specs/gn_isolate_map.pyl",
+      "--swarming-targets-file",
+      "basic_isolate\n",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/angle",
@@ -308,7 +319,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@basic_isolate@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -467,28 +480,27 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
-      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
-      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/angle/out/Release",
+      "-j",
+      "80",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/angle",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -597,7 +609,7 @@
       "--ninja-log-command-file",
       "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/angle/out/Release\", \"-j\", 80]",
       "--build-exit-status",
-      "1",
+      "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
@@ -675,9 +687,87 @@
     "name": "remove compile guard"
   },
   {
+    "cmd": [
+      "[CACHE]/builder/angle/tools/luci-go/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--verbose",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "[CACHE]/builder/angle/out/Release/basic_isolate.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"basic_isolate\": \"[dummy hash for basic_isolate]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"basic_isolate\": \"[dummy hash for basic_isolate]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/angle/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "[CACHE]/builder/angle/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "[dummy hash for basic_isolate]",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "--",
+      "--isolated-script-test-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "basic_isolate_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "[skipped] query test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to query.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
     "failure": {
       "failure": {},
-      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+      "humanReason": "1 Test Suite(s) failed.\n\n**basic_isolate_tests** failed."
     },
     "name": "$result"
   }
