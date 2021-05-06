@@ -135,9 +135,12 @@ def GenTests(api):
       suffix='_forced_invalid',
       revision=None)
 
-  yield generate_builder('luci.webrtc.perf', 'Perf Linux Xenial',
-                         failing_test='webrtc_perf_tests',
-                         suffix='_failing_test', revision='a' * 40)
+  yield generate_builder(
+      'luci.webrtc.perf',
+      'Perf Linux Bionic',
+      failing_test='webrtc_perf_tests on Ubuntu-18.04',
+      suffix='_failing_test',
+      revision='a' * 40)
   yield generate_builder(
       'luci.webrtc.perf',
       'Perf Android64 (M Nexus5X)',
@@ -145,9 +148,12 @@ def GenTests(api):
       suffix='_failing_test',
       revision='a' * 40)
 
-  yield generate_builder('luci.webrtc.perf', 'Perf Linux Xenial',
-                         is_experimental=True,
-                         suffix='_experimental', revision='a' * 40)
+  yield generate_builder(
+      'luci.webrtc.perf',
+      'Perf Linux Bionic',
+      is_experimental=True,
+      suffix='_experimental',
+      revision='a' * 40)
 
   gn_analyze_error_output = {'error': 'Wrong input'}
   yield generate_builder(

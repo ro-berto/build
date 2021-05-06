@@ -75,7 +75,6 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
                     'cpu': 'x86-64',
                 }
             },
@@ -91,7 +90,6 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -154,7 +152,6 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -394,7 +391,7 @@ BUILDERS = freeze({
                 'binary_size_files': ['obj/libwebrtc.a'],
                 'triggers': [
                     'luci.webrtc.perf/Perf Linux Trusty',
-                    'luci.webrtc.perf/Perf Linux Xenial',
+                    'luci.webrtc.perf/Perf Linux Bionic',
                 ],
             },
             'Linux64 Debug (ARM)': {
@@ -736,13 +733,13 @@ BUILDERS = freeze({
                 },
                 'swarming_timeout': 10800,  # 3h
             },
-            'Perf Linux Xenial': {
+            'Perf Linux Bionic': {
                 'recipe_config': 'webrtc_desktop_perf_swarming',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                'perf_id': 'webrtc-linux-tests-xenial',
+                'perf_id': 'webrtc-linux-tests-bionic',
                 'bot_type': 'tester',
                 'parent_buildername': 'Linux64 Builder',
                 'testing': {
@@ -751,7 +748,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'pool': 'WebRTC-perf',
                     'gpu': None,
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                 },
                 'swarming_timeout': 10800,  # 3h
             },
@@ -1023,7 +1020,6 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
                     'cpu': 'x86-64',
                 },
             },
@@ -1039,7 +1035,6 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    # TODO(bugs.webrtc.org/11113): No 32-bit capacity, use 64.
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -1261,11 +1256,9 @@ BUILDERS = freeze({
                     'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 },
-                # TODO(crbug/1018836): Use distro specific name instead of
-                # Linux.
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
-                    'os': 'Linux',
+                    'os': 'Ubuntu-14.04',
                     'gpu': None,
                 }
             },
