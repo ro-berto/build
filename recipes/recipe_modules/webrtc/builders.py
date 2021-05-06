@@ -299,7 +299,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86',
                 }
             },
@@ -314,7 +314,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86',
                 }
             },
@@ -355,7 +355,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -370,7 +370,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -435,7 +435,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -451,7 +451,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -467,7 +467,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -483,7 +483,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -499,7 +499,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1243,7 +1243,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1258,7 +1258,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 },
                 # TODO(crbug/1018836): Use distro specific name instead of
@@ -1306,7 +1306,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86',
                 }
             },
@@ -1321,7 +1321,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86',
                 }
             },
@@ -1363,7 +1363,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1380,7 +1380,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1396,7 +1396,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1412,7 +1412,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1428,7 +1428,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1444,7 +1444,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-16.04',
+                    'os': 'Ubuntu-18.04',
                     'cpu': 'x86-64',
                 }
             },

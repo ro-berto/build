@@ -98,7 +98,7 @@ def GenTests(api):
   yield generate_builder(bucketname, buildername, revision=None,
                          suffix='_forced')
   yield generate_builder(bucketname, buildername, revision='a' * 40,
-                         failing_test='rtc_unittests',
+                         failing_test='rtc_unittests on Ubuntu-18.04',
                          suffix='_failing_test')
   yield generate_builder(
       bucketname,
