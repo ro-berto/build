@@ -10,31 +10,37 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'linux-blink-optional-highdpi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-blink-optional-highdpi-rel-dummy',
+                retry_failed_shards=False,
             ),
         'mac10.12-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='mac10.12-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'mac10.13-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='mac10.13-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'mac10.14-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='mac10.14-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'mac10.15-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='mac10.15-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'mac11.0-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -46,11 +52,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='win7-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
         'win10-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='win10-blink-rel-dummy',
+                retry_failed_shards=False,
             ),
     },
     'tryserver.chromium': {
