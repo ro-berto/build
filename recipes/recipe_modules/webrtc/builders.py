@@ -391,7 +391,9 @@ BUILDERS = freeze({
                 'binary_size_files': ['obj/libwebrtc.a'],
                 'triggers': [
                     'luci.webrtc.perf/Perf Linux Trusty',
-                    'luci.webrtc.perf/Perf Linux Bionic',
+                    # TODO(crbub.com/1206432) - Create Bionic
+                    #   webrtc perf builders.
+                    #'luci.webrtc.perf/Perf Linux Bionic',
                 ],
             },
             'Linux64 Debug (ARM)': {
