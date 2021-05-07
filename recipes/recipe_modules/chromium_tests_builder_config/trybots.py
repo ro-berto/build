@@ -1195,6 +1195,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-lacros-builder-fyi-rel',
                 tester='linux-lacros-tester-fyi-rel',
             ),
+        'linux-lacros-version-skew-fyi':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-lacros-version-skew-fyi',
+            ),
         'linux-trusty-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
