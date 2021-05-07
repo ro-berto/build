@@ -1,9 +1,19 @@
-// Copyright 20120 The Chromium Authors. All rights reserved.
+// Copyright 2021 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 syntax = "proto3";
-package recipes.build.chromium_3pp;
+package recipe_modules.build.chromium_3pp;
+
+message PreprocessStep {
+  // The name of the preprocess
+  string name = 1;
+
+  // The preprocess arguments to run for the preprocess. It accepts a
+  // placeholder "{CHECKOUT}" which will be later on replaced by the actual
+  // checkout path. For example, ['{CHECKOUT}/src/foo/bar.py', '-v']
+  repeated string cmd = 2;
+}
 
 message InputProperties {
   // A prefix to the CIPD package name, for all 3pp packages.
@@ -37,5 +47,14 @@ message InputProperties {
   // Note that in tryjobs, package paths from the CLs will be added to
   // this list, if there were any.
   repeated string package_paths_to_build = 4;
+
+  // A list of preprocess to run before processing 3pp packages.
+  repeated PreprocessStep preprocess = 5;
+
+  // The config to set for "gclient" recipe module.
+  string gclient_config = 6;
+
+  // A list of config to apply for "gclient" recipe module.
+  repeated string gclient_apply_config = 7;
 }
 
