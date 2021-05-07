@@ -15,7 +15,7 @@
     ],
     "infra_step": true,
     "name": "schedule skylab tests.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"properties\": {\"requests\": {\"m88_lacros\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:lacros.Basic\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"retry\": {\"allow\": true, \"max\": 5}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj\"}}]}}}}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"0\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"properties\": {\"requests\": {\"m88_lacros\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:lacros.Basic\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"retry\": {\"allow\": true, \"max\": 5.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj\"}}]}}}}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"0\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -58,7 +58,7 @@
       "@@@STEP_LOG_LINE@request@                }, @@@",
       "@@@STEP_LOG_LINE@request@                \"retry\": {@@@",
       "@@@STEP_LOG_LINE@request@                  \"allow\": true, @@@",
-      "@@@STEP_LOG_LINE@request@                  \"max\": 5@@@",
+      "@@@STEP_LOG_LINE@request@                  \"max\": 5.0@@@",
       "@@@STEP_LOG_LINE@request@                }, @@@",
       "@@@STEP_LOG_LINE@request@                \"scheduling\": {@@@",
       "@@@STEP_LOG_LINE@request@                  \"managedPool\": \"MANAGED_POOL_QUOTA\", @@@",
