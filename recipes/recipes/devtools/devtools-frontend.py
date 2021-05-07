@@ -103,12 +103,6 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
 
     run_lint_check(api)
 
-    # TODO(liviurau): temporary removal of localization check. We need to think
-    # about making this configurable on the builder side to choose/add steps
-    # and configure script arguments
-    #run_localization_check(api)
-
-
     run_interactions(api, builder_config)
     run_e2e(api, builder_config)
 
@@ -169,10 +163,6 @@ def run_unit_tests(api, builder_config):
 
 def run_lint_check(api):
   run_node_script(api, 'Lint Check with ESLint', 'run_lint_check_js.js')
-
-
-def run_localization_check(api): # pragma: no cover
-  run_script(api, 'Localization Check', 'run_localization_check.py')
 
 
 def run_e2e(api, builder_config, args=None):
