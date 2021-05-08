@@ -64,7 +64,8 @@
     "cmd": [
       "[CACHE]/art/art/tools/buildbot-build.sh",
       "-j8",
-      "--target"
+      "--target",
+      "--installclean"
     ],
     "cwd": "[CACHE]/art",
     "env": {

@@ -175,7 +175,7 @@ def setup_host_x86(api,
   with api.context(env=env):
     api.step('build', [
         art_tools.join('buildbot-build.sh'),
-        '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--host'
+        '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--host', '--installclean'
     ])
 
     with api.step.defer_results():
@@ -341,7 +341,7 @@ def setup_target(api,
   with api.context(env=env):
     api.step('build target', [
         art_tools.join('buildbot-build.sh'),
-        '-j%d' % (HOST_BUILD_TARGET_MAKE_JOBS), '--target'
+        '-j%d' % (HOST_BUILD_TARGET_MAKE_JOBS), '--target', '--installclean'
     ])
 
   with api.step.defer_results():
