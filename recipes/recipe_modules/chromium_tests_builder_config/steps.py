@@ -3250,12 +3250,16 @@ class SwarmingIosTest(SwarmingTest):
     raw_cmd = task.get('raw_cmd')
     if raw_cmd is not None:
       raw_cmd = list(raw_cmd)
+
+    isolated, cas_input_root = self._get_isolated_or_cas_input_root(
+        task['task input'])
     swarming_task = api.chromium_swarming.task(
         name=task['step name'],
         task_output_dir=task_output_dir,
         failure_as_exception=False,
-        isolated=task['isolated hash'],
+        isolated=isolated,
         relative_cwd=task.get('relative_cwd'),
+        cas_input_root=cas_input_root,
         raw_cmd=raw_cmd)
 
     self._apply_swarming_task_config(

@@ -988,11 +988,13 @@ class iOSApi(recipe_api.RecipeApi):
 
     if targets_to_isolate:
       step_result = self.m.isolate.isolate_tests(
-          tmp_dir, targets=targets_to_isolate, verbose=True)
+          tmp_dir, targets=targets_to_isolate, use_cas=True, verbose=True)
 
       for task in tasks:
         if task['task_id'] in step_result.json.output:
           task['isolated hash'] = step_result.json.output[task['task_id']]
+          task['task input'] = self.m.isolate.isolated_tests.get(
+              task['task_id'])
 
     return tasks
 

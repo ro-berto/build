@@ -46,7 +46,7 @@ def RunSteps(api):
           'max runtime seconds': 70,
       },
       'task_id': 'dummy task id',
-      'isolated hash': 'dummy isolated hash',
+      'task input': 'dummy isolated hash/0',
       'xcode build version': 'dummy build version',
       'xcode version': 'dummy xcode version',
       'bot id': 'dummy bot id',
