@@ -13,9 +13,9 @@ DEPS = [
     'depot_tools/windows_sdk',
     'goma',
     'recipe_engine/buildbucket',
+    'recipe_engine/cas',
     'recipe_engine/context',
     'recipe_engine/file',
-    'recipe_engine/isolated',
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -149,8 +149,8 @@ def AnnotatedStepsSteps(api, got_revision, checkout_path,
       api.goma.stop(build_exit_status=exit_status)
 
 
-def UploadFilesToIsolateStorage(api, files):
-  """Pushes files up to the isolate server storage."""
+def UploadFilesToCAS(api, files):
+  """Pushes files up to the RBE-CAS."""
   with api.step.nest('Upload isolates'):
     isolate_dir = api.path.mkdtemp('isolate_directory')
     for file_info in files:
@@ -158,9 +158,7 @@ def UploadFilesToIsolateStorage(api, files):
       if file_info.is_dir:
         api.file.copytree("Copying tree: {}".format(file_info.input_path),
                           file_info.input_path, output_dir)
-    isolated = api.isolated.isolated(isolate_dir)
-    isolated.add_dir(isolate_dir)
-  return isolated.archive('Archive build outputs')
+  return api.cas.archive('archive files', isolate_dir, isolate_dir)
 
 
 def ParseSwarmingResults(api, builder_name, results):
@@ -209,7 +207,7 @@ def TriggerHardwareTests(api, got_revision, checkout_path,
           checkout_path.join('toolchain', 'linux_x86'),
           'native_client/toolchain/linux_arm', True),
   ]
-  isolated_hash = UploadFilesToIsolateStorage(api, isolated_files)
+  isolated_digest = UploadFilesToCAS(api, isolated_files)
 
   environment_vars = {
       'BUILDBOT_MASTERNAME':
@@ -235,9 +233,9 @@ def TriggerHardwareTests(api, got_revision, checkout_path,
           request[0].with_command([
               'python', 'buildbot/buildbot_selector.py'
           ]).with_relative_cwd('native_client').with_dimensions(
-              **dimensions).with_env_vars(**environment_vars).with_isolated(
-                  isolated_hash).with_expiration_secs(
-                      60 * 120).with_execution_timeout_secs(60 * 60),
+              **dimensions).with_env_vars(**environment_vars)
+          .with_cas_input_root(isolated_digest).with_expiration_secs(
+              60 * 120).with_execution_timeout_secs(60 * 60),
       ))
 
   metadata = api.swarming.trigger('Trigger hardware tests', requests=[request])
