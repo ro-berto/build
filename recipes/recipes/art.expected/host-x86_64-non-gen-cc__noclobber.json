@@ -49,7 +49,6 @@
   {
     "cmd": [
       "[CACHE]/art/art/tools/buildbot-build.sh",
-      "-j8",
       "--host",
       "--installclean"
     ],
@@ -76,7 +75,6 @@
     "cmd": [
       "build/soong/soong_ui.bash",
       "--make-mode",
-      "-j8",
       "test-art-host-gtest64"
     ],
     "cwd": "[CACHE]/art",
@@ -101,7 +99,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j8",
       "--optimizing",
       "--verbose",
       "--host",
@@ -129,7 +126,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j8",
       "--jit",
       "--debuggable",
       "--verbose",
@@ -186,7 +182,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j8",
       "--baseline",
       "--verbose",
       "--host",
@@ -214,7 +209,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j8",
       "--jit",
       "--verbose",
       "--host",
@@ -242,7 +236,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j8",
       "--speed-profile",
       "--verbose",
       "--host",

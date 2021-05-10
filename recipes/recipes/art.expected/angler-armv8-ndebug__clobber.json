@@ -63,7 +63,6 @@
   {
     "cmd": [
       "[CACHE]/art/art/tools/buildbot-build.sh",
-      "-j8",
       "--target",
       "--installclean"
     ],
@@ -176,8 +175,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/art/art/tools/run-gtests.sh",
-      "-j0"
+      "[CACHE]/art/art/tools/run-gtests.sh"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -296,7 +294,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--optimizing",
       "--target",
       "--verbose",
@@ -419,7 +416,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--optimizing",
       "--debuggable",
       "--target",
@@ -543,7 +539,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--jit",
       "--debuggable",
       "--target",
@@ -667,7 +662,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--interpreter",
       "--target",
       "--verbose",
@@ -790,7 +784,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--baseline",
       "--target",
       "--verbose",
@@ -913,7 +906,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--jit",
       "--target",
       "--verbose",
@@ -1036,7 +1028,6 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j0",
       "--speed-profile",
       "--target",
       "--verbose",

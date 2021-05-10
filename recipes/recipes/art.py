@@ -14,64 +14,38 @@ DEPS = [
 ]
 
 
-# "Repo sync jobs" parameter: value passed to option `-j` of command
-# `repo sync`.
+# Value passed to option `-j` of command `repo sync`.
 REPO_SYNC_JOBS = 16
 
-# "Make jobs" parameter: value passed to option `-j` of
-# - build commands (`build/soong/soong_ui.bash`, directly or via ART's
-#   `buildbot-build.sh` script);
-# - test commands, when supported (ART's `testrunner.py` and `run-gtests.sh`
-#   scripts).
-#
-# Values for commands running on target (device).
-# - Default value.
-TARGET_DEFAULT_MAKE_JOBS = 0  # Let the testrunner script choose the default.
-# - Lower value for Fugu (Nexus Player) devices.
-FUGU_MAKE_JOBS = 1
-#
-# Values for commands running on host.
-# - Default value.
-HOST_DEFAULT_MAKE_JOBS = 8
-# - Lower value for interpreter tests (on host).
 HOST_TEST_INTERPRETER_MAKE_JOBS = 5
-# - Value for building target artifacts (on host).
-HOST_BUILD_TARGET_MAKE_JOBS = HOST_DEFAULT_MAKE_JOBS
 
 _TARGET_DEVICE_MAP = {
     'walleye-armv7': {
         'bitness': 32,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'arm_krait',
     },
     'walleye-armv8': {
         'bitness': 64,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'armv8',
     },
     'angler-armv7': {
         'bitness': 32,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'arm_krait',
     },
     'fugu': {
         'bitness': 32,
-        'make_jobs': FUGU_MAKE_JOBS,
         'product': 'silvermont',
     },
     'angler-armv8': {
         'bitness': 64,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'armv8',
     },
     'bullhead-armv8': {
         'bitness': 64,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'armv8',
     },
     'bullhead-armv7': {
         'bitness': 32,
-        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
         'product': 'arm_krait',
     },
 }
@@ -173,27 +147,23 @@ def setup_host_x86(api,
     common_options += ['--cdex-' + cdex_level]
 
   with api.context(env=env):
-    api.step('build', [
-        art_tools.join('buildbot-build.sh'),
-        '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--host', '--installclean'
-    ])
+    api.step('build',
+             [art_tools.join('buildbot-build.sh'), '--host', '--installclean'])
 
     with api.step.defer_results():
       api.step('test gtest', [
           'build/soong/soong_ui.bash', '--make-mode',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS),
           'test-art-host-gtest%d' % bitness
       ])
 
-      api.step('test optimizing', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--optimizing'
-      ] + common_options)
+      api.step('test optimizing',
+               ['./art/test/testrunner/testrunner.py', '--optimizing'] +
+               common_options)
 
-      api.step('test debuggable', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit', '--debuggable'
-      ] + common_options)
+      api.step(
+          'test debuggable',
+          ['./art/test/testrunner/testrunner.py', '--jit', '--debuggable'] +
+          common_options)
 
       # Use a lower `-j` number for interpreter, some tests take a long time
       # to run on it.
@@ -202,32 +172,26 @@ def setup_host_x86(api,
           '-j%d' % (HOST_TEST_INTERPRETER_MAKE_JOBS), '--interpreter'
       ] + common_options)
 
-      api.step('test baseline', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--baseline'
-      ] + common_options)
+      api.step('test baseline',
+               ['./art/test/testrunner/testrunner.py', '--baseline'] +
+               common_options)
 
-      api.step('test jit', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit'
-      ] + common_options)
+      api.step('test jit', ['./art/test/testrunner/testrunner.py', '--jit'] +
+               common_options)
 
       if cdex_level != "none":
         api.step('test cdex-redefine-stress-optimizing', [
-            './art/test/testrunner/testrunner.py',
-            '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--optimizing',
+            './art/test/testrunner/testrunner.py', '--optimizing',
             '--redefine-stress', '--debuggable'
         ] + common_options)
         api.step('test cdex-redefine-stress-jit', [
-            './art/test/testrunner/testrunner.py',
-            '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit', '--redefine-stress',
+            './art/test/testrunner/testrunner.py', '--jit', '--redefine-stress',
             '--debuggable'
         ] + common_options)
 
-      api.step('test speed-profile', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--speed-profile'
-      ] + common_options)
+      api.step('test speed-profile',
+               ['./art/test/testrunner/testrunner.py', '--speed-profile'] +
+               common_options)
 
       libcore_command = [art_tools.join('run-libcore-tests.sh'),
                          '--mode=host',
@@ -307,7 +271,6 @@ def setup_target(api,
 
 
   bitness = _TARGET_DEVICE_MAP[device]['bitness']
-  make_jobs = _TARGET_DEVICE_MAP[device]['make_jobs']
   env.update(
       {'TARGET_PRODUCT': _TARGET_DEVICE_MAP[device]['product'],
        'ANDROID_PRODUCT_OUT': build_top_dir.join('out','target', 'product',
@@ -334,15 +297,10 @@ def setup_target(api,
                 api.path.pathsep +
                 '%(PATH)s' })
 
-  # Decrease the number of parallel tests, as some tests eat lots of memory.
-  if debug and device == 'fugu':
-    make_jobs = 1
-
   with api.context(env=env):
-    api.step('build target', [
-        art_tools.join('buildbot-build.sh'),
-        '-j%d' % (HOST_BUILD_TARGET_MAKE_JOBS), '--target', '--installclean'
-    ])
+    api.step(
+        'build target',
+        [art_tools.join('buildbot-build.sh'), '--target', '--installclean'])
 
   with api.step.defer_results():
     with api.context(env=test_env):
@@ -365,15 +323,8 @@ def setup_target(api,
 
 
     with api.context(env=gtest_env):
-      api.step('test gtest', [
-          art_tools.join('run-gtests.sh'), '-j%d' % (make_jobs)])
+      api.step('test gtest', [art_tools.join('run-gtests.sh')])
     test_logging(api, 'test gtest')
-
-    optimizing_make_jobs = make_jobs
-    # Decrease the number of parallel tests for fugu/optimizing, as some tests
-    # eat lots of memory.
-    if not debug and device == 'fugu':
-      optimizing_make_jobs = 1
 
     # Common options passed to testrunner.py.
     common_options = ['--target', '--verbose']
@@ -388,7 +339,6 @@ def setup_target(api,
 
     with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                   '-j%d' % (optimizing_make_jobs),
                                    '--optimizing'] + common_options)
     test_logging(api, 'test optimizing')
 
@@ -396,39 +346,33 @@ def setup_target(api,
       # We pass --optimizing for interpreter debuggable to run AOT checker tests
       # compiled debuggable.
       api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
-                                   '-j%d' % (make_jobs),
                                    '--optimizing',
                                    '--debuggable'] + common_options)
     test_logging(api, 'test debuggable')
 
     with api.context(env=test_env):
       api.step('test jit debuggable', ['./art/test/testrunner/testrunner.py',
-                                       '-j%d' % (make_jobs),
                                        '--jit',
                                        '--debuggable'] + common_options)
     test_logging(api, 'test jit debuggable')
 
     with api.context(env=test_env):
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                    '-j%d' % (make_jobs),
                                     '--interpreter'] + common_options)
     test_logging(api, 'test interpreter')
 
     with api.context(env=test_env):
       api.step('test baseline', ['./art/test/testrunner/testrunner.py',
-                                    '-j%d' % (make_jobs),
                                     '--baseline'] + common_options)
     test_logging(api, 'test baseline')
 
     with api.context(env=test_env):
       api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                            '-j%d' % (make_jobs),
                             '--jit'] + common_options)
     test_logging(api, 'test jit')
 
     with api.context(env=test_env):
       api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
-                                      '-j%d' % (make_jobs),
                                       '--speed-profile'] + common_options)
     test_logging(api, 'test speed-profile')
 
