@@ -514,12 +514,6 @@ SPEC.update([
         target_arch='arm',
         target_bits=64),
     config(
-        'ToTAndroidCFI',
-        android_config='clang_builder_mb_x64',
-        chromium_config='clang_tot_android',
-        target_arch='arm',
-        target_bits=32),
-    config(
         'ToTAndroidOfficial',
         android_config='clang_builder_mb_x64',
         chromium_config='clang_tot_android',
