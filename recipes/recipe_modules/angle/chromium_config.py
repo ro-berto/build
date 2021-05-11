@@ -5,9 +5,8 @@
 from RECIPE_MODULES.build.chromium import CONFIG_CTX
 
 
-@CONFIG_CTX(includes=['ninja'])
-def angle(c):
-  c.project_generator.tool = 'mb'
+@CONFIG_CTX(includes=['ninja', 'mb'])
+def angle_base(c):
   c.project_generator.isolate_map_paths = [
       c.CHECKOUT_PATH.join('infra', 'specs', 'gn_isolate_map.pyl'),
   ]
@@ -25,11 +24,11 @@ def angle(c):
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
 
-@CONFIG_CTX(includes=['angle', 'clang', 'goma'])
+@CONFIG_CTX(includes=['angle_base', 'clang', 'goma'])
 def angle_clang(c):
   pass
 
 
-@CONFIG_CTX(includes=['angle', 'gcc'])
+@CONFIG_CTX(includes=['angle_base', 'gcc'])
 def angle_non_clang(c):
   pass

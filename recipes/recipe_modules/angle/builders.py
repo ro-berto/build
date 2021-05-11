@@ -7,44 +7,56 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
 
 
 def _angle_spec(**kwargs):
-  kwargs.setdefault('gclient_config', 'angle')
   kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
+  kwargs.setdefault('chromium_config', 'angle_clang')
   return builder_spec.BuilderSpec.create(**kwargs)
 
 
-def _create_builder_config(platform, target_bits, internal):
-  gclient_apply_config = []
-  if internal:
-    gclient_apply_config += ['angle_internal']
+def _create_builder_config(platform, target_bits):
   return _angle_spec(
-      gclient_apply_config=gclient_apply_config,
-      chromium_config='angle',
-      chromium_apply_config=[
-          'mb',
-      ],
+      gclient_config='angle',
+      simulation_platform=platform,
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
       },
-      simulation_platform=platform,
   )
 
 
-def _create_tester_config(platform, target_bits, parent_builder, internal):
-  gclient_apply_config = []
-  if internal:
-    gclient_apply_config += ['angle_internal']
+def _create_tester_config(platform, target_bits, parent_builder):
   return _angle_spec(
-      gclient_apply_config=gclient_apply_config,
-      chromium_config='angle',
-      chromium_apply_config=[
-          'mb',
-      ],
+      gclient_config='angle',
+      simulation_platform=platform,
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
       },
-      simulation_platform=platform,
+      execution_mode=builder_spec.TEST,
+      parent_buildername=parent_builder,
+  )
+
+
+def _create_android_builder_config(target_bits):
+  return _angle_spec(
+      gclient_config='angle_android',
+      simulation_platform='linux',
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': target_bits,
+          'TARGET_PLATFORM': 'android',
+      },
+  )
+
+
+def _create_android_tester_config(target_bits, parent_builder):
+  return _angle_spec(
+      gclient_config='angle_android',
+      simulation_platform='linux',
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': target_bits,
+          'TARGET_PLATFORM': 'android',
+      },
       execution_mode=builder_spec.TEST,
       parent_buildername=parent_builder,
   )
@@ -52,33 +64,35 @@ def _create_tester_config(platform, target_bits, parent_builder, internal):
 
 _SPEC = {
     'android-arm-builder':
-        _create_builder_config('linux', 32, internal=True),
+        _create_android_builder_config(32),
     'android-arm64-builder':
-        _create_builder_config('linux', 64, internal=True),
+        _create_android_builder_config(64),
+    'android-arm64-pixel4':
+        _create_android_tester_config(64, 'android-arm64-builder'),
     'linux-builder':
-        _create_builder_config('linux', 64, internal=True),
+        _create_builder_config('linux', 64),
     'linux-intel':
-        _create_tester_config('linux', 64, 'linux-builder', internal=True),
+        _create_tester_config('linux', 64, 'linux-builder'),
     'linux-nvidia':
-        _create_tester_config('linux', 64, 'linux-builder', internal=True),
+        _create_tester_config('linux', 64, 'linux-builder'),
     'mac-amd':
-        _create_tester_config('mac', 64, 'mac-builder', internal=True),
+        _create_tester_config('mac', 64, 'mac-builder'),
     'mac-builder':
-        _create_builder_config('mac', 64, internal=True),
+        _create_builder_config('mac', 64),
     'mac-intel':
-        _create_tester_config('mac', 64, 'mac-builder', internal=True),
+        _create_tester_config('mac', 64, 'mac-builder'),
     'mac-nvidia':
-        _create_tester_config('mac', 64, 'mac-builder', internal=True),
+        _create_tester_config('mac', 64, 'mac-builder'),
     'win-x64-builder':
-        _create_builder_config('win', 64, internal=True),
+        _create_builder_config('win', 64),
     'win-x86-builder':
-        _create_builder_config('win', 32, internal=True),
+        _create_builder_config('win', 32),
     'win7-x86-amd':
-        _create_tester_config('win', 32, 'win-x86-builder', internal=True),
+        _create_tester_config('win', 32, 'win-x86-builder'),
     'win10-x64-intel':
-        _create_tester_config('win', 64, 'win-x64-builder', internal=True),
+        _create_tester_config('win', 64, 'win-x64-builder'),
     'win10-x64-nvidia':
-        _create_tester_config('win', 64, 'win-x64-builder', internal=True),
+        _create_tester_config('win', 64, 'win-x64-builder'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({

@@ -7,6 +7,18 @@ from recipe_engine.types import freeze
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 _SPEC = {
+    'android-arm64-rel':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='android-arm64-builder',
+                    tester='android-arm64-pixel4',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'linux-clang-rel':
         try_spec.TrySpec.create(
             mirrors=[

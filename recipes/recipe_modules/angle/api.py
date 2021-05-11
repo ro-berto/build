@@ -21,15 +21,7 @@ class ANGLEApi(recipe_api.RecipeApi):
     self._builder_config = None
 
   def _apply_builder_config(self, platform, toolchain, test_mode):
-    self.set_config('angle', optional=True)
-    if toolchain == 'clang':
-      self.m.chromium.set_config('angle_clang')
-    else:
-      self.m.chromium.set_config('angle_non_clang')
-    if platform == 'android':
-      self.m.gclient.set_config('angle_android')
-    else:
-      self.m.gclient.set_config('angle')
+    self.set_config('angle')
 
     self._trybots = trybots_module.TRYBOTS
     self._builders = builders_module.BUILDERS
@@ -46,7 +38,16 @@ class ANGLEApi(recipe_api.RecipeApi):
           self.m.chromium_tests_builder_config.lookup_builder(
               builder_db=self._builders, try_db=self._trybots, use_try_db=True))
       self.m.chromium_tests.report_builders(self._builder_config)
+      self.m.chromium_tests.configure_build(self._builder_config)
     else:
+      if toolchain == 'clang':
+        self.m.chromium.set_config('angle_clang')
+      else:
+        self.m.chromium.set_config('angle_non_clang')
+      if platform == 'android':
+        self.m.gclient.set_config('angle_android')
+      else:
+        self.m.gclient.set_config('angle')
       self._builder_id = self.m.chromium.get_builder_id()
 
   def _checkout(self):

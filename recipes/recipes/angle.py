@@ -34,7 +34,8 @@ def RunSteps(api):
 _TEST_BUILDERS = builder_db.BuilderDatabase.create({
     'angle': {
         'linux-builder':
-            builder_spec.BuilderSpec.create(chromium_config='angle'),
+            builder_spec.BuilderSpec.create(
+                gclient_config='angle', chromium_config='angle_clang'),
     },
 })
 
