@@ -80,6 +80,10 @@ SPEC.update([
         'lacros-amd64-generic-rel',
         cros_boards_with_qemu_images='amd64-generic',
     ),
+    _config(
+        'lacros-arm-generic-rel',
+        cros_boards='arm-generic',
+    ),
     _config('linux-ash-chromium-generator-rel'),
     _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg',),
