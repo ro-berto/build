@@ -38,8 +38,7 @@ RECIPE_CONFIG_PATHS = [
 # chromium and v8-ci-autorollers
 AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
 RTS_BETA_USERS = (
-    'nodir@chromium.org',
-    'guterman@google.com',
+    # Disabled for now due to https://crbug.com/1208106
 )
 
 
