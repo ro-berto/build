@@ -823,7 +823,6 @@ class ChromiumApi(recipe_api.RecipeApi):
               revision=None,
               webkit_revision=None,
               test_launcher_summary_output=None,
-              perf_id=None,
               perf_builder_name_alias=None,
               perf_config=None,
               chartjson_file=False,
@@ -855,10 +854,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--results-url=%s' % results_url)
     if perf_dashboard_id:
       full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
-    # TODO(linxinan): remove this once the downstream recipe has migrated to
-    # perf-builder-name-alias.
-    if perf_id:  # pragma: no cover
-      full_args.append('--perf-builder-name-alias=%s' % perf_builder_name_alias)
     if perf_builder_name_alias:
       full_args.append('--perf-builder-name-alias=%s' % perf_builder_name_alias)
     if perf_config:
