@@ -150,6 +150,41 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='mac',
         ),
+    'mac-arm64-archive-dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
+    'mac-arm64-archive-rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            archive_build=True,
+            gs_bucket='chromium-browser-snapshots',
+            gs_build_name='Mac_Arm',
+            gs_acl='public-read',
+            simulation_platform='mac',
+        ),
     'fuchsia-official':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
