@@ -641,8 +641,7 @@
       "--test-suite-path=gen/test/interactions",
       "--test-suite-source-dir=test/interactions",
       "--test-server-type='component-docs'",
-      "--target=Release",
-      "--coverage"
+      "--target=Release"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {

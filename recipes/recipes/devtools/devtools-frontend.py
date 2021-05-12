@@ -175,17 +175,12 @@ def run_e2e(api, builder_config, args=None):
 
 
 def run_interactions(api, builder_config):
-  run_node_script(
-      api,
-      'Interactions',
-      'run_test_suite.js',
-      [
-          "--test-suite-path=gen/test/interactions",
-          "--test-suite-source-dir=test/interactions",
-          "--test-server-type='component-docs'", "--target=" + builder_config,
-          "--coverage"
-      ],
-  )
+  run_node_script(api, 'Interactions', 'run_test_suite.js', [
+      "--test-suite-path=gen/test/interactions",
+      "--test-suite-source-dir=test/interactions",
+      "--test-server-type='component-docs'",
+      "--target=" + builder_config
+    ])
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
