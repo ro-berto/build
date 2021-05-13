@@ -251,11 +251,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android arm64 Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
             ),
-        'android_cfi_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Android CFI',
-            ),
         'android_clang_dbg_recipe':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
