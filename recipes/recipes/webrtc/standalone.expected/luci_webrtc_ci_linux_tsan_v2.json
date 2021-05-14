@@ -614,6 +614,8 @@
       "/path/to/tmp/json",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Linux_Tsan_v2/audio_decoder_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux_Tsan_v2/common_audio_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux_Tsan_v2/common_video_unittests.isolated.gen.json",

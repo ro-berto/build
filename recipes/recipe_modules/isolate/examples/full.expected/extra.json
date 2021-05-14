@@ -127,6 +127,8 @@
       "/path/to/tmp/json",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "RECIPE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_REPO[build]/test2.isolated.gen.json"
     ],

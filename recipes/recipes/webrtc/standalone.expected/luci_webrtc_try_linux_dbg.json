@@ -730,6 +730,8 @@
       "/path/to/tmp/json",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/linux_dbg/audio_decoder_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_dbg/common_audio_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_dbg/common_video_unittests.isolated.gen.json",

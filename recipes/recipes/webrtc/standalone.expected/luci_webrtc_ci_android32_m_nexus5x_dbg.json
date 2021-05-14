@@ -590,6 +590,8 @@
       "/path/to/tmp/json",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg/AppRTCMobile_test_apk.isolated.gen.json",
       "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg/android_instrumentation_test_apk.isolated.gen.json",
       "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg/audio_decoder_unittests.isolated.gen.json",

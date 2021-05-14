@@ -775,6 +775,8 @@
       "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/3.isolated.gen.json"

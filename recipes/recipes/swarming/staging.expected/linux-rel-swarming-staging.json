@@ -743,6 +743,8 @@
       "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",

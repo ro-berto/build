@@ -223,6 +223,8 @@
       "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/v8/out/build/perf.isolated.gen.json"
     ],
     "name": "isolate tests (perf)",

@@ -107,6 +107,9 @@ class IsolateApi(recipe_api.RecipeApi):
 
     if use_cas:
       args.extend(['-cas-instance', self.m.cas.instance])
+
+      # TODO(b/187913980): this is for investigation of upload failures.
+      args.extend(['-log-level', 'debug'])
     else:
       args.extend(['--isolate-server', self._isolate_server])
 

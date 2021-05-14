@@ -635,6 +635,8 @@
       "/path/to/tmp/json",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]\\builder\\src\\out\\Win32_Release_Clang\\audio_decoder_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\Win32_Release_Clang\\common_audio_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\Win32_Release_Clang\\common_video_unittests.isolated.gen.json",

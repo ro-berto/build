@@ -598,6 +598,8 @@
       "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
