@@ -265,6 +265,8 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
       src_path,
       r'C:\botcode\w',  # crbug.com/1010267
       '/b/f/w',  # crbug.com/1061603
+      '/b/s/w/ir/cache/builder',  #crbug.com/1208128
+      '/this/path/is/set'  #crbug.com/1208128
   ]
   coverage_path = os.path.normpath(filename)
   for prefix in prefixes:
