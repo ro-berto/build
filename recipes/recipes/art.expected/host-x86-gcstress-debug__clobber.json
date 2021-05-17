@@ -115,11 +115,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--optimizing",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "--optimizing"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -144,12 +144,12 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--jit",
-      "--debuggable",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "--jit",
+      "--debuggable"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -174,12 +174,12 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "-j5",
-      "--interpreter",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "-j5",
+      "--interpreter"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -204,11 +204,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--baseline",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "--baseline"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -233,11 +233,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--jit",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "--jit"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -262,11 +262,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--speed-profile",
       "--verbose",
       "--host",
       "--debug",
-      "--gcstress"
+      "--gcstress",
+      "--speed-profile"
     ],
     "cwd": "[CACHE]/art",
     "env": {

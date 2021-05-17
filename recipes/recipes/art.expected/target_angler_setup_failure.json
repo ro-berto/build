@@ -283,10 +283,10 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--optimizing",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--optimizing"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -405,11 +405,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--optimizing",
-      "--debuggable",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--optimizing",
+      "--debuggable"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -528,11 +528,11 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--jit",
-      "--debuggable",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--jit",
+      "--debuggable"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -651,10 +651,10 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--interpreter",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--interpreter"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -773,10 +773,10 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--baseline",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--baseline"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -895,10 +895,10 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--jit",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--jit"
     ],
     "cwd": "[CACHE]/art",
     "env": {
@@ -1017,10 +1017,10 @@
   {
     "cmd": [
       "./art/test/testrunner/testrunner.py",
-      "--speed-profile",
       "--target",
       "--verbose",
-      "--ndebug"
+      "--ndebug",
+      "--speed-profile"
     ],
     "cwd": "[CACHE]/art",
     "env": {

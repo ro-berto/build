@@ -131,20 +131,22 @@ def setup_host_x86(api,
   env.update({ 'ART_DEFAULT_COMPACT_DEX_LEVEL' : cdex_level })
 
   # Common options passed to testrunner.py.
-  common_options = ['--verbose', '--host']
+  testrunner_cmd = [
+      './art/test/testrunner/testrunner.py', '--verbose', '--host'
+  ]
 
   if debug:
-    common_options += ['--debug']
+    testrunner_cmd += ['--debug']
   else:
-    common_options += ['--ndebug']
+    testrunner_cmd += ['--ndebug']
 
   if gcstress:
-    common_options += ['--gcstress']
+    testrunner_cmd += ['--gcstress']
 
   # Pass down the cdex option to testrunner.py since it doesn't use the build
   # default.
   if cdex_level != 'none':
-    common_options += ['--cdex-' + cdex_level]
+    testrunner_cmd += ['--cdex-' + cdex_level]
 
   with api.context(env=env):
     api.step('build',
@@ -156,42 +158,29 @@ def setup_host_x86(api,
           'test-art-host-gtest%d' % bitness
       ])
 
-      api.step('test optimizing',
-               ['./art/test/testrunner/testrunner.py', '--optimizing'] +
-               common_options)
+      api.step('test optimizing', testrunner_cmd + ['--optimizing'])
 
-      api.step(
-          'test debuggable',
-          ['./art/test/testrunner/testrunner.py', '--jit', '--debuggable'] +
-          common_options)
+      api.step('test debuggable', testrunner_cmd + ['--jit', '--debuggable'])
 
       # Use a lower `-j` number for interpreter, some tests take a long time
       # to run on it.
-      api.step('test interpreter', [
-          './art/test/testrunner/testrunner.py',
-          '-j%d' % (HOST_TEST_INTERPRETER_MAKE_JOBS), '--interpreter'
-      ] + common_options)
+      api.step(
+          'test interpreter', testrunner_cmd +
+          ['-j%d' % (HOST_TEST_INTERPRETER_MAKE_JOBS), '--interpreter'])
 
-      api.step('test baseline',
-               ['./art/test/testrunner/testrunner.py', '--baseline'] +
-               common_options)
+      api.step('test baseline', testrunner_cmd + ['--baseline'])
 
-      api.step('test jit', ['./art/test/testrunner/testrunner.py', '--jit'] +
-               common_options)
+      api.step('test jit', testrunner_cmd + ['--jit'])
 
       if cdex_level != "none":
-        api.step('test cdex-redefine-stress-optimizing', [
-            './art/test/testrunner/testrunner.py', '--optimizing',
-            '--redefine-stress', '--debuggable'
-        ] + common_options)
-        api.step('test cdex-redefine-stress-jit', [
-            './art/test/testrunner/testrunner.py', '--jit', '--redefine-stress',
-            '--debuggable'
-        ] + common_options)
+        api.step(
+            'test cdex-redefine-stress-optimizing', testrunner_cmd +
+            ['--optimizing', '--redefine-stress', '--debuggable'])
+        api.step(
+            'test cdex-redefine-stress-jit',
+            testrunner_cmd + ['--jit', '--redefine-stress', '--debuggable'])
 
-      api.step('test speed-profile',
-               ['./art/test/testrunner/testrunner.py', '--speed-profile'] +
-               common_options)
+      api.step('test speed-profile', testrunner_cmd + ['--speed-profile'])
 
       libcore_command = [art_tools.join('run-libcore-tests.sh'),
                          '--mode=host',
@@ -327,53 +316,48 @@ def setup_target(api,
     test_logging(api, 'test gtest')
 
     # Common options passed to testrunner.py.
-    common_options = ['--target', '--verbose']
+    testrunner_cmd = [
+        './art/test/testrunner/testrunner.py', '--target', '--verbose'
+    ]
 
     if debug:
-      common_options += ['--debug']
+      testrunner_cmd += ['--debug']
     else:
-      common_options += ['--ndebug']
+      testrunner_cmd += ['--ndebug']
 
     if gcstress:
-      common_options += ['--gcstress']
+      testrunner_cmd += ['--gcstress']
 
     with api.context(env=test_env):
-      api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                   '--optimizing'] + common_options)
+      api.step('test optimizing', testrunner_cmd + ['--optimizing'])
     test_logging(api, 'test optimizing')
 
     with api.context(env=test_env):
       # We pass --optimizing for interpreter debuggable to run AOT checker tests
       # compiled debuggable.
-      api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
-                                   '--optimizing',
-                                   '--debuggable'] + common_options)
+      api.step('test debuggable',
+               testrunner_cmd + ['--optimizing', '--debuggable'])
     test_logging(api, 'test debuggable')
 
     with api.context(env=test_env):
-      api.step('test jit debuggable', ['./art/test/testrunner/testrunner.py',
-                                       '--jit',
-                                       '--debuggable'] + common_options)
+      api.step('test jit debuggable',
+               testrunner_cmd + ['--jit', '--debuggable'])
     test_logging(api, 'test jit debuggable')
 
     with api.context(env=test_env):
-      api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                    '--interpreter'] + common_options)
+      api.step('test interpreter', testrunner_cmd + ['--interpreter'])
     test_logging(api, 'test interpreter')
 
     with api.context(env=test_env):
-      api.step('test baseline', ['./art/test/testrunner/testrunner.py',
-                                    '--baseline'] + common_options)
+      api.step('test baseline', testrunner_cmd + ['--baseline'])
     test_logging(api, 'test baseline')
 
     with api.context(env=test_env):
-      api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                            '--jit'] + common_options)
+      api.step('test jit', testrunner_cmd + ['--jit'])
     test_logging(api, 'test jit')
 
     with api.context(env=test_env):
-      api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
-                                      '--speed-profile'] + common_options)
+      api.step('test speed-profile', testrunner_cmd + ['--speed-profile'])
     test_logging(api, 'test speed-profile')
 
     libcore_command = [art_tools.join('run-libcore-tests.sh'),
