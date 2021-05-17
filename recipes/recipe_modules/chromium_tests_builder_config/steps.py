@@ -68,7 +68,7 @@ REPEAT_COUNT_FOR_FAILING_TESTS = 10
 # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
 MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
 MAC_TOOLCHAIN_VERSION = (
-    'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
+    'git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1')
 MAC_TOOLCHAIN_ROOT = '.'
 
 # CIPD package containing various static test utilities and binaries for WPR
