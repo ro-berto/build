@@ -532,7 +532,6 @@ class iOSApi(recipe_api.RecipeApi):
     task = {
         'bot id': test.get('bot id'),
         'isolated.gen': None,
-        'isolated hash': None,
         'pool': test.get('pool'),
         'skip': 'skip' in test,
         'step name': step_name,
@@ -992,7 +991,6 @@ class iOSApi(recipe_api.RecipeApi):
 
       for task in tasks:
         if task['task_id'] in step_result.json.output:
-          task['isolated hash'] = step_result.json.output[task['task_id']]
           task['task input'] = self.m.isolate.isolated_tests.get(
               task['task_id'])
 
@@ -1005,7 +1003,7 @@ class iOSApi(recipe_api.RecipeApi):
     Returns:
       None if no tests should be run, otherwise an instance of SwarmingIosTest.
     """
-    if not task['isolated hash']: # pragma: no cover
+    if not task.get('task input', None):  # pragma: no cover
       return None
     if task['buildername'] != self.m.buildbucket.builder_name:
       return None
