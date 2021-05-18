@@ -579,22 +579,6 @@
       "-u",
       "third_party\\node\\node.py",
       "--output",
-      "scripts\\test\\run_lint_check_js.js"
-    ],
-    "cwd": "[CACHE]\\builder\\devtools-frontend",
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]\\builder\\devtools-frontend\\third_party"
-      ]
-    },
-    "name": "Lint Check with ESLint"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "third_party\\node\\node.py",
-      "--output",
       "scripts\\test\\run_test_suite.js",
       "--test-suite-path=gen/test/interactions",
       "--test-suite-source-dir=test/interactions",
@@ -609,6 +593,22 @@
       ]
     },
     "name": "Interactions"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "third_party\\node\\node.py",
+      "--output",
+      "scripts\\test\\run_lint_check_js.js"
+    ],
+    "cwd": "[CACHE]\\builder\\devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\devtools-frontend\\third_party"
+      ]
+    },
+    "name": "Lint Check with ESLint"
   },
   {
     "cmd": [

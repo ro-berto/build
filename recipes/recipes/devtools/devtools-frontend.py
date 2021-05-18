@@ -96,6 +96,7 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
       return
 
     run_unit_tests(api, builder_config)
+    run_interactions(api, builder_config)
     publish_coverage_points(api, builder_config)
 
     if _is_debug(builder_config):
@@ -103,9 +104,7 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
 
     run_lint_check(api)
 
-    run_interactions(api, builder_config)
     run_e2e(api, builder_config)
-
     if can_run_experimental_steps(api):
       # Place here any unstable steps that you want to be performed on
       # builders with property run_experimental_steps == True
@@ -246,10 +245,12 @@ def publish_coverage_points(api, builder_config):
   if api.tryserver.is_tryserver or not _is_debug(builder_config):
     return
 
+  run_node_script(api, 'Combining coverage reports',
+                  'merge_coverage_reports.js')
+
   dimensions = ["lines", "statements", "functions", "branches"]
 
-  report_file = api.path['checkout'].join('karma-coverage',
-                                          'coverage-summary.json')
+  report_file = api.path['checkout'].join('test', 'coverage-summary.json')
   if not api.path.exists(report_file):
     return
 
@@ -343,7 +344,7 @@ def GenTests(api):
       ci_build(builder='linux'),
       api.properties(builder_config='Debug'),
       api.path.exists(api.path['checkout'].join(
-          'karma-coverage',
+          'test',
           'coverage-summary.json',
       )),
   )
