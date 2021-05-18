@@ -8,11 +8,14 @@ from recipe_engine import post_process
 DEPS = [
     'archive',
     'chromium',
+    'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/path',
     'recipe_engine/properties',
 ]
+
+source_side_spec_path = ['archive', 'foo.json']
 
 
 def RunSteps(api):
@@ -26,6 +29,9 @@ def RunSteps(api):
   # should result in a no-op.
   api.archive.generic_archive_after_tests(
       build_dir=build_dir, test_success=False)
+
+  api.path.mock_add_paths(
+      api.chromium_checkout.checkout_dir.join(*source_side_spec_path))
 
   upload_results = api.archive.generic_archive(
       build_dir=build_dir,
@@ -95,8 +101,9 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  input_properties.source_side_spec_path.extend(source_side_spec_path)
   yield api.test(
-      'fuchsia_cipd_archive_x64_legacy',
+      'source_side_cipd_archive_data',
       api.chromium.generic_build(
           builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
       api.properties(
@@ -108,15 +115,55 @@ def GenTests(api):
           **{'$build/archive': input_properties}),
       api.chromium.override_version(
           major=88, step_name='Generic Archiving Steps.get version'),
+      api.archive._read_source_side_archive_spec(
+          source_side_spec_path[-1], {
+              "cipd_archive_datas": [{
+                  "yaml_files": ["foo",],
+                  "refs": ["{%channel%}",],
+                  "tags": {
+                      "version": "2.3.4.5",
+                  },
+              },],
+          }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(
           post_process.StepCommandContains,
           "Generic Archiving Steps.create foo", [
               'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
               '-hash-algo', 'sha256', '-ref', 'legacy88', '-tag',
-              'version:1.2.3.4', '-pkg-var', 'targetarch:amd64',
-              '-compression-level', '8', '-json-output', '/path/to/tmp/json'
+              'version:2.3.4.5', '-json-output', '/path/to/tmp/json'
           ]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'source_side_archive_data',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+      api.properties(
+          gcs_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.archive._read_source_side_archive_spec(
+          source_side_spec_path[-1], {
+              'archive_datas': [{
+                  'files': ['/path/to/another/file.txt'],
+                  'gcs_bucket': 'any-bucket',
+                  'gcs_path': 'dest_dir/',
+                  'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
+              },],
+          }),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/another/file.txt', [
+              'python', '-u', 'RECIPE_MODULE[depot_tools::gsutil]/resources/'
+              'gsutil_smart_retry.py', '--',
+              'RECIPE_REPO[depot_tools]/gsutil.py', '----', 'cp',
+              '/path/to/another/file.txt',
+              'gs://any-bucket/dest_dir/path/to/another/file.txt'
+          ]),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

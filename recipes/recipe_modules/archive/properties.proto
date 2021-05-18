@@ -149,8 +149,24 @@ message CIPDArchiveData {
   bool only_set_refs_on_tests_success = 6;
 }
 
-// Next id: 2
+// Next id: 4
 message InputProperties {
   repeated ArchiveData archive_datas = 1;
   repeated CIPDArchiveData cipd_archive_datas = 2;
+
+  // The path (relative to checkout_dir) to the file containing
+  // specs for archive data. archive_datas and cipd_archive_datas will both
+  // be ignored if this path is specfied.
+  //
+  // An example file looks like
+  // {
+  //   "cipd_archive_datas": [{
+  //     "yaml_files": ["foo",],
+  //     "refs": ["{%channel%}",],
+  //     "tags": {
+  //       "version": "2.3.4.5",
+  //     },
+  //   },],
+  // }
+  repeated string source_side_spec_path = 3;
 }

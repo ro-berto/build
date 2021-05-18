@@ -10,7 +10,11 @@ import os
 
 # pylint: disable=relative-import
 import manual_bisect_files
-from PB.recipe_modules.build.archive.properties import ArchiveData
+
+from google.protobuf import json_format
+
+from PB.recipe_modules.build.archive.properties import ArchiveData, \
+                                                       InputProperties
 from recipe_engine import recipe_api
 
 # Regular expression to identify a Git hash.
@@ -647,6 +651,41 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return input_str
 
+  def _read_source_side_archive_spec(self, source_side_archive_spec_path):
+    archive_spec_result = self.m.json.read(
+        'read archive spec (%s)' %
+        self.m.path.basename(source_side_archive_spec_path),
+        source_side_archive_spec_path,
+        infra_step=True,
+        step_test_data=lambda: self.m.json.test_api.output({}))
+    archive_spec_result.presentation.step_text = ('path: %s' %
+                                                  source_side_archive_spec_path)
+    source_side_archive_spec = archive_spec_result.json.output
+    return source_side_archive_spec
+
+  def _get_source_side_archive_spec(self, spec_path):
+    source_side_archive_spec_path = self.m.chromium_checkout.checkout_dir.join(
+        *spec_path)
+    archive_spec = self._read_source_side_archive_spec(
+        source_side_archive_spec_path)
+    return archive_spec
+
+  def _get_archive_config(self, config):
+    if config is None:
+      config = self._default_config
+
+    if not config.source_side_spec_path:
+      return config
+
+    source_side_archive_spec = self._get_source_side_archive_spec(
+        config.source_side_spec_path)
+    if source_side_archive_spec:
+      return json_format.ParseDict(
+          source_side_archive_spec,
+          InputProperties(),
+          ignore_unknown_fields=True)
+    return config
+
   def generic_archive(self,
                       build_dir,
                       update_properties,
@@ -685,19 +724,19 @@ class ArchiveApi(recipe_api.RecipeApi):
     upload_results['update_properties'] = update_properties
     upload_results['custom_vars'] = custom_vars
 
-    if config is None:
-      config = self._default_config
+    archive_config = self._get_archive_config(config)
 
-    if not config.archive_datas and not config.cipd_archive_datas:
+    if (not archive_config.archive_datas and
+        not archive_config.cipd_archive_datas):
       return upload_results
 
     with self.m.step.nest('Generic Archiving Steps'):
-      for archive_data in config.archive_datas:
+      for archive_data in archive_config.archive_datas:
         if not archive_data.only_upload_on_tests_success:
           upload_results['gcs'].extend(
               self.gcs_archive(build_dir, update_properties, archive_data,
                                custom_vars))
-      for cipd_archive_data in config.cipd_archive_datas:
+      for cipd_archive_data in archive_config.cipd_archive_datas:
         upload_results['cipd'].update(
             self.cipd_archive(build_dir, update_properties, custom_vars,
                               cipd_archive_data))
@@ -721,17 +760,17 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     For information about other args see generic_archive.
     """
-    if config is None:
-      config = self._default_config
-
     if not upload_results or not test_success:
       return
 
-    if not config.archive_datas and not config.cipd_archive_datas:
+    archive_config = self._get_archive_config(config)
+
+    if (not archive_config.archive_datas and
+        not archive_config.cipd_archive_datas):
       return
 
     with self.m.step.nest('Generic Archiving Steps After Tests'):
-      for archive_data in config.archive_datas:
+      for archive_data in archive_config.archive_datas:
         if archive_data.only_upload_on_tests_success:
           self.gcs_archive(build_dir, upload_results['update_properties'],
                            archive_data, upload_results['custom_vars'])
