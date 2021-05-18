@@ -19,7 +19,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/codesearch-gen-chromium-win/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/codesearch-gen-chromium-linux/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800",
       "PACKFILE_OFFLOADING": "1"
@@ -271,7 +271,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/codesearch-gen-chromium-win/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/codesearch-gen-chromium-linux/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {
@@ -283,16 +283,13 @@
   },
   {
     "cmd": [
-      "forfiles",
-      "/p",
+      "find",
       "[CACHE]/builder/src/out",
-      "/s",
-      "/m",
-      "*",
-      "/d",
-      "-7",
-      "/c",
-      "cmd /c if @isdir==FALSE del @path"
+      "-mtime",
+      "+7",
+      "-type",
+      "f",
+      "-delete"
     ],
     "name": "delete old generated files"
   },
@@ -305,7 +302,7 @@
       "-m",
       "chromium.linux",
       "-b",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -331,14 +328,14 @@
       "-m",
       "chromium.linux",
       "-b",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "[CACHE]/builder/src/out/win-Debug"
+      "[CACHE]/builder/src/out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -357,9 +354,9 @@
       "-u",
       "[CACHE]/builder/src/tools/clang/scripts/generate_compdb.py",
       "-p",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "-o",
-      "[CACHE]/builder/src/out/win-Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/Debug/compile_commands.json",
       "all"
     ],
     "name": "generate compilation database"
@@ -370,7 +367,7 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "desc",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "*",
       "--format=json"
     ],
@@ -385,28 +382,12 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "\n{\n   \"//ipc:mojom_constants__generator\": {\n      \"args\": [ \"--use_bundled_pylibs\", \"generate\", \"-d\", \"../../\", \"-I\", \"../../\", \"-o\", \"gen\", \"--bytecode_path\", \"gen/mojo/public/tools/bindings\", \"--filelist={{response_file_name}}\", \"-g\", \"c++\", \"--typemap\", \"gen/ipc/mojom_constants__type_mappings\" ],\n      \"deps\": [ \"//ipc:mojom_constants__parsed\", \"//ipc:mojom_constants__type_mappings\", \"//ipc:mojom_constants__verify_deps\", \"//mojo/public/tools/bindings:precompile_templates\" ],\n      \"inputs\": [ \"//mojo/public/tools/bindings/generators/mojom_cpp_generator.py\" ],\n      \"outputs\": [ \"//out/Debug/gen/ipc/constants.mojom.cc\", \"//out/Debug/gen/ipc/constants.mojom.h\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.cc\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.h\" ],\n      \"public\": \"*\",\n      \"script\": \"//mojo/public/tools/bindings/mojom_bindings_generator.py\",\n      \"sources\": [ \"//ipc/constants.mojom\" ],\n      \"testonly\": false,\n      \"toolchain\": \"//build/toolchain/linux:clang_x64\",\n      \"type\": \"action\",\n      \"visibility\": [ \"//ipc:*\" ]\n   }\n}\n",
-      "[CACHE]/builder/src/out/win-Debug/gn_targets.json"
+      "",
+      "[CACHE]/builder/src/out/Debug/gn_targets.json"
     ],
     "infra_step": true,
     "name": "write gn target list",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@gn_targets.json@@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@{@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@   \"//ipc:mojom_constants__generator\": {@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"args\": [ \"--use_bundled_pylibs\", \"generate\", \"-d\", \"../../\", \"-I\", \"../../\", \"-o\", \"gen\", \"--bytecode_path\", \"gen/mojo/public/tools/bindings\", \"--filelist={{response_file_name}}\", \"-g\", \"c++\", \"--typemap\", \"gen/ipc/mojom_constants__type_mappings\" ],@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"deps\": [ \"//ipc:mojom_constants__parsed\", \"//ipc:mojom_constants__type_mappings\", \"//ipc:mojom_constants__verify_deps\", \"//mojo/public/tools/bindings:precompile_templates\" ],@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"inputs\": [ \"//mojo/public/tools/bindings/generators/mojom_cpp_generator.py\" ],@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"outputs\": [ \"//out/Debug/gen/ipc/constants.mojom.cc\", \"//out/Debug/gen/ipc/constants.mojom.h\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.cc\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.h\" ],@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"public\": \"*\",@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"script\": \"//mojo/public/tools/bindings/mojom_bindings_generator.py\",@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"sources\": [ \"//ipc/constants.mojom\" ],@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"testonly\": false,@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"toolchain\": \"//build/toolchain/linux:clang_x64\",@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"type\": \"action\",@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@      \"visibility\": [ \"//ipc:*\" ]@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@   }@@@",
-      "@@@STEP_LOG_LINE@gn_targets.json@}@@@",
       "@@@STEP_LOG_END@gn_targets.json@@@"
     ]
   },
@@ -420,10 +401,23 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/src/out/win-Debug/kzip"
+      "[CACHE]/builder/src/out/Debug/kzip"
     ],
     "infra_step": true,
     "name": "java kzip"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out"
+    ],
+    "infra_step": true,
+    "name": "remove out directory"
   },
   {
     "cmd": [
@@ -457,7 +451,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "clang_revision",
@@ -483,13 +477,13 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/codesearch_gen_chromium_win"
+      "[CACHE]/goma/data/codesearch_gen_chromium_linux"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -510,7 +504,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -518,7 +512,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -557,7 +551,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -581,7 +575,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "-k",
       "0",
       "-j",
@@ -592,7 +586,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "compile"
@@ -603,7 +597,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "-k",
       "0",
       "-j",
@@ -617,7 +611,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "compile confirm no-op"
@@ -644,7 +638,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -680,7 +674,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -705,7 +699,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -734,9 +728,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/win-Debug\", \"-k\", \"0\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-k\", \"0\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -752,10 +746,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"codesearch-gen-chromium-win\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"codesearch-gen-chromium-linux\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--buildbot-mastername",
       "chromium.linux",
       "--buildbot-slavename",
@@ -765,7 +759,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.upload_log",
@@ -799,7 +793,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/win-Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -838,7 +832,7 @@
       "--tool",
       "[CACHE]/builder/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
       "-p",
-      "[CACHE]/builder/src/out/win-Debug",
+      "[CACHE]/builder/src/out/Debug",
       "--all"
     ],
     "name": "run translation_unit clang tool"
@@ -855,7 +849,7 @@
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "[CACHE]/builder/src/out/win-Debug"
+      "[CACHE]/builder/src/out/Debug"
     ],
     "name": "add kythe metadata"
   },
@@ -917,19 +911,17 @@
       "--checkout_dir",
       "[CACHE]/builder/src",
       "--path_to_compdb",
-      "[CACHE]/builder/src/out/win-Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/Debug/compile_commands.json",
       "--path_to_gn_targets",
-      "[CACHE]/builder/src/out/win-Debug/gn_targets.json",
+      "[CACHE]/builder/src/out/Debug/gn_targets.json",
       "--path_to_java_kzips",
-      "[CACHE]/builder/src/out/win-Debug/kzip",
+      "[CACHE]/builder/src/out/Debug/kzip",
       "--path_to_archive_output",
-      "[CACHE]/builder/src/out/win-Debug/chromium_win.kzip",
+      "[CACHE]/builder/src/out/Debug/chromium_linux.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
       "--build_config",
-      "win",
-      "--out_dir",
-      "src/out/win-Debug"
+      "linux"
     ],
     "name": "create kythe index pack"
   },
@@ -942,13 +934,13 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CACHE]/builder/src/out/win-Debug/chromium_win.kzip",
-      "gs://chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000001.kzip"
+      "[CACHE]/builder/src/out/Debug/chromium_linux.kzip",
+      "gs://chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000001.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000001.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000001.kzip@@@"
     ]
   },
   {
@@ -960,25 +952,14 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CACHE]/builder/src/out/win-Debug/compile_commands.json",
-      "gs://chrome-codesearch/debug/compile_commands_win_170242.json"
+      "[CACHE]/builder/src/out/Debug/compile_commands.json",
+      "gs://chrome-codesearch/debug/compile_commands_linux_170242.json"
     ],
     "infra_step": true,
     "name": "gsutil upload compile_commands.json",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_win_170242.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_170242.json@@@"
     ]
-  },
-  {
-    "cmd": [
-      "git",
-      "config",
-      "core.longpaths",
-      "true"
-    ],
-    "cwd": "[CACHE]/generated",
-    "infra_step": true,
-    "name": "set core.longpaths"
   },
   {
     "cmd": [
@@ -1093,10 +1074,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--debug-dir",
-      "win-Debug",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
       "[CACHE]/builder/src/out",

@@ -262,6 +262,17 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   kzip_dir = api.codesearch.c.javac_extractor_output_dir
   api.file.ensure_directory('java kzip', kzip_dir)
 
+  # If sentinel file is present, it means last build failed to compile, so
+  # remove out directory since it might be in a bad state.
+  sentinel_path = api.path['cache'].join('builder', 'cr-cs-sentinel')
+  if api.path.exists(sentinel_path):
+    api.file.rmtree('remove out directory', api.path['checkout'].join('out'))
+
+  # Create sentinel file to keep track of whether compilation succeeded.
+  api.file.write_text(
+      'create sentinel file', sentinel_path, 'cr-cs-sentinel',
+      include_log=False)
+
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
   # validation and doesn't get pushed out anyway, so there's no point in
@@ -280,6 +291,9 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
         target=gen_repo_out_dir or 'Debug')
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
+
+  # Remove sentinel file after compilation completes.
+  api.file.remove('remove sentinel file', sentinel_path)
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()
@@ -382,6 +396,13 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.step_data('compile', retcode=1),
+  )
+
+  yield api.test(
+      'full_%s_last_compile_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
+      api.path.exists(api.path['cache'].join('builder', 'cr-cs-sentinel')),
   )
 
   yield api.test(

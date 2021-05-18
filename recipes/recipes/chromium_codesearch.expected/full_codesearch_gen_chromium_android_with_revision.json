@@ -424,6 +424,20 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "cr-cs-sentinel",
+      "[CACHE]/builder/cr-cs-sentinel"
+    ],
+    "infra_step": true,
+    "name": "create sentinel file"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -790,6 +804,19 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/cr-cs-sentinel"
+    ],
+    "infra_step": true,
+    "name": "remove sentinel file"
   },
   {
     "cmd": [
