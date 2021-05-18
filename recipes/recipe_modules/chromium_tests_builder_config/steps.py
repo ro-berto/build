@@ -2051,7 +2051,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
             (sanitized_buildername, buildnumber))
     base += '/' + urllib.quote(step_name)
 
-    if 'with patch' in step_suffix:
+    # This keeps track of the link to build summary section for ci and cq.
+    if not 'without patch' in step_suffix:
       self._layout_test_results = base + '/layout-test-results/results.html'
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')
