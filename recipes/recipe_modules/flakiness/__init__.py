@@ -8,6 +8,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
+    'recipe_engine/step',
 ]
 
 PROPERTIES = properties.InputProperties
