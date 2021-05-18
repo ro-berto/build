@@ -17,6 +17,7 @@ from . import structs
 
 QS_ACCOUNT = 'lacros'
 CTP_BUILDER = 'cros_test_platform'
+CTP_BUILDER_DEV = 'cros_test_platform-dev'
 AUTOTEST_NAME = 'tast.lacros'
 CROS_BUCKET = 'gs://chromeos-image-archive/'
 POOL = Request.Params.Scheduling.MANAGED_POOL_QUOTA
@@ -88,7 +89,7 @@ class SkylabApi(recipe_api.RecipeApi):
       # cause cascading termination. For that see swarming_parent_run_id.
       bb_tags = {'parent_buildbucket_id': str(self.m.buildbucket.build.id)}
       bb_request = self.m.buildbucket.schedule_request(
-          CTP_BUILDER,
+          CTP_BUILDER_DEV if self.m.runtime.is_experimental else CTP_BUILDER,
           project='chromeos',
           bucket='testplatform',
           properties={
