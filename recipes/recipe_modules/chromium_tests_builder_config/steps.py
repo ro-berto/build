@@ -3284,6 +3284,12 @@ class SwarmingIosTest(SwarmingTest):
     named_cache = 'xcode_ios_%s' % (task['xcode build version'])
     swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
 
+    if self.spec.platform == 'simulator':
+      runtime_cache_name = 'runtime_ios_%s' % str(task['test']['os']).replace(
+          '.', '_')
+      runtime_cache_path = 'Runtime-ios-%s' % str(task['test']['os'])
+      swarming_task.named_caches[runtime_cache_name] = runtime_cache_path
+
     swarming_task.tags.add('device_type:%s' % str(task['test']['device type']))
     swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
     swarming_task.tags.add('platform:%s' % self.spec.platform)
