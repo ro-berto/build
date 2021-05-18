@@ -21,7 +21,7 @@
       "--revision",
       "src@r10",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -333,7 +333,7 @@
       "--revision",
       "src@r6",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1168,7 +1168,7 @@
       "--revision",
       "src@r7",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2003,7 +2003,7 @@
       "--revision",
       "src@r9",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2838,7 +2838,7 @@
       "--revision",
       "src@r10",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

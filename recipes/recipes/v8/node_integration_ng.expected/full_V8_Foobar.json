@@ -23,7 +23,7 @@
       "--revision",
       "node-ci/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -275,7 +275,7 @@
     ],
     "infra_step": true,
     "name": "trigger",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"v8_foobar_perf\", \"project\": \"v8-internal\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"project\": \"v8/node-ci\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"parent_buildername\": \"V8 Foobar\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/master@{#187054}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"v8_foobar_perf\", \"project\": \"v8-internal\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"project\": \"v8/node-ci\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"parent_buildername\": \"V8 Foobar\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/master@{#187054}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -307,7 +307,7 @@
       "@@@STEP_LOG_LINE@request@          \"host\": \"chromium.googlesource.com\", @@@",
       "@@@STEP_LOG_LINE@request@          \"id\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
       "@@@STEP_LOG_LINE@request@          \"project\": \"v8/node-ci\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/master\"@@@",
+      "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/main\"@@@",
       "@@@STEP_LOG_LINE@request@        }, @@@",
       "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
       "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",

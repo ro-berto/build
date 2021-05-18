@@ -30,7 +30,7 @@
       "--revision",
       "src@HEAD",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

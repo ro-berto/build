@@ -29,7 +29,7 @@
       "--revision",
       "boringssl@2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/linux_sde/8945511751514863184",

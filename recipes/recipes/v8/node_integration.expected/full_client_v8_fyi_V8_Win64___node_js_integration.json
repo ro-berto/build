@@ -23,7 +23,7 @@
       "--revision",
       "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

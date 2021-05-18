@@ -17,7 +17,7 @@
       "--revision",
       "src@r1",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -328,7 +328,7 @@
       "--revision",
       "src@r1",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

@@ -17,7 +17,7 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -709,7 +709,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Android64 (M Nexus5X)\", \"project\": \"webrtc\"}, {\"job\": \"Perf Android64 (O Pixel2)\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android64 Builder arm64/0\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Android64 (M Nexus5X)\", \"project\": \"webrtc\"}, {\"job\": \"Perf Android64 (O Pixel2)\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/main\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android64 Builder arm64/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -738,7 +738,7 @@
       "@@@STEP_LOG_LINE@input@                    }, @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
       "@@@STEP_LOG_LINE@input@                        \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"gitiles_ref:refs/heads/master\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"gitiles_ref:refs/heads/main\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_buildername:Android64 Builder arm64\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"user_agent:recipe\"@@@",
       "@@@STEP_LOG_LINE@input@                    ]@@@",

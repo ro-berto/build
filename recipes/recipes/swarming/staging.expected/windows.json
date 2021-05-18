@@ -33,7 +33,7 @@
       "--revision",
       "src/tools/swarming_client@HEAD",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

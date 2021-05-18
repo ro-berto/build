@@ -125,7 +125,7 @@
       "--revision",
       "src/third_party/angle@HEAD",
       "--refs",
-      "refs/heads/master",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",

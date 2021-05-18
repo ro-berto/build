@@ -17,7 +17,7 @@
       "--revision",
       "src@gfedcba0987654321",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -381,7 +381,7 @@
       "--revision",
       "src@gfedcba0987654321",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

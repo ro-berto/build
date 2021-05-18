@@ -41,7 +41,7 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/local_test/8945511751514863184",

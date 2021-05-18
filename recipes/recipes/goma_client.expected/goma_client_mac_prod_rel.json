@@ -17,7 +17,7 @@
       "--revision",
       "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
       "--refs",
-      "refs/heads/master",
+      "refs/heads/main",
       "--gerrit_no_reset"
     ],
     "env": {

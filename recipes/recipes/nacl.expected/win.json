@@ -17,7 +17,7 @@
       "--revision",
       "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/heads/master"
+      "refs/heads/main"
     ],
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "project/ci/win7-64-glibc-dbg/8945511751514863184",
