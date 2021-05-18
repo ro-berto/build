@@ -1604,7 +1604,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     self.report_builders(builder_config)
-    raw_result, task = self._calculate_tests_to_run(
+    raw_result, task = self.build_affected_targets(
         builder_id,
         builder_config,
         tests_to_run=tests,
@@ -1855,12 +1855,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if task_output_stdout:
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
-  def _calculate_tests_to_run(self,
-                              builder_id,
-                              builder_config,
-                              tests_to_run=None,
-                              root_solution_revision=None):
-    """Determines which tests need to be run.
+  def build_affected_targets(self,
+                             builder_id,
+                             builder_config,
+                             tests_to_run=None,
+                             root_solution_revision=None):
+    """Builds targets affected by change.
 
     Args:
       builders: An optional mapping from <group, buildername> to

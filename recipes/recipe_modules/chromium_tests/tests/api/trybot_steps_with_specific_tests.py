@@ -76,7 +76,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   tests = [s.get_test() for s in test_specs]
 
-  # Override _calculate_tests_to_run to run the desired test, in the desired
+  # Override build_affected_targets to run the desired test, in the desired
   # configuration.
   def config_override(builder_id, builder_config, **kwargs):
     task = api.chromium_tests.Task(builder_config, tests, update_step,
@@ -85,11 +85,11 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if fail_calculate_tests:
       raw_result.summary_markdown = (
-          'Compile step failed from "_calculate_tests_to_run".')
+          'Compile step failed from "build_affected_targets".')
       raw_result.status = common_pb.FAILURE
     return raw_result, task
 
-  api.chromium_tests._calculate_tests_to_run = config_override
+  api.chromium_tests.build_affected_targets = config_override
 
   def compile_override(*args, **kwargs):
     return result_pb2.RawResult(
@@ -136,7 +136,7 @@ def GenTests(api):
       api.properties(fail_calculate_tests=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason,
-                       'Compile step failed from "_calculate_tests_to_run".'),
+                       'Compile step failed from "build_affected_targets".'),
       api.post_process(post_process.DropExpectation),
   )
 
