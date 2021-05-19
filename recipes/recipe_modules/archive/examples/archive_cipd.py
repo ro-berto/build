@@ -16,6 +16,7 @@ DEPS = [
 ]
 
 source_side_spec_path = ['archive', 'foo.json']
+non_existing_spec_path = ['non', 'existing', 'foo.json']
 
 
 def RunSteps(api):
@@ -76,6 +77,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  input_properties.source_side_spec_path.extend(non_existing_spec_path)
   yield api.test(
       'fuchsia_cipd_archive_x64',
       api.chromium.generic_build(
@@ -101,6 +103,8 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  for path in non_existing_spec_path:
+    input_properties.source_side_spec_path.remove(path)
   input_properties.source_side_spec_path.extend(source_side_spec_path)
   yield api.test(
       'source_side_cipd_archive_data',

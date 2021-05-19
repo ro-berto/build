@@ -652,6 +652,8 @@ class ArchiveApi(recipe_api.RecipeApi):
     return input_str
 
   def _read_source_side_archive_spec(self, source_side_archive_spec_path):
+    if not self.m.path.exists(source_side_archive_spec_path):
+      return None
     archive_spec_result = self.m.json.read(
         'read archive spec (%s)' %
         self.m.path.basename(source_side_archive_spec_path),
