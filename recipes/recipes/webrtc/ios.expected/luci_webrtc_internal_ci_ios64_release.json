@@ -1030,7 +1030,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/0.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 0.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/common_audio_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1080,9 +1097,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/common_audio_unittests.app\", @@@",
@@ -1104,7 +1119,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/1.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 1.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/1.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/common_video_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1154,9 +1186,7 @@
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/1.isolated\", @@@",
+      "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/1.isolate\", @@@",
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@1.isolated.gen.json@    \"src/out/Release-iphoneos/common_video_unittests.app\", @@@",
@@ -1178,7 +1208,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/2.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 2.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/2.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/modules_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/2.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1228,9 +1275,7 @@
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/2.isolated\", @@@",
+      "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/2.isolate\", @@@",
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@2.isolated.gen.json@    \"src/out/Release-iphoneos/modules_tests.app\", @@@",
@@ -1252,7 +1297,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/3.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/3.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 3.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/3.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/modules_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/3.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1302,9 +1364,7 @@
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/3.isolated\", @@@",
+      "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/3.isolate\", @@@",
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@3.isolated.gen.json@    \"src/out/Release-iphoneos/modules_unittests.app\", @@@",
@@ -1326,7 +1386,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/4.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/4.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 4.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/4.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/rtc_pc_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/4.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1376,9 +1453,7 @@
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/4.isolated\", @@@",
+      "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/4.isolate\", @@@",
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@4.isolated.gen.json@    \"src/out/Release-iphoneos/rtc_pc_unittests.app\", @@@",
@@ -1400,7 +1475,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/5.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/5.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 5.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/5.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/rtc_stats_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/5.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1450,9 +1542,7 @@
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/5.isolated\", @@@",
+      "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/5.isolate\", @@@",
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@5.isolated.gen.json@    \"src/out/Release-iphoneos/rtc_stats_unittests.app\", @@@",
@@ -1474,7 +1564,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/6.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/6.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 6.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/6.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/system_wrappers_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/6.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1524,9 +1631,7 @@
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/6.isolated\", @@@",
+      "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/6.isolate\", @@@",
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@6.isolated.gen.json@    \"src/out/Release-iphoneos/system_wrappers_unittests.app\", @@@",
@@ -1548,7 +1653,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/7.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/7.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 7.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/7.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/test_support_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/7.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1598,9 +1720,7 @@
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/7.isolated\", @@@",
+      "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/7.isolate\", @@@",
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@7.isolated.gen.json@    \"src/out/Release-iphoneos/test_support_unittests.app\", @@@",
@@ -1622,7 +1742,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/8.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/8.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 8.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/8.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/tools_unittests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/8.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1672,9 +1809,7 @@
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/8.isolated\", @@@",
+      "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/8.isolate\", @@@",
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@8.isolated.gen.json@    \"src/out/Release-iphoneos/tools_unittests.app\", @@@",
@@ -1696,7 +1831,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/9.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/9.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 9.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/9.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/video_capture_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/9.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1746,9 +1898,7 @@
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/9.isolated\", @@@",
+      "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/9.isolate\", @@@",
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@9.isolated.gen.json@    \"src/out/Release-iphoneos/video_capture_tests.app\", @@@",
@@ -1770,7 +1920,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/10.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/10.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 10.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/10.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/video_engine_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/10.isolated.gen.json"
     ],
     "infra_step": true,
@@ -1820,9 +1987,7 @@
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/10.isolated\", @@@",
+      "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/10.isolate\", @@@",
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@10.isolated.gen.json@    \"src/out/Release-iphoneos/video_engine_tests.app\", @@@",

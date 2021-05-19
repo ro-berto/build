@@ -510,7 +510,25 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9a123\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/0.isolate"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "name": "isolate.copy template to 0.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9a123\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Debug-iphoneos/build-global xcode build version.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -561,9 +579,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"9a123\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Debug-iphoneos/build-global xcode build version.app\", @@@",

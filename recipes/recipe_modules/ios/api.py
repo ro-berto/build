@@ -571,6 +571,9 @@ class iOSApi(recipe_api.RecipeApi):
     xcode_build_version = task['xcode build version']
 
     task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
+    task_isolate = tmp_dir.join('%s.isolate' % test_id)
+    self.m.file.copy('copy template to %s.isolate' % test_id, isolate_template,
+                     task_isolate)
 
     args = [
         '--config-variable',
@@ -613,9 +616,7 @@ class iOSApi(recipe_api.RecipeApi):
         'xcode_version',
         xcode_build_version,
         '--isolate',
-        isolate_template,
-        '--isolated',
-        tmp_dir.join('%s.isolated' % test_id),
+        task_isolate,
         '--path-variable',
         'app_path',
         app_path,

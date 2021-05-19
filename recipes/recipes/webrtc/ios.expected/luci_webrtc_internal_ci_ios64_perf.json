@@ -882,7 +882,24 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "[CACHE]/builder/template.isolate",
+      "[CLEANUP]/isolate_tmp_1/0.isolate"
+    ],
+    "infra_step": true,
+    "name": "isolate.copy template to 0.isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "infra_step": true,
@@ -932,9 +949,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"10l232m\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/template.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
