@@ -140,21 +140,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'V8 Blink Linux Layout NG':
-        _client_v8_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com/',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'show_v8_revision',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'Linux ASAN Builder':
         _client_v8_fyi_spec(
             chromium_config='chromium_asan',
