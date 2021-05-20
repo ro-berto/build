@@ -58,9 +58,24 @@ def _out_path(target_cpu, debug, clang):
   return out_dir
 
 
+def _get_compiler_name(api, clang):
+  # Clang is used as the default compiler.
+  if clang or clang is None:
+    return 'clang'
+  # The non-Clang compiler is OS-dependent.
+  if api.platform.is_win:
+    return 'msvc'
+  return 'gcc'
+
+
+def _use_goma(api, clang):
+  return not api.platform.is_win or _get_compiler_name(api, clang) != 'msvc'
+
+
 def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
   """calls 'gn gen'"""
-  api.goma.ensure_goma()
+  if _use_goma(api, clang):
+    api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
   checkout = api.path['checkout']
@@ -68,8 +83,6 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
 
   # Prepare the arguments to pass in.
   args = [
-      'use_goma=true',
-      'goma_dir="%s"' % api.goma.goma_dir,
       'is_debug=%s' % gn_bool[debug],
       'tint_build_spv_reader=true',
       'tint_build_spv_writer=true',
@@ -78,6 +91,8 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
       'tint_build_msl_writer=true',
       'tint_build_hlsl_writer=true',
   ]
+  if _use_goma(api, clang):
+    args.extend(['use_goma=true', 'goma_dir="%s"' % api.goma.goma_dir])
 
   if clang is not None:
     args.append('is_clang=%s' % gn_bool[clang])
@@ -92,29 +107,23 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
     ])
 
 
-def _get_compiler_name(api, clang):
-  # Clang is used as the default compiler.
-  if clang or clang is None:
-    return 'clang'
-  # The non-Clang compiler is OS-dependent.
-  if api.platform.is_win:
-    return 'msvc'
-  return 'gcc'
-
-
 def _build_steps(api, out_dir, clang, *targets):
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [
-      api.depot_tools.ninja_path, '-C', debug_path, '-j',
-      api.goma.recommended_goma_jobs
-  ]
+
+  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
+  if _use_goma(api, clang):
+    ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
+
   ninja_cmd.extend(targets)
 
-  api.goma.build_with_goma(
-      name='compile with ninja',
-      ninja_command=ninja_cmd,
-      ninja_log_outdir=debug_path,
-      ninja_log_compiler=_get_compiler_name(api, clang))
+  if _use_goma(api, clang):
+    api.goma.build_with_goma(
+        name='compile with ninja',
+        ninja_command=ninja_cmd,
+        ninja_log_outdir=debug_path,
+        ninja_log_compiler=_get_compiler_name(api, clang))
+  else:
+    api.step('compile with ninja', ninja_cmd)
 
 
 def _run_unittests(api, out_dir):
