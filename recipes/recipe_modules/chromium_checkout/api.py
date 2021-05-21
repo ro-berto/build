@@ -2,9 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
+
 from recipe_engine import recipe_api
 
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.depot_tools.gclient import api as gclient
 
 
 class ChromiumCheckoutApi(recipe_api.RecipeApi):
@@ -96,13 +99,39 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
     timeout = int(self.timeout) if self.timeout else timeout
 
-    # Bot Update re-uses the gclient configs.
+    gclient_config = self.m.gclient.c
+    self._report_gclient_config(gclient_config)
+
     with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
-          clobber=bot_config.clobber, timeout=timeout, **kwargs)
+          gclient_config=gclient_config,
+          clobber=bot_config.clobber,
+          timeout=timeout,
+          **kwargs)
 
     assert update_step.json.output['did_run']
     # HACK(dnj): Remove after 'crbug.com/398105' has landed
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
 
     return update_step
+
+  def _report_gclient_config(self, gclient_config):
+    # We may need to update revision values to replace revision resolvers with
+    # something that is json serializable
+    gclient_config = copy.deepcopy(gclient_config)
+
+    def _replace_revision_resolver(revision):
+      return (repr(revision)
+              if isinstance(revision, gclient.RevisionResolver) else revision)
+
+    gclient_config.revisions = {
+        k: _replace_revision_resolver(v)
+        for k, v in gclient_config.revisions.iteritems()
+    }
+
+    for s in gclient_config.solutions:
+      s.revision = _replace_revision_resolver(s.revision)
+
+    step = self.m.step('gclient config', [])
+    step.presentation.logs['config'] = self.m.json.dumps(
+        gclient_config.as_jsonish(include_hidden=True), indent=2).split('\n')
