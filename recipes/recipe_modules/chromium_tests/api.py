@@ -96,6 +96,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._swarming_command_lines = {}
     self.filter_files_dir = None
 
+  @property
+  def swarming_command_lines(self):
+    return self._swarming_command_lines
+
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
@@ -587,7 +591,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._swarming_command_lines = step_result.json.output
     for test in tests:
       if test.runs_on_swarming or test.uses_isolate:
-        command_line = self._swarming_command_lines.get(test.target_name, [])
+        command_line = self.swarming_command_lines.get(test.target_name, [])
 
         if command_line:
           test.raw_cmd = command_line
@@ -1390,8 +1394,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if self.m.chromium.c.project_generator.tool == 'mb':
         additional_trigger_properties['swarming_command_lines_digest'] = (
-            self._archive_command_lines(self._swarming_command_lines,
-                                        builder_config.isolate_server))
+            self.archive_command_lines(self.swarming_command_lines,
+                                       builder_config.isolate_server))
         additional_trigger_properties['swarming_command_lines_cwd'] = (
             self.m.path.relpath(self.m.chromium.output_dir,
                                 self.m.path['checkout']))
@@ -1466,7 +1470,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self._swarming_command_lines = self._download_command_lines(digest)
       for test in tests:
         if test.runs_on_swarming:
-          command_line = self._swarming_command_lines.get(test.target_name, [])
+          command_line = self.swarming_command_lines.get(test.target_name, [])
           if command_line:
             # lists come back from properties as tuples, but the swarming
             # api expects this to be an actual list.
@@ -1490,7 +1494,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       package_transfer_reasons.append(" - %s doesn't use isolate" % t.name)
     return package_transfer_reasons
 
-  def _archive_command_lines(self, command_lines, isolate_server):
+  def archive_command_lines(self, command_lines, isolate_server):
     command_lines_file = self.m.path['cleanup'].join('command_lines.json')
     self.m.file.write_json('write command lines', command_lines_file,
                            command_lines)

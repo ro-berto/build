@@ -895,6 +895,21 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
             ),
+        'linux-rel-orchestrator':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.linux',
+                        buildername='Linux Builder',
+                        tester='Linux Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Linux Builder',
+                        tester='Linux Release (NVIDIA)',
+                    ),
+                ],
+            ),
         # crbug.com/1149606: Experimental builder to test pre-warming
         'linux-warmed':
             try_spec.TrySpec.create_for_single_mirror(
