@@ -571,9 +571,8 @@ class iOSApi(recipe_api.RecipeApi):
     xcode_build_version = task['xcode build version']
 
     task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
-    task_isolate = tmp_dir.join('%s.isolate' % test_id)
-    self.m.file.copy('copy template to %s.isolate' % test_id, isolate_template,
-                     task_isolate)
+    isolate_template_copy = self._ensure_checkout_dir().join('%s.isolate' %
+                                                             test_id)
 
     args = [
         '--config-variable',
@@ -616,7 +615,7 @@ class iOSApi(recipe_api.RecipeApi):
         'xcode_version',
         xcode_build_version,
         '--isolate',
-        task_isolate,
+        isolate_template_copy,
         '--path-variable',
         'app_path',
         app_path,
@@ -719,6 +718,11 @@ class iOSApi(recipe_api.RecipeApi):
         'generate %s.isolated.gen.json' % test_id,
         task['isolated.gen'],
         isolate_gen_file_contents,
+      )
+      self.m.file.copy(
+          'copy %s.isolate symlink' % test_id,
+          isolate_template,
+          isolate_template_copy,
       )
       pres = self.m.step.active_result.presentation
       pres.logs['%s.isolated.gen.json' % test_id] = (
