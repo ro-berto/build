@@ -788,6 +788,23 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Linux Builder (j-500) (n2) (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+                'use_deps_cache_prototype_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'Linux Builder (j-250) (reclient)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
