@@ -283,6 +283,19 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out"
+    ],
+    "infra_step": true,
+    "name": "remove out directory"
+  },
+  {
+    "cmd": [
       "find",
       "[CACHE]/builder/src/out",
       "-mtime",
@@ -405,19 +418,6 @@
     ],
     "infra_step": true,
     "name": "java kzip"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CACHE]/builder/src/out"
-    ],
-    "infra_step": true,
-    "name": "remove out directory"
   },
   {
     "cmd": [

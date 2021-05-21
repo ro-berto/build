@@ -248,6 +248,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks(name='runhooks%s' % name_suffix)
 
+  # If sentinel file is present, it means last build failed to compile, so
+  # remove out directory since it might be in a bad state.
+  sentinel_path = api.path['cache'].join('builder', 'cr-cs-sentinel')
+  if api.path.exists(sentinel_path):
+    api.file.rmtree('remove out directory', api.path['checkout'].join('out'))
+
   # Cleans up generated files. This is to prevent old generated files from
   # being left in the out directory. Note that this needs to be run *before*
   # generating the compilation database, otherwise some of the files generated
@@ -261,12 +267,6 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   # Prepare Java Kythe output directory
   kzip_dir = api.codesearch.c.javac_extractor_output_dir
   api.file.ensure_directory('java kzip', kzip_dir)
-
-  # If sentinel file is present, it means last build failed to compile, so
-  # remove out directory since it might be in a bad state.
-  sentinel_path = api.path['cache'].join('builder', 'cr-cs-sentinel')
-  if api.path.exists(sentinel_path):
-    api.file.rmtree('remove out directory', api.path['checkout'].join('out'))
 
   # Create sentinel file to keep track of whether compilation succeeded.
   api.file.write_text(
