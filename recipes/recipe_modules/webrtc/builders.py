@@ -233,7 +233,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 }
             },
@@ -248,7 +248,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -281,7 +281,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 }
             },
@@ -1166,7 +1166,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 }
             },
@@ -1181,7 +1181,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 },
                 'baremetal_swarming_dimensions': {
@@ -1202,7 +1202,7 @@ BUILDERS = freeze({
                     'platform': 'mac'
                 },
                 'swarming_dimensions': {
-                    'os': 'Mac-10.11',
+                    'os': 'Mac-11',
                     'cpu': 'x86-64',
                 }
             },
