@@ -821,10 +821,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _generate_dir_metadata(self):
     """Extracts directory metadata, e.g. mapping to monorail component."""
     dir_metadata = self.m.path.mkdtemp().join(constants.DIR_METADATA_FILE_NAME)
-    self.m.step('Extract directory metadata', [
-        self.m.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
-        'export', '-out', dir_metadata
-    ])
+    with self.m.context(cwd=self.m.path['checkout']):
+      self.m.step('Extract directory metadata', [
+          self.m.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
+          'export', '-out', dir_metadata
+      ])
     return dir_metadata
 
   def _generate_and_upload_metadata(self, binaries, profdata_path):
