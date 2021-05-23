@@ -35,4 +35,4 @@ def _AddCalibrationTestSpec(name, platform, target_bits):
 
 
 _AddCalibrationTestSpec('linux-perf-calibration', 'linux', 64)
-_AddCalibrationTestSpec('android-pixel2-perf-calibration', 'linux', 64)
+_AddCalibrationTestSpec('android-pixel2-perf-calibration', 'android', 64)
