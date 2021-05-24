@@ -29,6 +29,7 @@ def main(raw_args):
         'select',
         '-checkout', args.chromium_checkout, \
         '-model-dir', args.model_dir,
+        '-target-change-recall', '0.95',
         '-out', out_dir, \
       ])
 
