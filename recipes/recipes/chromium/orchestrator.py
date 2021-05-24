@@ -34,7 +34,7 @@ def RunSteps(api, properties):
       },
       tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
-  build = api.buildbucket.run([request])[0]
+  build = api.buildbucket.run([request], collect_interval=20, timeout=7200)[0]
   del build
 
 
