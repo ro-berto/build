@@ -296,18 +296,6 @@
   },
   {
     "cmd": [
-      "find",
-      "[CACHE]/builder/src/out",
-      "-mtime",
-      "+7",
-      "-type",
-      "f",
-      "-delete"
-    ],
-    "name": "delete old generated files"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",

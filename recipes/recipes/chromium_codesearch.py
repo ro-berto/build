@@ -248,17 +248,17 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks(name='runhooks%s' % name_suffix)
 
-  # If sentinel file is present, it means last build failed to compile, so
-  # remove out directory since it might be in a bad state.
   sentinel_path = api.path['cache'].join('builder', 'cr-cs-sentinel')
   if api.path.exists(sentinel_path):
+    # If sentinel file is present, it means last build failed to compile, so
+    # remove out directory since it might be in a bad state.
     api.file.rmtree('remove out directory', api.path['checkout'].join('out'))
-
-  # Cleans up generated files. This is to prevent old generated files from
-  # being left in the out directory. Note that this needs to be run *before*
-  # generating the compilation database, otherwise some of the files generated
-  # by that step may be deleted (if they've been unchanged for the past week).
-  api.codesearch.cleanup_old_generated()
+  else:
+    # Cleans up generated files. This is to prevent old generated files from
+    # being left in the out directory. Note that this needs to be run *before*
+    # generating the compilation database, otherwise some of the files generated
+    # by that step may be deleted (if they've been unchanged for the past week).
+    api.codesearch.cleanup_old_generated()
 
   api.codesearch.generate_compilation_database(
       targets, builder_group=builder_id.group, buildername=builder_id.builder)
