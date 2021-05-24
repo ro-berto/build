@@ -31,7 +31,8 @@ def RunSteps(api, properties):
               'builder_name': api.buildbucket.builder_name,
               'builder_group': api.builder_group.for_current
           }
-      })
+      },
+      tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
   build = api.buildbucket.run([request])[0]
   del build
