@@ -9,26 +9,28 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 
 class FlakinessApi(recipe_api.RecipeApi):
-  """A module for new test identification on try builds"""
+  """A module for new test identification on try builds."""
 
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._using_test_identifier = properties.identify_new_tests
+    self.build_count = properties.build_count or 1000
+    self.test_query_count = properties.test_query_count or 10000
 
   @property
   def using_test_identifier(self):
-    """Whether the build is identifying and logging new tests introduced
+    """Whether the build is identifying and logging new tests introduced.
 
     This needs to be enabled in order for the coordinating function of
     this module to execute.
 
     Return:
-      (bool) whether the build is identifying new tests.
+        A boolean of whether the build is identifying new tests.
     """
     return self._using_test_identifier
 
   def get_associated_invocations(self):
-    """Gets ResultDB Invocation IDs from the same CL as the current build
+    """Gets ResultDB Invocation IDs from the same CL as the current build.
 
     An invocation represents a container of results, in this case from a
     buildbucket build. Invocation IDs map the buildbucket build to the ResultDB
@@ -42,9 +44,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     Note: This does NOT get Invocation IDs associated with chained CLs.
 
     Returns:
-      A set of ResultDB Invocation IDs as strings
+        A set of ResultDB Invocation IDs as strings.
     """
-    step_name = 'fetching_builds_for_given_cl'
     change = self.m.buildbucket.build.input.gerrit_changes[0]
 
     # Creating BuildPredicate object for each patch set within a CL and
@@ -54,18 +55,20 @@ class FlakinessApi(recipe_api.RecipeApi):
     predicates = []
     for i in range(1, change.patchset + 1):
       predicates.append(
-          builds_service_pb2.BuildPredicate(gerrit_changes=[
-              common_pb2.GerritChange(
-                  host=change.host,
-                  project=change.project,
-                  change=change.change,
-                  patchset=i)
-          ]))
+          builds_service_pb2.BuildPredicate(
+              builder=self.m.buildbucket.build.builder,
+              gerrit_changes=[
+                  common_pb2.GerritChange(
+                      host=change.host,
+                      project=change.project,
+                      change=change.change,
+                      patchset=i),
+              ]))
 
     search_results = self.m.buildbucket.search(
         predicate=predicates,
-        step_name=step_name,
-        fields=['builds.*.infra.resultdb.invocation'],
+        step_name='fetching_builds_for_given_cl',
+        fields=['infra.resultdb.invocation'],
     )
 
     inv_set = set(
@@ -76,3 +79,114 @@ class FlakinessApi(recipe_api.RecipeApi):
         "invocation_list_from_builds"] = sorted(inv_set)
 
     return inv_set
+
+  def get_builder_invocation_history(self, builder_id, excluded_invs=None):
+    """Gets a list of Invocation IDs for the most recent builds on a builder.
+
+    Searches buildbucket for the ResultDB Invocation IDs of a specified number
+    of most recent builds on a particular builder.
+
+    Invocations represent containers of results and Invocation IDs map
+    buildbucket builds to results in ResultDB.
+
+    Args:
+        builder_id: A buildbucket.builder.proto.BuilderID message representing
+            the builder to search for build history from.
+        excluded_invs: A set of ResultDB invocation ID strings for invocations
+            that we don't want to include in our invocation list returned. This
+            is usually invocations associated with the current build that we
+            don't want to consider historical invocations as they contain new
+            tests from the current CL.
+
+    Returns:
+        A list of ResultDB Invocation ID strings for the builds we want to
+        query.
+    """
+    if excluded_invs is None:
+      excluded_invs = set()
+    step_name = 'get_historical_invocations'
+    predicate = builds_service_pb2.BuildPredicate(builder=builder_id)
+    search_results = self.m.buildbucket.search(
+        predicate=predicate,
+        limit=self.build_count,
+        fields=['infra.resultdb.invocation'],
+        step_name=step_name)
+
+    invs = [
+        str(b.infra.resultdb.invocation)
+        for b in search_results
+        if str(b.infra.resultdb.invocation) not in excluded_invs
+    ]
+
+    return invs
+
+  def get_test_variants(self, inv_list, step_name=None):
+    """Gets a set of test_id + variant hash strings found in specific builds.
+
+    This method searches ResultDB for the invocations specified, extracts the
+    test_id and variant_hash fields, concatenates them into strings, and
+    inserts them into a set for return.
+
+    Args:
+        inv_list: A list of string Invocation IDs for the invocations to query
+            from ResultDB.
+        step_name: A string of the name of the step in which this call is made.
+
+    Returns:
+        A set of test_id + test variant hash strings.
+    """
+    step_name = step_name or 'get_test_variants'
+    inv_dict = self.m.resultdb.query(
+        inv_ids=self.m.resultdb.invocation_ids(inv_list),
+        limit=self.test_query_count,
+        merge=True,
+        step_name=step_name)
+
+    test_set = set()
+    for inv in inv_dict.values():
+      for test_result in inv.test_results:
+        test_set.add(test_result.test_id + '_' + test_result.variant_hash)
+
+    return test_set
+
+  def identify_new_tests(self, variant_step=None, history_step=None):
+    """Coordinating method for identifying new tests on the current build.
+
+    This method queries ResultDB for the historical tests run on the specified
+    most recent builds on the current builder. This test list is compared with
+    the tests running on the current build to identify and return new tests
+    from the current CL.
+
+    Args:
+        variant_step: A string of the name of the step where the test variants
+            for the current build are found.
+        history_step: A string of the name of the step where the test variants
+            for the historical builds are found.
+
+    Returns:
+        A set of strings representing test_id + variant_hash concatenations
+        for all tests present in the current build but absent in the historical
+        build data.
+    """
+    if not self.using_test_identifier:
+      return None
+
+    variant_step = variant_step or 'get_current_cl_test_variants'
+    history_step = history_step or 'get_historical_test_variants'
+
+    with self.m.step.nest('searching_for_new_tests') as presentation:
+      current_builder = self.m.buildbucket.build.builder
+      current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
+      excluded_invs = self.get_associated_invocations()
+
+      inv_list = self.get_builder_invocation_history(
+          builder_id=current_builder, excluded_invs=excluded_invs)
+
+      current_tests = self.get_test_variants(
+          inv_list=[current_inv], step_name=variant_step)
+      historical_tests = self.get_test_variants(
+          inv_list=inv_list, step_name=history_step)
+      new_tests = current_tests.difference(historical_tests)
+
+      presentation.logs['new_tests'] = sorted(new_tests)
+    return new_tests

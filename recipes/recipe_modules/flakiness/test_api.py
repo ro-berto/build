@@ -7,8 +7,15 @@ from recipe_engine import recipe_test_api
 
 class FlakinessTestApi(recipe_test_api.RecipeTestApi):
 
-  def __call__(self, identify_new_tests=False):
+  def __call__(self,
+               identify_new_tests=False,
+               build_count=1000,
+               test_query_count=10000):
     return self.m.properties(
-        **{'$build/flakiness': {
-            'identify_new_tests': identify_new_tests
-        }})
+        **{
+            '$build/flakiness': {
+                'identify_new_tests': identify_new_tests,
+                'build_count': build_count,
+                'test_query_count': test_query_count
+            }
+        })
