@@ -251,7 +251,6 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Mac-11',
                     'cpu': 'x86-64',
-                    'cores': '12',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
@@ -1187,7 +1186,6 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Mac-11',
                     'cpu': 'x86-64',
-                    'cores': '12',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
