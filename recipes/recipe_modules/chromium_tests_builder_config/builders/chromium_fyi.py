@@ -154,6 +154,24 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'fuchsia-fyi-arm64-femu':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            # Serialize the tests to limit capacity usage.
+            serialize_tests=True,
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
     'fuchsia-fyi-arm64-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
