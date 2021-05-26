@@ -58,7 +58,7 @@ RECIPE_CONFIGS = freeze({
 
 BUILDERS = freeze({
     'luci.webrtc.ci': {
-        'settings': {
+       'settings': {
             'builder_group': 'client.webrtc',
             'build_gs_bucket': 'chromium-webrtc',
         },
@@ -210,17 +210,6 @@ BUILDERS = freeze({
                     'os': 'Windows-10-15063',
                     'cpu': 'x86-64',
                 }
-            },
-            'Win64 UWP': {
-                'recipe_config': 'webrtc_clang',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'win'
-                },
             },
             'Mac64 Debug': {
                 'recipe_config': 'webrtc',
@@ -1076,17 +1065,6 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
                     'cpu': 'x86-64',
-                },
-            },
-            'win_x64_uwp': {
-                'recipe_config': 'webrtc_clang',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'win'
                 },
             },
             'win_asan': {
