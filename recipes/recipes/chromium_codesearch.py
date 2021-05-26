@@ -202,7 +202,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   corpus = bot_config.get('corpus', 'chromium-linux')
   build_config = bot_config.get('build_config', '')
   targets = bot_config.get('compile_targets', [])
-  gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
+  gen_repo_branch = bot_config.get('gen_repo_branch', 'main')
   gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
 
   api.codesearch.set_config(

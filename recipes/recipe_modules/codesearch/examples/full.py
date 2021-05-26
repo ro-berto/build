@@ -25,33 +25,29 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
-  # The builders have the following parameters:
-  # - compile_targets: the compile targets.
-  # - platform: The platform for which the code is compiled.
-  # - sync_generated_files: Whether to sync generated files into a git repo.
-  # - corpus: Kythe corpus to generate index packs under.
-  # - gen_repo_branch: Which branch in the generated files repo to sync to.
-  'codesearch-gen-chromium-linux': {
-    'compile_targets': [
-      'all',
-    ],
-    'platform': 'linux',
-    'sync_generated_files': True,
-    'gen_repo_branch': 'master',
-    'corpus': 'chromium-linux',
-    'build_config': 'linux',
-  },
-  'codesearch-gen-chromium-win': {
-    'compile_targets': [
-      'all',
-    ],
-    'platform': 'win',
-    'sync_generated_files': True,
-    'gen_repo_branch': 'win',
-    'gen_repo_out_dir': 'win-Debug',
-    'corpus': 'chromium-win',
-    'build_config': 'win',
-  },
+    # The builders have the following parameters:
+    # - compile_targets: the compile targets.
+    # - platform: The platform for which the code is compiled.
+    # - sync_generated_files: Whether to sync generated files into a git repo.
+    # - corpus: Kythe corpus to generate index packs under.
+    # - gen_repo_branch: Which branch in the generated files repo to sync to.
+    'codesearch-gen-chromium-linux': {
+        'compile_targets': ['all',],
+        'platform': 'linux',
+        'sync_generated_files': True,
+        'gen_repo_branch': 'main',
+        'corpus': 'chromium-linux',
+        'build_config': 'linux',
+    },
+    'codesearch-gen-chromium-win': {
+        'compile_targets': ['all',],
+        'platform': 'win',
+        'sync_generated_files': True,
+        'gen_repo_branch': 'win',
+        'gen_repo_out_dir': 'win-Debug',
+        'corpus': 'chromium-win',
+        'build_config': 'win',
+    },
 })
 
 def RunSteps(api):

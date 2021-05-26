@@ -20,7 +20,7 @@ def RunSteps(api):
       COMPILE_TARGETS=api.properties.get('compile_targets', ['all']),
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
-      GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
+      GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'main'),
       GEN_REPO_OUT_DIR=api.properties.get('gen_repo_out_dir', ''),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
