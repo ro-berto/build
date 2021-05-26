@@ -497,8 +497,9 @@ def RunSteps(api):
           coverage_step.status = api.step.FAILURE
           use_coverage = False
 
-    api.python('gn gen', api.depot_tools.gn_py_path,
-               [paths.output_path, '--args=' + FormatGnArgs(api.properties)])
+    api.python(
+        'gn gen', api.depot_tools.gn_py_path,
+        ['gen', paths.output_path, '--args=' + FormatGnArgs(api.properties)])
 
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
     # if this is being run on a non-Mac platform.

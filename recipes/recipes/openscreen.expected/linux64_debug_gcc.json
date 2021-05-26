@@ -135,6 +135,7 @@
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
+      "gen",
       "[START_DIR]/openscreen/out/Default",
       "--args=is_debug=true is_gcc=true"
     ],
