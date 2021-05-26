@@ -452,6 +452,69 @@ class TestUtilsApi(recipe_api.RecipeApi):
         pruned_suites.remove(t)
     return pruned_suites
 
+  def _query_flaky_failures(self, tests_to_check):
+    """Queries FindIt if a given set of tests are known to be flaky.
+
+    Args:
+      tests_to_check: List of dicts like {'step_ui_name': .., 'test_name': ..}]
+    Returns:
+      Dict of flakes. See query_cq_flakes.py for the full format.
+    """
+    if not tests_to_check:
+      return {}
+
+    builder = self.m.buildbucket.build.builder
+    flakes_input = {
+        'project': builder.project,
+        'bucket': builder.bucket,
+        'builder': builder.builder,
+        'tests': tests_to_check,
+    }
+
+    result = self.m.python(
+        'query known flaky failures on CQ',
+        self.resource('query_cq_flakes.py'),
+        args=[
+            '--input-path',
+            self.m.json.input(flakes_input),
+            '--output-path',
+            self.m.json.output(),
+        ],
+        infra_step=True,
+        # Failing to query data from the service for any reason results in a
+        # step with infra failure, but doesn't fail the build to avoid
+        # affecting developers from landing their code, and the recipe will
+        # fall back to the original behavior to retrying failed tests in case
+        # of any issue.
+        ok_ret=('any'))
+
+    result.presentation.logs['input'] = json.dumps(flakes_input, indent=4)
+    result.presentation.logs['output'] = json.dumps(
+        result.json.output, indent=4)
+
+    if result.exc_result.retcode != 0:
+      result.presentation.step_text = 'Failed to get known flakes'
+      return {}
+
+    if not result.json.output:
+      return {}
+
+    if 'flakes' not in result.json.output:
+      result.presentation.step_text = 'Response is ill-formed'
+      return {}
+
+    for flake in result.json.output['flakes']:
+      if ('affected_gerrit_changes' not in flake or
+          'monorail_issue' not in flake or 'test' not in flake or
+          'step_ui_name' not in flake['test'] or
+          'test_name' not in flake['test']):
+        # Response is ill-formed. Don't expect to ever happen, but have this
+        # check in place just in case.
+        result.presentation.step_text = 'Response is ill-formed'
+        return {}
+
+    return result.json.output
+
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.
 
@@ -487,60 +550,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       tests_to_check.extend(tests)
 
-    if not tests_to_check:
+    known_flakes = self._query_flaky_failures(tests_to_check)
+    if not known_flakes:
       return
 
-    builder = self.m.buildbucket.build.builder
-    flakes_input = {
-        'project': builder.project,
-        'bucket': builder.bucket,
-        'builder': builder.builder,
-        'tests': tests_to_check,
-    }
-
-    result = self.m.python(
-        'query known flaky failures on CQ',
-        self.resource('query_cq_flakes.py'),
-        args=[
-            '--input-path',
-            self.m.json.input(flakes_input),
-            '--output-path',
-            self.m.json.output(),
-        ],
-        infra_step=True,
-        # Failing to query data from the service for any reason results in a
-        # step with infra failure, but doesn't fail the build to avoid
-        # affecting developers from landing their code, and the recipe will
-        # fall back to the original behavior to retrying failed tests in case
-        # of any issue.
-        ok_ret=('any'))
-
-    result.presentation.logs['input'] = json.dumps(flakes_input, indent=4)
-    result.presentation.logs['output'] = json.dumps(
-        result.json.output, indent=4)
-
-    if result.exc_result.retcode != 0:
-      result.presentation.step_text = 'Failed to get known flakes'
-      return
-
-    if not result.json.output:
-      return
-
-    if 'flakes' not in result.json.output:
-      result.presentation.step_text = 'Response is ill-formed'
-      return
-
-    test_suite = None
-    for flake in result.json.output['flakes']:
-      if ('affected_gerrit_changes' not in flake or
-          'monorail_issue' not in flake or 'test' not in flake or
-          'step_ui_name' not in flake['test'] or
-          'test_name' not in flake['test']):
-        # Response is ill-formed. Don't expect to ever happen, but have this
-        # check in place just in case.
-        result.presentation.step_text = 'Response is ill-formed'
-        return
-
+    for flake in known_flakes['flakes']:
       for t in failed_test_suites:
         if (t.name_of_step_for_suffix('with patch') == flake['test']
             ['step_ui_name']):
