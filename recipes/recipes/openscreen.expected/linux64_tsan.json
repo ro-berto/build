@@ -196,8 +196,9 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/buildtools/linux64/gn",
-      "gen",
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
       "[START_DIR]/openscreen/out/Default",
       "--args=is_tsan=true"
     ],
