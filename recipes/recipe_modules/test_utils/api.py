@@ -729,25 +729,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retry_list_old = self._extract_retriable_suites_legacy(
         failed_test_suites, invalid_test_suites, retry_failed_shards,
         retry_invalid_shards)
-    try:
-      retry_list_new = self._extract_retriable_suites_from_invocations(
-          rdb_results, retry_failed_shards)
-      # RDB is unaware of suites with invalid results (eg: shards that never
-      # ran). So we need to keep a channel open to swarming to record shards
-      # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
-      if retry_invalid_shards:
-        for t in test_suites:
-          # TODO(crbug.com/1135718): Tear-out all JSON-parsing logic from
-          # has_valid_results() and have it only inspect overall shard result.
-          if not t.has_valid_results(suffix):
-            retry_list_new.add(t.name)
-    except Exception as e:  #pragma: nocover
-      breakage = self.m.python.succeeding_step(
-          'Failure in ResultDB lookup (informational)',
-          'Querying for Swarming retries via ResultDB ' +
-          'produced error {}'.format(e))
-      breakage.presentation.status = self.m.step.WARNING
-      return invalid_test_suites, failed_and_invalid_suites
+    retry_list_new = self._extract_retriable_suites_from_invocations(
+        rdb_results, retry_failed_shards)
+    # RDB is unaware of suites with invalid results (eg: shards that never
+    # ran). So we need to keep a channel open to swarming to record shards
+    # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
+    if retry_invalid_shards:
+      for t in test_suites:
+        # TODO(crbug.com/1135718): Tear-out all JSON-parsing logic from
+        # has_valid_results() and have it only inspect overall shard result.
+        if not t.has_valid_results(suffix):
+          retry_list_new.add(t.name)
 
     swarming_test_suites = self._retry_with_patch_target_suites(
         retry_list_old, retry_list_new)
