@@ -1364,17 +1364,20 @@ SPEC = {
         _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
     'Optional Mac Retina Release (AMD)':
         _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Android Release (Pixel 4)':
+    'Optional Android Release (Nexus 5X)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
             ],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder',
+            android_config='main_builder_mb',
             simulation_platform='linux',
         ),
 

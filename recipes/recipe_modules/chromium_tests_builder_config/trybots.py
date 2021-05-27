@@ -301,7 +301,7 @@ TRYBOTS = try_spec.TryDatabase.create({
         'android_optional_gpu_tests_rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Optional Android Release (Pixel 4)',
+                buildername='Optional Android Release (Nexus 5X)',
                 retry_failed_shards=False,
             ),
         'android-webview-marshmallow-arm64-dbg':
