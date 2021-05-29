@@ -8,6 +8,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import resultdb as resultdb_pb2
 
 DEPS = [
     'flakiness',
@@ -20,7 +22,6 @@ DEPS = [
 def RunSteps(api):
   new_tests = {
       'test1_invocations/2hash',
-      'test1_invocations/3hash',
       'test1_invocations/4hash',
       'test1_invocations/5hash',
       'test1_invocations/6hash',
@@ -39,6 +40,8 @@ def RunSteps(api):
       'test2_invocations/10hash',
   }
   found_tests = api.flakiness.identify_new_tests()
+  if found_tests:
+    found_tests = set([str(test) for test in list(found_tests)])
   api.assertions.assertEqual(new_tests, found_tests)
 
 
@@ -52,16 +55,25 @@ def GenTests(api):
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=inv)),
     )
     build_database.append(build)
-
-    inv_bundle[inv] = api.resultdb.Invocation(test_results=[
+    test_results = [
         test_result_pb2.TestResult(
-            test_id='test1', variant_hash='{}hash'.format(inv)),
+            test_id='test1',
+            variant_hash='{}hash'.format(inv),
+            expected=False,
+            status=test_result_pb2.FAIL,
+        ),
         test_result_pb2.TestResult(
-            test_id='test2', variant_hash='{}hash'.format(inv)),
-    ])
+            test_id='test2',
+            variant_hash='{}hash'.format(inv),
+            expected=False,
+            status=test_result_pb2.FAIL,
+        ),
+    ]
+    inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
 
   basic_build = build_pb2.Build(
-      builder=builder_pb2.BuilderID(builder='Builder'),
+      builder=builder_pb2.BuilderID(
+          builder='Builder', project='chromium', bucket='try'),
       infra=build_pb2.BuildInfra(
           resultdb=build_pb2.BuildInfra.ResultDB(invocation='invocations/100')),
       input=build_pb2.Build.Input(
@@ -73,6 +85,16 @@ def GenTests(api):
                   patchset=3,
               )
           ],))
+
+  res = resultdb_pb2.GetTestResultHistoryResponse(entries=[
+      resultdb_pb2.GetTestResultHistoryResponse.Entry(
+          result=test_result_pb2.TestResult(
+              test_id='test1',
+              variant_hash='invocations/3hash',
+              expected=False,
+              status=test_result_pb2.FAIL,
+          ),)
+  ])
 
   yield api.test(
       'basic',
@@ -91,6 +113,15 @@ def GenTests(api):
       api.resultdb.query(
           inv_bundle={'invocations/1': inv_bundle['invocations/1']},
           step_name='searching_for_new_tests.get_historical_test_variants'),
+      api.resultdb.get_test_result_history(
+          res, step_name='searching_for_new_tests.get_test_result_history'),
+      api.post_process(post_process.StepCommandContains,
+                       'searching_for_new_tests.get_test_result_history', [
+                           'rdb',
+                           'rpc',
+                           'luci.resultdb.v1.ResultDB',
+                           'GetTestResultHistory',
+                       ]),
       api.post_process(post_process.DropExpectation),
   )
 
