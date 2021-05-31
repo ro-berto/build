@@ -58,11 +58,11 @@ def RunSteps(api):
       api.chromium_tests_builder_config.lookup_builder())
   is_angle_tot = 'angle_top_of_tree' in builder_config.gclient_apply_config
   if is_angle_tot:
-    angle_revision = 'refs/heads/master'
+    angle_revision = 'refs/heads/main'
   else:
     angle_revision = get_component_revision_from_deps(
         api, 'angle', 'Chromium',
-        'https://chromium.googlesource.com/chromium/src', 'refs/heads/master')
+        'https://chromium.googlesource.com/chromium/src', 'refs/heads/main')
 
   chromium_revision = get_component_revision_from_deps(
       api, 'chromium', 'ANGLE', 'https://chromium.googlesource.com/angle/angle',

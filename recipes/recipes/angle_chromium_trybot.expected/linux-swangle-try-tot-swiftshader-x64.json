@@ -7,7 +7,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/chromium/src/+/refs/heads/master/DEPS",
+      "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/DEPS",
       "--format",
       "text"
     ],

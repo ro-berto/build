@@ -57,7 +57,7 @@
       "fetch",
       "https://chromium.googlesource.com/angle/angle",
       "refs/changes/89/456789/12:change",
-      "master:base"
+      "main:base"
     ],
     "cwd": "[CLEANUP]/angle_tmp_1",
     "infra_step": true,
