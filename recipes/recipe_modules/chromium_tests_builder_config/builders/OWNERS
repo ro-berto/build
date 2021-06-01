@@ -1,5 +1,9 @@
 file://recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
 
+# Able to approve any builder change
+estaab@chromium.org
+gatong@chromium.org
+
 per-file chromium_android*=bpastene@chromium.org
 per-file chromium_angle.py=jmadill@chromium.org
 per-file chromium_angle.py=kbr@chromium.org
