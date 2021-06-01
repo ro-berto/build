@@ -1169,6 +1169,19 @@ SPEC = {
             },
             simulation_platform='win',
         ),
+    'Win x64 Builder (reclient)(cross)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['use_clang_coverage', 'enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='win',
+        ),
 }
 
 SPEC.update([
