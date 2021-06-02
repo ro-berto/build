@@ -1463,9 +1463,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.download_command_lines_for_tests(tests_using_isolates, builder_config)
 
-  def download_command_lines_for_tests(self, tests, builder_config):
-    digest = self.m.properties.get('swarming_command_lines_digest', '')
-    cwd = self.m.properties.get('swarming_command_lines_cwd', '')
+  def download_command_lines_for_tests(self,
+                                       tests,
+                                       builder_config,
+                                       swarming_command_lines_digest=None,
+                                       swarming_command_lines_cwd=None):
+    digest = (
+        swarming_command_lines_digest or
+        self.m.properties.get('swarming_command_lines_digest', ''))
+    cwd = (
+        swarming_command_lines_cwd or
+        self.m.properties.get('swarming_command_lines_cwd', ''))
     if digest:
       self._swarming_command_lines = self._download_command_lines(digest)
       for test in tests:

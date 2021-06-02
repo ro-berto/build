@@ -16,6 +16,7 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'filter',
+    'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -68,12 +69,13 @@ def RunSteps(api, properties):
               orch_builder_config.isolate_server))
       trigger_properties['swarming_command_lines_cwd'] = (
           api.m.path.relpath(api.m.chromium.output_dir, api.m.path['checkout']))
+      trigger_properties['swarm_hashes'] = api.isolate.isolated_tests
 
-      properties_step = api.step('swarming command line info', [])
+      properties_step = api.step('swarming trigger properties', [])
       properties_step.presentation.properties[
-          'command_lines_info'] = trigger_properties
+          'swarming_trigger_properties'] = trigger_properties
       properties_step.presentation.logs[
-          'command_lines_info'] = api.m.json.dumps(
+          'swarming_trigger_properties'] = api.m.json.dumps(
               trigger_properties, indent=2)
 
     return raw_result
@@ -84,17 +86,20 @@ def GenTests(api):
   def override_test_spec():
     return api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
+            'Linux Builder': {
+                'scripts': [{
+                    "isolate_profile_data": True,
+                    "name": "check_static_initializers",
+                    "script": "check_static_initializers.py",
+                    "swarming": {}
+                }],
+            },
             'Linux Tests': {
                 'gtest_tests': [{
                     'name': 'browser_tests',
                     'swarming': {
                         'can_use_on_swarming_builders': True
                     },
-                }],
-                'scripts': [{
-                    "name": "check_static_initializers",
-                    "script": "check_static_initializers.py",
-                    "swarming": {}
                 }],
             },
         })
@@ -115,7 +120,7 @@ def GenTests(api):
       ]),
       api.post_process(post_process.MustRun, 'compile (with patch)'),
       api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.MustRun, 'swarming command line info'),
+      api.post_process(post_process.MustRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -135,7 +140,7 @@ def GenTests(api):
       ]),
       api.post_process(post_process.DoesNotRun, 'compile (with patch)'),
       api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.DoesNotRun, 'swarming command line info'),
+      api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -156,7 +161,7 @@ def GenTests(api):
           'builder \'Linux Builder\' on group \'chromium.linux\''
       ]),
       api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.DoesNotRun, 'swarming command line info'),
+      api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -177,7 +182,7 @@ def GenTests(api):
           'tester \'Linux Tests\' on group \'chromium.linux\'',
           'builder \'Linux Builder\' on group \'chromium.linux\''
       ]),
-      api.post_process(post_process.DoesNotRun, 'swarming command line info'),
+      api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

@@ -139,7 +139,7 @@ class IsolateApi(recipe_api.RecipeApi):
         swarm_hashes[k] = v
 
     if swarm_hashes:
-      self._isolated_tests = swarm_hashes
+      self.set_isolated_tests(swarm_hashes)
 
     step_result.presentation.properties['isolate_server'] = self._isolate_server
 
@@ -157,6 +157,16 @@ class IsolateApi(recipe_api.RecipeApi):
         self._isolated_tests.pop(k)
 
     return step_result
+
+  def set_isolated_tests(self, swarm_hashes):
+    """Allows recipes to set their own swarm_hashes when they are not already
+    set as a build property.
+    Args:
+        swarm_hashes: Dict of target name -> isolated hash
+    """
+    assert isinstance(swarm_hashes, dict)
+
+    self._isolated_tests = swarm_hashes
 
   @property
   def isolated_tests(self):
