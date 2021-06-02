@@ -4979,19 +4979,19 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_capture_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_capture_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_capture_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_capture_tests on Ubuntu-14.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_capture_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-14.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"video_capture_tests/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_capture_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_capture_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_capture_tests on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_capture_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] video_capture_tests on Ubuntu-14.04",
+    "name": "[trigger] video_capture_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_capture_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_capture_tests/Ubuntu/[dummy has/linux_rel/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"36\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -5006,7 +5006,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_capture_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_capture_tests/Ubuntu/[dummy has/linux_rel/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
@@ -5023,7 +5023,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:linux_rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:video_capture_tests on Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:video_capture_tests on Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -5050,7 +5050,7 @@
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
@@ -5078,7 +5078,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_capture_tests/Ubuntu-14.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=36@@@"
+      "@@@STEP_LINK@task UI: video_capture_tests/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=36@@@"
     ]
   },
   {
@@ -5088,19 +5088,19 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"isac_fix_test/Ubuntu-14.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for isac_fix_test/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:isac_fix_test\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:isac_fix_test on Ubuntu-14.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for isac_fix_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-14.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"isac_fix_test/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for isac_fix_test/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:isac_fix_test\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:isac_fix_test on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for isac_fix_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] isac_fix_test on Ubuntu-14.04",
+    "name": "[trigger] isac_fix_test on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"isac_fix_test/Ubuntu-14.04/[dummy has/linux_rel/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"isac_fix_test/Ubuntu/[dummy has/linux_rel/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"37\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -5115,7 +5115,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"isac_fix_test/Ubuntu-14.04/[dummy has/linux_rel/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"isac_fix_test/Ubuntu/[dummy has/linux_rel/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
@@ -5132,7 +5132,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:linux_rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:isac_fix_test on Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:isac_fix_test on Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -5159,7 +5159,7 @@
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
@@ -5187,7 +5187,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: isac_fix_test/Ubuntu-14.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=37@@@"
+      "@@@STEP_LINK@task UI: isac_fix_test/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=37@@@"
     ]
   },
   {
@@ -5197,19 +5197,19 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for webrtc_perf_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:webrtc_perf_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:webrtc_perf_tests on Ubuntu-14.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/\", \"--nologs\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-14.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for webrtc_perf_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:webrtc_perf_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:webrtc_perf_tests on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/\", \"--nologs\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] webrtc_perf_tests on Ubuntu-14.04",
+    "name": "[trigger] webrtc_perf_tests on Ubuntu",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"38\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -5224,7 +5224,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/linux_rel/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
@@ -5241,7 +5241,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:linux_rel\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:webrtc_perf_tests on Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:webrtc_perf_tests on Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -5271,7 +5271,7 @@
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
@@ -5299,7 +5299,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests/Ubuntu-14.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=38@@@"
+      "@@@STEP_LINK@task UI: webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=38@@@"
     ]
   },
   {
@@ -7220,9 +7220,9 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
-    "name": "video_capture_tests on Ubuntu-14.04",
+    "name": "video_capture_tests on Ubuntu",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -7299,9 +7299,9 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
-    "name": "isac_fix_test on Ubuntu-14.04",
+    "name": "isac_fix_test on Ubuntu",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -7378,9 +7378,9 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
-    "name": "webrtc_perf_tests on Ubuntu-14.04",
+    "name": "webrtc_perf_tests on Ubuntu",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",

@@ -58,7 +58,7 @@ RECIPE_CONFIGS = freeze({
 
 BUILDERS = freeze({
     'luci.webrtc.ci': {
-       'settings': {
+        'settings': {
             'builder_group': 'client.webrtc',
             'build_gs_bucket': 'chromium-webrtc',
         },
@@ -1242,7 +1242,7 @@ BUILDERS = freeze({
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
-                    'os': 'Ubuntu-14.04',
+                    'os': 'Ubuntu',
                     'gpu': None,
                 }
             },
