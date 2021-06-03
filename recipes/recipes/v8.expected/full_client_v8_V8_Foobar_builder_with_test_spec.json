@@ -89,7 +89,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/v8/tools/luci-go/isolate",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3A238cbc8af249251e1b42348ea4a924dd9e470b0b/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",

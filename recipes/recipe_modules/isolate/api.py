@@ -15,6 +15,11 @@ from recipe_engine import recipe_api
 _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
 
 
+# Take revision from
+# https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
+_LUCI_GO_REVISION = 'git_revision:238cbc8af249251e1b42348ea4a924dd9e470b0b'
+
+
 class IsolateApi(recipe_api.RecipeApi):
   """APIs for interacting with isolates."""
 
@@ -94,7 +99,8 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
+    exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
+                                  _LUCI_GO_REVISION)
 
     # FIXME: Differentiate between bad *.isolate and upload errors.
     # Raise InfraFailure on upload errors.
