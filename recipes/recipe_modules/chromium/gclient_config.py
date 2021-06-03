@@ -371,7 +371,8 @@ def openscreen_tot(c):
 @CONFIG_CTX()
 def ios_webkit_tot(c):
   c.solutions[0].custom_vars['checkout_ios_webkit'] = 'True'
-  c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/master'
+  c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/main'
+
 
 @CONFIG_CTX()
 def no_kaleidoscope(c):
