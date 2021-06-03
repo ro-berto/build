@@ -1484,19 +1484,21 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "test r0.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"browser_tests\": \"[dummy hash for browser_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"browser_tests\": \"[dummy hash for browser_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"browser_tests\": \"[dummy hash for browser_tests/dummy size]\"}@@@"
     ]
   },
   {
@@ -1536,7 +1538,7 @@
       "@@@STEP_LOG_LINE@report@    }@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"isolated_tests\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"browser_tests\": \"[dummy hash for browser_tests]\"@@@",
+      "@@@STEP_LOG_LINE@report@    \"browser_tests\": \"[dummy hash for browser_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {}@@@",
