@@ -22,7 +22,7 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
 
 
 SPEC = {
-    # release builders and testers
+    # win release builders and testers
     'win-updater-builder-rel':
         CreateBuilderConfig('win'),
     'win7-updater-tester-rel':
@@ -43,6 +43,7 @@ SPEC = {
             'win',
             execution_mode=builder_spec.TEST,
             parent_buildername='win32-updater-builder-rel'),
+    # mac release builders and testers
     'mac-updater-builder-rel':
         CreateBuilderConfig('mac'),
     'mac10.11-updater-tester-rel':
@@ -80,7 +81,7 @@ SPEC = {
             'mac',
             execution_mode=builder_spec.TEST,
             parent_buildername='mac-updater-builder-rel'),
-    # debug builders and testers
+    # win debug builders and testers
     'win-updater-builder-dbg':
         CreateBuilderConfig('win'),
     'win7-updater-tester-dbg':
@@ -101,9 +102,40 @@ SPEC = {
             'win',
             execution_mode=builder_spec.TEST,
             parent_buildername='win32-updater-builder-dbg'),
+    # mac debug builders and testers
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
+    'mac10.11-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
+    'mac10.12-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
+    'mac10.13-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
+    'mac10.14-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
     'mac10.15-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
+    'mac11.0-updater-tester-dbg':
+        CreateBuilderConfig(
+            'mac',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='mac-updater-builder-dbg'),
+    'mac-arm64-updater-tester-dbg':
         CreateBuilderConfig(
             'mac',
             execution_mode=builder_spec.TEST,
