@@ -78,6 +78,7 @@ SPEC.update([
     ),
     _config(
         'lacros-amd64-generic-rel',
+        cros_boards='eve',
         cros_boards_with_qemu_images='amd64-generic',
     ),
     _config(
