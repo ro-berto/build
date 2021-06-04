@@ -233,7 +233,7 @@ SPEC = {
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
-                'CROS_BOARDS': 'eve',
+                'TARGET_CROS_BOARDS': 'eve',
                 'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
