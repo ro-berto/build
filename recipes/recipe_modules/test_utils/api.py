@@ -575,12 +575,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
         set(old_invalid_suites).intersection(retried_invalid_suites))
     return still_invalid_swarming_suites + non_swarming_invalid_suites
 
-  def _should_abort_tryjob(self, rdb_results, failed_suites):
+  def _should_abort_tryjob(self, rdb_results):
     """Determines if the current recipe should skip its next retry phases.
 
     Args:
       rdb_results: util.RDBResults instance for test results as reported by RDB
-      failed_suites: list of test_suites which failed in any way.
     Return:
       True if we shold skip retries; False otherwise.
     """
@@ -727,8 +726,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         self._run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
 
-    if self.m.tryserver.is_tryserver and self._should_abort_tryjob(
-        rdb_results, failed_test_suites):
+    if self.m.tryserver.is_tryserver and self._should_abort_tryjob(rdb_results):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
     if suffix == 'with patch':

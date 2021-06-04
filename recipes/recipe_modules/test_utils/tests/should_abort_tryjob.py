@@ -42,7 +42,7 @@ def RunSteps(api):
             variant=var)
     ])
   rdb_results = util.RDBResults.create(invocation_dict)
-  should_abort = api.test_utils._should_abort_tryjob(rdb_results, failed_suites)
+  should_abort = api.test_utils._should_abort_tryjob(rdb_results)
 
   expected_should_abort = api.properties.get('expected_should_abort', False)
   api.assertions.assertEqual(should_abort, expected_should_abort)
