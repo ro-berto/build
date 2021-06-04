@@ -1326,7 +1326,8 @@ TRYBOTS = try_spec.TryDatabase.create({
        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
-                buildername='linux-lacros-rel',
+                buildername='linux-lacros-builder-rel',
+                tester='linux-lacros-tester-rel',
             ),
         'linux-cfm-rel':
             try_spec.TrySpec.create_for_single_mirror(
