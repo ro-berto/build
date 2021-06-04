@@ -62,6 +62,6 @@ def GenTests(api):
       api.post_process(
           post_process.LogEquals,
           'fetching_builds_for_given_cl',
-          'invocation_list_from_builds',
+          'excluded_invocation_list',
           'invocations/1',
       ), api.post_process(post_process.DropExpectation))

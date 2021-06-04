@@ -15,8 +15,9 @@ class FlakinessApi(recipe_api.RecipeApi):
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._using_test_identifier = properties.identify_new_tests
-    self.build_count = properties.build_count or 1000
-    self.test_query_count = properties.test_query_count or 10000
+    self.build_count = properties.build_count or 100
+    self.historical_query_count = properties.historical_query_count or 1000
+    self.current_query_count = properties.current_query_count or 10000
 
   @property
   def using_test_identifier(self):
@@ -25,7 +26,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     This needs to be enabled in order for the coordinating function of
     this module to execute.
 
-    Return:
+    Returns:
         A boolean of whether the build is identifying new tests.
     """
     return self._using_test_identifier
@@ -68,6 +69,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     search_results = self.m.buildbucket.search(
         predicate=predicates,
+        report_build=False,
         step_name='fetching_builds_for_given_cl',
         fields=['infra.resultdb.invocation'],
     )
@@ -77,7 +79,7 @@ class FlakinessApi(recipe_api.RecipeApi):
         # explicitly requires strings
         str(build.infra.resultdb.invocation) for build in search_results)
     self.m.step.active_result.presentation.logs[
-        "invocation_list_from_builds"] = sorted(inv_set)
+        "excluded_invocation_list"] = sorted(inv_set)
 
     return inv_set
 
@@ -91,13 +93,13 @@ class FlakinessApi(recipe_api.RecipeApi):
     to map buildbucket builds to results in ResultDB.
 
     Args:
-        builder_id: A buildbucket.builder.proto.BuilderID message representing
-            the builder to search for build history from.
-        excluded_invs: A set of ResultDB invocation name strings for invocations
-            that we don't want to include in our invocation list returned. This
-            is usually invocations associated with the current build that we
-            don't want to consider historical invocations as they contain new
-            tests from the current CL.
+        builder_id (buildbucket.builder.proto.BuilderID message): The builder to
+            search for build history from.
+        excluded_invs (set of str): A set of ResultDB invocation name strings
+            for invocations that we don't want to include in our invocation list
+            returned. This is usually invocations associated with the current
+            build that we don't want to consider historical invocations as they
+            contain new tests from the current CL.
 
     Returns:
         A list of ResultDB Invocation names for the builds we want to
@@ -110,6 +112,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     search_results = self.m.buildbucket.search(
         predicate=predicate,
         limit=self.build_count,
+        report_build=False,
         fields=['infra.resultdb.invocation'],
         step_name=step_name)
 
@@ -121,7 +124,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return invs
 
-  def get_test_variants(self, inv_list, step_name=None):
+  def get_test_variants(self, inv_list, test_query_count=None, step_name=None):
     """Gets a set of (test_id, variant hash) tuples found in specific builds.
 
     This method searches ResultDB for the invocations specified, extracts the
@@ -129,17 +132,19 @@ class FlakinessApi(recipe_api.RecipeApi):
     inserts them into a set for return.
 
     Args:
-        inv_list: A list of string Invocation names for the invocations to query
+        inv_list (list of str): Invocation names for the invocations to query
             from ResultDB.
-        step_name: A string of the name of the step in which this call is made.
+        test_query_count (int): The number of tests to query from ResultDB.
+        step_name (str): The name of the step in which this call is made.
 
     Returns:
         A set of (test_id, test variant hash) tuples.
     """
+    test_query_count = test_query_count or self.historical_query_count
     step_name = step_name or 'get_test_variants'
     inv_dict = self.m.resultdb.query(
         inv_ids=self.m.resultdb.invocation_ids(inv_list),
-        limit=self.test_query_count,
+        limit=test_query_count,
         step_name=step_name)
 
     test_set = set()
@@ -182,7 +187,8 @@ class FlakinessApi(recipe_api.RecipeApi):
             contains={'def': {
                 'builder': builder
             }}),
-        page_size=page_size)
+        page_size=page_size,
+        step_name='verify_new_tests')
 
     for entry in results.entries:
       test_tuple = (entry.result.test_id, entry.result.variant_hash)
@@ -201,16 +207,29 @@ class FlakinessApi(recipe_api.RecipeApi):
     from the current CL.
 
     Args:
-        variant_step: A string of the name of the step where the test variants
-            for the current build are found.
-        history_step: A string of the name of the step where the test variants
-            for the historical builds are found.
+        variant_step (str): The name of the step where the test variants for the
+          current build are found.
+        history_step (str): The name of the step where the test variants for the
+          historical builds are found.
 
     Returns:
         A set of strings representing test_id + variant_hash concatenations
         for all tests present in the current build but absent in the historical
         build data.
     """
+
+    def join_tests(test_set):
+      """Joins set of test_id, variant hash tuples into strings.
+
+      For step presentations, test tuple sets cannot be logged so it is
+      necessary and preferred to convert to lists of sorted concatenated
+      strings.
+      """
+      return sorted([
+          '_'.join([test_id, variant_hash])
+          for test_id, variant_hash in test_set
+      ])
+
     if not self.using_test_identifier:
       return None
 
@@ -226,17 +245,25 @@ class FlakinessApi(recipe_api.RecipeApi):
           builder_id=current_builder, excluded_invs=excluded_invs)
 
       current_tests = self.get_test_variants(
-          inv_list=[current_inv], step_name=variant_step)
+          inv_list=[current_inv],
+          test_query_count=self.current_query_count,
+          step_name=variant_step)
+      self.m.step.active_result.presentation.logs[
+          'current_build_tests'] = join_tests(current_tests)
       historical_tests = self.get_test_variants(
           inv_list=inv_list, step_name=history_step)
+
+      # Comparing the current build test list to the ResultDB query test list to
+      # get a preliminary set of potential new tests.
       preliminary_new_tests = current_tests.difference(historical_tests)
+      self.m.step.active_result.presentation.logs[
+          'preliminary_tests'] = join_tests(preliminary_new_tests)
+
+      # Cross-referencing the potential new tests with ResultDB to ensure they
+      # are not present in existing builds.
       new_tests = self.verify_new_tests(
           prelim_tests=preliminary_new_tests,
           excluded_invs=excluded_invs,
           builder=current_builder.builder)
-      new_tests = [
-          "_".join([test_id, variant_hash])
-          for test_id, variant_hash in new_tests
-      ]
-      presentation.logs['new_tests'] = sorted(new_tests)
+      presentation.logs['new_tests'] = join_tests(new_tests)
     return new_tests

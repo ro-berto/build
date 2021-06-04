@@ -9,13 +9,15 @@ class FlakinessTestApi(recipe_test_api.RecipeTestApi):
 
   def __call__(self,
                identify_new_tests=False,
-               build_count=1000,
-               test_query_count=10000):
+               build_count=100,
+               historical_query_count=1000,
+               current_query_count=10000):
     return self.m.properties(
         **{
             '$build/flakiness': {
                 'identify_new_tests': identify_new_tests,
                 'build_count': build_count,
-                'test_query_count': test_query_count
+                'historical_query_count': historical_query_count,
+                'current_query_count': current_query_count,
             }
         })

@@ -41,7 +41,10 @@ def RunSteps(api):
   }
   found_tests = api.flakiness.identify_new_tests()
   if found_tests:
-    found_tests = set([str(test) for test in list(found_tests)])
+    found_tests = set([
+        str('_'.join([test_id, variant_hash]))
+        for test_id, variant_hash in found_tests
+    ])
   api.assertions.assertEqual(new_tests, found_tests)
 
 
@@ -93,14 +96,18 @@ def GenTests(api):
               variant_hash='invocations/3hash',
               expected=False,
               status=test_result_pb2.FAIL,
-          ),)
+          ))
   ])
 
   yield api.test(
       'basic',
       api.buildbucket.build(basic_build),
       api.flakiness(
-          identify_new_tests=True, build_count=10, test_query_count=2),
+          identify_new_tests=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
       api.buildbucket.simulated_search_results(
           builds=[basic_build],
           step_name='searching_for_new_tests.fetching_builds_for_given_cl'),
@@ -114,9 +121,9 @@ def GenTests(api):
           inv_bundle={'invocations/1': inv_bundle['invocations/1']},
           step_name='searching_for_new_tests.get_historical_test_variants'),
       api.resultdb.get_test_result_history(
-          res, step_name='searching_for_new_tests.get_test_result_history'),
+          res, step_name='searching_for_new_tests.verify_new_tests'),
       api.post_process(post_process.StepCommandContains,
-                       'searching_for_new_tests.get_test_result_history', [
+                       'searching_for_new_tests.verify_new_tests', [
                            'rdb',
                            'rpc',
                            'luci.resultdb.v1.ResultDB',
@@ -128,7 +135,11 @@ def GenTests(api):
   yield api.test(
       'no identification',
       api.flakiness(
-          identify_new_tests=False, build_count=10, test_query_count=2),
+          identify_new_tests=False,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
       api.expect_exception('AssertionError'),
       api.post_process(post_process.DropExpectation),
   )
