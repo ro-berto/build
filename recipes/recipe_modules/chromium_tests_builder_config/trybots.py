@@ -389,26 +389,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='Android FYI SkiaRenderer Vulkan (Pixel 2)',
             ),
-        'gpu-fyi-try-android-q-pixel-2-deqp-vk-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 32 dEQP Vk Release (Pixel 2)',
-            ),
-        'gpu-fyi-try-android-q-pixel-2-deqp-vk-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 64 dEQP Vk Release (Pixel 2)',
-            ),
-        'gpu-fyi-try-android-q-pixel-2-vk-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 32 Vk Release (Pixel 2)',
-            ),
-        'gpu-fyi-try-android-q-pixel-2-vk-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 64 Vk Release (Pixel 2)',
-            ),
         'gpu-fyi-try-android-r-pixel-4-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -455,34 +435,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='ANGLE GPU Android Release (Nexus 5X)',
                 retry_failed_shards=False,
             ),
-        'android_angle_vk32_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 32 Vk Release (Pixel 2)',
-                retry_failed_shards=False,
-            ),
-        'android_angle_vk64_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 64 Vk Release (Pixel 2)',
-                retry_failed_shards=False,
-            ),
         'android_angle_deqp_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='Android FYI dEQP Release (Nexus 5X)',
-                retry_failed_shards=False,
-            ),
-        'android_angle_vk32_deqp_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 32 dEQP Vk Release (Pixel 2)',
-                retry_failed_shards=False,
-            ),
-        'android_angle_vk64_deqp_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI 64 dEQP Vk Release (Pixel 2)',
                 retry_failed_shards=False,
             ),
         'fuchsia-angle-try':

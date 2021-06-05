@@ -31,24 +31,6 @@ def CreateAndroidBuilderConfig(target_bits, internal):
   )
 
 
-def CreateAndroidPerfBuilderConfig(target_bits):
-  return _chromium_angle_spec(
-      gclient_apply_config=[
-          'android',
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
-      chromium_config='android',
-      android_config='main_builder_mb',
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': target_bits,
-      },
-      simulation_platform='linux',
-      perf_isolate_upload=True,
-  )
-
-
 def CreateAndroidTesterConfig(target_bits, parent_builder, internal):
   gclient_apply_config = [
       'android',
@@ -191,21 +173,6 @@ SPEC = {
     'android-angle-chromium-arm64-nexus5x':
         CreateAndroidTesterConfig(
             64, 'android-angle-chromium-arm64-builder', internal=False),
-    'android-angle-perf-arm64-builder':
-        CreateAndroidPerfBuilderConfig(64),
-    'android-angle-perf-arm64-pixel2':
-        CreateAndroidTesterConfig(
-            64, 'android-angle-perf-arm64-builder', internal=True),
-    'android-angle-vk-arm-builder':
-        CreateAndroidBuilderConfig(32, internal=True),
-    'android-angle-vk-arm-pixel2':
-        CreateAndroidTesterConfig(
-            32, 'android-angle-vk-arm-builder', internal=True),
-    'android-angle-vk-arm64-builder':
-        CreateAndroidBuilderConfig(64, internal=True),
-    'android-angle-vk-arm64-pixel2':
-        CreateAndroidTesterConfig(
-            64, 'android-angle-vk-arm64-builder', internal=True),
     'fuchsia-angle-builder':
         CreateFuchsiaBuilderConfig(64),
     'ios-angle-builder':

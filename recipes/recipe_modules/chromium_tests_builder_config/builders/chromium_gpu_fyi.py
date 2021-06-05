@@ -1010,28 +1010,6 @@ SPEC = {
             simulation_platform='mac',
             serialize_tests=True,
         ),
-    'GPU FYI Perf Android 64 Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
-            simulation_platform='linux',
-            # This causes the builder to upload isolates to a location where
-            # Pinpoint can access them in addition to the usual isolate
-            # server. This is necessary because "Android FYI 64 Perf (Pixel
-            # 2)", which is a child of this builder, uploads perf results,
-            # and Pinpoint may trigger additional builds on this builder
-            # during a bisect.
-            perf_isolate_upload=True,
-        ),
     'Android FYI Release (Nexus 5)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
@@ -1159,74 +1137,6 @@ SPEC = {
             android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
         ),
-    'Android FYI 32 Vk Release (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Android FYI 64 Vk Release (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Android FYI 32 dEQP Vk Release (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Android FYI 64 dEQP Vk Release (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Android FYI SkiaRenderer GL (Nexus 5X)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
@@ -1252,24 +1162,6 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
-        ),
-    'Android FYI 64 Perf (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Perf Android 64 Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
         ),
     'ChromeOS FYI Release (amd64-generic)':
         _chromium_gpu_fyi_spec(
