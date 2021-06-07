@@ -1028,6 +1028,10 @@
     "name": "Upload to test-results [telemetry_gpu_unittests]"
   },
   {
+    "cmd": [],
+    "name": "query test results"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -1043,8 +1047,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results",
+    "name": "query test results.telemetry_gpu_unittests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

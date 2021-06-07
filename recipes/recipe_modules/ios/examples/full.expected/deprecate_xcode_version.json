@@ -1490,6 +1490,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "query test results (with patch)"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -1497,13 +1501,31 @@
       "-n",
       "1000",
       "-u",
-      "0",
+      "0"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "name": "query test results (with patch).build-global xcode version (iPhone X iOS 10.0)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
       "1"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "query test results (with patch)",
+    "name": "query test results (with patch).test-local xcode version (iPhone X iOS 11.0)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

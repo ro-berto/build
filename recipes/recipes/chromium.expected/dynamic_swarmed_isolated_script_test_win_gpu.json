@@ -1500,6 +1500,10 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Windows]"
   },
   {
+    "cmd": [],
+    "name": "query test results"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -1507,8 +1511,48 @@
       "-n",
       "1000",
       "-u",
-      "0",
-      "1",
+      "0"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "query test results.telemetry_gpu_unittests on NVIDIA GPU on Windows",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "1"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "query test results.telemetry_gpu_unittests on ATI GPU on Windows",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
       "2"
     ],
     "cwd": "[CACHE]\\builder",
@@ -1516,8 +1560,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results",
+    "name": "query test results.telemetry_gpu_unittests on (15ad) GPU on Windows",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
