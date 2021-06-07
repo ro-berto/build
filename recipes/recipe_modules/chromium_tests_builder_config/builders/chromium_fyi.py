@@ -228,7 +228,11 @@ SPEC = {
     'lacros-amd64-generic-rel-fyi':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
-            chromium_apply_config=['mb'],
+            # Some tests on this bot depend on being unauthenticated with GS, so
+            # don't run the tests inside a luci-auth context to avoid having the
+            # BOTO config setup for the task's service account.
+            # TODO(crbug.com/1217155): Fix this.
+            chromium_apply_config=['mb', 'mb_no_luci_auth'],
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={

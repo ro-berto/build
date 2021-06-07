@@ -130,7 +130,7 @@ SPEC.update([
         # Some tests on this bot depend on being unauthenticated with GS, so
         # don't run the tests inside a luci-auth context to avoid having the
         # BOTO config setup for the task's service account.
-        # TODO(crbug.com/1057152): Fix this.
+        # TODO(crbug.com/1217155): Fix this.
         chromium_apply_config=['mb_no_luci_auth']),
     _config('linux-cfm-rel'),
 ])
