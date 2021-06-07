@@ -48,20 +48,8 @@ def RunSteps(api, properties):
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
-    tests = task.test_suites
-    non_isolated_tests = [t for t in tests if not t.uses_isolate]
-    if non_isolated_tests:
-      test_runner = api.chromium_tests.create_test_runner(
-          non_isolated_tests,
-          suffix='with patch',
-      )
-      with api.chromium_tests.wrap_chromium_tests(orch_builder_config,
-                                                  non_isolated_tests):
-        raw_result = test_runner()
-        if raw_result and raw_result.status != common_pb.SUCCESS:
-          return raw_result
-
-    if any(t.uses_isolate for t in tests):
+    # Isolate the tests first so the Orchestrator can trigger them asap
+    if any(t.uses_isolate for t in task.test_suites):
       trigger_properties = {}
       trigger_properties['swarming_command_lines_digest'] = (
           api.chromium_tests.archive_command_lines(
@@ -77,6 +65,18 @@ def RunSteps(api, properties):
       properties_step.presentation.logs[
           'swarming_trigger_properties'] = api.m.json.dumps(
               trigger_properties, indent=2)
+
+    non_isolated_tests = [t for t in task.test_suites if not t.uses_isolate]
+    if non_isolated_tests:
+      test_runner = api.chromium_tests.create_test_runner(
+          non_isolated_tests,
+          suffix='with patch',
+      )
+      with api.chromium_tests.wrap_chromium_tests(orch_builder_config,
+                                                  non_isolated_tests):
+        raw_result = test_runner()
+        if raw_result and raw_result.status != common_pb.SUCCESS:
+          return raw_result
 
     return raw_result
 
@@ -182,7 +182,7 @@ def GenTests(api):
           'tester \'Linux Tests\' on group \'chromium.linux\'',
           'builder \'Linux Builder\' on group \'chromium.linux\''
       ]),
-      api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
+      api.post_process(post_process.MustRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
