@@ -655,6 +655,59 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'ios15-beta-simulator':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
+    'ios15-sdk-device':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+            },
+            simulation_platform='mac',
+        ),
+    'ios15-sdk-simulator':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
     'ios-asan':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
