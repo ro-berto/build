@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/presubmit',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
+    'recipe_engine/cq',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -62,6 +63,9 @@ def RunSteps(api):
       api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/')):
     skip_owners = True
 
+  if api.cq.active:
+    api.cq.allow_reuse_for(api.cq.DRY_RUN, api.cq.QUICK_DRY_RUN)
+
   with api.context(cwd=cwd):
     bot_update_step = api.presubmit.prepare()
     return api.presubmit.execute(bot_update_step, skip_owners)
@@ -75,7 +79,9 @@ def GenTests(api):
           bucket='try',
           builder='chromium_presubmit',
           git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.cq(run_mode=api.cq.DRY_RUN),
       api.step_data('presubmit', api.json.output({})),
+      api.step_data('presubmit py3', api.json.output({})),
   )
 
   REPO_NAMES = [

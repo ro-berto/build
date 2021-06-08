@@ -55,7 +55,10 @@
       "[CACHE]/builder/chromium_presubmit"
     ],
     "infra_step": true,
-    "name": "ensure builder cache dir"
+    "name": "ensure builder cache dir",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/cq/output@{\"reuse\": [{\"modeRegexp\": \"DRY_RUN\"}, {\"modeRegexp\": \"QUICK_DRY_RUN\"}]}@@@"
+    ]
   },
   {
     "cmd": [
@@ -169,6 +172,7 @@
       "--gerrit_branch",
       "refs/heads/master",
       "--gerrit_fetch",
+      "--dry_run",
       "--root",
       "[CACHE]/builder/chromium_presubmit/s",
       "--commit",
@@ -215,6 +219,7 @@
       "--gerrit_branch",
       "refs/heads/master",
       "--gerrit_fetch",
+      "--dry_run",
       "--root",
       "[CACHE]/builder/chromium_presubmit/s",
       "--commit",
@@ -239,9 +244,8 @@
     "name": "presubmit py3",
     "timeout": 480,
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
