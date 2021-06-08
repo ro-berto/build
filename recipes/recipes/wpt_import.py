@@ -80,8 +80,6 @@ def RunSteps(api):
         creds,
         '--auto-update',
         '--auto-file-bugs',
-        # TODO(crbug.com/1212268): temporary debugging
-        '--verbose',
     ]
 
     try:
