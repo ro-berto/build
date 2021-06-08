@@ -109,7 +109,7 @@ def RunSteps(api, platforms, custom_trigger_script,
         ],
         stdout=api.raw_io.output_text())
     # TODO(vadimsh): Pass result from isolate though --output-json option.
-    isolated = step_result.stdout.split()[0].strip()
+    task_input = step_result.stdout.split()[0].strip()
 
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
@@ -118,7 +118,7 @@ def RunSteps(api, platforms, custom_trigger_script,
       task = api.chromium_swarming.gtest_task(
           raw_cmd=['hello_world.exe'],
           name='hello_world',
-          isolated=isolated,
+          isolated=task_input,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge)
     elif isolated_script_task:
@@ -126,8 +126,18 @@ def RunSteps(api, platforms, custom_trigger_script,
       task_request = task.request
       task_slice = task_request[0]
 
-      task_slice = (task_slice.with_isolated(isolated).
-                    with_env_vars(**{'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}))
+      if '/' in task_input:
+        task_slice = (
+            task_slice.with_cas_input_root(task_input).with_env_vars(**{
+                'IS_GTEST': '',
+                'IS_SCRIPTTEST': 'True'
+            }))
+      else:
+        task_slice = (
+            task_slice.with_isolated(task_input).with_env_vars(**{
+                'IS_GTEST': '',
+                'IS_SCRIPTTEST': 'True'
+            }))
       task.request = (
           task_request.with_slice(0, task_slice).with_name('hello_world'))
 
@@ -141,7 +151,7 @@ def RunSteps(api, platforms, custom_trigger_script,
     else:
       task = api.chromium_swarming.task(
           name='hello_world',
-          isolated=isolated,
+          isolated=task_input,
           extra_args=['--foo', '42'],
           task_output_dir=temp_dir.join('task_output_dir'),
           named_caches=named_caches,
@@ -569,6 +579,28 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.chromium_swarming.summary(
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
+              + api.json.output(json_results), summary_data)),
+      api.properties(
+          isolated_script_task=True,
+          trigger_script=chromium_swarming.TriggerScript.create(
+              script=api.path['cache'].join('fake_custom_trigger_script.py'),
+              args=['foo', 'bar'],
+          )),
+      api.post_process(
+          post_process.Filter(
+              '[trigger (custom trigger script)] hello_world on Windows-7-SP1')
+      ),
+  )
+
+  yield api.test(
+      'isolated_script_with_custom_trigger_script_cas',
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('digest_for_win/hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(

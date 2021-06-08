@@ -987,7 +987,11 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # What isolated command to trigger.
     if task_slice.isolated:
+      # TODO(crbug.com/1143122): remove this after migration.
       args.extend(('--isolated', task_slice.isolated))
+
+    if task_slice.cas_input_root:
+      args.extend(('--digest', task_slice.cas_input_root))
 
     if task_slice.relative_cwd:  # pragma: no cover
       args.extend(['--relative-cwd', task_slice.relative_cwd])
