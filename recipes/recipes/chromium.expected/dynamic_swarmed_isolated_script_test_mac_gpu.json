@@ -1264,10 +1264,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10]"
   },
   {
-    "cmd": [],
-    "name": "query test results"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1275,28 +1271,7 @@
       "-n",
       "1000",
       "-u",
-      "0"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "infra_step": true,
-    "name": "query test results.telemetry_gpu_unittests on Intel GPU on Mac",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
+      "0",
       "1"
     ],
     "cwd": "[CACHE]/builder",
@@ -1305,9 +1280,8 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "query test results.telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
+    "name": "query test results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

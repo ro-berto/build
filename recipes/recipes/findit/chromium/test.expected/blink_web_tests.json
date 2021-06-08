@@ -1909,13 +1909,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r1.query test results (r1)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1930,9 +1923,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r1.query test results (r1).blink_web_tests",
+    "name": "test r1.query test results (r1)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -3249,13 +3242,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r0.query test results (r0)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -3270,9 +3256,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r0.query test results (r0).blink_web_tests",
+    "name": "test r0.query test results (r0)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

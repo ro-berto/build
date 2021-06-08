@@ -840,10 +840,6 @@
     "name": "Upload to test-results [base_unittests (with patch)]"
   },
   {
-    "cmd": [],
-    "name": "query test results (with patch)"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -855,9 +851,8 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results (with patch).base_unittests",
+    "name": "query test results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

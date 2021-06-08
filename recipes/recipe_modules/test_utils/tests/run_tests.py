@@ -354,7 +354,7 @@ def GenTests(api):
           retry_invalid_shards=True,
       ),
       api.override_step_data(
-          'query test results.base_unittests_failed_results',
+          'query test results',
           stdout=api.json.invalid(
               api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_process(post_process.MustRun, 'test3'),
@@ -379,7 +379,7 @@ def GenTests(api):
               },
           }),
       api.override_step_data(
-          'query test results.base_unittests',
+          'query test results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_check(post_process.MustRun, 'abort retry'),

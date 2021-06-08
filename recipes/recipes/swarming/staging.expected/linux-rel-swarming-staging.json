@@ -1408,10 +1408,6 @@
     "name": "Upload to test-results [browser_tests on Ubuntu]"
   },
   {
-    "cmd": [],
-    "name": "query test results"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1424,9 +1420,8 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results.browser_tests",
+    "name": "query test results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

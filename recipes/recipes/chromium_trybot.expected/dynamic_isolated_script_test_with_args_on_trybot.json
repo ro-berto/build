@@ -1566,10 +1566,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "query test results (with patch)"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1584,9 +1580,8 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results (with patch).telemetry_gpu_unittests",
+    "name": "query test results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

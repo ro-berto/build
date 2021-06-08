@@ -1879,13 +1879,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r5.query test results (r5)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1900,9 +1893,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r5.query test results (r5).gl_tests",
+    "name": "test r5.query test results (r5)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -3187,13 +3180,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r6.query test results (r6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -3208,9 +3194,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r6.query test results (r6).gl_tests",
+    "name": "test r6.query test results (r6)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -4495,13 +4481,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r2.query test results (r2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -4516,9 +4495,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r2.query test results (r2).gl_tests",
+    "name": "test r2.query test results (r2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -5817,13 +5796,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "test r3.query test results (r3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -5838,9 +5810,9 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r3.query test results (r3).gl_tests",
+    "name": "test r3.query test results (r3)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

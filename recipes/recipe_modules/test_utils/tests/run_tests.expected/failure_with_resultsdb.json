@@ -617,10 +617,6 @@
     "name": "Upload to test-results [base_unittests_failed_results]"
   },
   {
-    "cmd": [],
-    "name": "query test results"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -628,31 +624,14 @@
       "-n",
       "1000",
       "-u",
-      "0"
-    ],
-    "infra_step": true,
-    "name": "query test results.base_unittests_failed_results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
+      "0",
       "1"
     ],
     "infra_step": true,
-    "name": "query test results.base_unittests_failed_results_2",
+    "name": "query test results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -950,10 +929,6 @@
     "name": "Upload to test-results [base_unittests_failed_results (retry shards)]"
   },
   {
-    "cmd": [],
-    "name": "query test results (retry shards)"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -964,9 +939,8 @@
       "2"
     ],
     "infra_step": true,
-    "name": "query test results (retry shards).base_unittests_failed_results",
+    "name": "query test results (retry shards)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

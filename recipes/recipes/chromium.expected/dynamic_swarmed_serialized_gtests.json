@@ -892,10 +892,6 @@
     "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux]"
   },
   {
-    "cmd": [],
-    "name": "query test results"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -910,9 +906,8 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results.base_unittests on NVIDIA GPU on Linux",
+    "name": "query test results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -1187,10 +1182,6 @@
     "name": "Upload to test-results [browser_tests on NVIDIA GPU on Linux]"
   },
   {
-    "cmd": [],
-    "name": "query test results (2)"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1205,9 +1196,8 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results (2).browser_tests on NVIDIA GPU on Linux",
+    "name": "query test results (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

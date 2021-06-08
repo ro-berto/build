@@ -11,7 +11,7 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
 from . import canonical
-from .util import GTestResults, RDBPerSuiteResults, RDBResults, TestResults
+from .util import GTestResults, RDBResults, TestResults
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
@@ -340,32 +340,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return (RDBResults.create({}), bad_results_dict['invalid'],
               bad_results_dict['failed'])
 
-    all_unexpected_result_invocations = {}
-    all_rdb_results = []
-    with self.m.step.nest(query_step_name):
-      # For each Swarming test suite, fetch its results via RDB.
-      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
-      for t in swarming_test_suites:
-        task = t.get_task(suffix)
-        invocation_names = task.get_invocation_names()
-
-        unexpected_result_invocations = self.m.resultdb.query(
-            inv_ids=self.m.resultdb.invocation_ids(invocation_names),
-            variants_with_unexpected_results=True,
-            step_name=t.name,
-        )
-        all_unexpected_result_invocations.update(unexpected_result_invocations)
-        # TODO(crbug.com/1135718): Attach each RDBPerSuiteResults to its test's
-        # steps.SwarmingTest object.
-        all_rdb_results.append(
-            RDBPerSuiteResults.create(unexpected_result_invocations))
+    unexpected_result_invocations = self.m.resultdb.query(
+        inv_ids=self.m.resultdb.invocation_ids(invocation_names),
+        variants_with_unexpected_results=True,
+        step_name=query_step_name,
+    )
+    rdb_results = RDBResults.create(unexpected_result_invocations)
 
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
-    self._exonerate_unexpected_results(all_unexpected_result_invocations,
-                                       suffix)
+    self._exonerate_unexpected_results(unexpected_result_invocations, suffix)
 
-    rdb_results = RDBResults.create(all_rdb_results)
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
   def _exonerate_unexpected_results(self, unexpected_result_invocations,
@@ -623,8 +608,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           '\nskip retrying because there are >= {} test suites with test '
           'failures and it most likely indicates a problem with the CL. These '
           'suites being:\n{}'.format(
-              self._min_failed_suites_to_skip_retry, '\n'.join(
-                  s.suite_name for s in rdb_results.unexpected_failing_suites)))
+              self._min_failed_suites_to_skip_retry,
+              '\n'.join(rdb_results.unexpected_failing_suites)))
     else:
       result = self.m.step('proceed with retry', [])
       result.presentation.step_text = (
@@ -650,7 +635,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not retry_failed_shards:
       return set()
 
-    return set(s.suite_name for s in rdb_results.unexpected_failing_suites)
+    return rdb_results.unexpected_failing_suites
 
   def _extract_retriable_suites_legacy(self, failed_suites, invalid_suites,
                                        retry_failed_shards,
