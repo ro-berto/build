@@ -429,6 +429,20 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.chromium.angle': {
+        'android-angle-chromium-try':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.angle',
+                buildername='android-angle-chromium-arm64-builder',
+                tester='android-angle-chromium-arm64-nexus5x',
+                retry_failed_shards=False,
+            ),
+        'android-angle-try':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.angle',
+                buildername='android-angle-arm64-builder',
+                tester='android-angle-arm64-nexus5x',
+                retry_failed_shards=False,
+            ),
         'android_angle_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
