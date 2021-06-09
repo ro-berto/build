@@ -24,7 +24,6 @@ SPEC = {
             gclient_apply_config=[
                 'android',
                 'enable_reclient',
-                'use_deps_cache_prototype_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -45,7 +44,6 @@ SPEC = {
             gclient_apply_config=[
                 'android',
                 'enable_reclient',
-                'use_deps_cache_prototype_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
