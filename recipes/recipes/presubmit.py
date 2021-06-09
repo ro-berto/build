@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/presubmit',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
+    'recipe_engine/cq',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -62,6 +63,10 @@ def RunSteps(api):
       api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/')):
     skip_owners = True
 
+  dry_run_modes = (api.cq.DRY_RUN, api.cq.QUICK_DRY_RUN)
+  if api.cq.active and api.cq.run_mode in dry_run_modes:
+    api.cq.allow_reuse_for(*dry_run_modes)
+
   with api.context(cwd=cwd):
     bot_update_step = api.presubmit.prepare()
     return api.presubmit.execute(bot_update_step, skip_owners)
@@ -69,13 +74,42 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test(
-      'expected_tryjob',
+      'non_cq',
       api.buildbucket.try_build(
           project='chromium',
           bucket='try',
           builder='chromium_presubmit',
           git_repo='https://chromium.googlesource.com/chromium/src'),
       api.step_data('presubmit', api.json.output({})),
+      api.step_data('presubmit py3', api.json.output({})),
+  )
+
+  yield api.test(
+      'cq_dry_run',
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.cq(run_mode=api.cq.DRY_RUN),
+      api.step_data('presubmit', api.json.output({})),
+      api.step_data('presubmit py3', api.json.output({})),
+      # TODO(yiwzhang): drop the expectation and assert this build is
+      # reusable here once it becomes easier to check output properties.
+  )
+
+  yield api.test(
+      'cq_full_run',
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.cq(run_mode=api.cq.FULL_RUN),
+      api.step_data('presubmit', api.json.output({})),
+      api.step_data('presubmit py3', api.json.output({})),
+      # TODO(yiwzhang): drop the expectation and assert this build is *NOT*
+      # reusable here once it becomes easier to check output properties.
   )
 
   REPO_NAMES = [
