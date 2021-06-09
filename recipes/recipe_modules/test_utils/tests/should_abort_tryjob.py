@@ -30,6 +30,7 @@ def RunSteps(api):
   failed_suites = ['fake_suite' + str(i) for i in range(num_failed_suites)]
 
   invocation_dict = {}
+  rdb_suite_results = []
   for suite in failed_suites:
     var = common_pb2.Variant()
     var_def = getattr(var, 'def')
@@ -41,7 +42,8 @@ def RunSteps(api):
             expected=False,
             variant=var)
     ])
-  rdb_results = util.RDBResults.create(invocation_dict)
+    rdb_suite_results.append(util.RDBPerSuiteResults.create(invocation_dict))
+  rdb_results = util.RDBResults.create(rdb_suite_results)
   should_abort = api.test_utils._should_abort_tryjob(rdb_results)
 
   expected_should_abort = api.properties.get('expected_should_abort', False)

@@ -850,6 +850,10 @@
     "name": "Upload to test-results [base_unittests (with patch)]"
   },
   {
+    "cmd": [],
+    "name": "query test results (with patch)"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -861,8 +865,9 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results (with patch)",
+    "name": "query test results (with patch).base_unittests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -1936,6 +1941,10 @@
     "name": "Upload to test-results [base_unittests (without patch)]"
   },
   {
+    "cmd": [],
+    "name": "query test results (without patch)"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -1947,8 +1956,9 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results (without patch)",
+    "name": "query test results (without patch).base_unittests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

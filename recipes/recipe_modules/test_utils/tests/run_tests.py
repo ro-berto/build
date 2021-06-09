@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'skylab',
     'test_results',
     'test_utils',
@@ -354,11 +355,37 @@ def GenTests(api):
           retry_invalid_shards=True,
       ),
       api.override_step_data(
-          'query test results',
+          'query test results.base_unittests_failed_results',
           stdout=api.json.invalid(
               api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_process(post_process.MustRun, 'test3'),
       api.post_process(post_process.StatusFailure),
+  )
+
+  yield api.test(
+      'tasks_without_invocation',
+      api.chromium.ci_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests': '[dummy hash for base_unittests]',
+              'base_unittests_2': '[dummy hash for base_unittests_2]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+      ),
+      api.override_step_data(
+          'test_pre_run.[trigger] base_unittests',
+          api.swarming.trigger(
+              ['base_unittests'],
+              # Turning off resultdb should remove invocation IDs from the
+              # trigger output.
+              resultdb=False)),
+      api.post_check(post_process.MustRun,
+                     'query test results.No RDB results for base_unittests'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -379,7 +406,7 @@ def GenTests(api):
               },
           }),
       api.override_step_data(
-          'query test results',
+          'query test results.base_unittests',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_check(post_process.MustRun, 'abort retry'),

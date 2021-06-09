@@ -1073,6 +1073,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "query test results (with patch)"
+  },
+  {
     "cmd": [
       "rdb",
       "query",
@@ -1084,8 +1088,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "query test results (with patch)",
+    "name": "query test results (with patch).fake test (fake device iOS 8.1)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

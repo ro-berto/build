@@ -83,11 +83,12 @@ def GenTests(api):
               failure=False)),
       api.resultdb.query(
           inv_bundle,
-          step_name='query test results (with patch)',
+          step_name='query test results (with patch).base_unittests',
       ),
-      api.post_process(post_process.MustRun, 'query test results (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'query test results (with patch).base_unittests'),
       api.post_process(post_process.StepSuccess,
-                       'query test results (with patch)'),
+                       'query test results (with patch).base_unittests'),
       api.post_process(post_process.MustRun,
                        'include task invocations (with patch)'),
       api.post_process(post_process.StepSuccess,
@@ -122,15 +123,18 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=True),
               shards=2,
               failure=False)),
-      api.override_step_data('query test results (with patch)'),
-      api.override_step_data('query test results (retry shards with patch)'),
-      api.post_process(post_process.MustRun, 'query test results (with patch)'),
+      api.override_step_data('query test results (with patch).base_unittests'),
+      api.override_step_data(
+          'query test results (retry shards with patch).base_unittests'),
+      api.post_process(post_process.MustRun,
+                       'query test results (with patch).base_unittests'),
       api.post_process(post_process.StepSuccess,
-                       'query test results (with patch)'),
+                       'query test results (with patch).base_unittests'),
+      api.post_process(
+          post_process.MustRun,
+          'query test results (retry shards with patch).base_unittests'),
       api.post_process(post_process.MustRun,
-                       'query test results (retry shards with patch)'),
-      api.post_process(post_process.MustRun,
-                       'query test results (without patch)'),
+                       'query test results (without patch).base_unittests'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -216,15 +220,16 @@ def GenTests(api):
               failure=True)),
       api.resultdb.query(
           inv_bundle_with_failures,
-          step_name='query test results (with patch)',
+          step_name='query test results (with patch).base_unittests',
       ),
       api.resultdb.query(
           inv_bundle_with_failures,
-          step_name='query test results (retry shards with patch)',
+          step_name=('query test results (retry shards with patch).'
+                     'base_unittests'),
       ),
       api.resultdb.query(
           inv_bundle_with_failures,
-          step_name='query test results (without patch)',
+          step_name='query test results (without patch).base_unittests',
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected without patch results'),
@@ -318,7 +323,7 @@ def GenTests(api):
               failure=False)),
       api.resultdb.query(
           inv_bundle_with_unexpected_passes,
-          step_name='query test results (with patch)',
+          step_name='query test results (with patch).base_unittests',
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected passes (with patch)'),
