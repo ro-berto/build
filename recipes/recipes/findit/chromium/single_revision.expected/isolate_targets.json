@@ -9,11 +9,11 @@
       "--",
       "python",
       "None/tools/swarming_client/run_isolated.py",
-      "--isolated",
-      "hash1",
+      "--verbose",
       "-I",
       "server1",
-      "--verbose"
+      "--isolated",
+      "hash1"
     ],
     "name": "Run isolated test 'hash1'"
   },
@@ -27,11 +27,11 @@
       "--",
       "python",
       "None/tools/swarming_client/run_isolated.py",
-      "--isolated",
-      "hash2",
+      "--verbose",
       "-I",
       "server2",
-      "--verbose"
+      "--isolated",
+      "hash2"
     ],
     "name": "Run isolated test 'hash2'"
   },

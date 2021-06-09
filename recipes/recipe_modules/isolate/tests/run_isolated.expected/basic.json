@@ -9,11 +9,11 @@
       "--",
       "python",
       "None/tools/swarming_client/run_isolated.py",
-      "--isolated",
-      "isolate_hash",
+      "--verbose",
       "-I",
       "https://isolateserver.appspot.com",
-      "--verbose",
+      "--isolated",
+      "isolate_hash",
       "--",
       "some",
       "args"
@@ -30,18 +30,39 @@
       "--",
       "python",
       "None/tools/swarming_client/run_isolated.py",
-      "--isolated",
-      "isolate_hash",
+      "--verbose",
+      "--cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "--cas-digest",
+      "isolate digest/size",
+      "--",
+      "some",
+      "args"
+    ],
+    "name": "run_isolated (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "None/tools/swarming_client/run_isolated.py",
+      "--verbose",
       "-I",
       "https://isolateserver.appspot.com",
-      "--verbose",
+      "--isolated",
+      "isolate_hash",
       "--env",
       "VAR=value",
       "--",
       "some",
       "args"
     ],
-    "name": "run_isolated (2)"
+    "name": "run_isolated (3)"
   },
   {
     "name": "$result"

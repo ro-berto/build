@@ -196,14 +196,33 @@ class IsolateApi(recipe_api.RecipeApi):
     """Returns the path to run_isolated.py."""
     return self.m.swarming_client.path.join('run_isolated.py')
 
-  def run_isolated(self, name, isolate_hash, args=None, pre_args=None,
+  def run_isolated(self,
+                   name,
+                   isolated_input,
+                   args=None,
+                   pre_args=None,
                    **kwargs):
     """Runs an isolated test."""
     cmd = [
-        '--isolated', isolate_hash,
-        '-I', self.isolate_server,
         '--verbose',
     ]
+
+    if '/' in isolated_input:
+      cmd.extend([
+          '--cas-instance',
+          self.m.cas.instance,
+          '--cas-digest',
+          isolated_input,
+      ])
+    else:
+      # TODO(crbug.com/1143122): remove this after migration
+      cmd.extend([
+          '-I',
+          self.isolate_server,
+          '--isolated',
+          isolated_input,
+      ])
+
     if 'env' in kwargs and isinstance(kwargs['env'], dict):
       for k, v in sorted(kwargs.pop('env').iteritems()):
         cmd.extend(['--env', '%s=%s' % (k, v)])
