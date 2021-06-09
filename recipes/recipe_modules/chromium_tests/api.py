@@ -1898,6 +1898,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     step_result = self.m.step('use rts: %s' % use_rts, [])
     step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
     step_result.presentation.properties['rts_was_used'] = use_rts
+    if use_rts:
+      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
     self.configure_build(builder_config, use_rts)
 
     self.m.chromium.apply_config('trybot_flavor')
