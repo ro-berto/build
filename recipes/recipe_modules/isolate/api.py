@@ -17,7 +17,7 @@ _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
 
 # Take revision from
 # https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-_LUCI_GO_REVISION = 'git_revision:238cbc8af249251e1b42348ea4a924dd9e470b0b'
+_LUCI_GO_REVISION = 'git_revision:725192cc79f07ea946e10a64baac06625c206968'
 
 
 class IsolateApi(recipe_api.RecipeApi):
