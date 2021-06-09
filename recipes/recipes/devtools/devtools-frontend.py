@@ -133,6 +133,7 @@ def _configure_build(api, builder_config, is_official_build):
   build_cfg = api.chromium.make_config(BUILD_CONFIG=builder_config)
   build_cfg.build_config_fs = builder_config
   build_cfg.compile_py.compiler = 'goma'
+  build_cfg.gn_args.append('devtools_dcheck_always_on=true')
   if is_official_build:
     build_cfg.gn_args.append('is_official_build=true')
   api.chromium.c = build_cfg

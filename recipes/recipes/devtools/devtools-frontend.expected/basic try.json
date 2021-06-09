@@ -231,7 +231,7 @@
       "--root=[CACHE]/builder/devtools-frontend",
       "gen",
       "//out/Release",
-      "--args=is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "--args=devtools_dcheck_always_on=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
