@@ -158,13 +158,6 @@ def fuchsia_internal(c):  #pragma: no cover
   c.solutions[0].custom_vars['checkout_fuchsia_internal'] = 'True'
 
 
-@CONFIG_CTX(includes=['fuchsia'])
-def fuchsia_no_emu_isolate(c):  #pragma: no cover
-  """Indicates fuchsia test isolate does not require emulator packages."""
-
-  c.solutions[0].custom_vars['test_isolate_uses_emulator'] = 'False'
-
-
 @CONFIG_CTX()
 def win(c):
   c.target_os.add('win')

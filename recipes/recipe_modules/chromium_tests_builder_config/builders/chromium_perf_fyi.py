@@ -73,7 +73,6 @@ _AddBuildSpec(
     extra_gclient_apply_config=[
         'fuchsia_arm64',
         'fuchsia_internal',
-        'fuchsia_no_emu_isolate',
     ])
 
 _AddIsolatedTestSpec(
