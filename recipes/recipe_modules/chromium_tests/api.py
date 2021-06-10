@@ -1890,11 +1890,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         Configuration of the build/test.
     """
     use_rts = (
-        self.m.cq.active
-        and self.m.cq.run_mode == self.m.cq.DRY_RUN
-        and self.get_first_tag('cq_cl_owner') in RTS_BETA_USERS
-          or builder_config.use_regression_test_selection) \
-        and self.m.tryserver.get_footer('Rts') != 'disable'
+        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN or
+        builder_config.use_regression_test_selection)
     step_result = self.m.step('use rts: %s' % use_rts, [])
     step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
     step_result.presentation.properties['rts_was_used'] = use_rts
