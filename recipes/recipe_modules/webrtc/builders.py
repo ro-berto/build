@@ -288,6 +288,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'cpu': 'arm64-64-Apple_M1',
+                    'pool': 'luci.webrtc.ci',
                 }
             },
             'MacARM64 M1 Release': {
@@ -302,6 +303,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'cpu': 'arm64-64-Apple_M1',
+                    'pool': 'luci.webrtc.ci',
                 }
             },
             'Linux32 Debug': {
