@@ -359,10 +359,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
             step_name=t.name,
         )
         all_unexpected_result_invocations.update(unexpected_result_invocations)
-        # TODO(crbug.com/1135718): Attach each RDBPerSuiteResults to its test's
-        # steps.SwarmingTest object.
-        all_rdb_results.append(
-            RDBPerSuiteResults.create(unexpected_result_invocations))
+        res = RDBPerSuiteResults.create(unexpected_result_invocations)
+        t.update_rdb_results(suffix, res)
+        all_rdb_results.append(res)
 
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.

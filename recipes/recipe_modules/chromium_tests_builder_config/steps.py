@@ -589,6 +589,14 @@ class Test(object):
     # look up the failing step for a test suite from buildbucket.
     self._suffix_step_name_map = {}
 
+    # Used to track results of tests as reported by RDB. Separate from
+    # _deterministic_failures above as that is populated by parsing the tests'
+    # JSON results, while this field is populated entirely by RDB's API. Note
+    # that this field is only populated for SwarmingTests, but is initialized
+    # here for compatibility reasons. Also keyed via suffix like
+    # _deterministic_failures above.
+    self._rdb_results = {}
+
   @property
   def set_up(self):
     return None
@@ -661,6 +669,13 @@ class Test(object):
   @property
   def runs_on_swarming(self):
     return False
+
+  @property
+  def rdb_results(self):
+    return self._rdb_results  # pragma: no cover
+
+  def update_rdb_results(self, suffix, results):
+    self._rdb_results[suffix] = results
 
   @property
   def known_flaky_failures(self):
