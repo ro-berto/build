@@ -317,7 +317,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   def test_compute_llvm_args(self):
     args = generator._compute_llvm_args(
         '/path/to/coverage.profdata',
-        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
+        '/path/to/llvm-cov',
+        '/path/to/build_dir', ['/path/to/1.exe', '/path/to/2.exe'],
         ['/src/a.cc', '/src/b.cc'],
         1,
         arch="x86_64")
@@ -328,6 +329,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         '-skip-functions',
         '-num-threads',
         '1',
+        '-compilation-dir',
+        '/path/to/build_dir',
         '-arch=x86_64',
         '-arch=x86_64',
         '-instr-profile',
@@ -392,6 +395,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
         llvm_cov_path='/path/to/llvm-cov',
+        build_dir='/path/to/build_dir',
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=None,
         sources=['/path/to/src/dir/file.cc'],
@@ -505,6 +509,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
         llvm_cov_path='/path/to/llvm-cov',
+        build_dir='/path/to/build_dir',
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=component_mapping,
         sources=[],
@@ -755,6 +760,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
         llvm_cov_path='/path/to/llvm-cov',
+        build_dir='/path/to/build_dir',
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=None,
         sources=[],
@@ -801,12 +807,15 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     cpu_count.return_value = 100
 
     summaries = generator._get_per_target_coverage_summary(
-        '/foo/bar/baz.profdata', '/path/to/llvm-cov', ['binary1'], arch=None)
+        '/foo/bar/baz.profdata',
+        '/path/to/llvm-cov',
+        '/path/to/build_dir', ['binary1'],
+        arch=None)
 
     call.assert_called_with([
         '/path/to/llvm-cov', 'export', '-skip-expansions', '-skip-functions',
-        '-num-threads', '95', '-summary-only', '-instr-profile',
-        '/foo/bar/baz.profdata', 'binary1'
+        '-num-threads', '95', '-compilation-dir', '/path/to/build_dir',
+        '-summary-only', '-instr-profile', '/foo/bar/baz.profdata', 'binary1'
     ])
     self.assertIn('binary1', summaries)
     self.assertEqual(summaries['binary1'], summary_data['data'][0]['totals'])

@@ -831,6 +831,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _generate_and_upload_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
     args = [
+        '--build-dir',
+        self.m.chromium.output_dir,
         '--src-path',
         self.m.path['checkout'],
         '--output-dir',

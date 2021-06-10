@@ -299,6 +299,7 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
 def _compute_llvm_args(profdata_path,
                        llvm_cov_path,
+                       build_dir,
                        binaries,
                        sources=None,
                        num_threads=None,
@@ -321,6 +322,8 @@ def _compute_llvm_args(profdata_path,
       '-skip-functions',
       '-num-threads',
       str(num_threads_arg),
+      '-compilation-dir',
+      build_dir,
   ]
 
   if exclusions:
@@ -411,8 +414,8 @@ def _show_system_resource_usage(proc):
     logging.warning('ValueError caught when showing system info: %s', error)
 
 
-def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
-                               output_dir, exclusions, arch):
+def _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
+                               binaries, sources, output_dir, exclusions, arch):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
@@ -424,6 +427,7 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
       args = _compute_llvm_args(
           profdata_path,
           llvm_cov_path,
+          build_dir,
           binaries,
           sources,
           exclusions=exclusions,
@@ -524,13 +528,17 @@ def _split_metadata_in_shards_if_necessary(
   return compressed_data
 
 
-def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries,
-                                     arch):
+def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, build_dir,
+                                     binaries, arch):
   logging.info('Generating per-target coverage summaries ...')
   summaries = {}
   for binary in binaries:
     args = _compute_llvm_args(
-        profdata_path, llvm_cov_path, [binary], summary_only=True, arch=arch)
+        profdata_path,
+        llvm_cov_path,
+        build_dir, [binary],
+        summary_only=True,
+        arch=arch)
     try:
       output = subprocess.check_output(args)
       summaries[binary] = json.loads(output)['data'][0]['totals']
@@ -548,8 +556,8 @@ def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries,
 
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
-                       binaries, component_mapping, sources, diff_mapping,
-                       exclusions, arch):
+                       build_dir, binaries, component_mapping, sources,
+                       diff_mapping, exclusions, arch):
   """Generates code coverage metadata.
 
   Args:
@@ -577,8 +585,9 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   """
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
-  data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
-                                    sources, output_dir, exclusions, arch)
+  data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
+                                    binaries, sources, output_dir, exclusions,
+                                    arch)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '
@@ -600,7 +609,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
             files_coverage_data, component_mapping))
 
   summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
-                                               binaries, arch)
+                                               build_dir, binaries, arch)
 
   if diff_mapping is None:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
@@ -664,6 +673,11 @@ def _parse_args(args):
   parser = argparse.ArgumentParser(
       description='Generate the coverage data in metadata format')
   parser.add_argument(
+      '--build-dir',
+      required=True,
+      type=str,
+      help='absolute path to the build directory')
+  parser.add_argument(
       '--src-path',
       required=True,
       type=str,
@@ -718,6 +732,8 @@ def main():
   params = _parse_args(sys.argv[1:])
 
   # Validate parameters
+  if not os.path.exists(params.build_dir):
+    raise RuntimeError('Build directory %s must exist' % params.build_dir)
   if not os.path.exists(params.output_dir):
     raise RuntimeError('Output directory %s must exist' % params.output_dir)
 
@@ -761,8 +777,8 @@ def main():
 
   compressed_data, summaries = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
-      params.binaries, component_mapping, abs_sources, diff_mapping,
-      params.exclusion_pattern, params.arch)
+      params.build_dir, params.binaries, component_mapping, abs_sources,
+      diff_mapping, params.exclusion_pattern, params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
