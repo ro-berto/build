@@ -20,6 +20,7 @@
       "depot_tools@75c9832409cf3cc46fc1ed6783f9c294f77d2bb4"
     ],
     "env": {
+      "DEPOT_TOOLS_COLLECT_METRICS": "0",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
