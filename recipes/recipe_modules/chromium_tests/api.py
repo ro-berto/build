@@ -1891,7 +1891,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     use_rts = (
         self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN or
-        builder_config.use_regression_test_selection)
+        builder_config.always_use_regression_test_selection)
     step_result = self.m.step('use rts: %s' % use_rts, [])
     step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
     step_result.presentation.properties['rts_was_used'] = use_rts

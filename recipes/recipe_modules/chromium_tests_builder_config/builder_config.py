@@ -156,8 +156,8 @@ class BuilderConfig(object):
     return self._try_spec.execution_mode == COMPILE
 
   @cached_property
-  def use_regression_test_selection(self):
-    return self._try_spec.use_regression_test_selection
+  def always_use_regression_test_selection(self):
+    return self._try_spec.always_use_regression_test_selection
 
   @cached_property
   def regression_test_selection_recall(self):

@@ -88,8 +88,8 @@ class TrySpec(object):
   # Whether or not failed shards of tests should be retried
   retry_failed_shards = attrib(bool, default=True)
   # See http://bit.ly/chromium-rts
-  use_regression_test_selection = attrib(bool, default=False)
-  regression_test_selection_recall = attrib(float, default=None)
+  always_use_regression_test_selection = attrib(bool, default=False)
+  regression_test_selection_recall = attrib(float, default=0.95)
 
   @classmethod
   def create(cls, mirrors, **kwargs):
