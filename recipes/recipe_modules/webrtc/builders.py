@@ -276,6 +276,34 @@ BUILDERS = freeze({
                     'cores': '12',
                 }
             },
+            'MacARM64 M1 Debug': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'swarming_dimensions': {
+                    'cpu': 'arm64-64-Apple_M1',
+                }
+            },
+            'MacARM64 M1 Release': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'swarming_dimensions': {
+                    'cpu': 'arm64-64-Apple_M1',
+                }
+            },
             'Linux32 Debug': {
                 'recipe_config': 'webrtc',
                 'chromium_config_kwargs': {
@@ -1203,34 +1231,6 @@ BUILDERS = freeze({
                 }
             },
             'MacARM64 M1 Release try': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_dimensions': {
-                    'cpu': 'arm64-64-Apple_M1',
-                }
-            },
-            'MacARM64 M1 Debug': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_dimensions': {
-                    'cpu': 'arm64-64-Apple_M1',
-                }
-            },
-            'MacARM64 M1 Release': {
                 'recipe_config': 'webrtc',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Release',
