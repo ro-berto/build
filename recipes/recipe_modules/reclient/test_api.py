@@ -7,18 +7,21 @@ from recipe_engine import recipe_test_api
 
 class ReclientTestApi(recipe_test_api.RecipeTestApi):
 
-  def properties(self, instance='example', metrics_project=None,
-                 rewrapper_env=None):
+  def properties(self,
+                 instance='example',
+                 metrics_project=None,
+                 rewrapper_env=None,
+                 profiler_service=None):
     if rewrapper_env is None:
       rewrapper_env = {}
 
-    return self.m.properties(**{
-        '$build/reclient': {
-            'instance': instance,
-            'metrics_project': metrics_project,
-            'rewrapper_env': rewrapper_env,
-        },
-    }) + self.m.buildbucket.ci_build(
-                project='chromium',
-                bucket='ci',
-                builder='Linux reclient')
+    return self.m.properties(
+        **{
+            '$build/reclient': {
+                'instance': instance,
+                'metrics_project': metrics_project,
+                'rewrapper_env': rewrapper_env,
+                'profiler_service': profiler_service,
+            },
+        }) + self.m.buildbucket.ci_build(
+            project='chromium', bucket='ci', builder='Linux reclient')

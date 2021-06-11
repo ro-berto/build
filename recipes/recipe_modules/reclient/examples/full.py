@@ -52,3 +52,9 @@ def GenTests(api):
              'MISSING_RBE_PREFIX': 'foo',
          }) + api.expect_exception('MalformedREWrapperFlag') +
          api.post_process(post_process.DropExpectation))
+
+  yield (api.test('profiler') +
+         api.reclient.properties(profiler_service='reclient') +
+         api.post_process(
+             post_process.Filter(
+                 'preprocess for reclient.start reproxy via bootstrap')))

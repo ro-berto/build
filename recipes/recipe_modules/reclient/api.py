@@ -104,6 +104,10 @@ class ReclientApi(recipe_api.RecipeApi):
     return self._instance
 
   @property
+  def rbe_project(self):
+    return re.match('projects/(.+)/instances/.+', self.instance).group(1)
+
+  @property
   def metrics_project(self):
     if self._metrics_project:
       return self._metrics_project
@@ -249,6 +253,9 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_use_application_default_credentials': 'false',
         'RBE_use_gce_credentials': 'true',
     }
+    if self._props.profiler_service:
+      env['RBE_profiler_service'] = self._props.profiler_service
+      env['RBE_profiler_project_id'] = self.rbe_project
 
     with self.m.context(env=env):
       self.m.step(
@@ -276,15 +283,13 @@ class ReclientApi(recipe_api.RecipeApi):
     ]
 
     if self.metrics_project:
-      rbe_project = re.match('projects/(.+)/instances/.+',
-                             self.instance).group(1)
       args += [
           '-metrics_project',
           self.metrics_project,
           '-metrics_prefix',
           'go.chromium.org',
           '-metrics_namespace',
-          rbe_project,
+          self.rbe_project,
       ]
       labels = ''
       builder_id = self.m.buildbucket.build.builder
