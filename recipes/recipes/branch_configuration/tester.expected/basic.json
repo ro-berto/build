@@ -121,7 +121,7 @@
   },
   {
     "cmd": [],
-    "name": "branch-type1"
+    "name": "branch-config1"
   },
   {
     "cmd": [
@@ -132,14 +132,14 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type1.set branch type",
+    "name": "branch-config1.set branch type",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "branch-type1.verify",
+    "name": "branch-config1.verify",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -149,7 +149,7 @@
       "verification-script1"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-type1.verify.verification-script1",
+    "name": "branch-config1.verify.verification-script1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -159,14 +159,14 @@
       "verification-script2"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-type1.verify.verification-script2",
+    "name": "branch-config1.verify.verification-script2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "branch-type1.restore",
+    "name": "branch-config1.restore",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -179,7 +179,7 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type1.restore.git restore",
+    "name": "branch-config1.restore.git restore",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -192,14 +192,14 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type1.restore.git clean",
+    "name": "branch-config1.restore.git clean",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "branch-type2"
+    "name": "branch-config2"
   },
   {
     "cmd": [
@@ -210,14 +210,14 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type2.set branch type",
+    "name": "branch-config2.set branch type",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "branch-type2.verify",
+    "name": "branch-config2.verify",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -227,7 +227,7 @@
       "verification-script1"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-type2.verify.verification-script1",
+    "name": "branch-config2.verify.verification-script1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -237,14 +237,14 @@
       "verification-script2"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-type2.verify.verification-script2",
+    "name": "branch-config2.verify.verification-script2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "branch-type2.restore",
+    "name": "branch-config2.restore",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -257,7 +257,7 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type2.restore.git restore",
+    "name": "branch-config2.restore.git restore",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -270,7 +270,87 @@
     ],
     "cwd": "[CACHE]/builder/project",
     "infra_step": true,
-    "name": "branch-type2.restore.git clean",
+    "name": "branch-config2.restore.git clean",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "branch-config3"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/project/branch-script",
+      "set-type",
+      "--type",
+      "branch-type1",
+      "--type",
+      "branch-type2"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "infra_step": true,
+    "name": "branch-config3.set branch type",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "branch-config3.verify",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "verification-script1"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config3.verify.verification-script1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "verification-script2"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config3.verify.verification-script2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "branch-config3.restore",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "restore",
+      "."
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "infra_step": true,
+    "name": "branch-config3.restore.git restore",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "infra_step": true,
+    "name": "branch-config3.restore.git clean",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]

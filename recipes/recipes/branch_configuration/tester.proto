@@ -5,17 +5,33 @@ syntax = "proto3";
 
 package recipes.build.branch_configuration.tester;
 
+message BranchConfig {
+  // Required, the name to identify the configuration.
+  //
+  // The name is arbitrary and is only used for display and human
+  // identification.
+  string name = 1;
+  // Required, the branch types to set for the configuration.
+  //
+  // The branch types must be strings that can be passed as values for the
+  // --type flag to script identified by branch_script in InputProperties.
+  repeated string branch_types = 2;
+}
+
 message InputProperties {
   // Required, the path within the repo to the branch script that can be used to
   // set the branch type
   //
   // The script must be executable with a command of the form:
-  // <branch_script> set-type --type <branch_type>
-  // For each element <branch_type> in branch_types.
+  // <branch_script> set-type --type <branch_type> [--type <branch_type>]...
+  // For each element <branch_type> in branch_configs[i].branch_types.
   string branch_script = 1;
 
   // Required, the branch types to verify
+  // Deprecated: set branch_configs instead
   repeated string branch_types = 2;
+  // Required, the branch configs to verify
+  repeated BranchConfig branch_configs = 4;
 
   // Required, the path within the repo to scripts to execute to verify each
   // branch type
