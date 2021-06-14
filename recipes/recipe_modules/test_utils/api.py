@@ -636,24 +636,80 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return should_abort
 
-  def _extract_retriable_suites_from_invocations(self, rdb_results,
-                                                 retry_failed_shards):
+  def _extract_retriable_suites_from_invocations(self, test_suites, suffix,
+                                                 retry_failed_shards,
+                                                 retry_invalid_shards):
     """Examines tests results as reported by RDB for suites we want to retry.
 
     We want to retry any suite that had at least one test with consistent
     non-PASSing results.
 
     Args:
-      rdb_results: util.RDBResults instance for test results as reported by RDB
+      test_suites: iterable of objects implementing the steps.Test interface
+      suffix: suffix indicating context of the test run
       retry_failed_shards: If True, retry suites that contain non-PASSing
         results.
+      retry_invalid_shards: If True, retry shards of swarming tests without
+        valid results.
     Return:
       Set of suite names containing tests we want to retry.
     """
+    retriable_suites = set()
+    # RDB is unaware of suites with invalid results (eg: shards that never
+    # ran). So we need to keep a channel open to swarming to record shards
+    # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
+    if retry_invalid_shards:
+      for suite in test_suites:
+        # TODO(crbug.com/1135718): Tear-out all JSON-parsing logic from
+        # has_valid_results() and have it only inspect overall shard result.
+        if not suite.has_valid_results(suffix):
+          retriable_suites.add(suite.name)
     if not retry_failed_shards:
-      return set()
+      return retriable_suites
 
-    return set(s.suite_name for s in rdb_results.unexpected_failing_suites)
+    # Check if all unexpected failures are known to be flaky by FindIt, and
+    # mark them as flaky if so.
+    if suffix == 'with patch':
+      # Build the input FindIt's API expects: a list of dicts with just
+      # "step_ui_name" and "test_name".
+      find_it_input_test_list = []
+      for suite in test_suites:
+        if not suite.rdb_results.get(suffix):
+          continue
+        for test in suite.rdb_results[suffix].unexpected_failing_tests:
+          # RDB reports test IDs in a different format than FindIt accepts. So
+          # convert from one to the other by removing the "ninja://..." prefix.
+          find_it_input_test_name = test.split(suite.test_id_prefix)[-1]
+          find_it_input_test_list.append({
+              'step_ui_name': suite.name_of_step_for_suffix(suffix),
+              'test_name': find_it_input_test_name,
+          })
+      # Mark all the failed tests as flaky if FindIt has a monorail issue
+      # on file for them.
+      known_flakes = self._query_flaky_failures(find_it_input_test_list)
+      for flake in known_flakes.get('flakes', []):
+        for suite in test_suites:
+          if (suite.name_of_step_for_suffix(suffix) == flake['test']
+              ['step_ui_name']):
+            suite.add_known_flaky_failure(flake['test']['test_name'],
+                                          flake['monorail_issue'])
+
+    # Filter out suites whose failing tests are all known to be flaky, and
+    # only retry what's remaining.
+    for suite in test_suites:
+      if (not suite.rdb_results.get(suffix) or
+          not suite.rdb_results[suffix].unexpected_failing_tests):
+        continue
+      # Convert the names of all failing tests in RDB's results to FindIt's
+      # format, and if every test name in that set was reported by FindIt to
+      # be flaky, then we can skip the retry.
+      failing_test_names = set(
+          t.split(suite.test_id_prefix)[-1]
+          for t in suite.rdb_results[suffix].unexpected_failing_tests)
+      if not failing_test_names.issubset(suite.known_flaky_failures):
+        retriable_suites.add(suite.name)
+
+    return retriable_suites
 
   def _extract_retriable_suites_legacy(self, failed_suites, invalid_suites,
                                        retry_failed_shards,
@@ -760,16 +816,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         failed_test_suites, invalid_test_suites, retry_failed_shards,
         retry_invalid_shards)
     retry_list_new = self._extract_retriable_suites_from_invocations(
-        rdb_results, retry_failed_shards)
-    # RDB is unaware of suites with invalid results (eg: shards that never
-    # ran). So we need to keep a channel open to swarming to record shards
-    # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
-    if retry_invalid_shards:
-      for t in test_suites:
-        # TODO(crbug.com/1135718): Tear-out all JSON-parsing logic from
-        # has_valid_results() and have it only inspect overall shard result.
-        if not t.has_valid_results(suffix):
-          retry_list_new.add(t.name)
+        test_suites, suffix, retry_failed_shards, retry_invalid_shards)
 
     swarming_test_suites = self._retry_with_patch_target_suites(
         retry_list_old, retry_list_new)

@@ -38,7 +38,10 @@ PROPERTIES = {
 def RunSteps(api, is_swarming_test=True):
   test_spec = steps.LocalIsolatedScriptTestSpec.create('base_unittests')
   if is_swarming_test:
-    test_spec = steps.SwarmingGTestTestSpec.create('base_unittests', shards=2)
+    test_spec = steps.SwarmingGTestTestSpec.create(
+        'base_unittests',
+        shards=2,
+        test_id_prefix='ninja://chromium/tests:base_unittests/')
   tests = [test_spec.get_test()]
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
@@ -327,5 +330,59 @@ def GenTests(api):
       ),
       api.post_process(post_process.MustRun,
                        'exonerate unexpected passes (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  inv_bundle_with_one_failure = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:base_unittests/Test.Two',
+                      expected=False,
+                      status=test_result_pb2.FAIL),
+              ],
+          ),
+  }
+  findit_exoneration_output = {
+      'flakes': [{
+          'test': {
+              'step_ui_name': 'base_unittests (with patch)',
+              'test_name': 'Test.Two',
+          },
+          'affected_gerrit_changes': ['123', '234'],
+          'monorail_issue': '999',
+      }]
+  }
+  yield api.test(
+      'query_findit_with_invocation_results',
+      api.chromium.ci_build(builder_group='g', builder='linux-rel'),
+      api.properties(
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ),
+      api.resultdb.query(
+          inv_bundle_with_one_failure,
+          step_name='query test results (with patch).base_unittests',
+      ),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=False)),
+      # The first query is used in the legacy decisions. The second is used in
+      # RDB-based decisions. If both report the same failing test as flaky, then
+      # the decision logic should match.
+      api.override_step_data('query known flaky failures on CQ',
+                             api.json.output(findit_exoneration_output)),
+      api.override_step_data('query known flaky failures on CQ (2)',
+                             api.json.output(findit_exoneration_output)),
+      api.post_process(post_process.DoesNotRun,
+                       'Migration mismatch (informational)'),
       api.post_process(post_process.DropExpectation),
   )

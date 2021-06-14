@@ -672,7 +672,7 @@ class Test(object):
 
   @property
   def rdb_results(self):
-    return self._rdb_results  # pragma: no cover
+    return self._rdb_results
 
   def update_rdb_results(self, suffix, results):
     self._rdb_results[suffix] = results
