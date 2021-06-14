@@ -7,8 +7,9 @@ import itertools
 import json
 import re
 import urllib
-from recipe_engine.types import freeze
 
+from RECIPE_MODULES.build import chromium_swarming
+from recipe_engine.types import freeze
 
 MONORAIL_SEARCH_BUGS_TEMPLATE = (
     'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+%(name)s')
@@ -490,8 +491,24 @@ class V8SwarmingTest(V8Test):
     if self.api.v8.c.testing.may_shard:
       shards = self.test_step_config.shards
 
-    command = 'tools/%s.py' % self.test.get('tool', 'run-tests')
+    cipd_packages = None
+    command = ['tools/%s.py' % self.test.get('tool', 'run-tests')]
     idempotent = self.test.get('idempotent')
+
+    # TODO(crbug.com/1210489, crbug.com/1219410): We overwrite the python
+    # from the pool template for mac-arm64 as it points to amd64 and causes
+    # crashes. Remove this as soon as the python from the pool template is
+    # mac-arm64.
+    if (self.test_step_config.swarming_dimensions.get('pool') ==
+        'chromium.tests.mac-arm64'):
+      cipd_packages = [
+        chromium_swarming.CipdPackage.create(
+              name='infra/3pp/tools/cpython/mac-arm64',
+              version='version:2@2.7.18.chromium.39',
+              root='.mac_arm64_cpython',
+          )
+      ]
+      command = ['.mac_arm64_cpython/bin/python', '-u'] + command
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
@@ -500,7 +517,8 @@ class V8SwarmingTest(V8Test):
         name=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
         shards=shards,
-        raw_cmd=[command] + extra_args,
+        cipd_packages=cipd_packages,
+        raw_cmd=command + extra_args,
         **kwargs
     )
     self.task.collect_step = self._v8_collect_step

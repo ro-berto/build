@@ -822,6 +822,31 @@ def GenTests(api):
     api.post_process(DropExpectation)
   )
 
+  # Test that we use mac-arm64 cpython in the mac-acm64 pool.
+  mac_arm64_test_spec = """
+    {
+      "swarming_dimensions": {
+        "pool": "chromium.tests.mac-arm64",
+        "os": "Mac-11",
+      },
+      "tests": [
+        {
+          "name": "d8testing",
+        },
+      ],
+    }
+  """.strip()
+  yield (
+    api.v8.test(
+        'client.v8',
+        'mac_arm64',
+        parent_buildername='V8 Foobar - builder',
+        parent_test_spec=mac_arm64_test_spec,
+        swarm_hashes={'d8_default': 'hash/123'},
+    ) +
+    api.post_process(Filter('trigger tests.[trigger] Check - d8 on Mac-11'))
+  )
+
   # Test reading pyl test configs and build configs from a separate checkout.
   extra_test_config = """
     {
