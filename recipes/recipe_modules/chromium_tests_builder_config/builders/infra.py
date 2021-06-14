@@ -5,9 +5,10 @@
 from .. import builder_spec
 
 SPEC = {
-    'linux-infra-canary':
+    'linux-control-builder':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
+            chromium_apply_config=['mb'],  # Determines GN args
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
@@ -16,17 +17,16 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'linux-infra-canary-tests':
+    'linux-dynamic-linking-builder':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
+            chromium_apply_config=['mb'],  # Determines GN args
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='linux-infra-canary',
             simulation_platform='linux',
         ),
 }
