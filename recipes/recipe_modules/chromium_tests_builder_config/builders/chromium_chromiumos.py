@@ -58,8 +58,6 @@ def _config(name,
       'simulation_platform': 'linux',
   }
   cfg.update(**kwargs)
-  if chromium_apply_config:
-    cfg['chromium_apply_config'].extend(chromium_apply_config)
   if cros_boards:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARDS'] = cros_boards
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
@@ -126,11 +124,6 @@ SPEC.update([
         cros_boards='kevin',
         target_arch='arm',
         target_bits=32,
-        gclient_apply_config=['arm'],
-        # Some tests on this bot depend on being unauthenticated with GS, so
-        # don't run the tests inside a luci-auth context to avoid having the
-        # BOTO config setup for the task's service account.
-        # TODO(crbug.com/1217155): Fix this.
-        chromium_apply_config=['mb_no_luci_auth']),
+        gclient_apply_config=['arm']),
     _config('linux-cfm-rel'),
 ])
