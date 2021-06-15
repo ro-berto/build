@@ -551,7 +551,7 @@
       "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--",
       "--isolated-script-test-output",
-      "/path/to/tmp/json"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

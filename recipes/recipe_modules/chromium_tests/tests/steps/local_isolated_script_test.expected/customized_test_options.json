@@ -20,7 +20,7 @@
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
       "--isolated-script-test-output",
-      "/path/to/tmp/json"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "name": "blink_web_tests",
     "~followup_annotations": [

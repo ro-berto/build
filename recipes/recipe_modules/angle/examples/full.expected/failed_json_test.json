@@ -799,7 +799,7 @@
       "[dummy hash for basic_isolate]",
       "--",
       "--isolated-script-test-output",
-      "/path/to/tmp/json"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "name": "basic_isolate_tests",
     "~followup_annotations": [

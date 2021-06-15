@@ -248,7 +248,7 @@
       "--should-be-in-output",
       "--should-also-be-in-output",
       "--isolated-script-test-output",
-      "/path/to/tmp/json"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "name": "base_unittests",
     "~followup_annotations": [

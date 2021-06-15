@@ -2756,7 +2756,8 @@ class LocalIsolatedScriptTest(Test):
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 
-    json_results_file = api.json.output()
+    temp = api.path.mkstemp()
+    json_results_file = api.json.output(leak_to=temp)
     args.extend(['--isolated-script-test-output', json_results_file])
 
     step_test_data = lambda: api.json.test_api.output({
@@ -2784,7 +2785,6 @@ class LocalIsolatedScriptTest(Test):
       })
 
     # for local runs, result_adapter is available in chromium checkout.
-    temp = api.path.mkstemp()
     resultdb = attr.evolve(
         self.spec.resultdb,
         artifact_directory=api.path.dirname(temp),

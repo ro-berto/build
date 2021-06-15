@@ -565,7 +565,7 @@
       "--test-machine-name=\"Linux Tests\"",
       "--build-revision=\"2d72510e447ab60a9728aeea2362d8be2cbd7789\"",
       "--isolated-script-test-output",
-      "/path/to/tmp/json"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
