@@ -5,7 +5,7 @@
 from .. import builder_spec
 
 SPEC = {
-    'linux-control-builder':
+    'linux-component-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],  # Determines GN args
@@ -17,7 +17,7 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'linux-dynamic-linking-builder':
+    'linux-control-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],  # Determines GN args
