@@ -19,6 +19,9 @@ message BranchConfig {
 }
 
 message InputProperties {
+  reserved 2;
+  reserved "branch_types";
+
   // Required, the path within the repo to the branch script that can be used to
   // set the branch type
   //
@@ -27,9 +30,6 @@ message InputProperties {
   // For each element <branch_type> in branch_configs[i].branch_types.
   string branch_script = 1;
 
-  // Required, the branch types to verify
-  // Deprecated: set branch_configs instead
-  repeated string branch_types = 2;
   // Required, the branch configs to verify
   repeated BranchConfig branch_configs = 4;
 

@@ -63,12 +63,6 @@ def _validate_properties(properties):
         errors.append("multiple occurrences of '{}' in {}: {!r}".format(
             element, field_name, indices))
 
-  # TODO(gbeaty) remove this once builders are switched to use branch_configs
-  for t in properties.branch_types:
-    config = properties.branch_configs.add()
-    config.name = t
-    config.branch_types.append(t)
-
   if not properties.branch_script:
     errors.append('branch_script is empty')
 
@@ -210,39 +204,6 @@ def GenTests(api):
                      'branch-config3.set branch type',
                      ['--type', 'branch-type1', '--type', 'branch-type2']),
       api.post_check(post_process.StatusSuccess),
-  )
-
-  # TODO(gbeaty) Switch builders to use branch_configs, then remove the
-  # branch_types field
-  yield api.test(
-      'branch-types',
-      api.buildbucket.try_build(),
-      api.properties(
-          tester_pb.InputProperties(
-              branch_script='branch-script',
-              branch_types=['branch-type1', 'branch-type2'],
-              verification_scripts=[
-                  'verification-script1',
-                  'verification-script2',
-              ],
-          )),
-      api.post_check(
-          post_process.MustRun,
-          'branch-type1.set branch type',
-          'branch-type1.verify.verification-script1',
-          'branch-type1.verify.verification-script2',
-          'branch-type2.set branch type',
-          'branch-type2.verify.verification-script1',
-          'branch-type2.verify.verification-script2',
-      ),
-      api.post_check(post_process.StepCommandContains,
-                     'branch-type1.set branch type',
-                     ['--type', 'branch-type1']),
-      api.post_check(post_process.StepCommandContains,
-                     'branch-type2.set branch type',
-                     ['--type', 'branch-type2']),
-      api.post_check(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
