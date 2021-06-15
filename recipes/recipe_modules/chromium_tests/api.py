@@ -37,9 +37,6 @@ RECIPE_CONFIG_PATHS = [
 # values of owner._account_id.
 # chromium and v8-ci-autorollers
 AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
-RTS_BETA_USERS = (
-    # Disabled for now due to https://crbug.com/1208106
-)
 
 
 class Task(object):
