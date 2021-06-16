@@ -365,15 +365,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
-    self._exonerate_unexpected_results(all_unexpected_result_invocations,
-                                       suffix)
+    if suffix == 'without patch':
+      self._exonerate_without_patch_unexpected_results(
+          all_unexpected_result_invocations)
 
     rdb_results = RDBResults.create(all_rdb_results)
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
-  def _exonerate_unexpected_results(self, unexpected_result_invocations,
-                                    suffix):
-    """Notifies RDB of any unexpected test result that won't fail the build.
+  def _exonerate_without_patch_unexpected_results(
+      self, unexpected_result_invocations):
+    """Notifies RDB of any unexpected test result (except unexpected passes) in
+    without patch steps that won't fail the build.
 
     For more details, see http://go/resultdb-concepts#test-exoneration
 
@@ -381,18 +383,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
       unexpected_result_invocations: dict of
         {invocation_id: api.resultdb.Invocation} containing results of any
         test we ran that had unexpected results.
-      suffix: string specifying the stage/type of run, e.g. "without patch" or
-        "retry (with patch)".
     """
-    step_name = 'exonerate unexpected passes'
-    if suffix == 'without patch':
-      step_name = 'exonerate unexpected without patch results'
-    elif suffix:
-      step_name = '%s (%s)' % (step_name, suffix)
+    step_name = 'exonerate unexpected without patch results'
 
     # For each invocation, pull out the test variants for every test result
-    # that we should exonerate. Namely: exonerate every unexpected result
-    # except for unexpected failures during the "with patch" phase.
+    # that we should exonerate. Namely: exonerate every unexpected failures
+    # during the "without patch" phase.
+    # Unexpected passes should be already exonerated in tasks.
     # Keep this logic in-sync with
     # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
     # until that can be removed in favor of RDB.
@@ -401,23 +398,23 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for tr in inv.test_results:
         if tr.expected:
           continue  # If the test was retried and passed, skip its PASS result.
-        if suffix != 'without patch' and tr.status != test_result_pb2.PASS:
-          continue  # Skip unexpected failures during the "with patch" phase.
+        if tr.status == test_result_pb2.PASS:
+          # Skip unexpected passes during the "without patch" phase, because
+          # they have been exonerated.
+          continue
 
         unexpected_result_variants.setdefault(tr.test_id, [])
         # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
         if all(v != tr.variant for v in unexpected_result_variants[tr.test_id]):
           unexpected_result_variants[tr.test_id].append(tr.variant)
 
-    explanation_html = 'Unexpected passes do not cause a build failure'
-    if suffix == 'without patch':
-      explanation_html = (
-          'Unexpected results in (without patch) steps do not cause a build '
-          'failure, including unexpected failures '
-          # pylint: disable=line-too-long
-          '(https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
-          # pylint: enable=line-too-long
-      )
+    explanation_html = (
+        'The test failed in both (with patch) and (without patch) steps, so the'
+        'CL is exonerated for the test failures.'
+        # pylint: disable=line-too-long
+        '(https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
+        # pylint: enable=line-too-long
+    )
 
     exonerations = []
     for test_id, variants in unexpected_result_variants.iteritems():

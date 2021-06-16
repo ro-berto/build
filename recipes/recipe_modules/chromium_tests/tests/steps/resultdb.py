@@ -28,7 +28,10 @@ def RunSteps(api):
   )
 
   # test_location_base, test_id_prefix, coerce_negative_duration
-  rdb = ResultDB.create(enable=True, coerce_negative_duration=False)
+  rdb = ResultDB.create(
+      enable=True,
+      coerce_negative_duration=False,
+      exonerate_unexpected_pass=False)
   api.assertions.assertEqual(
       rdb.wrap(api, cmd),
       ['rdb', 'stream', '-var', bvar, '--'] + cmd,
@@ -46,12 +49,19 @@ def RunSteps(api):
       ] + cmd,
   )
   api.assertions.assertEqual(
-      rdb.wrap(api, cmd, coerce_negative_duration=True),
+      rdb.wrap(
+          api,
+          cmd,
+          coerce_negative_duration=True,
+          exonerate_unexpected_pass=False),
       ['rdb', 'stream', '-var', bvar, '-coerce-negative-duration', '--'] + cmd,
   )
 
   # step_name
-  rdb = ResultDB.create(enable=True, coerce_negative_duration=False)
+  rdb = ResultDB.create(
+      enable=True,
+      coerce_negative_duration=False,
+      exonerate_unexpected_pass=False)
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, step_name='test1'),
       ['rdb', 'stream', '-var', bvar, '-tag', 'step_name:test1', '--'] + cmd,
@@ -59,7 +69,10 @@ def RunSteps(api):
 
   # base_tags
   rdb = ResultDB.create(
-      enable=True, coerce_negative_duration=False, base_tags=[('k1', 'v1')])
+      enable=True,
+      coerce_negative_duration=False,
+      base_tags=[('k1', 'v1')],
+      exonerate_unexpected_pass=False)
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, base_tags=[('k2', 'v2')]),
       ['rdb', 'stream', '-var', bvar, '-tag', 'k1:v1', '-tag', 'k2:v2', '--'] +
@@ -72,7 +85,10 @@ def RunSteps(api):
 
   # base_variant
   rdb = ResultDB.create(
-      enable=True, coerce_negative_duration=False, base_variant={"k1": "v1"})
+      enable=True,
+      coerce_negative_duration=False,
+      base_variant={"k1": "v1"},
+      exonerate_unexpected_pass=False)
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, base_variant={"k1": "v2"}),
       ['rdb', 'stream', '-var', bvar, '-var', 'k1:v2', '--'] + cmd,
@@ -84,7 +100,10 @@ def RunSteps(api):
   )
 
   # result_format
-  rdb = ResultDB.create(enable=True, coerce_negative_duration=False)
+  rdb = ResultDB.create(
+      enable=True,
+      coerce_negative_duration=False,
+      exonerate_unexpected_pass=False)
   api.assertions.assertEqual(
       rdb.wrap(api, cmd, result_format='gtest'),
       ['rdb', 'stream', '-var', bvar, '--'] + [

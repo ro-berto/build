@@ -112,7 +112,8 @@ def GenTests(api):
                              api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-var', 'builder:test_buildername', '-tag',
-          'step_name:junit_test', '-coerce-negative-duration', '--'
+          'step_name:junit_test', '-coerce-negative-duration',
+          '-exonerate-unexpected-pass', '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),
@@ -143,7 +144,7 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
           'builder:test_buildername', '-tag', 'step_name:junit_test',
-          '-coerce-negative-duration', '--'
+          '-coerce-negative-duration', '-exonerate-unexpected-pass', '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),

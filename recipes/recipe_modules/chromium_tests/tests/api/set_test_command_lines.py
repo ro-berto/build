@@ -394,7 +394,8 @@ def GenTests(api):
                   '-test-location-base', '//test/location', '-tag',
                   'step_name:%s on (nv) GPU on Linux' % fake_test,
                   '-coerce-negative-duration', '-location-tags-file',
-                  '../../testing/location_tags.json', '--'
+                  '../../testing/location_tags.json',
+                  '-exonerate-unexpected-pass', '--'
               ] + fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
@@ -439,9 +440,9 @@ def GenTests(api):
                       '-var', 'test_suite:fake_test', '-tag',
                       'step_name:%s' % fake_test, '-coerce-negative-duration',
                       '-location-tags-file', '../../testing/location_tags.json',
-                      '--', 'result_adapter', 'gtest', '-result-file',
-                      '${ISOLATED_OUTDIR}/output.json', '-artifact-directory',
-                      '${ISOLATED_OUTDIR}', '--'
+                      '-exonerate-unexpected-pass', '--', 'result_adapter',
+                      'gtest', '-result-file', '${ISOLATED_OUTDIR}/output.json',
+                      '-artifact-directory', '${ISOLATED_OUTDIR}', '--'
                   ] + fake_command_lines[fake_test]))),
       api.post_process(post_process.DropExpectation),
   )
@@ -496,8 +497,9 @@ def GenTests(api):
                   '-test-location-base', '//third_party/webgl/src/sdk/tests/',
                   '-tag', 'step_name:webgl_fake_test on (nv) GPU on Linux',
                   '-coerce-negative-duration', '-location-tags-file',
-                  '../../testing/location_tags.json', '--', 'result_adapter',
-                  'json', '-result-file', '${ISOLATED_OUTDIR}/output.json',
+                  '../../testing/location_tags.json',
+                  '-exonerate-unexpected-pass', '--', 'result_adapter', 'json',
+                  '-result-file', '${ISOLATED_OUTDIR}/output.json',
                   '-artifact-directory', '${ISOLATED_OUTDIR}', '-test-location',
                   '--'
               ] + fake_command_lines[webgl_fake_test]))),

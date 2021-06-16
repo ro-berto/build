@@ -195,6 +195,7 @@
       "-tag",
       "step_name:gtest_test",
       "-coerce-negative-duration",
+      "-exonerate-unexpected-pass",
       "--",
       "[START_DIR]/src/tools/resultdb/result_adapter",
       "gtest",

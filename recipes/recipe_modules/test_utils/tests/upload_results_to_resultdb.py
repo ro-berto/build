@@ -278,61 +278,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  inv_bundle_with_unexpected_passes = {
-      'invid':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='ninja://chromium/tests:browser_tests/t1',
-                      expected=True,
-                      status=test_result_pb2.PASS,
-                      variant={'def': {
-                          'key1': 'value1',
-                      }}),
-                  test_result_pb2.TestResult(
-                      test_id='ninja://chromium/tests:browser_tests/t2',
-                      expected=False,
-                      status=test_result_pb2.PASS,
-                      variant={'def': {
-                          'key1': 'value1',
-                      }}),
-                  test_result_pb2.TestResult(
-                      test_id='ninja://chromium/tests:browser_tests/t3',
-                      expected=False,
-                      status=test_result_pb2.FAIL,
-                      variant={'def': {
-                          'key1': 'value1',
-                      }}),
-              ],
-          ),
-  }
-
-  yield api.test(
-      'exonerate_unexpected_passes',
-      api.chromium.ci_build(builder_group='g', builder='linux-rel'),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          is_swarming_test=True,
-      ),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
-              shards=2,
-              failure=False)),
-      api.resultdb.query(
-          inv_bundle_with_unexpected_passes,
-          step_name='query test results (with patch).base_unittests',
-      ),
-      api.post_process(post_process.MustRun,
-                       'exonerate unexpected passes (with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   inv_bundle_with_one_failure = {
       'invid':
           api.resultdb.Invocation(

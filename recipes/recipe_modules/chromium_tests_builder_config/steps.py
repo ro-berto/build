@@ -261,6 +261,10 @@ class ResultDB(object):
       from. It is meaningful only when result_format is not None.
     * artifact_directory - path to artifact directory where result_adapter
       finds and uploads artifacts from.
+    * location_tags_file - path to the location tags file for ResultSink to read
+      and attach location based tags to each test result.
+    * exonerate_unexpected_pass - flag to control if ResultSink should
+      automatically exonerate unexpected passes.
     * result_adapter_path - path to result_adapter binary.
   """
   enable = attrib(bool, default=False)
@@ -274,6 +278,7 @@ class ResultDB(object):
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
   artifact_directory = attrib((str, Placeholder), default='${ISOLATED_OUTDIR}')
   location_tags_file = attrib(str, default=None)
+  exonerate_unexpected_pass = attrib(bool, default=True)
   # result_adapter binary is available in chromium checkout or
   # the swarming bot.
   #
@@ -380,6 +385,7 @@ class ResultDB(object):
         test_location_base=configs.test_location_base,
         location_tags_file=configs.location_tags_file,
         require_build_inv=require_build_inv,
+        exonerate_unexpected_pass=configs.exonerate_unexpected_pass,
     )
 
 

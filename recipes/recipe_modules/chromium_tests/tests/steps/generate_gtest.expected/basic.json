@@ -261,6 +261,7 @@
       "-tag",
       "step_name:base_unittests",
       "-coerce-negative-duration",
+      "-exonerate-unexpected-pass",
       "--",
       "[START_DIR]/src/tools/resultdb/result_adapter",
       "gtest",
