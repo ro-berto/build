@@ -276,21 +276,6 @@ BUILDERS = freeze({
                     'cores': '12',
                 }
             },
-            'MacARM64 M1 Debug': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_dimensions': {
-                    'cpu': 'arm64-64-Apple_M1',
-                    'pool': 'luci.webrtc.ci',
-                }
-            },
             'MacARM64 M1 Release': {
                 'recipe_config': 'webrtc',
                 'chromium_config_kwargs': {
@@ -304,7 +289,7 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'cpu': 'arm64-64-Apple_M1',
                     'pool': 'luci.webrtc.ci',
-                }
+                },
             },
             'Linux32 Debug': {
                 'recipe_config': 'webrtc',
@@ -1216,34 +1201,6 @@ BUILDERS = freeze({
                     'os': 'Mac-11',
                     'cpu': 'x86-64',
                     'cores': '12',
-                }
-            },
-            'MacARM64 M1 Debug try': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_dimensions': {
-                    'cpu': 'arm64-64-Apple_M1',
-                }
-            },
-            'MacARM64 M1 Release try': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_dimensions': {
-                    'cpu': 'arm64-64-Apple_M1',
                 }
             },
             'linux_compile_dbg': {
