@@ -567,6 +567,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.set_test_command_lines(tests_including_triggered, name_suffix)
 
         if builder_config.perf_isolate_upload:
+          instance = (
+              self.m.cas.instance if self._use_cas(builder_config) else
+              self.m.isolate.isolate_server)
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
               self.m.perf_dashboard.get_change_info([{
@@ -574,7 +577,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                       'chromium',
                   'git_hash':
                       update_step.presentation.properties['got_revision'],
-              }]), self.m.isolate.isolate_server, self.m.isolate.isolated_tests)
+              }]), instance, self.m.isolate.isolated_tests)
       return raw_result
 
   def set_test_command_lines(self, tests, suffix):
