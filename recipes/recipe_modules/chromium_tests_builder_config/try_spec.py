@@ -11,6 +11,10 @@ from RECIPE_MODULES.build.chromium import BuilderId
 COMPILE_AND_TEST = 'compile/test'
 COMPILE = 'compile'
 
+ALWAYS = 'always'
+NEVER = 'never'
+QUICK_RUN_ONLY = 'quick_run_only'
+
 
 @attrs()
 class TryMirror(object):
@@ -88,7 +92,8 @@ class TrySpec(object):
   # Whether or not failed shards of tests should be retried
   retry_failed_shards = attrib(bool, default=True)
   # See http://bit.ly/chromium-rts
-  always_use_regression_test_selection = attrib(bool, default=False)
+  regression_test_selection = attrib(
+      enum([ALWAYS, QUICK_RUN_ONLY, NEVER]), default=NEVER)
   regression_test_selection_recall = attrib(float, default=0.95)
 
   @classmethod

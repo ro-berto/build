@@ -175,7 +175,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel',
-                always_use_regression_test_selection=True,
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'android-nougat-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -692,7 +692,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Fuchsia x64',
-                always_use_regression_test_selection=True,
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'fuchsia-x64-cast':
             try_spec.TrySpec.create_for_single_mirror(
@@ -867,6 +867,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'linux-rel-orchestrator':
             try_spec.TrySpec.create(
@@ -1004,7 +1005,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
-                always_use_regression_test_selection=True,
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'linux-rel-reclient':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1228,7 +1229,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-amd64-generic-rel',
-                always_use_regression_test_selection=True,
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'chromeos-arm-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1354,7 +1355,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='ios-simulator',
-                always_use_regression_test_selection=True,
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'ios13-beta-simulator':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1448,6 +1449,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Mac Retina Release (AMD)',
                 ),
             ],
+            regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'mac-rel-rts':
             try_spec.TrySpec.create([
@@ -1467,7 +1469,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Mac Retina Release (AMD)',
                 ),
             ],
-            always_use_regression_test_selection=True,
+            regression_test_selection=try_spec.ALWAYS,
             ),
         'mac_chromium_10.11_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1759,6 +1761,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Win10 x64 Release (NVIDIA)',
                 ),
             ],
+            regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'win10_chromium_x64_rel_ng_rts':
             try_spec.TrySpec.create([
@@ -1773,7 +1776,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Win10 x64 Release (NVIDIA)',
                 ),
             ],
-            always_use_regression_test_selection=True,
+            regression_test_selection=try_spec.ALWAYS,
             ),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(

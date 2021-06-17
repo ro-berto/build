@@ -20,6 +20,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 from . import generators
 from .targets_config import TargetsConfig
@@ -1746,8 +1747,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     mirrors = set()
     if not is_trybot:
       for try_builder_id in try_db:
-        try_spec = try_db.get(try_builder_id)
-        for try_mirror in try_spec.mirrors:
+        builder_spec = try_db.get(try_builder_id)
+        for try_mirror in builder_spec.mirrors:
           if try_mirror.builder_id == builder_id:
             mirrors.add(try_builder_id)
           if try_mirror.tester_id == builder_id:
@@ -1887,8 +1888,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         Configuration of the build/test.
     """
     use_rts = (
-        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN or
-        builder_config.always_use_regression_test_selection)
+        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
+        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
+    ) or builder_config.regression_test_selection == try_spec.ALWAYS
     step_result = self.m.step('use rts: %s' % use_rts, [])
     step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
     step_result.presentation.properties['rts_was_used'] = use_rts

@@ -92,7 +92,7 @@ def RunSteps(api):
               execution_mode=try_spec.COMPILE,
               analyze_names=['analyze-name'],
               retry_failed_shards=False,
-              always_use_regression_test_selection=True,
+              regression_test_selection=try_spec.ALWAYS,
               regression_test_selection_recall=0.5)))
 
   # Test builders_id property
@@ -118,11 +118,12 @@ def RunSteps(api):
   api.assertions.assertFalse(builder_config.is_compile_only)
   api.assertions.assertTrue(builder_config_with_try_overrides.is_compile_only)
 
-  # Test always_use_regression_test_selection property
-  api.assertions.assertFalse(
-      builder_config.always_use_regression_test_selection)
-  api.assertions.assertTrue(
-      builder_config_with_try_overrides.always_use_regression_test_selection)
+  # Test regression_test_selection property
+  api.assertions.assertEqual(try_spec.NEVER,
+                             builder_config.regression_test_selection)
+  api.assertions.assertEqual(
+      try_spec.ALWAYS,
+      builder_config_with_try_overrides.regression_test_selection)
 
   # Test regression_test_selection_recall property
   api.assertions.assertEqual(
