@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 DEPS = [
     'chromium',
@@ -66,6 +67,17 @@ _TEST_TRYBOTS = ctbc.TryDatabase.create({
                         tester='retry-shards-test',
                     ),
                 ],
+            ),
+        'rts-rel':
+            ctbc.TrySpec.create(
+                mirrors=[
+                    ctbc.TryMirror.create(
+                        builder_group='chromium.test',
+                        buildername='chromium-rel',
+                        tester='chromium-rel',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
     }
 })
@@ -652,5 +664,32 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
+      api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'quick run rts',
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='rts-rel',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS,
+      ),
+      api.chromium_tests.read_source_side_spec('chromium.test', {
+          'chromium-rel': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.post_process(post_process.MustRun, 'use rts: True'),
+      api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
   )
