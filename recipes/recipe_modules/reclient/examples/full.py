@@ -58,3 +58,8 @@ def GenTests(api):
          api.post_process(
              post_process.Filter(
                  'preprocess for reclient.start reproxy via bootstrap')))
+
+  yield (api.test('trace') + api.reclient.properties(publish_trace=True) +
+         api.post_process(
+             post_process.Filter(
+                 'postprocess for reclient.upload reclient traces')))

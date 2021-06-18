@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": [
+      "[TMP_BASE]/checkout/buildtools/reclient/rpl2cloudtrace",
+      "--project_id",
+      "example",
+      "--proxyLog_dir",
+      "[CLEANUP]/reclient_log_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.upload reclient traces",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@trace_list@https://console.cloud.google.com/traces/list?project=example@@@"
+    ]
+  }
+]

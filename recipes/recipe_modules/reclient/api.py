@@ -150,6 +150,10 @@ class ReclientApi(recipe_api.RecipeApi):
   def _bootstrap_bin_path(self):
     return self._get_reclient_exe_path('bootstrap')
 
+  @property
+  def _rpl2cloudtrace_bin_path(self):
+    return self._get_reclient_exe_path('rpl2cloudtrace')
+
   def _get_platform_exe_name(self, exe_name):
     if self.m.platform.is_win:
       exe_name += '.exe'
@@ -215,6 +219,8 @@ class ReclientApi(recipe_api.RecipeApi):
         self._stop_reproxy(reclient_log_dir)
         self._stop_cloudtail()
         self._upload_rbe_metrics(reclient_log_dir)
+        if self._props.publish_trace:
+          self._upload_reclient_traces(reclient_log_dir)
         gzip_name_maker = GzipFilenameMaker(self.m.time.utcnow(),
                                             self.m.uuid.random())
         if ninja_command:
@@ -340,6 +346,20 @@ class ReclientApi(recipe_api.RecipeApi):
         infra_step=True)
     step_result.presentation.logs['rbe_metrics'] = json.dumps(
         bq_json_dict, indent=2)
+
+  def _upload_reclient_traces(self, reclient_log_dir):
+    step_result = self.m.step(
+        'upload reclient traces', [
+            self._rpl2cloudtrace_bin_path,
+            '--project_id',
+            self.rbe_project,
+            '--proxyLog_dir',
+            reclient_log_dir,
+        ],
+        infra_step=True)
+    trace_list = ('https://console.cloud.google.com/traces/list?project=' +
+                  self.rbe_project)
+    step_result.presentation.links['trace_list'] = trace_list
 
   def _upload_ninja_log(self, name, ninja_command, build_exit_status,
                         gzip_name_maker):

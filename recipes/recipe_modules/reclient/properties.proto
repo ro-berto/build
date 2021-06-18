@@ -32,4 +32,8 @@ message InputProperties {
   // Service name for cloud profiler.
   // If not empty, use cloud profiler in GCP project for the RBE instance.
   string profiler_service = 6;
+
+  // Publish trace by rpl2cloudtrace to the cloud trace
+  // in the GCP project for the RBE instance.
+  bool publish_trace = 7;
 }
