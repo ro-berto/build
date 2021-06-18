@@ -1226,6 +1226,22 @@ SPEC = {
             },
             simulation_platform='win',
         ),
+    'Win10 Tests x64 20h2':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='chromium.win',
+            parent_buildername='Win x64 Builder',
+            simulation_platform='win',
+        ),
 }
 
 SPEC.update([
