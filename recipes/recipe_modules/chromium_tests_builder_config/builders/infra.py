@@ -53,4 +53,16 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'linux-pd-ssd-rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],  # Determines GN args
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
 }
