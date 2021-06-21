@@ -185,7 +185,7 @@ SPEC = {
                 'os': 'Windows-10',
             },
         ),
-    'ToTWinThinLTO64':
+    'ToTWinOfficial64':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
@@ -233,56 +233,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-        ),
-    'ToTAndroidASan':
-        _chromium_clang_spec(
-            chromium_config='clang_tot_android_asan',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-            },
-            android_config='asan_symbolize',
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
-    'ToTAndroid (dbg)':
-        _chromium_clang_spec(
-            chromium_config='clang_tot_android_dbg',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-            },
-            android_config='clang_builder_mb_x64',
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
-    'ToTAndroid x64':
-        _chromium_clang_spec(
-            chromium_config='clang_tot_android',
-            gclient_config='chromium',
-            chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
-            gclient_apply_config=['clang_tot', 'android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='clang_builder_mb_x64',
-            test_results_config='staging_server',
-            simulation_platform='linux',
         ),
     'ToTFuchsia x64':
         _chromium_clang_spec(
@@ -498,6 +448,20 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
         ),
+    'ToTWinPGO64':
+        _chromium_clang_spec(
+            chromium_config='chromium_win_clang_tot',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['clang_tot'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            test_results_config='staging_server',
+            simulation_platform='win',
+        ),
 }
 
 SPEC.update([
@@ -508,11 +472,34 @@ SPEC.update([
         target_arch='arm',
         target_bits=32),
     config(
+        'ToTAndroid (dbg)',
+        android_config='clang_builder_mb_x64',
+        chromium_config='clang_tot_android',
+        target_arch='arm',
+        target_bits=32,
+        build_config='Debug'),
+    config(
         'ToTAndroid64',
         android_config='clang_builder_mb_x64',
         chromium_config='clang_tot_android',
         target_arch='arm',
         target_bits=64),
+    config(
+        'ToTAndroid x86',
+        android_config='clang_builder_mb_x64',
+        chromium_config='clang_tot_android',
+        target_bits=32),
+    config(
+        'ToTAndroid x64',
+        android_config='clang_builder_mb_x64',
+        chromium_config='clang_tot_android',
+        target_bits=64),
+    config(
+        'ToTAndroidASan',
+        android_config='asan_symbolize',
+        chromium_config='clang_tot_android_asan',
+        target_arch='arm',
+        target_bits=32),
     config(
         'ToTAndroidOfficial',
         android_config='clang_builder_mb_x64',
@@ -525,7 +512,7 @@ SPEC.update([
     config('ToTLinuxASan', chromium_config='clang_tot_linux_asan'),
     config('ToTLinuxASanLibfuzzer', chromium_config='clang_tot_linux_asan'),
     config('ToTLinuxMSan'),
+    config('ToTLinuxPGO'),
     config('ToTLinuxTSan'),
-    config('ToTLinuxThinLTO'),
     config('ToTLinuxUBSanVptr', chromium_config='clang_tot_linux_ubsan_vptr'),
 ])
