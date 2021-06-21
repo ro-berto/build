@@ -506,6 +506,11 @@ SPEC.update([
         chromium_config='clang_tot_android',
         target_arch='arm',
         target_bits=32),
+    config(
+        'ToTAndroidCoverage x86',
+        android_config='clang_builder_mb_x64',
+        chromium_config='clang_tot_android',
+        target_bits=32),
     config('ToTLinux'),
     config('ToTLinuxOfficial', official=True),
     config('ToTLinux (dbg)', build_config='Debug'),
