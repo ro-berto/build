@@ -213,6 +213,28 @@ def create_gclient_config(api, target_config, base_url):
   return src_cfg
 
 
+def get_tot_revision(api, name, target_loc):
+  def ls_remote(branch, name_suffix=''):
+    step_result = api.git(
+        'ls-remote', target_loc, 'refs/heads/%s' % branch,
+        name='look up %s%s' % (name.replace('/', '_'), name_suffix),
+        stdout=api.raw_io.output_text(),
+    )
+    return step_result.stdout.strip()
+
+  output = ls_remote('main')
+  if output:
+    return output.split('\t')[0]
+
+  # TODO(crbug.com/1222015): Fallback code for refs/heads/master
+  # needed until all repositories use a main branch.
+  output = ls_remote('master', ' (fallback)')
+  api.step.active_result.presentation.status = api.step.WARNING
+  api.step.active_result.presentation.step_text += (
+      '%s lacks a main branch\n' % name)
+  return output.split('\t')[0]
+
+
 def get_key_mapper(autoroller_config):
   custom_mapping = autoroller_config.get('deps_key_mapping', {})
   if custom_mapping:
@@ -319,14 +341,9 @@ def RunSteps(api, autoroller_config):
         new_ver = api.cipd.describe(
             target_loc[len(CIPD_DEP_URL_PREFIX):], 'latest').pin.instance_id
       else:
-        # Use the HEAD of the deps repo.
-        step_result = api.git(
-          'ls-remote', target_loc, 'HEAD',
-          name='look up %s' % name.replace('/', '_'),
-          stdout=api.raw_io.output_text(),
-        )
-        new_ver = step_result.stdout.strip().split('\t')[0]
-      api.step.active_result.presentation.step_text = new_ver
+        # Use the ToT of the deps repo.
+        new_ver = get_tot_revision(api, name, target_loc)
+      api.step.active_result.presentation.step_text += new_ver
 
     # Check if an update is necessary.
     if target_ver != new_ver:
@@ -468,11 +485,17 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       ) +
       api.override_step_data(
           'look up build',
-          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
+          api.raw_io.stream_output('deadbeef\trefs/heads/main', stream='stdout'),
       ) +
       api.override_step_data(
           'look up base_trace_event_common',
-          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
+          api.raw_io.stream_output('', stream='stdout'),
+      ) +
+      # TODO(crbug.com/1222015): Temporary test data for fallback case. Once
+      # all repos have a main branch, add back output for the call above.
+      api.override_step_data(
+          'look up base_trace_event_common (fallback)',
+          api.raw_io.stream_output('deadbeef\trefs/heads/master', stream='stdout'),
       )
   )
 
@@ -508,7 +531,7 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       }) +
       api.override_step_data(
           'look up test_test262_data',
-          api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
+          api.raw_io.stream_output('deadbeef\trefs/heads/main', stream='stdout'),
       ) +
       api.post_process(Filter('git commit', 'git cl'))
   )

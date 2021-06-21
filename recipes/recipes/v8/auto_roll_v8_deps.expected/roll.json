@@ -375,13 +375,25 @@
       "git",
       "ls-remote",
       "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
-      "HEAD"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
-    "name": "look up base_trace_event_common",
+    "name": "look up base_trace_event_common"
+  },
+  {
+    "cmd": [
+      "git",
+      "ls-remote",
+      "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
+      "refs/heads/master"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "infra_step": true,
+    "name": "look up base_trace_event_common (fallback)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@deadbeef@@@"
+      "@@@STEP_TEXT@base/trace_event/common lacks a main branch<br/>deadbeef@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
@@ -413,7 +425,7 @@
       "git",
       "ls-remote",
       "https://chromium.googlesource.com/chromium/src/build.git",
-      "HEAD"
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder/v8",
     "infra_step": true,
