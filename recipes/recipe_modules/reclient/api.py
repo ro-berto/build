@@ -348,13 +348,21 @@ class ReclientApi(recipe_api.RecipeApi):
         bq_json_dict, indent=2)
 
   def _upload_reclient_traces(self, reclient_log_dir):
+    attributes = ','.join([
+        'project=' + self.m.buildbucket.build.builder.project,
+        'bucket=' + self.m.buildbucket.build.builder.bucket,
+        'builder=' + self.m.buildbucket.builder_name,
+        'number=%d' % self.m.buildbucket.build.number,
+    ])
     step_result = self.m.step(
         'upload reclient traces', [
             self._rpl2cloudtrace_bin_path,
             '--project_id',
             self.rbe_project,
-            '--proxyLog_dir',
+            '--proxy_log_dir',
             reclient_log_dir,
+            '--attributes',
+            attributes,
         ],
         infra_step=True)
     trace_list = ('https://console.cloud.google.com/traces/list?project=' +

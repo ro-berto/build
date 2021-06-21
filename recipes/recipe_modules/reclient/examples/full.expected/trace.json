@@ -4,8 +4,10 @@
       "[TMP_BASE]/checkout/buildtools/reclient/rpl2cloudtrace",
       "--project_id",
       "example",
-      "--proxyLog_dir",
-      "[CLEANUP]/reclient_log_tmp_1"
+      "--proxy_log_dir",
+      "[CLEANUP]/reclient_log_tmp_1",
+      "--attributes",
+      "project=chromium,bucket=ci,builder=Linux reclient,number=0"
     ],
     "infra_step": true,
     "name": "postprocess for reclient.upload reclient traces",
