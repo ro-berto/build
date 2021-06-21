@@ -820,6 +820,30 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Migration mismatch (informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy decision for retries had length 0<br/>New decision for retries had length 1@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Migration mismatch (retriable suites, informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy retries calculation contained extra elements set([])<br/>New retries calculation contained extra elements set(['basic_isolate_tests'])@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**basic_isolate_tests** failed."
