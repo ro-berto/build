@@ -1232,7 +1232,7 @@ SPEC = {
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
+            gclient_apply_config=['chromeos', 'enable_reclient'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
                 'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
