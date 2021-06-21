@@ -824,7 +824,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.step('Extract directory metadata', [
           self.m.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
-          'export', '-out', dir_metadata
+          'read', '-out', dir_metadata,
       ])
     return dir_metadata
 
