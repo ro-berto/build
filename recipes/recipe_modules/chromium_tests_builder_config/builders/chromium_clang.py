@@ -448,7 +448,7 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
         ),
-    'ToTWinPGO64':
+    'ToTWin64PGO':
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
