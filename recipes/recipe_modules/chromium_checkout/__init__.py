@@ -2,6 +2,7 @@ from PB.recipe_modules.build.chromium_checkout import properties
 
 DEPS = [
     'chromium',
+    'chromium_bootstrap',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/tryserver',

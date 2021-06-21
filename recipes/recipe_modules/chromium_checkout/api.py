@@ -100,6 +100,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     timeout = int(self.timeout) if self.timeout else timeout
 
     gclient_config = self.m.gclient.c
+    self.m.chromium_bootstrap.update_gclient_config(gclient_config)
     self._report_gclient_config(gclient_config)
 
     with self.m.context(cwd=self._working_dir):
