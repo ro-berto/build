@@ -288,7 +288,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'cpu': 'arm64-64-Apple_M1',
-                    'pool': 'luci.webrtc.ci',
+                    'pool': 'WebRTC-baremetal',
                 },
             },
             'Linux32 Debug': {
