@@ -62,6 +62,10 @@ def RunSteps(api):
   experimental_test.pre_run(api.chromium_tests.m, suffix)
   experimental_test.run(api.chromium_tests.m, suffix)
 
+  step_name = experimental_test.name_of_step_for_suffix(suffix)
+  experiment_on = api.properties['experiment_percentage'] == '100'
+  assert bool(step_name) == experiment_on
+
   assert experimental_test.has_valid_results('')
   assert not experimental_test.failures('')
   assert not experimental_test.deterministic_failures('')

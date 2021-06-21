@@ -686,15 +686,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       known_flakes = self._query_flaky_failures(find_it_input_test_list)
       for flake in known_flakes.get('flakes', []):
         for suite in test_suites:
-          try:
-            test_step_name = suite.name_of_step_for_suffix(suffix)
-          except KeyError:  # pragma: no cover
-            # Some tests appear to be intitialized and either don't run at all
-            # or don't have their _suffix_step_name_map updated correctly.
-            # TODO(crbug.com/1135718): Identify and fix these tests.
-            self.m.python.succeeding_step(
-                'Recipe bug: incorrectly initialized suite', suite.name)
-            continue
+          test_step_name = suite.name_of_step_for_suffix(suffix)
           if test_step_name == flake['test']['step_ui_name']:
             suite.add_known_flaky_failure(flake['test']['test_name'],
                                           flake['monorail_issue'])

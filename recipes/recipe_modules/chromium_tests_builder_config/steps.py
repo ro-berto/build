@@ -1122,6 +1122,9 @@ class TestWrapper(Test):  # pragma: no cover
   def compile_targets(self):
     return self._test.compile_targets()
 
+  def name_of_step_for_suffix(self, suffix):
+    return self._test.name_of_step_for_suffix(suffix)
+
   def pre_run(self, api, suffix):
     return self._test.pre_run(api, suffix)
 
@@ -1294,6 +1297,15 @@ class ExperimentalTest(TestWrapper):
                    self).pre_run(api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
+
+  #override
+  def name_of_step_for_suffix(self, suffix):
+    # Wraps the parent method since we use a modified suffix internally.
+    if not self.spec.is_in_experiment:
+      return None  # If the experiment isn't on, there won't be any step.
+    experimental_suffix = self._experimental_suffix(suffix)
+    return super(ExperimentalTest,
+                 self).name_of_step_for_suffix(experimental_suffix)
 
   #override
   @recipe_api.composite_step
@@ -3106,8 +3118,11 @@ class MockTest(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
-      step_result = api.step(self.step_name(suffix), None)
-      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
+      try:
+        step_result = api.step(self.step_name(suffix), None)
+      finally:
+        result = api.step.active_result
+        self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
 
     return step_result
 
