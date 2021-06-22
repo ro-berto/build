@@ -1,0 +1,19 @@
+[
+  {
+    "cmd": [
+      "[CACHE]/builder/v8/tools/bazel/bazel",
+      "build",
+      ":d8"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "name": "Bazel build"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/v8/tools/bazel/bazel",
+      "shutdown"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "name": "Bazel shutdown"
+  }
+]

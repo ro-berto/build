@@ -33,6 +33,11 @@ def v8_ios(c):
   c.target_os.add('ios')
 
 
+@CONFIG_CTX(includes=['v8'])
+def v8_with_bazel(c):
+  c.solutions[0].custom_vars['download_prebuilt_bazel'] = True
+
+
 @CONFIG_CTX()
 def node_ci(c):
   soln = c.solutions.add()
