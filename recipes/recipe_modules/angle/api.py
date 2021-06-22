@@ -91,8 +91,10 @@ class ANGLEApi(recipe_api.RecipeApi):
       # TODO(jmadill): Figure out why Linux is failing. http://anglebug.com/5530
       if not self.m.platform.is_linux:
         self.m.goma.start()
-        self.m.step('Run trace tests', cmd)
-        self.m.goma.stop(0)
+        try:
+          self.m.step('Run trace tests', cmd)
+        finally:
+          self.m.goma.stop(0)
 
   def steps(self):
     toolchain = self.m.properties.get('toolchain', 'clang')

@@ -100,34 +100,59 @@ def GenTests(api):
 
   yield api.test(
       'android_test',
-      ci_build('android-builder', platform='android', test_mode='compile_only'))
-  yield api.test('basic_test', ci_build('linux-builder'))
+      ci_build('android-builder', platform='android', test_mode='compile_only'),
+  )
   yield api.test(
-      'basic_mac_test', api.platform('mac', 64),
-      ci_build('mac-builder', platform='mac', test_mode='compile_only'))
+      'basic_test',
+      ci_build('linux-builder'),
+  )
+  yield api.test(
+      'basic_mac_test',
+      api.platform('mac', 64),
+      ci_build('mac-builder', platform='mac', test_mode='compile_only'),
+  )
   yield api.test(
       'compile_only_compile_failed_test',
       ci_build('linux-builder', test_mode='compile_only'),
-      api.step_data('compile', api.legacy_annotation.infra_failure_step))
+      api.step_data('compile', api.legacy_annotation.infra_failure_step),
+  )
   yield api.test(
-      'compile_and_test_compile_failed_test', ci_build('linux-builder'),
-      api.step_data('compile', api.legacy_annotation.infra_failure_step))
+      'compile_and_test_compile_failed_test',
+      ci_build('linux-builder'),
+      api.step_data('compile', api.legacy_annotation.infra_failure_step),
+  )
   yield api.test(
-      'win_non_clang_test', api.platform('win', 64),
+      'win_non_clang_test',
+      api.platform('win', 64),
       ci_build(
           builder='win-builder',
           toolchain='msvc',
           platform='win',
-          test_mode='compile_only'))
+          test_mode='compile_only'),
+  )
   yield api.test(
-      'linux_non_clang_test', api.platform('linux', 64),
+      'linux_non_clang_test',
+      api.platform('linux', 64),
       ci_build(
-          builder='linux-builder', toolchain='gcc', test_mode='checkout_only'))
-  yield api.test('linux_trace_test', api.platform('linux', 64),
-                 ci_build(builder='linux-builder', test_mode='trace_tests'))
+          builder='linux-builder', toolchain='gcc', test_mode='checkout_only'),
+  )
   yield api.test(
-      'win_trace_test', api.platform('win', 64),
-      ci_build(builder='win-builder', platform='win', test_mode='trace_tests'))
+      'linux_trace_test',
+      api.platform('linux', 64),
+      ci_build(builder='linux-builder', test_mode='trace_tests'),
+  )
+  yield api.test(
+      'win_trace_test',
+      api.platform('win', 64),
+      ci_build(builder='win-builder', platform='win', test_mode='trace_tests'),
+  )
+  yield api.test(
+      'win_trace_test_failure',
+      api.platform('win', 64),
+      ci_build(builder='win-builder', platform='win', test_mode='trace_tests'),
+      api.step_data('Run trace tests',
+                    api.legacy_annotation.infra_failure_step),
+  )
   yield api.test(
       'invalid_json_test',
       ci_build('linux-builder'),
