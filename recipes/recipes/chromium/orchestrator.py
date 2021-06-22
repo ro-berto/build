@@ -8,6 +8,8 @@ from PB.recipes.build.chromium.orchestrator import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_engine import result as result_pb2
 from google.protobuf import json_format
 from google.protobuf import struct_pb2
 
@@ -17,7 +19,12 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'code_coverage',
+    'depot_tools/gclient',
+    'depot_tools/gitiles',
+    'depot_tools/tryserver',
     'isolate',
+    'pgo',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -34,6 +41,25 @@ def RunSteps(api, properties):
     raise api.step.InfraFailure('Missing compilator input')
 
   with api.chromium.chromium_layout():
+    # Get current ToT revision
+    # TODO (gbeaty): To support downstream CLs, we need to find the revision
+    # of the root solution, not the repo of the CL
+    ref = api.tryserver.gerrit_change_target_ref
+
+    tot_revision, _ = api.gitiles.log(
+        api.tryserver.gerrit_change_repo_url,
+        ref,
+        limit=1,
+        step_name='read src ToT revision')
+    tot_revision = tot_revision[0]['commit']
+
+    gitiles_commit = common_pb.GitilesCommit(
+        # TODO: Programatically fetch this from tryserver module
+        host='chromium.googlesource.com',
+        project=api.tryserver.gerrit_change.project,
+        ref=ref,
+        id=tot_revision)
+
     # Scheduled build inherits current build's project and bucket
     request = api.buildbucket.schedule_request(
         builder=properties.compilator,
@@ -44,6 +70,7 @@ def RunSteps(api, properties):
                 'builder_group': api.builder_group.for_current
             }
         },
+        gitiles_commit=gitiles_commit,
         tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
     build = api.buildbucket.schedule([request],
@@ -55,10 +82,12 @@ def RunSteps(api, properties):
     api.chromium_tests.configure_build(builder_config)
     api.chromium_tests.report_builders(builder_config)
 
+    api.gclient.c.revisions['src'] = tot_revision
     _, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
         timeout=3600,
         set_output_commit=builder_config.set_output_commit,
+        enforce_fetch=True,
         no_fetch_tags=True)
 
     build = api.buildbucket.collect_builds([build.id],
@@ -92,20 +121,32 @@ def RunSteps(api, properties):
         swarming_command_lines_cwd=swarming_cwd)
 
     api.chromium_tests.configure_swarming(False, builder_group=builder_id.group)
-    test_runner = api.chromium_tests.create_test_runner(
-        tests,
-        suffix='with patch',
-        serialize_tests=builder_config.serialize_tests,
-        retry_failed_shards=True,
-        # If any tests export coverage data we want to retry invalid shards due
-        # to an existing issue with occasional corruption of collected coverage
-        # data.
-        retry_invalid_shards=any(
-            t.runs_on_swarming and t.isolate_profile_data for t in tests),
-    )
 
     with api.chromium_tests.wrap_chromium_tests(builder_config, tests):
-      return test_runner()
+      # Run the test. The isolates have already been created.
+      _, failing_test_suites = (
+          api.m.test_utils.run_tests_with_patch(
+              api.chromium_tests.m,
+              tests,
+              retry_failed_shards=builder_config.retry_failed_shards))
+
+      if api.code_coverage.using_coverage:  # pragma: no cover
+        api.code_coverage.process_coverage_data(tests)
+
+      # We explicitly do not want trybots to upload profiles to GS. We prevent
+      # this by ensuring all trybots wanting to run the PGO workflow have
+      # skip_profile_upload.
+      if (api.pgo.using_pgo and
+          self.m.pgo.skip_profile_upload):  # pragma: no cover
+        api.pgo.process_pgo_data(tests)
+
+      # TODO crbug.com/1203055: Retry without patch
+      if failing_test_suites:
+        api.chromium_tests.summarize_test_failures(failing_test_suites)
+        return result_pb2.RawResult(
+            summary_markdown=api.chromium_tests._format_unrecoverable_failures(
+                failing_test_suites, 'with patch'),
+            status=common_pb.FAILURE)
 
 
 def GenTests(api):
@@ -154,10 +195,15 @@ def GenTests(api):
         ],
         step_name='collect compilator')
 
+  def fake_tot_revision():
+    return api.step_data('read src ToT revision',
+                         api.gitiles.make_log_test_data('deadbeef'))
+
   yield api.test(
       'basic',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
       override_test_spec(),
       override_compilator(),
       api.post_process(post_process.MustRun, 'trigger compilator'),
@@ -169,10 +215,12 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
   yield api.test(
       'no_tests_to_trigger',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
       override_test_spec(),
       api.buildbucket.simulated_collect_output([
           build_pb2.Build(
@@ -204,6 +252,7 @@ def GenTests(api):
       'failing_test_retry_shard_passed',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
       override_test_spec(),
       api.override_step_data(
           'browser_tests (with patch)',
@@ -229,6 +278,7 @@ def GenTests(api):
       'failing_test_retry_shard_failed',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
       override_test_spec(),
       api.override_step_data(
           'browser_tests (with patch)',

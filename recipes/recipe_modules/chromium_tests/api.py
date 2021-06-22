@@ -1104,20 +1104,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True
 
-  def _summarize_test_failures(self, task, retried_suites=()):
+  def summarize_test_failures(self, test_suites, retried_suites=()):
     """
-    Takes a task and an optional list of suites retried without patch.
+    Takes test suites and an optional list of suites retried without patch.
     Summarizes the test results in the step UI, and returns the suites which
     can be presumptively attributed to the CL.
     Args:
-      task: Task object specifiying build/test configuration
+      test_suites: Iterable of test suites
       retried_suites (optional): Iterable of test suites retried on ToT.
-        Must be a subset of the task's test_suites field. Default ().
+        Must be a subset of the test_suites field. Default ().
     Returns:
       An array of test suites which failed and should not be forgiven.
     """
     culpable_failures = []
-    for t in task.test_suites:
+    for t in test_suites:
       if not t.has_failures_to_summarize():
         continue
       if t not in retried_suites:
@@ -1159,7 +1159,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       # Exit without retries if there were invalid tests or if all tests passed
       if invalid_test_suites or not failing_test_suites:
-        self._summarize_test_failures(task)
+        self.summarize_test_failures(task.test_suites)
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
@@ -1168,7 +1168,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +
             '<br/>'.join(RECIPE_CONFIG_PATHS))
-        self._summarize_test_failures(task)
+        self.summarize_test_failures(task.test_suites)
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
@@ -1182,7 +1182,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m, failing_test_suites, 'without patch', sort_by_shard=True)
 
       # Returns test suites whose failure is probably the CL's fault
-      return None, self._summarize_test_failures(task, failing_test_suites)
+      return None, self.summarize_test_failures(task.test_suites,
+                                                failing_test_suites)
 
   def _build_bisect_gs_archive_url(self, builder_spec):
     return self.m.archive.legacy_upload_url(
