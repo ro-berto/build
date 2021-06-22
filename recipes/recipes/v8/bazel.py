@@ -25,7 +25,11 @@ def RunSteps(api):
   api.v8.checkout()
   api.v8.runhooks()
   bazel = api.path['checkout'].join('tools', 'bazel', 'bazel')
-  with api.context(cwd=api.path['checkout']):
+  clang = api.path['checkout'].join(
+      'third_party', 'llvm-build', 'Release+Asserts', 'bin')
+  with api.context(
+      cwd=api.path['checkout'],
+      env_prefixes={'PATH': [clang, api.v8.depot_tools_path]}):
     try:
       api.step('Bazel build', [bazel, 'build', ':d8'])
     finally:

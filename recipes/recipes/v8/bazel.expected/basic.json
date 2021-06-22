@@ -6,6 +6,12 @@
       ":d8"
     ],
     "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin",
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
     "name": "Bazel build"
   },
   {
@@ -14,6 +20,12 @@
       "shutdown"
     ],
     "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin",
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
     "name": "Bazel shutdown"
   }
 ]
