@@ -1022,6 +1022,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     compression_level = None
     if cipd_archive_data.HasField('compression'):
       compression_level = cipd_archive_data.compression.compression_level
+    verification_timeout = None
+    if cipd_archive_data.HasField('verification'):
+      verification_timeout = cipd_archive_data.verification.verification_timeout
 
     pkg_refs = refs
     if cipd_archive_data.only_set_refs_on_tests_success:
@@ -1035,7 +1038,8 @@ class ArchiveApi(recipe_api.RecipeApi):
           refs=pkg_refs,
           tags=tags,
           pkg_vars=pkg_vars,
-          compression_level=compression_level)
+          compression_level=compression_level,
+          verification_timeout=verification_timeout)
       if cipd_archive_data.only_set_refs_on_tests_success:
         # Store info needed for setting refs through calling
         # generic_archive_after_tests.

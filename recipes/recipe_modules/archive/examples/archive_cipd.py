@@ -173,6 +173,7 @@ def GenTests(api):
 
   input_properties.cipd_archive_datas.remove(cipd_archive_data)
   cipd_archive_data.only_set_refs_on_tests_success = True
+  cipd_archive_data.verification.verification_timeout = '5m'
   input_properties.cipd_archive_datas.extend([cipd_archive_data])
   yield api.test(
       'android_cipd_archive_arm32',
@@ -188,13 +189,14 @@ def GenTests(api):
       api.chromium.override_version(
           major=89, step_name='Generic Archiving Steps.get version'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.StepCommandContains,
-                       "Generic Archiving Steps.create foo", [
-                           'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
-                           '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4',
-                           '-pkg-var', 'targetarch:arm32', '-compression-level',
-                           '8', '-json-output', '/path/to/tmp/json'
-                       ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          "Generic Archiving Steps.create foo", [
+              'cipd', 'create', '-pkg-def', 'None/out/Release/foo',
+              '-hash-algo', 'sha256', '-tag', 'version:1.2.3.4', '-pkg-var',
+              'targetarch:arm32', '-compression-level', '8',
+              '-verification-timeout', '5m', '-json-output', '/path/to/tmp/json'
+          ]),
       api.post_process(post_process.StepCommandContains,
                        "Generic Archiving Steps After Tests.cipd set-ref foo", [
                            'cipd', 'set-ref', 'foo', '-version',

@@ -126,7 +126,13 @@ message Compression {
   int32 compression_level = 1;
 }
 
-// Next id: 7
+message Verification {
+  // Maximum time to wait for backend-side package hash verification during
+  // package upload. (e.g. '200s', '5m')
+  string verification_timeout = 1;
+}
+
+// Next id: 8
 message CIPDArchiveData {
   // Path to YAML package definition files (relative to build directory).
   repeated string yaml_files = 1;
@@ -144,9 +150,12 @@ message CIPDArchiveData {
   // Sets the compression level.
   Compression compression = 5;
 
+  // Sets time for verification
+  Verification verification = 6;
+
   // If sets to true, add refs to the build only after tests are run
   // successfully.
-  bool only_set_refs_on_tests_success = 6;
+  bool only_set_refs_on_tests_success = 7;
 }
 
 // Next id: 4
