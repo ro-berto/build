@@ -3466,19 +3466,12 @@ class SkylabTest(Test):
   def __init__(self, spec):
     super(SkylabTest, self).__init__(spec)
     self.ctp_responses = []
-    self._lacros_gcs_path = None
+    self.lacros_gcs_path = None
+    self.exe_rel_path = None
 
   @property
   def is_skylabtest(self):
     return True
-
-  @property
-  def lacros_gcs_path(self):
-    return self._lacros_gcs_path
-
-  @lacros_gcs_path.setter
-  def lacros_gcs_path(self, value):
-    self._lacros_gcs_path = value
 
   @property
   def skylab_req(self):
@@ -3490,6 +3483,7 @@ class SkylabTest(Test):
         board=self.spec.cros_board,
         cros_img=self.spec.cros_img,
         lacros_gcs_path=self.lacros_gcs_path,
+        exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,
     )
 

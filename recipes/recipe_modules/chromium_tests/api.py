@@ -2172,6 +2172,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         '/experimental' if self.m.runtime.is_experimental else '', gcs_path)
     for t in tests:
       t.lacros_gcs_path = path
+      # TODO(crbug/1208580): Remove the hard coded path once we read the isolate
+      # file.
+      t.exe_rel_path = 'out/Release/chrome'
 
   def run_tests(self, builder_id, builder_config, tests, upload_results=None):
     if not tests:

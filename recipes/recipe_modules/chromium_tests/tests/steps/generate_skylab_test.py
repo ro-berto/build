@@ -125,6 +125,7 @@ def GenTests(api):
       api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['1 passed, 0 failed (1 total)']),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -136,6 +137,7 @@ def GenTests(api):
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['No test cases returned.']),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -144,6 +146,7 @@ def GenTests(api):
       api.post_process(
           post_process.StepTextContains, 'basic_EVE_TOT',
           ['Test was not scheduled because of absent lacros_gcs_path.']),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -152,6 +155,7 @@ def GenTests(api):
       api.post_process(
           post_process.StepTextContains, 'basic_EVE_TOT',
           ['Test was not scheduled because tast_expr was not set.']),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

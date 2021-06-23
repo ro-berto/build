@@ -69,6 +69,8 @@ class SkylabApi(recipe_api.RecipeApi):
           test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
         if s.lacros_gcs_path:
           test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
+        if s.exe_rel_path:
+          test_args.append('exe_rel_path=%s' % s.exe_rel_path)
         autotest_to_create.autotest.test_args = ' '.join(test_args)
         tags = {
             'label-pool': 'DUT_POOL_QUOTA',

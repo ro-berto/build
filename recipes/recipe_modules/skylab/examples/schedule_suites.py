@@ -30,6 +30,7 @@ def gen_skylab_req(tag):
       board='eve',
       tast_expr=LACROS_TAST_EXPR,
       lacros_gcs_path='gs://fake_bucket/lacros.zip',
+      exe_rel_path='out/Release/bin/run_foo_unittest',
       cros_img='eve-release/R88-13545.0.0')
 
 

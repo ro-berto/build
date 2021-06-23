@@ -46,14 +46,18 @@ class SkylabRequest(object):
   Attributes:
     * request_tag: The tag to identify a request in the CTP build.
     * tast_expr: The tast expression defines what tast test we run on the
-                 Skylab DUT, e.g. lacros.Basic.
+          Skylab DUT, e.g. lacros.Basic.
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
-                e.g. atlas-release/R88-13545.0.0
+          e.g. atlas-release/R88-13545.0.0
     * lacros_gcs_path: The GCS full path pointing to a Lacros artifact.
-                       e.g. gs://lacros-poc/lacros-builder/101/lacros.zip.
-                       If empty, DUT runs tests on the chrome bundled with
-                       the OS image.
+          e.g. gs://lacros-poc/lacros-builder/101/lacros.zip.
+          TODO(crbug/1187717): Update this part once we support gtest.
+          For lacros tast test, the GCS object equals to build dir, e.g.
+          out/Release, with selected files.
+          If empty, DUT runs tests on the chrome bundled with the OS image.
+    * exe_rel_path: The relative path of the test executable to src dir. For
+          tast test, it is the chrome binary, e.g. out/Release/chrome.
     * timeout_sec: The timeout for the test in second. Default is one hour.
   """
   request_tag = attrib(str)
@@ -61,6 +65,7 @@ class SkylabRequest(object):
   cros_img = attrib(str)
   tast_expr = attrib(str)
   lacros_gcs_path = attrib(str, default='')
+  exe_rel_path = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
 
   @classmethod
@@ -94,7 +99,7 @@ class SkylabResponse(object):
   Attributes:
     * url: The URL to view the Skylab test runner's execution details.
     * status: Representation of a Skylab test run's status, translated from
-              skylab test runner's lifecycle and verdict.
+          skylab test runner's lifecycle and verdict.
     * tast_suite: tast suite name.
     * verdict: test result.
     * log_url: GS URI for the test logs.
