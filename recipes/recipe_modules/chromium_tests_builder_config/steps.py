@@ -3589,7 +3589,5 @@ class SkylabTest(Test):
         })
     return self._test_runs[suffix]
 
-  # TODO(crbug/1155016): For POC, we only runs a chrome tast test, which does
-  # not rely on any specific compile targets.
   def compile_targets(self):
-    return []
+    return [self.spec.target_name] if self.spec.target_name else []

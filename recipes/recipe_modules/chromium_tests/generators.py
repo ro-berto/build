@@ -640,6 +640,7 @@ def generate_skylab_tests_from_one_spec(builder_group, buildername,
       for k, v in skylab_test_spec.items()
       if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
   }
+  common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
   common_skylab_kwargs['waterfall_builder_group'] = builder_group
   common_skylab_kwargs['waterfall_buildername'] = buildername
   return steps.SkylabTestSpec.create(

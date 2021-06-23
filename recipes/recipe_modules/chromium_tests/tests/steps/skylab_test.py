@@ -33,6 +33,7 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   test_spec = steps.SkylabTestSpec.create(
       name=api.properties.get('test_name', 'EVE_TOT'),
+      target_name='lacros_fyi_tast_tests',
       tast_expr='lacros.Basic',
       cros_board='eve',
       cros_img='eve-release/R88-13545.0.0')

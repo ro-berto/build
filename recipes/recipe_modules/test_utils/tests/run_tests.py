@@ -90,6 +90,7 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
           for k, v in spec.items()
           if k in ['cros_board', 'cros_img', 'tast_expr']
       }
+      common_skylab_kwargs['target_name'] = spec.get('test')
       test_specs.append(
           steps.SkylabTestSpec.create(spec.get('name'), **common_skylab_kwargs))
   else:

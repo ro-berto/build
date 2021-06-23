@@ -483,7 +483,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"basic_EVE_TOT\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"tast_expr\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"basic\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"lacros_fyi_tast_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"timeout_sec\": 7200@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -577,6 +577,8 @@
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--swarming-targets-file",
+      "lacros_fyi_tast_tests\n",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -587,7 +589,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@lacros_fyi_tast_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -716,7 +720,8 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
-      "chrome"
+      "chrome",
+      "lacros_fyi_tast_tests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -735,6 +740,7 @@
       "-j",
       "80",
       "chrome",
+      "lacros_fyi_tast_tests",
       "-d",
       "explain",
       "-n"
@@ -851,7 +857,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"chrome\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"chrome\", \"lacros_fyi_tast_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

@@ -515,6 +515,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       isolated_targets = [
           t.isolate_target for t in tests_including_triggered if t.uses_isolate
       ]
+      # Skylab tests pretend to be isolated_targets at run_mb_and_compile step,
+      # for generating the runtime deps. We upload the deps to GCS instead of
+      # isolate server, because skylab DUT does not support isolate.
+      skylab_isolates = [
+          t.target_name
+          for t in tests_including_triggered
+          if t.is_skylabtest and not t.target_name in isolated_targets
+      ]
 
       name_suffix = ''
       if self.m.tryserver.is_tryserver:
@@ -527,7 +535,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       raw_result = self.run_mb_and_compile(
           builder_id,
           compile_targets,
-          isolated_targets,
+          isolated_targets + skylab_isolates,
           name_suffix=name_suffix,
           mb_phase=mb_phase,
           mb_config_path=mb_config_path,

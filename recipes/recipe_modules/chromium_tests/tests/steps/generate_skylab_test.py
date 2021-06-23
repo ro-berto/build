@@ -35,7 +35,7 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  def boilerplate(skylab_gcs, tast_expr):
+  def boilerplate(skylab_gcs, tast_expr, target_name='lacros_fyi_tast_tests'):
     builder_group = 'chromium.chromiumos'
     builder = 'lacros-amd64-generic-rel'
     return sum([
@@ -64,7 +64,7 @@ def GenTests(api):
                         'name': 'basic_EVE_TOT',
                         'tast_expr': tast_expr,
                         'swarming': {},
-                        'test': 'basic',
+                        'test': target_name,
                         'timeout_sec': 7200
                     }],
                 }
