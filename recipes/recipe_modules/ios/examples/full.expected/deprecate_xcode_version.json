@@ -1501,6 +1501,8 @@
       "-n",
       "1000",
       "-u",
+      "-tr-fields",
+      "testId,variant,status,tags",
       "0"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1519,6 +1521,8 @@
       "-n",
       "1000",
       "-u",
+      "-tr-fields",
+      "testId,variant,status,tags",
       "1"
     ],
     "cwd": "[CACHE]/builder/src",

@@ -287,7 +287,7 @@ def GenTests(api):
                   test_result_pb2.TestResult(
                       test_id='ninja://chromium/tests:base_unittests/Test.Two',
                       expected=False,
-                      status=test_result_pb2.FAIL),
+                      status=test_result_pb2.FAIL)
               ],
           ),
   }
@@ -329,5 +329,53 @@ def GenTests(api):
                              api.json.output(findit_exoneration_output)),
       api.post_process(post_process.DoesNotRun,
                        'Migration mismatch (informational)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  inv_bundle_with_different_test_name = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:base_unittests/Test.Two',
+                      expected=False,
+                      status=test_result_pb2.FAIL,
+                      tags=[{
+                          'key': 'test_name',
+                          'value': 'Different.Test.Name'
+                      }]),
+              ],
+          ),
+  }
+  yield api.test(
+      'results_from_rdb_with_different_test_names',
+      api.chromium.ci_build(builder_group='g', builder='linux-rel'),
+      api.properties(
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ),
+      api.resultdb.query(
+          inv_bundle_with_different_test_name,
+          step_name='query test results (with patch).base_unittests',
+      ),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=False)),
+      # We give the failing test a different name when reported by RDB. So make
+      # sure the old test name is sent to FindIt in the legacy decision-making
+      # flow and the overridden name is sent to FindIt in the new flow.
+      api.post_process(post_process.LogContains,
+                       'query known flaky failures on CQ', 'input',
+                       ['Test.Two']),
+      api.post_process(post_process.LogContains,
+                       'query known flaky failures on CQ (2)', 'input',
+                       ['Different.Test.Name']),
       api.post_process(post_process.DropExpectation),
   )

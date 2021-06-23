@@ -407,7 +407,14 @@ class RDBPerSuiteResults(object):
           # A RDBPerSuiteResults instance shouldn't be created with invocations
           # from different suites.
           assert inv_name == suite_name, "Mismatched invocations"
-        results_by_test_id[tr.test_id].append(tr)
+        # The test's ID may not always directly match up with its name (see
+        # go/chrome-test-id for context). So lookup the test's name in the tags.
+        test_name = tr.test_id
+        for tag in tr.tags:
+          if tag.key == 'test_name':
+            test_name = tag.value
+            break
+        results_by_test_id[test_name].append(tr)
 
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()

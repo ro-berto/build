@@ -1770,6 +1770,8 @@
       "-n",
       "1000",
       "-u",
+      "-tr-fields",
+      "testId,variant,status,tags",
       "0"
     ],
     "cwd": "[CACHE]\\builder",
