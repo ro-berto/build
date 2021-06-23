@@ -269,7 +269,7 @@
       "--depot-tools-path=RECIPE_REPO[depot_tools]"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "name": "Run trace tests",
+    "name": "GLES 2.0 trace tests",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
     ]
@@ -435,7 +435,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Run trace tests') (retcode: 1)"
+      "humanReason": "Step('GLES 2.0 trace tests') (retcode: 1)"
     },
     "name": "$result"
   }

@@ -269,7 +269,22 @@
       "--depot-tools-path=RECIPE_REPO[depot_tools]"
     ],
     "cwd": "[CACHE]\\builder\\angle",
-    "name": "Run trace tests"
+    "name": "GLES 2.0 trace tests"
+  },
+  {
+    "cmd": [
+      "python3",
+      "src/tests/capture_replay_tests.py",
+      "--use-goma",
+      "--goma-dir=[CACHE]\\goma\\client",
+      "--log",
+      "debug",
+      "--gtest_filter=*/ES1_Vulkan_SwiftShader",
+      "--out-dir=[CACHE]\\builder\\angle\\out\\CaptureReplayTest",
+      "--depot-tools-path=RECIPE_REPO[depot_tools]"
+    ],
+    "cwd": "[CACHE]\\builder\\angle",
+    "name": "GLES 1.0 trace tests"
   },
   {
     "cmd": [],

@@ -69,32 +69,36 @@ class ANGLEApi(recipe_api.RecipeApi):
       self.m.chromium.taskkill()
     return raw_result
 
+  def _run_trace_tests(self, checkout, gtest_filter, step_name):
+    cmd = [
+        'python3',
+        'src/tests/capture_replay_tests.py',
+        '--use-goma',
+        '--goma-dir=%s' % self.m.goma.goma_dir,
+        '--log',
+        'debug',
+        '--gtest_filter=%s' % gtest_filter,
+        '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
+        '--depot-tools-path=%s' % self.m.depot_tools.root,
+    ]
+    if self.m.platform.is_linux:
+      cmd += ['--xvfb']
+    # TODO(jmadill): Figure out why Linux is failing. http://anglebug.com/6085
+    if not self.m.platform.is_linux:
+      self.m.step(step_name, cmd)
+
   def _trace_tests(self):
     self.m.goma.ensure_goma()
     checkout = self.m.path['checkout']
     with self.m.context(cwd=checkout):
-      cmd = [
-          'python3',
-          'src/tests/capture_replay_tests.py',
-          '--use-goma',
-          '--goma-dir=%s' % self.m.goma.goma_dir,
-          '--log',
-          'debug',
-          '--gtest_filter=*/ES2_Vulkan_SwiftShader',
-          '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
-          '--depot-tools-path=%s' % self.m.depot_tools.root,
-      ]
-
-      if self.m.platform.is_linux:
-        cmd += ['--xvfb']
-
-      # TODO(jmadill): Figure out why Linux is failing. http://anglebug.com/5530
-      if not self.m.platform.is_linux:
-        self.m.goma.start()
-        try:
-          self.m.step('Run trace tests', cmd)
-        finally:
-          self.m.goma.stop(0)
+      self.m.goma.start()
+      try:
+        self._run_trace_tests(checkout, '*/ES2_Vulkan_SwiftShader',
+                              'GLES 2.0 trace tests')
+        self._run_trace_tests(checkout, '*/ES1_Vulkan_SwiftShader',
+                              'GLES 1.0 trace tests')
+      finally:
+        self.m.goma.stop(0)
 
   def steps(self):
     toolchain = self.m.properties.get('toolchain', 'clang')
@@ -164,5 +168,3 @@ class ANGLEApi(recipe_api.RecipeApi):
             summary_markdown=self.m.chromium_tests
             ._format_unrecoverable_failures(failing_test_suites, ''),
             status=common_pb.FAILURE)
-
-      # TODO(jmadill): Summary text for failures. http://anglebug.com/5114

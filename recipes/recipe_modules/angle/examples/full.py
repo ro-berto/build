@@ -150,7 +150,7 @@ def GenTests(api):
       'win_trace_test_failure',
       api.platform('win', 64),
       ci_build(builder='win-builder', platform='win', test_mode='trace_tests'),
-      api.step_data('Run trace tests',
+      api.step_data('GLES 2.0 trace tests',
                     api.legacy_annotation.infra_failure_step),
   )
   yield api.test(
