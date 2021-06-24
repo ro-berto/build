@@ -79,10 +79,23 @@ CHROME_REQUIRED_FILES = {
   ],
   'fuchsia': [
     'chromedriver',
-    'cast_runner.far',
-    'http.far',
-    'web_engine_shell.far',
-    'web_runner.far',
+    'gen',
+    'gen/fuchsia',
+    'gen/fuchsia/runners'
+    'gen/fuchsia/runners/cast_runner',
+    'gen/fuchsia/runners/cast_runner/cast_runner.far',
+    'gen/fuchsia/runners/web_runner',
+    'gen/fuchsia/runners/web_runner/web_runner.far',
+    'gen/fuchsia/http',
+    'gen/fuchsia/http/http',
+    'gen/fuchsia/http/http/http.far',
+    'gen/fuchsia/engine',
+    'gen/fuchsia/engine/web_engine',
+    'gen/fuchsia/engine/web_engine/web_engine.far',
+    'gen/fuchsia/engine/web_engine_shell',
+    'gen/fuchsia/engine/web_engine_shell/web_engine_shell.far',
+    'gen/fuchsia/engine/web_engine_with_webui',
+    'gen/fuchsia/engine/web_engine_with_webui/web_engine_with_webui.far',
   ],
 }
 
