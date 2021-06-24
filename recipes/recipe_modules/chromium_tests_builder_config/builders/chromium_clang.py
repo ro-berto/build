@@ -338,12 +338,10 @@ SPEC = {
         ),
     'ToTWin':
         _chromium_clang_spec(
-            chromium_config='chromium_win_clang_official_tot',
+            chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
-            ],
+            gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -387,12 +385,10 @@ SPEC = {
         ),
     'ToTWin64':
         _chromium_clang_spec(
-            chromium_config='chromium_win_clang_official_tot',
+            chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
-            ],
+            gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
