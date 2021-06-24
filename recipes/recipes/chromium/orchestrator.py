@@ -30,10 +30,14 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'recipe_engine/swarming',
+    'recipe_engine/time',
     'test_utils',
 ]
 
 PROPERTIES = InputProperties
+
+SWARMING_PROPS_GET_INTERVAL_S = 20
+SWARMING_PROPS_WAIT_TIMEOUT_S = 2 * 60 * 60
 
 
 def RunSteps(api, properties):
@@ -90,35 +94,66 @@ def RunSteps(api, properties):
         enforce_fetch=True,
         no_fetch_tags=True)
 
-    build = api.buildbucket.collect_builds([build.id],
-                                           interval=20,
-                                           timeout=7200,
-                                           step_name='collect compilator',
-                                           mirror_status=True)[build.id]
+    def attempts():
+      for i in xrange(SWARMING_PROPS_WAIT_TIMEOUT_S /
+                      SWARMING_PROPS_GET_INTERVAL_S - 1):
+        yield i
+        api.time.sleep(SWARMING_PROPS_GET_INTERVAL_S)
+      yield
 
-    if 'swarming_trigger_properties' not in build.output.properties:
-      # No tests to trigger
-      return
+    def wait_for_swarming_props(build):
+      # Compilator will output swarming trigger properties before running local
+      # scripts/tests
+      output_property = 'swarming_trigger_properties'
+      with api.step.nest('wait for compilator {}'.format(output_property)):
+        for _ in attempts():
+          build = api.buildbucket.get(build.id)
+          if output_property in build.output.properties:
+            return build.output.properties[output_property]
+          if build.status == common_pb.SUCCESS:
+            return None
+          if build.status & common_pb.ENDED_MASK:
+            build_url = api.buildbucket.build_url(build_id=build.id)
+            api.step.active_result.presentation.links[str(build.id)] = build_url
+            if build.status == common_pb.FAILURE:
+              raise api.step.StepFailure('Compilator Failure')
+            if build.status == common_pb.CANCELED:
+              # This condition should be rare as swarming only propagates
+              # cancelations from parent -> child
+              raise api.step.InfraFailure('Compilator Canceled')
+            else:
+              raise api.step.InfraFailure('Compilator InfraFailure')
+        raise api.step.InfraFailure('Timeout waiting for compilator')
 
-    swarming_props = build.output.properties['swarming_trigger_properties']
+    swarming_props = wait_for_swarming_props(build)
 
-    swarming_digest = swarming_props['swarming_command_lines_digest']
-    swarming_cwd = swarming_props['swarming_command_lines_cwd']
+    # No tests to trigger and compilator finished running all local
+    # scripts and tests
+    if not swarming_props:
+      return None
 
-    swarm_hashes = swarming_props['swarm_hashes']
-    swarm_hashes = dict(zip(swarm_hashes.keys(), swarm_hashes.values()))
-    assert api.isolate.isolated_tests == {}
-    api.isolate.set_isolated_tests(swarm_hashes)
+    def process_swarming_props(swarming_props, builder_config, targets_config):
+      swarming_digest = swarming_props['swarming_command_lines_digest']
+      swarming_cwd = swarming_props['swarming_command_lines_cwd']
 
-    tests = [
-        t for t in targets_config.all_tests()
-        if t.uses_isolate and t.target_name in api.isolate.isolated_tests
-    ]
-    api.chromium_tests.download_command_lines_for_tests(
-        tests,
-        builder_config,
-        swarming_command_lines_digest=swarming_digest,
-        swarming_command_lines_cwd=swarming_cwd)
+      swarm_hashes = swarming_props['swarm_hashes']
+      swarm_hashes = dict(zip(swarm_hashes.keys(), swarm_hashes.values()))
+      assert api.isolate.isolated_tests == {}
+      api.isolate.set_isolated_tests(swarm_hashes)
+
+      tests = [
+          t for t in targets_config.all_tests()
+          if t.uses_isolate and t.target_name in api.isolate.isolated_tests
+      ]
+      api.chromium_tests.download_command_lines_for_tests(
+          tests,
+          builder_config,
+          swarming_command_lines_digest=swarming_digest,
+          swarming_command_lines_cwd=swarming_cwd)
+      return tests
+
+    tests = process_swarming_props(swarming_props, builder_config,
+                                   targets_config)
 
     api.chromium_tests.configure_swarming(False, builder_group=builder_id.group)
 
@@ -148,6 +183,15 @@ def RunSteps(api, properties):
                 failing_test_suites, 'with patch'),
             status=common_pb.FAILURE)
 
+    # Check to make sure the compilator completed any local scripts/tests
+    # If compilator build has failed, collect_builds() will automatically
+    # mirror the status for the orchestrator build
+    build = api.buildbucket.collect_builds([build.id],
+                                           interval=20,
+                                           timeout=60,
+                                           step_name='collect compilator',
+                                           mirror_status=True)[build.id]
+
 
 def GenTests(api):
 
@@ -172,28 +216,63 @@ def GenTests(api):
             },
         })
 
-  def override_compilator():
-    fake_command_lines_digest = (
-        'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
-    swarming_trigger_propertes = {
-        'swarming_command_lines_digest': fake_command_lines_digest,
-        'swarming_command_lines_cwd': 'out/Release',
-        'swarm_hashes': {
-            'browser_tests': '07de23bcf07fe2d5babb5140f727f6e53dbc1d1a'
-        },
-    }
+  build_id = 1234
+  fake_command_lines_digest = (
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
+  fake_swarming_trigger_properties = {
+      'swarming_command_lines_digest': fake_command_lines_digest,
+      'swarming_command_lines_cwd': 'out/Release',
+      'swarm_hashes': {
+          'browser_tests': '07de23bcf07fe2d5babb5140f727f6e53dbc1d1a'
+      },
+      'can_retry_without_patch': True,
+  }
+
+  def override_collect_compilator(build_id=build_id, status=common_pb.SUCCESS):
     return api.buildbucket.simulated_collect_output(
         [
             build_pb2.Build(
-                id=8922054662172514000,
+                id=build_id,
+                status=status,
                 output=dict(
                     properties=json_format.Parse(
                         api.json.dumps({
                             'swarming_trigger_properties':
-                                swarming_trigger_propertes
+                                fake_swarming_trigger_properties
                         }), struct_pb2.Struct())))
         ],
         step_name='collect compilator')
+
+  def override_trigger_compilator():
+    return api.buildbucket.simulated_schedule_output(
+        builds_service_pb2.BatchResponse(
+            responses=[dict(schedule_build=build_pb2.Build(id=build_id))]),
+        step_name='trigger compilator')
+
+  def override_wait_for_swarming_props(build_id=build_id,
+                                       status=common_pb.STARTED,
+                                       empty_props=False,
+                                       append_call_number=None):
+    if empty_props:
+      swarming_json_obj = {}
+    else:
+      swarming_json_obj = {
+          'swarming_trigger_properties': fake_swarming_trigger_properties
+      }
+    step_name = (
+        'wait for compilator swarming_trigger_properties.buildbucket.get')
+    if append_call_number:
+      step_name += ' ({})'.format(str(append_call_number))
+
+    return api.buildbucket.simulated_get(
+        build_pb2.Build(
+            id=build_id,
+            status=status,
+            output=dict(
+                properties=json_format.Parse(
+                    api.json.dumps(swarming_json_obj), struct_pb2.Struct()))),
+        step_name=step_name,
+    )
 
   def fake_tot_revision():
     return api.step_data('read src ToT revision',
@@ -205,7 +284,9 @@ def GenTests(api):
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_tot_revision(),
       override_test_spec(),
-      override_compilator(),
+      override_collect_compilator(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'collect compilator'),
       api.post_process(post_process.LogContains, 'trigger compilator',
@@ -222,16 +303,12 @@ def GenTests(api):
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_tot_revision(),
       override_test_spec(),
-      api.buildbucket.simulated_collect_output([
-          build_pb2.Build(
-              id=8922054662172514000,
-              output=dict(
-                  properties=json_format.Parse(
-                      api.json.dumps({}), struct_pb2.Struct())))
-      ],
-                                               step_name='collect compilator'),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(
+          status=common_pb.SUCCESS, empty_props=True),
       api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.DoesNotRun, 'browser_tests (with patch)'),
       api.post_process(post_process.LogContains, 'trigger compilator',
                        'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
@@ -254,6 +331,8 @@ def GenTests(api):
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_tot_revision(),
       override_test_spec(),
+      override_wait_for_swarming_props(),
+      override_trigger_compilator(),
       api.override_step_data(
           'browser_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -262,7 +341,7 @@ def GenTests(api):
           'browser_tests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(True), failure=False)),
-      override_compilator(),
+      override_collect_compilator(),
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'collect compilator'),
       api.post_process(post_process.MustRun,
@@ -280,6 +359,8 @@ def GenTests(api):
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_tot_revision(),
       override_test_spec(),
+      override_wait_for_swarming_props(),
+      override_trigger_compilator(),
       api.override_step_data(
           'browser_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -288,14 +369,93 @@ def GenTests(api):
           'browser_tests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)),
-      override_compilator(),
       api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.MustRun, 'collect compilator'),
       api.post_process(post_process.MustRun,
                        'browser_tests (retry shards with patch)'),
       api.post_process(post_process.LogContains, 'trigger compilator',
                        'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_compilator_while_waiting_for_swarming_props',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      override_test_spec(),
+      fake_tot_revision(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(
+          status=common_pb.FAILURE, empty_props=True),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(
+          post_process.MustRun,
+          'wait for compilator swarming_trigger_properties.buildbucket.get'),
+      api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'infra_failed_compilator_while_waiting_for_swarming_props',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      override_test_spec(),
+      fake_tot_revision(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(
+          status=common_pb.INFRA_FAILURE, empty_props=True),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(
+          post_process.MustRun,
+          'wait for compilator swarming_trigger_properties.buildbucket.get'),
+      api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'canceled_compilator_while_waiting_for_swarming_props',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      override_test_spec(),
+      fake_tot_revision(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(
+          status=common_pb.CANCELED, empty_props=True),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(
+          post_process.MustRun,
+          'wait for compilator swarming_trigger_properties.buildbucket.get'),
+      api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def override_wait_for_swarming_props_timeout():
+    test_data = []
+    counter_max = SWARMING_PROPS_WAIT_TIMEOUT_S / SWARMING_PROPS_GET_INTERVAL_S
+    test_data.append(override_wait_for_swarming_props(empty_props=True))
+    for i in range(2, counter_max + 1):
+      test_data.append(
+          override_wait_for_swarming_props(
+              empty_props=True, append_call_number=i))
+    return sum(test_data, api.empty_test_data())
+
+  yield api.test(
+      'timeout_compilator_while_waiting_for_swarming_props',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      override_test_spec(),
+      fake_tot_revision(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props_timeout(),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(
+          post_process.MustRun,
+          'wait for compilator swarming_trigger_properties.buildbucket.get'),
+      api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
