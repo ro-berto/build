@@ -242,6 +242,16 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/build/util/lastchange.py",
+      "-o",
+      "[START_DIR]/src/build/util/LASTCHANGE"
+    ],
+    "name": "Generate LASTCHANGE"
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",

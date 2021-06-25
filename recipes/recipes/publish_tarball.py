@@ -288,6 +288,10 @@ def publish_tarball(api):
                                          'i18n_process_css_test.html')
   ])
 
+  api.python('Generate LASTCHANGE',
+             api.path['checkout'].join('build', 'util', 'lastchange.py'),
+             ['-o', api.path['checkout'].join('build', 'util', 'LASTCHANGE')])
+
   api.file.copy(
       'copy clang-format', api.chromium.resource('clang-format'),
       api.path['checkout'].join('buildtools', 'linux64', 'clang-format'))
