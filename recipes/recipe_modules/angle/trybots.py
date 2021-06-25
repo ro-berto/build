@@ -34,6 +34,8 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
+    'android-perf':
+        _create_compile_spec('android-perf'),
     'linux-clang-dbg':
         _create_compile_spec('linux-clang-dbg'),
     'linux-clang-rel':
@@ -57,6 +59,8 @@ _SPEC = {
         _create_compile_spec('linux-gcc-dbg'),
     'linux-gcc-rel':
         _create_compile_spec('linux-gcc-rel'),
+    'linux-perf':
+        _create_compile_spec('linux-perf'),
     'linux-trace-rel':
         _create_compile_spec('linux-trace-rel'),
     'mac-dbg':
@@ -124,6 +128,8 @@ _SPEC = {
         _create_compile_spec('win-msvc-x86-dbg'),
     'win-msvc-x86-rel':
         _create_compile_spec('win-msvc-x86-rel'),
+    'win-perf':
+        _create_compile_spec('win-perf'),
     'win-trace-rel':
         _create_compile_spec('win-trace-rel'),
     'winuwp-x64-dbg':

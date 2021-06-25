@@ -76,6 +76,8 @@ _SPEC = {
         _create_android_tester_config(64, 'android-arm64-rel'),
     'android-arm64-rel':
         _create_android_builder_config('Release', 64),
+    'android-perf':
+        _create_android_builder_config('Release', 64),
     'linux-clang-dbg':
         _create_builder_config('linux', 'Debug', 64),
     'linux-clang-rel':
@@ -88,6 +90,8 @@ _SPEC = {
         _create_tester_config('linux', 64, 'linux-clang-rel'),
     'linux-nvidia':
         _create_tester_config('linux', 64, 'linux-clang-rel'),
+    'linux-perf':
+        _create_builder_config('linux', 'Release', 64),
     'linux-trace-rel':
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
@@ -116,6 +120,8 @@ _SPEC = {
         _create_builder_config('win', 'Debug', 32, is_clang=False),
     'win-msvc-x86-rel':
         _create_builder_config('win', 'Release', 32, is_clang=False),
+    'win-perf':
+        _create_builder_config('win', 'Release', 64),
     'win-trace-rel':
         _create_builder_config('win', 'Release', 64),
     'winuwp-x64-dbg':
