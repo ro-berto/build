@@ -257,8 +257,7 @@
     "infra_step": true,
     "name": "postprocess for reclient.read ninja log",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@.ninja_log@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -275,9 +274,7 @@
     "infra_step": true,
     "name": "postprocess for reclient.create ninja log gzip",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@fake gzip data@@@",
-      "@@@STEP_LOG_END@ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -372,9 +369,7 @@
     "infra_step": true,
     "name": "postprocess for reclient.read reclient log",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@reproxy.INFO@fake@@@",
-      "@@@STEP_LOG_END@reproxy.INFO@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -391,9 +386,7 @@
     "infra_step": true,
     "name": "postprocess for reclient.create reclient log tar",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@fake tar contents@@@",
-      "@@@STEP_LOG_END@reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

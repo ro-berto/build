@@ -409,7 +409,9 @@ class ReclientApi(recipe_api.RecipeApi):
     # This assumes that ninja_log is small enough to be loaded into RAM. (As of
     # 2021/01, it's around 3MB.)
     data_txt = self.m.file.read_text(
-        'read ninja log', self.m.path.join(ninja_log_outdir, '.ninja_log'))
+        'read ninja log',
+        self.m.path.join(ninja_log_outdir, '.ninja_log'),
+        include_log=False)
     data_txt += '\n# end of ninja log\n' + json.dumps(metadata)
     with io.BytesIO() as f_out:
       # |gzip_out| is created at the inner `with` clause intentionally, so that
@@ -425,7 +427,8 @@ class ReclientApi(recipe_api.RecipeApi):
       gzip_data = f_out.getvalue()
       if self._test_data.enabled:
         gzip_data = 'fake gzip data'
-      self.m.file.write_raw('create ninja log gzip', gzip_path, gzip_data)
+      self.m.file.write_raw(
+          'create ninja log gzip', gzip_path, gzip_data, include_log=False)
 
     gs_filename = '%s/reclient/%s' % (time_now.date().strftime('%Y/%m/%d'),
                                       gzip_filename)
@@ -465,8 +468,8 @@ class ReclientApi(recipe_api.RecipeApi):
       with tarfile.open(fileobj=tar_out, mode='w:gz') as tf:
         for log in log_files:
           # reclient glog files are generally <100KB, so safe to load in memory.
-          data_txt = self.m.file.read_text('read reclient log', log,
-                                           test_data='fake')
+          data_txt = self.m.file.read_text(
+              'read reclient log', log, test_data='fake', include_log=False)
           with contextlib.closing(io.BytesIO(data_txt.encode())) as fobj:
             tarinfo = tarfile.TarInfo(os.path.basename(log))
             tarinfo.size = len(fobj.getvalue())
@@ -475,7 +478,8 @@ class ReclientApi(recipe_api.RecipeApi):
       tar_data = tar_out.getvalue()
       if self._test_data.enabled:
         tar_data = 'fake tar contents'
-      self.m.file.write_raw('create reclient log tar', tar_path, tar_data)
+      self.m.file.write_raw(
+          'create reclient log tar', tar_path, tar_data, include_log=False)
     gs_filename = '%s/reclient/%s' % (
         gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), tar_filename)
     self.m.gsutil.upload(tar_path, _GS_BUCKET, gs_filename,
