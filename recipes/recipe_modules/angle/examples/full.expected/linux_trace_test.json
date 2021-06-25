@@ -1,6 +1,26 @@
 [
   {
     "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running builder 'linux-clang-builder' on group 'angle'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-clang-builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@linux-clang-builder@https://ci.chromium.org/p/angle/builders/ci/linux-clang-builder@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -36,7 +56,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-clang-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -102,7 +122,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-clang-builder/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {
@@ -190,7 +210,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_builder"
+      "[CACHE]/goma/data/linux_clang_builder"
     ],
     "cwd": "[CACHE]/builder/angle",
     "infra_step": true,
@@ -209,7 +229,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_clang_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -270,7 +290,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_clang_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -303,7 +323,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_clang_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -325,7 +345,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_clang_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -368,10 +388,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"linux-builder\", \"project\": \"angle\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux-clang-builder\", \"project\": \"angle\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux-builder",
+      "linux-clang-builder",
       "--buildbot-mastername",
       "angle",
       "--buildbot-slavename",

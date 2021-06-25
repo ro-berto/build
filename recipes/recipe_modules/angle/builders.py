@@ -12,12 +12,13 @@ def _angle_spec(**kwargs):
   return builder_spec.BuilderSpec.create(**kwargs)
 
 
-def _create_builder_config(platform, target_bits):
+def _create_builder_config(platform, config, target_bits, is_clang=True):
   return _angle_spec(
+      chromium_config='angle_clang' if is_clang else 'angle_non_clang',
       gclient_config='angle',
       simulation_platform=platform,
       chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
       },
   )
@@ -28,6 +29,7 @@ def _create_tester_config(platform, target_bits, parent_builder):
       gclient_config='angle',
       simulation_platform=platform,
       chromium_config_kwargs={
+          # All testing is in Release.
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
       },
@@ -36,12 +38,12 @@ def _create_tester_config(platform, target_bits, parent_builder):
   )
 
 
-def _create_android_builder_config(target_bits):
+def _create_android_builder_config(config, target_bits):
   return _angle_spec(
       gclient_config='angle_android',
       simulation_platform='linux',
       chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
+          'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
           'TARGET_PLATFORM': 'android',
       },
@@ -53,6 +55,7 @@ def _create_android_tester_config(target_bits, parent_builder):
       gclient_config='angle_android',
       simulation_platform='linux',
       chromium_config_kwargs={
+          # All testing is in Release.
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
           'TARGET_PLATFORM': 'android',
@@ -63,36 +66,68 @@ def _create_android_tester_config(target_bits, parent_builder):
 
 
 _SPEC = {
-    'android-arm-builder':
-        _create_android_builder_config(32),
-    'android-arm64-builder':
-        _create_android_builder_config(64),
+    'android-arm-dbg':
+        _create_android_builder_config('Debug', 32),
+    'android-arm-rel':
+        _create_android_builder_config('Release', 32),
+    'android-arm64-dbg':
+        _create_android_builder_config('Debug', 64),
     'android-arm64-pixel4':
-        _create_android_tester_config(64, 'android-arm64-builder'),
-    'linux-builder':
-        _create_builder_config('linux', 64),
+        _create_android_tester_config(64, 'android-arm64-rel'),
+    'android-arm64-rel':
+        _create_android_builder_config('Release', 64),
+    'linux-clang-dbg':
+        _create_builder_config('linux', 'Debug', 64),
+    'linux-clang-rel':
+        _create_builder_config('linux', 'Release', 64),
+    'linux-gcc-dbg':
+        _create_builder_config('linux', 'Debug', 64, is_clang=False),
+    'linux-gcc-rel':
+        _create_builder_config('linux', 'Release', 64, is_clang=False),
     'linux-intel':
-        _create_tester_config('linux', 64, 'linux-builder'),
+        _create_tester_config('linux', 64, 'linux-clang-rel'),
     'linux-nvidia':
-        _create_tester_config('linux', 64, 'linux-builder'),
+        _create_tester_config('linux', 64, 'linux-clang-rel'),
+    'linux-trace-rel':
+        _create_builder_config('linux', 'Release', 64),
     'mac-amd':
-        _create_tester_config('mac', 64, 'mac-builder'),
-    'mac-builder':
-        _create_builder_config('mac', 64),
+        _create_tester_config('mac', 64, 'mac-rel'),
+    'mac-dbg':
+        _create_builder_config('mac', 'Debug', 64),
     'mac-intel':
-        _create_tester_config('mac', 64, 'mac-builder'),
+        _create_tester_config('mac', 64, 'mac-rel'),
     'mac-nvidia':
-        _create_tester_config('mac', 64, 'mac-builder'),
-    'win-x64-builder':
-        _create_builder_config('win', 64),
-    'win-x86-builder':
-        _create_builder_config('win', 32),
+        _create_tester_config('mac', 64, 'mac-rel'),
+    'mac-rel':
+        _create_builder_config('mac', 'Release', 64),
+    'win-clang-x64-dbg':
+        _create_builder_config('win', 'Debug', 64),
+    'win-clang-x64-rel':
+        _create_builder_config('win', 'Release', 64),
+    'win-clang-x86-dbg':
+        _create_builder_config('win', 'Debug', 32),
+    'win-clang-x86-rel':
+        _create_builder_config('win', 'Release', 32),
+    'win-msvc-x64-dbg':
+        _create_builder_config('win', 'Debug', 64, is_clang=False),
+    'win-msvc-x64-rel':
+        _create_builder_config('win', 'Release', 64, is_clang=False),
+    'win-msvc-x86-dbg':
+        _create_builder_config('win', 'Debug', 32, is_clang=False),
+    'win-msvc-x86-rel':
+        _create_builder_config('win', 'Release', 32, is_clang=False),
+    'win-trace-rel':
+        _create_builder_config('win', 'Release', 64),
+    'winuwp-x64-dbg':
+        _create_builder_config('win', 'Debug', 64, is_clang=False),
+    'winuwp-x64-rel':
+        _create_builder_config('win', 'Release', 64, is_clang=False),
     'win7-x86-amd':
-        _create_tester_config('win', 32, 'win-x86-builder'),
+        _create_tester_config('win', 32, 'win-clang-x86-rel'),
     'win10-x64-intel':
-        _create_tester_config('win', 64, 'win-x64-builder'),
+        _create_tester_config('win', 64, 'win-clang-x64-rel'),
     'win10-x64-nvidia':
-        _create_tester_config('win', 64, 'win-x64-builder'),
+        _create_tester_config('win', 64, 'win-clang-x64-rel'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({

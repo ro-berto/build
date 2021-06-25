@@ -33,15 +33,21 @@ _TEST_BUILDERS = builder_db.BuilderDatabase.create({
         'android-builder':
             builder_spec.BuilderSpec.create(
                 gclient_config='angle_android', chromium_config='angle_clang'),
-        'linux-builder':
+        'linux-clang-builder':
             builder_spec.BuilderSpec.create(
                 gclient_config='angle', chromium_config='angle_clang'),
+        'linux-gcc-builder':
+            builder_spec.BuilderSpec.create(
+                gclient_config='angle', chromium_config='angle_non_clang'),
         'mac-builder':
             builder_spec.BuilderSpec.create(
                 gclient_config='angle', chromium_config='angle_clang'),
-        'win-builder':
+        'win-clang-builder':
             builder_spec.BuilderSpec.create(
                 gclient_config='angle', chromium_config='angle_clang'),
+        'win-msvc-builder':
+            builder_spec.BuilderSpec.create(
+                gclient_config='angle', chromium_config='angle_non_clang'),
     },
 })
 
@@ -55,12 +61,20 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                         buildername='android-builder',
                     ),
                 ],),
-        'linux-builder':
+        'linux-clang-builder':
             try_spec.TrySpec.create(
                 mirrors=[
                     try_spec.TryMirror.create(
                         builder_group='angle',
-                        buildername='linux-builder',
+                        buildername='linux-clang-builder',
+                    ),
+                ],),
+        'linux-gcc-builder':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='angle',
+                        buildername='linux-gcc-builder',
                     ),
                 ],),
         'mac-builder':
@@ -71,12 +85,20 @@ _TEST_TRYBOTS = try_spec.TryDatabase.create({
                         buildername='mac-builder',
                     ),
                 ],),
-        'win-builder':
+        'win-clang-builder':
             try_spec.TrySpec.create(
                 mirrors=[
                     try_spec.TryMirror.create(
                         builder_group='angle',
-                        buildername='win-builder',
+                        buildername='win-clang-builder',
+                    ),
+                ],),
+        'win-msvc-builder':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='angle',
+                        buildername='win-msvc-builder',
                     ),
                 ],),
     }
@@ -104,7 +126,7 @@ def GenTests(api):
   )
   yield api.test(
       'basic_test',
-      ci_build('linux-builder'),
+      ci_build('linux-clang-builder'),
   )
   yield api.test(
       'basic_mac_test',
@@ -113,19 +135,19 @@ def GenTests(api):
   )
   yield api.test(
       'compile_only_compile_failed_test',
-      ci_build('linux-builder', test_mode='compile_only'),
+      ci_build('linux-clang-builder', test_mode='compile_only'),
       api.step_data('compile', api.legacy_annotation.infra_failure_step),
   )
   yield api.test(
       'compile_and_test_compile_failed_test',
-      ci_build('linux-builder'),
+      ci_build('linux-clang-builder'),
       api.step_data('compile', api.legacy_annotation.infra_failure_step),
   )
   yield api.test(
       'win_non_clang_test',
       api.platform('win', 64),
       ci_build(
-          builder='win-builder',
+          builder='win-msvc-builder',
           toolchain='msvc',
           platform='win',
           test_mode='compile_only'),
@@ -134,31 +156,35 @@ def GenTests(api):
       'linux_non_clang_test',
       api.platform('linux', 64),
       ci_build(
-          builder='linux-builder', toolchain='gcc', test_mode='checkout_only'),
+          builder='linux-gcc-builder',
+          toolchain='gcc',
+          test_mode='checkout_only'),
   )
   yield api.test(
       'linux_trace_test',
       api.platform('linux', 64),
-      ci_build(builder='linux-builder', test_mode='trace_tests'),
+      ci_build(builder='linux-clang-builder', test_mode='trace_tests'),
   )
   yield api.test(
       'win_trace_test',
       api.platform('win', 64),
-      ci_build(builder='win-builder', platform='win', test_mode='trace_tests'),
+      ci_build(
+          builder='win-clang-builder', platform='win', test_mode='trace_tests'),
   )
   yield api.test(
       'win_trace_test_failure',
       api.platform('win', 64),
-      ci_build(builder='win-builder', platform='win', test_mode='trace_tests'),
+      ci_build(
+          builder='win-clang-builder', platform='win', test_mode='trace_tests'),
       api.step_data('GLES 2.0 trace tests',
                     api.legacy_annotation.infra_failure_step),
   )
   yield api.test(
       'invalid_json_test',
-      ci_build('linux-builder'),
+      ci_build('linux-clang-builder'),
       api.chromium_tests.read_source_side_spec(
           'angle', {
-              'linux-builder': {
+              'linux-clang-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'basic_isolate',
                       'name': 'basic_isolate_tests',
@@ -172,10 +198,10 @@ def GenTests(api):
   )
   yield api.test(
       'failed_json_test',
-      ci_build('linux-builder'),
+      ci_build('linux-clang-builder'),
       api.chromium_tests.read_source_side_spec(
           'angle', {
-              'linux-builder': {
+              'linux-clang-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'basic_isolate',
                       'name': 'basic_isolate_tests',

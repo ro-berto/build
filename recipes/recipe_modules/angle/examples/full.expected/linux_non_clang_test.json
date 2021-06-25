@@ -1,6 +1,26 @@
 [
   {
     "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>running builder 'linux-gcc-builder' on group 'angle'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-gcc-builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@linux-gcc-builder@https://ci.chromium.org/p/angle/builders/ci/linux-gcc-builder@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -36,7 +56,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-gcc-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -102,7 +122,7 @@
     "cwd": "[CACHE]/builder/angle",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "angle/ci/linux-gcc-builder/8945511751514863184",
       "GYP_DEFINES": "clang=0"
     },
     "env_suffixes": {

@@ -32,23 +32,12 @@ class ANGLEApi(recipe_api.RecipeApi):
       if 'trybots' in self._test_data:
         self._trybots = self._test_data['trybots']
 
-    if test_mode == 'compile_and_test':
-      # contains build/test settings for the bot
-      self._builder_id, self._builder_config = (
-          self.m.chromium_tests_builder_config.lookup_builder(
-              builder_db=self._builders, try_db=self._trybots, use_try_db=True))
-      self.m.chromium_tests.report_builders(self._builder_config)
-      self.m.chromium_tests.configure_build(self._builder_config)
-    else:
-      if toolchain == 'clang':
-        self.m.chromium.set_config('angle_clang')
-      else:
-        self.m.chromium.set_config('angle_non_clang')
-      if platform == 'android':
-        self.m.gclient.set_config('angle_android')
-      else:
-        self.m.gclient.set_config('angle')
-      self._builder_id = self.m.chromium.get_builder_id()
+    # contains build/test settings for the bot
+    self._builder_id, self._builder_config = (
+        self.m.chromium_tests_builder_config.lookup_builder(
+            builder_db=self._builders, try_db=self._trybots, use_try_db=True))
+    self.m.chromium_tests.report_builders(self._builder_config)
+    self.m.chromium_tests.configure_build(self._builder_config)
 
   def _checkout(self):
     # Checkout angle and its dependencies (specified in DEPS) using gclient.
