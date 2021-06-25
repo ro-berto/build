@@ -5,6 +5,30 @@
 from .. import builder_spec
 
 SPEC = {
+    'linux-bootstrap':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
+    'linux-bootstrap-rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'linux-component-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
