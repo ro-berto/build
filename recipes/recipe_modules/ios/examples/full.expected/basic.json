@@ -5800,7 +5800,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "0"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5820,7 +5820,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "1"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5840,7 +5840,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "2"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5860,7 +5860,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "3"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5880,7 +5880,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "4"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5900,7 +5900,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "5"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5920,7 +5920,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "6"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5940,7 +5940,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "7"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5960,7 +5960,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "8"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -5980,7 +5980,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "9"
     ],
     "cwd": "[CACHE]/builder/src",

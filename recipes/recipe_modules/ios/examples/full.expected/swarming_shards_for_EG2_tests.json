@@ -2337,7 +2337,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "0"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2357,7 +2357,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "1"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2377,7 +2377,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "2"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2397,7 +2397,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "3"
     ],
     "cwd": "[CACHE]/builder/src",

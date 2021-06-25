@@ -1153,7 +1153,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "0",
       "1",
       "2"

@@ -629,7 +629,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "0"
     ],
     "infra_step": true,
@@ -650,7 +650,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "1"
     ],
     "infra_step": true,
@@ -942,7 +942,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags",
+      "testId,variant,status,tags,expected",
       "2"
     ],
     "infra_step": true,
