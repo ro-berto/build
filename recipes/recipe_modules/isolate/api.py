@@ -27,6 +27,7 @@ class IsolateApi(recipe_api.RecipeApi):
     super(IsolateApi, self).__init__(**kwargs)
     # TODO(maruel): Delete this recipe and use upstream isolated instead.
     # https://crbug.com/944904
+    # TODO(crbug.com/1143123): remove this.
     self._isolate_server = 'https://isolateserver.appspot.com'
     self._isolated_tests = {}
 
@@ -147,7 +148,8 @@ class IsolateApi(recipe_api.RecipeApi):
     if swarm_hashes:
       self.set_isolated_tests(swarm_hashes)
 
-    step_result.presentation.properties['isolate_server'] = self._isolate_server
+    if not use_cas:
+      step_result.presentation.properties['isolate_server'] = self._isolate_server
 
     if (swarm_hashes_property_name and
         len(swarm_hashes) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH):

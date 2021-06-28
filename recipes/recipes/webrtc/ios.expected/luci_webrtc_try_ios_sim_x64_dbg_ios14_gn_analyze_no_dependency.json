@@ -4323,7 +4323,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"9\": \"[dummy hash for 9/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0\": \"[dummy hash for 0/dummy size]\", \"1\": \"[dummy hash for 1/dummy size]\", \"10\": \"[dummy hash for 10/dummy size]\", \"11\": \"[dummy hash for 11/dummy size]\", \"12\": \"[dummy hash for 12/dummy size]\", \"13\": \"[dummy hash for 13/dummy size]\", \"14\": \"[dummy hash for 14/dummy size]\", \"15\": \"[dummy hash for 15/dummy size]\", \"16\": \"[dummy hash for 16/dummy size]\", \"17\": \"[dummy hash for 17/dummy size]\", \"2\": \"[dummy hash for 2/dummy size]\", \"3\": \"[dummy hash for 3/dummy size]\", \"4\": \"[dummy hash for 4/dummy size]\", \"5\": \"[dummy hash for 5/dummy size]\", \"6\": \"[dummy hash for 6/dummy size]\", \"7\": \"[dummy hash for 7/dummy size]\", \"8\": \"[dummy hash for 8/dummy size]\", \"9\": \"[dummy hash for 9/dummy size]\"}@@@"
     ]
   },

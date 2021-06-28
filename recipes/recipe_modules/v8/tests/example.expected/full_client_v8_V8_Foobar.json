@@ -284,8 +284,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://chrome-isolated.appspot.com\"@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

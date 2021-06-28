@@ -1092,7 +1092,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"0\": \"[dummy hash for 0/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://chrome-isolated.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0\": \"[dummy hash for 0/dummy size]\"}@@@"
     ]
   },
