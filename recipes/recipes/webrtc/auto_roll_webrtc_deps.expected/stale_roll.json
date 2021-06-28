@@ -183,7 +183,7 @@
       "git",
       "checkout",
       "-f",
-      "master"
+      "main"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -194,7 +194,7 @@
       "git",
       "pull",
       "origin",
-      "master"
+      "main"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
