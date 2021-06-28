@@ -13,11 +13,6 @@ DEPS = [
   'swarming_client',
 ]
 
-PROPERTIES = {
-  'buildnumber': Property(
-    kind=int, help="Number for the build.", default=100),
-}
-
 
 def RunSteps(api):
   # 'isolate_tests' step needs swarming checkout.
