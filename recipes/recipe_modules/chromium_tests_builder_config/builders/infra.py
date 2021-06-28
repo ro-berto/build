@@ -17,8 +17,10 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'linux-bootstrap-rel':
+    'linux-bootstrap-tests':
         builder_spec.BuilderSpec.create(
+            execution_mode=builder_spec.TEST,
+            parent_buildername='linux-bootstrap',
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
