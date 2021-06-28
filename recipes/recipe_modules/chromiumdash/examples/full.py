@@ -9,7 +9,7 @@ DEPS = [
 
 def RunSteps(api):
   api.chromiumdash.releases('Android', 'Beta', 1)
-  api.chromiumdash.milestones(3)
+  api.chromiumdash.milestones(3, only_branched=True)
   api.chromiumdash.fetch_commit_info('abcdefg')
 
 

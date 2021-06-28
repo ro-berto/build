@@ -80,12 +80,23 @@ class ChromiumDashApi(recipe_api.RecipeApi):
         {'platform': platform, 'channel': release_channel, 'num': num},
         step_name, default_test_data)
 
-  def milestones(self, num, step_name=None):
-    """Fetch milestones from chromiumdash."""
+  def milestones(self, num, step_name=None, only_branched=False):
+    """Fetch milestones from chromiumdash.
+
+    Args:
+      num: Number of milestones to request
+      step_name: Optional name for the step
+      only_branched: Request only milestones with release branches
+
+    Returns: Response containing milestones from ChromiumDash's
+             fetch_milestone endpoint
+    """
 
     default_test_data = [
         {'chromium_branch': str(4324 + i), 'milestone': 88 + i}
         for i in range(num)]
-
+    args = {'num': num}
+    if only_branched:
+      args.update({'only_branched': 'true'})
     return self._get_json(
-        self.MILESTONE_ENDPOINT, {'num': num}, step_name, default_test_data)
+        self.MILESTONE_ENDPOINT, args, step_name, default_test_data)

@@ -19,13 +19,13 @@
       "-u",
       "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
       "--url",
-      "https://chromiumdash.appspot.com/fetch_milestones?num=3",
+      "https://chromiumdash.appspot.com/fetch_milestones?num=3&only_branched=true",
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
       "/path/to/tmp/json"
     ],
-    "name": "GET https://chromiumdash.appspot.com/fetch_milestones?num=3"
+    "name": "GET https://chromiumdash.appspot.com/fetch_milestones?num=3&only_branched=true"
   },
   {
     "cmd": [
