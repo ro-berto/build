@@ -137,7 +137,12 @@ class ANGLEApi(recipe_api.RecipeApi):
         return compile_step
 
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir, targets=compile_targets, verbose=True)
+          self.m.chromium.output_dir,
+          targets=compile_targets,
+          verbose=True,
+          # TODO(crbug.com/1224266): remove this after migration.
+          use_cas=True,
+      )
       self.m.chromium_tests.set_test_command_lines(tests, "")
       # ANGLE marks entire failing shards as invalid. We retry them here.
       invalid_test_suites, failing_test_suites = (

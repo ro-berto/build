@@ -748,18 +748,19 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/angle/out/Release/basic_isolate.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"basic_isolate\": \"[dummy hash for basic_isolate]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"basic_isolate\": \"[dummy hash for basic_isolate/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"basic_isolate\": \"[dummy hash for basic_isolate]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"basic_isolate\": \"[dummy hash for basic_isolate/dummy size]\"}@@@"
     ]
   },
   {
@@ -793,10 +794,10 @@
       "python",
       "[CACHE]/builder/angle/tools/swarming_client/run_isolated.py",
       "--verbose",
-      "-I",
-      "https://isolateserver.appspot.com",
-      "--isolated",
-      "[dummy hash for basic_isolate]",
+      "--cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "--cas-digest",
+      "[dummy hash for basic_isolate/dummy size]",
       "--",
       "--isolated-script-test-output",
       "[CLEANUP]/tmp_tmp_1"
