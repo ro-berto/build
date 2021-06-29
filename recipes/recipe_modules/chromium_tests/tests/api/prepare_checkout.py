@@ -339,9 +339,12 @@ def GenTests(api):
   )
 
   yield already_migrated_test(
-      'test-migration-already-migrated-junit-tests',
+      'test-migration-already-migrated-scripts',
       test_spec=steps.ScriptTestSpec.create(
-          'fake-test', script='fake-script', all_compile_targets={}),
+          'fake-test',
+          script='fake-script',
+          all_compile_targets={},
+          resultdb=steps.ResultDB.create(enable=True)),
       builder_source_side_spec={
           'scripts': [{
               'name': 'fake-test',
@@ -351,7 +354,7 @@ def GenTests(api):
   )
 
   yield already_migrated_test(
-      'test-migration-already-migrated-scripts',
+      'test-migration-already-migrated-junit-tests',
       test_spec=steps.AndroidJunitTestSpec.create(
           'fake-test', target_name='fake-target'),
       builder_source_side_spec={

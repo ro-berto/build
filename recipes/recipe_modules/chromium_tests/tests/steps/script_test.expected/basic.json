@@ -3,6 +3,11 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
       "None/testing/scripts/script.py",
       "--build-config-fs",
       "Release",

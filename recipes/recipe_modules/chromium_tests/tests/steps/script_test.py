@@ -5,6 +5,7 @@
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
+    'build',
     'chromium',
     'chromium_tests',
     'recipe_engine/buildbucket',

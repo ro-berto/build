@@ -492,6 +492,11 @@ def generate_script_tests(api,
     if (script_spec.get('ci_only') and
         chromium_tests_api.m.tryserver.is_tryserver):
       continue
+
+    rdb_kwargs = dict(script_spec.get('resultdb', {'enable': True}))
+    rdb_kwargs.setdefault('test_id_prefix', script_spec.get('test_id_prefix'))
+    resultdb = steps.ResultDB.create(**rdb_kwargs)
+
     yield steps.ScriptTestSpec.create(
         str(script_spec['name']),
         script=script_spec['script'],
@@ -500,7 +505,8 @@ def generate_script_tests(api,
         override_compile_targets=script_spec.get('override_compile_targets',
                                                  []),
         waterfall_builder_group=builder_group,
-        waterfall_buildername=buildername)
+        waterfall_buildername=buildername,
+        resultdb=resultdb)
 
 
 def generate_isolated_script_tests(api,

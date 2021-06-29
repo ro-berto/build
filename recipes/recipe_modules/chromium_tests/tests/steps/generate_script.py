@@ -5,6 +5,7 @@
 from RECIPE_MODULES.build.chromium_tests import generators
 
 DEPS = [
+    'build',
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',

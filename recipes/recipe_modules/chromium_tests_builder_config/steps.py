@@ -676,6 +676,31 @@ class Test(object):
   def runs_on_swarming(self):
     return False
 
+  def prep_local_rdb(self, api, temp=None, include_artifacts=True):
+    """Returns a ResultDB instance suitable for local test runs.
+
+    Main difference between remote swarming runs and local test runs (ie:
+    ScriptTests and LocalIsolatedScriptTests) is the location of a temp
+    result file and the location of the result_adapter binary.
+
+    Args:
+      api: Recipe API object.
+      temp: Path to temp file to store results.
+      include_artifacts: If True, add the parent dir of temp as an artifact dir.
+    """
+    temp = temp or api.path.mkstemp()
+    artifact_dir = api.path.dirname(temp) if include_artifacts else ''
+    resultdb = attr.evolve(
+        self.spec.resultdb,
+        artifact_directory=artifact_dir,
+        base_variant=dict(
+            self.spec.resultdb.base_variant or {},
+            test_suite=self.canonical_name),
+        result_adapter_path=str(api.path['checkout'].join(
+            'tools', 'resultdb', 'result_adapter')),
+        result_file=api.path.abspath(temp))
+    return resultdb
+
   @property
   def rdb_results(self):
     return self._rdb_results
@@ -1429,10 +1454,12 @@ class ScriptTest(Test):  # pylint: disable=W0232
                        api.json.input(tests_to_retry)])  # pragma: no cover
 
     try:
+      resultdb = self.prep_local_rdb(api)
+
       script_args = []
       if self.spec.script_args:
         script_args = ['--args', api.json.input(self.spec.script_args)]
-      api.python(
+      api.build.python(
           self.step_name(suffix),
           # Enforce that all scripts are in the specified directory
           # for consistency.
@@ -1440,6 +1467,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
                                     api.path.basename(self.spec.script)),
           args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
                 ['run', '--output', api.json.output()] + run_args),
+          resultdb=resultdb if resultdb else None,
           step_test_data=lambda: api.json.test_api.output({
               'valid': True,
               'failures': []
@@ -1631,16 +1659,7 @@ class LocalGTestTest(Test):
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
-    # for local runs, result_adapter is available in chromium checkout.
-    resultdb = attr.evolve(
-        self.spec.resultdb,
-        artifact_directory='',
-        base_variant=dict(
-            self.spec.resultdb.base_variant or {},
-            test_suite=self.canonical_name),
-        result_adapter_path=str(api.path['checkout'].join(
-            'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(api.path.mkstemp()))
+    resultdb = self.prep_local_rdb(api, include_artifacts=False)
     gtest_results_file = api.test_utils.gtest_results(
         add_json_log=False, leak_to=resultdb.result_file)
 
@@ -2802,16 +2821,7 @@ class LocalIsolatedScriptTest(Test):
           'stdout': api.raw_io.output(),
       })
 
-    # for local runs, result_adapter is available in chromium checkout.
-    resultdb = attr.evolve(
-        self.spec.resultdb,
-        artifact_directory=api.path.dirname(temp),
-        base_variant=dict(
-            self.spec.resultdb.base_variant or {},
-            test_suite=self.canonical_name),
-        result_adapter_path=str(api.path['checkout'].join(
-            'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(temp))
+    resultdb = self.prep_local_rdb(api, temp=temp)
     if resultdb:
       kwargs['resultdb'] = resultdb
 
