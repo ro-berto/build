@@ -55,6 +55,11 @@ PROPERTIES = {
             help='Repo for which LKGR should be updated.'),
     'ref':
         Property(kind=str, default=None, help='LKGR ref to update.'),
+    'src_ref':
+        Property(
+            kind=str,
+            default='refs/heads/master',
+            help='Source repo ref to fetch from.'),
     'config':
         Property(
             kind=dict,
@@ -77,7 +82,8 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag):
+def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag,
+             src_ref):
   # TODO(jbudorick): Remove old_botconfig once the three builders above
   # are explicitly setting their desired properties.
   old_botconfig = BUILDERS.get(api.buildbucket.builder_name)
@@ -187,6 +193,7 @@ def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag):
       submodule_update_recursive=False,
       # For some reason, git cache doesn't make this faster crbug.com/860112.
       use_git_cache=True,
+      ref=src_ref,
   )
 
   new_lkgr = step_result.raw_io.output_texts['lkgr_hash']
@@ -238,6 +245,7 @@ def GenTests(api):
              project='custom',
              repo='https://custom.googlesource.com/src',
              ref='refs/heads/lkgr',
+             src_ref='refs/heads/master',
              config={
                  'project': 'custom',
                  'source_url': 'https://custom.googlesource.com/src',
