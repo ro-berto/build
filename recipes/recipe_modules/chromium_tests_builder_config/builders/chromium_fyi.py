@@ -50,6 +50,21 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'mac-arm64-on-arm64-rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
     'mac-osxbeta-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
