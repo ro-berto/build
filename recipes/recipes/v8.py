@@ -72,21 +72,29 @@ PROPERTIES = {
     'triggers_proxy': Property(default=False, kind=bool),
     # Weather to use goma for compilation.
     'use_goma': Property(default=True, kind=bool),
+    # Weather to use reclient for compilation.
+    'use_rbe': Property(default=False, kind=bool),
 }
 
 
 def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
-             enable_swarming, gclient_vars, mb_config_path,
-             target_arch, target_platform, track_build_dependencies, triggers,
-             triggers_proxy, use_goma):
+             enable_swarming, gclient_vars, mb_config_path, target_arch,
+             target_platform, track_build_dependencies, triggers,
+             triggers_proxy, use_goma, use_rbe):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
-      v8.bot_config_by_buildername(use_goma=use_goma),
-      binary_size_tracking, clusterfuzz_archive, coverage,
-      enable_swarming, target_arch, target_platform, track_build_dependencies,
-      triggers, triggers_proxy,
+      v8.bot_config_by_buildername(use_goma=use_goma, use_rbe=use_rbe),
+      binary_size_tracking,
+      clusterfuzz_archive,
+      coverage,
+      enable_swarming,
+      target_arch,
+      target_platform,
+      track_build_dependencies,
+      triggers,
+      triggers_proxy,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_vars(gclient_vars)
@@ -1054,6 +1062,13 @@ def GenTests(api):
     ) +
     api.post_process(DropExpectation)
   )
+  yield (api.v8.test(
+      'client.v8',
+      'V8 Foobar',
+      'rbe',
+      use_goma=False,
+      use_rbe=True,
+  ) + api.post_process(DropExpectation))
 
   def check_gs_url_equals(check, steps, expected):
     check('gsutil upload' in steps)

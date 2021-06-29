@@ -118,9 +118,13 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_number = None
     self.use_cas = properties.get('use_cas', True)
 
-  def bot_config_by_buildername(
-      self, builders=None, use_goma=True):
+  def bot_config_by_buildername(self,
+                                builders=None,
+                                use_goma=True,
+                                use_rbe=False):
     default = {}
+    # use_goma and use_rbe cannot be set at the same time.
+    assert not use_goma or not use_rbe
     if not self.m.properties.get('parent_buildername'):
       # Builders and builder_testers both build and need the following set of
       # default chromium configs:
@@ -131,6 +135,10 @@ class V8Api(recipe_api.RecipeApi):
       else:
         default['chromium_apply_config'] = [
             'default_compiler', 'mb', 'mb_no_luci_auth'
+        ]
+      if use_rbe:
+        default['gclient_apply_config'] = [
+            'enable_reclient',
         ]
     return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
@@ -285,6 +293,9 @@ class V8Api(recipe_api.RecipeApi):
 
     if self.m.chromium.c.TARGET_PLATFORM == 'ios':
       self.m.gclient.apply_config('v8_ios')
+
+    for c in self.bot_config.get('gclient_apply_config', []):
+      self.m.gclient.apply_config(c)
 
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
@@ -610,7 +621,7 @@ class V8Api(recipe_api.RecipeApi):
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
 
-      if self.isolated_tests: 
+      if self.isolated_tests:
         self.upload_isolated_json()
 
   def _update_build_environment(self, gn_args):
