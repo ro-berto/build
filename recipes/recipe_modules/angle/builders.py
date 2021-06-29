@@ -12,7 +12,11 @@ def _angle_spec(**kwargs):
   return builder_spec.BuilderSpec.create(**kwargs)
 
 
-def _create_builder_config(platform, config, target_bits, is_clang=True):
+def _create_builder_config(platform,
+                           config,
+                           target_bits,
+                           is_clang=True,
+                           perf_isolate_upload=False):
   return _angle_spec(
       chromium_config='angle_clang' if is_clang else 'angle_non_clang',
       gclient_config='angle',
@@ -21,6 +25,7 @@ def _create_builder_config(platform, config, target_bits, is_clang=True):
           'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
       },
+      perf_isolate_upload=perf_isolate_upload,
   )
 
 
@@ -38,7 +43,9 @@ def _create_tester_config(platform, target_bits, parent_builder):
   )
 
 
-def _create_android_builder_config(config, target_bits):
+def _create_android_builder_config(config,
+                                   target_bits,
+                                   perf_isolate_upload=False):
   return _angle_spec(
       gclient_config='angle_android',
       simulation_platform='linux',
@@ -47,6 +54,7 @@ def _create_android_builder_config(config, target_bits):
           'TARGET_BITS': target_bits,
           'TARGET_PLATFORM': 'android',
       },
+      perf_isolate_upload=perf_isolate_upload,
   )
 
 
@@ -74,10 +82,12 @@ _SPEC = {
         _create_android_builder_config('Debug', 64),
     'android-arm64-pixel4':
         _create_android_tester_config(64, 'android-arm64-rel'),
+    'android-arm64-pixel4-perf':
+        _create_android_tester_config(64, 'android-perf'),
     'android-arm64-rel':
         _create_android_builder_config('Release', 64),
     'android-perf':
-        _create_android_builder_config('Release', 64),
+        _create_android_builder_config('Release', 64, perf_isolate_upload=True),
     'linux-clang-dbg':
         _create_builder_config('linux', 'Debug', 64),
     'linux-clang-rel':
@@ -88,10 +98,15 @@ _SPEC = {
         _create_builder_config('linux', 'Release', 64, is_clang=False),
     'linux-intel':
         _create_tester_config('linux', 64, 'linux-clang-rel'),
+    'linux-intel-perf':
+        _create_tester_config('linux', 64, 'linux-perf'),
     'linux-nvidia':
         _create_tester_config('linux', 64, 'linux-clang-rel'),
+    'linux-nvidia-perf':
+        _create_tester_config('linux', 64, 'linux-perf'),
     'linux-perf':
-        _create_builder_config('linux', 'Release', 64),
+        _create_builder_config(
+            'linux', 'Release', 64, perf_isolate_upload=True),
     'linux-trace-rel':
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
@@ -121,7 +136,7 @@ _SPEC = {
     'win-msvc-x86-rel':
         _create_builder_config('win', 'Release', 32, is_clang=False),
     'win-perf':
-        _create_builder_config('win', 'Release', 64),
+        _create_builder_config('win', 'Release', 64, perf_isolate_upload=True),
     'win-trace-rel':
         _create_builder_config('win', 'Release', 64),
     'winuwp-x64-dbg':
@@ -132,8 +147,12 @@ _SPEC = {
         _create_tester_config('win', 32, 'win-clang-x86-rel'),
     'win10-x64-intel':
         _create_tester_config('win', 64, 'win-clang-x64-rel'),
+    'win10-x64-intel-perf':
+        _create_tester_config('win', 64, 'win-perf'),
     'win10-x64-nvidia':
         _create_tester_config('win', 64, 'win-clang-x64-rel'),
+    'win10-x64-nvidia-perf':
+        _create_tester_config('win', 64, 'win-perf'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({

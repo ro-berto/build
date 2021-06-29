@@ -35,7 +35,17 @@ _SPEC = {
             retry_failed_shards=False,
         ),
     'android-perf':
-        _create_compile_spec('android-perf'),
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='android-perf',
+                    tester='android-arm64-pixel4-perf',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'linux-clang-dbg':
         _create_compile_spec('linux-clang-dbg'),
     'linux-clang-rel':
@@ -60,7 +70,22 @@ _SPEC = {
     'linux-gcc-rel':
         _create_compile_spec('linux-gcc-rel'),
     'linux-perf':
-        _create_compile_spec('linux-perf'),
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-perf',
+                    tester='linux-intel-perf',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-perf',
+                    tester='linux-nvidia-perf',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'linux-trace-rel':
         _create_compile_spec('linux-trace-rel'),
     'mac-dbg':
@@ -129,7 +154,22 @@ _SPEC = {
     'win-msvc-x86-rel':
         _create_compile_spec('win-msvc-x86-rel'),
     'win-perf':
-        _create_compile_spec('win-perf'),
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-perf',
+                    tester='win10-x64-intel-perf',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-perf',
+                    tester='win10-x64-nvidia-perf',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'win-trace-rel':
         _create_compile_spec('win-trace-rel'),
     'winuwp-x64-dbg':
