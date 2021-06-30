@@ -2124,6 +2124,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='mac10.15-updater-tester-dbg',
             ),
     },
+    'tryserver.infra': {
+        'linux-bootstrap': try_spec.TrySpec.create_for_single_mirror(
+            builder_group='infra',
+            buildername='linux-bootstrap',
+            tester='linux-bootstrap-tests',
+        ),
+    },
     'tryserver.v8': {
         'v8_linux_blink_rel':
             try_spec.TrySpec.create_for_single_mirror(
