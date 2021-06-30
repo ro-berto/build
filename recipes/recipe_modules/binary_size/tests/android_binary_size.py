@@ -73,6 +73,7 @@ def GenTests(api):
       api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.MustRun,
                        constants.PATCH_FIXED_BUILD_STEP_NAME),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
 
   def has_expected_supersize_link(check,

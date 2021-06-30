@@ -206,7 +206,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
           if raw_result and raw_result.status != common_pb.SUCCESS:
             self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
                                           '')
-            return raw_result
+            return None
 
         expectations_without_patch_json = (
             self._check_for_failed_expectation_files(expectations_result_path,
