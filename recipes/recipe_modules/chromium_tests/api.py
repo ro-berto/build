@@ -521,6 +521,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       skylab_isolates = [
           t.target_name
           for t in tests_including_triggered
+          # Skylab test has different runner script and dependencies. A skylab
+          # test target should not appear in isolated_targets.
           if t.is_skylabtest and not t.target_name in isolated_targets
       ]
 
@@ -587,6 +589,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                   'git_hash':
                       update_step.presentation.properties['got_revision'],
               }]), instance, self.m.isolate.isolated_tests)
+
+      if skylab_isolates:
+        self._prepare_artifact_for_skylab(
+            builder_config.builder_db[builder_id], [
+                t for t in tests_including_triggered
+                if t.target_name in skylab_isolates
+            ])
       return raw_result
 
   def set_test_command_lines(self, tests, suffix):
@@ -2133,57 +2142,99 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         android_version_code=android_version_code,
         name='lookup builder GN args')
 
-  def _prepare_lacros_artifact_for_skylab(self, builder_spec, tests):
+  def _gen_runtime_dict_for_skylab(self, target):
+    """Generate the rel path of runtime deps to src dir.
+
+    Skylab DUT in CrOS does not support isolate. We reuse the isolate file
+    generated at compile step to decide the runtime dependencies.
+
+    Args:
+      target: The ninja build target for the test, e.g. url_unittests.
+
+    Returns:
+      runtime_dict: Relative paths to the src dir of the runtime deps, with
+          the key of its relative path to build dir, original form in the
+          isolate file.
+    """
+    with self.m.step.nest('collect runtime deps for %s' % target) as step:
+      src_dir = self.m.path['checkout']
+      build_dir = self.m.chromium.output_dir
+      abs_runtime_deps = build_dir.join(target + '.isolate')
+      if not self.m.path.exists(abs_runtime_deps):
+        failure_msg = 'Failed to find the %s.isolate.' % target
+        step.presentation.status = self.m.step.FAILURE
+        raise self.m.step.StepFailure(failure_msg)
+
+      content = self.m.file.read_text('read isolate file', abs_runtime_deps)
+      try:
+        isolate_dict = eval(content.strip())
+      except:
+        failure_msg = 'Failed to parse the %s.isolate' % target
+        step.presentation.status = self.m.step.FAILURE
+        raise self.m.step.StepFailure(failure_msg)
+
+      if len(isolate_dict.get('variables', {}).get('files', [])) == 0:
+        failure_msg = 'No dependencies attached to target %s.' % target
+        step.presentation.status = self.m.step.FAILURE
+        raise self.m.step.StepFailure(failure_msg)
+
+      runtime_dict = {}
+      for f in isolate_dict['variables']['files']:
+        abs_file_path = self.m.path.abspath(self.m.path.join(build_dir, f))
+        rel_to_out_dir = self.m.path.relpath(abs_file_path, src_dir)
+        runtime_dict[f] = str(rel_to_out_dir)
+
+      return runtime_dict
+
+  def _upload_runtime_deps_for_skylab(self, gcs_bucket, gcs_path, target,
+                                      runtime_deps):
+    with self.m.step.nest('upload skylab runtime deps for %s' % target):
+      _full_gcs_path = '%s/%s/lacros.zip' % (gcs_path, target)
+      arch_data = arch_prop.ArchiveData(
+          gcs_bucket=gcs_bucket,
+          gcs_path=_full_gcs_path,
+          archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_ZIP,
+          base_dir='src',
+          files=[v for v in runtime_deps.values()],
+      )
+      self.m.archive.generic_archive(
+          build_dir=self.m.chromium_checkout.checkout_dir,
+          update_properties={},
+          config=arch_prop.InputProperties(archive_datas=[arch_data]))
+      return 'gs://{}{}/{}'.format(
+          gcs_bucket, '/experimental' if self.m.runtime.is_experimental else '',
+          _full_gcs_path)
+
+  def _prepare_artifact_for_skylab(self, builder_spec, tests):
     if not (builder_spec.skylab_gs_bucket and tests):
       return
-    gcs_path = '{}/{}/lacros.zip'.format(self.m.buildbucket.builder_name,
-                                         self.m.buildbucket.build.number)
+    gcs_path = '{}/{}'.format(self.m.buildbucket.builder_name,
+                              self.m.buildbucket.build.number)
     if builder_spec.skylab_gs_extra:
       gcs_path = '{}/{}'.format(builder_spec.skylab_gs_extra, gcs_path)
-    # TODO(crbug/1114161): Package the chrome build via squashfs(crbug/1163747)
-    # once cros_test_platform provides Lacros provision feature.
-    # Archived files are hardcoded here only for POC.
-    config = arch_prop.InputProperties(archive_datas=[
-        arch_prop.ArchiveData(
-            dirs=['locales', 'swiftshader', 'WidevineCdm'],
-            files=[
-                'chrome',
-                'chrome_100_percent.pak',
-                'chrome_200_percent.pak',
-                'crashpad_handler',
-                'headless_lib.pak',
-                'icudtl.dat',
-                'nacl_helper',
-                'nacl_irt_x86_64.nexe',
-                'resources.pak',
-                'snapshot_blob.bin',
-            ],
-            gcs_bucket=builder_spec.skylab_gs_bucket,
-            gcs_path=gcs_path,
-            archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_ZIP,
-        )
-    ])
-    self.m.archive.generic_archive(
-        build_dir=self.m.chromium.output_dir,
-        update_properties={},
-        config=config)
-    path = 'gs://{}{}/{}'.format(
-        builder_spec.skylab_gs_bucket,
-        '/experimental' if self.m.runtime.is_experimental else '', gcs_path)
-    for t in tests:
-      t.lacros_gcs_path = path
-      # TODO(crbug/1208580): Remove the hard coded path once we read the isolate
-      # file.
-      t.exe_rel_path = 'out/Release/chrome'
+    with self.m.step.nest('prepare skylab tests'):
+      tests_by_target = collections.defaultdict(list)
+      for t in tests:
+        tests_by_target[t.target_name].append(t)
+      runtime_dict_by_target = {
+          t: self._gen_runtime_dict_for_skylab(t)
+          for t in sorted(tests_by_target.keys())
+      }
+      gcs_path_by_target = {
+          t: self._upload_runtime_deps_for_skylab(builder_spec.skylab_gs_bucket,
+                                                  gcs_path, t, r)
+          for t, r in runtime_dict_by_target.items()
+      }
+      for target, tests in tests_by_target.items():
+        for t in tests:
+          t.exe_rel_path = runtime_dict_by_target.get(target).get('./chrome')
+          t.lacros_gcs_path = gcs_path_by_target.get(target)
 
   def run_tests(self, builder_id, builder_config, tests, upload_results=None):
     if not tests:
       return
 
     self.configure_swarming(False, builder_group=builder_id.group)
-    self._prepare_lacros_artifact_for_skylab(
-        builder_config.builder_db[builder_id],
-        [t for t in tests if t.is_skylabtest])
     test_runner = self.create_test_runner(
         tests,
         serialize_tests=builder_config.serialize_tests,
