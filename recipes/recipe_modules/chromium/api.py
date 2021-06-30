@@ -1357,7 +1357,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           chromium_config=chromium_config,
           phase=phase,
-          # Ignore goma for analysis.
+          # Ignore no remote execution for analysis.
           use_goma=False,
           additional_args=mb_args,
           step_test_data=step_test_data,
@@ -1373,6 +1373,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                 chromium_config=None,
                 phase=None,
                 use_goma=True,
+                use_reclient=False,
                 android_version_code=None,
                 android_version_name=None,
                 gn_args_location=None,
@@ -1408,8 +1409,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     name = name or 'lookup GN args'
     additional_args = ['--recursive' if recursive else '--quiet']
     lookup_test_data = ('goma_dir = "/b/build/slave/cache/goma_client"\n'
-                        'target_cpu = "x86"\n'
-                        'use_goma = true\n')
+                        'target_cpu = "x86"\n')
+    if use_goma:
+      lookup_test_data += 'use_goma = true\n'
+    elif use_reclient:
+      lookup_test_data += 'use_reclient = true\n'
     result = self.run_mb_cmd(
         name,
         'lookup',
@@ -1445,6 +1449,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              mb_path=None,
              mb_config_path=None,
              use_goma=True,
+             use_reclient=False,
              isolated_targets=None,
              build_dir=None,
              phase=None,
@@ -1498,6 +1503,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         mb_config_path=mb_config_path,
         phase=phase,
         use_goma=use_goma,
+        use_reclient=use_reclient,
         recursive=recursive_lookup,
         android_version_code=android_version_code,
         android_version_name=android_version_name,

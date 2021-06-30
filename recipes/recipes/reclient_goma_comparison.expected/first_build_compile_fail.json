@@ -1,11 +1,26 @@
 [
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "init cache if not exists"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True', 'llvm_force_head_revision': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -19,8 +34,9 @@
       "--refs",
       "refs/heads/main"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/ClangToTLinuxASanLibfuzzer/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Comparison Linux/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -185,6 +201,32 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out/Release.1"
+    ],
+    "infra_step": true,
+    "name": "rmtree [CACHE]/builder/src/out/Release.1"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out/Release.2"
+    ],
+    "infra_step": true,
+    "name": "rmtree [CACHE]/builder/src/out/Release.2"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -255,11 +297,10 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/ClangToTLinuxASanLibfuzzer/8945511751514863184",
-      "GYP_DEFINES": "clang=1"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Comparison Linux/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -272,50 +313,54 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "chromium.swarm",
       "-b",
-      "ClangToTLinuxASanLibfuzzer",
+      "Comparison Linux",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "chromium.swarm",
       "-b",
-      "ClangToTLinuxASanLibfuzzer",
+      "Comparison Linux",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
     "~followup_annotations": [
@@ -327,29 +372,26 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
-      "--src-dir",
-      "[START_DIR]/src",
-      "--output-json",
-      "/path/to/tmp/json",
-      "--use-tot-clang"
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "isolate-everything",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "Comparison Linux",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/Release"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
     },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
-    ]
+    "name": "generate .isolate files"
   },
   {
     "cmd": [],
@@ -365,9 +407,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/ClangToTLinuxASanLibfuzzer"
+      "[CACHE]/goma/data/Comparison_Linux"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -384,12 +426,12 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ClangToTLinuxASanLibfuzzer",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Comparison_Linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -429,7 +471,7 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -454,38 +496,37 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
-      "80",
-      "empty_fuzzer"
+      "80"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[START_DIR]/src/out/Release",
-      "-j",
-      "80",
-      "empty_fuzzer",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "compile confirm no-op"
+    "name": "Goma build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
+      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -499,7 +540,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -532,7 +573,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -554,7 +595,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -590,15 +631,15 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 80, \"empty_fuzzer\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
       "--build-exit-status",
-      "0",
+      "1",
       "--build-step-name",
-      "compile",
+      "Goma build",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -608,16 +649,16 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"ClangToTLinuxASanLibfuzzer\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Comparison Linux\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "ClangToTLinuxASanLibfuzzer",
+      "Comparison Linux",
       "--buildbot-mastername",
-      "chromium.fyi",
+      "chromium.swarm",
       "--buildbot-slavename",
       "fake-bot-id"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -648,7 +689,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -659,13 +700,10 @@
     ]
   },
   {
-    "cmd": [
-      "[START_DIR]/src/out/Release/empty_fuzzer",
-      "-runs=1"
-    ],
-    "name": "running empty_fuzzer"
-  },
-  {
+    "failure": {
+      "failure": {},
+      "humanReason": "#### Step _Goma build_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+    },
     "name": "$result"
   }
 ]
