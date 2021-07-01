@@ -43,6 +43,16 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'linux-ssd-rel-swarming':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+            },
+            simulation_platform='linux',
+        ),
     'mac-rel-swarming':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
