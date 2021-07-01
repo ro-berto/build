@@ -118,6 +118,10 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_number = None
     self.use_cas = properties.get('use_cas', True)
 
+  def _use_reclient(self, gn_args):
+    args = self.m.gn.parse_gn_args(gn_args)
+    return args.get('use_rbe') == 'true'
+
   def bot_config_by_buildername(self,
                                 builders=None,
                                 use_goma=True,
@@ -731,6 +735,7 @@ class V8Api(recipe_api.RecipeApi):
     with self.ensure_osx_sdk_if_needed():
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
+      use_reclient = False
 
       # Calculate targets to isolate from V8-side test specification. The
       # test_spec contains extra TestStepConfig objects for the current builder
@@ -766,6 +771,10 @@ class V8Api(recipe_api.RecipeApi):
         # user on test failures for easier build reproduction.
         self._update_build_environment(gn_args)
 
+        use_reclient = self._use_reclient(gn_args)
+        if use_reclient:
+          kwargs['use_reclient'] = True
+
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
         if 'gn_args' in self.build_environment:
@@ -774,7 +783,7 @@ class V8Api(recipe_api.RecipeApi):
       elif self.m.chromium.c.project_generator.tool == 'gn':
         self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
 
-      if use_goma:
+      if use_goma and not use_reclient:
         kwargs['use_goma_module'] = True
       raw_result = self.m.chromium.compile(out_dir=out_dir, **kwargs)
       if raw_result.status != common_pb.SUCCESS:

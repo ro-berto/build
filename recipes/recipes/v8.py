@@ -989,6 +989,13 @@ def GenTests(api):
       'use_goma = true\n'
       '""" to _path_/args.gn.\n'
   )
+  fake_gn_args_x64_reclient = ('\n'
+                               'Writing """\\\n'
+                               'goma_dir = "/b/build/slave/cache/goma_client"\n'
+                               'target_cpu = "x64"\n'
+                               'use_goma = false\n'
+                               'use_rbe = true\n'
+                               '""" to _path_/args.gn.\n')
 
   # Cover running gcov coverage.
   yield (
@@ -1068,7 +1075,9 @@ def GenTests(api):
       'rbe',
       use_goma=False,
       use_rbe=True,
-  ) + api.post_process(DropExpectation))
+  ) + api.step_data('build.lookup GN args',
+                    api.raw_io.stream_output(fake_gn_args_x64_reclient)) +
+         api.post_process(DropExpectation))
 
   def check_gs_url_equals(check, steps, expected):
     check('gsutil upload' in steps)
