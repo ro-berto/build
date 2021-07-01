@@ -72,7 +72,7 @@ class IsolateApi(recipe_api.RecipeApi):
       suffix='',
       # TODO(crbug.com/chrome-operations/49): remove this after
       # isolate server shutdown.
-      use_cas=False,
+      use_cas=True,
       **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 

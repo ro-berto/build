@@ -155,8 +155,10 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "RECIPE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_REPO[build]/test2.isolated.gen.json"
     ],
@@ -172,7 +174,6 @@
       "@@@STEP_LOG_LINE@failed to isolate@@@@",
       "@@@STEP_LOG_LINE@failed to isolate@See logs for more information.@@@",
       "@@@STEP_LOG_END@failed to isolate@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver-dev.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1\": \"[dummy hash for test1]\"}@@@"
     ]
   },
