@@ -184,13 +184,20 @@ def RunSteps(api, properties):
             status=common_pb.FAILURE)
 
     # Check to make sure the compilator completed any local scripts/tests
-    # If compilator build has failed, collect_builds() will automatically
-    # mirror the status for the orchestrator build
     build = api.buildbucket.collect_builds([build.id],
                                            interval=20,
                                            timeout=60,
                                            step_name='collect compilator',
                                            mirror_status=True)[build.id]
+    if build.status != common_pb.SUCCESS:
+      if build.status == common_pb.CANCELED:
+        # This condition should be rare as swarming only propagates
+        # cancelations from parent -> child
+        raise api.step.InfraFailure('Compilator Canceled')
+
+      summary_markdown = "From compilator: \n" + build.summary_markdown
+      return result_pb2.RawResult(
+          status=build.status, summary_markdown=summary_markdown)
 
 
 def GenTests(api):
@@ -228,12 +235,15 @@ def GenTests(api):
       'can_retry_without_patch': True,
   }
 
-  def override_collect_compilator(build_id=build_id, status=common_pb.SUCCESS):
+  def override_collect_compilator(build_id=build_id,
+                                  status=common_pb.SUCCESS,
+                                  summary_markdown=""):
     return api.buildbucket.simulated_collect_output(
         [
             build_pb2.Build(
                 id=build_id,
                 status=status,
+                summary_markdown=summary_markdown,
                 output=dict(
                     properties=json_format.Parse(
                         api.json.dumps({
@@ -429,6 +439,39 @@ def GenTests(api):
           post_process.MustRun,
           'wait for compilator swarming_trigger_properties.buildbucket.get'),
       api.post_process(post_process.DoesNotRun, 'collect compilator'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_compilator_local_test',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(
+          status=common_pb.FAILURE,
+          summary_markdown=("1 Test Suite(s) failed.\n\n"
+                            "**headless_python_unittests** failed.")),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'compilator_canceled_at_final_collect',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(status=common_pb.CANCELED),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
