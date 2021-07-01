@@ -3594,4 +3594,5 @@ class SkylabTest(Test):
     return self._test_runs[suffix]
 
   def compile_targets(self):
-    return [self.spec.target_name] if self.spec.target_name else []
+    return [self.spec.target_name, 'lacros_version_metadata', 'chrome'
+           ] if self.spec.target_name else []

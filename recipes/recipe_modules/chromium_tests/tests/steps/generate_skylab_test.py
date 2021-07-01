@@ -45,8 +45,8 @@ def GenTests(api):
                 'files': ['../../.vpython',
                           'resources.pak',
                           'resources.pak.info',
-                          'chrome',
-                          '../../file_in_src',
+                          './chrome',
+                          '../../testing/buildbot/filters',
                           'gen/third_party',
                             ]}}
   """
@@ -101,7 +101,6 @@ def GenTests(api):
         api.chromium_tests.read_source_side_spec(
             builder_group, {
                 builder: {
-                    'additional_compile_targets': ['chrome'],
                     'skylab_tests': [{
                         'cros_board': 'eve',
                         'cros_img': 'eve-release/R89-13631.0.0',
@@ -115,10 +114,17 @@ def GenTests(api):
                 }
             }),
     ], api.empty_test_data())
-
+    # Mock the file/folder for recipe training.
+    mock_paths = [
+        api.path['start_dir'].join('squashfs', 'squashfs-tools', 'mksquashfs')
+    ]
+    # testing/buildbot/filters should be a folder.
+    mock_paths.append(api.path['checkout'].join('testing', 'buildbot',
+                                                'filters', 'foo'))
     if isolate_file_exists:
-      steps += api.path.exists(api.path['checkout'].join(
-          'out', 'Release', '%s.isolate' % TEST_TARGET))
+      mock_paths.append(api.path['checkout'].join('out', 'Release',
+                                                  '%s.isolate' % TEST_TARGET))
+    steps += api.path.exists(*mock_paths)
     if isolate_file_exists and should_read_isolate:
       steps += api.step_data(
           'prepare skylab tests.'
@@ -161,12 +167,11 @@ def GenTests(api):
     return test_data
 
   def archive_gsuri_should_match_skylab_req(check, steps):
-    archive_step = (
-        'prepare skylab tests.'
-        'upload skylab runtime deps for {target}.'
-        'Generic Archiving Steps.gsutil upload '
-        'lacros/lacros-amd64-generic-rel/571/{target}/lacros.zip').format(
-            target=TEST_TARGET)
+    archive_step = ('prepare skylab tests.'
+                    'upload skylab runtime deps for {target}.'
+                    'Generic Archiving Steps.gsutil upload '
+                    'lacros/lacros-amd64-generic-rel/571/{target}/'
+                    'lacros_compressed.squash').format(target=TEST_TARGET)
     archive_link = steps[archive_step].links['gsutil.upload']
     gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
     build_req = api.json.loads(
@@ -174,8 +179,13 @@ def GenTests(api):
         .logs['request'])
     properties = build_req['requests'][0]['scheduleBuild'].get('properties', [])
     for req in properties['requests'].values():
-      test = req['testPlan']['test'][0]
-      check(gs_uri in test['autotest']['testArgs'])
+      sw_deps = req['params']['softwareDependencies']
+      dep_of_lacros = [
+          '%s/lacros_compressed.squash' % d['lacrosGcsPath']
+          for d in sw_deps
+          if d.get('lacrosGcsPath')
+      ]
+      check(gs_uri in dep_of_lacros)
 
   yield api.test(
       'basic',
@@ -189,7 +199,13 @@ def GenTests(api):
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'
            'Generic Archiving Steps.'
-           'Copy file file_in_src') % TEST_TARGET,
+           'Copy folder testing/buildbot/filters') % TEST_TARGET,
+      ),
+      api.post_process(
+          post_process.MustRun,
+          ('prepare skylab tests.upload skylab runtime deps for %s.'
+           'Generic Archiving Steps.'
+           'Copy file metadata.json') % TEST_TARGET,
       ),
       api.post_process(post_process.DropExpectation),
   )

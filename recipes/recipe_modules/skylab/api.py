@@ -53,22 +53,21 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.metadata.debug_symbols_archive_url = gs_img_uri
         sw_dep = req.params.software_dependencies.add()
         sw_dep.chromeos_build = s.cros_img
+        if s.lacros_gcs_path:
+          lacros_dep = req.params.software_dependencies.add()
+          lacros_dep.lacros_gcs_path = s.lacros_gcs_path
         req.params.scheduling.managed_pool = POOL
         req.params.scheduling.qs_account = QS_ACCOUNT
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
         autotest_to_create = req.test_plan.test.add()
         autotest_to_create.autotest.name = AUTOTEST_NAME
-        # TODO(crbug/1172129): Deprecate test_args once lacros provision
-        # is available by TLS.
         test_args = ['dummy=crbug.com/984103']
         if s.tast_expr:
           # Due to crbug/1173329, skylab does not support arbitrary tast
           # expressions. As a workaround, we encode the user's expression
           # in base64.
           test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
-        if s.lacros_gcs_path:
-          test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
         if s.exe_rel_path:
           test_args.append('exe_rel_path=%s' % s.exe_rel_path)
         autotest_to_create.autotest.test_args = ' '.join(test_args)

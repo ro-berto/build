@@ -20,7 +20,7 @@
     ],
     "infra_step": true,
     "name": "test_pre_run (with patch).schedule tests on skylab.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"properties\": {\"requests\": {\"EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:lacros.Basic\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj lacros_gcs_path=lacros\"}}]}}}}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"0\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"properties\": {\"requests\": {\"EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"tast-expr:lacros.Basic\", \"suite:tast.lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"label-board:eve\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}, {\"lacrosGcsPath\": \"lacros\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj\"}}]}}}}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"0\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -73,6 +73,9 @@
       "@@@STEP_LOG_LINE@request@                \"softwareDependencies\": [@@@",
       "@@@STEP_LOG_LINE@request@                  {@@@",
       "@@@STEP_LOG_LINE@request@                    \"chromeosBuild\": \"eve-release/R88-13545.0.0\"@@@",
+      "@@@STEP_LOG_LINE@request@                  }, @@@",
+      "@@@STEP_LOG_LINE@request@                  {@@@",
+      "@@@STEP_LOG_LINE@request@                    \"lacrosGcsPath\": \"lacros\"@@@",
       "@@@STEP_LOG_LINE@request@                  }@@@",
       "@@@STEP_LOG_LINE@request@                ], @@@",
       "@@@STEP_LOG_LINE@request@                \"time\": {@@@",
@@ -84,7 +87,7 @@
       "@@@STEP_LOG_LINE@request@                  {@@@",
       "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
       "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj lacros_gcs_path=lacros\"@@@",
+      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj\"@@@",
       "@@@STEP_LOG_LINE@request@                    }@@@",
       "@@@STEP_LOG_LINE@request@                  }@@@",
       "@@@STEP_LOG_LINE@request@                ]@@@",
@@ -194,7 +197,7 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@compile_targets: ['lacros_fyi_tast_tests']@@@",
+      "@@@STEP_LOG_LINE@details@compile_targets: ['lacros_fyi_tast_tests', 'lacros_version_metadata', 'chrome']@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },

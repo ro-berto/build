@@ -2188,22 +2188,41 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _upload_runtime_deps_for_skylab(self, gcs_bucket, gcs_path, target,
                                       runtime_deps):
+
+    def is_dir(rel_path):
+      return self.m.path.isdir(self.m.path['checkout'].join(rel_path))
+
+    def is_file(rel_path):
+      return self.m.path.isfile(self.m.path['checkout'].join(rel_path))
+
     with self.m.step.nest('upload skylab runtime deps for %s' % target):
-      _full_gcs_path = '%s/%s/lacros.zip' % (gcs_path, target)
-      arch_data = arch_prop.ArchiveData(
+      # Lacros TLS provision requires a metadata.json containing the chrome
+      # version along with the squashfs file.
+      out_dir = self.m.path.relpath(self.m.chromium.output_dir,
+                                    self.m.chromium_checkout.checkout_dir)
+      metadata_arch = arch_prop.ArchiveData(
           gcs_bucket=gcs_bucket,
-          gcs_path=_full_gcs_path,
-          archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_ZIP,
+          gcs_path='%s/%s' % (gcs_path, target),
+          archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES,
+          base_dir=str(out_dir),
+          files=['metadata.json'],
+      )
+      squash_arch = arch_prop.ArchiveData(
+          gcs_bucket=gcs_bucket,
+          gcs_path='%s/%s/lacros_compressed.squash' % (gcs_path, target),
+          archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_SQUASHFS,
           base_dir='src',
-          files=[v for v in runtime_deps.values()],
+          files=[v for v in runtime_deps.values() if is_file(v)],
+          dirs=[v for v in runtime_deps.values() if is_dir(v)],
       )
       self.m.archive.generic_archive(
           build_dir=self.m.chromium_checkout.checkout_dir,
           update_properties={},
-          config=arch_prop.InputProperties(archive_datas=[arch_data]))
-      return 'gs://{}{}/{}'.format(
+          config=arch_prop.InputProperties(
+              archive_datas=[squash_arch, metadata_arch]))
+      return 'gs://{}{}/{}/{}'.format(
           gcs_bucket, '/experimental' if self.m.runtime.is_experimental else '',
-          _full_gcs_path)
+          gcs_path, target)
 
   def _prepare_artifact_for_skylab(self, builder_spec, tests):
     if not (builder_spec.skylab_gs_bucket and tests):

@@ -97,8 +97,12 @@ def GenTests(api):
     for req in properties['requests'].values():
       test = req['testPlan']['test'][0]
       got = _args_to_dict(test['autotest']['testArgs'])
-      check(lacros_gcs_path == got['lacros_gcs_path'])
       check(tast_expr == base64.b64decode(got['tast_expr_b64']))
+      sw_deps = req['params']['softwareDependencies']
+      dep_of_lacros = [
+          d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
+      ]
+      check(lacros_gcs_path in dep_of_lacros)
 
   yield api.test(
       'basic',
