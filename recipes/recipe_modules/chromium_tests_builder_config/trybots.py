@@ -1414,6 +1414,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='mac-arm64-rel',
+                tester='mac-arm64-rel-tests',
             ),
         # This trybot mirrors the trybot mac-rel with
         # analyze_deps_autorolls set to False
