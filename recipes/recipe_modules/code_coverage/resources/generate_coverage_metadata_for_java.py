@@ -389,24 +389,12 @@ def main():
     host_coverage_files = [
         f for f in coverage_files if f.endswith('junit_tests.exec')
     ]
-    device_unit_tests_coverage_files = [
-        f for f in coverage_files
-        # TODO(crbug/1201005): Revisit this filter once the bug is fixed.
-        # First two conditions are for gtests which are unit tests
-        # Third one is for instrumentation tests which are batched as unit tests
-        if ('unittests_default' in f or 'unit_tests_default' in f or
-            'only_unit_tests' in f)
-    ]
-    device_not_unit_tests_coverage_files = [
-        f for f in coverage_files if (f not in host_coverage_files and
-                                      f not in device_unit_tests_coverage_files)
+    device_coverage_files = [
+        f for f in coverage_files if not f.endswith('junit_tests.exec')
     ]
 
-    device_unit_tests_cmd = (
-        cmd + device_unit_tests_coverage_files +
-        _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
-    device_not_unit_tests_cmd = (
-        cmd + device_not_unit_tests_coverage_files +
+    device_cmd = (
+        cmd + device_coverage_files +
         _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
     host_cmd = cmd + host_coverage_files + _create_classfile_args(
         class_files, _HOST_CLASS_EXCLUDE_SUFFIX)
@@ -415,34 +403,19 @@ def main():
     # JaCoCo XML report will be generated temporarily
     # then parsed to json metadata to --output-file.
     temp_dir = tempfile.mkdtemp()
-    temp_device_unit_tests_xml = os.path.join(temp_dir,
-                                              'temp_device_unit_tests.xml')
-    temp_device_not_unit_tests_xml = os.path.join(
-        temp_dir, 'temp_device_not_unit_tests.xml')
+    temp_device_xml = os.path.join(temp_dir, 'temp_device.xml')
     temp_host_xml = os.path.join(temp_dir, 'temp_host.xml')
-    device_unit_tests_cmd += ['--xml', temp_device_unit_tests_xml]
-    device_not_unit_tests_cmd += ['--xml', temp_device_not_unit_tests_xml]
+    device_cmd += ['--xml', temp_device_xml]
     host_cmd += ['--xml', temp_host_xml]
 
-    cmd_output = subprocess.check_output(device_unit_tests_cmd)
-    logging.info(
-        'JaCoCo device XML report (inclusive of Unit Tests) generated: %r',
-        cmd_output)
-    cmd_output = subprocess.check_output(device_not_unit_tests_cmd)
-    logging.info(
-        'JaCoCo device XML report (exclusive of Unit Tests) generated: %r',
-        cmd_output)
+    cmd_output = subprocess.check_output(device_cmd)
+    logging.info('JaCoCo device XML report generated: %r', cmd_output)
     cmd_output = subprocess.check_output(host_cmd)
     logging.info('JaCoCo host XML report generated: %r', cmd_output)
 
-    temp_unit_tests_xml = os.path.join(temp_dir, 'temp_unit_tests.xml')
-    temp_overall_tests_xml = os.path.join(temp_dir, 'temp_overall_tests.xml')
-    combine_jacoco_reports.combine_xml_files(temp_unit_tests_xml,
-                                             temp_device_unit_tests_xml,
+    temp_overall_xml = os.path.join(temp_dir, 'temp_overall.xml')
+    combine_jacoco_reports.combine_xml_files(temp_overall_xml, temp_device_xml,
                                              temp_host_xml)
-    combine_jacoco_reports.combine_xml_files(temp_overall_tests_xml,
-                                             temp_unit_tests_xml,
-                                             temp_device_not_unit_tests_xml)
 
     def _export_as_json(xml, exported_filename):
       # Command tends to exit with status 0 when it actually failed.
@@ -457,8 +430,7 @@ def main():
       with open(os.path.join(params.output_dir, exported_filename), 'w') as f:
         f.write(zlib.compress(json.dumps(data)))
 
-    _export_as_json(temp_unit_tests_xml, 'unit_tests.json.gz')
-    _export_as_json(temp_overall_tests_xml, 'overall_tests.json.gz')
+    _export_as_json(temp_overall_xml, 'overall_tests.json.gz')
 
   finally:
     shutil.rmtree(temp_dir)

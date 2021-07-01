@@ -524,16 +524,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             args=args,
             **kwargs)
 
-        for self._current_processing_test_type in ('unit', 'overall'):
-          metadata_path = coverage_dir.join('%s_tests.json.gz' %
-                                            self._current_processing_test_type)
-          if not self.m.path.exists(metadata_path):
-            self.m.python.succeeding_step(
-                'skip processing because %s tests metadata was missing' %
-                self._current_processing_test_type, '')
-            return
-          self._persist_coverage_data_as_json(
-              source=metadata_path, data_type='java_metadata', **kwargs)
+        self._current_processing_test_type = 'overall'
+        metadata_path = coverage_dir.join('%s_tests.json.gz' %
+                                          self._current_processing_test_type)
+        if not self.m.path.exists(metadata_path):
+          self.m.python.succeeding_step(
+              'skip processing because %s tests metadata was missing' %
+              self._current_processing_test_type, '')
+          return
+        self._persist_coverage_data_as_json(
+            source=metadata_path, data_type='java_metadata', **kwargs)
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True

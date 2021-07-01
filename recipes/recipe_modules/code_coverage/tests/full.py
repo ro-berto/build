@@ -455,8 +455,6 @@ def GenTests(api):
           'Generate Java coverage metadata'),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'gsutil Upload JSON metadata'),
-      api.post_process(post_process.MustRun, 'process java coverage.'
-                       'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -496,8 +494,6 @@ def GenTests(api):
           'Generate Java coverage metadata'),
       api.post_process(post_process.MustRun, 'process java coverage.'
                        'gsutil Upload JSON metadata'),
-      api.post_process(post_process.MustRun, 'process java coverage.'
-                       'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -523,30 +519,6 @@ def GenTests(api):
       api.post_process(
           post_process.MustRun, 'process java coverage.'
           'skip processing because overall tests metadata was missing'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'java metadata for unit tests does not exist',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-arm64-rel'),
-      api.code_coverage(use_java_coverage=True),
-      api.properties(files_to_instrument=[
-          'some/path/to/FileTest.java',
-          'some/other/path/to/FileTest.java',
-      ]),
-      api.properties(mock_java_unit_tests_metadata_path=False),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'generate line number mapping from bot to Gerrit'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'Generate Java coverage metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage.'
-          'skip processing because unit tests metadata was missing'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
