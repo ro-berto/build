@@ -807,7 +807,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3A725192cc79f07ea946e10a64baac06625c206968"
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Ae20098f56b10587e3cc0bc9ccac4934a13158de3"
     ],
     "infra_step": true,
     "name": "install infra/tools/luci/isolate.ensure package directory",
@@ -820,9 +820,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3A725192cc79f07ea946e10a64baac06625c206968",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Ae20098f56b10587e3cc0bc9ccac4934a13158de3",
       "-ensure-file",
-      "infra/tools/luci/isolate/${platform} git_revision:725192cc79f07ea946e10a64baac06625c206968",
+      "infra/tools/luci/isolate/${platform} git_revision:e20098f56b10587e3cc0bc9ccac4934a13158de3",
       "-max-threads",
       "0",
       "-json-output",
@@ -836,7 +836,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:725\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:e20\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -847,7 +847,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3A725192cc79f07ea946e10a64baac06625c206968/isolate",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Ae20098f56b10587e3cc0bc9ccac4934a13158de3/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
