@@ -330,7 +330,7 @@
       "The recipe has crashed at point 'Uncaught exception'!",
       "",
       "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 294, in RunSteps",
+      "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 297, in RunSteps",
       "    cr_deps = GetDEPS(api, 'src', CR_PROJECT_NAME, BASE_URL)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 124, in GetDEPS",
       "    raise Exception(\"malformatted DEPS entry '%s'\" % tokens)",

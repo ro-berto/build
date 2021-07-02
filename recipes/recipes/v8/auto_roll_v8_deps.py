@@ -271,6 +271,9 @@ def RunSteps(api, autoroller_config):
     if commit['subject'] == autoroller_config['subject']:
       api.gerrit.abandon_change(target_gerrit_base_url, commit['_number'],
                                 'stale roll')
+      step_result = api.step('Previous roll failed', cmd=None)
+      step_result.presentation.step_text = 'Notify sheriffs!'
+      step_result.presentation.status = 'FAILURE'
 
   api.gclient.c = create_gclient_config(api, target_config, target_base_url)
   api.gclient.apply_config('chromium')
@@ -621,5 +624,6 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
               'subject': 'Update V8 DEPS.'
           }])),
       api.post_process(MustRun, 'gerrit abandon'),
+      api.post_process(MustRun, 'Previous roll failed'),
       api.post_process(DropExpectation),
   )
