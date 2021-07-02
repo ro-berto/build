@@ -9,6 +9,7 @@ DEPS = [
     'isolate',
     'recipe_engine/path',
     'recipe_engine/properties',
+    'recipe_engine/buildbucket',
 ]
 
 PROPERTIES = {
@@ -28,3 +29,12 @@ def RunSteps(api, use_cas):
 def GenTests(api):
   yield api.test('basic')
   yield api.test('basic_isolate') + api.properties(use_cas=False)
+
+  # TODO(crbug.com/1225524): remove this after migration.
+  yield api.test(
+      'basic_use_new_lib',
+      api.buildbucket.ci_build(
+          experiments={'chromium.isolate.use_new_lib': True}),
+      api.post_process(post_process.StepCommandContains, 'isolate tests',
+                       ['-use-new-lib']),
+      api.post_process(post_process.DropExpectation))

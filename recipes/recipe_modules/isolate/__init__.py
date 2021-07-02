@@ -8,6 +8,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/git',
     'depot_tools/gsutil',
+    'recipe_engine/buildbucket',
     'recipe_engine/cas',
     'recipe_engine/cipd',
     'recipe_engine/context',

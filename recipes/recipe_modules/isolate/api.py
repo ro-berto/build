@@ -117,6 +117,10 @@ class IsolateApi(recipe_api.RecipeApi):
 
       # TODO(b/187913980): this is for investigation of upload failures.
       args.extend(['-log-level', 'debug'])
+
+      if "chromium.isolate.use_new_lib" in self.m.buildbucket.build.input.experiments:
+        # TODO(crbug.com/1225524): remove this after migration.
+        args.extend(['-use-new-lib'])
     else:
       args.extend(['--isolate-server', self._isolate_server])
 
