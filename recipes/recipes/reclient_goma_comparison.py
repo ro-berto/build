@@ -129,6 +129,7 @@ def GenTests(api):
         api.properties(
             buildername=buildername, buildnumber=571, configuration='Release'),
         api.post_process(post_process.StatusSuccess),
+        api.post_process(post_process.DropExpectation),
     )
     yield api.test(
         test_name + '_fail',
@@ -138,6 +139,7 @@ def GenTests(api):
             buildername=buildername, buildnumber=571, configuration='Release'),
         api.step_data('compare_build_artifacts', retcode=1),
         api.post_process(post_process.StatusFailure),
+        api.post_process(post_process.DropExpectation),
     )
 
   yield api.test(
@@ -149,6 +151,7 @@ def GenTests(api):
       api.properties(configuration='Release'),
       api.step_data('Goma build', retcode=1),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -160,4 +163,5 @@ def GenTests(api):
       api.properties(configuration='Release'),
       api.step_data('Reclient build', retcode=1),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
