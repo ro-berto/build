@@ -20,4 +20,6 @@ message InputProperties {
   string coverage_exclude_sources = 5;
   // Whether JavaScript coverage is enabled.
   bool use_javascript_coverage = 6;
+  // Hash of a past commit to be used for referenced coverage.
+  string coverage_reference_commit = 7;
 }

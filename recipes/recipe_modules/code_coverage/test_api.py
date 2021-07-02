@@ -15,7 +15,8 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
                use_java_coverage=False,
                use_javascript_coverage=False,
                coverage_test_types=None,
-               coverage_exclude_sources=None):
+               coverage_exclude_sources=None,
+               coverage_reference_commit=None):
     return self.m.properties(
         **{
             '$build/code_coverage':
@@ -26,5 +27,5 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
                     use_javascript_coverage=use_javascript_coverage,
                     coverage_test_types=coverage_test_types,
                     coverage_exclude_sources=coverage_exclude_sources,
-                ),
+                    coverage_reference_commit=coverage_reference_commit),
         })

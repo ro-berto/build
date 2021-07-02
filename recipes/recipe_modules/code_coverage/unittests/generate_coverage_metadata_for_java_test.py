@@ -1,3 +1,4 @@
+#!/usr/bin/env vpython
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -221,7 +222,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     self.assertListEqual(actual_result, expected_result)
 
   @mock.patch.object(os.path, 'isfile')
-  @mock.patch.object(repository_util, 'GetFileRevisions')
+  @mock.patch.object(repository_util, '_GetFileRevisions')
   def test_generate_json_coverage_metadata(self, mock_get_file_revisions,
                                            mock_os_path_isfile):
     mock_get_file_revisions.return_value = self.FILE_REVISIONS
@@ -482,7 +483,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     self.assertDictEqual(expected_output, actual_output)
 
   @mock.patch.object(os.path, 'isfile')
-  @mock.patch.object(repository_util, 'GetFileRevisions')
+  @mock.patch.object(repository_util, '_GetFileRevisions')
   def test_generate_json_coverage_metadata_no_line_instrumented(
       self, mock_get_file_revisions, mock_os_path_isfile):
     mock_get_file_revisions.return_value = self.FILE_REVISIONS
@@ -495,7 +496,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
         '', root, ['dir'], self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
 
-  @mock.patch.object(repository_util, 'GetFileRevisions')
+  @mock.patch.object(repository_util, '_GetFileRevisions')
   def test_generate_json_coverage_metadata_skip_auto_generated_files(
       self, mock_get_file_revisions):
     mock_get_file_revisions.return_value = self.FILE_REVISIONS

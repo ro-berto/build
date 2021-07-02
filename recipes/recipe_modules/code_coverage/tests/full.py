@@ -162,6 +162,21 @@ def GenTests(api):
   )
 
   yield api.test(
+      'with_reference_commit',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
+      api.code_coverage(
+          use_clang_coverage=True, coverage_reference_commit='123hash'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS,
+          ['--reference-commit', '123hash']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'javascript: full repo',
       api.chromium.generic_build(
           builder_group='chromium.fyi',

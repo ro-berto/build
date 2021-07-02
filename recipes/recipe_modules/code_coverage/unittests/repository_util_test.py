@@ -59,7 +59,7 @@ class RepositoryUtilTest(unittest.TestCase):
 
     with mock.patch('repository_util.open',
                     mock.mock_open(read_data=deps_file_content)) as m:
-      file_revisions = repository_util.GetFileRevisions(
+      file_revisions = repository_util._GetFileRevisions(
           '/src', 'DEPS', ['//file1.cc', '//third_party/repo/file2.cc'])
 
       expected_file_revisions = {
@@ -69,7 +69,7 @@ class RepositoryUtilTest(unittest.TestCase):
       self.assertDictEqual(expected_file_revisions, file_revisions)
       m.assert_called_once_with('/src/DEPS', 'r')
 
-  @mock.patch.object(repository_util, 'GetFileRevisions', autospec=True)
+  @mock.patch.object(repository_util, '_GetFileRevisions', autospec=True)
   def test_add_git_revisions_to_coverage_files_metadata(
       self, mock_get_file_revisions):
     mock_get_file_revisions.return_value = {
@@ -86,6 +86,43 @@ class RepositoryUtilTest(unittest.TestCase):
         'timestamp': 1234,
     }]
     self.assertListEqual(expected_coverage_files_data, coverage_files_data)
+
+
+  @mock.patch('repository_util.subprocess.check_output', autospec=True)
+  def test_get_unmodified_lines_since_commit(self, mock_subprocess):
+    reference_commit = 'hash'
+    src_path = '//chromium/src'
+    file_path = 'base/myfile.cc'
+    diff_output = '\n'.join([
+        'diff --git a/newfile b/newfile',
+        'index cdf28dbec898..a92d664bc20a 100644', '--- a/newfile',
+        '+++ b/newfile', '@@ -1,4 +1,3 @@', '-line 0', ' line 1',
+        '-line 3 modified', '-line 4', '+line 2', '+line 3'
+    ])
+    head_content = '\n'.join(['line 0', 'line 1', 'line 3 modified', 'line 4'])
+    reference_commit_content = '\n'.join(['line 1', 'line 2', 'line 3'])
+
+    def mock_subprocess_side_effect(commands, cwd):
+      assert cwd == src_path
+      if commands[:2] == ['git', 'diff']:
+        assert commands[2:] == ['HEAD', reference_commit, '--', file_path]
+        return diff_output
+      elif commands[:2] == ['git', 'show']:
+        show_arg = commands[2].split(':')
+        assert len(show_arg) == 2
+        assert show_arg[1] == file_path
+        if show_arg[0] == 'HEAD':
+          return head_content
+        elif show_arg[0] == reference_commit:
+          return reference_commit_content
+        assert False, 'Unexpected git show call'
+
+      assert False, 'Unexpected subprocess call'
+
+    mock_subprocess.side_effect = mock_subprocess_side_effect
+    actual_unmodified_lines = repository_util.GetUnmodifiedLinesSinceCommit(
+        src_path, file_path, reference_commit)
+    self.assertListEqual([2], actual_unmodified_lines)
 
 
 if __name__ == '__main__':

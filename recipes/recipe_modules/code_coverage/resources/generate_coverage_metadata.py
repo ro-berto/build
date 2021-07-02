@@ -141,6 +141,7 @@ def _extract_coverage_info(segments):
 
 def _to_compressed_format(line_data, block_data):
   """Turns output of `_extract_coverage_info` to a compressed format."""
+  line_data = sorted(line_data.items(), key=lambda x: x[0])
   lines = []
   # Aggregate contiguous blocks of lines with the exact same hit count.
   last_index = 0
@@ -184,25 +185,25 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
   If the file is not in the mapping, then this function is non-op.
 
   Args:
-    line_data: A list of tuples consists of line number and and how many
-               executions the line is.
-    block_data: A mapping from line number to a list of sub-line blocks where
-                the code is not covered. A block is represented by two integers
-                [start_column, end_column].
-    line_mapping: A map that maps from local diff's line number to Gerrit diff's
-                  line number as well as the line itself.
+    line_data (dict): A mapping from line number to corresponding
+                      execution count. 
+    block_data (dict): A mapping from line number to a list of sub-line blocks
+                      where the code is not covered. A block is represented by
+                      two integers [start_column, end_column].
+    line_mapping(dict): A map that maps from local diff's line number to Gerrit
+                      diff's line number as well as the line itself.
 
   Returns:
     A tuple of line_data and block with line numbers being rebased.
   """
-  rebased_line_data = []
-  for line_num, count in line_data:
+  rebased_line_data = {}
+  for line_num, count in line_data.iteritems():
 
     if str(line_num) not in line_mapping:
       continue
 
     rebased_line_num = line_mapping[str(line_num)][0]
-    rebased_line_data.append((rebased_line_num, count))
+    rebased_line_data[rebased_line_num] = count
 
   rebased_block_data = {}
   for line_num, subline_blocks in block_data.iteritems():
@@ -215,7 +216,62 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
   return rebased_line_data, rebased_block_data
 
 
-def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
+def _drop_data_for_unmodified_lines(line_data, block_data, unmodified_lines):
+  """Drops unmodified lines(as compared to reference commit) from coverage data.
+  
+  Args:
+    line_data (dict): A mapping from line number to corresponding
+                      execution count. 
+    block_data (dict): A mapping from line number to a list of sub-line blocks
+                      where the code is not covered. A block is represented by
+                      two integers [start_column, end_column].
+    unmodified_lines (list): A list containing line numbers which have not
+                            been modified since the reference commit.
+
+  Returns:
+    A tuple (referenced_line_data, referenced_block_data) with same structure
+    as `line_data` and `block_data` with data for `unmodified_lines` removed.
+  """
+  referenced_line_data = {}
+  for line_num, count in line_data.iteritems():
+    if line_num in unmodified_lines:
+      continue
+    referenced_line_data[line_num] = count
+
+  rebased_block_data = {}
+  for line_num, subline_blocks in block_data.iteritems():
+    if line_num in unmodified_lines:
+      continue
+    rebased_block_data[line_num] = subline_blocks
+
+  return referenced_line_data, rebased_block_data
+
+
+def _calculate_line_summary_metrics(line_data):
+  """Calculates summary metrics for a file.
+
+  This method only returns 'line' summary, as arg line_data
+  (presumably) have data for some of the lines removed. As a result, other
+  summary metrics like 'regions' and 'functions' are not feasible to calculate.
+  See `_get_clang_summary_metrics()` for contrast.
+
+  Args:
+    line_data (dict): Mapping from line number to corresponding execution count.
+  Returns:
+      A list that conforms to the Metric proto at
+      https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+  """
+  covered = 0
+  for _, count in line_data.iteritems():
+    if count > 0:
+      covered += 1
+  return [{'name': 'line', 'covered': covered, 'total': len(line_data)}]
+
+
+def _to_compressed_file_record(src_path,
+                               file_coverage_data,
+                               diff_mapping=None,
+                               reference_commit=None):
   """Converts the given Clang file coverage data to coverage metadata format.
 
   Coverage metadata format:
@@ -248,10 +304,16 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
                   root, and the corresponding value is another map that maps
                   from local diff's line number to Gerrit diff's line number as
                   well as the line itself.
+    reference_commit: Hash of a past commit. Passing this in arguments would
+                  also generate file record relative to that commit i.e.
+                  only those lines would be considered in file record which
+                  were modified/added after the said commit.
 
   Returns:
-    A json containing the coverage data for the given file and conforms to the
-    coverage metadata format.
+    A tuple containing two elements, each of which is a json conforming to
+    `File` proto. The first element represents the default file coverage while 
+    the second element represents coverage relative to reference_commit. If
+    `reference_commit` is not provided, second element is None.
   """
   segments = file_coverage_data['segments']
   if not segments:
@@ -273,11 +335,10 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
     if coverage_path.startswith(prefix):
       coverage_path = coverage_path[len(prefix):]
       break
-  # Convert the filesystem path to a source-absolute (GN-style) path.
-  coverage_path = '//' + _posix_path(coverage_path).lstrip('/')
+  coverage_path = _posix_path(coverage_path).lstrip('/')
 
   line_data, block_data = _extract_coverage_info(segments)
-  line_data = sorted(line_data.items(), key=lambda x: x[0])
+
   if diff_mapping is not None and rel_file_path in diff_mapping:
     line_mapping = diff_mapping[rel_file_path]
     line_data, block_data = _rebase_line_and_block_data(line_data, block_data,
@@ -285,16 +346,36 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   lines, uncovered_blocks = _to_compressed_format(line_data, block_data)
   data = {
-      'path':
-          coverage_path,
+      'path':  # Convert filesystem path to a source-absolute (GN-style) path.
+          '//' + coverage_path,
       'lines':
           lines,
       'summaries':
-          _convert_clang_summary_to_metadata(file_coverage_data['summary']),
+          _get_clang_summary_metrics(file_coverage_data['summary']),
   }
   if uncovered_blocks:
     data['uncovered_blocks'] = uncovered_blocks
-  return data
+
+  referenced_data = None
+  if reference_commit:
+    unmodified_lines = repository_util.GetUnmodifiedLinesSinceCommit(
+        src_path, coverage_path, reference_commit)
+    referenced_line_data, referenced_block_data = (
+        _drop_data_for_unmodified_lines(line_data, block_data,
+                                        unmodified_lines))
+    referenced_lines, referenced_uncovered_blocks = _to_compressed_format(
+        referenced_line_data, referenced_block_data)
+    referenced_data = {
+        'path':  # Convert filesystem path to a source-absolute (GN-style) path.
+            '//' + coverage_path,
+        'lines':
+            referenced_lines,
+        'summaries':
+            _calculate_line_summary_metrics(referenced_line_data),
+    }
+    if referenced_uncovered_blocks:
+      referenced_data['uncovered_blocks'] = referenced_uncovered_blocks
+  return data, referenced_data
 
 
 def _compute_llvm_args(profdata_path,
@@ -468,12 +549,16 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
       return json.load(f)
 
 
-def _split_metadata_in_shards_if_necessary(
-    output_dir, compressed_files, directory_summaries, component_summaries):
+def _split_metadata_in_shards_if_necessary(output_dir, files_dir,
+                                           compressed_files,
+                                           directory_summaries,
+                                           component_summaries):
   """Splits the metadata in a sharded manner if there are too many files.
 
   Args:
     output_dir: Absolute path output directory for the generated artifacts.
+    files_dir: Subdirectory of output directory containing the generated 
+              artifacts.
     compressed_files: A list of json object that stores coverage info for files
                       in compressed format. Used by both per-cl coverage and
                       full-repo coverage.
@@ -514,14 +599,13 @@ def _split_metadata_in_shards_if_necessary(
       files_slice.append(compressed_files[start:start + files_in_a_shard])
       index += 1
 
-    files_dir_name = 'file_coverage'
-    os.mkdir(os.path.join(output_dir, files_dir_name))
+    os.mkdir(os.path.join(output_dir, files_dir))
     file_shard_paths = []
     for i, files in enumerate(files_slice):
       file_name = 'files%d.json.gz' % (i + 1)
-      with open(os.path.join(output_dir, files_dir_name, file_name), 'wb') as f:
+      with open(os.path.join(output_dir, files_dir, file_name), 'wb') as f:
         f.write(zlib.compress(json.dumps({'files': files})))
-      path = os.path.normpath(os.path.join(files_dir_name, file_name))
+      path = os.path.normpath(os.path.join(files_dir, file_name))
       file_shard_paths.append(_posix_path(path))
     compressed_data['file_shards'] = file_shard_paths
 
@@ -555,9 +639,18 @@ def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, build_dir,
   return summaries
 
 
-def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
-                       build_dir, binaries, component_mapping, sources,
-                       diff_mapping, exclusions, arch):
+def _generate_metadata(src_path,
+                       output_dir,
+                       profdata_path,
+                       llvm_cov_path,
+                       build_dir,
+                       binaries,
+                       component_mapping,
+                       sources,
+                       diff_mapping=None,
+                       reference_commit=None,
+                       exclusions=None,
+                       arch=None):
   """Generates code coverage metadata.
 
   Args:
@@ -573,16 +666,24 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
              per-cl coverage.
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
+    reference_commit: Hash of the commit used to generate coverage reports
+                      restricted to lines of code merged after it.
+                      Only meaningful for full-codebase coverage.
     exclusions: A regex string to exclude matches from aggregation.
     arch: A string indicating the architecture of the binaries.
 
   Returns:
-    A tuple (compressed_data, summaries) where:
-    compressed_data: A data structure that can be serialized according to the
-                     coverage metadata format.
+    A tuple (data, referenced_data, summaries) where:
+    data: A data structure that can be serialized according to the
+                    coverage metadata format.
+    referenced_data: A data structure containing coverage info 
+                    referenced against a past commit, that can be serialized
+                    according to the coverage metadata format.                 
     summaries: A dict that maps binary name to a summary of that binary's
                coverage data.
   """
+  assert not (bool(diff_mapping) and bool(reference_commit)
+             ), "Atmost one of diff_mapping or reference_commit can be present"
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
@@ -595,25 +696,36 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   logging.info('Processing coverage data ...')
   start_time = time.time()
-  files_coverage_data = []
+  files_coverage = []
+  files_referenced_coverage = []
   for datum in data['data']:
     for file_data in datum['files']:
-      record = _to_compressed_file_record(src_path, file_data, diff_mapping)
-      files_coverage_data.append(record)
+      record, referenced_record = _to_compressed_file_record(
+          src_path, file_data, diff_mapping, reference_commit)
+      files_coverage.append(record)
+      if reference_commit:
+        files_referenced_coverage.append(referenced_record)
 
-  per_directory_coverage_data = {}
-  per_component_coverage_data = {}
+  per_directory_coverage = {}
+  per_component_coverage = {}
   if diff_mapping is None:
-    per_directory_coverage_data, per_component_coverage_data = (
+    per_directory_coverage, per_component_coverage = (
         aggregation_util.get_aggregated_coverage_data_from_files(
-            files_coverage_data, component_mapping))
+            files_coverage, component_mapping))
+    if reference_commit:
+      per_directory_referenced_coverage, per_component_referenced_coverage = (
+          aggregation_util.get_aggregated_coverage_data_from_files(
+              files_referenced_coverage, component_mapping))
 
   summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
                                                build_dir, binaries, arch)
 
   if diff_mapping is None:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
-        files_coverage_data, src_path, 'DEPS')
+        files_coverage, src_path, 'DEPS')
+    if reference_commit:
+      repository_util.AddGitRevisionsToCoverageFilesMetadata(
+          files_referenced_coverage, src_path, 'DEPS')
 
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
@@ -622,17 +734,20 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   start_time = time.time()
 
   compressed_data = _split_metadata_in_shards_if_necessary(
-      output_dir, files_coverage_data, per_directory_coverage_data,
-      per_component_coverage_data)
+      output_dir, 'files_coverage', files_coverage, per_directory_coverage,
+      per_component_coverage)
+  compressed_referenced_data = None
+  if reference_commit:
+    compressed_referenced_data = _split_metadata_in_shards_if_necessary(
+        output_dir, 'files_referenced_coverage', files_referenced_coverage,
+        per_directory_referenced_coverage, per_component_referenced_coverage)
   minutes = (time.time() - start_time) / 60
-  logging.info(
-      'Dumping aggregated data (without all.json.gz) took %.0f minutes',
-      minutes)
+  logging.info('Generating coverage metadata took %.0f minutes', minutes)
 
-  return compressed_data, summaries
+  return compressed_data, compressed_referenced_data, summaries
 
 
-def _convert_clang_summary_to_metadata(clang_summary):
+def _get_clang_summary_metrics(clang_summary):
   """Converts Clang summary format to metadata format.
 
   Args:
@@ -641,7 +756,7 @@ def _convert_clang_summary_to_metadata(clang_summary):
                           dicts with format: {'covered': int, 'count': int}.
 
   Returns:
-    A list that conforms to the summaries in coverage metadata format:
+    A list that conforms to the Metric proto at
     https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
   """
   # Clang uses 'lines', 'regions', 'functions', whereas it's preferrable to use
@@ -713,6 +828,11 @@ def _parse_args(args):
       help='the source files to generate the coverage for, path should be '
       'relative to the root of the code checkout')
   parser.add_argument(
+      '--reference-commit',
+      type=str,
+      help='Hash of the commit used to generate coverage reports '
+      'restricted to lines of code merged after it')
+  parser.add_argument(
       '--diff-mapping-path',
       type=str,
       help='absolute path to the file that stores the diff mapping')
@@ -775,13 +895,17 @@ def main():
       'component_mapping (for full-repo coverage) and diff_mapping '
       '(for per-cl coverage) cannot be specified at the same time.')
 
-  compressed_data, summaries = _generate_metadata(
+  data, referenced_data, summaries = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
       params.build_dir, params.binaries, component_mapping, abs_sources,
-      diff_mapping, params.exclusion_pattern, params.arch)
+      diff_mapping, params.reference_commit, params.exclusion_pattern,
+      params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
-    f.write(zlib.compress(json.dumps(compressed_data)))
+    f.write(zlib.compress(json.dumps(data)))
+  with open(os.path.join(params.output_dir, 'all_referenced.json.gz'),
+            'wb') as f:
+    f.write(zlib.compress(json.dumps(referenced_data)))
   with open(os.path.join(params.output_dir, 'per_target_summaries.json'),
             'wb') as f:
     json.dump(summaries, f)

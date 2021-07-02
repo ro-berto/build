@@ -160,7 +160,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }],
     }
     self.maxDiff = None
-    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    record, _ = generator._to_compressed_file_record(src_path,
+                                                     file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
   # This test uses made-up segments, and the intention is to test that for
@@ -207,7 +208,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         ]
     }
     self.maxDiff = None
-    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    record, _ = generator._to_compressed_file_record(src_path,
+                                                     file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
   # This test uses the following code:
@@ -222,7 +224,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
   def test_rebase_line_and_block_data(self):
-    line_data = [(1, 1), (2, 1), (3, 1), (4, 1), (5, 0), (6, 0), (7, 0)]
+    line_data = {1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 0, 7: 0}
     block_data = {2: [[18, 24]]}
     file_name = 'base/base.cc'
     diff_mapping = {'base/base.cc': {'2': [16, 'A line added by the patch.']}}
@@ -231,10 +233,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         generator._rebase_line_and_block_data(line_data, block_data,
                                               diff_mapping[file_name]))
 
-    expected_line_data = [(16, 1)]
+    expected_line_data = {16: 1}
     expected_block_data = {16: [[18, 24]]}
     self.maxDiff = None
-    self.assertListEqual(expected_line_data, rebased_line_data)
+    self.assertDictEqual(expected_line_data, rebased_line_data)
     self.assertDictEqual(expected_block_data, rebased_block_data)
 
   # This test uses the following code:
@@ -279,8 +281,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }
     }
 
-    record = generator._to_compressed_file_record(src_path, file_coverage_data,
-                                                  diff_mapping)
+    record, _ = generator._to_compressed_file_record(src_path,
+                                                     file_coverage_data,
+                                                     diff_mapping)
 
     expected_record = {
         'path':
@@ -390,7 +393,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }
     }
 
-    compressed_data, _ = generator._generate_metadata(
+    compressed_data, _, _ = generator._generate_metadata(
         src_path='/path/to/src',
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
@@ -399,9 +402,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=None,
         sources=['/path/to/src/dir/file.cc'],
-        diff_mapping=diff_mapping,
-        exclusions=None,
-        arch=None)
+        diff_mapping=diff_mapping)
 
     expected_compressed_files = [{
         'path':
@@ -441,21 +442,17 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # 6|      0|  return 1;
   # 7|      0|}
   #
-  # /path/to/src/dir2/file2.cc
-  # 1|      1|int main() { return 0; }
-  #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
-  @mock.patch.object(generator.repository_util, 'GetFileRevisions')
+  @mock.patch.object(generator.repository_util, '_GetFileRevisions')
   @mock.patch.object(generator, '_get_coverage_data_in_json')
   def test_generate_metadata_for_full_repo_coverage(
-      self, mock_get_coverage_data, mock_GetFileRevisions,
+      self, mock_get_coverage_data, mock__GetFileRevisions,
       mock_get_per_target_coverage_summary):
     # Number of files should not exceed 1000; otherwise sharding will happen.
-    mock_GetFileRevisions.return_value = {
+    mock__GetFileRevisions.return_value = {
         '//dir1/file1.cc': ('hash1', 1234),
-        '//dir2/file2.cc': ('hash2', 5678),
     }
     mock_get_coverage_data.return_value = {
         'data': [{
@@ -482,19 +479,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'filename':
                         '/path/to/src/dir1/file1.cc',
                 },
-                {
-                    'segments': [[1, 12, 1, True, True],
-                                 [1, 25, 0, False, False]],
-                    'summary': {
-                        'lines': {
-                            'count': 1,
-                            'covered': 1,
-                            'percent': 100,
-                        },
-                    },
-                    'filename':
-                        '/path/to/src/dir2/file2.cc',
-                },
             ]
         }]
     }
@@ -502,9 +486,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     # We don't care about the summaries for this test.
     mock_get_per_target_coverage_summary.return_value = {}
 
-    component_mapping = {'dir1': 'Test>Component', 'dir2': 'Test>Component'}
+    component_mapping = {'dir1': 'Test>Component'}
 
-    compressed_data, _ = generator._generate_metadata(
+    compressed_data, _, _ = generator._generate_metadata(
         src_path='/path/to/src',
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
@@ -513,36 +497,23 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=component_mapping,
         sources=[],
-        diff_mapping=None,
         exclusions='.*bad_file.*',
-        arch=None)
+    )
 
     expected_compressed_components = [{
-        'dirs': [
-            {
-                'path': '//dir1/',
-                'name': 'dir1/',
-                'summaries': [{
-                    'covered': 4,
-                    'total': 7,
-                    'name': 'line',
-                }]
-            },
-            {
-                'path': '//dir2/',
-                'name': 'dir2/',
-                'summaries': [{
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'line',
-                }]
-            },
-        ],
-        'path':
-            'Test>Component',
+        'dirs': [{
+            'path': '//dir1/',
+            'name': 'dir1/',
+            'summaries': [{
+                'covered': 4,
+                'total': 7,
+                'name': 'line',
+            }]
+        }],
+        'path': 'Test>Component',
         'summaries': [{
-            'covered': 5,
-            'total': 8,
+            'covered': 4,
+            'total': 7,
             'name': 'line',
         }]
     }]
@@ -551,41 +522,29 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertListEqual(expected_compressed_components,
                          compressed_data['components'])
 
-    expected_compressed_summaries = [{'covered': 5, 'total': 8, 'name': 'line'}]
+    expected_compressed_summaries = [{'covered': 4, 'total': 7, 'name': 'line'}]
 
     self.assertListEqual(expected_compressed_summaries,
                          compressed_data['summaries'])
 
     expected_compressed_dirs = [
         {
-            'dirs': [
-                {
-                    'path': '//dir1/',
-                    'name': 'dir1/',
-                    'summaries': [{
-                        'covered': 4,
-                        'total': 7,
-                        'name': 'line',
-                    }]
-                },
-                {
-                    'path': '//dir2/',
-                    'name': 'dir2/',
-                    'summaries': [{
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'line',
-                    }]
-                },
-            ],
+            'dirs': [{
+                'path': '//dir1/',
+                'name': 'dir1/',
+                'summaries': [{
+                    'covered': 4,
+                    'total': 7,
+                    'name': 'line',
+                }]
+            }],
             'files': [],
             'summaries': [{
-                'covered': 5,
-                'total': 8,
+                'covered': 4,
+                'total': 7,
                 'name': 'line'
             }],
-            'path':
-                '//'
+            'path': '//'
         },
         {
             'dirs': [],
@@ -603,27 +562,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'total': 7,
                 'name': 'line',
             }],
-            'path':
-                '//dir1/'
-        },
-        {
-            'dirs': [],
-            'files': [{
-                'name': 'file2.cc',
-                'path': '//dir2/file2.cc',
-                'summaries': [{
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'line',
-                }]
-            }],
-            'summaries': [{
-                'covered': 1,
-                'total': 1,
-                'name': 'line',
-            }],
-            'path':
-                '//dir2/'
+            'path': '//dir1/'
         },
     ]
 
@@ -665,26 +604,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'timestamp':
                 1234,
         },
-        {
-            'path': '//dir2/file2.cc',
-            'lines': [{
-                'count': 1,
-                'last': 1,
-                'first': 1,
-            }],
-            'summaries': [{
-                'covered': 1,
-                'name': 'line',
-                'total': 1,
-            }],
-            'revision': 'hash2',
-            'timestamp': 5678,
-        },
     ]
 
     self.assertListEqual(expected_compressed_files, compressed_data['files'])
-
-
 
   # This test uses the following code:
   # /path/to/src/dir1/file1.cc
@@ -696,81 +618,170 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # 6|      0|  return 1;
   # 7|      0|}
   #
-  # /path/to/src/dir2/file2.cc
-  # 1|      1|int main() { return 0; }
-  #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
+  #
+  # Line 1, 7 were commited before reference_commit and should be excluded
+  # from referenced_coverage
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
-  @mock.patch.object(generator.repository_util, 'GetFileRevisions')
+  @mock.patch.object(generator.repository_util, '_GetFileRevisions')
+  @mock.patch.object(generator.repository_util, 'GetUnmodifiedLinesSinceCommit')
   @mock.patch.object(generator, '_get_coverage_data_in_json')
-  def test_generate_metadata_for_full_repo_coverage_without_component(
-      self, mock_get_coverage_data, mock_GetFileRevisions,
-      mock_get_per_target_coverage_summary):
+  def test_generate_referenced_metadata_for_full_repo_coverage(
+      self, mock_get_coverage_data, mock_get_unmodified_lines_since_commit,
+      mock__GetFileRevisions, mock_get_per_target_coverage_summary):
+    mock_get_unmodified_lines_since_commit.return_value = [1, 7]
     # Number of files should not exceed 1000; otherwise sharding will happen.
-    mock_GetFileRevisions.return_value = {
+    mock__GetFileRevisions.return_value = {
         '//dir1/file1.cc': ('hash1', 1234),
-        '//dir2/file2.cc': ('hash2', 5678),
     }
     mock_get_coverage_data.return_value = {
         'data': [{
-            'files': [
-                {
-                    'segments': [
-                        [1, 12, 1, True, True],
-                        [2, 7, 1, True, True],
-                        [2, 14, 1, True, False],
-                        [2, 18, 0, True, True],
-                        [2, 25, 1, True, False],
-                        [2, 27, 1, True, True],
-                        [4, 4, 0, True, False],
-                        [6, 3, 0, True, True],
-                        [7, 2, 0, False, False],
-                    ],
-                    'summary': {
-                        'lines': {
-                            'count': 7,
-                            'covered': 4,
-                            'percent': 57
-                        },
+            'files': [{
+                'segments': [
+                    [1, 12, 1, True, True],
+                    [2, 7, 1, True, True],
+                    [2, 14, 1, True, False],
+                    [2, 18, 0, True, True],
+                    [2, 25, 1, True, False],
+                    [2, 27, 1, True, True],
+                    [4, 4, 0, True, False],
+                    [6, 3, 0, True, True],
+                    [7, 2, 0, False, False],
+                ],
+                'summary': {
+                    'lines': {
+                        'count': 7,
+                        'covered': 4,
+                        'percent': 57
                     },
-                    'filename': '/path/to/src/dir1/file1.cc',
                 },
-                {
-                    'segments': [[1, 12, 1, True, True],
-                                 [1, 25, 0, False, False]],
-                    'summary': {
-                        'lines': {
-                            'count': 1,
-                            'covered': 1,
-                            'percent': 100,
-                        },
-                    },
-                    'filename': '/path/to/src/dir2/file2.cc',
-                },
-            ]
+                'filename': '/path/to/src/dir1/file1.cc',
+            }]
         }]
     }
 
     # We don't care about the summaries for this test.
     mock_get_per_target_coverage_summary.return_value = {}
 
-    compressed_data, _ = generator._generate_metadata(
+    component_mapping = {'dir1': 'Test>Component'}
+
+    _, compressed_data, _ = generator._generate_metadata(
         src_path='/path/to/src',
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
         llvm_cov_path='/path/to/llvm-cov',
         build_dir='/path/to/build_dir',
         binaries=['/path/to/binary1', '/path/to/binary2'],
-        component_mapping=None,
+        component_mapping=component_mapping,
         sources=[],
-        diff_mapping=None,
         exclusions='.*bad_file.*',
-        arch=None)
+        reference_commit='hash0')
 
-    self.assertIsNotNone(compressed_data.get('files'))
-    self.assertIsNotNone(compressed_data.get('dirs'))
-    self.assertIsNone(compressed_data.get('components'))
+    expected_compressed_components = [{
+        'dirs': [{
+            'path': '//dir1/',
+            'name': 'dir1/',
+            'summaries': [{
+                'covered': 3,
+                'total': 5,
+                'name': 'line',
+            }]
+        }],
+        'path': 'Test>Component',
+        'summaries': [{
+            'covered': 3,
+            'total': 5,
+            'name': 'line',
+        }]
+    }]
+
+    self.maxDiff = None
+    self.assertListEqual(expected_compressed_components,
+                         compressed_data['components'])
+
+    expected_compressed_summaries = [{'covered': 3, 'total': 5, 'name': 'line'}]
+
+    self.assertListEqual(expected_compressed_summaries,
+                         compressed_data['summaries'])
+
+    expected_compressed_dirs = [
+        {
+            'dirs': [{
+                'path': '//dir1/',
+                'name': 'dir1/',
+                'summaries': [{
+                    'covered': 3,
+                    'total': 5,
+                    'name': 'line',
+                }]
+            },],
+            'files': [],
+            'summaries': [{
+                'covered': 3,
+                'total': 5,
+                'name': 'line'
+            }],
+            'path': '//'
+        },
+        {
+            'dirs': [],
+            'files': [{
+                'name': 'file1.cc',
+                'path': '//dir1/file1.cc',
+                'summaries': [{
+                    'covered': 3,
+                    'total': 5,
+                    'name': 'line',
+                }]
+            }],
+            'summaries': [{
+                'covered': 3,
+                'total': 5,
+                'name': 'line',
+            }],
+            'path': '//dir1/'
+        },
+    ]
+
+    self.assertListEqual(expected_compressed_dirs, compressed_data['dirs'])
+
+    expected_compressed_files = [
+        {
+            'path': '//dir1/file1.cc',
+            'lines': [{
+                'count': 1,
+                'last': 4,
+                'first': 2,
+            }, {
+                'count': 0,
+                'last': 6,
+                'first': 5,
+            }],
+            'summaries': [{
+                'covered': 3,
+                'name': 'line',
+                'total': 5,
+            }],
+            'uncovered_blocks': [{
+                'ranges': [{
+                    'last': 24,
+                    'first': 18,
+                }],
+                'line': 2,
+            }, {
+                'ranges': [{
+                    'last': -1,
+                    'first': 4,
+                }],
+                'line': 4,
+            }],
+            'revision': 'hash1',
+            'timestamp': 1234,
+        },
+    ]
+
+    self.assertListEqual(expected_compressed_files, compressed_data['files'])
 
   @mock.patch('psutil.cpu_count')
   @mock.patch('subprocess.check_output')

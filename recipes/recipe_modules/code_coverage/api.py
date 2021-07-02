@@ -38,6 +38,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._coverage_metadata_gs_paths = []
     # The list of mimic builder names to be uploaded.
     self._mimic_builder_names = []
+    # The commit in the past to be used as reference point for coverage reports
+    # When set, two sets of coverage reports are generated - the usual and the
+    # referenced(only lines added/modified since reference commit are included
+    # in coverage reports)
+    self._reference_commit = properties.coverage_reference_commit
     # The bucket to which code coverage data should be uploaded.
     self._gs_bucket = properties.gs_bucket or constants.DEFAULT_BUCKET_NAME
     # List of test types to run in a builder. By default, it runs overall
@@ -860,6 +865,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
       ])
     else:
+      if self._reference_commit:
+        args.extend(['--reference-commit', self._reference_commit])
       pattern = (
           constants.EXCLUDE_SOURCES.get(self._exclude_sources_key)
           if self._exclude_sources_key else [])

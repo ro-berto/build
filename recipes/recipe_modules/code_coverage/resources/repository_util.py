@@ -15,6 +15,8 @@ import platform
 import subprocess
 import time
 
+import diff_util
+
 IS_WIN = platform.system() == 'Windows'
 GIT = 'git' if not IS_WIN else 'git.bat'
 
@@ -97,7 +99,6 @@ def _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_content):
     src_checkout_paths.append(path)
   # pylint: disable=unnecessary-lambda
   src_checkout_paths.sort(key=lambda x: len(x), reverse=True)
-
   return src_checkout_paths
 
 
@@ -166,7 +167,7 @@ def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
   return all_files
 
 
-def GetFileRevisions(root_dir, deps_file_path, file_paths):
+def _GetFileRevisions(root_dir, deps_file_path, file_paths):
   """Returns a dict mapping from the path to its git revision for given files.
 
   Args:
@@ -239,7 +240,7 @@ def AddGitRevisionsToCoverageFilesMetadata(files_coverage_data, src_path,
   start_time = time.time()
 
   all_files = [file_record['path'] for file_record in files_coverage_data]
-  file_git_metadata = GetFileRevisions(src_path, deps_file_path, all_files)
+  file_git_metadata = _GetFileRevisions(src_path, deps_file_path, all_files)
   for file_record in files_coverage_data:
     git_metadata = file_git_metadata.get(file_record['path'])
     if not git_metadata:
@@ -252,3 +253,49 @@ def AddGitRevisionsToCoverageFilesMetadata(files_coverage_data, src_path,
   logging.info(
       'Retrieving and filling in git metadata for %d files took %.0f '
       'minutes', len(all_files), minutes)
+
+
+def GetUnmodifiedLinesSinceCommit(src_path, file_path, reference_commit):
+  """ Returns a list of lines unmodified since the reference_commit.
+
+  This function does a git diff against the reference_commit and parses its
+  output to find the unmodified lines.
+
+  Args:
+    src_path (str): Absolute path to the root of the checkout.
+    file_path (str): File path relative to the root of the checkout,
+                    without leading slashes
+    reference_commit (str): Hash of the reference commit
+  """
+  try:
+    show_arg = '%s:%s' % (reference_commit, file_path)
+    show_cmd = [GIT, 'show', show_arg]
+    show_output = subprocess.check_output(show_cmd, cwd=src_path)
+  except subprocess.CalledProcessError:
+    logging.info('Unable to fetch file content at reference_commit.'
+                 '%s may have been added later or moved.' % file_path)
+    # Return empty because all lines at HEAD are new
+    return []
+  reference_commit_lines = show_output.splitlines()
+
+  try:
+    diff_cmd = [GIT, 'diff', 'HEAD', reference_commit, '--', file_path]
+    diff_output = subprocess.check_output(diff_cmd, cwd=src_path)
+  except subprocess.CalledProcessError:
+    logging.error('Unable to calculate diff with reference commit')
+    raise
+  diff_lines = diff_output.splitlines()
+
+  try:
+    show_arg = 'HEAD:%s' % (file_path)
+    show_cmd = [GIT, 'show', show_arg]
+    show_output = subprocess.check_output(show_cmd, cwd=src_path)
+  except subprocess.CalledProcessError:
+    logging.warn('Unable to fetch file content at HEAD' % file_path)
+    raise
+  local_lines = show_output.splitlines()
+
+  unchanged_lines = (
+      diff_util.generate_line_number_mapping(diff_lines, local_lines,
+                                             reference_commit_lines).keys())
+  return unchanged_lines
