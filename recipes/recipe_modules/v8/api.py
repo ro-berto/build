@@ -104,7 +104,7 @@ class V8Api(recipe_api.RecipeApi):
   EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
   TEST_SPEC = v8_builders.TestSpec
 
-  def __init__(self, properties, *args, **kwargs):
+  def __init__(self, *args, **kwargs):
     super(V8Api, self).__init__(*args, **kwargs)
     self.test_configs = {}
     self.bot_config = None
@@ -116,7 +116,6 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
-    self.use_cas = properties.get('use_cas', True)
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
@@ -610,7 +609,6 @@ class V8Api(recipe_api.RecipeApi):
           verbose=True,
           swarm_hashes_property_name=None,
           step_name='isolate tests (perf)',
-          use_cas=True,
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
       # https://crbug.com/944904
@@ -621,7 +619,6 @@ class V8Api(recipe_api.RecipeApi):
           targets=isolate_targets,
           verbose=True,
           swarm_hashes_property_name=None,
-          use_cas=self.use_cas,
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
 
