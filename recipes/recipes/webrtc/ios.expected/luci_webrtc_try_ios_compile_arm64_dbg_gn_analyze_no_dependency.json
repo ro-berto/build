@@ -69,7 +69,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm_dbg/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm64_dbg/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -226,7 +226,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm_dbg/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm64_dbg/8945511751514863184",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
@@ -268,24 +268,24 @@
       "/path/to/tmp/json",
       "copy",
       "{\n  \"configuration\": \"Debug\",\n  \"gn_args\": [\n    \"is_debug=true\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"sdk\": \"iphoneos10.3\",\n  \"tests\": [],\n  \"xcode build version\": \"10l232m\"\n}",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm_dbg.json"
+      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm64_dbg.json"
     ],
     "infra_step": true,
-    "name": "apply build config.generate ios_compile_arm_dbg.json",
+    "name": "apply build config.generate ios_compile_arm64_dbg.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@{@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  \"configuration\": \"Debug\",@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@    \"is_debug=true\",@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@    \"target_cpu=\\\"arm\\\"\",@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  ],@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  \"sdk\": \"iphoneos10.3\",@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  \"tests\": [],@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm_dbg.json@}@@@",
-      "@@@STEP_LOG_END@ios_compile_arm_dbg.json@@@"
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@{@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  \"configuration\": \"Debug\",@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@    \"is_debug=true\",@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@    \"target_cpu=\\\"arm\\\"\",@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  ],@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  \"sdk\": \"iphoneos10.3\",@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  \"tests\": [],@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_dbg.json@}@@@",
+      "@@@STEP_LOG_END@ios_compile_arm64_dbg.json@@@"
     ]
   },
   {
@@ -293,7 +293,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm_dbg.json",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm64_dbg.json",
       "/path/to/tmp/json"
     ],
     "name": "apply build config.read build config",
@@ -459,7 +459,7 @@
       "-m",
       "tryserver.webrtc",
       "-b",
-      "ios_compile_arm_dbg",
+      "ios_compile_arm64_dbg",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",

@@ -50,40 +50,6 @@ BUILDERS = freeze({
             'builder_group': 'client.webrtc',
         },
         'builders': {
-            'iOS32 Debug': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
-            'iOS32 Release': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
             'iOS64 Debug': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
@@ -182,40 +148,6 @@ BUILDERS = freeze({
             'builder_group': 'tryserver.webrtc',
         },
         'builders': {
-            'ios_compile_arm_dbg': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
-            'ios_compile_arm_rel': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
             'ios_compile_arm64_dbg': {
                 'recipe_config': 'webrtc_ios',
                 'chromium_config_kwargs': {
@@ -543,18 +475,16 @@ def GenTests(api):
           api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}})
       )
 
-  yield (
-    generate_builder(
+  yield (generate_builder(
       'luci.webrtc.ci',
-      'iOS32 Debug',
+      'iOS64 Debug',
       revision='b' * 40,
       suffix='_fail_compile',
-      fail_compile=True
-    ) +
-    api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}}) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
-  )
+      fail_compile=True) +
+         api.properties(**{'$depot_tools/osx_sdk': {
+             'sdk_version': '10l232m'
+         }}) + api.post_process(post_process.StatusFailure) +
+         api.post_process(post_process.DropExpectation))
 
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield (generate_builder(
@@ -569,7 +499,7 @@ def GenTests(api):
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield (generate_builder(
       'luci.webrtc.try',
-      'ios_compile_arm_dbg',
+      'ios_compile_arm64_dbg',
       revision='a' * 40,
       suffix='_gn_analyze_no_dependency',
       gn_analyze_output=gn_analyze_no_deps_output) +
