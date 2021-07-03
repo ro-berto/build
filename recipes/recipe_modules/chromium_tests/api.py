@@ -2195,6 +2195,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     def is_file(rel_path):
       return self.m.path.isfile(self.m.path['checkout'].join(rel_path))
 
+    # Allow other account to access files we send to skylab.
+    # Some tests may use non-root account to run the executable in
+    # squashfs, which does not exist in the build bot. For these tests,
+    # we make the squashfs image account agnostic by expanding its
+    # content's mode bit of others, e.g. 750 to 755 or 640 to 644.
+    def _update_perm(rel_path):
+      self.m.step(
+          'update permissions for %s' % rel_path,
+          ['chmod', '-R', 'o=g',
+           str(self.m.path['checkout'].join(rel_path))])
+      return rel_path
+
     with self.m.step.nest('upload skylab runtime deps for %s' % target):
       # Lacros TLS provision requires a metadata.json containing the chrome
       # version along with the squashfs file.
@@ -2212,8 +2224,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           gcs_path='%s/%s/lacros_compressed.squash' % (gcs_path, target),
           archive_type=arch_prop.ArchiveData.ARCHIVE_TYPE_SQUASHFS,
           base_dir='src',
-          files=[v for v in runtime_deps.values() if is_file(v)],
-          dirs=[v for v in runtime_deps.values() if is_dir(v)],
+          files=[_update_perm(v) for v in runtime_deps.values() if is_file(v)],
+          dirs=[_update_perm(v) for v in runtime_deps.values() if is_dir(v)],
+          root_permission_override='755',
       )
       self.m.archive.generic_archive(
           build_dir=self.m.chromium_checkout.checkout_dir,

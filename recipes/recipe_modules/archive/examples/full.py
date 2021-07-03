@@ -223,6 +223,7 @@ def GenTests(api):
     archive_data.gcs_path = ('{%position%}/{%commit%}/{%timestamp%}/'
                              '{%chromium_version%}' + archive_filename)
     archive_data.archive_type = archive_type
+    archive_data.root_permission_override = "755"
     input_properties.archive_datas.extend([archive_data])
 
     yield api.test(
@@ -241,6 +242,10 @@ def GenTests(api):
                 "move", "[CLEANUP]/tmp_tmp_2/before_rename_file",
                 "[CLEANUP]/tmp_tmp_2/after_rename_file_20120514125323"
             ]),
+        api.post_process(
+            post_process.StepCommandContains,
+            "Generic Archiving Steps.Update temporary folder permissions",
+            ["chmod", "755", "[CLEANUP]/tmp_tmp_2"]),
         api.post_process(post_process.DropExpectation),
     )
 

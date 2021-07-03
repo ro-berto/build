@@ -20,7 +20,7 @@ message ArchiveFileRename {
   string to_file = 2;
 }
 
-// Next id: 12
+// Next id: 13
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -118,6 +118,13 @@ message ArchiveData {
 
   // If sets to true, only upload after tests are run successfully.
   bool only_upload_on_tests_success = 11;
+
+  // The root dir for compression is created by mktmp, which by default has
+  // 700 permission. If the consumer needs to read or run the files
+  // archived here from a non-root user, we need to overwrite the root dir
+  // to 755.
+  // Accept any file mode bit in string, e.g. "755" or operators like "g+rwx".
+  string root_permission_override = 12;
 }
 
 message Compression {

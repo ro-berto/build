@@ -887,6 +887,12 @@ class ArchiveApi(recipe_api.RecipeApi):
     # Copy all files to a temporary directory. Keeping the structure.
     # This directory will be used for archiving.
     temp_dir = self.m.path.mkdtemp()
+    if archive_data.root_permission_override:
+      self.m.step('Update temporary folder permissions', [
+          'chmod',
+          archive_data.root_permission_override,
+          str(temp_dir),
+      ])
     for filename in expanded_files:
       tmp_file_path = self.m.path.join(temp_dir, filename)
       tmp_file_dir = self.m.path.dirname(tmp_file_path)
