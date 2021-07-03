@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
+import json
+
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
@@ -25,6 +28,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
     'skylab',
+    'test_utils',
 ]
 
 
@@ -235,12 +239,22 @@ def GenTests(api):
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      api.override_step_data(
+          'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
+          api.test_utils.gtest_results(
+              json.dumps({
+                  'per_iteration_data': [{
+                      'SpammyTest': [{
+                          'elapsed_time_ms': 1000,
+                          'output_snippet': 'line 1\nline 2',
+                          'status': 'SUCCESS',
+                      }],
+                  }],
+              }))),
       api.post_process(post_process.StepCommandContains, 'compile',
                        [GTEST_TARGET]),
       api.post_process(
           archive_gsuri_should_match_skylab_req, target=GTEST_TARGET),
-      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
-                       ['1 passed, 0 failed (1 total)']),
       api.post_process(
           post_process.MustRun,
           'prepare skylab tests.'
@@ -256,6 +270,20 @@ def GenTests(api):
       ),
       api.post_process(check_exe_rel_path_for_gtest,
                        'out/Release/bin/run_%s' % GTEST_TARGET),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'gtest with invalid json result',
+      boilerplate('chrome-test-builds', target_name=GTEST_TARGET),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      api.override_step_data(
+          'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
+          api.test_utils.gtest_results('not json')),
+      api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
+                       ['No valid result file returned.']),
       api.post_process(post_process.DropExpectation),
   )
 

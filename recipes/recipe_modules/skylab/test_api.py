@@ -13,6 +13,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.test_platform.steps.execution import ExecuteResponse, ExecuteResponses
 from PB.test_platform.taskstate import TaskState
+from PB.test_platform.common.task import TaskLogData
 
 
 class SkylabTestApi(recipe_test_api.RecipeTestApi):
@@ -33,7 +34,9 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
                   "471a63bc9c481010"),
         log_url=("https://stainless.corp.google.com/browse/"
                  "chromeos-autotest-results/swarming-471a63bc9c481010/"),
-    )
+        log_data=TaskLogData(
+            gs_url=("gs://chromeos-test-logs/"
+                    "test-runner/prod/2021-06-02/foo")))
     for c in test_cases:
       t.test_cases.add(name=c.name, verdict=c.verdict)
     return t

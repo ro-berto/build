@@ -112,7 +112,8 @@ class SkylabResponse(object):
           skylab test runner's lifecycle and verdict.
     * tast_suite: tast suite name.
     * verdict: test result.
-    * log_url: GS URI for the test logs.
+    * log_url: Stainless log URL for humans to view.
+    * log_gs_uri: GCS URI for the log at which skylab logs are stored
     * test_cases: List of test cases contained in this suite.
   """
   url = attrib(str, default=None)
@@ -126,6 +127,7 @@ class SkylabResponse(object):
   verdict = attrib(
       enum(["PASSED", "FAILED", "UNSPECIFIED"]), default="UNSPECIFIED")
   log_url = attrib(str, default=None)
+  log_gs_uri = attrib(str, default=None)
   test_cases = attrib(sequence[SkylabTestCase], default=())
 
   @classmethod

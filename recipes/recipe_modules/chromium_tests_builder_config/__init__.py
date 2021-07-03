@@ -4,6 +4,7 @@
 
 DEPS = [
     'chromium',
+    'depot_tools/gsutil',
     'depot_tools/tryserver',
     'recipe_engine/platform',
     'recipe_engine/python',

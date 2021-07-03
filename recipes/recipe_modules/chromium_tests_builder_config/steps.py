@@ -3519,10 +3519,87 @@ class SkylabTest(Test):
     self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     raise api.step.StepFailure(status)
 
+  def tast_result_parser(self, api, result, suffix, step):
+    """Return result dict.
+
+    CTP response contains tast case result. Parse it to get the step's
+    output presentation.
+    """
+    if not result.test_cases:
+      self._raise_failed_step(api, suffix, step, api.step.FAILURE,
+                              'No test cases returned.')
+
+    pass_fail_counts = {}
+    passed_cases, failed_cases = [], []
+    for tc in result.test_cases:
+      pass_fail_counts.setdefault(tc.name, {'pass_count': 0, 'fail_count': 0})
+      if tc.verdict == 'PASSED':
+        pass_fail_counts[tc.name]['pass_count'] += 1
+        passed_cases.append(tc.name)
+        continue
+      pass_fail_counts[tc.name]['fail_count'] += 1
+      failed_cases.append(tc.name)
+    step_log = []
+    if passed_cases:
+      step_log += ['PASSED:'] + passed_cases + ['']
+    if failed_cases:
+      step_log += ['FAILED:'] + failed_cases
+    step.logs['Test Cases'] = step_log if step_log else ['No test cases found']
+    step.step_text += (
+        '<br/>%s passed, %s failed (%s total)' %
+        (len(passed_cases), len(failed_cases), len(result.test_cases)))
+    self.update_test_run(
+        api, suffix, {
+            'failures': failed_cases,
+            'valid': result is not None,
+            'total_tests_ran': len(result.test_cases),
+            'pass_fail_counts': pass_fail_counts,
+            'findit_notrun': set(),
+        })
+
+  def gtest_result_parser(self, api, result, suffix, step):
+    # TODO(crbug/1222806): Upload test result to Result DB from the skylab
+    # test runner side. We are still discussing with OS infra team about the
+    # implementation. Before that, parse the gtest result in our recipe.
+    resultdb = attr.evolve(
+        self.spec.resultdb,
+        artifact_directory='',
+        base_variant=dict(
+            self.spec.resultdb.base_variant or {},
+            test_suite=self.canonical_name),
+        result_adapter_path=str(api.path['checkout'].join(
+            'tools', 'resultdb', 'result_adapter')),
+        result_file=api.path.abspath(api.path.mkstemp()))
+    gtest_results_file = api.gsutil.download_url(
+        '%s/autoserv_test/chromium/results/output.json' % result.log_gs_uri,
+        api.test_utils.gtest_results(
+            add_json_log=False, leak_to=resultdb.result_file),
+        name='Download test result for %s' % self.name)
+    if not gtest_results_file.test_utils.gtest_results.raw:
+      return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
+                                     'No valid result file returned.')
+    gtest_results = api.test_utils.present_gtest_failures(
+        gtest_results_file, presentation=step.presentation)
+    if gtest_results:
+      self.update_test_run(api, suffix, gtest_results.canonical_result_format())
+      api.test_results.upload(
+          api.json.input(gtest_results.raw),
+          test_type='.'.join(gtest_results_file.name_tokens),
+          chrome_revision=api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'refs/x@{#0}'))
+
+  def present_result(self, api, resp, step, suffix, parser):
+    if resp.verdict != "PASSED":
+      step.presentation.status = api.step.FAILURE
+    if resp.url:
+      step.links['Test Run'] = resp.url
+    if resp.log_url:
+      step.links['Logs(stainless)'] = resp.log_url
+    return parser(api, resp, suffix, step)
+
   @recipe_api.composite_step
   def run(self, api, suffix):
     self._suffix_step_name_map[suffix] = self.name
-    pass_fail_counts = {}
 
     with api.step.nest(self.name) as step:
       step_failure_msg = None
@@ -3532,54 +3609,18 @@ class SkylabTest(Test):
       if step_failure_msg:
         return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
                                        step_failure_msg)
-
-      result = self._find_valid_result()
-      if not result:
+      resp = self._find_valid_result()
+      if not resp:
         return self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
                                        'Invalid test result.')
 
-      # TODO(crbug/1155016): Transform test result to isolated test style, thus
-      # we could reuse existing code to render the skylab result.
-      if result.verdict != "PASSED":
-        step.presentation.status = api.step.FAILURE
-      if result.url:
-        step.links['Test Run'] = result.url
-      if result.log_url:
-        step.links['Logs(stainless)'] = result.log_url
-      if not result.test_cases:
-        return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
-                                       'No test cases returned.')
+      parser = self.gtest_result_parser
+      if self.is_tast_test:
+        parser = self.tast_result_parser
 
-      passed_cases, failed_cases = [], []
-      for tc in result.test_cases:
-        pass_fail_counts.setdefault(tc.name, {'pass_count': 0, 'fail_count': 0})
-        if tc.verdict == 'PASSED':
-          pass_fail_counts[tc.name]['pass_count'] += 1
-          passed_cases.append(tc.name)
-          continue
-        pass_fail_counts[tc.name]['fail_count'] += 1
-        failed_cases.append(tc.name)
-      step_log = []
-      if passed_cases:
-        step_log += ['PASSED:'] + passed_cases + ['']
-      if failed_cases:
-        step_log += ['FAILED:'] + failed_cases
-      step.logs['Test Cases'] = step_log if step_log else [
-          'No test cases found'
-      ]
-      step.step_text += (
-          '<br/>%s passed, %s failed (%s total)' %
-          (len(passed_cases), len(failed_cases), len(result.test_cases)))
+      self.present_result(api, resp, step, suffix, parser)
 
-    self.update_test_run(
-        api, suffix, {
-            'failures': failed_cases,
-            'valid': result is not None,
-            'total_tests_ran': len(result.test_cases),
-            'pass_fail_counts': pass_fail_counts,
-            'findit_notrun': set(),
-        })
-    return self._test_runs[suffix]
+      return self._test_runs[suffix]
 
   def compile_targets(self):
     t = [self.spec.target_name, 'lacros_version_metadata']

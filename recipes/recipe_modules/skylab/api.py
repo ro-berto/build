@@ -208,6 +208,7 @@ class SkylabApi(recipe_api.RecipeApi):
               url=task.task_url,
               status=status,
               log_url=task.log_url,
+              log_gs_uri=task.log_data.gs_url,
               verdict=self._unify_verdict(task.state.verdict),
               test_cases=self._get_test_cases(task.test_cases)))
     return results
