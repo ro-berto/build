@@ -12,7 +12,7 @@ DEPS = [
 import re
 import base64
 
-from RECIPE_MODULES.build.skylab import structs
+from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
@@ -22,22 +22,27 @@ from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
+LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
 
 
-def gen_skylab_req(tag):
-  return structs.SkylabRequest.create(
+def gen_skylab_req(tag, tast_expr=None, test_args=None):
+  return SkylabRequest.create(
       request_tag=tag,
       board='eve',
-      tast_expr=LACROS_TAST_EXPR,
+      tast_expr=tast_expr,
+      test_args=test_args,
       lacros_gcs_path='gs://fake_bucket/lacros.zip',
       exe_rel_path='out/Release/bin/run_foo_unittest',
       cros_img='eve-release/R88-13545.0.0')
 
 
 def RunSteps(api):
-  hw_test_req = gen_skylab_req('m88_lacros')
-  another_hw_test_req = gen_skylab_req('m87_lacros')
-  build_id = api.skylab.schedule_suites('', [hw_test_req, another_hw_test_req])
+  hw_test_req = gen_skylab_req('m88_lacros', tast_expr=LACROS_TAST_EXPR)
+  another_hw_test_req = gen_skylab_req('m87_lacros', tast_expr=LACROS_TAST_EXPR)
+  gtest_req = gen_skylab_req(
+      'm88_urlunittest', tast_expr=None, test_args=LACROS_GTEST_ARGS)
+  build_id = api.skylab.schedule_suites(
+      '', [hw_test_req, another_hw_test_req, gtest_req])
   got = api.skylab.wait_on_suites(build_id, timeout_seconds=3600)
   api.assertions.assertEqual(got.status, common_pb2.SUCCESS)
   api.assertions.assertIn('m88_lacros', got.responses)
@@ -73,6 +78,9 @@ def GenTests(api):
         'm87_lacros':
             api.skylab.gen_json_execution_response(
                 [task_passed, task_failed, task_aborted]),
+        'm88_urlunittest':
+            api.skylab.gen_json_execution_response(
+                [task_passed, task_failed, task_aborted]),
     }
 
   def _args_to_dict(arg_line):
@@ -90,14 +98,17 @@ def GenTests(api):
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     check(tag in properties['requests'])
 
-  def check_test_arg(check, steps, lacros_gcs_path, tast_expr):
+  def check_test_arg(check, steps, lacros_gcs_path, tast_expr, test_args):
     req = api.json.loads(
         steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     for req in properties['requests'].values():
       test = req['testPlan']['test'][0]
       got = _args_to_dict(test['autotest']['testArgs'])
-      check(tast_expr == base64.b64decode(got['tast_expr_b64']))
+      if got.get('tast_expr_b64'):
+        check(tast_expr == base64.b64decode(got['tast_expr_b64']))
+      else:
+        check(test_args == base64.b64decode(got['test_args_b64']))
       sw_deps = req['params']['softwareDependencies']
       dep_of_lacros = [
           d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
@@ -115,6 +126,7 @@ def GenTests(api):
           step_name='collect skylab results.buildbucket.collect'),
       api.post_check(check_has_req_tag, 'm88_lacros'),
       api.post_check(check_has_req_tag, 'm87_lacros'),
+      api.post_check(check_has_req_tag, 'm88_urlunittest'),
       api.post_check(check_test_arg, 'gs://fake_bucket/lacros.zip',
-                     LACROS_TAST_EXPR),
+                     LACROS_TAST_EXPR, LACROS_GTEST_ARGS),
   )

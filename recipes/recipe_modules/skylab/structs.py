@@ -8,19 +8,21 @@ from RECIPE_MODULES.build.attr_utils import (attrs, attrib, enum, sequence,
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
+SKYLAB_TAST_TEST = 'tast_test'
+SKYLAB_GTEST = 'gtest'
+
 # This file defines an interface for other recipes to interact with Skylab. As
 # this module is designed for Lacros tests, the field exposed here are highly
 # focusing on the Lacros use cases.
 #
 # Skylab tests are invoked via a luci rpc call to cros_test_platform builder,
 # aka CTP. CTP supports multiple request in one build, where each request has
-# an unique tag. A request executes an autotest test, which wraps one
-# tast suite. Users must specify this autotest wrapper name in their
-# request.
+# an unique tag. A request executes an autotest test, which wraps one tast or
+# gtest suite. All skylab tests from Chromium/Chrome recipe land to our
+# pre-defined autotest wrapper, tast.lacros for tast tests and lacros_gtest
+# for gtest tests.
 #
-# As Lacros decided to use tast test framework, this module is designed to be
-# more tast friendly by providing the tast suite result. See the CTP response
-# below(go/ctp-resp):
+# See the CTP response below(go/ctp-resp):
 # ````
 # responses(autotest suite response)
 #  +
@@ -31,9 +33,9 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 #              |
 #              +-> test_cases
 # ```
-# 1. instead of a raw CTP response, the module breaks it down and returns a list
-#    of tast suite runs, contained in "attempts".
-# 2. users can extract a specific result via the request tag and tast name.
+# 1. instead of a raw CTP response, this module breaks it down and returns a
+#    list of tast/gtest suite runs, contained in "attempts".
+# 2. users can extract a specific result via the request tag, aka test name.
 
 
 @attrs()
@@ -45,8 +47,6 @@ class SkylabRequest(object):
 
   Attributes:
     * request_tag: The tag to identify a request in the CTP build.
-    * tast_expr: The tast expression defines what tast test we run on the
-          Skylab DUT, e.g. lacros.Basic.
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
           e.g. atlas-release/R88-13545.0.0
@@ -58,19 +58,29 @@ class SkylabRequest(object):
           If empty, DUT runs tests on the chrome bundled with the OS image.
     * exe_rel_path: The relative path of the test executable to src dir. For
           tast test, it is the chrome binary, e.g. out/Release/chrome.
-    * timeout_sec: The timeout for the test in second. Default is one hour.
+    * timeout_sec: The timeout for the test in second. Default is one hour.]
+    * test_type: The type of the test, by default gtest. If the request has
+          non-empty tast_expr, then tast_test.
+    * tast_expr: The tast expression defines what tast test we run on the
+          Skylab DUT, e.g. lacros.Basic.
+    * test_args: The runtime argument for test,
+          e.g. '--gtest_filter="VaapiTest.*'.
   """
   request_tag = attrib(str)
   board = attrib(str)
   cros_img = attrib(str)
-  tast_expr = attrib(str)
   lacros_gcs_path = attrib(str, default='')
   exe_rel_path = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
+  test_type = attrib(
+      enum([SKYLAB_TAST_TEST, SKYLAB_GTEST]), default=SKYLAB_GTEST)
+  tast_expr = attrib(str, default='')
+  test_args = attrib(str, default='')
 
   @classmethod
   def create(cls, **kwargs):
-    return cls(**kwargs)
+    test_type = SKYLAB_TAST_TEST if kwargs.get('tast_expr') else SKYLAB_GTEST
+    return cls(test_type=test_type, **kwargs)
 
 
 @attrs()

@@ -630,27 +630,27 @@ def generate_skylab_tests(api,
                           bot_update_step,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
-  del api, scripts_compile_targets_fn, swarming_dimensions
-  del bot_update_step
+  del scripts_compile_targets_fn, swarming_dimensions
+
+  def generate_skylab_tests_from_one_spec(builder_group, buildername,
+                                          skylab_test_spec):
+    common_skylab_kwargs = {
+        k: v
+        for k, v in skylab_test_spec.items()
+        if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
+    }
+    common_skylab_kwargs['test_args'] = get_args_for_test(
+        api, chromium_tests_api, skylab_test_spec, bot_update_step)
+    common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
+    common_skylab_kwargs['waterfall_builder_group'] = builder_group
+    common_skylab_kwargs['waterfall_buildername'] = buildername
+    return steps.SkylabTestSpec.create(
+        skylab_test_spec.get('name'), **common_skylab_kwargs)
 
   for spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
     if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
       continue
     yield generate_skylab_tests_from_one_spec(builder_group, buildername, spec)
-
-
-def generate_skylab_tests_from_one_spec(builder_group, buildername,
-                                        skylab_test_spec):
-  common_skylab_kwargs = {
-      k: v
-      for k, v in skylab_test_spec.items()
-      if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
-  }
-  common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
-  common_skylab_kwargs['waterfall_builder_group'] = builder_group
-  common_skylab_kwargs['waterfall_buildername'] = buildername
-  return steps.SkylabTestSpec.create(
-      skylab_test_spec.get('name'), **common_skylab_kwargs)
 
 
 ALL_GENERATORS = [

@@ -52,7 +52,7 @@ from recipe_engine.util import Placeholder
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build import skylab
+from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              callable_, command_args, enum,
                                              mapping, sequence)
@@ -3463,7 +3463,8 @@ class SkylabTestSpec(TestSpec):
   """Spec for a suite that runs on CrOS Skylab."""
   cros_board = attrib(str)
   cros_img = attrib(str)
-  tast_expr = attrib(str)
+  tast_expr = attrib(str, default='')
+  test_args = attrib(command_args, default=())
   timeout_sec = attrib(int, default=3600)
 
   @property
@@ -3484,31 +3485,21 @@ class SkylabTest(Test):
     return True
 
   @property
+  def is_tast_test(self):
+    return bool(self.spec.tast_expr)
+
+  @property
   def skylab_req(self):
-    if not self._should_schedule():
-      return None
-    return skylab.structs.SkylabRequest.create(
+    return SkylabRequest.create(
         request_tag=self.name,
         tast_expr=self.spec.tast_expr,
+        test_args=' '.join(self.spec.test_args),
         board=self.spec.cros_board,
         cros_img=self.spec.cros_img,
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,
-    )
-
-  def _should_schedule(self):
-    """Return true if lacros_gcs_path and tast_expr are set.
-
-    If the lacros_gcs_path is empty, skylab runs the test on the chrome
-    bundled in the OS image. This is valueless to kick it off from
-    browser infra, because it was tested by OS side.
-    If the tast expr is not specified, the task runs all tast tests, which
-    is NOT preferred. Because it consumes our skylab DUT time silently.
-    Overall, we schedule this skylab request iff both of the variables
-    are set.
-    """
-    return self.lacros_gcs_path and self.spec.tast_expr
+    ) if self.lacros_gcs_path else None
 
   def _find_valid_result(self):
     """Return the first deterministic result from the responses.
@@ -3538,9 +3529,6 @@ class SkylabTest(Test):
       if not self.lacros_gcs_path:
         step_failure_msg = (
             'Test was not scheduled because of absent lacros_gcs_path.')
-      if not self.spec.tast_expr:
-        step_failure_msg = (
-            'Test was not scheduled because tast_expr was not set.')
       if step_failure_msg:
         return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
                                        step_failure_msg)
@@ -3594,5 +3582,7 @@ class SkylabTest(Test):
     return self._test_runs[suffix]
 
   def compile_targets(self):
-    return [self.spec.target_name, 'lacros_version_metadata', 'chrome'
-           ] if self.spec.target_name else []
+    t = [self.spec.target_name, 'lacros_version_metadata']
+    if self.is_tast_test:
+      t.append('chrome')
+    return t

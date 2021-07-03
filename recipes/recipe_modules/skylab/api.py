@@ -18,7 +18,8 @@ from . import structs
 QS_ACCOUNT = 'lacros'
 CTP_BUILDER = 'cros_test_platform'
 CTP_BUILDER_DEV = 'cros_test_platform-dev'
-AUTOTEST_NAME = 'tast.lacros'
+AUTOTEST_NAME_TAST = 'tast.lacros'
+AUTOTEST_NAME_CHROMIUM = 'chromium'
 CROS_BUCKET = 'gs://chromeos-image-archive/'
 POOL = Request.Params.Scheduling.MANAGED_POOL_QUOTA
 
@@ -53,31 +54,39 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.metadata.debug_symbols_archive_url = gs_img_uri
         sw_dep = req.params.software_dependencies.add()
         sw_dep.chromeos_build = s.cros_img
-        if s.lacros_gcs_path:
-          lacros_dep = req.params.software_dependencies.add()
-          lacros_dep.lacros_gcs_path = s.lacros_gcs_path
         req.params.scheduling.managed_pool = POOL
         req.params.scheduling.qs_account = QS_ACCOUNT
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
         autotest_to_create = req.test_plan.test.add()
-        autotest_to_create.autotest.name = AUTOTEST_NAME
-        test_args = ['dummy=crbug.com/984103']
-        if s.tast_expr:
-          # Due to crbug/1173329, skylab does not support arbitrary tast
-          # expressions. As a workaround, we encode the user's expression
-          # in base64.
-          test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
-        if s.exe_rel_path:
-          test_args.append('exe_rel_path=%s' % s.exe_rel_path)
-        autotest_to_create.autotest.test_args = ' '.join(test_args)
+        autotest_name = AUTOTEST_NAME_CHROMIUM
+        if s.test_type == structs.SKYLAB_TAST_TEST:
+          autotest_name = AUTOTEST_NAME_TAST
+        autotest_to_create.autotest.name = autotest_name
         tags = {
             'label-pool': 'DUT_POOL_QUOTA',
             'label-board': s.board,
             'build': gs_img_uri,
-            'suite': AUTOTEST_NAME,
-            'tast-expr': s.tast_expr,
+            'suite': autotest_name,
         }
+        test_args = ['dummy=crbug.com/984103']
+        if s.tast_expr:
+          # Due to crbug/1173329, skylab does not support arbitrary tast
+          # expressions. As a workaround, we encode test argument which may
+          # contain complicated patterns to base64.
+          test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
+          tags['tast-expr'] = s.tast_expr
+        if s.test_args:
+          test_args.append('test_args_b64=%s' % base64.b64encode(s.test_args))
+          tags['test_args'] = s.test_args
+        if s.lacros_gcs_path:
+          lacros_dep = req.params.software_dependencies.add()
+          lacros_dep.lacros_gcs_path = s.lacros_gcs_path
+          test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
+        if s.exe_rel_path:
+          test_args.append('exe_rel_path=%s' % s.exe_rel_path)
+          tags['exe_rel_path'] = s.exe_rel_path
+        autotest_to_create.autotest.test_args = ' '.join(test_args)
         swarming_tags = [
             '{}:{}'.format(key, value) for key, value in tags.items()
         ]

@@ -39,6 +39,7 @@ def RunSteps(api):
       cros_img='eve-release/R88-13545.0.0')
   test = test_spec.get_test()
   test.lacros_gcs_path = 'lacros'
+  test.exe_rel_path = 'out/Release/chrome'
   api.test_utils.run_tests(api.chromium_tests.m, [test], 'with patch')
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [

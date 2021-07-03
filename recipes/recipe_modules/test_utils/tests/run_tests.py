@@ -88,7 +88,7 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
       common_skylab_kwargs = {
           k: v
           for k, v in spec.items()
-          if k in ['cros_board', 'cros_img', 'tast_expr']
+          if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
       }
       common_skylab_kwargs['target_name'] = spec.get('test')
       test_specs.append(
@@ -103,6 +103,7 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
   tests = [s.get_test() for s in test_specs]
   for t in [test for test in tests if test.is_skylabtest]:
     t.lacros_gcs_path = 'gs://dummy/lacros.zip'
+    t.exe_rel_path = 'out/Lacros/chrome'
 
   _, failed_tests = api.test_utils.run_tests(
       api.chromium_tests.m,

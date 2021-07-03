@@ -2246,7 +2246,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       }
       for target, tests in tests_by_target.items():
         for t in tests:
-          t.exe_rel_path = runtime_dict_by_target.get(target).get('./chrome')
+          t.exe_rel_path = runtime_dict_by_target.get(target).get(
+              './chrome' if t.is_tast_test else 'bin/run_%s' % t.target_name)
           t.lacros_gcs_path = gcs_path_by_target.get(target)
 
   def run_tests(self, builder_id, builder_config, tests, upload_results=None):

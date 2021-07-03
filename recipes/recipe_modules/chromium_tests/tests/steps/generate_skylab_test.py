@@ -37,17 +37,20 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  TEST_TARGET = 'lacros_fyi_tast_tests'
+  TAST_TARGET = 'lacros_fyi_tast_tests'
+  GTEST_TARGET = 'vaapi_unittest'
 
   GOOD_ISOLATE_TEXT = """
     {'variables': {'command': ['bin/run_lacros_smoke_tast_tests',
                             '--logs-dir=${ISOLATED_OUTDIR}'],
                 'files': ['../../.vpython',
+                          'bin/run_vaapi_unittest',
                           'resources.pak',
                           'resources.pak.info',
                           './chrome',
                           '../../testing/buildbot/filters',
                           'gen/third_party',
+                          '../../testing/buildbot/filters',
                             ]}}
   """
 
@@ -62,11 +65,12 @@ def GenTests(api):
   """
 
   def boilerplate(skylab_gcs,
-                  tast_expr,
+                  tast_expr='',
+                  test_args='',
                   isolate_content=GOOD_ISOLATE_TEXT,
                   isolate_file_exists=True,
                   is_ci_build=True,
-                  target_name=TEST_TARGET,
+                  target_name=TAST_TARGET,
                   should_read_isolate=True):
     builder_group = 'chromium.chromiumos'
     builder = 'lacros-amd64-generic-rel'
@@ -107,6 +111,7 @@ def GenTests(api):
                         'ci_only': True,
                         'name': 'basic_EVE_TOT',
                         'tast_expr': tast_expr,
+                        'args': [test_args],
                         'swarming': {},
                         'test': target_name,
                         'timeout_sec': 7200
@@ -121,14 +126,17 @@ def GenTests(api):
     # testing/buildbot/filters should be a folder.
     mock_paths.append(api.path['checkout'].join('testing', 'buildbot',
                                                 'filters', 'foo'))
+    mock_paths.append(api.path['checkout'].join('out', 'Release', 'chrome'))
+    mock_paths.append(api.path['checkout'].join('out', 'Release', 'bin',
+                                                'run_%s' % target_name))
     if isolate_file_exists:
       mock_paths.append(api.path['checkout'].join('out', 'Release',
-                                                  '%s.isolate' % TEST_TARGET))
+                                                  '%s.isolate' % target_name))
     steps += api.path.exists(*mock_paths)
     if isolate_file_exists and should_read_isolate:
       steps += api.step_data(
           'prepare skylab tests.'
-          'collect runtime deps for %s.read isolate file' % TEST_TARGET,
+          'collect runtime deps for %s.read isolate file' % target_name,
           api.file.read_text(isolate_content))
 
     return steps
@@ -166,19 +174,23 @@ def GenTests(api):
         step_name='collect skylab results.buildbucket.collect')
     return test_data
 
-  def archive_gsuri_should_match_skylab_req(check, steps):
-    archive_step = ('prepare skylab tests.'
-                    'upload skylab runtime deps for {target}.'
-                    'Generic Archiving Steps.gsutil upload '
-                    'lacros/lacros-amd64-generic-rel/571/{target}/'
-                    'lacros_compressed.squash').format(target=TEST_TARGET)
-    archive_link = steps[archive_step].links['gsutil.upload']
-    gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
+  def _extract_skylab_req(steps):
     build_req = api.json.loads(
         steps['test_pre_run.schedule tests on skylab.buildbucket.schedule']
         .logs['request'])
     properties = build_req['requests'][0]['scheduleBuild'].get('properties', [])
     for req in properties['requests'].values():
+      yield req
+
+  def archive_gsuri_should_match_skylab_req(check, steps, target=TAST_TARGET):
+    archive_step = ('prepare skylab tests.'
+                    'upload skylab runtime deps for {target}.'
+                    'Generic Archiving Steps.gsutil upload '
+                    'lacros/lacros-amd64-generic-rel/571/{target}/'
+                    'lacros_compressed.squash').format(target=target)
+    archive_link = steps[archive_step].links['gsutil.upload']
+    gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
+    for req in _extract_skylab_req(steps):
       sw_deps = req['params']['softwareDependencies']
       dep_of_lacros = [
           '%s/lacros_compressed.squash' % d['lacrosGcsPath']
@@ -187,9 +199,15 @@ def GenTests(api):
       ]
       check(gs_uri in dep_of_lacros)
 
+  def check_exe_rel_path_for_gtest(check, steps, rel_path):
+    for req in _extract_skylab_req(steps):
+      test = req['testPlan']['test'][0]
+      check(rel_path in test['autotest']['testArgs'])
+
   yield api.test(
-      'basic',
-      boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
+      'basic for tast',
+      boilerplate(
+          'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
@@ -199,20 +217,52 @@ def GenTests(api):
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'
            'Generic Archiving Steps.'
-           'Copy folder testing/buildbot/filters') % TEST_TARGET,
+           'Copy file out/Release/chrome') % TAST_TARGET,
       ),
       api.post_process(
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'
            'Generic Archiving Steps.'
-           'Copy file metadata.json') % TEST_TARGET,
+           'Copy file metadata.json') % TAST_TARGET,
       ),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
+      'basic for gtest',
+      boilerplate(
+          'chrome-test-builds',
+          test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
+          target_name=GTEST_TARGET),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      api.post_process(post_process.StepCommandContains, 'compile',
+                       [GTEST_TARGET]),
+      api.post_process(
+          archive_gsuri_should_match_skylab_req, target=GTEST_TARGET),
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
+                       ['1 passed, 0 failed (1 total)']),
+      api.post_process(
+          post_process.MustRun,
+          'prepare skylab tests.'
+          'upload skylab runtime deps for {target}.'
+          'Generic Archiving Steps.'
+          'Copy file out/Release/bin/run_{target}'.format(target=GTEST_TARGET),
+      ),
+      api.post_process(
+          post_process.MustRun,
+          ('prepare skylab tests.upload skylab runtime deps for %s.'
+           'Generic Archiving Steps.'
+           'Copy folder testing/buildbot/filters') % GTEST_TARGET,
+      ),
+      api.post_process(check_exe_rel_path_for_gtest,
+                       'out/Release/bin/run_%s' % GTEST_TARGET),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'CTP response with empty test case result',
-      boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
+      boilerplate(
+          'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
@@ -224,8 +274,7 @@ def GenTests(api):
 
   yield api.test(
       'not scheduled for absent skylab gcs',
-      boilerplate(
-          '', '("group:mainline" && "dep:lacros")', should_read_isolate=False),
+      boilerplate('', tast_expr=TAST_TARGET, should_read_isolate=False),
       api.post_process(
           post_process.StepTextContains, 'basic_EVE_TOT',
           ['Test was not scheduled because of absent lacros_gcs_path.']),
@@ -233,25 +282,16 @@ def GenTests(api):
   )
 
   yield api.test(
-      'not scheduled for absent tast expr',
-      boilerplate('chrome-test-builds', ''),
-      api.post_process(
-          post_process.StepTextContains, 'basic_EVE_TOT',
-          ['Test was not scheduled because tast_expr was not set.']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'failed to find isolate file',
       boilerplate(
           'chrome-test-builds',
-          '("group:mainline" && "dep:lacros")',
+          tast_expr='("group:mainline" && "dep:lacros")',
           isolate_file_exists=False),
       api.post_process(
           post_process.StepFailure,
-          'prepare skylab tests.collect runtime deps for %s' % TEST_TARGET),
+          'prepare skylab tests.collect runtime deps for %s' % TAST_TARGET),
       api.post_process(post_process.ResultReason,
-                       'Failed to find the %s.isolate.' % TEST_TARGET),
+                       'Failed to find the %s.isolate.' % TAST_TARGET),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -259,13 +299,13 @@ def GenTests(api):
       'failed to parse isolate file',
       boilerplate(
           'chrome-test-builds',
-          '("group:mainline" && "dep:lacros")',
+          tast_expr='("group:mainline" && "dep:lacros")',
           isolate_content=BAD_ISOLATE_TEXT),
       api.post_process(
           post_process.StepFailure,
-          'prepare skylab tests.collect runtime deps for %s' % TEST_TARGET),
+          'prepare skylab tests.collect runtime deps for %s' % TAST_TARGET),
       api.post_process(post_process.ResultReason,
-                       'Failed to parse the %s.isolate' % TEST_TARGET),
+                       'Failed to parse the %s.isolate' % TAST_TARGET),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -273,19 +313,20 @@ def GenTests(api):
       'target has no deps',
       boilerplate(
           'chrome-test-builds',
-          '("group:mainline" && "dep:lacros")',
+          tast_expr='("group:mainline" && "dep:lacros")',
           isolate_content=EMPTY_FILE_LIST),
       api.post_process(
           post_process.StepFailure,
-          'prepare skylab tests.collect runtime deps for %s' % TEST_TARGET),
+          'prepare skylab tests.collect runtime deps for %s' % TAST_TARGET),
       api.post_process(post_process.ResultReason,
-                       'No dependencies attached to target %s.' % TEST_TARGET),
+                       'No dependencies attached to target %s.' % TAST_TARGET),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'ci_only_test_on_ci_builder',
-      boilerplate('chrome-test-builds', '("group:mainline" && "dep:lacros")'),
+      boilerplate(
+          'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['1 passed, 0 failed (1 total)']),
@@ -296,7 +337,7 @@ def GenTests(api):
       'ci_only_test_on_trybot',
       boilerplate(
           'chrome-test-builds',
-          'dummy_tast',
+          tast_expr='dummy_tast',
           is_ci_build=False,
           should_read_isolate=False),
       api.post_process(
