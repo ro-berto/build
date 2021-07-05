@@ -266,7 +266,7 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone 11',
                     'os': '12.0',
                     'pool': 'chrome.tests',
                 },
@@ -291,7 +291,7 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone 11',
                     'os': '12.0',
                     'pool': 'chrome.tests',
                 },
@@ -351,7 +351,7 @@ BUILDERS = freeze({
                     'bucket': 'chromium-webrtc',
                 },
                 'ios_testing': {
-                    'device type': 'iPhone 6s',
+                    'device type': 'iPhone 11',
                     'os': '12.0',
                     'pool': 'chrome.tests',
                 },
