@@ -17,7 +17,7 @@ _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
 
 # Take revision from
 # https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-_LUCI_GO_REVISION = 'git_revision:e20098f56b10587e3cc0bc9ccac4934a13158de3'
+_LUCI_GO_REVISION = 'git_revision:a5505c14c78e1a27562164fb55f7d2d8190a0a9b'
 
 
 class IsolateApi(recipe_api.RecipeApi):
@@ -100,8 +100,11 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
+    version = _LUCI_GO_REVISION
+    if self._test_data.enabled:
+      version = 'git_revision:dummy_version'
     exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
-                                  _LUCI_GO_REVISION)
+                                  version)
 
     # FIXME: Differentiate between bad *.isolate and upload errors.
     # Raise InfraFailure on upload errors.
