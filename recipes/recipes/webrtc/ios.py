@@ -267,7 +267,7 @@ BUILDERS = freeze({
                 },
                 'ios_testing': {
                     'device type': 'iPhone 11',
-                    'os': '12.0',
+                    'os': '14.7',
                     'pool': 'chrome.tests',
                 },
             },
@@ -292,7 +292,7 @@ BUILDERS = freeze({
                 },
                 'ios_testing': {
                     'device type': 'iPhone 11',
-                    'os': '12.0',
+                    'os': '14.7',
                     'pool': 'chrome.tests',
                 },
             },
