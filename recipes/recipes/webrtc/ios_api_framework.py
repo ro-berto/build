@@ -57,7 +57,9 @@ def RunSteps(api):
   if not api.tryserver.is_tryserver:
     zip_out = api.path['start_dir'].join('webrtc_ios_api_framework.zip')
     pkg = api.zip.make_package(output_dir, zip_out)
-    pkg.add_directory(output_dir.join('WebRTC.framework'))
+    pkg.add_directory(
+        output_dir.join('WebRTC.xcframework', 'ios-arm64', 'WebRTC.framework',
+                        'WebRTC'))
     pkg.zip('zip archive')
 
     if not api.runtime.is_experimental:
