@@ -219,7 +219,7 @@
       "--output",
       "/path/to/tmp/json",
       "--",
-      "WebRTC.framework/WebRTC"
+      "WebRTC.xcframework/ios-arm64/WebRTC.framework/WebRTC"
     ],
     "infra_step": true,
     "name": "get binary sizes",

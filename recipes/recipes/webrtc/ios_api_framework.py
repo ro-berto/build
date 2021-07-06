@@ -50,8 +50,9 @@ def RunSteps(api):
 
   output_dir = api.path['checkout'].join('out_ios_libs')
 
-  api.webrtc.get_binary_sizes(files=['WebRTC.framework/WebRTC'],
-                              base_dir=output_dir)
+  api.webrtc.get_binary_sizes(
+      files=['WebRTC.xcframework/ios-arm64/WebRTC.framework/WebRTC'],
+      base_dir=output_dir)
 
   if not api.tryserver.is_tryserver:
     zip_out = api.path['start_dir'].join('webrtc_ios_api_framework.zip')
