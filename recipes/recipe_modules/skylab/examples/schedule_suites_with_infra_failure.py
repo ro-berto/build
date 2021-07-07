@@ -6,24 +6,21 @@ DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/properties',
     'skylab',
 ]
 
 from google.protobuf import json_format
 
-from RECIPE_MODULES.build.skylab import structs
-
-from recipe_engine.post_process import StepException
+from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
-                                                       builds_service_pb2)
 
 
 def RunSteps(api):
-  got = api.skylab.wait_on_suites(1234, timeout_seconds=3600)
-  api.assertions.assertEqual(got.status, common_pb2.INFRA_FAILURE)
+  api.skylab.wait_on_suites(
+      api.properties.get('mock_build_id', 0), timeout_seconds=3600)
 
 
 def GenTests(api):
@@ -34,6 +31,7 @@ def GenTests(api):
       # api.buildbucket.simulated_collect_output because it only return
       # the failed build, instead of raising a StepFailure, which
       # api.buildbucket.collect_build() does.
+      api.properties(mock_build_id=1234),
       api.step_data(
           'collect skylab results.buildbucket.collect.wait',
           api.json.output(json_format.MessageToJson(build_pb2.Build(id=0))),
@@ -41,5 +39,11 @@ def GenTests(api):
       api.buildbucket.simulated_get(
           build_pb2.Build(id=1234, status=common_pb2.INFRA_FAILURE),
           step_name='collect skylab results.buildbucket.get'),
-      api.post_process(StepException, 'collect skylab results'),
+      api.post_process(post_process.StepException, 'collect skylab results'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'invalid build id',
+      api.post_process(post_process.DropExpectation),
   )

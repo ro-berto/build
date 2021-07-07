@@ -21,6 +21,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
+from recipe_engine import post_process
+
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
 LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
 
@@ -129,4 +131,5 @@ def GenTests(api):
       api.post_check(check_has_req_tag, 'm88_urlunittest'),
       api.post_check(check_test_arg, 'gs://fake_bucket/lacros.zip',
                      LACROS_TAST_EXPR, LACROS_GTEST_ARGS),
+      api.post_process(post_process.DropExpectation),
   )

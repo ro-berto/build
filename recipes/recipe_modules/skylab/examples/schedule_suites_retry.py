@@ -49,6 +49,7 @@ def GenTests(api):
               responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
           step_name='schedule skylab tests.buildbucket.schedule'),
       api.post_check(should_enable_retry, 3),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -59,4 +60,5 @@ def GenTests(api):
           post_process.ResultReason,
           u'Uncaught Exception: ValueError("\'retries\' must be in '
           u'(0, 1, 2, 3, 4, 5) (got 6)",)'),
+      api.post_process(post_process.DropExpectation),
   )

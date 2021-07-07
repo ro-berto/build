@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'recipe_engine/buildbucket',
     'skylab',
@@ -31,6 +33,7 @@ def GenTests(api):
           'collect skylab results.buildbucket.collect.wait',
           times_out_after=12),
       api.post_check(check_step_status, 'FAILURE'),
+      api.post_process(post_process.DropExpectation),
   )
 
   # If not timeout, raise an EXCEPTION for whatever failure the collect_build()
@@ -42,4 +45,5 @@ def GenTests(api):
           times_out_after=9,
           retcode=1),
       api.post_check(check_step_status, 'EXCEPTION'),
+      api.post_process(post_process.DropExpectation),
   )
