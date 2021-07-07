@@ -84,6 +84,9 @@ def RunSteps(api, properties):
         api.chromium_tests_builder_config.lookup_builder())
 
     api.chromium_tests.configure_build(builder_config)
+    # Set api.m.chromium.c.compile_py.compiler to empty string so that
+    # prepare_checkout() does not attempt to run ensure_goma()
+    api.m.chromium.c.compile_py.compiler = ''
     api.chromium_tests.report_builders(builder_config)
 
     api.gclient.c.revisions['src'] = tot_revision
