@@ -266,6 +266,8 @@ class ResultDB(object):
     * exonerate_unexpected_pass - flag to control if ResultSink should
       automatically exonerate unexpected passes.
     * result_adapter_path - path to result_adapter binary.
+    * include - If True, a new invocation will be created for the test and
+      included in the parent invocation.
   """
   enable = attrib(bool, default=False)
   result_format = attrib(enum(['gtest', 'json', 'single']), default=None)
@@ -279,6 +281,7 @@ class ResultDB(object):
   artifact_directory = attrib((str, Placeholder), default='${ISOLATED_OUTDIR}')
   location_tags_file = attrib(str, default=None)
   exonerate_unexpected_pass = attrib(bool, default=True)
+  include = attrib(bool, default=False)
   # result_adapter binary is available in chromium checkout or
   # the swarming bot.
   #
@@ -386,6 +389,7 @@ class ResultDB(object):
         location_tags_file=configs.location_tags_file,
         require_build_inv=require_build_inv,
         exonerate_unexpected_pass=configs.exonerate_unexpected_pass,
+        include=configs.include,
     )
 
 
@@ -698,7 +702,10 @@ class Test(object):
             test_suite=self.canonical_name),
         result_adapter_path=str(api.path['checkout'].join(
             'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(temp))
+        result_file=api.path.abspath(temp),
+        # Give each local test suite its own invocation to make it easier to
+        # fetch results.
+        include=True)
     return resultdb
 
   @property
