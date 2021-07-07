@@ -258,7 +258,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
@@ -283,7 +282,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
@@ -309,7 +307,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
@@ -343,7 +340,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
@@ -368,7 +364,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
@@ -393,7 +388,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',

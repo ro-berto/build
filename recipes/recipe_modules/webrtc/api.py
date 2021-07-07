@@ -411,9 +411,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     return len(self._compile_targets) > 0
 
   def configure_isolate(self, phase=None):
-    if self.bot.config.get('isolate_server'):
-      self.m.isolate.isolate_server = self.bot.config['isolate_server']
-
     if self.bot.config.get('parent_buildername'):
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
 
@@ -597,7 +594,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
-  def isolate(self, use_cas=True):
+  def isolate(self):
     if self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
       # Set the swarm_hashes name so that it is found by pinpoint.
       commit_position = self.revision_cp.replace('@', '(at)')
@@ -607,24 +604,18 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
           targets=self._isolated_targets,
-          use_cas=use_cas,
           swarm_hashes_property_name=swarm_hashes_property_name)
 
-      # Upload the isolate file to the pinpoint server.
-      instance = self.m.isolate.isolate_server
-      if use_cas:
-        instance = self.m.cas.instance
+      # Upload the input files to the pinpoint server.
       self.m.perf_dashboard.upload_isolate(
           self.m.buildbucket.builder_name,
           self.m.perf_dashboard.get_change_info([{
               'repository': 'webrtc',
               'git_hash': self.revision
-          }]), instance, self.m.isolate.isolated_tests)
+          }]), self.m.cas.instance, self.m.isolate.isolated_tests)
     else:
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir,
-          targets=self._isolated_targets,
-          use_cas=use_cas)
+          self.m.chromium.output_dir, targets=self._isolated_targets)
 
   def find_swarming_command_lines(self):
     step_result = self.m.python(
