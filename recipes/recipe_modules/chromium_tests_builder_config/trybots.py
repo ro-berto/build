@@ -1733,6 +1733,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
             ),
+        'win10-rel-orchestrator':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.win',
+                    buildername='Win x64 Builder',
+                    tester='Win10 Tests x64',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Win x64 Builder',
+                    tester='Win10 x64 Release (NVIDIA)',
+                ),
+            ]),
         # This trybot mirrors the trybot win10_chromium_x64_rel_ng with
         # analyze_deps_autorolls set to False
         'win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng':
