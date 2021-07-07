@@ -15,10 +15,8 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
     'chromium',
-    'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/gsutil',
-    'gn',
     'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
@@ -34,14 +32,16 @@ DEPS = [
 
 
 PROPERTIES = {
-  # One of Release|Debug.
-  'build_config': Property(default=None, kind=str),
-  # One of intel|arm|mips.
-  'target_arch': Property(default=None, kind=str),
-  # One of 32|64.
-  'target_bits': Property(default=None, kind=Single((int, float))),
-  # One of android|fuchsia|linux|mac|win.
-  'target_platform': Property(default=None, kind=str),
+    # One of Release|Debug.
+    'build_config': Property(default=None, kind=str),
+    # One of intel|arm|mips.
+    'target_arch': Property(default=None, kind=str),
+    # One of 32|64.
+    'target_bits': Property(default=None, kind=Single((int, float))),
+    # One of android|fuchsia|linux|mac|win.
+    'target_platform': Property(default=None, kind=str),
+    # Whether to use reclient for compilation.
+    'use_rbe': Property(default=None, kind=bool),
 }
 
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
@@ -50,8 +50,14 @@ RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?(\d+\.\d+)$')
 FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
-def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
-                 archive_suffix=''):
+def make_archive(api,
+                 bot_config,
+                 ref,
+                 version,
+                 archive_type,
+                 step_suffix='',
+                 archive_suffix='',
+                 use_rbe=False):
   with api.step.nest('sync' + step_suffix):
     api.v8.apply_bot_config(bot_config)
     if archive_type == 'ref':
@@ -87,7 +93,7 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
 
   build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   with api.step.nest('build' + step_suffix):
-    compile_failure = api.v8.compile()
+    compile_failure = api.v8.compile(use_reclient=use_rbe)
     if compile_failure:
       return None, compile_failure
 
@@ -174,7 +180,8 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
     return version, None
 
 
-def RunSteps(api, build_config, target_arch, target_bits, target_platform):
+def RunSteps(api, build_config, target_arch, target_bits, target_platform,
+             use_rbe):
   target_bits = int(target_bits)
 
   with api.step.nest('initialization'):
@@ -186,10 +193,13 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
 
     # Apply properties from cr-buildbucket.cfg.
     bot_config = {
-      'chromium_apply_config': [
-        'default_compiler', 'goma', 'gn'],
-      'v8_config_kwargs': {},
+        'chromium_apply_config': ['default_compiler', 'gn'],
+        'v8_config_kwargs': {},
     }
+    if use_rbe:
+      bot_config['gclient_apply_config'] = ['enable_reclient']
+    else:
+      bot_config['chromium_apply_config'].append('goma')
     for key, value in (
         ('BUILD_CONFIG', build_config),
         ('TARGET_ARCH', target_arch),
@@ -201,17 +211,26 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
   if build_config == 'Debug':
     # Debug binaries require libraries to be present in the same archive to
     # run.
-    version, compile_failure = make_archive(api, bot_config, ref, None, 'all')
+    version, compile_failure = make_archive(
+        api, bot_config, ref, None, 'all', use_rbe=use_rbe)
     if compile_failure:
       return compile_failure
   else:
-    version, compile_failure = make_archive(api, bot_config, ref, None, 'exe')
+    version, compile_failure = make_archive(
+        api, bot_config, ref, None, 'exe', use_rbe=use_rbe)
     if compile_failure:
       return compile_failure
     if not version:
       return
     version, compile_failure = make_archive(
-        api, bot_config, ref, version, 'lib', ' (libs)', '-libs')
+        api,
+        bot_config,
+        ref,
+        version,
+        'lib',
+        ' (libs)',
+        '-libs',
+        use_rbe=use_rbe)
     if compile_failure:
       return compile_failure
 
@@ -220,7 +239,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
     if (RELEASE_BRANCH_RE.match(ref) and
         FIRST_BUILD_IN_MILESTONE_RE.match(version)):
       version, compile_failure = make_archive(
-          api, bot_config, ref, version, 'ref', ' (ref)')
+          api, bot_config, ref, version, 'ref', ' (ref)', use_rbe=use_rbe)
       if compile_failure:
         return compile_failure
 
@@ -489,3 +508,22 @@ def GenTests(api):
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
   )
+
+  # Test reclient
+  yield api.test(
+      api.v8.test_name('client.v8.official', 'V8 Foobar', 'linux_reclient'),
+      api.chromium.ci_build(
+          builder_group='client.v8.official',
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          git_ref='refs/branch-heads/3.4',
+          builder='V8 Foobar',
+          revision='a' * 40),
+      api.properties(build_config='Release', target_bits=64, use_rbe=True),
+      api.platform('linux', 64), api.v8.version_file(0, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3')),
+      api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
+                       'build.gn', 'build.compile', 'make archive.zipping',
+                       'make archive.gsutil upload') +
+      filter_steps(is_release=True))

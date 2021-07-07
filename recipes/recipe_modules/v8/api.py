@@ -729,7 +729,7 @@ class V8Api(recipe_api.RecipeApi):
     with self.ensure_osx_sdk_if_needed():
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
-      use_reclient = False
+      use_reclient = kwargs.get('use_reclient', False)
 
       # Calculate targets to isolate from V8-side test specification. The
       # test_spec contains extra TestStepConfig objects for the current builder
@@ -775,7 +775,8 @@ class V8Api(recipe_api.RecipeApi):
           self.m.step.active_result.presentation.logs['gn_args'] = (
               self.build_environment['gn_args'].splitlines())
       elif self.m.chromium.c.project_generator.tool == 'gn':
-        self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
+        self.m.chromium.run_gn(
+            use_goma=use_goma, build_dir=build_dir, use_reclient=use_reclient)
 
       if use_goma and not use_reclient:
         kwargs['use_goma_module'] = True
