@@ -3473,6 +3473,12 @@ class SkylabTestSpec(TestSpec):
   tast_expr = attrib(str, default='')
   test_args = attrib(command_args, default=())
   timeout_sec = attrib(int, default=3600)
+  # Enable retry for all Skylab tests by default. We see around 10% of tests
+  # failed due to lab issues. Set retry into test requests, so that failed
+  # tests could get rerun from OS infra side. We only bridged our CI builders
+  # to Skylab now, so we do not expect a lot of failures from our artifact.
+  # Revisit this when we integrate CQ to Skylab.
+  retries = attrib(int, default=3)
 
   @property
   def test_class(self):
@@ -3506,19 +3512,8 @@ class SkylabTest(Test):
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,
+        retries=self.spec.retries,
     ) if self.lacros_gcs_path else None
-
-  def _find_valid_result(self):
-    """Return the first deterministic result from the responses.
-
-    CTP responses contain a list of attempts for each CTP request.
-    Skip the attempt(s) failed due to infra_failure, which does
-    not have meaningful result for us.
-    """
-    for r in self.ctp_responses:
-      if r.status in [common_pb2.SUCCESS, common_pb2.FAILURE]:
-        return r
-    return None
 
   def _raise_failed_step(self, api, suffix, step, status, failure_msg):
     step.presentation.status = status
@@ -3616,8 +3611,7 @@ class SkylabTest(Test):
       if step_failure_msg:
         return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
                                        step_failure_msg)
-      resp = self._find_valid_result()
-      if not resp:
+      if not self.ctp_responses:
         return self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
                                        'Invalid test result.')
 
@@ -3625,7 +3619,20 @@ class SkylabTest(Test):
       if self.is_tast_test:
         parser = self.tast_result_parser
 
-      self.present_result(api, resp, step, suffix, parser)
+      if len(self.ctp_responses) == 1:
+        self.present_result(api, self.ctp_responses[0], step, suffix, parser)
+      else:
+        # Keep the logic simple and consider the test succeed if any
+        # of the attempt passed. In long term, we will rely on ResultDB to
+        # tell us the test result.
+        if any(r.verdict == "PASSED" for r in self.ctp_responses):
+          step.presentation.status = api.step.SUCCESS
+        for i, r in enumerate(self.ctp_responses, 1):
+          with api.step.nest('attempt: #' + str(i)) as attempt_step:
+            try:
+              self.present_result(api, r, attempt_step, suffix, parser)
+            except api.step.StepFailure:
+              pass
 
       return self._test_runs[suffix]
 

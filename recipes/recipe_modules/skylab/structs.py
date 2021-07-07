@@ -65,6 +65,8 @@ class SkylabRequest(object):
           Skylab DUT, e.g. lacros.Basic.
     * test_args: The runtime argument for test,
           e.g. '--gtest_filter="VaapiTest.*'.
+    * retries: The max that CTP will retry a request. Default is 0, no retry and
+          max is 5.
   """
   request_tag = attrib(str)
   board = attrib(str)
@@ -76,6 +78,7 @@ class SkylabRequest(object):
       enum([SKYLAB_TAST_TEST, SKYLAB_GTEST]), default=SKYLAB_GTEST)
   tast_expr = attrib(str, default='')
   test_args = attrib(str, default='')
+  retries = attrib(enum([0, 1, 2, 3, 4, 5]), default=0)
 
   @classmethod
   def create(cls, **kwargs):

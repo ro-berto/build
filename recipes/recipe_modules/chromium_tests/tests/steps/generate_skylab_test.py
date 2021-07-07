@@ -164,7 +164,7 @@ def GenTests(api):
         tag: api.skylab.gen_json_execution_response(tasks),
     }
 
-  def simulate_ctp_response(api, tag, task):
+  def simulate_ctp_response(api, tag, tasks):
     test_data = api.buildbucket.simulated_schedule_output(
         builds_service_pb2.BatchResponse(
             responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
@@ -173,7 +173,7 @@ def GenTests(api):
     test_data += api.buildbucket.simulated_collect_output(
         [
             api.skylab.test_with_multi_response(1234,
-                                                gen_tag_resp(api, tag, task)),
+                                                gen_tag_resp(api, tag, tasks)),
         ],
         step_name='collect skylab results.buildbucket.collect')
     return test_data
@@ -203,6 +203,11 @@ def GenTests(api):
       ]
       check(gs_uri in dep_of_lacros)
 
+  def check_req_by_default_enabled_retry(check, steps):
+    for req in _extract_skylab_req(steps):
+      params_retry = req['params']['retry']
+      check(params_retry['allow'] == True and params_retry['max'] == 3)
+
   def check_exe_rel_path_for_gtest(check, steps, rel_path):
     for req in _extract_skylab_req(steps):
       test = req['testPlan']['test'][0]
@@ -212,11 +217,15 @@ def GenTests(api):
       'basic for tast',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE, TASK_PASSED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
-      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
+      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT'),
+      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #1'),
+      api.post_process(post_process.StepTextContains,
+                       'basic_EVE_TOT.attempt: #2',
                        ['1 passed, 0 failed (1 total)']),
+      api.post_process(check_req_by_default_enabled_retry),
       api.post_process(
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'

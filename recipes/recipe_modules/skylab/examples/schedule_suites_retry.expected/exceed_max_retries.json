@@ -1,0 +1,31 @@
+[
+  {
+    "cmd": [],
+    "name": "RECIPE CRASH (Uncaught exception)",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@",
+      "The recipe has crashed at point 'Uncaught exception'!",
+      "",
+      "Traceback (most recent call last):",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/skylab/examples/schedule_suites_retry.py\", line 30, in RunSteps",
+      "    hw_test_req = gen_skylab_req('m88_lacros', api.properties.get('retries'))",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/skylab/examples/schedule_suites_retry.py\", line 26, in gen_skylab_req",
+      "    cros_img='eve-release/R88-13545.0.0')",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/skylab/structs.py\", line 86, in create",
+      "    return cls(test_type=test_type, **kwargs)",
+      "  File \"<attrs generated init RECIPE_MODULES.build.skylab.structs.SkylabRequest>\", line 23, in __init__",
+      "    __attr_validator_retries(self, __attr_retries, self.retries)",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/attr_utils/__init__.py\", line 176, in validate",
+      "    validator(obj, attribute, value)",
+      "  File \"PYTHON(site-packages)/attr/validators.py\", in __call__",
+      "    name=attr.name, options=self.options, value=value",
+      "ValueError: 'retries' must be in (0, 1, 2, 3, 4, 5) (got 6)"
+    ]
+  },
+  {
+    "failure": {
+      "humanReason": "Uncaught Exception: ValueError(\"'retries' must be in (0, 1, 2, 3, 4, 5) (got 6)\",)"
+    },
+    "name": "$result"
+  }
+]

@@ -30,13 +30,12 @@ class SkylabApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(SkylabApi, self).__init__(**kwargs)
 
-  def schedule_suites(self, name, requests, retry=False):
+  def schedule_suites(self, name, requests):
     """Schedule CrOS autotest suites by invoking the cros_test_platform recipe.
 
     Args:
     * name (str): The step name.
     * requests (list[SkylabRequest]): List of Autotest suites to schedule.
-    * retry (bool): If True, retry at most 5 times within this invocation.
 
     Returns:
       ctp_build_id[str]: a cros_test_platform build ID.
@@ -91,8 +90,8 @@ class SkylabApi(recipe_api.RecipeApi):
             '{}:{}'.format(key, value) for key, value in tags.items()
         ]
         req.params.decorations.tags.extend(swarming_tags)
-        if retry:
-          self._enable_test_retries(req)
+        if s.retries:
+          self._enable_test_retries(req, s.retries)
         reqs[s.request_tag] = json_format.MessageToDict(req)
 
       # We're sending this only to add a link back to the parent. This will not
@@ -155,13 +154,14 @@ class SkylabApi(recipe_api.RecipeApi):
           status=ctp_build.status,
           responses=tagged_responses)
 
-  def _enable_test_retries(self, req):
-    """Enable test retries within suites.
+  def _enable_test_retries(self, req, retries):
+    """Enable test retries within a single CTP build.
 
     Args:
-      params: A request.Request object.
+      req: A request.Request object.
+      retries: See structs.SkylabRequest.
     """
-    req.params.retry.max = 5
+    req.params.retry.max = retries
     req.params.retry.allow = True
 
   def _get_skylab_task_result(self, execute_response):
