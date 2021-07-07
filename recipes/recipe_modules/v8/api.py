@@ -602,7 +602,6 @@ class V8Api(recipe_api.RecipeApi):
     # internal isolate server.
     if 'perf' in isolate_targets:
       isolate_targets.remove('perf')
-      self.m.isolate.isolate_server = 'https://chrome-isolated.appspot.com'
       self.m.isolate.isolate_tests(
           output_dir,
           targets=['perf'],
@@ -611,8 +610,6 @@ class V8Api(recipe_api.RecipeApi):
           step_name='isolate tests (perf)',
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
-      # https://crbug.com/944904
-      self.m.isolate.isolate_server = 'https://isolateserver.appspot.com'
     elif isolate_targets:
       self.m.isolate.isolate_tests(
           output_dir,
