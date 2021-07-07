@@ -708,6 +708,12 @@ class Test(object):
         include=True)
     return resultdb
 
+  def get_invocation_names(self, _suffix):  # pragma: no cover
+    """Returns the invocation names tracking the test's results in RDB."""
+    # TODO(crbug.com/1135718): Raise a NotImplementedError once all subclasses
+    # have an implementation.
+    return []
+
   @property
   def rdb_results(self):
     return self._rdb_results
@@ -2532,6 +2538,9 @@ class SwarmingTest(Test):
 
   def get_task(self, suffix):
     return self._tasks.get(suffix)
+
+  def get_invocation_names(self, suffix):
+    return self.get_task(suffix).get_invocation_names()
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""

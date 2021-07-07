@@ -302,8 +302,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invocation_names = []
     if self.m.resultdb.enabled:
       for t in swarming_test_suites:
-        task = t.get_task(suffix)
-        invocation_names.extend(task.get_invocation_names())
+        invocation_names.extend(t.get_invocation_names(suffix))
 
       if invocation_names and suffix != 'without patch':
         # Include the task invocations in the build's invocation.
@@ -344,10 +343,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     all_rdb_results = []
     with self.m.step.nest(query_step_name):
       # For each Swarming test suite, fetch its results via RDB.
-      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
+      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching. And
+      # do this for all test types, not just swarming tests.
       for t in swarming_test_suites:
-        task = t.get_task(suffix)
-        invocation_names = task.get_invocation_names()
+        invocation_names = t.get_invocation_names(suffix)
         if not invocation_names:
           result = self.m.step('No RDB results for %s' % t.name, [])
           result.presentation.status = self.m.step.WARNING
