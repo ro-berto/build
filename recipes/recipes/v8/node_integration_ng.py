@@ -5,8 +5,8 @@
 """Recipe to test v8/node.js integration."""
 
 from recipe_engine.recipe_api import Property
-from recipe_engine.post_process import (
-    Filter, ResultReasonRE, StatusFailure, StatusSuccess, DropExpectation)
+from recipe_engine.post_process import (Filter, ResultReasonRE, StatusFailure,
+                                        StatusSuccess, DropExpectation)
 
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
@@ -20,7 +20,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
-    'goma',
     'infra/zip',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
@@ -36,10 +35,12 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  # List of tester names to trigger.
-  'triggers': Property(default=None, kind=list),
-  # Use V8 ToT (HEAD) revision instead of pinned.
-  'v8_tot': Property(default=False, kind=bool),
+    # List of tester names to trigger.
+    'triggers': Property(default=None, kind=list),
+    # Use V8 ToT (HEAD) revision instead of pinned.
+    'v8_tot': Property(default=False, kind=bool),
+    # Weather to use reclient for compilation.
+    'use_rbe': Property(default=False, kind=bool),
 }
 
 ARCHIVE_PATH = 'chromium-v8/node-%s-rel'
@@ -68,11 +69,14 @@ def run_with_retry(api, step_name, step_fun):
   return True
 
 
-def RunSteps(api, triggers, v8_tot):
+def RunSteps(api, triggers, v8_tot, use_rbe):
+  use_goma = not use_rbe
   with api.step.nest('initialization'):
     # Set up dependent modules.
     api.chromium.set_config('node_ci')
     api.gclient.set_config('node_ci')
+    if use_rbe:
+      api.gclient.apply_config('enable_reclient')
     revision = api.buildbucket.gitiles_commit.id or 'HEAD'
     if v8_tot:
       api.gclient.c.revisions['node-ci'] = 'HEAD'
@@ -87,13 +91,15 @@ def RunSteps(api, triggers, v8_tot):
       assert update_step.json.output['did_run']
 
     api.chromium.runhooks()
-    api.chromium.ensure_goma()
+    if use_goma:
+      api.chromium.ensure_goma()
 
   with api.step.nest('build'):
     depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
     with api.context(env_prefixes={'PATH': [depot_tools_path]}):
-      api.chromium.run_gn(use_goma=True)
-      raw_result = api.chromium.compile(use_goma_module=True)
+      api.chromium.run_gn(use_goma=use_goma, use_reclient=use_rbe)
+      raw_result = api.chromium.compile(
+          use_goma_module=use_goma, use_reclient=use_rbe)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
 
@@ -304,3 +310,13 @@ def GenTests(api):
     api.post_process(StatusFailure) +
     api.post_process(DropExpectation)
   )
+
+  yield (test(
+      'node_ci_foobar_rel_reclient',
+      platform='linux',
+      v8_tot=True,
+      use_rbe=True,
+  ) + api.post_process(
+      Filter('initialization.bot_update', 'build.gn',
+             'build.preprocess for reclient',
+             'build.postprocess for reclient')))

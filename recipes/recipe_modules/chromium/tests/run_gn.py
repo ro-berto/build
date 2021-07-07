@@ -15,7 +15,13 @@ def RunSteps(api):
       BUILD_CONFIG=api.properties.get('build_config', 'Release'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
-  api.chromium.run_gn(use_goma=True, gn_path=api.properties.get('gn_path'))
+  use_rbe = api.properties.get('use_rbe', False)
+  use_goma = not use_rbe
+
+  api.chromium.run_gn(
+      use_goma=use_goma,
+      gn_path=api.properties.get('gn_path'),
+      use_reclient=use_rbe)
 
 
 def GenTests(api):
@@ -40,4 +46,9 @@ def GenTests(api):
   yield api.test(
       'debug',
       api.properties(build_config='Debug'),
+  )
+
+  yield api.test(
+      'reclient',
+      api.properties(build_config='Debug', use_rbe=True),
   )

@@ -1128,7 +1128,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       self.m.gclient.runhooks(**kwargs)
 
   @_with_chromium_layout
-  def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
+  def run_gn(self,
+             use_goma=False,
+             gn_path=None,
+             build_dir=None,
+             use_reclient=False,
+             **kwargs):
+    assert not use_goma or not use_reclient
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
 
@@ -1174,6 +1180,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       # Do not allow goma to invoke local compiler.
       gn_env['GOMA_USE_LOCAL'] = 'false'
+
+    if use_reclient:
+      gn_args.append('use_rbe=true')
 
     gn_args.extend(self.c.project_generator.args)
 
