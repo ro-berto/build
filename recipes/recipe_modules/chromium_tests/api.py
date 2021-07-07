@@ -232,7 +232,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                     for log, contents in sorted(t.get('logs', {}).iteritems()):
                       result.presentation.logs[log] = contents
 
-  def prepare_checkout(self, builder_config, report_cache_state=True, **kwargs):
+  def prepare_checkout(self, builder_config, report_cache_state=True,
+                       root_solution_revision=None, **kwargs):
     if report_cache_state:
       with self.m.step.nest('builder cache') as presentation:
         contents = self.m.file.listdir('check if empty',
@@ -247,8 +248,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           presentation.step_text = (
               '\nbuilder cache is absent, expect a slow build')
 
+    # The root_solution_revision input property can be used to checkout
+    # the root solution at a certain branch. This can be used when attempting
+    # to run a builder for a child repository on a certain branch,
+    # and the same branch needs to be checked out for the root solution
+    root_solution_revision = (root_solution_revision or
+                              self.m.properties.get('root_solution_revision'))
     update_step = self.m.chromium_checkout.ensure_checkout(
-        builder_config, **kwargs)
+        builder_config, root_solution_revision=root_solution_revision, **kwargs)
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):

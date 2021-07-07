@@ -110,6 +110,19 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic-branch',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.chromium_tests.read_source_side_spec('chromium.linux', {
+          'Linux Tests': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.properties(root_solution_revision='refs/branch-heads/4472'),
+      api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
       'analyze_compile_mode',
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
