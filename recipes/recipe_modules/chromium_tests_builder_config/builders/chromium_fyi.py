@@ -1250,6 +1250,20 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'chromeos-amd64-generic-rel (goma cache silo)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb', 'goma_enable_cache_silo'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+        ),
 }
 
 SPEC.update([
