@@ -609,6 +609,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/src/out/Linux64_Builder/isac_fix_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux64_Builder/low_bandwidth_audio_perf_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux64_Builder/webrtc_perf_tests.isolated.gen.json"

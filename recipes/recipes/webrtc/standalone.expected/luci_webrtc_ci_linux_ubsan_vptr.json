@@ -668,6 +668,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/src/out/Linux_UBSan_vptr/audio_decoder_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux_UBSan_vptr/common_audio_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Linux_UBSan_vptr/common_video_unittests.isolated.gen.json",

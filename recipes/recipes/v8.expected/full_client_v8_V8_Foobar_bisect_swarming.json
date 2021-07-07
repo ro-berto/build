@@ -368,6 +368,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
       "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
@@ -1025,6 +1026,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
       "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
@@ -1507,6 +1509,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
       "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
@@ -2031,6 +2034,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json",
       "[CACHE]/builder/v8/out/build/test262.isolated.gen.json"
     ],
