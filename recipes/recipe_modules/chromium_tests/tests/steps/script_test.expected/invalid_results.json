@@ -24,7 +24,8 @@
     "name": "script_test",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
     ]
   },
   {

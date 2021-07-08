@@ -97,6 +97,10 @@ IOS_PRODUCT_TYPES = {
 
 ALLOWED_RESULT_HANDLER_NAMES = ('default', 'layout tests', 'fake')
 
+# Matches the name of the new invocation that gets printed to stderr when
+# calling `rdb stream -new`.
+RDB_INVOCATION_NAME_RE = re.compile(r'rdb-stream: included "(\S+)" in "\S+"')
+
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -1443,6 +1447,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
+  def __init__(self, spec):
+    super(ScriptTest, self).__init__(spec)
+    self._suffix_to_invocation_names = {}
+
+  def get_invocation_names(self, suffix):
+    inv = self._suffix_to_invocation_names.get(suffix)
+    return [inv] if inv else []
+
   def compile_targets(self):
     if self.spec.override_compile_targets:
       return self.spec.override_compile_targets
@@ -1466,6 +1478,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
       run_args.extend(['--filter-file',
                        api.json.input(tests_to_retry)])  # pragma: no cover
 
+    result = None
     try:
       resultdb = self.prep_local_rdb(api)
 
@@ -1481,6 +1494,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
                 ['run', '--output', api.json.output()] + run_args),
           resultdb=resultdb if resultdb else None,
+          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
           step_test_data=lambda: api.json.test_api.output({
               'valid': True,
               'failures': []
@@ -1525,6 +1539,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
       _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
           api.test_utils.format_step_text([['failures:', failures]]))
+
+    if result:
+      # TODO(crbug.com/1227180): Specify our own custom invocation name rather
+      # than parsing stderr.
+      match = RDB_INVOCATION_NAME_RE.search(result.stderr)
+      if match:
+        inv_name = match.group(1)
+        self._suffix_to_invocation_names[suffix] = inv_name
 
     return self._test_runs[suffix]
 

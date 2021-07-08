@@ -269,7 +269,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           aborted
       failed suites, list of test_suites which failed in any way. Superset of
           invalids
-   """
+    """
     local_test_suites = []
     swarming_test_suites = []
     skylab_test_suites = []
@@ -344,8 +344,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     with self.m.step.nest(query_step_name):
       # For each Swarming test suite, fetch its results via RDB.
       # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching. And
-      # do this for all test types, not just swarming tests.
-      for t in swarming_test_suites:
+      # do this for all test types, not just swarming & script tests.
+      script_tests = [
+          t for t in local_test_suites if isinstance(t, steps.ScriptTest)
+      ]
+      for t in swarming_test_suites + script_tests:
         invocation_names = t.get_invocation_names(suffix)
         if not invocation_names:
           result = self.m.step('No RDB results for %s' % t.name, [])
