@@ -454,7 +454,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-18.04',
+                    'os': 'Ubuntu-14.04',
                     'cpu': 'x86-64',
                 }
             },
@@ -1386,7 +1386,7 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'swarming_dimensions': {
-                    'os': 'Ubuntu-18.04',
+                    'os': 'Ubuntu-14.04',
                     'cpu': 'x86-64',
                 }
             },
