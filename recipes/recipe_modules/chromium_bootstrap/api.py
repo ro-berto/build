@@ -19,6 +19,20 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
     super(ChromiumBootstrapApi, self).__init__(**kwargs)
     self._commits = tuple(input_properties.commits)
 
+  def initialize(self):
+    # TODO(gbeaty) Once we have the ability to have Milo display the
+    # bootstrapped properties, this can be removed
+    if '$build/chromium_bootstrap' in self.m.properties:
+      result = self.m.step('bootstrapped properties', [])
+      result.presentation.step_text = (
+          'This build was bootstrapped, '
+          'see properties log for actual properties')
+      result.presentation.logs['properties'] = self.m.json.dumps(
+          dict(self.m.properties),
+          indent=2,
+          sort_keys=True,
+          separators=(',', ': '))
+
   def update_gclient_config(self, gclient_config=None):
     """Update the gclient config to be consistent with the bootstrapper.
 

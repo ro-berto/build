@@ -8,5 +8,7 @@ PROPERTIES = chromium_bootstrap.ChromiumBootstrapModuleProperties
 
 DEPS = [
     'depot_tools/gclient',
+    'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/step',
 ]
