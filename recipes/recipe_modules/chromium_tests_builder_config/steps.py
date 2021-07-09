@@ -2996,28 +2996,54 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
 
 @attrs()
-class AndroidTestSpec(TestSpec):
-  """Spec for a test that runs against Android.
+class AndroidJunitTestSpec(TestSpec):
+  """Create a spec for a test that runs a Junit test on Android.
 
   Attributes:
-    * compile_targets - The compile targets to be built for the test.
+    * additional_args - Additional arguments passed to the test.
   """
-  # pylint: disable=abstract-method
 
   compile_targets = attrib(sequence[str])
+  additional_args = attrib(command_args, default=())
 
+  @classmethod
+  def create(cls, name, **kwargs):
+    """Create an AndroidJunitTestSpec.
 
-class AndroidTest(Test):
-
-  def run_tests(self, api, suffix, json_results_file):
-    """Runs the Android test suite and outputs the json results to a file.
-
-    Args:
-      api: Caller's API.
-      suffix: Suffix added to the test name.
-      json_results_file: File to output the test results.
+    Arguments:
+      * name - The name of the test.
+      * kwargs - Keyword arguments to initialize the attributes of the
+        created object. The `compile_targets` attribute is fixed to the
+        target name, so it cannot be specified.
     """
-    raise NotImplementedError()  # pragma: no cover
+    target_name = kwargs.pop('target_name', None) or name
+    return super(AndroidJunitTestSpec, cls).create(
+        name, target_name=target_name, compile_targets=[target_name], **kwargs)
+
+  @property
+  def test_class(self):
+    """The test class associated with the spec."""
+    return AndroidJunitTest
+
+
+class AndroidJunitTest(Test):
+
+  @property
+  def uses_local_devices(self):
+    return False
+
+  #override
+  def run_tests(self, api, suffix, json_results_file):
+    return api.chromium_android.run_java_unit_test_suite(
+        self.name,
+        target_name=self.spec.target_name,
+        verbose=True,
+        suffix=suffix,
+        additional_args=self.spec.additional_args,
+        json_results_file=json_results_file,
+        step_test_data=(
+            lambda: api.test_utils.test_api.canned_gtest_output(False)),
+        resultdb=self.spec.resultdb)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -3051,56 +3077,6 @@ class AndroidTest(Test):
 
   def compile_targets(self):
     return self.spec.compile_targets
-
-
-@attrs()
-class AndroidJunitTestSpec(AndroidTestSpec):
-  """Create a spec for a test that runs a Junit test on Android.
-
-  Attributes:
-    * additional_args - Additional arguments passed to the test.
-  """
-
-  additional_args = attrib(command_args, default=())
-
-  @classmethod
-  def create(cls, name, **kwargs):
-    """Create an AndroidJunitTestSpec.
-
-    Arguments:
-      * name - The name of the test.
-      * kwargs - Keyword arguments to initialize the attributes of the
-        created object. The `compile_targets` attribute is fixed to the
-        target name, so it cannot be specified.
-    """
-    target_name = kwargs.pop('target_name', None) or name
-    return super(AndroidJunitTestSpec, cls).create(
-        name, target_name=target_name, compile_targets=[target_name], **kwargs)
-
-  @property
-  def test_class(self):
-    """The test class associated with the spec."""
-    return AndroidJunitTest
-
-
-class AndroidJunitTest(AndroidTest):
-
-  @property
-  def uses_local_devices(self):
-    return False
-
-  #override
-  def run_tests(self, api, suffix, json_results_file):
-    return api.chromium_android.run_java_unit_test_suite(
-        self.name,
-        target_name=self.spec.target_name,
-        verbose=True,
-        suffix=suffix,
-        additional_args=self.spec.additional_args,
-        json_results_file=json_results_file,
-        step_test_data=(
-            lambda: api.test_utils.test_api.canned_gtest_output(False)),
-        resultdb=self.spec.resultdb)
 
 
 @attrs()
