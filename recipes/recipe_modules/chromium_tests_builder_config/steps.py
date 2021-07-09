@@ -1495,6 +1495,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
                 ['run', '--output', api.json.output()] + run_args),
           resultdb=resultdb if resultdb else None,
           stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+          venv=True,  # Runs the test through vpython.
           step_test_data=lambda: api.json.test_api.output({
               'valid': True,
               'failures': []
