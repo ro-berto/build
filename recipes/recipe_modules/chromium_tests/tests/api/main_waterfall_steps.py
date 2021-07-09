@@ -418,7 +418,7 @@ def GenTests(api):
           }),
       api.post_process(post_process.MustRun,
                        'chrome_public_test_apk on Android'),
-      api.post_process(post_process.MustRun, 'process java coverage'),
+      api.post_process(post_process.MustRun, 'process java coverage (overall)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
