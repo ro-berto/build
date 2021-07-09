@@ -41,7 +41,9 @@ PROPERTIES = {
     # One of android|fuchsia|linux|mac|win.
     'target_platform': Property(default=None, kind=str),
     # Whether to use reclient for compilation.
-    'use_rbe': Property(default=None, kind=bool),
+    'use_rbe': Property(default=False, kind=bool),
+    # Whether to upload archive.
+    'upload_archive': Property(default=True, kind=bool),
 }
 
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
@@ -57,7 +59,8 @@ def make_archive(api,
                  archive_type,
                  step_suffix='',
                  archive_suffix='',
-                 use_rbe=False):
+                 use_rbe=False,
+                 upload_archive=True):
   with api.step.nest('sync' + step_suffix):
     api.v8.apply_bot_config(bot_config)
     if archive_type == 'ref':
@@ -126,6 +129,12 @@ def make_archive(api,
     else:
       arch_name = ''
 
+    if not upload_archive:
+      if archive_type == 'ref':
+        return None, None
+      else:
+        return version, None
+
     # Upload refbuild and trigger refbuild bundler.
     if archive_type == 'ref':
       platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
@@ -181,7 +190,7 @@ def make_archive(api,
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform,
-             use_rbe):
+             use_rbe, upload_archive):
   target_bits = int(target_bits)
 
   with api.step.nest('initialization'):
@@ -212,12 +221,24 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
     # Debug binaries require libraries to be present in the same archive to
     # run.
     version, compile_failure = make_archive(
-        api, bot_config, ref, None, 'all', use_rbe=use_rbe)
+        api,
+        bot_config,
+        ref,
+        None,
+        'all',
+        use_rbe=use_rbe,
+        upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
   else:
     version, compile_failure = make_archive(
-        api, bot_config, ref, None, 'exe', use_rbe=use_rbe)
+        api,
+        bot_config,
+        ref,
+        None,
+        'exe',
+        use_rbe=use_rbe,
+        upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
     if not version:
@@ -230,7 +251,8 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'lib',
         ' (libs)',
         '-libs',
-        use_rbe=use_rbe)
+        use_rbe=use_rbe,
+        upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
 
@@ -239,7 +261,14 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
     if (RELEASE_BRANCH_RE.match(ref) and
         FIRST_BUILD_IN_MILESTONE_RE.match(version)):
       version, compile_failure = make_archive(
-          api, bot_config, ref, version, 'ref', ' (ref)', use_rbe=use_rbe)
+          api,
+          bot_config,
+          ref,
+          version,
+          'ref',
+          ' (ref)',
+          use_rbe=use_rbe,
+          upload_archive=upload_archive)
       if compile_failure:
         return compile_failure
 
@@ -519,11 +548,19 @@ def GenTests(api):
           git_ref='refs/branch-heads/3.4',
           builder='V8 Foobar',
           revision='a' * 40),
-      api.properties(build_config='Release', target_bits=64, use_rbe=True),
-      api.platform('linux', 64), api.v8.version_file(0, 'head', prefix='sync.'),
+      api.properties(
+          build_config='Release',
+          target_bits=64,
+          use_rbe=True,
+          upload_archive=False), api.platform('linux', 64),
+      api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output('3.4.3')),
       api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
-                       'build.gn', 'build.compile', 'make archive.zipping',
-                       'make archive.gsutil upload') +
-      filter_steps(is_release=True))
+                       'build.gn', 'build.preprocess for reclient',
+                       'build.compile', 'make archive.zipping'),
+      api.post_process(DoesNotRun, 'make archive.gsutil upload'),
+      api.post_process(
+          Filter('sync.bot_update', 'build.gn', 'build.preprocess for reclient',
+                 'build.compile', 'build (libs).gn',
+                 'build (libs).preprocess for reclient')))
