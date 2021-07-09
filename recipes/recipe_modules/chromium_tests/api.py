@@ -1642,6 +1642,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure message if an error occurred.
       - None if no failures
     """
+    # CrOS CQ supports linking & testing CLs across different repos in one
+    # build via the `Cq-Depends` footer. But Chrome's CQ does not. So check
+    # if the CL author has mistakenly added the footer to their chromium CL
+    # and fail loudly in that case to avoid confusion.
+    if self.m.tryserver.is_tryserver:
+      cq_depends_footer = self.m.tryserver.get_footer(
+          self.m.tryserver.constants.CQ_DEPEND_FOOTER)
+      if cq_depends_footer:
+        raise self.m.step.StepFailure(
+            'Commit message footer {} is not supported on Chrome builders. '
+            'Please remove the line(s) from the commit message and try '
+            'again.'.format(self.m.tryserver.constants.CQ_DEPEND_FOOTER))
+
     self.report_builders(builder_config)
     raw_result, task = self.build_affected_targets(
         builder_id,

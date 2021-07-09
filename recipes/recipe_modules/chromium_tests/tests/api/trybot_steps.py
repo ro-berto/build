@@ -6,6 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
+from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
 DEPS = [
     'chromium',
@@ -705,4 +706,18 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'use rts: True'),
       api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'depend_on_footer_failure',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.step_data(
+          'parse description',
+          api.json.output(
+              {tryserver.constants.CQ_DEPEND_FOOTER: 'chromium:123456'})),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.ResultReasonRE,
+                       r'Commit message footer Cq-Depend is not supported.*'),
+      api.post_process(post_process.DropExpectation),
   )
