@@ -80,7 +80,6 @@ def RunSteps(api):
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
   api.chromium.mb_gen(builder_id, phase='goma')
-  api.chromium.mb_isolate_everything(builder_id, phase='goma')
 
   raw_result = api.chromium.compile(
       targets, name='Goma build', use_goma_module=True)
@@ -92,8 +91,6 @@ def RunSteps(api):
 
   api.chromium.mb_gen(builder_id, build_dir=build_dir, phase='reclient')
 
-  api.chromium.mb_isolate_everything(
-      builder_id, build_dir=build_dir, phase='reclient')
   raw_result = api.chromium.compile(
       targets,
       name='Reclient build',
@@ -102,15 +99,6 @@ def RunSteps(api):
       target=target)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
-
-  # Compare the artifacts from the 2 builds, raise an exception if they're
-  # not equals.
-  # TODO(sebmarchand): Do a smarter comparison.
-  first_dir = str(api.chromium.output_dir)
-  first_dir = first_dir.rstrip('\\/') + '.1'
-  api.isolate.compare_build_artifacts(
-      first_dir,
-      str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
 
 def _sanitize_nonalpha(text):
@@ -129,16 +117,6 @@ def GenTests(api):
         api.properties(
             buildername=buildername, buildnumber=571, configuration='Release'),
         api.post_process(post_process.StatusSuccess),
-        api.post_process(post_process.DropExpectation),
-    )
-    yield api.test(
-        test_name + '_fail',
-        api.chromium.ci_build(builder_group=builder_group, builder=buildername),
-        api.platform(COMPARISON_BUILDERS[buildername]['platform'], 64),
-        api.properties(
-            buildername=buildername, buildnumber=571, configuration='Release'),
-        api.step_data('compare_build_artifacts', retcode=1),
-        api.post_process(post_process.StatusFailure),
         api.post_process(post_process.DropExpectation),
     )
 
