@@ -327,12 +327,6 @@ def _parse_args(args):
       '--diff-mapping-path',
       type=str,
       help='absolute path to the file that stores the diff mapping')
-  parser.add_argument(
-      '--exec-filename-pattern',
-      required=True,
-      type=str,
-      help='Regex pattern for .exec filenames to be considered '
-      'for generating metadata.')
   params = parser.parse_args(args=args)
 
   if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
@@ -393,12 +387,10 @@ def main():
                      'jacococli.jar'), 'report'
     ]
     host_coverage_files = [
-        f for f in coverage_files if f.endswith('junit_tests.exec') and
-        re.match(params.exec_filename_pattern, f)
+        f for f in coverage_files if f.endswith('junit_tests.exec')
     ]
     device_coverage_files = [
-        f for f in coverage_files if not f.endswith('junit_tests.exec') and
-        re.match(params.exec_filename_pattern, f)
+        f for f in coverage_files if not f.endswith('junit_tests.exec')
     ]
 
     device_cmd = (
@@ -438,7 +430,7 @@ def main():
       with open(os.path.join(params.output_dir, exported_filename), 'w') as f:
         f.write(zlib.compress(json.dumps(data)))
 
-    _export_as_json(temp_overall_xml, 'all.json.gz')
+    _export_as_json(temp_overall_xml, 'overall_tests.json.gz')
 
   finally:
     shutil.rmtree(temp_dir)

@@ -72,10 +72,6 @@ PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
     'chromeos': {
         'unit': '(crashpad|ipc|.*unit).*test.*',
         'overall': '.+'
-    },
-    'android': {
-        'unit': '(.*unit).*test.*',
-        'overall': '.+'
     }
 }
 PLATFORM_TO_TARGET_NAME_PATTERN_MAP[

@@ -362,9 +362,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     if self.use_java_coverage:
       try:
-        for test_type in self._test_types:
-          self._current_processing_test_type = test_type
-          self.process_java_coverage_data()
+        self.process_java_coverage_data()
       finally:
         self.m.python(
             'Clean up Java coverage files',
@@ -494,8 +492,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           'skip processing coverage data because no source file changed', '')
       return
 
-    with self.m.step.nest('process java coverage (%s)' %
-                          self._current_processing_test_type):
+    with self.m.step.nest('process java coverage'):
       try:
         coverage_dir = self.m.chromium.output_dir.join('coverage')
         args = [
@@ -525,18 +522,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               '--dir-metadata-path',
               dir_metadata_path,
           ])
-        args.extend([
-            '--exec-filename-pattern',
-            ("%s\.exec" % constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
-                self.platform][self._current_processing_test_type])
-        ])
+
         self.m.python(
             'Generate Java coverage metadata',
             self.resource('generate_coverage_metadata_for_java.py'),
             args=args,
             **kwargs)
 
-        metadata_path = coverage_dir.join('all.json.gz')
+        self._current_processing_test_type = 'overall'
+        metadata_path = coverage_dir.join('%s_tests.json.gz' %
+                                          self._current_processing_test_type)
         if not self.m.path.exists(metadata_path):
           self.m.python.succeeding_step(
               'skip processing because %s tests metadata was missing' %

@@ -40,14 +40,12 @@ def RunSteps(api):
         api.profiles.profile_dir().join('unit-merged.profdata'))
     api.path.mock_add_paths(
         api.profiles.profile_dir().join('overall-merged.profdata'))
-  if api.properties.get('mock_java_tests_metadata_path', True):
+  if api.properties.get('mock_java_all_tests_metadata_path', True):
     api.path.mock_add_paths(
-        api.chromium.output_dir.join('coverage').join('all.json.gz'))
-
-
-#   if api.properties.get('mock_java_unit_tests_metadata_path', True):
-#     api.path.mock_add_paths(
-#         api.chromium.output_dir.join('coverage').join('unit_tests.json.gz'))
+        api.chromium.output_dir.join('coverage').join('overall_tests.json.gz'))
+  if api.properties.get('mock_java_unit_tests_metadata_path', True):
+    api.path.mock_add_paths(
+        api.chromium.output_dir.join('coverage').join('unit_tests.json.gz'))
   if api.properties.get('mock_javascript_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('devtools_code_coverage').join(
@@ -465,32 +463,14 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='chromium.fyi', builder='android-code-coverage'),
       api.code_coverage(use_java_coverage=True),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'Extract directory metadata'),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
-          'Extract directory metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
-          'gsutil Upload JSON metadata'),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'process java coverage for full-codebase dual coverage',
-      api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
-      api.code_coverage(
-          use_java_coverage=True, coverage_test_types=['unit', 'overall']),
-      api.post_process(
-          post_process.MustRun, 'process java coverage (unit).'
-          'Generate Java coverage metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
-          'Generate Java coverage metadata'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -522,21 +502,20 @@ def GenTests(api):
       ]),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'generate line number mapping from bot to Gerrit'),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
-      api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
-          'gsutil Upload JSON metadata'),
+      api.post_process(post_process.MustRun, 'process java coverage.'
+                       'gsutil Upload JSON metadata'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'java metadata for tests does not exist',
+      'java metadata for all tests does not exist',
       api.chromium.try_build(
           builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
@@ -545,15 +524,15 @@ def GenTests(api):
           'some/path/to/FileTest.java',
           'some/other/path/to/FileTest.java',
       ]),
-      api.properties(mock_java_tests_metadata_path=False),
+      api.properties(mock_java_all_tests_metadata_path=False),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'generate line number mapping from bot to Gerrit'),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'Generate Java coverage metadata'),
       api.post_process(
-          post_process.MustRun, 'process java coverage (overall).'
+          post_process.MustRun, 'process java coverage.'
           'skip processing because overall tests metadata was missing'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -565,11 +544,10 @@ def GenTests(api):
           builder_group='chromium.fyi', builder='android-code-coverage'),
       api.code_coverage(use_java_coverage=True),
       api.step_data(
-          'process java coverage (overall).Generate Java coverage metadata',
-          retcode=1),
-      api.post_check(lambda check, steps: check(steps[
-          'process java coverage (overall).Generate Java coverage metadata'
-      ].output_properties['process_coverage_data_failure'] == True)),
+          'process java coverage.Generate Java coverage metadata', retcode=1),
+      api.post_check(lambda check, steps: check(
+          steps['process java coverage.Generate Java coverage metadata'
+               ].output_properties['process_coverage_data_failure'] == True)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -585,11 +563,10 @@ def GenTests(api):
           'some/other/path/to/file.java',
       ]),
       api.step_data(
-          'process java coverage (overall).Generate Java coverage metadata',
-          retcode=1),
-      api.post_check(lambda check, steps: check(steps[
-          'process java coverage (overall).Generate Java coverage metadata'
-      ].output_properties['process_coverage_data_failure'] == True)),
+          'process java coverage.Generate Java coverage metadata', retcode=1),
+      api.post_check(lambda check, steps: check(
+          steps['process java coverage.Generate Java coverage metadata'
+               ].output_properties['process_coverage_data_failure'] == True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
