@@ -1405,6 +1405,40 @@ class ExperimentalTest(TestWrapper):
     return {}
 
 
+class LocalTest(Test):
+  """Abstract class for local tests.
+
+  This class contains logic related to running tests locally, namely for local
+  RDB invocations. All of which is intended to be shared with any subclasses.
+  """
+  # pylint: disable=abstract-method
+
+  def __init__(self, spec):
+    super(LocalTest, self).__init__(spec)
+    self._suffix_to_invocation_names = {}
+
+  def get_invocation_names(self, suffix):
+    inv = self._suffix_to_invocation_names.get(suffix)
+    return [inv] if inv else []
+
+  def update_inv_name_from_stderr(self, stderr, suffix):
+    """Scans the given stderr for a local test for the test's invocation name.
+
+    And updates self._suffix_to_invocation_names with the name.
+
+    Args:
+      stderr: stderr from the step_data.StepData obj returned from the step
+          wrapped with `rdb stream -new ...`.
+      suffix: String suffix representing the phase of the build.
+    """
+    # TODO(crbug.com/1227180): Specify our own custom invocation name rather
+    # than parsing stderr.
+    match = RDB_INVOCATION_NAME_RE.search(stderr)
+    if match:
+      inv_name = match.group(1)
+      self._suffix_to_invocation_names[suffix] = inv_name
+
+
 # TODO(gbeaty) Simplify ScriptTestSpec/ScriptTest to just have the compile
 # targets for the script rather than having a mapping with all compile targets
 # and optional override compile targets
@@ -1434,7 +1468,7 @@ class ScriptTestSpec(TestSpec):
     return ScriptTest
 
 
-class ScriptTest(Test):  # pylint: disable=W0232
+class ScriptTest(LocalTest):  # pylint: disable=W0232
   """
   Test which uses logic from script inside chromium repo.
 
@@ -1449,11 +1483,6 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
   def __init__(self, spec):
     super(ScriptTest, self).__init__(spec)
-    self._suffix_to_invocation_names = {}
-
-  def get_invocation_names(self, suffix):
-    inv = self._suffix_to_invocation_names.get(suffix)
-    return [inv] if inv else []
 
   def compile_targets(self):
     if self.spec.override_compile_targets:
@@ -1542,12 +1571,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           api.test_utils.format_step_text([['failures:', failures]]))
 
     if result:
-      # TODO(crbug.com/1227180): Specify our own custom invocation name rather
-      # than parsing stderr.
-      match = RDB_INVOCATION_NAME_RE.search(result.stderr)
-      if match:
-        inv_name = match.group(1)
-        self._suffix_to_invocation_names[suffix] = inv_name
+      self.update_inv_name_from_stderr(result.stderr, suffix)
 
     return self._test_runs[suffix]
 
@@ -1638,7 +1662,7 @@ class LocalGTestTestSpec(TestSpec):
     return LocalGTestTest
 
 
-class LocalGTestTest(Test):
+class LocalGTestTest(LocalTest):
 
   def __init__(self, spec):
     super(LocalGTestTest, self).__init__(spec)
@@ -2766,7 +2790,7 @@ class LocalIsolatedScriptTestSpec(TestSpec):
     return _get_results_handler(self.results_handler_name, JSONResultsHandler())
 
 
-class LocalIsolatedScriptTest(Test):
+class LocalIsolatedScriptTest(LocalTest):
 
   def __init__(self, spec):
     super(LocalIsolatedScriptTest, self).__init__(spec)
@@ -3026,7 +3050,7 @@ class AndroidJunitTestSpec(TestSpec):
     return AndroidJunitTest
 
 
-class AndroidJunitTest(Test):
+class AndroidJunitTest(LocalTest):
 
   @property
   def uses_local_devices(self):
@@ -3043,7 +3067,8 @@ class AndroidJunitTest(Test):
         json_results_file=json_results_file,
         step_test_data=(
             lambda: api.test_utils.test_api.canned_gtest_output(False)),
-        resultdb=self.spec.resultdb)
+        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        resultdb=self.prep_local_rdb(api))
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -3059,6 +3084,7 @@ class AndroidJunitTest(Test):
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
+      self.update_inv_name_from_stderr(step_result.stderr, suffix)
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(

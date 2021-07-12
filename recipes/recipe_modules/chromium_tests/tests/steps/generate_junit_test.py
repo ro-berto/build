@@ -18,6 +18,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_results',
     'test_utils',
@@ -108,12 +109,16 @@ def GenTests(api):
           'args': ['--foo=bar'],
       }),
       api.post_process(post_process.MustRun, 'junit_test'),
-      api.override_step_data('junit_test',
-                             api.test_utils.canned_gtest_output(True)),
+      api.override_step_data(
+          'junit_test',
+          api.test_utils.canned_gtest_output(True),
+          stderr=api.raw_io.output(
+              'rdb-stream: included "test-invocation" in "build-invocation"')),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
-          'rdb', 'stream', '-var', 'builder:test_buildername', '-tag',
-          'step_name:junit_test', '-coerce-negative-duration',
-          '-exonerate-unexpected-pass', '--'
+          'rdb', 'stream', '-var', 'builder:test_buildername', '-var',
+          'test_suite:junit_test', '-tag', 'step_name:junit_test',
+          '-coerce-negative-duration', '-new', '-realm', 'chromium:ci',
+          '-include', '-exonerate-unexpected-pass', '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),
@@ -143,8 +148,9 @@ def GenTests(api):
                              api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
-          'builder:test_buildername', '-tag', 'step_name:junit_test',
-          '-coerce-negative-duration', '-exonerate-unexpected-pass', '--'
+          'builder:test_buildername', '-var', 'test_suite:junit_test', '-tag',
+          'step_name:junit_test', '-coerce-negative-duration', '-new', '-realm',
+          'chromium:ci', '-include', '-exonerate-unexpected-pass', '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),
