@@ -316,6 +316,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
             self.m.resultdb.invocation_ids(invocation_names),
             step_name=step_name)
 
+      # Collect the remaining invocation names for all non-swarming tests. We
+      # don't need to run include_invocations() for these since invocations
+      # created locally are automatically included in the parent invocation.
+      for t in local_test_suites + skylab_test_suites:
+        invocation_names.extend(t.get_invocation_names(suffix))
+
     for group in groups:
       group.run(caller_api, suffix)
 
@@ -333,9 +339,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                        suffix if suffix else 'query test results')
     if not invocation_names:
       step_result = self.m.step('[skipped] %s' % query_step_name, [])
-      step_result.presentation.logs["stdout"] = [
-          'No swarming test results to query.'
-      ]
+      step_result.presentation.logs["stdout"] = ['No test results to query.']
       return (RDBResults.create({}), bad_results_dict['invalid'],
               bad_results_dict['failed'])
 
@@ -343,12 +347,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     all_rdb_results = []
     with self.m.step.nest(query_step_name):
       # For each Swarming test suite, fetch its results via RDB.
-      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching. And
-      # do this for all test types, not just swarming & script tests.
-      script_tests = [
-          t for t in local_test_suites if isinstance(t, steps.ScriptTest)
-      ]
-      for t in swarming_test_suites + script_tests:
+      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
+      for t in test_suites:
         invocation_names = t.get_invocation_names(suffix)
         if not invocation_names:
           result = self.m.step('No RDB results for %s' % t.name, [])
