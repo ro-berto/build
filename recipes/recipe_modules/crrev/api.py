@@ -43,20 +43,3 @@ class CrrevApi(recipe_api.RecipeApi):
       return result['git_sha']
     except (self.m.step.StepFailure, KeyError):
       raise self.m.step.StepFailure('Could not resolve ' + commit_position)
-
-  def to_commit_position(self, commit_hash, attempts=3, step_name=None):
-    """Fetches a commit position string given a commit hash."""
-    if not re.match(r'^[0-9a-zA-Z]{40}$', commit_hash):
-      raise ValueError('Not a full 40-digit SHA1 hash (%s)' % commit_hash)
-    step_name = step_name or 'crrev get commit position for ' + commit_hash
-    try:
-      result = self(step_name, 'commit_path/' + commit_hash, attempts=attempts)
-      numberings = result['numberings']
-    except (self.m.step.StepFailure, KeyError):
-      raise self.m.step.StepFailure('Could not resolve ' + commit_hash)
-    for numbering in numberings:
-      if numbering['numbering_type'] == 'COMMIT_POSITION':
-        ref = numbering['numbering_identifier']
-        number = numbering['number']
-        return self.m.commit_position.format(ref, number)
-    raise self.m.step.StepFailure('No commit position for ' + commit_hash)

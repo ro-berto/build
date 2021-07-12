@@ -15,45 +15,17 @@ DEPS = [
 
 
 def RunSteps(api):
-  if 'commit_position' in api.properties.keys():
-    cp = api.properties['commit_position']
-    try:
-      api.crrev.to_commit_hash(cp)
-    except ValueError:
-      raise recipe_api.StepFailure('Invalid commit position: %s' % cp)
-
-  if 'commit_hash' in api.properties.keys():
-    sha = api.properties['commit_hash']
-    try:
-      api.crrev.to_commit_position(sha)
-    except ValueError:
-      raise recipe_api.StepFailure('Invalid commit hash: %s' % sha)
+  cp = api.properties['commit_position']
+  try:
+    api.crrev.to_commit_hash(cp)
+  except ValueError:
+    raise recipe_api.StepFailure('Invalid commit position: %s' % cp)
 
 
 def GenTests(api):
   yield api.test(
       'invalid_commit_position',
       api.properties(commit_position='foo'),
-  )
-
-  yield api.test(
-      'invalid_hash',
-      api.properties(commit_hash='foo'),
-  )
-
-  yield api.test(
-      'valid_hash',
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
-      api.step_data(
-          name='crrev get commit position for '
-          'abcdeabcde0123456789abcdeabcde0123456789',
-          stdout=api.json.output({
-              'numberings': [{
-                  'number': '111',
-                  'numbering_identifier': 'refs/heads/master',
-                  'numbering_type': 'COMMIT_POSITION',
-              }]
-          })),
   )
 
   yield api.test(
@@ -72,24 +44,4 @@ def GenTests(api):
       api.step_data(
           name='crrev get commit hash for refs/heads/master@{#111}',
           stdout=api.json.output({})),
-  )
-
-  yield api.test(
-      'empty_commit_position_output',
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
-      api.step_data(
-          name='crrev get commit position for '
-          'abcdeabcde0123456789abcdeabcde0123456789',
-          stdout=api.json.output({})),
-  )
-
-  yield api.test(
-      'no_numberings',
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
-      api.step_data(
-          name='crrev get commit position for '
-          'abcdeabcde0123456789abcdeabcde0123456789',
-          stdout=api.json.output({
-              'numberings': []
-          })),
   )
