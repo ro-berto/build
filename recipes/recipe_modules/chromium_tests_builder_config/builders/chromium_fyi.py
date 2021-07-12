@@ -857,6 +857,23 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Linux Builder (j-500) (g-ip) (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+                'reclient_test',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'Linux Builder (j-500) (n2) (reclient)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
@@ -1117,6 +1134,24 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            # Set archive build to false since this is a shadow.
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
+    'TSAN Release (g-ip) (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'tsan2', 'clobber'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+                'reclient_test',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
