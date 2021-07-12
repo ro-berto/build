@@ -9,9 +9,7 @@ DEPS = [
     'chromium_checkout',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/gsutil',
     'depot_tools/tryserver',
-    'infra/zip',
     'ios',
     'recipe_engine/commit_position',
     'recipe_engine/context',
@@ -53,23 +51,6 @@ def RunSteps(api):
   api.webrtc.get_binary_sizes(
       files=['WebRTC.xcframework/ios-arm64/WebRTC.framework/WebRTC'],
       base_dir=output_dir)
-
-  if not api.tryserver.is_tryserver:
-    zip_out = api.path['start_dir'].join('webrtc_ios_api_framework.zip')
-    pkg = api.zip.make_package(output_dir, zip_out)
-    pkg.add_directory(
-        output_dir.join('WebRTC.xcframework', 'ios-arm64', 'WebRTC.framework',
-                        'WebRTC'))
-    pkg.zip('zip archive')
-
-    if not api.runtime.is_experimental:
-      api.gsutil.upload(
-          zip_out,
-          'chromium-webrtc',
-          ('ios_api_framework/webrtc_ios_api_framework_%s.zip' %
-           api.webrtc.revision_number),
-          args=['-a', 'public-read'],
-          unauthenticated_url=True)
 
 
 def GenTests(api):
