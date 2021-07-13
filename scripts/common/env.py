@@ -293,15 +293,6 @@ def GetEnvPythonPath():
   return PythonPath.FromPathStr(pythonpath)
 
 
-def GetMasterPythonPath(master_dir):
-  """Returns (PythonPath): A path including a BuildBot master's directory.
-
-  Args:
-    master_dir (str): The BuildBot master root directory.
-  """
-  return PythonPath.FromPaths(master_dir)
-
-
 def GetBuildPythonPath():
   """Returns (PythonPath): The Chrome Infra build path.
   """
@@ -315,23 +306,19 @@ def GetBuildPythonPath():
   return build_path
 
 
-def GetInfraPythonPath(master_dir=None, with_third_party=True):
+def GetInfraPythonPath(with_third_party=True):
   """Returns (PythonPath): The full working Chrome Infra utility path.
 
-  This path is consistent for master, slave, and tool usage. It includes (in
+  This path is consistent for builder and tool usage. It includes (in
   this order):
     - Any environment PYTHONPATH overrides.
-    - If 'master_dir' is supplied, the master's python path component.
     - The Chrome Infra build path.
     - The system python path.
 
   Args:
-    master_dir (str): If not None, include a master path component.
     with_third_party (bool): True, use third_party libraries in the build path.
   """
   path = PythonPath()
-  if master_dir:
-    path += GetMasterPythonPath(master_dir)
   path += GetBuildPythonPath()
 
   # workaround for official builder (crbug.com/843012)
@@ -339,17 +326,6 @@ def GetInfraPythonPath(master_dir=None, with_third_party=True):
     path += GetEnvPythonPath()
 
   return path
-
-
-def _InfraPathFromArgs(args):
-  """Returns (PythonPath): A PythonPath populated from command-line arguments.
-
-  Args:
-    args (argparse.Namespace): The command-line arguments constructed by 'main'.
-  """
-  return GetInfraPythonPath(
-      master_dir=args.master_dir,
-  )
 
 
 def _Command_Echo(args, path):
@@ -384,8 +360,6 @@ def _Command_Print(args, path):
 def main():
   """Main execution function."""
   parser = argparse.ArgumentParser()
-  parser.add_argument('-M', '--master_dir',
-      help="Augment the path with the master's directory.")
   parser.add_argument('-o', '--output', metavar='PATH',
       type=argparse.FileType('w'), default='-',
       help="File to output to (use '-' for STDOUT).")
@@ -404,7 +378,7 @@ def main():
   args = parser.parse_args()
 
   # Execute our subcommand function, which will return the exit code.
-  path = _InfraPathFromArgs(args)
+  path = GetInfraPythonPath()
   return args.func(args, path)
 
 

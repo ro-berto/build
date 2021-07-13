@@ -184,8 +184,6 @@ class InfraPythonPathTestCase(unittest.TestCase):
 
   def testGenerate(self):
     self.assertIsNotNone(env.GetInfraPythonPath())
-    self.assertIsNotNone(env.GetInfraPythonPath(
-        master_dir=os.path.join(env.Build, 'masters', 'master.chromium')))
 
   def testRequestsLoads(self):
     # NOTE: Update this if 'requests' version changes.
