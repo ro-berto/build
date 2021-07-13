@@ -316,14 +316,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
             self.m.resultdb.invocation_ids(invocation_names),
             step_name=step_name)
 
-      # Collect the remaining invocation names for all non-swarming tests. We
-      # don't need to run include_invocations() for these since invocations
-      # created locally are automatically included in the parent invocation.
-      for t in local_test_suites + skylab_test_suites:
-        invocation_names.extend(t.get_invocation_names(suffix))
-
     for group in groups:
       group.run(caller_api, suffix)
+
+    if self.m.resultdb.enabled:
+      # Collect the remaining invocation names for all non-swarming tests. Note
+      # that we parse the tests' stderr to determine their invocation names. So
+      # the tests must already have run. We also don't need to run
+      # include_invocations() for these since invocations created locally are
+      # automatically included in the parent invocation.
+      for t in local_test_suites + skylab_test_suites:
+        invocation_names.extend(t.get_invocation_names(suffix))
 
     bad_results_dict = {}
     (bad_results_dict['invalid'],
