@@ -91,17 +91,6 @@ def CommitChecks(input_api, output_api):
   return output
 
 
-def BuildInternalCheck(output, input_api, output_api):
-  if output:
-    b_i = input_api.os_path.join(input_api.PresubmitLocalPath(), '..',
-                                 'build_internal')
-    if input_api.os_path.exists(b_i):
-      return [output_api.PresubmitNotifyResult(
-          'You have a build_internal checkout. '
-          'Updating it may resolve some issues.')]
-  return []
-
-
 def CommonChecks(input_api, output_api):
   file_filter = lambda x: x.LocalPath() == 'infra/config/recipes.cfg'
   return input_api.canned_checks.CheckJsonParses(
@@ -124,6 +113,5 @@ def CheckChangeOnUpload(input_api, output_api):
 def CheckChangeOnCommit(input_api, output_api):
   output = CommonChecks(input_api, output_api)
   output.extend(CommitChecks(input_api, output_api))
-  output.extend(BuildInternalCheck(output, input_api, output_api))
   output.extend(CheckChangeOnUpload(input_api, output_api))
   return output
