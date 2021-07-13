@@ -8,7 +8,7 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into git cl.
 """
 
-import re
+PRESUBMIT_VERSION = '2.0.0'
 
 
 def GetFilesToSkip(input_api):
@@ -30,11 +30,11 @@ def GetFilesToSkip(input_api):
   ]
 
 
-def CommitChecks(input_api, output_api):
-  def join(*args):
-    return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
+def join(input_api, *args):
+  return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
-  # Run pylint.
+
+def CheckPylintOnCommit(input_api, output_api):
   vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
   infra_path = input_api.subprocess.check_output(
       [vpython, 'scripts/common/env.py', 'print']).split()
@@ -43,7 +43,7 @@ def CommitChecks(input_api, output_api):
       'W0613',  # Unused argument
       'W0403',  # Relative import. TODO(crbug.com/1095510): remove this
   ]
-  output = input_api.canned_checks.RunPylint(
+  return input_api.canned_checks.RunPylint(
       input_api,
       output_api,
       files_to_skip=GetFilesToSkip(input_api),
@@ -52,11 +52,13 @@ def CommitChecks(input_api, output_api):
           # Initially, a separate run was done for unit tests but now that
           # pylint is fetched in memory with setuptools, it seems it caches
           # sys.path so modifications to sys.path aren't kept.
-          join('recipes', 'unittests'),
-          join('tests'),
+          join(input_api, 'recipes', 'unittests'),
+          join(input_api, 'tests'),
       ]
   )
 
+
+def CheckTestsOnCommit(input_api, output_api):
   tests = []
 
   for dir_glob in (
@@ -68,50 +70,49 @@ def CommitChecks(input_api, output_api):
       ('recipes', 'recipes', '*', '*.resources'),
   ):
     glob = dir_glob + ('*_test.py',)
-    test_files = input_api.glob(join(*glob))
+    test_files = input_api.glob(join(input_api, *glob))
     tests.extend(
         input_api.canned_checks.GetUnitTests(input_api, output_api, test_files)
     )
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
   # condition where multiple tests are trying to fetch at once.
-  output.extend(input_api.RunTests([input_api.Command(
-      name='recipes fetch',
-      cmd=[input_api.python_executable,
-           input_api.os_path.join('recipes', 'recipes.py'), 'fetch'],
-      kwargs={},
-      message=output_api.PresubmitError,
-  )]))
+  output = input_api.RunTests([
+      input_api.Command(
+          name='recipes fetch',
+          cmd=[
+              input_api.python_executable,
+              input_api.os_path.join('recipes', 'recipes.py'), 'fetch'
+          ],
+          kwargs={},
+          message=output_api.PresubmitError,
+      )
+  ])
   # Run the tests.
   output.extend(input_api.RunTests(tests))
 
-  output.extend(input_api.canned_checks.PanProjectChecks(
-      input_api, output_api, excluded_paths=GetFilesToSkip(input_api),
-      owners_check=False))
   return output
 
 
-def CommonChecks(input_api, output_api):
+def CheckPanProjectChecksOnCommit(input_api, output_api):
+  return input_api.canned_checks.PanProjectChecks(
+      input_api,
+      output_api,
+      excluded_paths=GetFilesToSkip(input_api),
+      owners_check=False
+  )
+
+
+def CheckConfigFilesParse(input_api, output_api):
   file_filter = lambda x: x.LocalPath() == 'infra/config/recipes.cfg'
   return input_api.canned_checks.CheckJsonParses(
       input_api, output_api, file_filter=file_filter
   )
 
 
-def CheckChangeOnUpload(input_api, output_api):
-  output = CommonChecks(input_api, output_api)
+def CheckPatchFormatted(input_api, output_api):
   # TODO(https://crbug.com/979330) If clang-format is fixed for non-chromium
   # repos, remove check_clang_format=False so that proto files can be formatted
-  output.extend(
-      input_api.canned_checks.CheckPatchFormatted(
-          input_api, output_api, check_clang_format=False
-      )
+  return input_api.canned_checks.CheckPatchFormatted(
+      input_api, output_api, check_clang_format=False
   )
-  return output
-
-
-def CheckChangeOnCommit(input_api, output_api):
-  output = CommonChecks(input_api, output_api)
-  output.extend(CommitChecks(input_api, output_api))
-  output.extend(CheckChangeOnUpload(input_api, output_api))
-  return output
