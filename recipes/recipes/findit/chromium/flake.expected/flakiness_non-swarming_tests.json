@@ -1577,11 +1577,16 @@
   },
   {
     "cmd": [],
-    "name": "test r0.[skipped] query test results (r0)",
+    "name": "test r0.query test results (r0)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@stdout@No test results to query.@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test r0.query test results (r0).No RDB results for gl_tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

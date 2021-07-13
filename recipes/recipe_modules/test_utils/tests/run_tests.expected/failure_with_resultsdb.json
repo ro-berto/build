@@ -618,10 +618,7 @@
   },
   {
     "cmd": [],
-    "name": "query test results",
-    "~followup_annotations": [
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "query test results"
   },
   {
     "cmd": [
@@ -667,8 +664,7 @@
     "cmd": [],
     "name": "query test results.No RDB results for test3",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

@@ -212,10 +212,13 @@
   },
   {
     "cmd": [],
-    "name": "[skipped] query test results (with patch)",
+    "name": "query test results (with patch)"
+  },
+  {
+    "cmd": [],
+    "name": "query test results (with patch).No RDB results for EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@No test results to query.@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

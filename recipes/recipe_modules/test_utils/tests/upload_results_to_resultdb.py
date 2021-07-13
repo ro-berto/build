@@ -149,10 +149,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.post_process(post_process.DoesNotRun,
-                       'query test results (with patch)'),
-      api.post_process(post_process.MustRun,
-                       '[skipped] query test results (with patch)'),
+      api.post_process(post_process.MustRun, 'query test results (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
