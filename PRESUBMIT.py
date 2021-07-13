@@ -34,8 +34,6 @@ def CommitChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
-  output = []
-
   # Run pylint.
   vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
   infra_path = input_api.subprocess.check_output(
@@ -45,18 +43,19 @@ def CommitChecks(input_api, output_api):
       'W0613',  # Unused argument
       'W0403',  # Relative import. TODO(crbug.com/1095510): remove this
   ]
-  output.extend(input_api.canned_checks.RunPylint(
+  output = input_api.canned_checks.RunPylint(
       input_api,
       output_api,
       files_to_skip=GetFilesToSkip(input_api),
       disabled_warnings=disabled_warnings,
       extra_paths_list=infra_path + [
-        # Initially, a separate run was done for unit tests but now that
-        # pylint is fetched in memory with setuptools, it seems it caches
-        # sys.path so modifications to sys.path aren't kept.
-        join('recipes', 'unittests'),
-        join('tests'),
-      ]))
+          # Initially, a separate run was done for unit tests but now that
+          # pylint is fetched in memory with setuptools, it seems it caches
+          # sys.path so modifications to sys.path aren't kept.
+          join('recipes', 'unittests'),
+          join('tests'),
+      ]
+  )
 
   tests = []
 
@@ -103,8 +102,15 @@ def BuildInternalCheck(output, input_api, output_api):
   return []
 
 
+def CommonChecks(input_api, output_api):
+  file_filter = lambda x: x.LocalPath() == 'infra/config/recipes.cfg'
+  return input_api.canned_checks.CheckJsonParses(
+      input_api, output_api, file_filter=file_filter
+  )
+
+
 def CheckChangeOnUpload(input_api, output_api):
-  output = []
+  output = CommonChecks(input_api, output_api)
   # TODO(https://crbug.com/979330) If clang-format is fixed for non-chromium
   # repos, remove check_clang_format=False so that proto files can be formatted
   output.extend(
@@ -116,7 +122,8 @@ def CheckChangeOnUpload(input_api, output_api):
 
 
 def CheckChangeOnCommit(input_api, output_api):
-  output = CommitChecks(input_api, output_api)
+  output = CommonChecks(input_api, output_api)
+  output.extend(CommitChecks(input_api, output_api))
   output.extend(BuildInternalCheck(output, input_api, output_api))
   output.extend(CheckChangeOnUpload(input_api, output_api))
   return output
