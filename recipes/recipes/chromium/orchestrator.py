@@ -145,7 +145,7 @@ def RunSteps(api, properties):
       api.isolate.set_isolated_tests(swarm_hashes)
 
       tests = [
-          t for t in targets_config.all_tests()
+          t for t in targets_config.tests_in_scope()
           if t.uses_isolate and t.target_name in api.isolate.isolated_tests
       ]
       api.chromium_tests.download_command_lines_for_tests(
