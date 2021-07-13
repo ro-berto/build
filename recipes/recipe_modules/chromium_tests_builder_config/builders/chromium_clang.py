@@ -340,6 +340,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -348,12 +349,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            swarming_server='https://chrome-swarming.appspot.com',
-            isolate_server='https://chrome-isolated.appspot.com',
-            swarming_dimensions={
-                'pool': 'chrome.tests',
-                'os': 'Windows-10',
-            },
         ),
     'ToTWin(dbg)':
         _chromium_clang_spec(
@@ -387,6 +382,7 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -395,12 +391,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            swarming_server='https://chrome-swarming.appspot.com',
-            isolate_server='https://chrome-isolated.appspot.com',
-            swarming_dimensions={
-                'pool': 'chrome.tests',
-                'os': 'Windows-10',
-            },
         ),
     'ToTWinASanLibfuzzer':
         _chromium_clang_spec(
