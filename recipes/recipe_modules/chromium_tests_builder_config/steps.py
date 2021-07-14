@@ -1232,6 +1232,16 @@ class TestWrapper(Test):  # pragma: no cover
   def isolate_profile_data(self):
     return self._test.isolate_profile_data
 
+  def get_invocation_names(self, suffix):
+    return self._test.get_invocation_names(suffix)
+
+  @property
+  def rdb_results(self):
+    return self._test.rdb_results
+
+  def update_rdb_results(self, suffix, results):
+    return self._test.update_rdb_results(suffix, results)
+
 
 @attrs()
 class ExperimentalTestSpec(TestWrapperSpec):
@@ -2587,7 +2597,10 @@ class SwarmingTest(Test):
     return self._tasks.get(suffix)
 
   def get_invocation_names(self, suffix):
-    return self.get_task(suffix).get_invocation_names()
+    task = self.get_task(suffix)
+    if task:
+      return task.get_invocation_names()
+    return []
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
