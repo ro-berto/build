@@ -1353,10 +1353,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     additional_trigger_properties = self.outbound_transfer(
         builder_id, builder_config, update_step, targets_config)
 
-    if builder_config.upload_isolates_but_do_not_run_tests:
-      self._explain_why_we_upload_isolates_but_do_not_run_tests()
-      return None
-
     self.trigger_child_builds(
         builder_id,
         update_step,
@@ -1406,7 +1402,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       triggered child builds.
     """
     isolate_transfer = any(
-        t.uses_isolate for t in targets_config.tests_triggered_by(builder_id))
+        t.uses_isolate for t in targets_config.tests_triggered_by(builder_id)
+    ) or builder_config.expose_trigger_properties
     non_isolated_tests = [
         t for t in targets_config.tests_triggered_by(builder_id)
         if not t.uses_isolate
@@ -1415,6 +1412,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bool(non_isolated_tests) or builder_config.bisect_archive_build)
 
     additional_trigger_properties = {}
+
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
@@ -1426,6 +1424,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_trigger_properties['swarming_command_lines_cwd'] = (
             self.m.path.relpath(self.m.chromium.output_dir,
                                 self.m.path['checkout']))
+
+      # This gets set if we don't trigger builds. Whatever wants the output of
+      # this build probably wants access to the same properties, so expose them
+      # here.
+      if builder_config.expose_trigger_properties:
+        self.m.step.active_result.presentation.properties[
+            'trigger_properties'] = additional_trigger_properties
 
     if (package_transfer and
         builder_config.execution_mode == ctbc.COMPILE_AND_TEST):
@@ -1511,15 +1516,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             # api expects this to be an actual list.
             test.raw_cmd = list(command_line)
             test.relative_cwd = cwd
-
-  def _explain_why_we_upload_isolates_but_do_not_run_tests(self):
-    self.m.python.succeeding_step(
-        'explain isolate tests', [
-            'This bot is uploading isolates so that individuals can download ',
-            'them and run tests locally when we do not yet have enough ',
-            'hardware available for bots to run the tests directly',
-        ],
-        as_log='why is this running?')
 
   def _explain_package_transfer(self, builder_config, non_isolated_tests):
     package_transfer_reasons = [
@@ -1663,10 +1659,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         root_solution_revision=root_solution_revision)
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
-
-    if task.builder_config.upload_isolates_but_do_not_run_tests:
-      self._explain_why_we_upload_isolates_but_do_not_run_tests()
-      return None
 
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:

@@ -203,6 +203,22 @@ class BuilderSpec(object):
   # A bool controlling whether an isolate is uploaded to the perf dashboard
   perf_isolate_upload = attrib(bool, default=False)
 
+  # A bool controlling if a build should expose details about triggering tests.
+  # If set, the 'trigger_properties' output property will be present on the
+  # build.  It will contain the properties normally set when triggering
+  # subsequent builds, which includes the isolate digests, the digest of a file
+  # containing the command lines for each isolate to execute, and the cwd of
+  # the checkout.
+  # This will only do something if the build actually produces isolates. This
+  # also only works on CI builders.
+  #
+  # This is normally not necessary. Builders only need to archive command
+  # lines if another build will need to use them. The chromium recipe
+  # automatically does this if your build triggers another build using the
+  # chromium recipe. Only set this value if something other than a triggered
+  # chromium builder needs to use the isolates created during a build execution.
+  expose_trigger_properties = attrib(bool, default=False)
+
   # A bool controlling whether to archive the build outputs
   archive_build = attrib(bool, default=None)
   # The bucket to archive the build to
@@ -253,12 +269,6 @@ class BuilderSpec(object):
   # For acceptable values, see
   # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
   simulation_platform = attrib(str, default=None)
-
-  # See api._explain_why_we_upload_isolates_but_do_not_run_tests() for
-  # Why this exists.
-  # TODO(crbug.com/1106083) - Remove this when we have hardware in Swarming
-  # and can run the tests; this should no longer be needed at that point.
-  upload_isolates_but_do_not_run_tests = attrib(bool, default=False)
 
   # Whether to set the buildbucket output commit for the build
   # TODO(https://crbug.com/1170220) Remove this once we're able to specify

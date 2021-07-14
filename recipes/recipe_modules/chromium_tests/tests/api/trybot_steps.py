@@ -606,68 +606,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  fake_group = 'fake_group'
-  fake_builder = 'fake-builder'
-  fake_test = 'fake_test'
-  fake_try_builder = 'fake-try-builder'
-
-  yield api.test(
-      'trybot_uploads_isolates_but_does_not_run_tests',
-      api.properties(
-          config='Release',
-          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
-      ),
-      api.chromium_tests_builder_config.try_build(
-          builder_group=fake_group,
-          builder=fake_try_builder,
-          builder_db=ctbc.BuilderDatabase.create({
-              fake_group: {
-                  fake_builder:
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          upload_isolates_but_do_not_run_tests=True,
-                      ),
-              }
-          }),
-          try_db=ctbc.TryDatabase.create({
-              fake_group: {
-                  fake_try_builder:
-                      ctbc.TrySpec.create(mirrors=[
-                          ctbc.TryMirror.create(
-                              builder_group=fake_group,
-                              buildername=fake_builder,
-                          )
-                      ])
-              }
-          })),
-      api.chromium_tests.read_source_side_spec(
-          fake_group, {
-              fake_builder: {
-                  'isolated_scripts': [{
-                      'name': fake_test,
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                      }
-                  }],
-              }
-          }),
-      api.override_step_data(
-          'read filter exclusion spec',
-          api.json.output({
-              'base': {
-                  'exclusions': ['f.*'],
-              },
-              'chromium': {
-                  'exclusions': [],
-              }
-          })),
-      api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.MustRun, 'explain isolate tests'),
-      api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   yield api.test(
       'basic dryrun',
       api.properties(dry_run=True),

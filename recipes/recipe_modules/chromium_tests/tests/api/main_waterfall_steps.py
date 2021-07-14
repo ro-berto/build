@@ -732,8 +732,12 @@ def GenTests(api):
   fake_builder = 'fake-builder'
   fake_test = 'fake_test'
 
+  def PropertyExists(check, step_odict, key):
+    properties = post_process.GetBuildProperties(step_odict)
+    check(key in properties)
+
   yield api.test(
-      'ci_bot_uploads_isolates_but_does_not_run_tests',
+      'ci_bot_expose_trigger_properties',
       api.properties(
           config='Release',
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
@@ -748,7 +752,7 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          upload_isolates_but_do_not_run_tests=True,
+                          expose_trigger_properties=True,
                       ),
               }
           })),
@@ -764,7 +768,9 @@ def GenTests(api):
               }
           }),
       api.post_process(post_process.MustRun, 'isolate tests'),
-      api.post_process(post_process.MustRun, 'explain isolate tests'),
+      api.post_process(post_process.MustRun,
+                       'archive command lines to RBE-CAS'),
+      api.post_process(PropertyExists, 'trigger_properties'),
       api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
       api.post_process(post_process.DropExpectation),
   )
