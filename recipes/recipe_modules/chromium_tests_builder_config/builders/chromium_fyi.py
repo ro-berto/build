@@ -1299,6 +1299,60 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'lacros-amd64-generic-rel (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos', 'enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+        ),
+    'lacros-amd64-generic-rel (goma cache silo)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb', 'goma_enable_cache_silo'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+        ),
+    'linux-lacros-builder-rel (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos', 'enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
+    'linux-lacros-builder-rel (goma cache silo)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb', 'goma_enable_cache_silo'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
 }
 
 SPEC.update([
