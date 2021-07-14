@@ -40,10 +40,7 @@ GN_PROPERTIES = [
 ]
 
 # List of dimensions used for starting swarming on ARM64.
-SWARMING_DIMENSIONS = {
-    'cpu': 'arm64',
-    'os': 'Ubuntu-18.04'
-}
+SWARMING_DIMENSIONS = {'cpu': 'arm64', 'os': 'Ubuntu-20.04'}
 
 # LUCI pool information.
 FLEX_TRY_POOL = 'luci.flex.try'
