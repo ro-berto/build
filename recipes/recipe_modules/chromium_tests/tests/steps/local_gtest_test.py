@@ -88,18 +88,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'android',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={'test': 'gtest_test'},
-          target_platform='android',
-      ),
-  )
-
-  yield api.test(
       'windows',
       api.chromium.ci_build(
           builder_group='test_group',

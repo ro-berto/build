@@ -1260,34 +1260,6 @@ def GenTests(api):
           }),
   )
 
-  yield api.test(
-      'dynamic_gtest_android',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.android',
-          builder='Lollipop Phone Tester',
-          parent_buildername='Android arm Builder (dbg)'),
-      api.chromium_tests.read_source_side_spec('chromium.android', {
-          'Lollipop Phone Tester': {
-              'gtest_tests': [{
-                  'test': 'base_unittests',
-              }],
-          },
-      }),
-  )
-
-  yield api.test(
-      'dynamic_gtest_fuchsia',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
-      api.chromium_tests.read_source_side_spec('chromium.fyi', {
-          'Fuchsia': {
-              'gtest_tests': [{
-                  'test': 'base_unittests',
-              }],
-          },
-      }),
-  )
-
   # Tests switching on asan and swiching off lsan for sandbox tester.
   yield api.test(
       'dynamic_gtest_memory_asan_no_lsan',

@@ -1718,9 +1718,6 @@ class LocalGTestTest(LocalTest):
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    is_android = api.chromium.c.TARGET_PLATFORM == 'android'
-    is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
-
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
@@ -1741,15 +1738,11 @@ class LocalGTestTest(LocalTest):
         'step_test_data': step_test_data,
         'resultdb': resultdb,
     }
-    if is_android:
-      kwargs['json_results_file'] = gtest_results_file
-      kwargs['shard_timeout'] = self.spec.android_shard_timeout
-    else:
-      kwargs['xvfb'] = self.spec.use_xvfb
-      kwargs['test_type'] = self.name
-      kwargs['annotate'] = self.spec.annotate
-      kwargs['test_launcher_summary_output'] = gtest_results_file
-      kwargs.update(self._get_runtest_kwargs(api))
+    kwargs['xvfb'] = self.spec.use_xvfb
+    kwargs['test_type'] = self.name
+    kwargs['annotate'] = self.spec.annotate
+    kwargs['test_launcher_summary_output'] = gtest_results_file
+    kwargs.update(self._get_runtest_kwargs(api))
 
     if self.spec.perf_config:
       kwargs['perf_config'] = self._get_revision(api, self.spec.perf_config)
@@ -1758,23 +1751,11 @@ class LocalGTestTest(LocalTest):
       kwargs['perf_builder_name_alias'] = self.spec.perf_builder_name_alias
 
     try:
-      if is_android:
-        api.chromium_android.run_test_suite(self.target_name, **kwargs)
-      elif is_fuchsia:
-        script = api.chromium.output_dir.join('bin',
-                                              'run_%s' % self.target_name)
-        args.extend(['--test-launcher-summary-output', gtest_results_file])
-        args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
-        cmd = ['python', '-u', script] + args
-        if resultdb and resultdb.enable:
-          cmd = resultdb.wrap(api, cmd, step_name=self.target_name)
-        api.step(self.target_name, cmd)
-      else:
-        api.chromium.runtest(
-            self.target_name,
-            revision=self.spec.revision,
-            webkit_revision=self.spec.webkit_revision,
-            **kwargs)
+      api.chromium.runtest(
+          self.target_name,
+          revision=self.spec.revision,
+          webkit_revision=self.spec.webkit_revision,
+          **kwargs)
       # TODO(kbr): add functionality to generate_gtest to be able to
       # force running these local gtests via isolate from the src-side
       # JSON files. crbug.com/584469
