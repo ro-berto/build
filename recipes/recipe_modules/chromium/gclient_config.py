@@ -312,7 +312,8 @@ def chrome_internal(c):
 
   p = c.repo_path_map
   p['https://chrome-internal.googlesource.com/chrome/src-internal'] = (
-      'src-internal', None)
+      'src-internal', 'HEAD')
+
 
 @CONFIG_CTX()
 def checkout_instrumented_libraries(c):

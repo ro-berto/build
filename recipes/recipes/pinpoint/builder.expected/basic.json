@@ -65,7 +65,7 @@
       "@@@STEP_LOG_LINE@config@  \"repo_path_map\": {@@@",
       "@@@STEP_LOG_LINE@config@    \"https://chrome-internal.googlesource.com/chrome/src-internal\": [@@@",
       "@@@STEP_LOG_LINE@config@      \"src-internal\", @@@",
-      "@@@STEP_LOG_LINE@config@      null@@@",
+      "@@@STEP_LOG_LINE@config@      \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@config@    ], @@@",
       "@@@STEP_LOG_LINE@config@    \"https://chromium.googlesource.com/angle/angle\": [@@@",
       "@@@STEP_LOG_LINE@config@      \"src/third_party/angle\", @@@",
