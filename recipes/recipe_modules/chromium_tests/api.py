@@ -181,56 +181,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         sorted(builder_config.source_side_spec_files.iteritems())
     }
     tests = {}
-    # migration type -> builder group -> builder -> test info
-    # migration type is one of 'already migrated', 'needs migration', 'mismatch'
-    # test info is a dict with key 'test' storing the name of the test and the
-    # optional key 'logs' containing logs to add to the migration tracking step
-    # for the test
-    migration_state = {}
 
     for builder_id in builder_config.all_keys:
       builder_spec = builder_config.builder_db[builder_id]
-      builder_tests, builder_migration_state = (
-          self.generate_tests_from_source_side_spec(
-              source_side_specs[builder_id.group],
-              builder_spec,
-              builder_id.builder,
-              builder_id.group,
-              builder_spec.swarming_dimensions,
-              scripts_compile_targets_fn,
-              update_step,
-          ))
+      builder_tests = self.generate_tests_from_source_side_spec(
+          source_side_specs[builder_id.group],
+          builder_spec,
+          builder_id.builder,
+          builder_id.group,
+          builder_spec.swarming_dimensions,
+          scripts_compile_targets_fn,
+          update_step,
+      )
       tests[builder_id] = builder_tests
-
-      for key, migration_tests in builder_migration_state.iteritems():
-        if not migration_tests:
-          continue
-        migration_type_dict = migration_state.setdefault(key, {})
-        group_dict = migration_type_dict.setdefault(builder_id.group, {})
-        group_dict[builder_id.builder] = migration_tests
-
-    if migration_state:
-      self._report_test_spec_migration_state(migration_state)
 
     return TargetsConfig.create(
         builder_config=builder_config,
         source_side_specs=source_side_specs,
         tests=tests)
-
-  def _report_test_spec_migration_state(self, migration_state):
-    with self.m.step.nest('test spec migration') as presentation:
-      presentation.step_text = (
-          '\nThis is an informational step for infra maintainers')
-      for key, groups in sorted(migration_state.iteritems()):
-        with self.m.step.nest(key):
-          for group, builders in sorted(groups.iteritems()):
-            with self.m.step.nest(group):
-              for builder, tests in sorted(builders.iteritems()):
-                with self.m.step.nest(builder):
-                  for t in sorted(tests, key=lambda t: t['test']):
-                    result = self.m.step(t['test'], [])
-                    for log, contents in sorted(t.get('logs', {}).iteritems()):
-                      result.presentation.logs[log] = contents
 
   def prepare_checkout(self, builder_config, report_cache_state=True,
                        root_solution_revision=None, **kwargs):
@@ -293,64 +261,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for s in test_specs_for_generator:
         test_specs[s.name] = s
 
-    migration_state = {
-        'needs migration': [],
-        'already migrated': [],
-        'mismatch': [],
-    }
-    for s in builder_spec.test_specs:
-      src_spec = test_specs.get(s.name)
-      test_specs[s.name] = s
-      if src_spec is None:
-        migration_state['needs migration'].append({'test': s.name})
-      else:
-        src_spec = src_spec.without_waterfall().without_test_id_prefix()
-        s = s.without_waterfall().without_test_id_prefix()
-        if hasattr(s, 'merge') and s.merge is None:
-          # Specs specified in the recipes generally don't have the merge script
-          # set whereas the source side specs will always have them generated,
-          # so clear it from the source side spec if its not present in the
-          # recipe spec
-          src_spec = src_spec.without_merge()
-        if s == src_spec:
-          migration_state['already migrated'].append({'test': s.name})
-        else:
-
-          def to_text(spec):
-
-            def encode(obj):
-              if isinstance(obj, FrozenDict):
-                return dict(obj)
-              if isinstance(obj, Path):
-                return str(obj)
-              return '**Could not be encoded**'  # pragma: no cover
-
-            text = self.m.json.dumps(
-                spec.as_jsonish(), default=encode, indent=2, sort_keys=True)
-            return text.splitlines()
-
-          src_spec_text = to_text(src_spec)
-          s_text = to_text(s)
-          d = {
-              'test': s.name,
-              'logs': {
-                  'specs diff':
-                      difflib.unified_diff(
-                          s_text,
-                          src_spec_text,
-                          'spec defined in recipe',
-                          'spec defined in source side spec file',
-                          # Use the max of the lengths so that the entire spec
-                          # appears in the diff
-                          n=max(len(s_text), len(src_spec_text)),
-                          lineterm='')
-              }
-          }
-          migration_state['mismatch'].append(d)
-
     tests = tuple(s.get_test() for s in test_specs.itervalues())
 
-    return tests, migration_state
+    return tests
 
   def read_source_side_spec(self, source_side_spec_file):
     source_side_spec_path = self.m.chromium.c.source_side_spec_dir.join(

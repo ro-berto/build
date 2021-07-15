@@ -13,19 +13,7 @@ from RECIPE_MODULES.build.chromium import BuilderId
 
 def _migration_validation(builder_id, builder_spec):
   """Validate that back-sliding of BuilderSpec migrations does not occur."""
-  if builder_spec.test_specs:
-    assert builder_id.group in (
-        'chrome.pgo',
-        'chromium.webrtc',
-
-        # Used for testing the migration
-        'fake-group',
-    ), ('Builder: {!r}\nUse of the test_specs field is deprecated,'
-        ' instead update the source side spec file for builder group {!r}.'
-        ' Contact gbeaty@ if you need assistance.').format(
-            builder_id, builder_id.group)
-
-  elif builder_spec.swarming_dimensions:
+  if builder_spec.swarming_dimensions:
     assert builder_id.group in (
         'chromium.clang',
         'chromium.fyi',

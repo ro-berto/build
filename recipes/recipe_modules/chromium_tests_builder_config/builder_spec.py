@@ -169,9 +169,6 @@ class BuilderSpec(object):
   # Dimensions to apply to all created swarming tasks
   # Deprecated: Swarming dimensions should be specified in the source side spec
   # for a builder
-  # Deprecation exception: If you're using the deprecated test_specs field, it
-  # is acceptable to continue using this field so that it applies to both tests
-  # in the test_specs field and the tests from the source side spec
   swarming_dimensions = attrib(mapping[str, ...], default={})
   # URL to override the swarming server to use
   swarming_server = attrib(str, default=None)
@@ -191,10 +188,6 @@ class BuilderSpec(object):
   # that will run non-isolated tests
   build_gs_bucket = attrib(str, default=None)
 
-  # Specs for tests to be run for this builder
-  # Deprecated: Tests should be specified in the source side spec for the
-  # builder
-  test_specs = attrib(sequence[steps.TestSpec], default=())
   # A bool controlling whether swarming tests should be run serially
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity
