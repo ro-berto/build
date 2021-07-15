@@ -17,25 +17,26 @@ class LibyuvApi(recipe_api.RecipeApi):
     self.group_config = None
     self.bot_config = None
     self.bot_type = None
+    self.buildername = None
     self.recipe_config = None
     self.revision = ''
 
   def apply_bot_config(self, builders, recipe_configs):
     builder_group = self.m.builder_group.for_current
-    buildername = self.m.buildbucket.builder_name
+    self.buildername = self.m.buildbucket.builder_name
     group_dict = builders.get(builder_group, {})
     self.group_config = group_dict.get('settings', {})
 
-    self.bot_config = group_dict.get('builders', {}).get(buildername)
+    self.bot_config = group_dict.get('builders', {}).get(self.buildername)
     assert self.bot_config, ('Unrecognized builder name "%r" for group "%r".' %
-                             (buildername, builder_group))
+                             (self.buildername, builder_group))
 
     self.bot_type = self.bot_config['bot_type']
     recipe_config_name = self.bot_config['recipe_config']
     self.recipe_config = recipe_configs.get(recipe_config_name)
     assert self.recipe_config, (
         'Cannot find recipe_config "%s" for builder "%r".' %
-        (recipe_config_name, buildername))
+        (recipe_config_name, self.buildername))
 
     chromium_kwargs = self.bot_config.get('chromium_config_kwargs', {})
     if self.recipe_config.get('chromium_android_config'):
@@ -58,7 +59,7 @@ class LibyuvApi(recipe_api.RecipeApi):
         # fastbuild is enabled since it implies symbol_level=2. So we can only
         # enable dcheck for those.
         self.m.chromium.apply_config('dcheck')
-      elif 'ubsan' in buildername.lower():
+      elif 'ubsan' in self.buildername.lower():
         pass  # UBSAN with dchecks crashes clang on some bots.
       else:
         self.m.chromium.apply_config('trybot_flavor')
@@ -66,6 +67,21 @@ class LibyuvApi(recipe_api.RecipeApi):
   @property
   def should_build(self):
     return self.bot_type in ('builder', 'builder_tester')
+
+  @property
+  def should_use_goma(self):
+    non_goma_builders = [
+        'Linux GCC',
+        'Win32 Debug',
+        'Win32 Release',
+        'Win64 Debug',
+        'Win64 Release',
+        'linux_gcc',
+        'win',
+        'win64_rel',
+        'win_rel',
+    ]
+    return self.buildername not in non_goma_builders
 
   @property
   def should_test(self):

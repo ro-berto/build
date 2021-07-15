@@ -29,7 +29,7 @@ def libyuv_clang(c):
   _libyuv_static_build(c)
 
 
-@CONFIG_CTX(includes=['ninja', 'gcc', 'goma'])
+@CONFIG_CTX(includes=['ninja', 'gcc'])
 def libyuv_gcc(c):
   _libyuv_common(c)
 

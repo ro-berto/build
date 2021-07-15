@@ -31,14 +31,15 @@ def RunSteps(api):
   libyuv.apply_bot_config(libyuv.BUILDERS, libyuv.RECIPE_CONFIGS)
 
   libyuv.checkout()
-  if libyuv.should_build:
+  should_use_goma = libyuv.should_use_goma
+  if libyuv.should_build and should_use_goma:
     api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   if libyuv.should_build:
     with libyuv.ensure_sdk():
-      api.chromium.run_gn(use_goma=True)
-      raw_result = api.chromium.compile(use_goma_module=True)
+      api.chromium.run_gn(use_goma=should_use_goma)
+      raw_result = api.chromium.compile(use_goma_module=should_use_goma)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
     if libyuv.should_upload_build:
