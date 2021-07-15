@@ -1207,73 +1207,7 @@
     "name": "test_pre_run (with patch)"
   },
   {
-    "cmd": [],
-    "name": "install infra/tools/run_annotations"
-  },
-  {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/cipd/infra/tools/run_annotations/latest"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "install infra/tools/run_annotations.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/cipd/infra/tools/run_annotations/latest",
-      "-ensure-file",
-      "infra/tools/run_annotations/${platform} latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "install infra/tools/run_annotations.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_2/sub_build.pb",
-      "--",
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -1300,21 +1234,12 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_3",
-      "TEMP": "[CLEANUP]/tmp_tmp_3",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_3",
-      "TMP": "[CLEANUP]/tmp_tmp_3",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_3"
+      "CHROME_HEADLESS": "1"
     },
     "name": "base_unittests (with patch)",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"FAILURE\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
+      "@@@STEP_LOG_END@raw_io.output[stderr]@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
@@ -2123,10 +2048,6 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_5/sub_build.pb",
-      "--",
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -2144,7 +2065,7 @@
       "--test-type=base_unittests",
       "--step-name=base_unittests (without patch)",
       "--test-launcher-summary-output",
-      "[CLEANUP]/tmp_tmp_4",
+      "[CLEANUP]/tmp_tmp_2",
       "--builder-name=linux-rel",
       "--slave-name=test_bot",
       "--build-number=571",
@@ -2157,20 +2078,11 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_6",
-      "TEMP": "[CLEANUP]/tmp_tmp_6",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_6",
-      "TMP": "[CLEANUP]/tmp_tmp_6",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_6"
+      "CHROME_HEADLESS": "1"
     },
     "name": "base_unittests (without patch)",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"FAILURE\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
+      "@@@STEP_LOG_END@raw_io.output[stderr]@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

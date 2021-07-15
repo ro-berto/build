@@ -1730,7 +1730,9 @@ class LocalGTestTest(LocalTest):
     gtest_results_file = api.test_utils.gtest_results(
         add_json_log=False, leak_to=resultdb.result_file)
 
-    step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
+    step_test_data = lambda: (
+        api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
+        stream_output('', 'stderr'))
 
     kwargs = {
         'name': self.step_name(suffix),
@@ -1755,6 +1757,7 @@ class LocalGTestTest(LocalTest):
           self.target_name,
           revision=self.spec.revision,
           webkit_revision=self.spec.webkit_revision,
+          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
           **kwargs)
       # TODO(kbr): add functionality to generate_gtest to be able to
       # force running these local gtests via isolate from the src-side
@@ -1777,6 +1780,7 @@ class LocalGTestTest(LocalTest):
         self.update_test_run(api, suffix,
                              gtest_results.canonical_result_format())
 
+      self.update_inv_name_from_stderr(step_result.stderr, suffix)
       r = api.test_utils.present_gtest_failures(step_result)
       if r:
         self._gtest_results[suffix] = r
