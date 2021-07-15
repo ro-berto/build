@@ -830,11 +830,12 @@ def GenTests(api):
     api.post_process(DropExpectation)
   )
 
-  # Test that we use mac-arm64 cpython in the mac-acm64 pool.
+  # Test that we use mac-arm64 cpython when using mac-arm64 devices.
   mac_arm64_test_spec = """
     {
       "swarming_dimensions": {
-        "pool": "chromium.tests.mac-arm64",
+        "pool": "chromium.tests",
+        "cpu": "arm64",
         "os": "Mac-11",
       },
       "tests": [

@@ -495,8 +495,9 @@ class V8SwarmingTest(V8Test):
     # from the pool template for mac-arm64 as it points to amd64 and causes
     # crashes. Remove this as soon as the python from the pool template is
     # mac-arm64.
-    if (self.test_step_config.swarming_dimensions.get('pool') ==
-        'chromium.tests.mac-arm64'):
+    cpu_dim = self.test_step_config.swarming_dimensions.get('cpu', '')
+    os_dim = self.test_step_config.swarming_dimensions.get('os', '')
+    if (cpu_dim == 'arm64' and os_dim.startswith('Mac')):
       cipd_packages = [
         chromium_swarming.CipdPackage.create(
               name='infra/3pp/tools/cpython/mac-arm64',
