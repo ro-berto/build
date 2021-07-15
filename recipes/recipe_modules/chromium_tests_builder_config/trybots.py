@@ -451,6 +451,17 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android FYI dEQP Release (Nexus 5X)',
                 retry_failed_shards=False,
             ),
+        'angle-try-mac-amd-exp':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.angle',
+                        buildername='mac-angle-builder',
+                        tester='mac-angle-amd-exp',
+                    ),
+                ],
+                retry_failed_shards=False,
+            ),
         'fuchsia-angle-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
@@ -1941,6 +1952,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                     builder_group='chromium.dawn',
                     buildername='Dawn Mac x64 DEPS Builder',
                     tester='Dawn Mac x64 DEPS Release (Intel)',
+                ),
+            ]),
+        'dawn-try-mac-amd-exp':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.dawn',
+                    buildername='Dawn Mac x64 Builder',
+                    tester='Dawn Mac x64 Experimental Release (AMD)',
                 ),
             ]),
         'dawn-win10-x86-deps-rel':

@@ -197,6 +197,8 @@ SPEC = {
         CreateBuilderConfig('mac', 64, internal=True),
     'mac-angle-amd':
         CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
+    'mac-angle-amd-exp':
+        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-intel':
         CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-nvidia':

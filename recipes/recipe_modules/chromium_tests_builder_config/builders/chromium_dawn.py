@@ -57,6 +57,8 @@ SPEC = {
     # The Dawn Mac testers are actually running on thin Linux VMs.
     'Dawn Mac x64 Release (AMD)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
+    'Dawn Mac x64 Experimental Release (AMD)':
+        CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
     'Dawn Mac x64 Release (Intel)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
     'Dawn Mac x64 DEPS Builder':
