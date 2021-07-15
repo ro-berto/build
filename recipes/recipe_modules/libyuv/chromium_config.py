@@ -33,6 +33,13 @@ def libyuv_clang(c):
 def libyuv_gcc(c):
   _libyuv_common(c)
 
+
+@CONFIG_CTX(includes=['ninja'])
+def libyuv_msvc(c):
+  _libyuv_common(c)
+  c.gn_args.append('is_clang=false')
+
+
 @CONFIG_CTX(includes=['android'])
 def libyuv_android(c):
   if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
