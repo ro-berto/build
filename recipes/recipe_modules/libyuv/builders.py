@@ -288,19 +288,6 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
             },
-            'Linux Memcheck': {
-                'recipe_config': 'libyuv',
-                'chromium_apply_config': ['memcheck'],
-                'gclient_apply_config': ['libyuv_valgrind'],
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'linux'
-                },
-            },
             'Linux MSan': {
                 'recipe_config': 'libyuv_clang',
                 'chromium_apply_config': ['msan'],
@@ -671,19 +658,6 @@ BUILDERS = freeze({
             'linux_asan': {
                 'recipe_config': 'libyuv_clang',
                 'chromium_apply_config': ['asan', 'lsan'],
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'linux'
-                },
-            },
-            'linux_memcheck': {
-                'recipe_config': 'libyuv',
-                'chromium_apply_config': ['memcheck'],
-                'gclient_apply_config': ['libyuv_valgrind'],
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,

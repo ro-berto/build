@@ -22,8 +22,3 @@ def libyuv_android(_):
 def libyuv_ios(c):
   c.target_os.add('mac')
   c.target_os.add('ios')
-
-@CONFIG_CTX(includes=['libyuv'])
-def libyuv_valgrind(c):
-  c.solutions[0].custom_deps['src/third_party/valgrind'] = \
-      ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')
