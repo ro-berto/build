@@ -23,10 +23,6 @@ def libyuv(c):
 @CONFIG_CTX(includes=['chromium_clang'])
 def libyuv_clang(c):
   _libyuv_common(c)
-  # TODO(https://bugs.chromium.org/p/libyuv/issues/detail?id=883): After
-  # switching to absl/flags, component builds are not working correctly
-  # see crbug.com/1166430 for a way to fix.
-  _libyuv_static_build(c)
 
 
 @CONFIG_CTX(includes=['ninja', 'gcc'])
@@ -42,10 +38,9 @@ def libyuv_msvc(c):
 
 @CONFIG_CTX(includes=['android'])
 def libyuv_android(c):
+  _libyuv_common(c)
   if c.TARGET_ARCH == 'intel' and c.TARGET_BITS == 32:
     c.gn_args.append('android_full_debug=true')
-
-  _libyuv_static_build(c)
 
 @CONFIG_CTX(includes=['chromium'])
 def libyuv_ios(c):
@@ -60,10 +55,14 @@ def libyuv_ios(c):
   c.gn_args.append('ios_enable_code_signing=false')
   c.gn_args.append('target_os="%s"' % c.TARGET_PLATFORM)
   _libyuv_common(c)
-  _libyuv_static_build(c)
 
 def _libyuv_common(c):
   c.compile_py.default_targets = []
+  # TODO(https://bugs.chromium.org/p/libyuv/issues/detail?id=883): After
+  # switching to absl/flags, component builds are not working correctly
+  # see crbug.com/1166430 for a way to fix.
+  _libyuv_static_build(c)
+
 
 def _libyuv_static_build(c):
   # TODO(kjellander): Investigate moving this into chromium recipe module's

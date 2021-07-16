@@ -100,7 +100,7 @@
       "--root=[CACHE]\\builder\\src",
       "gen",
       "//out/Debug",
-      "--args=is_clang=false is_debug=true target_cpu=\"x86\""
+      "--args=is_component_build=false is_clang=false is_debug=true target_cpu=\"x86\""
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
