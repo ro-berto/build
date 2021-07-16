@@ -4,7 +4,7 @@
 """Script to generate JavaScript coverage metadata file.
 
 The code coverage data format is defined at:
-https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
 """
 
 import argparse

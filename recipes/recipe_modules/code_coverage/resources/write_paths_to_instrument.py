@@ -4,7 +4,7 @@
 # found in the LICENSE file.
 """Writes an input file for the partial code coverage compile wrapper.
 
-https://chromium.googlesource.com/chromium/src/+/refs/heads/master/docs/clang_code_coverage_wrapper.md
+https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/clang_code_coverage_wrapper.md
 """
 
 import argparse

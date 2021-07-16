@@ -26,7 +26,7 @@ class SquashfsApi(recipe_api.RecipeApi):
     Meaning call:
     mksquashfs /abs/path/ /abs/another/path/image.sqsh
     See more at:
-    https://github.com/plougher/squashfs-tools/blob/master/USAGE
+    https://github.com/plougher/squashfs-tools/blob/HEAD/USAGE
     """
     if not self.m.platform.is_linux:
       self.m.python.failing_step('Mksquashfs only supports linux',

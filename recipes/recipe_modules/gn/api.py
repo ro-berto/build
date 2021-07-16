@@ -140,7 +140,7 @@ class GnApi(recipe_api.RecipeApi):
            output_format='label', step_name='calculate gn refs', **kwargs):
     """Find reverse dependencies for a given set of inputs.
 
-    See https://gn.googlesource.com/gn/+/master/docs/reference.md#refs for
+    See https://gn.googlesource.com/gn/+/main/docs/reference.md#refs for
     more documentation of the command.
 
     Args:
@@ -177,7 +177,7 @@ class GnApi(recipe_api.RecipeApi):
          step_name='list gn targets'):
     """List targets for a given set of inputs.
 
-    See https://gn.googlesource.com/gn/+/master/docs/reference.md#ls for
+    See https://gn.googlesource.com/gn/+/main/docs/reference.md#ls for
     more documentation of the command.
 
     Args:
@@ -207,7 +207,7 @@ class GnApi(recipe_api.RecipeApi):
   def clean(self, build_dir, step_name='clean outdir'):
     """Cleans the output directory except for args.gn and needed ninja files.
 
-    See https://gn.googlesource.com/gn/+/master/docs/reference.md#cmd_clean for
+    See https://gn.googlesource.com/gn/+/main/docs/reference.md#cmd_clean for
     more documentation of the command. The build_dir must exist and contain
     files from previous gn run.
 

@@ -259,7 +259,7 @@ def _calculate_line_summary_metrics(line_data):
     line_data (dict): Mapping from line number to corresponding execution count.
   Returns:
       A list that conforms to the Metric proto at
-      https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+      https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
   """
   covered = 0
   for _, count in line_data.iteritems():
@@ -275,7 +275,7 @@ def _to_compressed_file_record(src_path,
   """Converts the given Clang file coverage data to coverage metadata format.
 
   Coverage metadata format:
-  https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+  https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
 
   Args:
     src_path (str): The absolute path to the root directory of the checkout.
@@ -757,7 +757,7 @@ def _get_clang_summary_metrics(clang_summary):
 
   Returns:
     A list that conforms to the Metric proto at
-    https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+    https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
   """
   # Clang uses 'lines', 'regions', 'functions', whereas it's preferrable to use
   # singular forms in metadata format.

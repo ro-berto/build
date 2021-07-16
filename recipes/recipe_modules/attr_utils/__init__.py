@@ -289,7 +289,7 @@ sequence = _UnparameterizedSequence.create()
 
 # The set of allowed types should be kept in sync with the types allowed by
 # _validate_cmd_list in
-# https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/step/api.py
+# https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/recipe_modules/step/api.py
 command_args = sequence[(int, long, basestring, Path, Placeholder)]
 
 

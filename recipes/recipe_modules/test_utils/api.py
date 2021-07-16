@@ -380,7 +380,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # during the "without patch" phase.
     # Unexpected passes should be already exonerated in tasks.
     # Keep this logic in-sync with
-    # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
+    # https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
     # until that can be removed in favor of RDB.
     unexpected_result_variants = {}
     for inv in unexpected_result_invocations.values():
@@ -401,7 +401,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         'The test failed in both (with patch) and (without patch) steps, so the'
         'CL is exonerated for the test failures.'
         # pylint: disable=line-too-long
-        '(https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
+        '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
         # pylint: enable=line-too-long
     )
 
@@ -1164,7 +1164,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     The test_results will be an instance of the GTestResults class.
 
     Visit
-    https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/README.recipes.md
+    https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/README.recipes.md
     to find the definition and usage of add_json_log and leak_to.
     """
     return GTestResultsOutputPlaceholder(self, add_json_log, leak_to=leak_to)

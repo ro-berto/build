@@ -260,7 +260,7 @@ class BuilderSpec(object):
   # simulation tests we need to tell the platform recipe module what platform
   # the builder would be run on
   # For acceptable values, see
-  # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
+  # https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
   simulation_platform = attrib(str, default=None)
 
   # Whether to set the buildbucket output commit for the build

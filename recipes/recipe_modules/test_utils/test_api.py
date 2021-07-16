@@ -165,7 +165,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     # pylint: disable=line-too-long
     """Generates fake test results in the JSON test results format.
 
-    See https://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md
+    See https://chromium.googlesource.com/chromium/src/+/main/docs/testing/json_test_results_format.md
     for documentation on the format.
 
     Args:

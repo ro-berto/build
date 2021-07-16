@@ -13,7 +13,7 @@ In legacy format:
 * FULL form:     gs://chromium-owners/component_map.json
 
 See more on forms in
-https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/tools/dirmd/proto/mapping.proto
+https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/tools/dirmd/proto/mapping.proto
 """
 
 from RECIPE_MODULES.build import chromium

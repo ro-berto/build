@@ -37,7 +37,7 @@ def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only, use_py3):
   when updating tests and adding/moving directories.
 
   This step uses the generator_script; see documentation at
-  github.com/luci/recipes-py/blob/master/recipe_modules/generator_script/api.py
+  github.com/luci/recipes-py/blob/main/recipe_modules/generator_script/api.py
 
   Use the test_checkout_path property in local tests to run against a local
   copy of catapult_build/build_steps.py.

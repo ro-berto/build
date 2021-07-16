@@ -59,7 +59,7 @@ def _should_skip(path):
   This is meant as quick emulation of hte gitattributes-based skipping
   behavior previously provided by GitFileIolator.
   TODO(qyearsley): Implement gitattributes reading, or an alternative.
-  https://source.chromium.org/chromium/chromium/src/+/master:.gitattributes
+  https://source.chromium.org/chromium/chromium/src/+/main:.gitattributes
   """
   return (('third_party/blink/' in path and '-expected.' in path) or
           ('third_party/' in path and 'third_party/blink/' not in path))

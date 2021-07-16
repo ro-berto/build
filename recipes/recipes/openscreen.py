@@ -235,7 +235,7 @@ def GenerateRequest(api, binary, digest, dimensions):
   # a basic request with one mostly empty TaskRequest that can be used as a
   # template to generate slices.
   # For more information, see the swarming guide:
-  # https://chromium.googlesource.com/infra/luci/luci-py/+/master/appengine/swarming/doc/User-Guide.md#task #pylint: disable=line-too-long
+  # https://chromium.googlesource.com/infra/luci/luci-py/+/main/appengine/swarming/doc/User-Guide.md#task #pylint: disable=line-too-long
   task_slice = request[0].with_command([
       './out/{}/{}'.format(BUILD_CONFIG, binary)
   ]).with_dimensions(**dimensions).with_cas_input_root(digest)
@@ -362,7 +362,7 @@ def CalculateCodeCoverage(api, paths):
   # Upload the coverage results to the code_coverage cloud storge
   # account, so that Gerrit can find it.
   # For more information, see:
-  # https://source.chromium.org/chromium/chromium/tools/build/+/master:scripts/slave/recipe_modules/code_coverage/api.py;l=363  #pylint: disable=line-too-long
+  # https://source.chromium.org/chromium/chromium/tools/build/+/main:scripts/slave/recipe_modules/code_coverage/api.py;l=363  #pylint: disable=line-too-long
   api.code_coverage.process_clang_coverage_data(
       binaries={paths.unit_test_binary_path})
 

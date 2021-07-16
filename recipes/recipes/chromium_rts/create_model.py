@@ -277,7 +277,7 @@ def compose_build_summary(api, model_dir):
   )
 
   # Format of the file is GitBasedStrategyConfig in
-  # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/rts/cmd/rts-chromium/rts-chromium.proto
+  # https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/rts/cmd/rts-chromium/rts-chromium.proto
 
   # Note: this is essentially HTML, not plaintext, so whitespace is collapsed.
   lines = ['ChangeRecall | Savings | Max distance']

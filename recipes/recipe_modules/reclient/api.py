@@ -163,7 +163,7 @@ class ReclientApi(recipe_api.RecipeApi):
     exe_name = self._get_platform_exe_name(exe_name)
     if self._reclient_cipd_dir is None:
       # This depends on where the reclient CIPD is checked out in DEPS,
-      # https://source.chromium.org/chromium/chromium/src/+/master:DEPS;l=452-461;drc=6b88cf228d9d27f49e89f7c4d9ffb582771daa48
+      # https://source.chromium.org/chromium/chromium/src/+/main:DEPS;l=452-461;drc=6b88cf228d9d27f49e89f7c4d9ffb582771daa48
       reclient_cipd = self.m.path['checkout'].join('buildtools', 'reclient')
       self._reclient_cipd_dir = str(reclient_cipd)
     return self.m.path.join(self._reclient_cipd_dir, exe_name)
@@ -391,7 +391,7 @@ class ReclientApi(recipe_api.RecipeApi):
     ninja_log_outdir = ninja_command[log_index].replace('/', self.m.path.sep)
 
     # Metadata schema:
-    # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/appengine/chromium_build_stats/ninjalog/ninjalog.go;l=94-145;drc=deb62f6ebdf51d5187830310eddc9826d53dcc85
+    # https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/appengine/chromium_build_stats/ninjalog/ninjalog.go;l=94-145;drc=deb62f6ebdf51d5187830310eddc9826d53dcc85
     metadata = {
         'cmdline': ninja_command,
         'cwd': str(self.m.context.cwd),  # make it serializable
@@ -403,7 +403,7 @@ class ReclientApi(recipe_api.RecipeApi):
     }
     time_now = gzip_name_maker.timestamp
     # Must start with 'ninja_log' prefix, see
-    # https://source.chromium.org/chromium/infra/infra/+/master:go/src/infra/appengine/chromium_build_stats/app/ninja_log.go;l=311-314;drc=e507df6040ea871ba6ef6b5e7da00d8cb186a1bd
+    # https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/appengine/chromium_build_stats/app/ninja_log.go;l=311-314;drc=e507df6040ea871ba6ef6b5e7da00d8cb186a1bd
     gzip_filename = gzip_name_maker.make('ninja_log')
     gzip_path = self._tmp_base_dir.join(gzip_filename)
     # This assumes that ninja_log is small enough to be loaded into RAM. (As of

@@ -65,7 +65,7 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 REPEAT_COUNT_FOR_FAILING_TESTS = 10
 
 # Pinned version of
-# https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
+# https://chromium.googlesource.com/infra/infra/+/main/go/src/infra/cmd/mac_toolchain
 MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
 MAC_TOOLCHAIN_VERSION = (
     'git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1')
@@ -1786,7 +1786,7 @@ class JSONResultsHandler(ResultsHandler):
       failures: a dictionary mapping test names to failure information.
         The failure information could be empty or it could be a dictionary
         of per-test fields per
-        https://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md
+        https://chromium.googlesource.com/chromium/src/+/main/docs/testing/json_test_results_format.md
 
     Returns:
       A tuple: (failure state, list of failure strings).

@@ -1006,7 +1006,7 @@ SPEC = {
             build_gs_bucket='chromium-memory-archive',
         ),
     # Shadow of 'Linux TSan Builder' that runs on re-client
-    # https://source.chromium.org/chromium/chromium/tools/build/+/master:recipes/recipe_modules/chromium_tests/builders/chromium_memory.py;l=142-153;drc=f0bea90284b4f79199b3f4e7b577e6b31d395680
+    # https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/builders/chromium_memory.py;l=142-153;drc=f0bea90284b4f79199b3f4e7b577e6b31d395680
     # Add it as an FYI builder, so that its failure doesn't notify anyone.
     'Linux TSan Builder (reclient)':
         builder_spec.BuilderSpec.create(
@@ -1395,7 +1395,7 @@ SPEC.update([
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
     # Despite the FYI name, these are the "MVP bots" used by teams:
-    # https://source.chromium.org/chromium/chromium/src/+/master:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
+    # https://source.chromium.org/chromium/chromium/src/+/main:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
     stock_config('linux-wpt-identity-fyi-rel', staging=False),
     stock_config('linux-wpt-input-fyi-rel', staging=False),
     stock_config('mac-hermetic-upgrade-rel'),

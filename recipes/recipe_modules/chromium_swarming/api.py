@@ -291,7 +291,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     run at all, the previous results will be returned as-is.
 
     For more infos, see:
-    https://github.com/luci/luci-py/blob/master/appengine/swarming/doc/User-Guide.md#task-idempotency
+    https://github.com/luci/luci-py/blob/main/appengine/swarming/doc/User-Guide.md#task-idempotency
 
     This value can be changed per individual task.
     """
@@ -1115,7 +1115,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     req_name = task.task_name
     if task.shards > 1:
       # This is to imitate
-      # https://source.chromium.org/chromium/chromium/src/+/master:tools/swarming_client/swarming.py;l=256-260;drc=ae767b34c311b4efe7e007856bf5a98b44cd0134
+      # https://source.chromium.org/chromium/chromium/src/+/main:tools/swarming_client/swarming.py;l=256-260;drc=ae767b34c311b4efe7e007856bf5a98b44cd0134
       req_name = '%s:%d:%d' % (req_name, shard_index, task.shards)
     req = task.request.with_name(req_name)
     req_slice = req[0]
@@ -1856,7 +1856,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       default_priority: optional default_priority to use. Will override the
           priority name inherited from builder_group (or the global default).
       path_to_merge_scripts: The path to a local directory mirroring
-          https://chromium.googlesource.com/chromium/src/+/master/testing/merge_scripts/.
+          https://chromium.googlesource.com/chromium/src/+/main/testing/merge_scripts/.
           This is needed for accessing the scripts used for merging outputs. If
           unset, this module will look at self.m.chromium_checkout.working_dir.
     """
