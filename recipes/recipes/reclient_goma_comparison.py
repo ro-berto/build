@@ -31,6 +31,7 @@ COMPARISON_BUILDERS = freeze({
     'Comparison Linux': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
+        'chromium_apply_config': ['mb', 'goma_enable_cache_silo'],
         'gclient_apply_config': ['enable_reclient'],
         'platform': 'linux',
         'targets': ['all'],
