@@ -62,6 +62,10 @@ def RunSteps(api):
   experimental_test.pre_run(api.chromium_tests.m, suffix)
   experimental_test.run(api.chromium_tests.m, suffix)
 
+  # Just for code coverage.
+  experimental_test.get_invocation_names(suffix)
+  experimental_test.update_rdb_results(suffix, {})
+
   step_name = experimental_test.name_of_step_for_suffix(suffix)
   experiment_on = api.properties['experiment_percentage'] == '100'
   assert bool(step_name) == experiment_on

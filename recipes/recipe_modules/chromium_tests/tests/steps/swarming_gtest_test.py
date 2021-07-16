@@ -48,8 +48,10 @@ def RunSteps(api):
   test.test_options = test_options
 
   try:
+    assert len(test.get_invocation_names('')) == 0
     test.pre_run(api, '')
     test.run(api, '')
+    assert len(test.get_invocation_names('')) > 0
     assert test.runs_on_swarming and test.is_gtest
   finally:
     api.step('details', [])

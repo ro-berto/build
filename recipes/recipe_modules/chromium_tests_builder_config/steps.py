@@ -1344,6 +1344,14 @@ class ExperimentalTest(TestWrapper):
             self).pass_fail_counts(self._experimental_suffix(suffix))
     return {}
 
+  def get_invocation_names(self, suffix):
+    return super(ExperimentalTest,
+                 self).get_invocation_names(self._experimental_suffix(suffix))
+
+  def update_rdb_results(self, suffix, results):
+    return super(ExperimentalTest, self).update_rdb_results(
+        self._experimental_suffix(suffix), results)
+
 
 class LocalTest(Test):
   """Abstract class for local tests.
