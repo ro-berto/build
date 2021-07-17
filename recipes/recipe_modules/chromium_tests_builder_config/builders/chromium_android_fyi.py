@@ -247,4 +247,22 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
+    'android-cronet-x86-dbg-10-tests':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            chromium_apply_config=['cronet_builder', 'mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            parent_builder_group="chromium.android",
+            parent_buildername='android-cronet-x86-dbg',
+            execution_mode=builder_spec.TEST,
+            simulation_platform='linux',
+            android_config='main_builder',
+        ),
 }
