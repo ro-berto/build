@@ -78,8 +78,8 @@ class LibyuvApi(recipe_api.RecipeApi):
         'Win64 Release',
         'linux_gcc',
         'win',
-        'win64_rel',
         'win_rel',
+        'win_x64_rel',
     ]
     return self.buildername not in non_goma_builders
 
