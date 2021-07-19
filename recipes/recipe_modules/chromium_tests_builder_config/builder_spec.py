@@ -5,8 +5,6 @@
 import attr
 import itertools
 
-from . import steps
-
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
                                              sequence)
 
