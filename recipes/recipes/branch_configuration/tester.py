@@ -88,11 +88,15 @@ def _validate_properties(properties):
             "multiple configs named '{}' in branch_configs: {!r}".format(
                 config, indices))
 
-  if not properties.verification_scripts:
-    errors.append('verification_scripts is empty')
+  # TODO(gbeaty) Once the builders set starlark_entry_points, remove
+  # verification_scripts
+  if not properties.starlark_entry_points and properties.verification_scripts:
+    properties.starlark_entry_points.extend(properties.verification_scripts)
+  if not properties.starlark_entry_points:
+    errors.append('starlark_entry_points is empty')
   else:
-    validate_repeated_field('verification_scripts',
-                            properties.verification_scripts)
+    validate_repeated_field('starlark_entry_points',
+                            properties.starlark_entry_points)
 
   return errors
 
@@ -139,8 +143,10 @@ def RunSteps(api, properties):
         with api.step.nest('verify'):
           try:
             with api.step.defer_results():
-              for script in properties.verification_scripts:
-                api.step(script, [script])
+              for entry_point in properties.starlark_entry_points:
+                for subcommand in ('generate', 'validate'):
+                  cmd = ['lucicfg', subcommand, entry_point]
+                  api.step(' '.join(cmd), cmd)
           except api.step.StepFailure:
             bad_branch_configs.append(branch_config.name)
 
@@ -177,22 +183,22 @@ def GenTests(api):
                       branch_types=['branch-type1', 'branch-type2'],
                   ),
               ],
-              verification_scripts=[
-                  'verification-script1',
-                  'verification-script2',
+              starlark_entry_points=[
+                  'entry-point1.star',
+                  'entry-point2.star',
               ],
           )),
       api.post_check(
           post_process.MustRun,
           'branch-config1.set branch type',
-          'branch-config1.verify.verification-script1',
-          'branch-config1.verify.verification-script2',
+          'branch-config1.verify.lucicfg generate entry-point1.star',
+          'branch-config1.verify.lucicfg validate entry-point1.star',
           'branch-config2.set branch type',
-          'branch-config2.verify.verification-script1',
-          'branch-config2.verify.verification-script2',
+          'branch-config2.verify.lucicfg generate entry-point1.star',
+          'branch-config2.verify.lucicfg validate entry-point1.star',
           'branch-config3.set branch type',
-          'branch-config3.verify.verification-script1',
-          'branch-config3.verify.verification-script2',
+          'branch-config3.verify.lucicfg generate entry-point1.star',
+          'branch-config3.verify.lucicfg validate entry-point1.star',
       ),
       api.post_check(post_process.StepCommandContains,
                      'branch-config1.set branch type',
@@ -249,18 +255,24 @@ def GenTests(api):
                       branch_types=['branch-type3'],
                   ),
               ],
-              verification_scripts=[
-                  'verification-script1',
-                  'verification-script2',
+              starlark_entry_points=[
+                  'entry-point1.star',
+                  'entry-point2.star',
               ],
           )),
-      api.step_data('branch-config1.verify.verification-script1', retcode=1),
-      api.step_data('branch-config3.verify.verification-script2', retcode=1),
-      api.post_check(post_process.StepFailure,
-                     'branch-config1.verify.verification-script1'),
+      api.step_data(
+          'branch-config1.verify.lucicfg generate entry-point1.star',
+          retcode=1),
+      api.step_data(
+          'branch-config3.verify.lucicfg generate entry-point2.star',
+          retcode=1),
+      api.post_check(
+          post_process.StepFailure,
+          'branch-config1.verify.lucicfg generate entry-point1.star'),
       api.post_check(post_process.StepFailure, 'branch-config1'),
-      api.post_check(post_process.StepFailure,
-                     'branch-config3.verify.verification-script2'),
+      api.post_check(
+          post_process.StepFailure,
+          'branch-config3.verify.lucicfg generate entry-point2.star'),
       api.post_check(post_process.StepFailure, 'branch-config3'),
       api.post_check(post_process.StepSuccess, 'branch-config2'),
       api.post_check(post_process.StatusFailure),
@@ -289,7 +301,7 @@ def GenTests(api):
       invalid_properties(
           'branch_script is empty',
           'branch_configs is empty',
-          'verification_scripts is empty',
+          'starlark_entry_points is empty',
       ),
   )
 
@@ -315,8 +327,8 @@ def GenTests(api):
           r'\bbranch_configs\[0\].branch_types is empty\b',
           (r"\bmultiple configs named 'branch-config' "
            r'in branch_configs: \[1, 2\]'),
-          r'\bverification_scripts\[0\] is empty\b',
+          r'\bstarlark_entry_points\[0\] is empty\b',
           (r"\bmultiple occurrences of 'verification-script' "
-           r'in verification_scripts: \[1, 2\]'),
+           r'in starlark_entry_points: \[1, 2\]'),
       ),
   )

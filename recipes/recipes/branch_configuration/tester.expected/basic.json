@@ -146,20 +146,48 @@
   },
   {
     "cmd": [
-      "verification-script1"
+      "lucicfg",
+      "generate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config1.verify.verification-script1",
+    "name": "branch-config1.verify.lucicfg generate entry-point1.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [
-      "verification-script2"
+      "lucicfg",
+      "validate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config1.verify.verification-script2",
+    "name": "branch-config1.verify.lucicfg validate entry-point1.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "generate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config1.verify.lucicfg generate entry-point2.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "validate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config1.verify.lucicfg validate entry-point2.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -224,20 +252,48 @@
   },
   {
     "cmd": [
-      "verification-script1"
+      "lucicfg",
+      "generate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config2.verify.verification-script1",
+    "name": "branch-config2.verify.lucicfg generate entry-point1.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [
-      "verification-script2"
+      "lucicfg",
+      "validate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config2.verify.verification-script2",
+    "name": "branch-config2.verify.lucicfg validate entry-point1.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "generate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config2.verify.lucicfg generate entry-point2.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "validate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config2.verify.lucicfg validate entry-point2.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -304,20 +360,48 @@
   },
   {
     "cmd": [
-      "verification-script1"
+      "lucicfg",
+      "generate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config3.verify.verification-script1",
+    "name": "branch-config3.verify.lucicfg generate entry-point1.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [
-      "verification-script2"
+      "lucicfg",
+      "validate",
+      "entry-point1.star"
     ],
     "cwd": "[CACHE]/builder/project",
-    "name": "branch-config3.verify.verification-script2",
+    "name": "branch-config3.verify.lucicfg validate entry-point1.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "generate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config3.verify.lucicfg generate entry-point2.star",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "lucicfg",
+      "validate",
+      "entry-point2.star"
+    ],
+    "cwd": "[CACHE]/builder/project",
+    "name": "branch-config3.verify.lucicfg validate entry-point2.star",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]

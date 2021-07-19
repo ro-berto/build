@@ -6,6 +6,8 @@ syntax = "proto3";
 package recipes.build.branch_configuration.tester;
 
 message BranchConfig {
+  // Next ID: 3
+
   // Required, the name to identify the configuration.
   //
   // The name is arbitrary and is only used for display and human
@@ -19,6 +21,8 @@ message BranchConfig {
 }
 
 message InputProperties {
+  // Next ID: 6
+
   reserved 2;
   reserved "branch_types";
 
@@ -33,6 +37,7 @@ message InputProperties {
   // Required, the branch configs to verify
   repeated BranchConfig branch_configs = 4;
 
+  // DEPRECATED Use entry_point_scripts instead.
   // Required, the path within the repo to scripts to execute to verify each
   // branch type
   //
@@ -42,4 +47,13 @@ message InputProperties {
   // fails (exit code != 0), then the branch type will be considered a failure
   // and the build's status will be failure.
   repeated string verification_scripts = 3;
+
+  // Required, the path within the repo to the starlark entry point scripts
+  //
+  // For each branch type, after the project is reconfigured for the branch
+  // type, each of the entry point scripts will have their config regenerated
+  // and validated with the luci-config service. If regenerating or validating
+  // fails, then the branch type will be considered a failure and the build's
+  // status will be failure.
+  repeated string starlark_entry_points = 5;
 }
