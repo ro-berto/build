@@ -278,7 +278,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "src/tests/capture_replay_tests.py",
       "--use-goma",
       "--goma-dir=[CACHE]\\goma\\client",

@@ -60,7 +60,7 @@ class ANGLEApi(recipe_api.RecipeApi):
 
   def _run_trace_tests(self, checkout, gtest_filter, step_name):
     cmd = [
-        'python3',
+        'vpython3',
         'src/tests/capture_replay_tests.py',
         '--use-goma',
         '--goma-dir=%s' % self.m.goma.goma_dir,
