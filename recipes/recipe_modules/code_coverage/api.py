@@ -705,7 +705,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     args = [
         '--report-directory', self.report_dir, '--profdata-path', profdata_path,
-        '--llvm-cov', self.cov_executable, '--binaries'
+        '--llvm-cov', self.cov_executable, '--compilation-directory',
+        self.m.chromium.output_dir, '--binaries'
     ]
     args.extend(binaries)
     args.append('--sources')

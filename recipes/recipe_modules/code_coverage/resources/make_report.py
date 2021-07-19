@@ -21,6 +21,10 @@ def _make_report_argument_parser(*args, **kwargs):
       required=True,
       help='dir to store the generated report in, must exist')
   parser.add_argument(
+      '--compilation-directory',
+      required=True,
+      help='dir used as a base for relative coverage mapping paths')
+  parser.add_argument(
       '--profdata-path',
       required=True,
       help='where the merged profdata is stored')
@@ -52,7 +56,8 @@ def main():
     raise RuntimeError('Input data %s missing' % params.profdata_path)
 
   reporter.generate_report(params.llvm_cov, params.profdata_path,
-                           params.report_directory, params.binaries,
+                           params.report_directory,
+                           params.compilation_directory, params.binaries,
                            params.sources, params.arch)
 
   return 0

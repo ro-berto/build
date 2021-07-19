@@ -24,6 +24,7 @@ class MakeReportTest(unittest.TestCase):
   def test_parameters(self):
     with mock.patch.object(reporter, 'generate_report') as mock_gen_report:
       out_dir = 'out-dir'
+      compilation_dir = 'compilation-dir'
       profdata_file = 'merge.profdata'
       # Not the real path.
       llvm_cov = '/usr/bin/llvm_cov'
@@ -33,8 +34,16 @@ class MakeReportTest(unittest.TestCase):
 
       # Test successful call, without sources.
       args = [
-          'make_report.py', '--report-directory', out_dir, '--profdata-path',
-          profdata_file, '--llvm-cov', llvm_cov, '--binaries',
+          'make_report.py',
+          '--report-directory',
+          out_dir,
+          '--compilation-directory',
+          compilation_dir,
+          '--profdata-path',
+          profdata_file,
+          '--llvm-cov',
+          llvm_cov,
+          '--binaries',
       ]
       args.extend(binaries)
       with mock.patch('os.path.exists'):
@@ -43,8 +52,8 @@ class MakeReportTest(unittest.TestCase):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries, None, None),
-          mock_gen_report.call_args)
+          mock.call(llvm_cov, profdata_file, out_dir, compilation_dir, binaries,
+                    None, None), mock_gen_report.call_args)
 
       # With sources.
       args.append('--sources')
@@ -55,8 +64,8 @@ class MakeReportTest(unittest.TestCase):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources, None),
-          mock_gen_report.call_args)
+          mock.call(llvm_cov, profdata_file, out_dir, compilation_dir, binaries,
+                    sources, None), mock_gen_report.call_args)
 
       # With arch.
       args.extend(['--arch', 'x86_64'])
@@ -66,13 +75,21 @@ class MakeReportTest(unittest.TestCase):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources, arch),
-          mock_gen_report.call_args)
+          mock.call(llvm_cov, profdata_file, out_dir, compilation_dir, binaries,
+                    sources, arch), mock_gen_report.call_args)
 
       # Test validation.
       args = [
-          'make_report.py', '--report-directory', out_dir, '--profdata-path',
-          profdata_file, '--llvm-cov', llvm_cov, '--binaries',
+          'make_report.py',
+          '--report-directory',
+          out_dir,
+          '--compilation-directory',
+          compilation_dir,
+          '--profdata-path',
+          profdata_file,
+          '--llvm-cov',
+          llvm_cov,
+          '--binaries',
       ]
       args.extend(binaries)
       args.append('--sources')
@@ -112,6 +129,7 @@ class MakeReportTest(unittest.TestCase):
   def test_cov_invocation(self):
     with mock.patch.object(subprocess, 'check_output') as mock_run:
       out_dir = 'out-dir'
+      compilation_dir = 'compilation-dir'
       profdata_file = 'merge.profdata'
       # Not the real path.
       llvm_cov = '/usr/bin/llvm_cov'
@@ -119,23 +137,25 @@ class MakeReportTest(unittest.TestCase):
       sources = ['base/file1.cc', 'base/file2.cc']
 
       with mock.patch('platform.system', return_value='Linux'):
-        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
-                                 sources)
+        reporter.generate_report(llvm_cov, profdata_file, out_dir,
+                                 compilation_dir, binaries, sources)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
-              '-output-dir=out-dir', '-Xdemangler', 'c++filt', '-Xdemangler',
-              '-n', '-instr-profile=merge.profdata', 'binary1', '-object',
-              'binary2', 'base/file1.cc', 'base/file2.cc'
+              '-output-dir=out-dir', '-compilation-dir=compilation-dir',
+              '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
+              '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
+              'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
       with mock.patch('platform.system', return_value='Windows'):
-        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
-                                 sources)
+        reporter.generate_report(llvm_cov, profdata_file, out_dir,
+                                 compilation_dir, binaries, sources)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
-              '-output-dir=out-dir', '-Xdemangler', 'llvm-undname.exe',
+              '-output-dir=out-dir', '-compilation-dir=compilation-dir',
+              '-Xdemangler', 'llvm-undname.exe',
               '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
               'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
@@ -143,6 +163,7 @@ class MakeReportTest(unittest.TestCase):
   def test_arch(self):
     with mock.patch.object(subprocess, 'check_output') as mock_run:
       out_dir = 'out-dir'
+      compilation_dir = 'compilation-dir'
       profdata_file = 'merge.profdata'
       # Not the real path.
       llvm_cov = '/usr/bin/llvm_cov'
@@ -151,15 +172,15 @@ class MakeReportTest(unittest.TestCase):
       arch = 'x86_64'
 
       with mock.patch('platform.system', return_value='Darwin'):
-        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
-                                 sources, arch)
+        reporter.generate_report(llvm_cov, profdata_file, out_dir,
+                                 compilation_dir, binaries, sources, arch)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
-              '-output-dir=out-dir', '-arch=x86_64', '-arch=x86_64',
-              '-num-threads=1', '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
-              '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
-              'base/file1.cc', 'base/file2.cc'
+              '-output-dir=out-dir', '-compilation-dir=compilation-dir',
+              '-arch=x86_64', '-arch=x86_64', '-num-threads=1', '-Xdemangler',
+              'c++filt', '-Xdemangler', '-n', '-instr-profile=merge.profdata',
+              'binary1', '-object', 'binary2', 'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
 

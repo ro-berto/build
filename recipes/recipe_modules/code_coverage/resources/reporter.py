@@ -11,7 +11,8 @@ import subprocess
 
 
 def _call_cov_tool(cov_tool_path, profile_input_file_path,
-                   report_output_dir_path, binaries, sources, arch):
+                   report_output_dir_path, compilation_dir_path, binaries,
+                   sources, arch):
   """Calls the llvm-cov tool.
 
   Args:
@@ -19,6 +20,8 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
     profile_input_file_path (str): path to the merged profdata file.
     report_output_dir_path (str): path to the directory where the report files
         are to be written.
+    compilation_dir_path (str): path to the directory used as a base for
+        relative coverage mapping paths.
     binaries (list of str): list of paths to the instrumented executables to
         create a report for.
     sources (list of str): list of paths to the source files to include in the
@@ -32,8 +35,11 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
 
   try:
     subprocess_cmd = [
-        cov_tool_path, 'show', '-format=html',
-        '-output-dir=' + report_output_dir_path
+        cov_tool_path,
+        'show',
+        '-format=html',
+        '-output-dir=' + report_output_dir_path,
+        '-compilation-dir=' + compilation_dir_path,
     ]
 
     if arch:
@@ -72,6 +78,7 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
 def generate_report(llvm_cov,
                     profdata_path,
                     report_directory,
+                    compilation_directory,
                     binaries,
                     sources=None,
                     arch=None):
@@ -81,10 +88,12 @@ def generate_report(llvm_cov,
     llvm_cov (str): The path to the llvm-cov executable.
     profdata_path (str): The path to the merged input profile.
     report_directory (str): Where to write the report.
+    compilation_directory (str): the directory used as a base for relative 
+        coverage mapping paths.
     binaries (list of str): The binaries to write a report for.
     sources (list of str): list of paths to the source files to include in the
         report, includes all if not specified.
     arch (str): Binary architechture. Consumed by llvm command.
   """
-  _call_cov_tool(llvm_cov, profdata_path, report_directory, binaries, sources,
-                 arch)
+  _call_cov_tool(llvm_cov, profdata_path, report_directory,
+                 compilation_directory, binaries, sources, arch)
