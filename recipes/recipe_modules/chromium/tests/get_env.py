@@ -32,3 +32,9 @@ def GenTests(api):
       api.platform('mac', 64),
       api.properties(chromium_apply_config=['goma_store_only']),
   )
+
+  yield api.test(
+      'goma_large_cache_file',
+      api.platform('mac', 64),
+      api.properties(chromium_apply_config=['goma_large_cache_file']),
+  )

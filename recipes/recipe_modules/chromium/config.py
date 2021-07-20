@@ -65,6 +65,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
           GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),
           GOMA_STORE_ONLY=Single(bool, empty_val=False, required=False),
+          GOMA_DEPS_CACHE_MAX_PROTO_SIZE_IN_MB=Single(int, required=False),
           FORCE_MAC_TOOLCHAIN=Single(int, required=False),
           FORCE_MAC_SDK_MIN=Single(basestring, required=False),
       ),
@@ -263,6 +264,11 @@ def goma_enable_cache_silo(c):
 @config_ctx()
 def goma_store_only(c):
   c.env.GOMA_STORE_ONLY = True
+
+
+@config_ctx()
+def goma_large_cache_file(c):
+  c.env.GOMA_DEPS_CACHE_MAX_PROTO_SIZE_IN_MB = 256
 
 
 @config_ctx()
