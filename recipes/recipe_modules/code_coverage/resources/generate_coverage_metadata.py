@@ -903,9 +903,10 @@ def main():
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(data)))
-  with open(os.path.join(params.output_dir, 'all_referenced.json.gz'),
-            'wb') as f:
-    f.write(zlib.compress(json.dumps(referenced_data)))
+  if referenced_data:
+    with open(os.path.join(params.output_dir, 'all_referenced.json.gz'),
+              'wb') as f:
+      f.write(zlib.compress(json.dumps(referenced_data)))
   with open(os.path.join(params.output_dir, 'per_target_summaries.json'),
             'wb') as f:
     json.dump(summaries, f)
