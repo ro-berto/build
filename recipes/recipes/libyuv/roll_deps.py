@@ -55,8 +55,8 @@ def RunSteps(api):
             'Stale roll found. Abandoned.')
 
     # Enforce a clean state, and discard any local commits from previous runs.
-    api.git('checkout', '-f', 'master')
-    api.git('pull', 'origin', 'master')
+    api.git('checkout', '-f', 'main')
+    api.git('pull', 'origin', 'main')
     api.git('clean', '-ffd')
 
     # Run the roll script. It will take care of branch creation, modifying DEPS,
