@@ -23,8 +23,8 @@ message BranchConfig {
 message InputProperties {
   // Next ID: 6
 
-  reserved 2;
-  reserved "branch_types";
+  reserved 2, 3;
+  reserved "branch_types", "verification_scripts";
 
   // Required, the path within the repo to the branch script that can be used to
   // set the branch type
@@ -36,17 +36,6 @@ message InputProperties {
 
   // Required, the branch configs to verify
   repeated BranchConfig branch_configs = 4;
-
-  // DEPRECATED Use entry_point_scripts instead.
-  // Required, the path within the repo to scripts to execute to verify each
-  // branch type
-  //
-  // For each branch type, after the project is reconfigured for the branch
-  // type, the verification scripts will be executed in the order they appear.
-  // The scripts will be executed without any arguments. If any of the scripts
-  // fails (exit code != 0), then the branch type will be considered a failure
-  // and the build's status will be failure.
-  repeated string verification_scripts = 3;
 
   // Required, the path within the repo to the starlark entry point scripts
   //

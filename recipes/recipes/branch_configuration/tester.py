@@ -88,10 +88,6 @@ def _validate_properties(properties):
             "multiple configs named '{}' in branch_configs: {!r}".format(
                 config, indices))
 
-  # TODO(gbeaty) Once the builders set starlark_entry_points, remove
-  # verification_scripts
-  if not properties.starlark_entry_points and properties.verification_scripts:
-    properties.starlark_entry_points.extend(properties.verification_scripts)
   if not properties.starlark_entry_points:
     errors.append('starlark_entry_points is empty')
   else:
@@ -224,9 +220,9 @@ def GenTests(api):
                       branch_types=['bad-branch-type'],
                   ),
               ],
-              verification_scripts=[
-                  'verification-script1',
-                  'verification-script2',
+              starlark_entry_points=[
+                  'entry-point1.star',
+                  'entry-point2.star',
               ],
           )),
       api.step_data('bad-branch-config.set branch type', retcode=1),
@@ -316,10 +312,10 @@ def GenTests(api):
                   tester_pb.BranchConfig(name='branch-config'),
                   tester_pb.BranchConfig(name='branch-config'),
               ],
-              verification_scripts=[
+              starlark_entry_points=[
                   '',
-                  'verification-script',
-                  'verification-script',
+                  'entry-point.star',
+                  'entry-point.star',
               ],
           )),
       invalid_properties(
@@ -328,7 +324,7 @@ def GenTests(api):
           (r"\bmultiple configs named 'branch-config' "
            r'in branch_configs: \[1, 2\]'),
           r'\bstarlark_entry_points\[0\] is empty\b',
-          (r"\bmultiple occurrences of 'verification-script' "
+          (r"\bmultiple occurrences of 'entry-point.star' "
            r'in starlark_entry_points: \[1, 2\]'),
       ),
   )
