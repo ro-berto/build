@@ -107,14 +107,6 @@ def _configure_builder(api, target_tester):
   # manually.
   api.chromium.apply_config('goma_failfast')
 
-  if bot_mirror.tester_id:
-    tester_spec = (
-        api.chromium_tests_builder_config.builder_db[bot_mirror.tester_id])
-    for key, value in tester_spec.swarming_dimensions.iteritems():
-      # Coercing str as json.loads creates unicode strings. This only matters
-      # for testing.
-      api.chromium_swarming.set_default_dimension(str(key), str(value))
-
   compile_kwargs = {
       'override_execution_mode': ctbc.COMPILE_AND_TEST,
   }
@@ -237,7 +229,6 @@ def GenTests(api):
             'fake-tester':
                 ctbc.BuilderSpec.create(
                     parent_buildername='fake-builder',
-                    swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
                     gclient_config='chromium',
@@ -250,7 +241,6 @@ def GenTests(api):
                 ),
             'fake-builder':
                 ctbc.BuilderSpec.create(
-                    swarming_dimensions={'pool': 'luci.dummy.pool'},
                     chromium_config='chromium',
                     chromium_apply_config=['mb'],
                     gclient_config='chromium',

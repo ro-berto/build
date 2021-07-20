@@ -140,9 +140,6 @@ def GenTests(api):
                     execution_mode=ctbc.TEST,
                     parent_buildername='findit_builder',
                     simulation_platform='linux',
-                    swarming_dimensions={
-                        'os': 'Linux',
-                    },
                 ),
             'findit_builder_tester':
                 ctbc.BuilderSpec.create(
@@ -154,9 +151,6 @@ def GenTests(api):
                         'TARGET_BITS': 64,
                     },
                     simulation_platform='linux',
-                    swarming_dimensions={
-                        'os': 'Linux',
-                    },
                 ),
         },
     })

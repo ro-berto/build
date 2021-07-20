@@ -44,10 +44,6 @@ def config(name,
     cfg['gclient_apply_config'].append('checkout_pgo_profiles')
     cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
     cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
-    cfg['swarming_dimensions'] = {
-        'pool': 'chrome.tests',
-        'os': 'Ubuntu-14.04',
-    }
   else:
     cfg['isolate_server'] = 'https://isolateserver.appspot.com'
 
@@ -180,10 +176,6 @@ SPEC = {
             simulation_platform='win',
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
-            swarming_dimensions={
-                'pool': 'chrome.tests',
-                'os': 'Windows-10',
-            },
         ),
     'ToTWinOfficial64':
         _chromium_clang_spec(
@@ -201,10 +193,6 @@ SPEC = {
             simulation_platform='win',
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
-            swarming_dimensions={
-                'pool': 'chrome.tests',
-                'os': 'Windows-10',
-            },
         ),
     'CrWinAsan':
         _chromium_clang_spec(
@@ -296,11 +284,6 @@ SPEC = {
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
-            swarming_dimensions={
-                'gpu': 'none',
-                'os': 'Mac-10.15',
-                'pool': 'chrome.tests',
-            },
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

@@ -78,9 +78,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            swarming_dimensions={
-                'os': 'Mac-10.14',
-            },
             execution_mode=builder_spec.TEST,
             test_results_config='staging_server',
             parent_builder_group='chromium.mac',

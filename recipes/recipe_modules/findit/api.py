@@ -362,13 +362,6 @@ class FinditApi(recipe_api.RecipeApi):
     # start.
     self.m.chromium.apply_config('goma_failfast')
 
-    # Configure to match the test config on the tester, as builders don't have
-    # the settings for swarming tests.
-    if bot_mirror.tester_id:
-      tester_spec = builders[bot_mirror.tester_id]
-      for key, value in tester_spec.swarming_dimensions.iteritems():
-        self.m.chromium_swarming.set_default_dimension(key, value)
-
     # Record the current revision of the checkout and HEAD of the git cache.
     checked_out_revision, cached_revision = self.record_previous_revision(
         builder_config)

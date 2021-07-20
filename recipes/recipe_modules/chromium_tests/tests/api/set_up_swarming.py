@@ -28,7 +28,6 @@ def RunSteps(api):
                   ctbc.BuilderSpec.create(
                       isolate_server='https://example/isolate',
                       swarming_server='https://example/swarming',
-                      swarming_dimensions={'os': 'Ubuntu-14.04'},
                   ),
           },
       }))
@@ -36,8 +35,6 @@ def RunSteps(api):
   api.chromium_tests.set_up_swarming(builder_config)
   api.assertions.assertEqual(api.chromium_swarming.swarming_server,
                              api.properties.get('expected_swarming_server'))
-  api.assertions.assertEqual(api.chromium_swarming.default_dimensions,
-                             api.properties.get('expected_swarming_dimensions'))
   api.assertions.assertEqual(api.isolate.isolate_server,
                              api.properties.get('expected_isolate_server'))
 
@@ -48,11 +45,6 @@ def GenTests(api):
       api.platform.name('linux'),
       api.properties(
           expected_swarming_server='https://example/swarming',
-          expected_swarming_dimensions={
-              'cpu': 'x86-64',
-              'gpu': None,
-              'os': 'Ubuntu-14.04',
-          },
           expected_isolate_server='https://example/isolate',
           expected_isolate_service_account=None),
       api.post_process(post_process.StatusSuccess),

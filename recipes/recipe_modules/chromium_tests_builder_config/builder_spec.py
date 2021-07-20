@@ -164,10 +164,6 @@ class BuilderSpec(object):
   # Remove once all tasks are switched to `cas`
   isolate_use_cas = attrib(bool, default=False)
 
-  # Dimensions to apply to all created swarming tasks
-  # Deprecated: Swarming dimensions should be specified in the source side spec
-  # for a builder
-  swarming_dimensions = attrib(mapping[str, ...], default={})
   # URL to override the swarming server to use
   swarming_server = attrib(str, default=None)
 

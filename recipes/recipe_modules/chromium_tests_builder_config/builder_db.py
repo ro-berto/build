@@ -11,23 +11,6 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
 from RECIPE_MODULES.build.chromium import BuilderId
 
 
-def _migration_validation(builder_id, builder_spec):
-  """Validate that back-sliding of BuilderSpec migrations does not occur."""
-  if builder_spec.swarming_dimensions:
-    assert builder_id.group in (
-        'chromium.clang',
-        'chromium.fyi',
-        'chromium.webrtc',
-
-        # Used for tests of the code that consumes swarming_dimensions
-        'chromium.findit',
-        'test_group',
-    ), ('Builder: {!r}\nUse of the swarming_dimensions field is deprecated,'
-        ' instead update the source side spec file for builder group {!r}.'
-        ' Contact gbeaty@ if you need assistance., {}').format(
-            builder_id, builder_id.group, builder_spec.swarming_dimensions)
-
-
 @attrs()
 class BuilderDatabase(collections.Mapping):
   """A database that provides information for multiple groups.
@@ -58,22 +41,14 @@ class BuilderDatabase(collections.Mapping):
     information in builder_dict.
     """
     db = {}
-    builders_by_group = {}
 
     for group, builders_for_group in builder_dict.iteritems():
-      builders_for_group = dict(builders_for_group)
       for builder_name, builder_spec in builders_for_group.iteritems():
-        assert isinstance(builder_spec,
-                          builder_spec_module.BuilderSpec), builder_spec
         builder_id = BuilderId.create_for_group(group, builder_name)
-        _migration_validation(builder_id, builder_spec)
 
-        builders_for_group[builder_name] = builder_spec
         db[builder_id] = builder_spec
 
-      builders_by_group[group] = builders_for_group
-
-    return cls(db, builders_by_group)
+    return cls(db, builder_dict)
 
   @cached_property
   def builder_graph(self):

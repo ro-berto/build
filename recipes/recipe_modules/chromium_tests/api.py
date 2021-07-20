@@ -149,9 +149,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if builder_config.swarming_server:
       self.m.chromium_swarming.swarming_server = builder_config.swarming_server
 
-    for key, value in builder_config.swarming_dimensions.iteritems():
-      self.m.chromium_swarming.set_default_dimension(key, value)
-
   def runhooks(self, update_step):
     if self.m.tryserver.is_tryserver:
       try:
@@ -189,7 +186,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           builder_spec,
           builder_id.builder,
           builder_id.group,
-          builder_spec.swarming_dimensions,
           scripts_compile_targets_fn,
           update_step,
       )
@@ -242,7 +238,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def generate_tests_from_source_side_spec(self, source_side_spec, builder_spec,
                                            buildername, builder_group,
-                                           swarming_dimensions,
                                            scripts_compile_targets_fn,
                                            bot_update_step):
     test_specs = collections.OrderedDict()
@@ -256,7 +251,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           buildername,
           source_side_spec,
           bot_update_step,
-          swarming_dimensions=swarming_dimensions,
           scripts_compile_targets_fn=scripts_compile_targets_fn)
       for s in test_specs_for_generator:
         test_specs[s.name] = s
