@@ -81,7 +81,10 @@ def RunSteps(api):
           if api.path.exists(src_dir.join(f))
       ]
 
-      metrics_filenames = {'histograms.xml', 'fieldtrial_testing_config.json'}
+      metrics_filenames = {
+          'histograms.xml', 'fieldtrial_testing_config.json',
+          'histogram_suffixes_list.xml'
+      }
       metrics_paths = [
           path for path in affected
           if api.path.basename(path) in metrics_filenames
