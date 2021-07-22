@@ -61,4 +61,5 @@ def GenTests(api):
       api.angle.ci_build(build_number=1234),
       api.angle.builders(_TEST_BUILDERS),
       api.angle.trybots(_TEST_TRYBOTS),
+      api.angle.override_commit_pos_data(),
   )

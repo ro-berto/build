@@ -114,6 +114,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/angle/src/commit_id.py",
+      "position"
+    ],
+    "name": "get commit position",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>commit position: 1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@1@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
       "cipd",
       "ensure",
       "-root",

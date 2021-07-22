@@ -39,6 +39,16 @@ class ANGLEApi(recipe_api.RecipeApi):
     self.m.chromium_tests.report_builders(self._builder_config)
     self.m.chromium_tests.configure_build(self._builder_config)
 
+  def _get_angle_commit_pos(self):
+    stepdata = self.m.python(
+        'get commit position',
+        self.m.path.join(self.m.path['checkout'], 'src', 'commit_id.py'),
+        args=['position'],
+        stdout=self.m.raw_io.output_text(add_output_log=True))
+    commit_pos = int(stepdata.stdout.strip())
+    stepdata.presentation.step_text = '<br/>commit position: %d' % commit_pos
+    return commit_pos
+
   def _checkout(self):
     # Checkout angle and its dependencies (specified in DEPS) using gclient.
     solution_path = self.m.path['cache'].join('builder')
@@ -47,6 +57,11 @@ class ANGLEApi(recipe_api.RecipeApi):
       update_step = self.m.bot_update.ensure_checkout()
 
     assert update_step.json.output['did_run']
+
+    # Add an ANGLE commit position to the build properties.
+    build_properties = update_step.json.output['properties']
+    build_properties['angle_commit_pos'] = self._get_angle_commit_pos()
+
     self.m.chromium.set_build_properties(update_step.json.output['properties'])
     self.m.chromium.runhooks()
     return update_step

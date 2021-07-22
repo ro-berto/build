@@ -43,4 +43,5 @@ def GenTests(api):
         ),
         api.post_check(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
+        api.angle.override_commit_pos_data(),
     )

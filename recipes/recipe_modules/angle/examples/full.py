@@ -20,6 +20,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/path',
+    'recipe_engine/raw_io',
     'test_utils',
 ]
 
@@ -118,7 +119,8 @@ def GenTests(api):
         toolchain=toolchain,
         platform=platform,
         test_mode=test_mode,
-    ) + api.angle.builders(_TEST_BUILDERS) + api.angle.trybots(_TEST_TRYBOTS)
+    ) + api.angle.builders(_TEST_BUILDERS) + api.angle.trybots(
+        _TEST_TRYBOTS) + api.angle.override_commit_pos_data()
 
   yield api.test(
       'android_test',

@@ -91,3 +91,7 @@ class ANGLETestsApi(recipe_test_api.RecipeTestApi):
     kwargs.setdefault('project', 'angle')
     return self.m.chromium.try_build(**kwargs) + self.m.properties(
         toolchain=toolchain, platform=platform, test_mode=test_mode)
+
+  def override_commit_pos_data(self):
+    return self.override_step_data(
+        'get commit position', stdout=self.m.raw_io.output_text('1'))
