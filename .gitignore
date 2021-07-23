@@ -1,2 +1,4 @@
 *.pyc
 /recipes/.recipe_deps
+# This is DEPS'ed in for an infra_internal checkout
+third_party/psutils
