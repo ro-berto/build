@@ -49,6 +49,9 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
+  for c in recipe_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
+
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
