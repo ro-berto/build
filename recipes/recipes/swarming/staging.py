@@ -69,8 +69,6 @@ def RunSteps(api):
       'https://chromium-swarm-dev.appspot.com')
 
   api.chromium_tests.configure_build(builder_config)
-  api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
-  api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
   update_step = api.chromium_checkout.ensure_checkout(builder_config)
 
   targets_config = (
