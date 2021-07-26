@@ -1562,6 +1562,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp\\peerconnection_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",

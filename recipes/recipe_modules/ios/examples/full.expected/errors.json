@@ -1044,6 +1044,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
+      "-use-new-lib",
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/2.isolated.gen.json",
       "[CLEANUP]/isolate_tmp_1/3.isolated.gen.json"
