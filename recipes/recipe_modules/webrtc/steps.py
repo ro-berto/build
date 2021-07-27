@@ -8,8 +8,8 @@ import os
 import re
 import sys
 
-from recipe_engine.types import freeze
 from recipe_engine import recipe_api
+from recipe_engine.engine_types import freeze
 
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))

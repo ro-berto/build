@@ -7,7 +7,7 @@ import attr
 import collections
 import json
 
-from recipe_engine import post_process, types
+from recipe_engine import engine_types, post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
@@ -22,7 +22,7 @@ DEPS = [
 def _bot_db_to_json(bot_db):
 
   def encode(obj):
-    if isinstance(obj, types.FrozenDict):
+    if isinstance(obj, engine_types.FrozenDict):
       return dict(obj)
     if attr.has(type(obj)):
       return attr.asdict(obj, dict_factory=collections.OrderedDict)

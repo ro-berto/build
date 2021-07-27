@@ -6,8 +6,8 @@
 Recipe for building and running tests for Libyuv stand-alone.
 """
 
-from recipe_engine.types import freeze
 from recipe_engine import post_process
+from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [

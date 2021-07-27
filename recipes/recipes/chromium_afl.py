@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.types import freeze
 from recipe_engine import post_process
+from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build.attr_utils import attrs, attrib
 from RECIPE_MODULES.build import chromium

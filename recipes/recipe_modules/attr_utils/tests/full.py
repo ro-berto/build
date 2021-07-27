@@ -6,7 +6,7 @@ import attr
 
 from recipe_engine import post_process
 from recipe_engine.config_types import NamedBasePath, Path
-from recipe_engine.types import FrozenDict
+from recipe_engine.engine_types import FrozenDict
 from recipe_engine.util import Placeholder
 
 from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
@@ -164,7 +164,7 @@ def RunSteps(api):
   # test validation of attribute value
   with api.assertions.assertRaises(TypeError) as caught:
     MappingTest(typed=1)
-  message = ("'typed' must be <class 'recipe_engine.types.FrozenDict'> "
+  message = ("'typed' must be <class 'recipe_engine.engine_types.FrozenDict'> "
              "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(str(caught.exception), message)
 

@@ -5,7 +5,7 @@
 # Contains the bulk of the libyuv builder configurations to improve readability
 # of the recipe.
 
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 
 RECIPE_CONFIGS = freeze({
     'libyuv': {

@@ -9,7 +9,7 @@ import re
 import urllib
 
 from RECIPE_MODULES.build import chromium_swarming
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 
 MONORAIL_SEARCH_BUGS_TEMPLATE = (
     'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+%(name)s')

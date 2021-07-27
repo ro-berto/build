@@ -10,9 +10,9 @@ import json
 import re
 import traceback
 
-from recipe_engine.config_types import Path
-from recipe_engine.types import FrozenDict
 from recipe_engine import recipe_api
+from recipe_engine.config_types import Path
+from recipe_engine.engine_types import FrozenDict
 
 from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as arch_prop

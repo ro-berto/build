@@ -7,9 +7,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 """
 
-from recipe_engine.recipe_api import Property
-from recipe_engine.types import freeze
 from recipe_engine import post_process
+from recipe_engine.engine_types import freeze
+from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 

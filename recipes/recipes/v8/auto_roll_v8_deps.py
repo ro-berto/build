@@ -6,7 +6,7 @@ from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 
 DEPS = [
   'depot_tools/bot_update',

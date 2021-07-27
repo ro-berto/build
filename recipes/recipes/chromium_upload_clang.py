@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 
 from RECIPE_MODULES.build import chromium
 

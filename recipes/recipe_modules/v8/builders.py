@@ -8,7 +8,7 @@
 
 from collections import defaultdict
 
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 # pylint: disable=relative-import
 from testing import V8Variant
 

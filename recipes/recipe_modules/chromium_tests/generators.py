@@ -9,7 +9,7 @@ import textwrap
 
 from . import steps
 
-from recipe_engine import types
+from recipe_engine import engine_types
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build import skylab
@@ -112,7 +112,9 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
       chromium_tests_api.m.python.infra_failing_step(
           'Invalid conditional',
           'Test spec has invalid conditional: {}\n{}'.format(
-              error_message, json.dumps(types.thaw(raw_test_spec), indent=2)))
+              error_message,
+              json.dumps(engine_types.thaw(raw_test_spec), indent=2),
+          ))
 
     variable = get_variable()
     value = conditional.get('value', '')

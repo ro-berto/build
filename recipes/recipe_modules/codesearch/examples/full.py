@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
+from recipe_engine.engine_types import freeze
 from recipe_engine.recipe_api import Property
-from recipe_engine.types import freeze
 
 DEPS = [
   'chromium',

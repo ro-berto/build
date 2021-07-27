@@ -80,7 +80,7 @@ from attr import converters, validators
 import six
 
 from recipe_engine.config_types import Path
-from recipe_engine.types import FrozenDict, freeze
+from recipe_engine.engine_types import FrozenDict, freeze
 from recipe_engine.util import Placeholder
 
 _NOTHING = object()

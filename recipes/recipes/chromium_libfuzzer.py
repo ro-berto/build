@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 
 import re
-from recipe_engine.types import freeze
 from recipe_engine import post_process
+from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import attrs, attrib

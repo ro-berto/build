@@ -6,8 +6,8 @@
 
 from contextlib import contextmanager
 
+from recipe_engine.engine_types import freeze
 from recipe_engine.post_process import Filter
-from recipe_engine.types import freeze
 
 
 DEPS = [

@@ -13,7 +13,7 @@ import sys
 import textwrap
 import urllib
 
-from recipe_engine.types import freeze
+from recipe_engine.engine_types import freeze
 from recipe_engine import recipe_api
 
 _RESULT_DETAILS_LINK = 'result_details (logcats, flakiness links)'

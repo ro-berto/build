@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import engine_types
 from recipe_engine import post_process
-from recipe_engine import types
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
@@ -32,7 +32,7 @@ def RunSteps(api):
   update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
   properties = api.chromium_tests._get_trigger_properties(
       builder_id, update_step)
-  expected = types.thaw(api.properties['expected_trigger_properties'])
+  expected = engine_types.thaw(api.properties['expected_trigger_properties'])
   for k, v in expected.iteritems():
     if k not in properties:  # pragma: no cover
       api.assertions.fail('Property {} not present, expected {!r}'.format(k, v))
