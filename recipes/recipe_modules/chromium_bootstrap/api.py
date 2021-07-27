@@ -18,6 +18,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
   def __init__(self, input_properties, **kwargs):
     super(ChromiumBootstrapApi, self).__init__(**kwargs)
     self._commits = tuple(input_properties.commits)
+    self._skip_analysis_reasons = tuple(input_properties.skip_analysis_reasons)
 
   def initialize(self):
     # TODO(gbeaty) Once we have the ability to have Milo display the
@@ -32,6 +33,11 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
           indent=2,
           sort_keys=True,
           separators=(',', ': '))
+
+  @property
+  def skip_analysis_reasons(self):
+    """Reasons to skip analysis as determined by the bootstrapper."""
+    return self._skip_analysis_reasons
 
   def update_gclient_config(self, gclient_config=None):
     """Update the gclient config to be consistent with the bootstrapper.

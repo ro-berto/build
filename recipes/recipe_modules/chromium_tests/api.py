@@ -1706,6 +1706,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Use analyze to determine the compile targets that are affected by the CL.
     # Use this to prune the relevant compile targets and test targets.
     if self.m.tryserver.is_tryserver:
+      skip_analysis_reasons = list(
+          self.m.chromium_bootstrap.skip_analysis_reasons)
+      skip_analysis_logs = {}
+
       absolute_affected_files = set(
           str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
               '/', self.m.path.sep) for f in affected_files)
@@ -1716,14 +1720,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # If any of the spec files that we used for determining the targets/tests
       # is affected, skip doing analysis, just build/test all of them
       if affected_spec_files:
+        skip_analysis_reasons.append(
+            'test specs that are consumed by the builder '
+            'are also affected by the CL')
+        skip_analysis_logs['affected_spec_files'] = sorted(affected_spec_files)
+
+      if skip_analysis_reasons:
         step_result = self.m.step('analyze', [])
-        text = [
-            'skipping analyze, '
-            'the following source test specs are consumed by the builder '
-            'and affected by the CL:'
-        ]
-        text.extend(sorted(affected_spec_files))
-        step_result.presentation.step_text = '\n'.join(text)
+        text = ['skipping analyze'] + skip_analysis_reasons
+        step_result.presentation.step_text = '\n* '.join(text)
+        for log, contents in sorted(skip_analysis_logs.iteritems()):
+          step_result.presentation.logs[log] = contents
         return test_targets, compile_targets
 
       additional_compile_targets = sorted(

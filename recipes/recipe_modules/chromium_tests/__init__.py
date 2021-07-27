@@ -11,6 +11,7 @@ DEPS = [
     'builder_group',
     'chromium',
     'chromium_android',
+    'chromium_bootstrap',
     'chromium_checkout',
     'chromium_swarming',
     'code_coverage',
