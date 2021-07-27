@@ -6,6 +6,7 @@ import json
 
 DEPS = [
     'isolate',
+    'chromium',
     'chromium_checkout',
     'chromium_swarming',
     'code_coverage',
@@ -227,6 +228,10 @@ def RunSteps(api, platforms, custom_trigger_script,
 def GenTests(api):
   yield api.test(
       'basic',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -241,6 +246,10 @@ def GenTests(api):
 
   yield api.test(
       'custom_trigger_script',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
@@ -258,6 +267,10 @@ def GenTests(api):
 
   yield api.test(
       'default_trigger_script',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output_text('hash hello_world.isolated')),
@@ -267,18 +280,22 @@ def GenTests(api):
           '[trigger] hello_world', lambda check, req: check(req[0].env_vars[
               'GTEST_SHARD_INDEX'] == '0'), lambda check, req: check(req[
                   0].env_vars['GTEST_TOTAL_SHARDS'] == '2'), lambda check, req:
-          check(req[0].command == ['--foo', '42'])),
+          check(req[0].command[-2:] == ['--foo', '42'])),
       api.post_check(
           api.swarming.check_triggered_request,
           '[trigger] hello_world (2)', lambda check, req: check(req[0].env_vars[
               'GTEST_SHARD_INDEX'] == '1'), lambda check, req: check(req[
                   0].env_vars['GTEST_TOTAL_SHARDS'] == '2'), lambda check, req:
-          check(req[0].command == ['--foo', '42'])),
+          check(req[0].command[-2:] == ['--foo', '42'])),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'wait_for_tasks',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -320,6 +337,10 @@ def GenTests(api):
 
   yield api.test(
       'named_caches',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
@@ -333,6 +354,10 @@ def GenTests(api):
 
   yield api.test(
       'service_account',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -381,6 +406,10 @@ def GenTests(api):
 
   yield api.test(
       'gtest_with_outputs_ref',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -401,6 +430,10 @@ def GenTests(api):
 
   yield api.test(
       'gtest_with_duration',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -416,6 +449,10 @@ def GenTests(api):
 
   yield api.test(
       'gtest_with_long_task',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -427,6 +464,10 @@ def GenTests(api):
 
   yield api.test(
       'gtest_with_many_failures',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -464,6 +505,10 @@ def GenTests(api):
   data['shards'][0]['state'] = 'EXPIRED'
   yield api.test(
       'swarming_expired_new',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -472,19 +517,25 @@ def GenTests(api):
   )
   yield api.test(
       'isolated_script_expired_new',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
-                    api.raw_io.output_dir({
-                        'summary.json': json.dumps(data)
-                    })),
+                    api.raw_io.output_dir({'summary.json': json.dumps(data)})),
       api.properties(isolated_script_task=True),
   )
 
   data['shards'][0]['state'] = 'TIMED_OUT'
   yield api.test(
       'swarming_timeout_new',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -493,13 +544,15 @@ def GenTests(api):
   )
   yield api.test(
       'isolated_script_timeout_new',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
-                    api.raw_io.output_dir({
-                        'summary.json': json.dumps(data)
-                    })),
+                    api.raw_io.output_dir({'summary.json': json.dumps(data)})),
       api.properties(isolated_script_task=True),
   )
 
@@ -507,15 +560,17 @@ def GenTests(api):
   data['shards'][0]['exit_code'] = '1'
   yield api.test(
       'isolated_script_non_zero_exit_status',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(data)
-              }), data)),
+              api.raw_io.output_dir({'summary.json': json.dumps(data)}), data)),
       api.properties(isolated_script_task=True),
   )
 
@@ -533,6 +588,10 @@ def GenTests(api):
   big_output_dir['0/big_text.txt'] = 'lots of text\n' * 2000
   yield api.test(
       'isolated_large_outdir',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -560,6 +619,10 @@ def GenTests(api):
   }
   yield api.test(
       'isolated_script_with_custom_merge',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
@@ -576,6 +639,10 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_with_custom_trigger_script',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
@@ -598,6 +665,10 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_with_custom_trigger_script_cas',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output('digest_for_win/hello_world.isolated')),
@@ -620,6 +691,10 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_with_realm',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
@@ -666,44 +741,50 @@ def GenTests(api):
   }
   yield api.test(
       'gtest_with_null_shard',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data)
-              }) + api.test_utils.canned_gtest_output(False), summary_data)),
-      api.properties(
-          platforms=('linux',),
-          gtest_task=True),
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
+              + api.test_utils.canned_gtest_output(False), summary_data)),
+      api.properties(platforms=('linux',), gtest_task=True),
   )
   yield api.test(
       'isolated_script_with_null_shard',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data)
-              }), summary_data)),
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
+              summary_data)),
       api.properties(platforms=('linux',), isolated_script_task=True),
   )
   yield api.test(
       'coverage_gtest_with_null_shard',
-      api.m.code_coverage(use_clang_coverage=True),
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ), api.m.code_coverage(use_clang_coverage=True),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data)
-              }) + api.test_utils.canned_gtest_output(False), summary_data)),
+              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
+              + api.test_utils.canned_gtest_output(False), summary_data)),
       api.properties(platforms=('linux',), gtest_task=True),
       api.post_process(post_process.StepFailure, 'hello_world'),
       api.post_process(post_process.DropExpectation))
@@ -729,25 +810,30 @@ def GenTests(api):
 
   yield api.test(
       'gtest_with_deduped_shard',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({
-                  'summary.json': json.dumps(summary_data_deduped)
-              }) + api.test_utils.canned_gtest_output(False),
-              summary_data_deduped)),
-      api.properties(
-          platforms=('linux',),
-          gtest_task=True),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data_deduped)}) +
+              api.test_utils.canned_gtest_output(False), summary_data_deduped)),
+      api.properties(platforms=('linux',), gtest_task=True),
   )
 
   missing_duration_data = api.chromium_swarming.canned_summary_output_raw()
   del missing_duration_data['shards'][0]['duration']
   yield api.test(
       'missing_duration',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.step_data(
           'archive for linux',
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
@@ -755,7 +841,6 @@ def GenTests(api):
           'hello_world',
           api.chromium_swarming.summary(
               api.test_utils.canned_gtest_output(True), missing_duration_data)),
-      api.properties(
-          platforms=('linux',),
-          gtest_task=True), api.post_process(post_process.StatusSuccess),
+      api.properties(platforms=('linux',), gtest_task=True),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))

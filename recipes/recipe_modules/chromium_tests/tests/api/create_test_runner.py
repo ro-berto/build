@@ -30,6 +30,10 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'failure',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.builder_group.for_current('test_group'),
       api.properties(
           buildername='test_buildername', bot_id='test_bot_id',
@@ -40,6 +44,10 @@ def GenTests(api):
 
   yield api.test(
       'serialize_tests',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.builder_group.for_current('test_group'),
       api.properties(
           buildername='test_buildername',
@@ -51,6 +59,10 @@ def GenTests(api):
   )
   yield api.test(
       'retry_failed_shards',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.builder_group.for_current('test_group'),
       api.properties(
           buildername='test_buildername',

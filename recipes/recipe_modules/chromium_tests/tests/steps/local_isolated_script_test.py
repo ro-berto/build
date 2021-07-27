@@ -91,6 +91,10 @@ def GenTests(api):
 
   yield api.test(
       'basic',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
@@ -98,6 +102,10 @@ def GenTests(api):
 
   yield api.test(
       'raw_cmd',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -113,6 +121,10 @@ def GenTests(api):
 
   yield api.test(
       'override_compile_targets',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -122,6 +134,10 @@ def GenTests(api):
 
   yield api.test(
       'log_pass_fail_counts',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -133,6 +149,10 @@ def GenTests(api):
 
   yield api.test(
       'log_pass_fail_counts_invalid_results',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -140,15 +160,17 @@ def GenTests(api):
           log_pass_fail_counts=True),
       api.override_step_data(
           'base_unittests',
-          api.test_utils.m.json.output({
-              'interrupted': True
-          }, 255)),
+          api.test_utils.m.json.output({'interrupted': True}, 255)),
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'customized_test_options',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -159,6 +181,10 @@ def GenTests(api):
   )
   yield api.test(
       'isolate_coverage_data',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           isolate_coverage_data=True,
           swarm_hashes={

@@ -67,6 +67,10 @@ def GenTests(api):
 
   yield api.test(
       'basic',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -79,6 +83,10 @@ def GenTests(api):
 
   yield api.test(
       'invalid_test_results',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -478,6 +486,10 @@ def GenTests(api):
 
   yield api.test(
       'experimental',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'experiment_percentage': '100',

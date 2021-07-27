@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import collections
 import json
 import string
@@ -124,20 +125,6 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
-# TODO(crbug.com/1108016): Enable resultdb globally.
-def _result_sink_experiment_enabled(api, test_class=''):
-  assert test_class in {
-      '',
-      'gtests_local',
-      'junit_tests',
-      'json_local',
-  }, 'invalid test_class %s' % test_class
-  name = 'chromium.resultdb.result_sink'
-  if test_class:
-    name += '.%s' % test_class
-  return name in api.buildbucket.build.input.experiments
-
-
 def _normalize_optional_dimensions(optional_dimensions):
   if not optional_dimensions:
     return optional_dimensions
@@ -180,18 +167,9 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
   kwargs['test_id_prefix'] = raw_test_spec.get('test_id_prefix')
   kwargs['name'] = name
 
-  # Enables resultdb if the build is picked for the experiment.
-  # TODO(crbug.com/1108016): Enable resultdb globally.
-  if _result_sink_experiment_enabled(api):
-    rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
-    if rdb_kwargs:
-      # Set test_id_prefix with TestSpec.test_id_prefix, if the ResultDB dict
-      # has no test_id_prefix set.
-      #
-      # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
-      # gets turned down.
-      rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
-      kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
+  rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
+  rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
+  kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
 
   processed_set_ups = []
   for s in raw_test_spec.get('setup', []):
@@ -402,14 +380,7 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     kwargs['ignore_task_failure'] = raw_test_spec.get('ignore_task_failure',
                                                       False)
 
-    # Enables resultdb if the build is picked for the experiment.
-    # TODO(crbug.com/1108016): Enable resultdb globally.
-    if _result_sink_experiment_enabled(api):
-      if not kwargs.get('resultdb'):
-        kwargs['resultdb'] = steps.ResultDB.create(
-            enable=True,
-            result_format='gtest',
-            test_id_prefix=raw_test_spec.get('test_id_prefix'))
+    kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.SwarmingGTestTestSpec.create(**kwargs)
 
   def gtest_local_delegate(raw_test_spec, **kwargs):
@@ -421,14 +392,7 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     kwargs['perf_builder_name_alias'] = raw_test_spec.get(
         'perf_builder_name_alias')
 
-    # Enables resultdb if the build is picked for the experiment.
-    # TODO(crbug.com/1108016): Enable resultdb globally.
-    if _result_sink_experiment_enabled(api, 'gtests_local'):
-      if not kwargs.get('resultdb'):
-        kwargs['resultdb'] = steps.ResultDB.create(
-            enable=True,
-            result_format='gtest',
-            test_id_prefix=raw_test_spec.get('test_id_prefix'))
+    kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.LocalGTestTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec, gtest_swarming_delegate,
@@ -436,7 +400,7 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     yield t
 
 
-def generate_junit_tests(api,
+def generate_junit_tests(_api,
                          chromium_tests_api,
                          builder_group,
                          buildername,
@@ -449,16 +413,9 @@ def generate_junit_tests(api,
     if test.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
       continue
 
-    # Enables resultdb if the build is picked for the experiment.
-    # TODO(crbug.com/1108016): Enable resultdb globally.
-    resultdb = None
-
-    if _result_sink_experiment_enabled(api, 'junit_tests'):
-      # TODO(crbug/1106965): remove test_id_prefix from TestSpec, if deriver
-      # gets turned down.
-      rdb_kwargs = dict(test.get('resultdb', {'enable': True}))
-      rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
-      resultdb = steps.ResultDB.create(**rdb_kwargs)
+    rdb_kwargs = dict(test.get('resultdb', {}))
+    rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
+    resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     yield steps.AndroidJunitTestSpec.create(
         test.get('name', test['test']),
@@ -569,40 +526,21 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_builder_group'] = builder_group
 
-    # Enables resultdb if the build is picked for the experiment.
-    # TODO(crbug.com/1108016): Enable resultdb globally.
-    if _result_sink_experiment_enabled(api):
-      resultdb = kwargs.get('resultdb')
-      if not resultdb:
-        resultdb_kwargs = {
-            'enable': True,
-            'result_format': 'json',
-            'test_id_prefix': raw_test_spec.get('test_id_prefix'),
-        }
-
-        # For webgl tests, we can construct test locations as
-        # <test_location_base>/<test names>.
-        if kwargs['name'].startswith('webgl'):
-          # Arg for result_adapter to pass test names as test locations.
-          resultdb_kwargs['test_id_as_test_location'] = True
-          # Arg for ResultSink to prepend to test locations.
-          resultdb_kwargs['test_location_base'] = (
-              '//third_party/webgl/src/sdk/tests/')
-
-        kwargs['resultdb'] = steps.ResultDB.create(**resultdb_kwargs)
+    resultdb = kwargs['resultdb']
+    # HACK: If an isolated script test doesn't explicitly enable resultdb in
+    # its test spec, assume it doesn't have native integration with result-sink
+    # and consequently needs the result_adapter added using the 'json' format.
+    # TODO(crbug.com/1135718): Explicitly mark all such tests as using the
+    # json result format in the testing specs.
+    rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
+    if not rdb_kwargs:
+      resultdb = attr.evolve(resultdb, result_format='json')
+    kwargs['resultdb'] = resultdb
 
     return steps.SwarmingIsolatedScriptTestSpec.create(**kwargs)
 
   def isolated_script_local_delegate(raw_test_spec, **kwargs):
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
-    # Enables resultdb if the build has the experiment.
-    # TODO(crbug.com/1108016): Enable resultdb globally.
-    if _result_sink_experiment_enabled(
-        api, 'json_local') and not kwargs.get('resultdb'):
-      kwargs['resultdb'] = steps.ResultDB.create(
-          enable=True,
-          result_format='json',
-          test_id_prefix=raw_test_spec.get('test_id_prefix'))
     return steps.LocalIsolatedScriptTestSpec.create(**kwargs)
 
   for t in generator_common(api, raw_test_spec,

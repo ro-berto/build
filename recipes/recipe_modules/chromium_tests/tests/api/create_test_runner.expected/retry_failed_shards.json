@@ -5,6 +5,21 @@
   },
   {
     "cmd": [
+      "rdb",
+      "stream",
+      "-var",
+      "builder:test_buildername",
+      "-var",
+      "test_suite:base_unittests",
+      "-tag",
+      "step_name:base_unittests",
+      "-coerce-negative-duration",
+      "-new",
+      "-realm",
+      "chromium:ci",
+      "-include",
+      "-exonerate-unexpected-pass",
+      "--",
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -25,7 +40,7 @@
       "[CLEANUP]/tmp_tmp_1",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
-      "--build-number=123",
+      "--build-number=571",
       "base_unittests"
     ],
     "cwd": "[CACHE]/builder",
@@ -51,15 +66,28 @@
       "--builder-name",
       "test_buildername",
       "--build-number",
-      "123",
+      "571",
       "--test-type",
       "base_unittests",
       "--chrome-revision",
       "refs/x@{#0}",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
     "name": "Upload to test-results [base_unittests]"
+  },
+  {
+    "cmd": [],
+    "name": "query test results"
+  },
+  {
+    "cmd": [],
+    "name": "query test results.No RDB results for base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "failure": {

@@ -273,7 +273,7 @@ class ResultDB(object):
     * include - If True, a new invocation will be created for the test and
       included in the parent invocation.
   """
-  enable = attrib(bool, default=False)
+  enable = attrib(bool, default=True)
   result_format = attrib(enum(['gtest', 'json', 'single']), default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
@@ -307,17 +307,12 @@ class ResultDB(object):
         created object.
 
     Returns:
-      If True was passed for keyword argument `enable`, a `ResultDB`
-      instance with attributes initialized with the matching keyword
-      arguments. Otherwise, a default `ResultDB` instance (validity of
-      the keyword arguments will still be checked).
+      A `ResultDB` instance with attributes initialized with the matching
+      keyword arguments.
     """
     # Unconditionally construct an instance with the keywords to have the
     # arguments validated.
-    resultdb = cls(**kwargs)
-    if not resultdb.enable:
-      return cls()
-    return resultdb
+    return cls(**kwargs)
 
   def wrap(self,
            api,
