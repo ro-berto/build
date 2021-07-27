@@ -644,7 +644,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X/AppRTCMobile_test_apk.isolated.gen.json",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X/android_instrumentation_test_apk.isolated.gen.json",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X/audio_decoder_unittests.isolated.gen.json",

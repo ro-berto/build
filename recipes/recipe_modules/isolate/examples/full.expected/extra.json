@@ -159,7 +159,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "RECIPE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_REPO[build]/test2.isolated.gen.json"
     ],
@@ -183,7 +182,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "RECIPE_REPO[build]/test1.isolated.gen.json",
       "RECIPE_REPO[build]/test2.isolated.gen.json"
     ],

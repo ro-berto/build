@@ -1405,7 +1405,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]\\builder\\src\\out\\Release\\gl_tests.isolated.gen.json"
     ],
     "name": "test r1.isolate tests",
@@ -2742,7 +2741,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]\\builder\\src\\out\\Release\\gl_tests.isolated.gen.json"
     ],
     "name": "test r0.isolate tests",

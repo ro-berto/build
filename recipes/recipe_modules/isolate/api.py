@@ -17,7 +17,7 @@ _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
 
 # Take revision from
 # https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-_LUCI_GO_REVISION = 'git_revision:b07638c0390a878b41b6ddb5b671da9fd7b6e5c3'
+_LUCI_GO_REVISION = 'git_revision:18c2cb6f0e32b35f2a50556f81d23ddb762ed0f5'
 
 
 class IsolateApi(recipe_api.RecipeApi):
@@ -120,9 +120,6 @@ class IsolateApi(recipe_api.RecipeApi):
 
       # TODO(b/187913980): this is for investigation of upload failures.
       args.extend(['-log-level', 'debug'])
-
-      # TODO(crbug.com/1225524): remove this after migration.
-      args.extend(['-use-new-lib'])
     else:
       args.extend(['--isolate-server', self._isolate_server])
 

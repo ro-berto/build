@@ -98,7 +98,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/v8/out/build/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",

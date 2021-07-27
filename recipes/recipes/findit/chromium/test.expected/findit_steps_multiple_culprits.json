@@ -1519,7 +1519,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Release/browser_tests.isolated.gen.json",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
@@ -3229,7 +3228,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "test r6.isolate tests",
@@ -4560,7 +4558,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r2.isolate tests",
@@ -5883,7 +5880,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r3.isolate tests",

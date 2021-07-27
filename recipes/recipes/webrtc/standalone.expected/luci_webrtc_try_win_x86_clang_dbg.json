@@ -830,7 +830,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]\\builder\\src\\out\\win_x86_clang_dbg\\audio_decoder_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_clang_dbg\\common_audio_unittests.isolated.gen.json",
       "[CACHE]\\builder\\src\\out\\win_x86_clang_dbg\\common_video_unittests.isolated.gen.json",

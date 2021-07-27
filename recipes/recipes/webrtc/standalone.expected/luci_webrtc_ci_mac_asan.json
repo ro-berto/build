@@ -705,7 +705,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "-use-new-lib",
       "[CACHE]/builder/src/out/Mac_Asan/audio_decoder_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac_Asan/common_audio_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac_Asan/common_video_unittests.isolated.gen.json",
