@@ -90,6 +90,7 @@ SPEC.update([
         'linux-chromeos-js-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
     _config('linux-lacros-builder-rel'),
+    _config('linux-lacros-dbg'),
     _config('linux-lacros-rel'),
     _config(
         'linux-lacros-tester-rel',
