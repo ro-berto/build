@@ -323,7 +323,8 @@
       "80",
       "gn_all",
       "openscreen_unittests",
-      "e2e_tests"
+      "e2e_tests",
+      "fuzzer_tests_all"
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
@@ -439,7 +440,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/openscreen/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 80, \"gn_all\", \"openscreen_unittests\", \"e2e_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 80, \"gn_all\", \"openscreen_unittests\", \"e2e_tests\", \"fuzzer_tests_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

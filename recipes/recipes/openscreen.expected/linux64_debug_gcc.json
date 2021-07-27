@@ -149,7 +149,8 @@
       "[START_DIR]/openscreen/out/Default",
       "gn_all",
       "openscreen_unittests",
-      "e2e_tests"
+      "e2e_tests",
+      "fuzzer_tests_all"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "compile with ninja"

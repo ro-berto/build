@@ -31,7 +31,9 @@ DEPS = [
 BUILD_CONFIG = 'Default'
 UNIT_TEST_BINARY_NAME = 'openscreen_unittests'
 E2E_TEST_BINARY_NAME = 'e2e_tests'
-BUILD_TARGETS = ['gn_all', UNIT_TEST_BINARY_NAME, E2E_TEST_BINARY_NAME]
+BUILD_TARGETS = [
+    'gn_all', UNIT_TEST_BINARY_NAME, E2E_TEST_BINARY_NAME, 'fuzzer_tests_all'
+]
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 GN_PROPERTIES = [
