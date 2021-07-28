@@ -802,6 +802,34 @@ SPEC = {
             },
             simulation_platform='win',
         ),
+    'arm-upload-perfetto':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+        ),
+    'arm64-upload-perfetto':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            simulation_platform='linux',
+        ),
     'linux-upload-perfetto':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
