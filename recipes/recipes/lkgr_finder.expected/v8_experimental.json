@@ -142,9 +142,8 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/infra/run.py",
+      "vpython",
+      "-m",
       "infra.services.lkgr_finder",
       "--project=v8",
       "--verbose",
