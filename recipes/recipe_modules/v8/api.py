@@ -860,11 +860,7 @@ class V8Api(recipe_api.RecipeApi):
     build_config = self.m.json.read(
       'read build config', build_config_path,
       step_test_data=self.test_api.example_build_config).json.output
-    debug = (
-        build_config['is_debug'] or
-        build_config.get('dcheck_always_on') or
-        build_config.get('v8_dcheck_always_on')
-    )
+    debug = build_config['is_debug'] or build_config['dcheck_always_on']
     return 'debug' if debug else 'release'
 
   def maybe_create_clusterfuzz_archive(self, update_step):
