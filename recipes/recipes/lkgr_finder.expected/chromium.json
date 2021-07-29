@@ -142,9 +142,10 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/infra/run.py",
+      "vpython",
+      "-vpython-spec",
+      ".vpython",
+      "-m",
       "infra.services.lkgr_finder",
       "--project=chromium",
       "--verbose",

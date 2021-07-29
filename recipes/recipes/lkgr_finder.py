@@ -120,6 +120,9 @@ def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag,
 
   api.file.ensure_directory('mkdirs builder/lw', checkout_dir.join('lw'))
   args = [
+      '-vpython-spec',
+      '.vpython',
+      '-m',
       'infra.services.lkgr_finder',
       '--project=%s' % project,
       '--verbose',
@@ -150,10 +153,8 @@ def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag,
 
   try:
     with api.context(cwd=checkout_dir.join('infra')):
-      api.python(
-          'calculate %s lkgr' % project,
-          checkout_dir.join('infra', 'run.py'),
-          args,
+      api.step(
+          'calculate %s lkgr' % project, ['vpython'] + args,
           step_test_data=lambda: step_test_data)
   except api.step.StepFailure as e:
     # Don't fail the build if the LKGR is just stale.
