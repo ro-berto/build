@@ -11,4 +11,7 @@ message InputProperties {
   // This only applies when the host platform is Mac and when the configuration
   // mac_toolchain.enabled is set to true.
   string xcode_build_version = 1;
+
+  // Whether to set RBE_cache_silo environment to run gomacc.
+  bool goma_cache_silo = 2;
 }

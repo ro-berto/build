@@ -307,3 +307,24 @@ def GenTests(api):
       ),
       api.properties(out_dir='/tmp'),
   )
+
+  yield api.test(
+      'basic_out_dir_with_goma_cache_silo',
+      api.chromium.ci_build(
+          builder_group='chromium.android',
+          builder='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          build_number=77457,
+      ),
+      api.properties(
+          **{
+              'use_goma_module': True,
+              'out_dir': '/tmp',
+              '$build/chromium': {
+                  'goma_cache_silo': True,
+              },
+          }),
+      api.post_check(lambda check, steps: check(steps['compile'].env[
+          'RBE_cache_silo'] == 'Android arm Builder (dbg)')),
+      api.post_process(post_process.DropExpectation),
+  )

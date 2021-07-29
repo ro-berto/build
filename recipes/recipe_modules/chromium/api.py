@@ -52,6 +52,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._version = None
     self._clang_version = None
     self._xcode_build_version = input_properties.xcode_build_version
+    self._goma_cache_silo = input_properties.goma_cache_silo
 
   @property
   def xcode_build_version(self):
@@ -482,7 +483,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # However, it is disabled on mac because GOMA_USE_LOCAL=false makes mac
       # builders hangs. Please see crbug.com/1056935.
       ninja_env['GOMA_USE_LOCAL'] = 'false'
-    if self.c.compile_py.goma_enable_cache_silo:
+    if self.c.compile_py.goma_enable_cache_silo or self._goma_cache_silo:
       ninja_env['RBE_cache_silo'] = self.m.buildbucket.builder_name
     build_exit_status = -1
     try:
