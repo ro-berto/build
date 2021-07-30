@@ -364,6 +364,7 @@ def GenTests(api):
                       'name': fake_test,
                       'resultdb': {
                           'enable': True,
+                          'has_native_resultdb_integration': True,
                           'test_location_base': '//test/location',
                       },
                       'swarming': {

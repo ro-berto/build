@@ -246,6 +246,8 @@ class ResultDB(object):
 
   Attributes:
     * enable - Whether or not ResultDB-integration is enabled.
+    * has_native_resultdb_integration - If True, indicates the test will upload
+      its results to ResultDB and that ResultSink is not needed.
     * result_format - The format of the test results.
     * test_id_as_test_location - Whether the test ID will be used as the
       test location. It only makes sense to set this for blink_web_tests
@@ -274,6 +276,7 @@ class ResultDB(object):
       included in the parent invocation.
   """
   enable = attrib(bool, default=True)
+  has_native_resultdb_integration = attrib(bool, default=False)
   result_format = attrib(enum(['gtest', 'json', 'single']), default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
@@ -350,7 +353,7 @@ class ResultDB(object):
       return cmd
 
     # wrap it with result_adapter
-    if configs.result_format:
+    if not configs.has_native_resultdb_integration and configs.result_format:
       exe = configs.result_adapter_path + ('.exe'
                                            if api.platform.is_win else '')
       result_adapter = [
