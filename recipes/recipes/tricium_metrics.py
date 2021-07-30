@@ -218,16 +218,16 @@ def GenTests(api):
                   "comments": [{
                       "category": "Metrics/Removed",
                       "message": "[ERROR]: Removed",
-                      "path": "testdata/src/rm/remove_histogram.xml"
+                      "path": "testdata/src/rm/remove_histograms.xml"
                   }]
-              })) + api.post_process(post_process.DoesNotRun,
-                                     'metrics.load_test_analyzer') +
+              })) +
+      api.post_process(post_process.DoesNotRun, 'metrics.load_test_analyzer') +
       api.post_process(post_process.StepSuccess, 'metrics.load_live_analyzer') +
       api.post_process(post_process.StepSuccess, 'metrics') +
-      api.post_process(post_process.StatusSuccess) + api.post_check(
-          lambda check, steps: '[ERROR]: Removed' in
-            steps['metrics.write_results'].output_properties['tricium']
-      ) + api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.StatusSuccess) +
+      api.post_check(lambda check, steps: '[ERROR]: Removed' in steps[
+          'metrics.write_results'].output_properties['tricium']) +
+      api.post_process(post_process.DropExpectation))
 
   yield (
       test_with_patch(
@@ -242,7 +242,7 @@ def GenTests(api):
               "comments": [{
                   "category": "Metrics/Removed",
                   "message": "[ERROR]: Removed",
-                  "path": "testdata/src/rm/remove_histogram.xml"
+                  "path": "testdata/src/rm/remove_histograms.xml"
               }]
           })) +
       api.post_process(post_process.DoesNotRun, 'metrics.load_test_analyzer') +
