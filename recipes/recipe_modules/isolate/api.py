@@ -15,11 +15,6 @@ from recipe_engine import recipe_api
 _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
 
 
-# Take revision from
-# https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-_LUCI_GO_REVISION = 'git_revision:559e1b74816dbee4c31f87a4733f2a304c4acfb6'
-
-
 class IsolateApi(recipe_api.RecipeApi):
   """APIs for interacting with isolates."""
 
@@ -100,9 +95,13 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    version = _LUCI_GO_REVISION
-    if self._test_data.enabled:
-      version = 'git_revision:dummy_version'
+    # Rely on cas client autoroll.
+    version = self.m.file.read_text(
+          "read infra revision",
+          # This has revision of https://chromium.googlesource.com/infra/infra/.
+          self.m.cas.resource("infra.sha1"),
+          test_data='git_revision:mock_infra_git_revision').strip()
+
     exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
                                   version)
 

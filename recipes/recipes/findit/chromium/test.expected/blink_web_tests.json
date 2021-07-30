@@ -1442,6 +1442,25 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r1.read infra revision",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
+      "@@@STEP_LOG_END@infra.sha1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r1.install infra/tools/luci/isolate",
     "~followup_annotations": [
@@ -1458,7 +1477,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version"
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
     "infra_step": true,
     "name": "test r1.install infra/tools/luci/isolate.ensure package directory",
@@ -1471,9 +1490,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
       "-ensure-file",
-      "infra/tools/luci/isolate/${platform} git_revision:dummy_version",
+      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
       "-max-threads",
       "0",
       "-json-output",
@@ -1487,7 +1506,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:dum\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -1498,7 +1517,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version/isolate",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -2939,7 +2958,26 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version/isolate",
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "test r0.read infra revision",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
+      "@@@STEP_LOG_END@infra.sha1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",

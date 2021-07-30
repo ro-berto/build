@@ -939,6 +939,27 @@
     "name": "remove compile guard"
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read infra revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
+      "@@@STEP_LOG_END@infra.sha1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "install infra/tools/luci/isolate"
   },
@@ -952,7 +973,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version"
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -968,9 +989,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
       "-ensure-file",
-      "infra/tools/luci/isolate/${platform} git_revision:dummy_version",
+      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
       "-max-threads",
       "0",
       "-json-output",
@@ -987,7 +1008,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:dum\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -998,7 +1019,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Adummy_version/isolate",
+      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
