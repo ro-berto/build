@@ -1414,6 +1414,11 @@ SPEC.update([
     stock_config('linux-gcc-rel'),
     stock_config(
         'linux-lacros-builder-fyi-rel', gclient_apply_config=['chromeos']),
+    stock_config('linux-lacros-dbg-fyi', gclient_apply_config=['chromeos']),
+    stock_config(
+        'linux-lacros-dbg-tests-fyi',
+        execution_mode=builder_spec.TEST,
+        parent_buildername='linux-lacros-dbg-fyi'),
     stock_config(
         'linux-lacros-tester-fyi-rel',
         execution_mode=builder_spec.TEST,
