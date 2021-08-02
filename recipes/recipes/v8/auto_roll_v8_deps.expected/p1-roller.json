@@ -21,7 +21,7 @@
       "-m",
       "Rolling tools/swarming_client: https://chromium.googlesource.com/external/swarming.client/+log/380e326..380e326",
       "-m",
-      "TBR=liviurau@chromium.org"
+      "R=liviurau@chromium.org"
     ],
     "cwd": "[CACHE]/builder/p1",
     "env_prefixes": {
@@ -38,6 +38,7 @@
       "cl",
       "upload",
       "-f",
+      "--set-bot-commit",
       "--use-commit-queue",
       "--bypass-hooks",
       "--send-mail",

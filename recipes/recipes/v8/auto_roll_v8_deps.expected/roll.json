@@ -628,7 +628,7 @@
       "-m",
       "Rolling v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client/+log/380e326..380e326",
       "-m",
-      "TBR=anybody@chromium.org,ciciobello@chromium.org"
+      "R=anybody@chromium.org,ciciobello@chromium.org"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -659,6 +659,7 @@
       "cl",
       "upload",
       "-f",
+      "--set-bot-commit",
       "--use-commit-queue",
       "--bypass-hooks",
       "--send-mail"

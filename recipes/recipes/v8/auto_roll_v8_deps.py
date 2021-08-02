@@ -394,7 +394,7 @@ def RunSteps(api, autoroller_config):
     args = ['commit', '-a', '-m', autoroller_config['subject']]
     for message in commit_message:
       args.extend(['-m', message])
-    args.extend(['-m', 'TBR=%s' % ','.join(autoroller_config['reviewers'])])
+    args.extend(['-m', 'R=%s' % ','.join(autoroller_config['reviewers'])])
     kwargs = {'stdout': api.raw_io.output_text()}
     with api.context(
         cwd=api.path['checkout'],
@@ -402,8 +402,8 @@ def RunSteps(api, autoroller_config):
       api.git(*args, **kwargs)
       api.git('show')
       upload_args = [
-          'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-          '--send-mail'
+          'cl', 'upload', '-f', '--set-bot-commit', '--use-commit-queue',
+          '--bypass-hooks', '--send-mail'
       ]
       if 'bugs' in autoroller_config:
         upload_args += ['-b', autoroller_config['bugs']]
