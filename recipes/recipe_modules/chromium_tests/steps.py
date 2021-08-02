@@ -1517,7 +1517,6 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
       result.presentation.step_text += (
           api.test_utils.format_step_text([['failures:', failures]]))
 
-    if result:
       self.update_inv_name_from_stderr(result.stderr, suffix)
 
     return self._test_runs[suffix]
