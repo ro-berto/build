@@ -1310,6 +1310,21 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1235218): remove after the migration.
+    'chromeos-amd64-generic-rel (reclient compare)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos', 'enable_reclient'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+        ),
     'chromeos-amd64-generic-rel (goma cache silo)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
