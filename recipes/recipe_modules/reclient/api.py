@@ -460,7 +460,7 @@ class ReclientApi(recipe_api.RecipeApi):
     files = self.m.file.listdir('list reclient log directory', reclient_log_dir,
                                 test_data = ['reproxy.INFO'])
     log_files = []
-    log_levels = ['INFO', 'WARNING', 'ERROR', 'FATAL']
+    log_levels = ['INFO', 'WARNING', 'ERROR', 'FATAL', 'log']
     for f in files:
       if any(x in str(f) for x in log_levels):
         log_files.append(str(f))
