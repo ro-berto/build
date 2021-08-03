@@ -218,7 +218,7 @@ def GenTests(api):
                   "comments": [{
                       "category": "Metrics/Removed",
                       "message": "[ERROR]: Removed",
-                      "path": "testdata/src/rm/remove_histograms.xml"
+                      "path": "testdata/src/test/histograms.xml"
                   }]
               })) +
       api.post_process(post_process.DoesNotRun, 'metrics.load_test_analyzer') +
@@ -242,7 +242,7 @@ def GenTests(api):
               "comments": [{
                   "category": "Metrics/Removed",
                   "message": "[ERROR]: Removed",
-                  "path": "testdata/src/rm/remove_histograms.xml"
+                  "path": "testdata/src/test/histograms.xml"
               }]
           })) +
       api.post_process(post_process.DoesNotRun, 'metrics.load_test_analyzer') +
