@@ -144,8 +144,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "build.py",
       "deps",
       "--install",
@@ -167,8 +166,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "build.py",
       "build",
       "--verbose"
@@ -189,8 +187,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
+      "python3",
       "build.py",
       "create_package",
       "--verbose"
@@ -221,7 +218,7 @@
       "    _RunStepsCelab(api)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 99, in _RunStepsCelab",
       "    tests)",
-      "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 275, in _RunTests",
+      "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 274, in _RunTests",
       "    raise ValueError('pool_name and pool_size must be defined with `tests`.')",
       "ValueError: pool_name and pool_size must be defined with `tests`."
     ]

@@ -192,12 +192,11 @@ def _BuildCelabFromSource(api, checkout):
   cert_file = packages_root.join('cacert.pem')
   goenv = {"GOPATH": go_root, "GIT_SSL_CAINFO": cert_file}
   with api.context(cwd=checkout, env=goenv, env_suffixes={'PATH': add_paths}):
-    api.python('install deps', 'build.py', ['deps', '--install', '--verbose'])
-    api.python('build', 'build.py', ['build', '--verbose'])
-    api.python(
-      'create python package',
-      'build.py', ['create_package', '--verbose'],
-      venv=True)
+    api.step('install deps',
+             ['python3', 'build.py', 'deps', '--install', '--verbose'])
+    api.step('build', ['python3', 'build.py', 'build', '--verbose'])
+    api.step('create python package',
+             ['python3', 'build.py', 'create_package', '--verbose'])
 
   return _get_bin_directory(api, checkout.join('out'))
 

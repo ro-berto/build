@@ -144,8 +144,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "build.py",
       "deps",
       "--install",
@@ -167,8 +166,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "build.py",
       "build",
       "--verbose"
@@ -189,8 +187,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
+      "python3",
       "build.py",
       "create_package",
       "--verbose"
