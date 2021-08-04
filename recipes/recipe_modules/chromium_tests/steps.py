@@ -2816,8 +2816,6 @@ class LocalIsolatedScriptTest(LocalTest):
       })
 
     resultdb = self.prep_local_rdb(api, temp=temp)
-    if resultdb:
-      kwargs['resultdb'] = resultdb
 
     try:
       api.isolate.run_isolated(
@@ -2826,6 +2824,8 @@ class LocalIsolatedScriptTest(LocalTest):
           args,
           pre_args=pre_args,
           step_test_data=step_test_data,
+          resultdb=resultdb if resultdb else None,
+          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
           **kwargs)
     finally:
       # TODO(kbr, nedn): the logic of processing the output here is very similar
@@ -2841,6 +2841,7 @@ class LocalIsolatedScriptTest(LocalTest):
 
       self.update_test_run(
           api, suffix, self.spec.results_handler.validate_results(api, results))
+      self.update_inv_name_from_stderr(step_result.stderr, suffix)
 
       if (api.step.active_result.retcode == 0 and
           not self._test_runs[suffix]['valid']):
