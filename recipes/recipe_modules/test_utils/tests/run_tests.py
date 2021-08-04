@@ -80,7 +80,11 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
     test_specs = [
         MockSwarmingTestSpec.create(name=test_name),
         MockSwarmingTestSpec.create(name=test_name + '_2'),
-        steps.MockTestSpec.create(name='test3')
+        steps.MockTestSpec.create(name='test3'),
+        steps.ExperimentalTestSpec.create(
+            steps.MockTestSpec.create(name='experimental_test'),
+            experiment_percentage=0,
+            api=api)
     ]
   elif test_skylab:
     test_specs = []

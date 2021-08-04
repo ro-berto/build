@@ -336,6 +336,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     with self.m.step.nest(query_step_name):
       # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
       for t in test_suites:
+        if (isinstance(t, steps.ExperimentalTest) and
+            not t.spec.is_in_experiment):
+          continue
         invocation_names = t.get_invocation_names(suffix)
         if not invocation_names:
           self.m.step('No RDB results for %s' % t.name, [])
