@@ -547,6 +547,10 @@ SPEC.update([
         isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['android', 'enable_wpr_tests'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
+    stock_config(
+        'android-11-x86-rel',
+        isolate_server='https://isolateserver.appspot.com',
+        android_config='x86_builder'),
     stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
