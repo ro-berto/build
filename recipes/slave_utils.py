@@ -25,8 +25,9 @@ WARNING_EXIT_CODE = 88
 
 # Regex matching git comment lines containing svn revision info.
 GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
-# Regex for the master branch commit position.
-GIT_CR_POS_RE = re.compile(r'^Cr-Commit-Position: refs/heads/master@{#(\d+)}$')
+# Regex for the default branch commit position.
+GIT_CR_POS_RE = re.compile(
+  r'^Cr-Commit-Position: refs/heads/(?:master|main)@{#(\d+)}$')
 
 # Global variables set by command-line arguments (AddArgs, AddOpts).
 _ARGS_GSUTIL_PY_PATH = os.environ.get('BUILD_SLAVE_UTILS_GSUTIL_PY_PATH')
