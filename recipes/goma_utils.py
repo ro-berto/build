@@ -29,11 +29,13 @@ from recipes import slave_utils
 # The Google Cloud Storage bucket to store logs related to goma.
 GOMA_LOG_GS_BUCKET = 'chrome-goma-log'
 
-# Platform dependent location of run command.
-PLATFORM_RUN_CMD = {
+# Platform dependent location of the unpacked infra-python package.
+# TODO(crbug/1236339): We should move away from using this package, as it's
+# deprecated.
+INFRA_PYTHON_DIR = {
     # os.name: run_cmd to use.
-    'nt': 'C:\\infra-python\\run.py',
-    'posix': '/opt/infra-python/run.py',
+    'nt': 'C:\\infra-python\\',
+    'posix': '/opt/infra-python/',
 }
 
 # <cmd>.<host>.<user>.log.<severity>.<yyyy><mm><dd>-<hh><mm><ss>.<xxxxx>
@@ -473,8 +475,8 @@ def SendCountersToTsMon(counters):
     return
 
   try:
-    run_cmd = PLATFORM_RUN_CMD.get(os.name)
-    if not run_cmd:
+    infra_python_dir = INFRA_PYTHON_DIR.get(os.name)
+    if not infra_python_dir:
       print 'Unknown os.name: %s' % os.name
       return
 
@@ -489,13 +491,17 @@ def SendCountersToTsMon(counters):
       counters_json.append(c_json)
 
     cmd = [
-        sys.executable, run_cmd, 'infra.tools.send_ts_mon_values', '--verbose',
-        '--ts-mon-target-type', 'task', '--ts-mon-task-service-name',
-        'goma-client', '--ts-mon-task-job-name', 'default'
+        'vpython', '-vpython-spec',
+        'infra/tools/send_ts_mon_values/standalone.vpython', '-m',
+        'infra.tools.send_ts_mon_values', '--verbose', '--ts-mon-target-type',
+        'task', '--ts-mon-task-service-name', 'goma-client',
+        '--ts-mon-task-job-name', 'default'
     ]
     cmd.extend(counters_json)
     cmd_filter = chromium_utils.FilterCapture()
-    retcode = chromium_utils.RunCommand(cmd, filter_obj=cmd_filter, max_time=30)
+    retcode = chromium_utils.RunCommand(
+        cmd, filter_obj=cmd_filter, max_time=30, cwd=infra_python_dir
+    )
     if retcode:
       print('Execution of send_ts_mon_values failed with code %s' % retcode)
       print '\n'.join(cmd_filter.text)
