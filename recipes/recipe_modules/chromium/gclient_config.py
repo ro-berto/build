@@ -405,4 +405,4 @@ def reclient_staging(c):
 @CONFIG_CTX()
 def reclient_test(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.37.0.58a4659-gomaip'
+  cv['reclient_version'] = 're_client_version:0.38.0.5f131f2-gomaip'
