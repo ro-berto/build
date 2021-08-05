@@ -158,7 +158,8 @@ def RunSteps(api, properties):
     tests = process_swarming_props(swarming_props, builder_config,
                                    targets_config)
 
-    api.chromium_tests.configure_swarming(False, builder_group=builder_id.group)
+    api.chromium_tests.configure_swarming(
+        api.tryserver.is_tryserver, builder_group=builder_id.group)
 
     with api.chromium_tests.wrap_chromium_tests(builder_config, tests):
       # Run the test. The isolates have already been created.
