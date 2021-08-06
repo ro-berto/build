@@ -37,9 +37,6 @@ COMPARISON_BUILDERS = freeze({
         'gclient_apply_config': ['enable_reclient', 'reclient_test'],
         'platform': 'linux',
         'targets': ['all'],
-        'reclient_rewrapper_env': {
-            'RBE_deps_cache_max_mb': "256"
-        },
     },
 })
 

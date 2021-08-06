@@ -25,6 +25,11 @@ _GS_BUCKET = 'chrome-goma-log'
 # by 90%. Furthermore, we also gzip compress the log file.
 _REPROXY_LOG_FORMAT = 'reducedtext'
 
+# For builds using the goma input processor, sometimes the deps cache file is
+# too big for the default setting.  So just set the max file size permitted to
+# be large enough.
+_DEPS_CACHE_MAX_MB = '256'
+
 
 def make_test_rbe_stats_pb():
   stats = rbe_metrics_bq.RbeMetricsBq().stats
@@ -249,6 +254,7 @@ class ReclientApi(recipe_api.RecipeApi):
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
         'RBE_deps_cache_dir': reclient_cache_dir,
+        'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
         'RBE_instance': self.instance,
         'RBE_log_format': _REPROXY_LOG_FORMAT,
         'RBE_log_dir': reclient_log_dir,
