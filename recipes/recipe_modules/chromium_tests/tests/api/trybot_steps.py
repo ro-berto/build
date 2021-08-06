@@ -641,7 +641,7 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.post_process(post_process.MustRun, 'use rts: True'),
+      api.post_process(post_process.MustRun, 'quick run options'),
       api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
   )

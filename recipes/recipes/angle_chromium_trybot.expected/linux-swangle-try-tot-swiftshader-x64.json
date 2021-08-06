@@ -247,14 +247,6 @@
   },
   {
     "cmd": [],
-    "name": "use rts: False",
-    "~followup_annotations": [
-      "@@@STEP_LINK@info@https://bit.ly/chromium-rts@@@",
-      "@@@SET_BUILD_PROPERTY@rts_was_used@false@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "builder cache",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>builder cache is absent, expect a slow build@@@",

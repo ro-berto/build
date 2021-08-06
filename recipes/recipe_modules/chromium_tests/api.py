@@ -1826,9 +1826,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
     ) or builder_config.regression_test_selection == try_spec.ALWAYS
-    step_result = self.m.step('use rts: %s' % use_rts, [])
-    step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
-    step_result.presentation.properties['rts_was_used'] = use_rts
+    if self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN:
+      step_result = self.m.step('quick run options', [])
+      step_result.presentation.properties['rts_was_used'] = use_rts
+      if use_rts:
+        step_result.presentation.links[
+            'use_rts: true'] = 'https://bit.ly/chromium-rts'
+        step_result.presentation.links['info'] = 'https://bit.ly/chromium-rts'
     # RTS-enabled Quick Run builds can't be reused for non-quick runs because
     # they are slightly less safe than normal builds
     if (use_rts and
