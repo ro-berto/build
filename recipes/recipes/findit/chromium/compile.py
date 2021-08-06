@@ -111,7 +111,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
         bot_update_step,
         build_config,
         compile_targets,
-        tests_including_triggered=[],
+        tests=[],
         override_execution_mode=ctbc.COMPILE_AND_TEST)
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED

@@ -81,7 +81,7 @@ def RunSteps(api, properties):
         bot_update_step,
         build_config,
         compile_targets,
-        tests_including_triggered=test_objects,
+        tests=test_objects,
         **compile_kwargs)
     if compile_result.status != common_pb.SUCCESS:
       return compile_result

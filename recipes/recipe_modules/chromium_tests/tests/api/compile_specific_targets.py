@@ -49,7 +49,7 @@ def RunSteps(api):
       update_step,
       targets_config,
       compile_targets=['base_unittests'],
-      tests_including_triggered=tests,
+      tests=tests,
       override_execution_mode=ctbc.COMPILE_AND_TEST)
 
 

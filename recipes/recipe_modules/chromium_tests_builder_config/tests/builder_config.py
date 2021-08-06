@@ -46,7 +46,8 @@ def RunSteps(api):
     builder_config_module.BuilderConfig.create(
         builders,
         try_spec.TrySpec.create_for_single_mirror(
-            builder_group='non-existent-group', buildername='fake-builder'))
+            builder_group='non-existent-group', buildername='fake-builder'),
+        is_try_builder=True)
   message = "No configuration present for group 'non-existent-group'"
   api.assertions.assertEqual(str(caught.exception), message)
 
@@ -55,7 +56,8 @@ def RunSteps(api):
     builder_config_module.BuilderConfig.create(
         builders,
         try_spec.TrySpec.create_for_single_mirror(
-            builder_group='fake-group', buildername='non-existent-builder'))
+            builder_group='fake-group', buildername='non-existent-builder'),
+        is_try_builder=True)
   message = ("No configuration present for builder 'non-existent-builder'"
              " in group 'fake-group'")
   api.assertions.assertEqual(str(caught.exception), message)
@@ -66,6 +68,7 @@ def RunSteps(api):
         builders,
         try_spec.TrySpec.create_for_single_mirror(
             builder_group='non-existent-group', buildername='fake-builder'),
+        is_try_builder=True,
         python_api=api.python)
   name = "No configuration present for group 'non-existent-group'"
   api.assertions.assertEqual(caught.exception.result.name, name)
@@ -83,7 +86,7 @@ def RunSteps(api):
           tester='fake-tester2'),
   ]
   builder_config = builder_config_module.BuilderConfig.create(
-      builders, try_spec.TrySpec.create(mirrors))
+      builders, try_spec.TrySpec.create(mirrors), is_try_builder=True)
   builder_config_with_try_overrides = (
       builder_config_module.BuilderConfig.create(
           builders,
@@ -93,7 +96,8 @@ def RunSteps(api):
               analyze_names=['analyze-name'],
               retry_failed_shards=False,
               regression_test_selection=try_spec.ALWAYS,
-              regression_test_selection_recall=0.5)))
+              regression_test_selection_recall=0.5),
+          is_try_builder=True))
 
   # Test builders_id property
   api.assertions.assertEqual(builder_config.builder_ids, (

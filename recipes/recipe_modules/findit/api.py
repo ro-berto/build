@@ -43,6 +43,7 @@ class FinditApi(recipe_api.RecipeApi):
     return ctbc.BuilderConfig.create(
         builders or self.m.chromium_tests_builder_config.builder_db,
         try_spec,
+        is_try_builder=False,
         python_api=self.m.python)
 
   def _calculate_repo_dir(self, solution_name):
@@ -255,7 +256,7 @@ class FinditApi(recipe_api.RecipeApi):
             bot_update_step,
             build_config,
             actual_compile_targets,
-            tests_including_triggered=actual_tests_to_run,
+            tests=actual_tests_to_run,
             override_execution_mode=ctbc.COMPILE_AND_TEST)
 
         if raw_result.status != common_pb.SUCCESS:
