@@ -50,7 +50,7 @@ def RunSteps(api):
     api.chromium.apply_config('mb')
 
     # Do not rebase the patch, so that the Tricium analyzer observes the correct
-    # line numbers. Otherwise, line numbers would be relative to origin/master,
+    # line numbers. Otherwise, line numbers would be relative to origin/main,
     # which may be synced to include changes subsequent to the actual patch.
     api.chromium_checkout.ensure_checkout(gerrit_no_rebase_patch_ref=True)
 

@@ -12,7 +12,7 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
-                         '\trefs/heads/master')
+                         '\trefs/heads/main')
 _GIT_REV_PARSE_OUTPUT = '1234567123456712345671234567888812345678'
 
 
@@ -441,14 +441,14 @@ class FinditApi(recipe_api.RecipeApi):
         previously_cached_revision_step = self.m.git(
             'ls-remote',
             'origin',
-            'refs/heads/master',
+            'refs/heads/main',
             stdout=self.m.raw_io.output(),
             name='record previously cached revision',
-            step_test_data=
-            lambda: self.m.raw_io.test_api.stream_output(_GIT_LS_REMOTE_OUTPUT))
+            step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+                _GIT_LS_REMOTE_OUTPUT))
 
         # Sample output:
-        # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a  refs/heads/master`
+        # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a  refs/heads/main`
         matches = re.match('(?P<revision>[a-fA-f0-9]{40})\s*\S*',
                            previously_cached_revision_step.stdout.strip())
         if matches:

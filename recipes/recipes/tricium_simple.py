@@ -34,8 +34,8 @@ def RunSteps(api):
     api.gclient.set_config('chromium')
     api.chromium.set_config('chromium')
     # We want line numbers for the file as it is in the CL, not as it is
-    # rebased on origin/master. gerrit_no_rebase_patch_ref prevents rebasing
-    # on origin/master which may result in incorrect line numbers.
+    # rebased on origin/main. gerrit_no_rebase_patch_ref prevents rebasing
+    # on origin/main which may result in incorrect line numbers.
     api.chromium_checkout.ensure_checkout(gerrit_no_rebase_patch_ref=True)
     input_dir = api.chromium_checkout.checkout_dir.join('src')
     affected_files = [

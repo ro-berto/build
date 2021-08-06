@@ -226,9 +226,9 @@ def get_tot_revision(api, name, target_loc):
   if output:
     return output.split('\t')[0]
 
-  # TODO(crbug.com/1222015): Fallback code for refs/heads/master
+  # TODO(crbug.com/1222015): Fallback code for refs/heads/main
   # needed until all repositories use a main branch.
-  output = ls_remote('master', ' (fallback)')
+  output = ls_remote('main', ' (fallback)')
   api.step.active_result.presentation.status = api.step.WARNING
   api.step.active_result.presentation.step_text += (
       '%s lacks a main branch\n' % name)
@@ -288,7 +288,7 @@ def RunSteps(api, autoroller_config):
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-    api.git('checkout', '-f', 'origin/master')
+    api.git('checkout', '-f', 'origin/main')
     api.git('branch', '-D', 'roll', ok_ret='any')
     api.git('clean', '-ffd')
     api.git('new-branch', 'roll')
@@ -481,16 +481,14 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
 
   yield (
       template('roll', 'Auto-roll - v8 deps') +
-      api.properties(autoroller_config=v8_deps_config) +
-      api.override_step_data(
+      api.properties(autoroller_config=v8_deps_config) + api.override_step_data(
           'gclient setdep base_trace_event_common',
           retcode=1,
-      ) +
-      api.override_step_data(
+      ) + api.override_step_data(
           'look up build',
-          api.raw_io.stream_output('deadbeef\trefs/heads/main', stream='stdout'),
-      ) +
-      api.override_step_data(
+          api.raw_io.stream_output(
+              'deadbeef\trefs/heads/main', stream='stdout'),
+      ) + api.override_step_data(
           'look up base_trace_event_common',
           api.raw_io.stream_output('', stream='stdout'),
       ) +
@@ -498,9 +496,9 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       # all repos have a main branch, add back output for the call above.
       api.override_step_data(
           'look up base_trace_event_common (fallback)',
-          api.raw_io.stream_output('deadbeef\trefs/heads/master', stream='stdout'),
-      )
-  )
+          api.raw_io.stream_output(
+              'deadbeef\trefs/heads/main', stream='stdout'),
+      ))
 
   yield api.test(
       'bad-cr-roll',

@@ -166,7 +166,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
   def _get_comparable_upload_path_for_sort_key(self, branch, number):
     """Returns a sortable string corresponding to the commit position."""
-    if branch and branch != 'refs/heads/master':
+    if branch and branch not in ('refs/heads/master', 'refs/heads/main'):
       branch = branch.replace('/', '_')
       return '%s-%s' % (branch, number)
     return str(number)
@@ -553,7 +553,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     contents = self.m.gitiles.download_file(
         "https://chromium.googlesource.com/chromium/src.git/",
         base_name,
-        branch='refs/heads/master',
+        branch='refs/heads/main',
         step_name='fetch milestone_branch',
         step_test_data=lambda: self.m.json.test_api.output({
             'value': base64.b64encode(mock_milestone_str),

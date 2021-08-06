@@ -545,7 +545,7 @@ def RunSteps(api):
 
   recipes_py_path = api.cipd.ensure_tool(
       'infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py',
-      version='refs/heads/master',
+      version='refs/heads/main',
       executable_path='recipe_engine/recipes.py')
   recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
   affected_recipes = _determine_affected_recipes(

@@ -58,7 +58,7 @@ PROPERTIES = {
     'src_ref':
         Property(
             kind=str,
-            default='refs/heads/master',
+            default='refs/heads/main',
             help='Source repo ref to fetch from.'),
     'config':
         Property(
@@ -246,7 +246,7 @@ def GenTests(api):
              project='custom',
              repo='https://custom.googlesource.com/src',
              ref='refs/heads/lkgr',
-             src_ref='refs/heads/master',
+             src_ref='refs/heads/main',
              config={
                  'project': 'custom',
                  'source_url': 'https://custom.googlesource.com/src',

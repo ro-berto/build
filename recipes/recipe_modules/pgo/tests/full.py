@@ -123,7 +123,7 @@ def GenTests(api):
           post_process.StepCommandContains,
           'Processing PGO .profraw data.gsutil upload artifact to GS', [
               'gs://chromium-optimization-profiles/pgo_profiles/'
-              'chrome-win64-master-1587876258-'
+              'chrome-win64-main-1587876258-'
               'ade24b3118b1feaa04cb4406253403f3f72a7f0e.profdata'
           ]),
       api.post_process(post_process.DropExpectation),

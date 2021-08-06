@@ -87,16 +87,21 @@ def RunSteps(api):
     configs = configs[:MAX_CONFIGS]
 
   v8_commits, _ = api.gitiles.log(
-      'https://chromium.googlesource.com/v8/v8/', 'refs/heads/master', limit=1,
+      'https://chromium.googlesource.com/v8/v8/',
+      'refs/heads/main',
+      limit=1,
       step_name='read V8 ToT revision')
   v8_tot = v8_commits[0]['commit']
   # TODO(sergiyb): Stop setting got_revision property when build manifests
   # are supported in Milo, in which case using set_output_gitiles_commit should
   # be sufficient.
   api.step.active_result.presentation.properties['got_revision'] = v8_tot
-  api.buildbucket.set_output_gitiles_commit(common_pb2.GitilesCommit(
-      host='chromium.googlesource.com', project='v8/v8',
-      ref='refs/heads/master', id=v8_tot))
+  api.buildbucket.set_output_gitiles_commit(
+      common_pb2.GitilesCommit(
+          host='chromium.googlesource.com',
+          project='v8/v8',
+          ref='refs/heads/main',
+          id=v8_tot))
   builds = api.v8.buildbucket_trigger([
     (
       'v8_flako',

@@ -63,7 +63,7 @@ def RunSteps(api):
 
     def delete_branch(name):
       # Get off branch, if any, otherwise delete fails.
-      api.git('checkout', 'origin/master')
+      api.git('checkout', 'origin/main')
       api.git('branch', '-D', name, ok_ret='any')
 
     delete_branch(name)

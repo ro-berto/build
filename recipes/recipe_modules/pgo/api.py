@@ -40,9 +40,9 @@ class PgoApi(recipe_api.RecipeApi):
     """Parse the branch name from ref."""
     ref = self.m.buildbucket.gitiles_commit.ref
     # Release ref: refs/branch-heads/4103
-    # Master ref: refs/heads/master
-    # If ref is undefined, default it to master
-    return ref.split('/', 3)[2] if ref else 'master'
+    # Master ref: refs/heads/main
+    # If ref is undefined, default it to main
+    return ref.split('/', 3)[2] if ref else 'main'
 
   def _profdata_artifact_name(self, sha1):
     """Generate profdata artifact name.

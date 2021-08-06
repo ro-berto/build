@@ -181,7 +181,7 @@ def chromium_skia(c):
   c.solutions[0].revision = 'HEAD'
   del c.solutions[0].custom_deps
   c.revisions['src/third_party/skia'] = (
-      gclient_api.RevisionFallbackChain('origin/master'))
+      gclient_api.RevisionFallbackChain('origin/main'))
   c.got_revision_reverse_mapping['got_chromium_revision'] = 'src'
   c.got_revision_reverse_mapping['got_revision'] = 'src/third_party/skia'
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'

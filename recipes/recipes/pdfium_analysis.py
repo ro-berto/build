@@ -51,7 +51,7 @@ def RunSteps(api):
 
   api.gclient.set_config('pdfium')
   # We want line numbers for the file as it is in the CL, not as it is
-  # rebased on origin/master. BotUpdateApi.ensure_checkout() by default
+  # rebased on origin/main. BotUpdateApi.ensure_checkout() by default
   # prevents rebasing and ensures the correct line numbers.
   api.bot_update.ensure_checkout()
   input_dir = api.path['checkout']

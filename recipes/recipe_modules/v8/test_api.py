@@ -310,11 +310,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return trigger
 
   def example_scheduler_gitiles_trigger(self, key='a'):
-    return triggers_pb2.Trigger(id=key, gitiles=dict(
-      repo='https://chromium.googlesource.com/v8/v8',
-      ref='refs/heads/master',
-      revision=key*40,
-    ))
+    return triggers_pb2.Trigger(
+        id=key,
+        gitiles=dict(
+            repo='https://chromium.googlesource.com/v8/v8',
+            ref='refs/heads/main',
+            revision=key * 40,
+        ))
 
   def example_bisection_range(self):
     # Gitiles returns changes in the order child -> parent.
@@ -488,7 +490,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
            parent_test_spec=None,
            parent_buildername=None,
            parent_bot_config=None,
-           git_ref='refs/heads/master',
+           git_ref='refs/heads/main',
            **kwargs):
     """Convenience method to generate test data for V8 recipe runs.
 

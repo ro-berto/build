@@ -91,7 +91,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--",
       "-h",
-      "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#50110}",
+      "x-goog-meta-Cr-Commit-Position:refs/heads/main@{#50110}",
       "-h",
       "x-goog-meta-Cr-Commit-Position-Number:50110",
       "-h",
