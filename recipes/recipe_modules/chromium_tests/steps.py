@@ -3436,6 +3436,7 @@ class SkylabTestSpec(TestSpec):
   """Spec for a suite that runs on CrOS Skylab."""
   cros_board = attrib(str)
   cros_img = attrib(str)
+  dut_pool = attrib(str, default='')
   tast_expr = attrib(str, default='')
   test_args = attrib(command_args, default=())
   timeout_sec = attrib(int, default=3600)
@@ -3475,6 +3476,7 @@ class SkylabTest(Test):
         test_args=' '.join(self.spec.test_args),
         board=self.spec.cros_board,
         cros_img=self.spec.cros_img,
+        dut_pool=self.spec.dut_pool,
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,

@@ -27,7 +27,7 @@ LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
 LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
 
 
-def gen_skylab_req(tag, tast_expr=None, test_args=None):
+def gen_skylab_req(tag, tast_expr=None, test_args=None, dut_pool=''):
   return SkylabRequest.create(
       request_tag=tag,
       board='eve',
@@ -35,7 +35,8 @@ def gen_skylab_req(tag, tast_expr=None, test_args=None):
       test_args=test_args,
       lacros_gcs_path='gs://fake_bucket/lacros.zip',
       exe_rel_path='out/Release/bin/run_foo_unittest',
-      cros_img='eve-release/R88-13545.0.0')
+      cros_img='eve-release/R88-13545.0.0',
+      dut_pool=dut_pool)
 
 
 def RunSteps(api):
@@ -43,8 +44,12 @@ def RunSteps(api):
   another_hw_test_req = gen_skylab_req('m87_lacros', tast_expr=LACROS_TAST_EXPR)
   gtest_req = gen_skylab_req(
       'm88_urlunittest', tast_expr=None, test_args=LACROS_GTEST_ARGS)
+  nearby_connection_req = gen_skylab_req(
+      'm87_nearby',
+      tast_expr=LACROS_TAST_EXPR,
+      dut_pool='cross_device_multi_cb')
   build_id = api.skylab.schedule_suites(
-      '', [hw_test_req, another_hw_test_req, gtest_req])
+      '', [hw_test_req, another_hw_test_req, gtest_req, nearby_connection_req])
   got = api.skylab.wait_on_suites(build_id, timeout_seconds=3600)
   api.assertions.assertEqual(got.status, common_pb2.SUCCESS)
   api.assertions.assertIn('m88_lacros', got.responses)
@@ -83,6 +88,9 @@ def GenTests(api):
         'm88_urlunittest':
             api.skylab.gen_json_execution_response(
                 [task_passed, task_failed, task_aborted]),
+        'm87_nearby':
+            api.skylab.gen_json_execution_response(
+                [task_passed, task_failed, task_aborted]),
     }
 
   def _args_to_dict(arg_line):
@@ -99,6 +107,16 @@ def GenTests(api):
         steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
     properties = req['requests'][0]['scheduleBuild'].get('properties', [])
     check(tag in properties['requests'])
+
+  def check_pool(check, steps, tag, pool='', managed=False):
+    req = api.json.loads(
+        steps['schedule skylab tests.buildbucket.schedule'].logs['request'])
+    properties = req['requests'][0]['scheduleBuild'].get('properties', [])
+    scheduling = properties['requests'][tag]['params']['scheduling']
+    if managed:
+      check(scheduling['managedPool'] == 'MANAGED_POOL_QUOTA')
+    else:
+      check(scheduling['unmanagedPool'] == pool)
 
   def check_test_arg(check, steps, lacros_gcs_path, tast_expr, test_args):
     req = api.json.loads(
@@ -127,8 +145,11 @@ def GenTests(api):
           [api.skylab.test_with_multi_response(1234, gen_tag_resp())],
           step_name='collect skylab results.buildbucket.collect'),
       api.post_check(check_has_req_tag, 'm88_lacros'),
+      api.post_check(check_pool, 'm88_lacros', managed=True),
       api.post_check(check_has_req_tag, 'm87_lacros'),
       api.post_check(check_has_req_tag, 'm88_urlunittest'),
+      api.post_check(check_has_req_tag, 'm87_nearby'),
+      api.post_check(check_pool, 'm87_nearby', 'cross_device_multi_cb'),
       api.post_check(check_test_arg, 'gs://fake_bucket/lacros.zip',
                      LACROS_TAST_EXPR, LACROS_GTEST_ARGS),
       api.post_process(post_process.DropExpectation),

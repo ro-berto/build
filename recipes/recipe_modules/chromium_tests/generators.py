@@ -561,9 +561,10 @@ def generate_skylab_tests(api,
 
   def generate_skylab_tests_from_one_spec(builder_group, buildername,
                                           skylab_test_spec):
+    kwargs_to_forward = set(
+        k for k in attr.fields_dict(steps.SkylabTestSpec) if k != 'test_args')
     common_skylab_kwargs = {
-        k: v for k, v in skylab_test_spec.items() if k in
-        ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec', 'retries']
+        k: v for k, v in skylab_test_spec.items() if k in kwargs_to_forward
     }
     common_skylab_kwargs['test_args'] = get_args_for_test(
         api, chromium_tests_api, skylab_test_spec, bot_update_step)

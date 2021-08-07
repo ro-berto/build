@@ -53,7 +53,6 @@ class SkylabApi(recipe_api.RecipeApi):
         req.params.metadata.debug_symbols_archive_url = gs_img_uri
         sw_dep = req.params.software_dependencies.add()
         sw_dep.chromeos_build = s.cros_img
-        req.params.scheduling.managed_pool = POOL
         req.params.scheduling.qs_account = QS_ACCOUNT
         req.params.software_attributes.build_target.name = s.board
         req.params.time.maximum_duration.seconds = s.timeout_sec
@@ -63,12 +62,17 @@ class SkylabApi(recipe_api.RecipeApi):
           autotest_name = AUTOTEST_NAME_TAST
         autotest_to_create.autotest.name = autotest_name
         tags = {
-            'label-pool': 'DUT_POOL_QUOTA',
             'label-board': s.board,
             'build': gs_img_uri,
             'suite': autotest_name,
         }
         test_args = ['dummy=crbug.com/984103']
+        if s.dut_pool:
+          req.params.scheduling.unmanaged_pool = s.dut_pool
+          tags['label-pool'] = s.dut_pool
+        else:
+          req.params.scheduling.managed_pool = POOL
+          tags['label-pool'] = 'DUT_POOL_QUOTA'
         if s.tast_expr:
           # Due to crbug/1173329, skylab does not support arbitrary tast
           # expressions. As a workaround, we encode test argument which may
