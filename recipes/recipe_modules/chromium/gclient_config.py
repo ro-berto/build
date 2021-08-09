@@ -406,3 +406,12 @@ def reclient_staging(c):
 def reclient_test(c):
   cv = c.solutions[0].custom_vars
   cv['reclient_version'] = 're_client_version:0.38.0.5f131f2-gomaip'
+
+
+# This configuration overrides the default reclient version
+# with a clang-scan-deps version.  This is used for doing builds
+# with the clang-scan-deps based input processor.
+@CONFIG_CTX()
+def reclient_clang_scan_deps(c):
+  cv = c.solutions[0].custom_vars
+  cv['reclient_version'] = 're_client_version:0.38.0.c3845b1'
