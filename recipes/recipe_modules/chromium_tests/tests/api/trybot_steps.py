@@ -532,8 +532,25 @@ def GenTests(api):
 
   yield api.test(
       'pgo_trybot',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.perf', builder='Mac Builder Perf'),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='pgo-try-group',
+          builder='pgo-try-builder',
+          builder_db=ctbc.BuilderDatabase.create({
+              'pgo-group': {
+                  'pgo-builder':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          chromium_config='chromium',
+                      ),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'pgo-try-group': {
+                  'pgo-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          'pgo-group', 'pgo-builder'),
+              },
+          })),
       api.properties(
           swarm_hashes={
               'performance_test_suite':
@@ -542,8 +559,8 @@ def GenTests(api):
       api.pgo(use_pgo=True, skip_profile_upload=True),
       api.platform('mac', 64),
       api.chromium_tests.read_source_side_spec(
-          'chromium.perf', {
-              'mac-builder-perf': {
+          'pgo-group', {
+              'pgo-builder': {
                   'isolated_scripts': [{
                       'name': 'performance_test_suite',
                       'isolate_profile_data': True,

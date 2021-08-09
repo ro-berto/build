@@ -92,19 +92,11 @@ def GenTests(api):
 
   yield api.test(
       'perf_isolate_lookup',
-      api.chromium.ci_build(
-          builder_group='chromium.perf', builder='linux-builder-perf'),
-      api.properties(swarming_gtest=True),
-      api.post_process(Filter('pinpoint isolate upload')),
-  )
-
-  yield api.test(
-      'perf_isolate_lookup_tryserver',
+      # pinpoint/builder.py does its own mapping of try builder to CI builder
+      # because it wants a simple mapping that pulls in all triggered try
+      # builders, which doesn't match the semantics of trybot/TrySpec
       api.chromium.try_build(
-          builder_group='tryserver.chromium.perf',
-          builder='Mac Builder Perf',
-          change_number=671632,
-          patch_set=1),
+          builder_group='chromium.perf', builder='linux-builder-perf'),
       api.properties(
           deps_revision_overrides={'src': '12345678' * 5}, swarming_gtest=True),
       api.post_process(Filter('pinpoint isolate upload')),

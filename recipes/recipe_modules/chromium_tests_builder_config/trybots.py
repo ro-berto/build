@@ -1646,64 +1646,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Mac Debug (Intel)',
             ),
     },
-    'tryserver.chromium.perf': {
-        'Android Compile Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='android-builder-perf',
-            ),
-        'Android arm64 Compile Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='android_arm64-builder-perf',
-            ),
-        'Chromecast Linux Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='chromecast-linux-builder-perf',
-            ),
-        'Chromeos Amd64 Generic Lacros Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='chromeos-amd64-generic-lacros-builder-perf',
-            ),
-        'Fuchsia Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf.fyi',
-                buildername='fuchsia-builder-perf-fyi',
-                tester='fuchsia-perf-fyi',
-            ),
-        'Linux Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='linux-builder-perf',
-            ),
-        'Mac Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='mac-builder-perf',
-            ),
-        'Mac arm Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='mac-arm-builder-perf',
-            ),
-        'mac-10_13_laptop_high_end-perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='mac-10_13_laptop_high_end-perf',
-            ),
-        'Win Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='win32-builder-perf',
-            ),
-        'Win x64 Builder Perf':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.perf',
-                buildername='win64-builder-perf',
-            ),
-    },
     'tryserver.chromium.win': {
         'win-asan':
             try_spec.TrySpec.create_for_single_mirror(
