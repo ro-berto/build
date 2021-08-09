@@ -569,5 +569,10 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-x86-dbg', config='Debug'),
+    stock_cronet_config(
+        'android-cronet-x86-dbg-10-tests',
+        config='Debug',
+        execution_mode=builder_spec.TEST,
+        parent_buildername='android-cronet-x86-dbg'),
     stock_cronet_config('android-cronet-x86-rel'),
 ])
