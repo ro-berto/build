@@ -559,6 +559,11 @@ class Test(object):
     # _deterministic_failures above.
     self._rdb_results = {}
 
+    # Maps suffix to wheter or not the test exited non-zero. In conjunction with
+    # _rdb_results above, can safely handle any type of test failure without
+    # inspecting JSON.
+    self._failure_on_exit_suffix_map = {}
+
   @property
   def set_up(self):
     return None
@@ -710,7 +715,16 @@ class Test(object):
     """
     raise NotImplementedError()
 
-  def has_valid_results(self, suffix):  # pragma: no cover
+  def failure_on_exit(self, suffix):
+    """Returns True if the test (or any of its shards) exited non-zero.
+
+    Used to determine the result of the test in the absence of anything
+    uploaded to RDB. For safety, assume any test that fails to update
+    _failure_on_exit_suffix_map resulted in a failure.
+    """
+    return self._failure_on_exit_suffix_map.get(suffix, True)
+
+  def has_valid_results(self, suffix):
     """
     Returns True if results (failures) are valid.
 
@@ -1512,6 +1526,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
               'pass_fail_counts': pass_fail_counts,
               'findit_notrun': set(),
           })
+      self._failure_on_exit_suffix_map[suffix] = result.retcode != 0
 
       _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
@@ -1668,7 +1683,9 @@ class LocalGTestTest(LocalTest):
 
     step_test_data = lambda: (
         api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
-        stream_output('', 'stderr'))
+        stream_output(
+            'rdb-stream: included "invocations/some-inv-name" in '
+            '"invocations/parent-inv-name"', 'stderr'))
 
     kwargs = {
         'name': self.step_name(suffix),
@@ -1715,6 +1732,7 @@ class LocalGTestTest(LocalTest):
         gtest_results = step_result.test_utils.gtest_results
         self.update_test_run(api, suffix,
                              gtest_results.canonical_result_format())
+      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
 
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       r = api.test_utils.present_gtest_failures(step_result)
@@ -2581,6 +2599,8 @@ class SwarmingTest(Test):
       results['valid'] = False
 
     self.update_test_run(api, suffix, results)
+    self._failure_on_exit_suffix_map[suffix] = bool(
+        self._tasks[suffix].failed_shards)
     return step_result
 
   @property
@@ -2842,6 +2862,7 @@ class LocalIsolatedScriptTest(LocalTest):
       self.update_test_run(
           api, suffix, self.spec.results_handler.validate_results(api, results))
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
+      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
 
       if (api.step.active_result.retcode == 0 and
           not self._test_runs[suffix]['valid']):
@@ -3017,6 +3038,7 @@ class AndroidJunitTest(LocalTest):
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
+      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
@@ -3377,6 +3399,7 @@ class SwarmingIosTest(SwarmingTest):
     else:
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
+    self._failure_on_exit_suffix_map[suffix] = bool(swarming_task.failed_shards)
 
     # Upload test results JSON to the flakiness dashboard.
     shard_output_dir_full_path = api.path.join(
@@ -3593,8 +3616,10 @@ class SkylabTest(Test):
         # Keep the logic simple and consider the test succeed if any
         # of the attempt passed. In long term, we will rely on ResultDB to
         # tell us the test result.
+        self._failure_on_exit_suffix_map[suffix] = True
         if any(r.verdict == "PASSED" for r in self.ctp_responses):
           step.presentation.status = api.step.SUCCESS
+          self._failure_on_exit_suffix_map[suffix] = False
         for i, r in enumerate(self.ctp_responses, 1):
           with api.step.nest('attempt: #' + str(i)) as attempt_step:
             try:

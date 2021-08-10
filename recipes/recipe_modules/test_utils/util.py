@@ -369,7 +369,7 @@ class RDBResults(object):
     for res in results:
       assert isinstance(res, RDBPerSuiteResults)
       all_suites.append(res)
-      if res.unexpected_failing_tests:
+      if res.unexpected_failing_tests or res.invalid:
         unexpected_failing_suites.append(res)
 
     return cls(all_suites, unexpected_failing_suites)
@@ -387,15 +387,18 @@ class RDBPerSuiteResults(object):
   suite_name = attrib(str, default=None)  # Default used in recipe tests.
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
+  invalid = attrib(bool, default=False)
 
   @classmethod
-  def create(cls, invocations):
+  def create(cls, invocations, suite_name=None, failure_on_exit=False):
     """
     Args:
       invocations, dict of {invocation_id: api.resultdb.Invocation} as
           returned by resultdb recipe_module's query().
+      failure_on_exit: If True, indicates the test harness/runner exited with a
+          non-zero exit code. If this occurs and no unexpected failures were
+          reported, it indicates invalid test results.
     """
-    suite_name = None
     results_by_test_id = collections.defaultdict(list)
     for inv in invocations.values():
       for tr in inv.test_results:
@@ -431,4 +434,10 @@ class RDBPerSuiteResults(object):
       else:
         unexpected_passing_tests.add(test_name)
 
-    return cls(suite_name, unexpected_passing_tests, unexpected_failing_tests)
+    # If there were no test failures, but the harness exited non-zero, assume
+    # something went wrong in the test setup/init (eg: failure in underlying
+    # hardware) and that the results are invalid.
+    invalid = failure_on_exit and not unexpected_failing_tests
+
+    return cls(suite_name, unexpected_passing_tests, unexpected_failing_tests,
+               invalid)

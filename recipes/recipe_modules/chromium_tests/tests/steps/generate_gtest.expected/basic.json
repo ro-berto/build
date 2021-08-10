@@ -238,6 +238,7 @@
     },
     "name": "base_unittests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output[stderr]@rdb-stream: included \"invocations/some-inv-name\" in \"invocations/parent-inv-name\"@@@",
       "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
     ]
   },

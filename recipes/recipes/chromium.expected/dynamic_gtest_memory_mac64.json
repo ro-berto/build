@@ -666,6 +666,7 @@
     },
     "name": "browser_tests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output[stderr]@rdb-stream: included \"invocations/some-inv-name\" in \"invocations/parent-inv-name\"@@@",
       "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
     ]
   },
@@ -703,10 +704,27 @@
     "name": "query test results"
   },
   {
-    "cmd": [],
-    "name": "query test results.No RDB results for browser_tests",
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,status,tags,expected",
+      "some-inv-name"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "query test results.browser_tests",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

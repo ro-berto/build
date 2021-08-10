@@ -342,16 +342,23 @@ class TestUtilsApi(recipe_api.RecipeApi):
         invocation_names = t.get_invocation_names(suffix)
         if not invocation_names:
           self.m.step('No RDB results for %s' % t.name, [])
-          continue
+          # TODO(crbug.com/1135718): Make failure to fetch RDB results fatal.
+          res = RDBPerSuiteResults.create({},
+                                          failure_on_exit=False,
+                                          suite_name=t.canonical_name)
+        else:
+          unexpected_result_invocations = self.m.resultdb.query(
+              inv_ids=self.m.resultdb.invocation_ids(invocation_names),
+              variants_with_unexpected_results=True,
+              step_name=t.name,
+              tr_fields=['testId', 'variant', 'status', 'tags', 'expected'],
+          )
+          all_unexpected_result_invocations.update(
+              unexpected_result_invocations)
+          res = RDBPerSuiteResults.create(
+              unexpected_result_invocations,
+              failure_on_exit=t.failure_on_exit(suffix))
 
-        unexpected_result_invocations = self.m.resultdb.query(
-            inv_ids=self.m.resultdb.invocation_ids(invocation_names),
-            variants_with_unexpected_results=True,
-            step_name=t.name,
-            tr_fields=['testId', 'variant', 'status', 'tags', 'expected'],
-        )
-        all_unexpected_result_invocations.update(unexpected_result_invocations)
-        res = RDBPerSuiteResults.create(unexpected_result_invocations)
         t.update_rdb_results(suffix, res)
         all_rdb_results.append(res)
 
@@ -649,9 +656,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
     if retry_invalid_shards:
       for suite in test_suites:
-        # TODO(crbug.com/1135718): Tear-out all JSON-parsing logic from
-        # has_valid_results() and have it only inspect overall shard result.
-        if not suite.has_valid_results(suffix):
+        results = suite.rdb_results.get(suffix)
+        if results and results.invalid:
           retriable_suites.add(suite.name)
     if not retry_failed_shards:
       return retriable_suites

@@ -1204,6 +1204,7 @@
     },
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output[stderr]@rdb-stream: included \"invocations/some-inv-name\" in \"invocations/parent-inv-name\"@@@",
       "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
     ]
   },
@@ -1237,10 +1238,23 @@
     "name": "query test results (with patch)"
   },
   {
-    "cmd": [],
-    "name": "query test results (with patch).No RDB results for base_unittests",
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,status,tags,expected",
+      "some-inv-name"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "query test results (with patch).base_unittests",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

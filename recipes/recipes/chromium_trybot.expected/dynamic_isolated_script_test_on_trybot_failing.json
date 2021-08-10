@@ -1804,38 +1804,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Migration mismatch (informational)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Legacy decision for retries had length 1<br/>New decision for retries had length 0@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Migration mismatch (retriable suites, informational)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Legacy retries calculation contained extra elements set([u'telemetry_gpu_unittests'])<br/>New retries calculation contained extra elements set([])@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "test_pre_run (retry shards with patch)"
   },
