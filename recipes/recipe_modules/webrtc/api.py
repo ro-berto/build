@@ -217,7 +217,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   @property
   def revision_number(self):
     branch, number = self.m.commit_position.parse(self.revision_cp)
-    assert branch.endswith('/main')
+    assert branch.endswith('/main') or branch.endswith('/master')
     return number
 
   @property
