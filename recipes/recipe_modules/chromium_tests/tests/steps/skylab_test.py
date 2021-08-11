@@ -121,10 +121,6 @@ def GenTests(api):
 
   yield api.test(
       'infra_failure',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
       api.buildbucket.simulated_schedule_output(
           builds_service_pb2.BatchResponse(
               responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
