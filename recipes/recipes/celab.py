@@ -45,8 +45,6 @@ def _get_bin_directory(api, bin_root):
     bin_dir = bin_dir.join('linux_amd64', 'bin')
   elif api.platform.is_win:
     bin_dir = bin_dir.join('windows_amd64', 'bin')
-  elif api.platform.is_mac:
-    bin_dir = bin_dir.join('darwin_amd64', 'bin')
   return bin_dir
 
 
@@ -455,12 +453,6 @@ def GenTests(api):
   yield api.test(
       'basic_ci_windows',
       api.platform('win', 64),
-      api.buildbucket.ci_build(
-          project='celab', bucket='ci', git_repo=CELAB_REPO),
-  )
-  yield api.test(
-      'basic_ci_mac',
-      api.platform('mac', 64),
       api.buildbucket.ci_build(
           project='celab', bucket='ci', git_repo=CELAB_REPO),
   )
