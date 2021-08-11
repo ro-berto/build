@@ -375,7 +375,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                update_step,
                                targets_config,
                                compile_targets,
-                               tests,
+                               tests_including_triggered,
                                mb_phase=None,
                                mb_config_path=None,
                                mb_recursive_lookup=True,
@@ -393,10 +393,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       update_step - The StepResult from the bot_update step.
       targets_config - The configuration of the current build.
       compile_targets - The list of targets to compile.
-      tests - The list of tests to be built for this builder. The tests may or
-        may not be executed by the builder and may be executed by another
-        builder that is triggered. The compile operation will prepare and upload
-        the isolates for the tests that use isolate.
+      tests_including_triggered - The list of tests that will be executed by
+        this builder and any triggered builders. The compile operation will
+        prepare and upload the isolates for the tests that use isolate.
       mb_phase - A phase argument to be passed to mb. Must be provided if the
         configuration identified by `builder_id` uses phases and must not be
         provided if the configuration identified by `builder_id` does not use
@@ -427,13 +426,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_android.run_tree_truth()
 
     if execution_mode == ctbc.COMPILE_AND_TEST:
-      isolated_targets = [t.isolate_target for t in tests if t.uses_isolate]
+      isolated_targets = [
+          t.isolate_target for t in tests_including_triggered if t.uses_isolate
+      ]
       # Skylab tests pretend to be isolated_targets at run_mb_and_compile step,
       # for generating the runtime deps. We upload the deps to GCS instead of
       # isolate server, because skylab DUT does not support isolate.
       skylab_isolates = [
           t.target_name
-          for t in tests
+          for t in tests_including_triggered
           # Skylab test has different runner script and dependencies. A skylab
           # test target should not appear in isolated_targets.
           if t.is_skylabtest and not t.target_name in isolated_targets
@@ -488,7 +489,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             use_cas=self._use_cas(builder_config),
             swarm_hashes_property_name=swarm_hashes_property_name)
 
-        self.set_test_command_lines(tests, name_suffix)
+        self.set_test_command_lines(tests_including_triggered, name_suffix)
 
         if builder_config.perf_isolate_upload:
           instance = (
@@ -505,8 +506,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if skylab_isolates:
         self._prepare_artifact_for_skylab(
-            builder_config.builder_db[builder_id],
-            [t for t in tests if t.target_name in skylab_isolates])
+            builder_config.builder_db[builder_id], [
+                t for t in tests_including_triggered
+                if t.target_name in skylab_isolates
+            ])
       return raw_result
 
   def set_test_command_lines(self, tests, suffix):
@@ -1748,6 +1751,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_targets, compile_targets
 
+  def _gather_tests_to_run(self, builder_config, targets_config):
+    if builder_config.is_compile_only:
+      return [], []
+
+    # Determine the tests that would be run if this were a CI tester.
+    # Tests are instances of class(Test) from chromium_tests/steps.py. These
+    # objects know how to dispatch isolate tasks, parse results, and keep
+    # state on the results of previous test runs.
+    return targets_config.tests_in_scope(), targets_config.all_tests()
+
   def revise_affected_files_for_deps_autorolls(self, affected_files):
     # When DEPS is autorolled, typically the change is an updated git revision.
     # We use the following logic to figure out which files really changed.
@@ -1870,9 +1883,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.code_coverage.instrument(
           affected_files, is_deps_only_change=is_deps_only_change)
 
-    tests = []
-    if not builder_config.is_compile_only:
-      tests = targets_config.tests_in_scope()
+    tests, tests_including_triggered = self._gather_tests_to_run(
+        builder_config, targets_config)
 
     test_targets, compile_targets = self.determine_compilation_targets(
         builder_id, builder_config, affected_files, targets_config)
@@ -1888,11 +1900,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               t.target_name.startswith(target_name)
               for target_name in tests_to_run)
       ]
+      tests_including_triggered = [
+          t for t in tests_including_triggered if any(
+              t.target_name.startswith(target_name)
+              for target_name in tests_to_run)
+      ]
 
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if compile_targets:
       tests = self.tests_in_compile_targets(test_targets, tests)
+      tests_including_triggered = self.tests_in_compile_targets(
+          test_targets, tests_including_triggered)
 
       compile_targets = sorted(set(compile_targets))
       raw_result = self.compile_specific_targets(
@@ -1901,7 +1920,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_update_step,
           targets_config,
           compile_targets,
-          tests,
+          tests_including_triggered,
           override_execution_mode=ctbc.COMPILE_AND_TEST,
           use_rts=use_rts,
           rts_recall=builder_config.regression_test_selection_recall)

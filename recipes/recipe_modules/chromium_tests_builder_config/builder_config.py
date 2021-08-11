@@ -32,17 +32,11 @@ class BuilderConfig(object):
   """
 
   builder_db = attrib(BuilderDatabase)
-  _try_spec = attrib(TrySpec)
-  _is_try_builder = attrib(bool)
   try_db = attrib(TryDatabase, default=TryDatabase.create({}))
+  _try_spec = attrib(TrySpec)
 
   @classmethod
-  def create(cls,
-             builder_db,
-             try_spec,
-             is_try_builder,
-             try_db=None,
-             python_api=None):
+  def create(cls, builder_db, try_spec, try_db=None, python_api=None):
     """Create a BuilderConfig instance.
 
     Args:
@@ -61,7 +55,7 @@ class BuilderConfig(object):
         builders in try_spec.mirrors and python_api is not None.
     """
     try:
-      return cls(builder_db, try_spec, is_try_builder, try_db)
+      return cls(builder_db, try_db, try_spec)
     except BuilderConfigException as e:
       if python_api is not None:
         python_api.infra_failing_step(
@@ -118,8 +112,7 @@ class BuilderConfig(object):
         'Expected TryDatabase for try_db, got {}'.format(type(try_db))
 
     try_spec = None
-    is_try_builder = bool(use_try_db and try_db)
-    if is_try_builder:
+    if use_try_db and try_db:
       try_spec = try_db.get(builder_id)
 
     # Some trybots do not mirror a CI bot. In this case, return a configuration
@@ -128,11 +121,7 @@ class BuilderConfig(object):
       try_spec = TrySpec.create([builder_id])
 
     return cls.create(
-        builder_db,
-        try_db=try_db,
-        try_spec=try_spec,
-        is_try_builder=is_try_builder,
-        python_api=python_api)
+        builder_db, try_db=try_db, try_spec=try_spec, python_api=python_api)
 
   def __getattr__(self, attr):
     per_builder_values = {}
@@ -184,10 +173,7 @@ class BuilderConfig(object):
 
   @cached_property
   def all_keys(self):
-    keys = self.root_keys
-    if not self._is_try_builder:
-      keys = self.builder_db.builder_graph.get_transitive_closure(keys)
-    return keys
+    return self.builder_db.builder_graph.get_transitive_closure(self.root_keys)
 
   @cached_property
   def source_side_spec_files(self):
