@@ -775,9 +775,10 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "include task invocations",
+    "name": "test_pre_run.include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

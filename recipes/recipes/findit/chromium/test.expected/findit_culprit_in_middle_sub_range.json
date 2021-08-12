@@ -1787,10 +1787,10 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r5.include task invocations (r5)",
+    "name": "test r5.test_pre_run (r5).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -3146,10 +3146,10 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r6.include task invocations (r6)",
+    "name": "test r6.test_pre_run (r6).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -4504,10 +4504,10 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r2.include task invocations (r2)",
+    "name": "test r2.test_pre_run (r2).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/2\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -5865,10 +5865,10 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r3.include task invocations (r3)",
+    "name": "test r3.test_pre_run (r3).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/3\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

@@ -1667,10 +1667,10 @@
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
-    "name": "test r1.include task invocations (r1)",
+    "name": "test r1.test_pre_run (r1).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

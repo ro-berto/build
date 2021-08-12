@@ -4861,9 +4861,10 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "include task invocations (with patch)",
+    "name": "test_pre_run (with patch).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\", \"invocations/1\", \"invocations/2\", \"invocations/3\", \"invocations/4\", \"invocations/5\", \"invocations/6\", \"invocations/7\", \"invocations/8\", \"invocations/9\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

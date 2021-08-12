@@ -92,10 +92,12 @@ def GenTests(api):
                        'query test results (with patch).base_unittests'),
       api.post_process(post_process.StepSuccess,
                        'query test results (with patch).base_unittests'),
-      api.post_process(post_process.MustRun,
-                       'include task invocations (with patch)'),
-      api.post_process(post_process.StepSuccess,
-                       'include task invocations (with patch)'),
+      api.post_process(
+          post_process.MustRun,
+          'test_pre_run (with patch).include swarming task invocations'),
+      api.post_process(
+          post_process.StepSuccess,
+          'test_pre_run (with patch).include swarming task invocations'),
       api.post_process(post_process.DropExpectation),
   )
 

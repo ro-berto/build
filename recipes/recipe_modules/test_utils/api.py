@@ -289,7 +289,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     groups = [
         LocalGroup(local_test_suites),
-        SwarmingGroup(swarming_test_suites),
+        SwarmingGroup(swarming_test_suites, self.m.resultdb),
         SkylabGroup(skylab_test_suites),
     ]
 
@@ -298,23 +298,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     with self.m.step.nest(nest_name):
       for group in groups:
         group.pre_run(caller_api, suffix)
-
-    invocation_names = []
-    if self.m.resultdb.enabled:
-      for t in swarming_test_suites:
-        invocation_names.extend(t.get_invocation_names(suffix))
-
-      if invocation_names and suffix != 'without patch':
-        # Include the task invocations in the build's invocation.
-        # Note that 'without patch' results are reported but not included in
-        # the builds' invocation, since the results are not related to the
-        # patch under test.
-        step_name = 'include task invocations'
-        if suffix:
-          step_name += ' (%s)' % suffix
-        self.m.resultdb.include_invocations(
-            self.m.resultdb.invocation_ids(invocation_names),
-            step_name=step_name)
 
     for group in groups:
       group.run(caller_api, suffix)
@@ -1181,9 +1164,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
 
 class TestGroup(object):
+  """Abstract class defines the shared interface for tests.
 
-  def __init__(self, test_suites):
+  Attributes:
+    * test_suites - Iterable of objects implementing the steps.Test interface.
+    * resultdb_api - Recipe API object for the resultdb recipe module.
+  """
+
+  def __init__(self, test_suites, resultdb_api=None):
     self._test_suites = test_suites
+    self.resultdb_api = resultdb_api
 
   def pre_run(self, caller_api, suffix):  # pragma: no cover
     """Executes the |pre_run| method of each test.
@@ -1213,6 +1203,22 @@ class TestGroup(object):
       if raise_on_failure and test.abort_on_failure:
         raise
 
+  def include_rdb_invocation(self, suffix,
+                             step_name='include test invocations'):
+    invocation_names = []
+    if self.resultdb_api and self.resultdb_api.enabled:
+      for t in self._test_suites:
+        invocation_names.extend(t.get_invocation_names(suffix))
+
+      # Include the task invocations in the build's invocation.
+      # Note that 'without patch' results are reported but not included in
+      # the builds' invocation, since the results are not related to the
+      # patch under test.
+      if invocation_names and suffix != 'without patch':
+        self.resultdb_api.include_invocations(
+            self.resultdb_api.invocation_ids(invocation_names),
+            step_name=step_name)
+
 
 class LocalGroup(TestGroup):
 
@@ -1232,8 +1238,8 @@ class LocalGroup(TestGroup):
 
 class SwarmingGroup(TestGroup):
 
-  def __init__(self, test_suites):
-    super(SwarmingGroup, self).__init__(test_suites)
+  def __init__(self, test_suites, resultdb):
+    super(SwarmingGroup, self).__init__(test_suites, resultdb)
     self._task_ids_to_test = {}
 
   def pre_run(self, caller_api, suffix):
@@ -1244,6 +1250,9 @@ class SwarmingGroup(TestGroup):
 
       task_ids = tuple(task.get_task_ids())
       self._task_ids_to_test[task_ids] = t
+
+    self.include_rdb_invocation(
+        suffix, step_name='include swarming task invocations')
 
   def run(self, caller_api, suffix):
     """Executes the |run| method of each test."""
