@@ -300,19 +300,21 @@ class TestUtilsApi(recipe_api.RecipeApi):
         group.pre_run(caller_api, suffix)
 
     invocation_names = []
-    for t in swarming_test_suites:
-      invocation_names.extend(t.get_invocation_names(suffix))
+    if self.m.resultdb.enabled:
+      for t in swarming_test_suites:
+        invocation_names.extend(t.get_invocation_names(suffix))
 
-    if invocation_names and suffix != 'without patch':
-      # Include the task invocations in the build's invocation.
-      # Note that 'without patch' results are reported but not included in
-      # the builds' invocation, since the results are not related to the
-      # patch under test.
-      step_name = 'include task invocations'
-      if suffix:
-        step_name += ' (%s)' % suffix
-      self.m.resultdb.include_invocations(
-          self.m.resultdb.invocation_ids(invocation_names), step_name=step_name)
+      if invocation_names and suffix != 'without patch':
+        # Include the task invocations in the build's invocation.
+        # Note that 'without patch' results are reported but not included in
+        # the builds' invocation, since the results are not related to the
+        # patch under test.
+        step_name = 'include task invocations'
+        if suffix:
+          step_name += ' (%s)' % suffix
+        self.m.resultdb.include_invocations(
+            self.m.resultdb.invocation_ids(invocation_names),
+            step_name=step_name)
 
     for group in groups:
       group.run(caller_api, suffix)
@@ -321,6 +323,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     (bad_results_dict['invalid'],
      bad_results_dict['failed']) = self._retrieve_bad_results(
          test_suites, suffix)
+
+    if not self.m.resultdb.enabled:
+      return (RDBResults.create({}), bad_results_dict['invalid'],
+              bad_results_dict['failed'])
 
     # Query test results from ResultDB.
     query_step_name = ('query test results (%s)' %
@@ -786,11 +792,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.failing_step(
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
-    if not self.m.resultdb.enabled:
-      self.m.python.failing_step(
-          'resultdb not enabled',
-          'every build supported by chromium recipe code must have resultdb '
-          'enabled')
     rdb_results, invalid_test_suites, failed_test_suites = (
         self._run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
