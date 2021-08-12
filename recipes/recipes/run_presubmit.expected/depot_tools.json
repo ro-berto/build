@@ -77,7 +77,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/depot_tools@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "depot_tools@HEAD"
+      "depot_tools@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder/depot_tools_presubmit",
     "env": {

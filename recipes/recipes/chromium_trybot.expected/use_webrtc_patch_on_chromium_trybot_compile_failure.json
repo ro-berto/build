@@ -312,7 +312,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@HEAD",
+      "src/third_party/webrtc@refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",

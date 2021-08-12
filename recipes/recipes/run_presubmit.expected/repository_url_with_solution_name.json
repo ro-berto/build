@@ -77,7 +77,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/skia@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "skia@HEAD"
+      "skia@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder/chromium_presubmit",
     "env": {

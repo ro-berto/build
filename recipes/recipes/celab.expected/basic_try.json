@@ -78,7 +78,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/enterprise/cel@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "cel@HEAD"
+      "cel@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
     "env": {

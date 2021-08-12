@@ -62,7 +62,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/infra/goma/client@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "client@HEAD",
+      "client@refs/heads/main",
+      "--refs",
+      "refs/heads/main",
       "--gerrit_no_reset"
     ],
     "env": {

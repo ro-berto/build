@@ -299,7 +299,7 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@HEAD",
+      "src/v8@refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",

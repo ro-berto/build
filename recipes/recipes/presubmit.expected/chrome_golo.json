@@ -77,7 +77,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chrome_golo@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "chrome_golo@HEAD",
+      "chrome_golo@refs/heads/main",
+      "--refs",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder/chrome_golo_presubmit",

@@ -63,9 +63,11 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD",
+      "src@refs/heads/main",
       "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src/third_party/webrtc@HEAD",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

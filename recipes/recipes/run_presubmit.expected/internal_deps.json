@@ -77,7 +77,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/internal_deps@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "internal.DEPS@HEAD"
+      "internal.DEPS@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder/internal_deps_presubmit",
     "env": {

@@ -78,7 +78,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/pdfium@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "pdfium@HEAD"
+      "pdfium@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

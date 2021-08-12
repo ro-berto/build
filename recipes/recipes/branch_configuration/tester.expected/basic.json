@@ -63,7 +63,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/project@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "project@HEAD"
+      "project@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

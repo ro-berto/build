@@ -310,7 +310,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "src@HEAD",
+      "src@refs/heads/main",
+      "--refs",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",

@@ -62,7 +62,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "src@HEAD"
+      "src@refs/heads/main",
+      "--refs",
+      "refs/heads/main"
     ],
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184",

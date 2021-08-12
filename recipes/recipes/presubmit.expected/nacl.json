@@ -77,7 +77,9 @@
       "--patch_ref",
       "https://chromium.googlesource.com/nacl@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
-      "native_client@HEAD",
+      "native_client@refs/heads/main",
+      "--refs",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder/nacl_presubmit",

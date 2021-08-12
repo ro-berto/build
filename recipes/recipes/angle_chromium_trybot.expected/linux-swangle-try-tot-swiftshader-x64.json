@@ -411,7 +411,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/swiftshader@HEAD",
+      "src/third_party/swiftshader@refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
