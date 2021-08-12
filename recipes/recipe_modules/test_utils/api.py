@@ -357,6 +357,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
               unexpected_result_invocations)
           res = RDBPerSuiteResults.create(
               unexpected_result_invocations,
+              suite_name=t.canonical_name,
               failure_on_exit=t.failure_on_exit(suffix))
 
         t.update_rdb_results(suffix, res)

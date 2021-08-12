@@ -363,7 +363,8 @@ def GenTests(api):
       api.override_step_data(
           'query test results.base_unittests_failed_results',
           stdout=api.json.invalid(
-              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+              api.test_utils.rdb_results(
+                  failing_suites=['base_unittests_failed_results']))),
       api.post_process(post_process.MustRun, 'test3'),
       api.post_process(post_process.StatusFailure),
   )

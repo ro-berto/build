@@ -674,8 +674,8 @@
     "name": "query test results.base_unittests_failed_results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_failed_results_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_failed_results_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests_failed_results\"}}}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

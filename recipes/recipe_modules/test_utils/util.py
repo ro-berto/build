@@ -384,13 +384,13 @@ class RDBPerSuiteResults(object):
   here.
   """
 
-  suite_name = attrib(str, default=None)  # Default used in recipe tests.
+  suite_name = attrib(str)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
   invalid = attrib(bool, default=False)
 
   @classmethod
-  def create(cls, invocations, suite_name=None, failure_on_exit=False):
+  def create(cls, invocations, suite_name, failure_on_exit=False):
     """
     Args:
       invocations, dict of {invocation_id: api.resultdb.Invocation} as
@@ -403,13 +403,12 @@ class RDBPerSuiteResults(object):
     for inv in invocations.values():
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
-        inv_name = suite_name = variant_def['test_suite']
-        if not suite_name:
-          suite_name = inv_name
-        else:
-          # A RDBPerSuiteResults instance shouldn't be created with invocations
-          # from different suites.
-          assert inv_name == suite_name, "Mismatched invocations"
+        inv_name = variant_def['test_suite']
+        # A RDBPerSuiteResults instance shouldn't be created with invocations
+        # from different suites.
+        if inv_name and suite_name:
+          assert inv_name == suite_name, "Mismatched invocations, %s vs %s" % (
+              inv_name, suite_name)
         # The test's ID may not always directly match up with its name (see
         # go/chrome-test-id for context). So lookup the test's name in the tags.
         test_name = tr.test_id
