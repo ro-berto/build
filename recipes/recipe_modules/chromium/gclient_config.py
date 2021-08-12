@@ -63,8 +63,9 @@ def chromium_bare(c):
   p['https://skia.googlesource.com/skia'] = ('src/third_party/skia', 'HEAD')
   p['https://chromium.googlesource.com/v8/v8'] = ('src/v8', 'HEAD')
   p['https://webrtc.googlesource.com/src'] = ('src/third_party/webrtc', 'HEAD')
+  # TODO(https://crbug.com/swiftshader/164): Change to main once created.
   p['https://swiftshader.googlesource.com/SwiftShader/'] = (
-      'src/third_party/swiftshader', 'HEAD')
+      'src/third_party/swiftshader', 'refs/heads/master')
 
 
 @CONFIG_CTX(includes=['chromium_bare'])
@@ -260,7 +261,8 @@ def swiftshader_top_of_tree(c):  # pragma: no cover
 
   Sets up ToT instead of the DEPS-pinned revision for SwiftShader.
   """
-  c.revisions['src/third_party/swiftshader'] = 'HEAD'
+  # TODO(https://crbug.com/swiftshader/164): Change to main once created.
+  c.revisions['src/third_party/swiftshader'] = 'refs/heads/master'
 
 # TODO(phajdan.jr): Move to proper repo and add coverage.
 @CONFIG_CTX()
