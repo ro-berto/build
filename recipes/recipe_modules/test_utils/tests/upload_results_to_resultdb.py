@@ -239,39 +239,8 @@ def GenTests(api):
   yield api.test(
       'resultdb_disabled',
       api.builder_group.for_current('g'),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          is_swarming_test=True,
-      ),
-      api.buildbucket.build(
-          build_pb2.Build(
-              builder=builder_pb2.BuilderID(
-                  project='chromium',
-                  bucket='try',
-                  builder='linux-rel',
-              ))),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
-              shards=2,
-              failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=True)),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=True)),
-      api.post_process(post_process.DoesNotRun,
-                       'query test results (with patch)'),
+      api.post_process(post_process.MustRun, 'resultdb not enabled'),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -3,10 +3,12 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
-
+    'depot_tools/tryserver',
+    'chromium',
     'chromium_swarming',
     'test_utils',
 ]
@@ -45,6 +47,13 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
   test_specs = [
       steps.MockTestSpec.create(name='test', **_get_test_kwargs_by_index(0)),
       steps.MockTestSpec.create(name='test2', **_get_test_kwargs_by_index(1)),
+      # Experimental tests use a custom prefix internally, so adding one here
+      # should hopefully uncover any hidden assumptions about its behavior
+      # around prefixes.
+      steps.ExperimentalTestSpec.create(
+          steps.MockTestSpec.create(name='test3'),
+          experiment_percentage=0,
+          api=api)
   ]
 
   tests = [s.get_test() for s in test_specs]
@@ -77,6 +86,7 @@ def GenTests(api):
   # TODO(martiniss): Rewrite these tests to use assertions in RunSteps.
   yield api.test(
       'success',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.post_process(post_process.MustRun, 'test (with patch)'),
       api.post_process(post_process.MustRun, 'test2 (with patch)'),
       api.post_process(post_process.MustRun, 'NONE invalid'),
@@ -86,6 +96,7 @@ def GenTests(api):
 
   yield api.test(
       'invalid_results',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(test_kwargs_list=[
           {
               'has_valid_results': False
@@ -100,6 +111,7 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_retry_succeeds',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
           test_kwargs_list=[{
@@ -118,6 +130,7 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_retry_still_fails',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
           test_kwargs_list=[{
@@ -137,6 +150,7 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_retry_subset_fails',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
           test_kwargs_list=[{
@@ -156,6 +170,7 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid_then_valid',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
           test_kwargs_list=[{
@@ -181,6 +196,7 @@ def GenTests(api):
   # shards.
   yield api.test(
       'non_swarming_invalid_results',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
           test_kwargs_list=[{
