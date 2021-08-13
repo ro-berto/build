@@ -8,6 +8,9 @@ import json
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
+                                                       invocation_pb2)
+
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
@@ -26,6 +29,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'skylab',
     'test_utils',
@@ -110,15 +114,24 @@ def GenTests(api):
             builder_group, {
                 builder: {
                     'skylab_tests': [{
-                        'cros_board': 'eve',
-                        'cros_img': 'eve-release/R89-13631.0.0',
-                        'ci_only': True,
-                        'name': 'basic_EVE_TOT',
-                        'tast_expr': tast_expr,
+                        'cros_board':
+                            'eve',
+                        'cros_img':
+                            'eve-release/R89-13631.0.0',
+                        'test_id_prefix':
+                            'ninja://chromeos/lacros:lacros_fyi_tast_tests/',
+                        'ci_only':
+                            True,
+                        'name':
+                            'basic_EVE_TOT',
+                        'tast_expr':
+                            tast_expr,
                         'args': [test_args],
                         'swarming': {},
-                        'test': target_name,
-                        'timeout_sec': 7200
+                        'test':
+                            target_name,
+                        'timeout_sec':
+                            7200
                     }],
                 }
             }),
@@ -157,6 +170,11 @@ def GenTests(api):
       'tast.lacros',
       [],
       verdict=TaskState.VERDICT_FAILED,
+  )
+
+  GTEST_TASK_PASSED = api.skylab.gen_task_result(
+      'gtest',
+      [],
   )
 
   def gen_tag_resp(api, tag, tasks):
@@ -241,13 +259,23 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  inv_bundle = {
+      'build-8839265267168653505':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),),
+  }
   yield api.test(
       'basic for gtest',
       boilerplate(
           'chrome-test-builds',
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      simulate_ctp_response(api, 'basic_EVE_TOT', [GTEST_TASK_PASSED]),
+      api.resultdb.query(
+          inv_bundle,
+          step_name='query test results.basic_EVE_TOT',
+      ),
       api.override_step_data(
           'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
           api.test_utils.gtest_results(
@@ -279,6 +307,15 @@ def GenTests(api):
       ),
       api.post_process(check_exe_rel_path_for_gtest,
                        'out/Release/bin/run_%s' % GTEST_TARGET),
+      api.post_process(
+          post_process.MustRun,
+          'query test results.basic_EVE_TOT',
+      ),
+      api.post_process(
+          post_process.StepCommandContains,
+          'query test results.basic_EVE_TOT',
+          ['build-8839265267168653505'],
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -3350,6 +3350,9 @@ class SkylabTest(Test):
         exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,
         retries=self.spec.retries,
+        # TODO(crbug.com/1238139): Migrate tast to rdb once we could handle
+        # tast result in the runner script.
+        resultdb=None if self.is_tast_test else self.prep_skylab_rdb(),
     ) if self.lacros_gcs_path else None
 
   def _raise_failed_step(self, api, suffix, step, status, failure_msg):
@@ -3357,6 +3360,31 @@ class SkylabTest(Test):
     step.presentation.step_text = failure_msg
     self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     raise api.step.StepFailure(status)
+
+  def prep_skylab_rdb(self):
+    return attr.evolve(
+        self.spec.resultdb,
+        test_id_prefix=self.spec.test_id_prefix,
+        base_variant=dict(
+            self.spec.resultdb.base_variant or {},
+            test_suite=self.canonical_name),
+        result_format='gtest',
+        result_file='output.json',
+        artifact_directory='')
+
+  def get_invocation_names(self, suffix):
+    # As of 2021Q3, we can only generate the invocation name from the test
+    # runner build ID included in the CTP response.
+    # Revisit it once CTP2 is online(go/ctp2-dd).
+    runner_url_re = ('^https://ci.chromium.org/p/chromeos/builders/test_runner'
+                     '/test_runner/b([0-9]*)$')
+    urls = [str(b.url) for b in self.ctp_responses]
+    inv_names = []
+    for url in urls:
+      match = re.search(runner_url_re, url)
+      if match:
+        inv_names.append('invocations/build-%s' % match.group(1))
+    return inv_names
 
   def tast_result_parser(self, api, result, suffix, step):
     """Return result dict.
@@ -3397,22 +3425,9 @@ class SkylabTest(Test):
         })
 
   def gtest_result_parser(self, api, result, suffix, step):
-    # TODO(crbug/1222806): Upload test result to Result DB from the skylab
-    # test runner side. We are still discussing with OS infra team about the
-    # implementation. Before that, parse the gtest result in our recipe.
-    resultdb = attr.evolve(
-        self.spec.resultdb,
-        artifact_directory='',
-        base_variant=dict(
-            self.spec.resultdb.base_variant or {},
-            test_suite=self.canonical_name),
-        result_adapter_path=str(api.path['checkout'].join(
-            'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(api.path.mkstemp()))
     gtest_results_file = api.gsutil.download_url(
         '%s/autoserv_test/chromium/results/output.json' % result.log_gs_uri,
-        api.test_utils.gtest_results(
-            add_json_log=False, leak_to=resultdb.result_file),
+        api.test_utils.gtest_results(add_json_log=False),
         name='Download test result for %s' % self.name)
     if not gtest_results_file.test_utils.gtest_results.raw:
       return self._raise_failed_step(api, suffix, step, api.step.FAILURE,

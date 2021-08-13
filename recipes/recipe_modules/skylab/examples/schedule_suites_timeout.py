@@ -9,12 +9,6 @@ DEPS = [
     'skylab',
 ]
 
-from RECIPE_MODULES.build.skylab import structs
-
-from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
-                                                       builds_service_pb2)
-
 
 def RunSteps(api):
   api.skylab.wait_on_suites(1234, timeout_seconds=10)

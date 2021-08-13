@@ -2,11 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import base64
 
 from google.protobuf import json_format
 
 from recipe_engine import recipe_api
+
+from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.test_platform.request import Request
@@ -82,10 +85,17 @@ class SkylabApi(recipe_api.RecipeApi):
         if s.test_args:
           test_args.append('test_args_b64=%s' % base64.b64encode(s.test_args))
           tags['test_args'] = s.test_args
+        if s.resultdb and s.resultdb.enable:
+          rdb_str = self.m.json.dumps({
+              k: getattr(s.resultdb, k)
+              for k in attr.fields_dict(ResultDB)
+              if not getattr(s.resultdb, k) in [None, '']
+          })
+          test_args.append('resultdb_settings=%s' % base64.b64encode(rdb_str))
         if s.lacros_gcs_path:
           lacros_dep = req.params.software_dependencies.add()
           lacros_dep.lacros_gcs_path = s.lacros_gcs_path
-          test_args.append('lacros_gcs_path=%s' % s.lacros_gcs_path)
+          tags['lacros_gcs_path'] = s.lacros_gcs_path
         if s.exe_rel_path:
           test_args.append('exe_rel_path=%s' % s.exe_rel_path)
           tags['exe_rel_path'] = s.exe_rel_path

@@ -13,7 +13,6 @@ from . import steps
 from recipe_engine import engine_types
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build import skylab
 
 
 def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):

@@ -290,7 +290,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     groups = [
         LocalGroup(local_test_suites),
         SwarmingGroup(swarming_test_suites, self.m.resultdb),
-        SkylabGroup(skylab_test_suites),
+        SkylabGroup(skylab_test_suites, self.m.resultdb),
     ]
 
     nest_name = 'test_pre_run (%s)' % suffix if suffix else 'test_pre_run'
@@ -1307,8 +1307,8 @@ class SwarmingGroup(TestGroup):
 
 class SkylabGroup(TestGroup):
 
-  def __init__(self, test_suites):
-    super(SkylabGroup, self).__init__(test_suites)
+  def __init__(self, test_suites, result_db):
+    super(SkylabGroup, self).__init__(test_suites, result_db)
     self.ctp_build_id = 0
     self.ctp_build_timeout_sec = 3600
 
@@ -1337,3 +1337,6 @@ class SkylabGroup(TestGroup):
     for t in self._test_suites:
       t.ctp_responses = tag_resp.get(t.name, [])
       self._run_func(t, t.run, caller_api, suffix, True)
+
+    self.include_rdb_invocation(
+        suffix, step_name='include skylab_test_runner invocations')

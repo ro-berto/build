@@ -20,7 +20,7 @@
     ],
     "infra_step": true,
     "name": "test_pre_run (with patch).schedule tests on skylab.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"requests\": {\"EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"label-board:eve\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"suite:tast.lacros\", \"exe_rel_path:out/Release/chrome\", \"tast-expr:lacros.Basic\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"retry\": {\"allow\": true, \"max\": 3.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}, {\"lacrosGcsPath\": \"lacros\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj lacros_gcs_path=lacros exe_rel_path=out/Release/chrome\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"chromium/src\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"requests\": {\"EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"label-board:eve\", \"lacros_gcs_path:lacros\", \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"suite:tast.lacros\", \"exe_rel_path:out/Release/chrome\", \"tast-expr:lacros.Basic\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R88-13545.0.0\"}, \"retry\": {\"allow\": true, \"max\": 3.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R88-13545.0.0\"}, {\"lacrosGcsPath\": \"lacros\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Release/chrome\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -58,6 +58,7 @@
       "@@@STEP_LOG_LINE@request@                \"decorations\": {@@@",
       "@@@STEP_LOG_LINE@request@                  \"tags\": [@@@",
       "@@@STEP_LOG_LINE@request@                    \"label-board:eve\", @@@",
+      "@@@STEP_LOG_LINE@request@                    \"lacros_gcs_path:lacros\", @@@",
       "@@@STEP_LOG_LINE@request@                    \"build:gs://chromeos-image-archive/eve-release/R88-13545.0.0\", @@@",
       "@@@STEP_LOG_LINE@request@                    \"suite:tast.lacros\", @@@",
       "@@@STEP_LOG_LINE@request@                    \"exe_rel_path:out/Release/chrome\", @@@",
@@ -99,7 +100,7 @@
       "@@@STEP_LOG_LINE@request@                  {@@@",
       "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
       "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj lacros_gcs_path=lacros exe_rel_path=out/Release/chrome\"@@@",
+      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Release/chrome\"@@@",
       "@@@STEP_LOG_LINE@request@                    }@@@",
       "@@@STEP_LOG_LINE@request@                  }@@@",
       "@@@STEP_LOG_LINE@request@                ]@@@",
@@ -177,7 +178,7 @@
       "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"output\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJxdjk1Kw0AUgEkttGRVsil06VKYzCSW/gjqqhsX1UVwJ2U6fZ0MTeYN817oCTyAxxVcWCpF9ADf\\nT/bRSwer19Wmeq6y917WHyajZPKVpJ9J9lAzB7qT0tQRW0ASdNSxdd7mOgQKyLnBVrKmw6Pb3U/n\\nhZ7dbs3STBeFKtSkP3wZXV2PTQ3AtFkju70zmh36Cohv3i56Yu18A0QnXQy5RbQNnNXbiEeC377u\\nGPnEigjUNUzyMiT+x+XTMp3bP/NnsEFL8kfReQ9Rhog7WaqyEGomVCn3iN9BJVuO\\n\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJxVj8FKw0AURWksWLIq2QhduhQmb5I0k8R9Ny60iyBuJCTT6WQgyQvzJvRDBLd+gD9pjVZwd+/i\\ncO4NPj3/eve8q8qnMvjwguVqsV5s3j3/zQteWudGugeQJpStxd5MfYhWwwhzVUjQTKY7KEvgFLnK\\nTsOg7L/c5HlSxCKNRRaJXKRJytPNcrVfX93eyFYpR9UjOnM0snYGh/KM3r1exORqM3SKKJRox1Aj\\n6k6dcw+NxROpvx2snhx+a5lVNHWOgE617c2g2TaLapE0spDbPOIRh4fCz/R86wLPYIf65wX7XT5a\\nPEDM44hxwXgMR8Qv1H1kNg==\\n\"@@@",
       "@@@STEP_LOG_LINE@json.output@          }@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"status\": \"SUCCESS\"@@@",
@@ -205,9 +206,25 @@
     "name": "EVE_TOT",
     "~followup_annotations": [
       "@@@STEP_TEXT@No test cases returned.@@@",
-      "@@@STEP_LINK@Test Run@https://chromeos-swarming.appspot.com/task?id=471a63bc9c481010@@@",
+      "@@@STEP_LINK@Test Run@https://ci.chromium.org/p/chromeos/builders/test_runner/test_runner/b8839265267168653505@@@",
       "@@@STEP_LINK@Logs(stainless)@https://stainless.corp.google.com/browse/chromeos-autotest-results/swarming-471a63bc9c481010/@@@",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "name": "include skylab_test_runner invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/build-8839265267168653505\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -215,10 +232,22 @@
     "name": "query test results (with patch)"
   },
   {
-    "cmd": [],
-    "name": "query test results (with patch).No RDB results for EVE_TOT",
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,status,tags,expected",
+      "build-8839265267168653505"
+    ],
+    "infra_step": true,
+    "name": "query test results (with patch).EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

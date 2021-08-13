@@ -5,6 +5,7 @@
 
 from RECIPE_MODULES.build.attr_utils import (attrs, attrib, enum, sequence,
                                              mapping)
+from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
@@ -69,6 +70,8 @@ class SkylabRequest(object):
           e.g. '--gtest_filter="VaapiTest.*'.
     * retries: The max that CTP will retry a request. Default is 0, no retry and
           max is 5.
+    * resultdb: The ResultDB integration configuration, defined in
+          chromium_tests/resultdb.py.
   """
   request_tag = attrib(str)
   board = attrib(str)
@@ -82,6 +85,7 @@ class SkylabRequest(object):
   tast_expr = attrib(str, default='')
   test_args = attrib(str, default='')
   retries = attrib(enum([0, 1, 2, 3, 4, 5]), default=0)
+  resultdb = attrib(ResultDB, default=None)
 
   @classmethod
   def create(cls, **kwargs):

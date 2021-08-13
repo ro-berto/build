@@ -12,6 +12,7 @@ DEPS = [
 import re
 import base64
 
+from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
@@ -25,6 +26,10 @@ from recipe_engine import post_process
 
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
 LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
+RESULTDB_CONFIG = {
+    'result_file': 'output.json',
+    'result_format': 'gtest',
+}
 
 
 def gen_skylab_req(tag, tast_expr=None, test_args=None, dut_pool=''):
@@ -36,7 +41,8 @@ def gen_skylab_req(tag, tast_expr=None, test_args=None, dut_pool=''):
       lacros_gcs_path='gs://fake_bucket/lacros.zip',
       exe_rel_path='out/Release/bin/run_foo_unittest',
       cros_img='eve-release/R88-13545.0.0',
-      dut_pool=dut_pool)
+      dut_pool=dut_pool,
+      resultdb=ResultDB.create(**RESULTDB_CONFIG))
 
 
 def RunSteps(api):
@@ -134,6 +140,10 @@ def GenTests(api):
           d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
       ]
       check(lacros_gcs_path in dep_of_lacros)
+      if got.get('resultdb_settings'):
+        rdb_config = api.json.loads(
+            base64.b64decode(got.get('resultdb_settings')))
+        check(all([rdb_config[k] == v for k, v in RESULTDB_CONFIG.items()]))
 
   yield api.test(
       'basic',

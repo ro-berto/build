@@ -30,13 +30,13 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
     t = ExecuteResponse.TaskResult(
         state=TaskState(verdict=verdict, life_cycle=life_cycle),
         name=name,
-        task_url=("https://chromeos-swarming.appspot.com/task?id="
-                  "471a63bc9c481010"),
-        log_url=("https://stainless.corp.google.com/browse/"
-                 "chromeos-autotest-results/swarming-471a63bc9c481010/"),
+        task_url=('https://ci.chromium.org/p/chromeos/builders/test_runner/'
+                  'test_runner/b8839265267168653505'),
+        log_url=('https://stainless.corp.google.com/browse/'
+                 'chromeos-autotest-results/swarming-471a63bc9c481010/'),
         log_data=TaskLogData(
-            gs_url=("gs://chromeos-test-logs/"
-                    "test-runner/prod/2021-06-02/foo")))
+            gs_url=('gs://chromeos-test-logs/'
+                    'test-runner/prod/2021-06-02/foo')))
     for c in test_cases:
       t.test_cases.add(name=c.name, verdict=c.verdict)
     return t
