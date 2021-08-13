@@ -276,12 +276,10 @@ class IsolateApi(recipe_api.RecipeApi):
                       '--json-input', self.m.json.input(diffs),
                       '--output', output,
                   ])
-    self.m.gsutil.upload(output,
-                         GS_BUCKET,
-                         self.m.path.join(
-                             self.m.properties['buildername'],
-                             self.m.properties['buildnumber'],
-                             TARBALL_NAME))
+    self.m.gsutil.upload(
+        output, GS_BUCKET,
+        '{}/{}/{}'.format(self.m.properties['buildername'],
+                          self.m.properties['buildnumber'], TARBALL_NAME))
 
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""

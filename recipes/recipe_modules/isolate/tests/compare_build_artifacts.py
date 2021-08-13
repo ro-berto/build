@@ -2,10 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
-  'chromium',
-  'isolate',
-  'recipe_engine/properties',
+    'chromium',
+    'isolate',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
 ]
 
 
@@ -25,4 +28,14 @@ def GenTests(api):
       'failure',
       api.properties(buildername='test_buildername', buildnumber=123),
       api.step_data('compare_build_artifacts', retcode=1),
+  )
+
+  yield api.test(
+      'win',
+      api.platform.name('win'),
+      api.properties(buildername='test_buildername', buildnumber=123),
+      api.post_check(post_process.StepCommandContains, 'gsutil upload',
+                     ('gs://chrome-determinism/test_buildername/123/'
+                      'deterministic_build_diffs.tgz')),
+      api.post_process(post_process.DropExpectation),
   )
