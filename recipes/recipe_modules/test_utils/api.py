@@ -346,13 +346,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
         t.update_rdb_results(suffix, res)
         all_rdb_results.append(res)
 
+      rdb_results = RDBResults.create(all_rdb_results)
+      # Serialize the recipe's internal representation of its test results to a
+      # log. To be used only for debugging.
+      step_result = self.m.step('$debug - all results', cmd=None)
+      step_result.presentation.logs['serialzed results'] = (
+          self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
+
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
     if suffix == 'without patch':
       self._exonerate_without_patch_unexpected_results(
           all_unexpected_result_invocations)
 
-    rdb_results = RDBResults.create(all_rdb_results)
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
   def _exonerate_without_patch_unexpected_results(

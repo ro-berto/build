@@ -1958,6 +1958,27 @@
   },
   {
     "cmd": [],
+    "name": "test r3.query test results (r3).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ]@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test r4",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
@@ -3337,6 +3358,27 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test r4.query test results (r4).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"gl_tests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ]@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
     ]
   },
   {

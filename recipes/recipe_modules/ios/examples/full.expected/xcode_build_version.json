@@ -2012,6 +2012,37 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "query test results (with patch).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"build-global xcode build version (fake device iOS 10.0)\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"task-local xcode build version (fake device 2 iOS 11.0)\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"task-local xcode version (fake device 3 iOS 11.0)\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

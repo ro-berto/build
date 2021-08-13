@@ -1065,6 +1065,25 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test r1.query test results (r1).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"checkperms\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

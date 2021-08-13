@@ -374,6 +374,15 @@ class RDBResults(object):
 
     return cls(all_suites, unexpected_failing_suites)
 
+  def to_jsonish(self):
+    jsonish_repr = {
+        'unexpected_failing_suites': [
+            s.suite_name for s in self.unexpected_failing_suites
+        ],
+        'all_suites': [s.to_jsonish() for s in self.all_suites],
+    }
+    return jsonish_repr
+
 
 @attrs()
 class RDBPerSuiteResults(object):
@@ -440,3 +449,12 @@ class RDBPerSuiteResults(object):
 
     return cls(suite_name, unexpected_passing_tests, unexpected_failing_tests,
                invalid)
+
+  def to_jsonish(self):
+    jsonish_repr = {
+        'suite_name': self.suite_name,
+        'invalid': str(self.invalid),
+        'unexpected_passing_tests': list(self.unexpected_passing_tests),
+        'unexpected_failing_tests': list(self.unexpected_failing_tests),
+    }
+    return jsonish_repr

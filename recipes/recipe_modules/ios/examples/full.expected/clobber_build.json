@@ -528,6 +528,18 @@
     "name": "query test results (with patch)"
   },
   {
+    "cmd": [],
+    "name": "query test results (with patch).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

@@ -226,6 +226,25 @@
   },
   {
     "cmd": [],
+    "name": "query test results (with patch).$debug - all results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"EVE_TOT\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['lacros_fyi_tast_tests', 'lacros_version_metadata', 'chrome']@@@",
