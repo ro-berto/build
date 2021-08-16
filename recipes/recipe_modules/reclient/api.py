@@ -206,7 +206,6 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     reclient_log_dir = self.m.path.mkdtemp('reclient_log')
     with self.m.step.nest('preprocess for reclient'):
-      self._install_reclient_cfgs()
       self._make_reclient_cache_dir(self.deps_cache_path)
       self._list_reclient_cache_dir(self.deps_cache_path)
       self._start_reproxy(reclient_log_dir, self.deps_cache_path)
@@ -235,21 +234,6 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_rpl(reclient_log_dir, gzip_name_maker)
         self._upload_logs(reclient_log_dir, gzip_name_maker)
         self.m.file.rmtree('cleanup reclient log dir', reclient_log_dir)
-
-  def _install_reclient_cfgs(self):
-    """Install reclient cfgs."""
-    env = {
-        'RBE_instance': self.instance,
-    }
-    with self.m.context(env=env):
-      self.m.step(
-          name='install reclient_cfgs',
-          cmd=[
-              'vpython3',
-              self.m.path['checkout'].join('buildtools', 'reclient_cfgs',
-                                           'fetch_reclient_cfgs.py'),
-          ],
-          infra_step=True)
 
   def _make_reclient_cache_dir(self, reclient_cache_dir):
     """Ensure that reclient_cache_exists, create it if it doesn't."""
