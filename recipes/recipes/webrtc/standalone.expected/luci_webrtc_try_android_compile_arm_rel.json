@@ -666,13 +666,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_compile_arm_rel\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android_compile_arm_rel",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android_compile_arm_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

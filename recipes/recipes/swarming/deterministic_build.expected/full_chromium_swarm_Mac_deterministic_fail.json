@@ -710,13 +710,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac deterministic\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Mac deterministic",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Mac deterministic"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1145,13 +1140,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac deterministic\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Mac deterministic",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Mac deterministic"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

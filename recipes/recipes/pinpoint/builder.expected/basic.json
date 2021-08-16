@@ -943,13 +943,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android Compile Perf\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Android Compile Perf",
-      "--buildbot-mastername",
-      "tryserver.chromium.perf",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Android Compile Perf"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -594,13 +594,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"MacARM64 M1 Release\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "MacARM64 M1 Release",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "MacARM64 M1 Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

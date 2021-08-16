@@ -969,13 +969,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux-swangle-tot-swiftshader-x64\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux-swangle-tot-swiftshader-x64",
-      "--buildbot-mastername",
-      "chromium.swangle",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux-swangle-tot-swiftshader-x64"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

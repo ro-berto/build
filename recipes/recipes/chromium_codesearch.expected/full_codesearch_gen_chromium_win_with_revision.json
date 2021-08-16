@@ -753,13 +753,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"codesearch-gen-chromium-win\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-win",
-      "--buildbot-mastername",
-      "chromium.linux",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "codesearch-gen-chromium-win"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

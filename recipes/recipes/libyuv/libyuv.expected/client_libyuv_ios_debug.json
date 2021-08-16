@@ -540,13 +540,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS Debug\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "iOS Debug",
-      "--buildbot-mastername",
-      "client.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "iOS Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

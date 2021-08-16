@@ -1342,13 +1342,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios_sim_x64_dbg_ios14\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "ios_sim_x64_dbg_ios14",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "ios_sim_x64_dbg_ios14"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

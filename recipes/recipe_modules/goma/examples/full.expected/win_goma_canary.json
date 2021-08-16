@@ -285,13 +285,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Linux Builder",
-      "--buildbot-mastername",
-      "test_group",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Linux Builder"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

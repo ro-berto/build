@@ -1088,13 +1088,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"v8_linux_chromium_gn_rel\", \"project\": \"v8\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "v8_linux_chromium_gn_rel",
-      "--buildbot-mastername",
-      "tryserver.v8",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "v8_linux_chromium_gn_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

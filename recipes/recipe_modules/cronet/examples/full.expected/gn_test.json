@@ -628,13 +628,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"gn_test\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "gn_test",
-      "--buildbot-mastername",
-      "fake-group",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "gn_test"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1187,13 +1182,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"gn_test\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "gn_test",
-      "--buildbot-mastername",
-      "fake-group",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "gn_test"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

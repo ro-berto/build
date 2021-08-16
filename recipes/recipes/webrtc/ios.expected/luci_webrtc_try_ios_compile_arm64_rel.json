@@ -916,13 +916,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios_compile_arm64_rel\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "ios_compile_arm64_rel",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "ios_compile_arm64_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

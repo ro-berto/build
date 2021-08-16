@@ -443,13 +443,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"mac_skia\", \"project\": \"pdfium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "mac_skia",
-      "--buildbot-mastername",
-      "client.pdfium",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "mac_skia"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

@@ -1135,13 +1135,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_binary_size\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android_binary_size",
-      "--buildbot-mastername",
-      "tryserver.chromium.android",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android_binary_size"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

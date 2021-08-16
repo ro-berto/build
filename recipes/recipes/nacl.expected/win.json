@@ -663,13 +663,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"win7-64-glibc-dbg\", \"project\": \"project\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win7-64-glibc-dbg",
-      "--buildbot-mastername",
-      "client.nacl",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win7-64-glibc-dbg"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

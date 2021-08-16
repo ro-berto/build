@@ -575,13 +575,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win64 ASan\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Win64 ASan",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Win64 ASan"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

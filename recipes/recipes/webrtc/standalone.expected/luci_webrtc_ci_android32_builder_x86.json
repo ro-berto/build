@@ -475,13 +475,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android32 Builder x86\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Android32 Builder x86",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Android32 Builder x86"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

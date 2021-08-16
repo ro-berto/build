@@ -541,13 +541,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"mac\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "mac",
-      "--buildbot-mastername",
-      "tryserver.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "mac"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

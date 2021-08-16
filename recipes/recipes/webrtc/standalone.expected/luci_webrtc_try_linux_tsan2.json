@@ -701,13 +701,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux_tsan2\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux_tsan2",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux_tsan2"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

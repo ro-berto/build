@@ -514,13 +514,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Win7\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Perf Win7",
-      "--buildbot-mastername",
-      "client.webrtc.perf",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Perf Win7"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

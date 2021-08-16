@@ -264,11 +264,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"builder\", \"project\": \"project\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "builder",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "builder"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

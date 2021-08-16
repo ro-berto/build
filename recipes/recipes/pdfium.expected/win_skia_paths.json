@@ -394,13 +394,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"windows_skia_paths\", \"project\": \"pdfium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "windows_skia_paths",
-      "--buildbot-mastername",
-      "client.pdfium",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "windows_skia_paths"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

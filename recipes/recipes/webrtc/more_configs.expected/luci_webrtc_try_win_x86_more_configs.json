@@ -584,13 +584,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_x86_more_configs\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win_x86_more_configs",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win_x86_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1013,13 +1008,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_x86_more_configs\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win_x86_more_configs",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win_x86_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1451,13 +1441,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_x86_more_configs\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win_x86_more_configs",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win_x86_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

@@ -1199,13 +1199,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS64 Sim Debug (iOS 14.0)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "iOS64 Sim Debug (iOS 14.0)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "iOS64 Sim Debug (iOS 14.0)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -102,12 +102,6 @@ def main():
   parser.add_argument(
       '--buildbot-buildername', default='unknown', help='buildbot buildername'
   )
-  parser.add_argument(
-      '--buildbot-mastername', default='unknown', help='buildbot mastername'
-  )
-  parser.add_argument(
-      '--buildbot-slavename', default='unknown', help='buildbot slavename'
-  )
 
   # For CompileEvents.
   parser.add_argument(
@@ -140,7 +134,10 @@ def main():
 
   # From Runtime API.
   parser.add_argument(
-      '--is-luci', action='store_true', help='True if this runs on LUCI'
+      '--is-luci',
+      action='store_true',
+      default=True,
+      help='Deprecated: not used. TODO(1117820): remove this flag',
   )
   parser.add_argument(
       '--is-experimental', action='store_true', help='True if experimental'
@@ -164,10 +161,7 @@ def main():
   if args.upload_compiler_proxy_info:
     viewer_url = goma_utils.UploadGomaCompilerProxyInfo(
         builder=args.buildbot_buildername,
-        master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci,
         is_experimental=args.is_experimental,
         override_gsutil=override_gsutil
     )
@@ -211,10 +205,7 @@ def main():
         args.goma_stats_file,
         goma_crash_report=args.goma_crash_report_id_file,
         builder=args.buildbot_buildername,
-        master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)
@@ -229,10 +220,7 @@ def main():
         args.json_status,
         args.build_exit_status,
         builder=args.buildbot_buildername,
-        master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)
@@ -241,10 +229,7 @@ def main():
         args.json_status,
         args.build_exit_status,
         builder=args.buildbot_buildername,
-        master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
         builder_id=builder_id,
-        is_luci=args.is_luci
     )
     if counter:
       tsmon_counters.append(counter)

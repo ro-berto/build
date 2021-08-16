@@ -533,13 +533,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android64 (M Nexus5X)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Android64 (M Nexus5X)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Android64 (M Nexus5X)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

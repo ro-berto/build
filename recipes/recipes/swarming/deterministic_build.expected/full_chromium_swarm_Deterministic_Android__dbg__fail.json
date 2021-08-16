@@ -650,13 +650,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Android (dbg)\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Android (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Android (dbg)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1059,13 +1054,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Android (dbg)\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Android (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Android (dbg)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

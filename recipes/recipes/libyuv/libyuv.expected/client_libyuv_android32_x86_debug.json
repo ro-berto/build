@@ -434,13 +434,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android32 x86 Debug\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Android32 x86 Debug",
-      "--buildbot-mastername",
-      "client.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Android32 x86 Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

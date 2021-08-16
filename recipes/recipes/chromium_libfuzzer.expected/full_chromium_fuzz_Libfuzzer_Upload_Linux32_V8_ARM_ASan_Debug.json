@@ -809,13 +809,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Linux32 V8-ARM ASan Debug\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Libfuzzer Upload Linux32 V8-ARM ASan Debug",
-      "--buildbot-mastername",
-      "chromium.fuzz",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Libfuzzer Upload Linux32 V8-ARM ASan Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

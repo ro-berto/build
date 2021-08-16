@@ -688,13 +688,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Fuchsia (dbg)\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Fuchsia (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Fuchsia (dbg)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1071,13 +1066,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Fuchsia (dbg)\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Fuchsia (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Fuchsia (dbg)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

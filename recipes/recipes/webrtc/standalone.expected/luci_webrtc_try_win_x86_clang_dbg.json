@@ -719,13 +719,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win_x86_clang_dbg\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win_x86_clang_dbg",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win_x86_clang_dbg"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

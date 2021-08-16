@@ -482,13 +482,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android",
-      "--buildbot-mastername",
-      "tryserver.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

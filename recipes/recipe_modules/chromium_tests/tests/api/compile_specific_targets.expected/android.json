@@ -852,13 +852,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android-cronet-arm-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android-cronet-arm-rel",
-      "--buildbot-mastername",
-      "chromium.android",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android-cronet-arm-rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

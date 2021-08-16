@@ -515,13 +515,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win32 Debug (Clang)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Win32 Debug (Clang)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Win32 Debug (Clang)"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

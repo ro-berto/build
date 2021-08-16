@@ -1105,13 +1105,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux-rel",
-      "--buildbot-mastername",
-      "tryserver.chromium.linux",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux-rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

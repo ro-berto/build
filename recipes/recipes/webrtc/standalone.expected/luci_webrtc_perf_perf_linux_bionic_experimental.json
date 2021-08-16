@@ -496,14 +496,9 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Linux Bionic\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--is-experimental",
       "--buildbot-buildername",
-      "Perf Linux Bionic",
-      "--buildbot-mastername",
-      "client.webrtc.perf",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Perf Linux Bionic"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

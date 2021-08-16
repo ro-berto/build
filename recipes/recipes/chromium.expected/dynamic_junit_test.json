@@ -913,13 +913,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android-marshmallow-arm64-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android-marshmallow-arm64-rel",
-      "--buildbot-mastername",
-      "chromium.android",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android-marshmallow-arm64-rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

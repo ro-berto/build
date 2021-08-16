@@ -345,10 +345,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}",
-      "--is-luci",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}"
     ],
     "cwd": "None",
     "env": {

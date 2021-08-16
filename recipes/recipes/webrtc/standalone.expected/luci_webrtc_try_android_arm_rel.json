@@ -683,13 +683,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_arm_rel\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android_arm_rel",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android_arm_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -5800,13 +5795,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_arm_rel\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android_arm_rel",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android_arm_rel"
     ],
     "cwd": "[CACHE]/builder",
     "name": "postprocess_for_goma (2).upload_log",

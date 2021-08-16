@@ -794,13 +794,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Linux ASan\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Libfuzzer Upload Linux ASan",
-      "--buildbot-mastername",
-      "chromium.fuzz",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Libfuzzer Upload Linux ASan"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

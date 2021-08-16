@@ -390,13 +390,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux_xfa_ubsan\", \"project\": \"pdfium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux_xfa_ubsan",
-      "--buildbot-mastername",
-      "client.pdfium",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux_xfa_ubsan"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

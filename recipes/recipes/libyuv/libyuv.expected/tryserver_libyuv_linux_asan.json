@@ -505,13 +505,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux_asan\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux_asan",
-      "--buildbot-mastername",
-      "tryserver.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux_asan"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

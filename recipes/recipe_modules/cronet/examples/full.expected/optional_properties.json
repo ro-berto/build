@@ -918,13 +918,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"local_test\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "local_test",
-      "--buildbot-mastername",
-      "fake-group",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "local_test"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

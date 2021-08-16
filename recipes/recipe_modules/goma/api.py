@@ -110,7 +110,7 @@ class GomaApi(recipe_api.RecipeApi):
     return self._jsonstatus
 
   @property
-  def default_cache_path_per_slave(self):
+  def _default_cache_path_per_bot(self):
     if self._ephemeral:
       return self.m.path['tmp_base'].join('goma')
     return self.m.path['cache'].join('goma')
@@ -119,16 +119,16 @@ class GomaApi(recipe_api.RecipeApi):
   def default_cache_path(self):
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
                               self.m.buildbucket.builder_name)
-    data_cache = self.default_cache_path_per_slave.join('data')
+    data_cache = self._default_cache_path_per_bot.join('data')
     return data_cache.join(safe_buildername)
 
   @property
   def default_client_path(self):
-    return self.default_cache_path_per_slave.join('client')
+    return self._default_cache_path_per_bot.join('client')
 
   @property
   def _default_bqupload_dir(self):
-    return self.default_cache_path_per_slave.join('bqupload')
+    return self._default_cache_path_per_bot.join('bqupload')
 
   @property
   def _default_bqupload_path(self):
@@ -136,7 +136,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def _extra_package_path(self):
-    return self.default_cache_path_per_slave.join('extra')
+    return self._default_cache_path_per_bot.join('extra')
 
   @property
   def jobs(self):
@@ -171,7 +171,7 @@ class GomaApi(recipe_api.RecipeApi):
       # be improved if -j is larger than that.
       #
       # For safety, we'd like to set the upper limit to 200.
-      # Note that currently most try-bot build slaves have 8 processors.
+      # Note that currently most try-bot build bots have 8 processors.
       self._recommended_jobs = min(10 * self.m.platform.cpu_count, 200)
 
     return self._recommended_jobs
@@ -609,18 +609,12 @@ class GomaApi(recipe_api.RecipeApi):
             'builder': builder_id.builder,
         })
     ])
-    args.append('--is-luci')
-
     if self.m.runtime.is_experimental:
       args.append('--is-experimental')
 
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     if self.m.buildbucket.builder_name:
       args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
-    if self.m.builder_group.for_current:
-      args.extend(['--buildbot-mastername', self.m.builder_group.for_current])
-    if self.m.swarming.bot_id:
-      args.extend(['--buildbot-slavename', self.m.swarming.bot_id])
 
     result = self.m.build.python(
         name=name or 'upload_log',

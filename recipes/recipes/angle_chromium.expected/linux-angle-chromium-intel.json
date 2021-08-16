@@ -924,13 +924,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux-angle-chromium-intel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux-angle-chromium-intel",
-      "--buildbot-mastername",
-      "chromium.angle",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux-angle-chromium-intel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

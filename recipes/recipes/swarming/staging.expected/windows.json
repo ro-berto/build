@@ -801,13 +801,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"dev\", \"builder\": \"win-rel-swarming\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win-rel-swarming",
-      "--buildbot-mastername",
-      "chromium.dev",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win-rel-swarming"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

@@ -429,13 +429,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux64 Release\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Linux64 Release",
-      "--buildbot-mastername",
-      "client.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Linux64 Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

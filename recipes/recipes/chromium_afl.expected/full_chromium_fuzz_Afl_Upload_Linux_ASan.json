@@ -669,13 +669,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Afl Upload Linux ASan\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Afl Upload Linux ASan",
-      "--buildbot-mastername",
-      "chromium.fuzz",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Afl Upload Linux ASan"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

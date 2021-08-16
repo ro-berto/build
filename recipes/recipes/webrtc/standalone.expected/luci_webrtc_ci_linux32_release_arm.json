@@ -469,13 +469,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux32 Release (ARM)\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Linux32 Release (ARM)",
-      "--buildbot-mastername",
-      "client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Linux32 Release (ARM)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

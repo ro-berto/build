@@ -683,13 +683,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"android_arm64_dbg\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android_arm64_dbg",
-      "--buildbot-mastername",
-      "tryserver.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android_arm64_dbg"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

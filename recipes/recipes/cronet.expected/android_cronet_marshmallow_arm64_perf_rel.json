@@ -671,13 +671,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android-cronet-marshmallow-arm64-perf-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android-cronet-marshmallow-arm64-perf-rel",
-      "--buildbot-mastername",
-      "chromium.android",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android-cronet-marshmallow-arm64-perf-rel"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1136,13 +1131,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android-cronet-marshmallow-arm64-perf-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android-cronet-marshmallow-arm64-perf-rel",
-      "--buildbot-mastername",
-      "chromium.android",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android-cronet-marshmallow-arm64-perf-rel"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

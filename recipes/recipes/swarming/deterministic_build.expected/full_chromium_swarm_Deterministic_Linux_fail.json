@@ -688,13 +688,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Linux\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Linux",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Linux"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1071,13 +1066,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Linux\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Linux",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Linux"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

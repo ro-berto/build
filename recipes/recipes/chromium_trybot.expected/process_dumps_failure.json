@@ -1113,13 +1113,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"win7-rel\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win7-rel",
-      "--buildbot-mastername",
-      "tryserver.chromium.win",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win7-rel"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

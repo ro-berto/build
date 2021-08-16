@@ -801,13 +801,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"gen-linux-try\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "gen-linux-try",
-      "--buildbot-mastername",
-      "tryserver.chromium.codesearch",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "gen-linux-try"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

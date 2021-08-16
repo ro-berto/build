@@ -657,13 +657,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"mac-newlib-dbg-asan\", \"project\": \"project\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "mac-newlib-dbg-asan",
-      "--buildbot-mastername",
-      "client.nacl",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "mac-newlib-dbg-asan"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

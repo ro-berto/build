@@ -388,11 +388,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"dawn\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,
@@ -730,11 +727,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"dawn\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux"
     ],
     "name": "postprocess_for_goma (2).upload_log",
     "timeout": 300,

@@ -649,13 +649,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"mac-builder\", \"project\": \"angle\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "mac-builder",
-      "--buildbot-mastername",
-      "angle",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "mac-builder"
     ],
     "cwd": "[CACHE]/builder/angle",
     "env": {

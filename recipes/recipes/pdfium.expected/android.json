@@ -390,13 +390,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"android\", \"project\": \"pdfium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "android",
-      "--buildbot-mastername",
-      "client.pdfium",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "android"
     ],
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,

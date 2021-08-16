@@ -437,13 +437,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"win-clang-builder\", \"project\": \"angle\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "win-clang-builder",
-      "--buildbot-mastername",
-      "angle",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "win-clang-builder"
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "name": "postprocess_for_goma.upload_log",

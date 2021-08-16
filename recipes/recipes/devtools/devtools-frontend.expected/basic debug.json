@@ -513,13 +513,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"devtools\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "linux",
-      "--buildbot-mastername",
-      "tryserver.devtools-frontend",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "linux"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {

@@ -844,13 +844,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Deterministic Linux (dbg)\", \"project\": \"chromium\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Deterministic Linux (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Deterministic Linux (dbg)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

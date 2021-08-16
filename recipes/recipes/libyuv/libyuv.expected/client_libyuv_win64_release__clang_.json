@@ -461,13 +461,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win64 Release (Clang)\", \"project\": \"libyuv\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Win64 Release (Clang)",
-      "--buildbot-mastername",
-      "client.libyuv",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Win64 Release (Clang)"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

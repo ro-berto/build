@@ -561,13 +561,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"perf\", \"builder\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "Perf Mac 10.11",
-      "--buildbot-mastername",
-      "client.webrtc.perf",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "Perf Mac 10.11"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

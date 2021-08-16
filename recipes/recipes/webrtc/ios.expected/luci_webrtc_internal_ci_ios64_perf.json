@@ -759,13 +759,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"iOS64 Perf\", \"project\": \"webrtc-internal\"}",
-      "--is-luci",
       "--buildbot-buildername",
-      "iOS64 Perf",
-      "--buildbot-mastername",
-      "internal.client.webrtc",
-      "--buildbot-slavename",
-      "fake-bot-id"
+      "iOS64 Perf"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
