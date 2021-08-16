@@ -12,7 +12,8 @@ from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze
 
 MONORAIL_SEARCH_BUGS_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+%(name)s')
+    'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+%(name)s'
+    ' -status:Fixed -status:Verified&can=1')
 
 MONORAIL_FILE_BUG_TEMPLATE = (
     'https://bugs.chromium.org/p/v8/issues/entry?template=%(template)s&'

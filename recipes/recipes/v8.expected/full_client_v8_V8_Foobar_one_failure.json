@@ -658,7 +658,7 @@
       "@@@STEP_LOG_LINE@test-name@Some errput.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_END@test-name@@@",
-      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/test-name@@@",
+      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/test-name%20-status:Fixed%20-status:Verified&can=1@@@",
       "@@@STEP_LINK@test-name (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/test-name+starts+failing&description=Failing+test:+suite-name/dir/test-name%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
       "@@@STEP_FAILURE@@@"
     ]

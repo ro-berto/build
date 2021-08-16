@@ -39,7 +39,7 @@
       "@@@STEP_LOG_LINE@test-name@Some output.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_END@test-name@@@",
-      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-FlagFuzz+suite-name/dir/test-name@@@",
+      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-FlagFuzz+suite-name/dir/test-name%20-status:Fixed%20-status:Verified&can=1@@@",
       "@@@STEP_LINK@test-name (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+flag-fuzzer+failure&summary=suite-name/dir/test-name+starts+failing+%28flag+fuzzer%29&description=Failing+test:+suite-name/dir/test-name%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0ALink+to+Flako+run:+%3Cinsert%3E@@@",
       "@@@STEP_FAILURE@@@"
     ]

@@ -277,9 +277,9 @@
       "@@@STEP_LOG_LINE@slow@Some errput.@@@",
       "@@@STEP_LOG_LINE@slow@@@@",
       "@@@STEP_LOG_END@slow@@@",
-      "@@@STEP_LINK@fast (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/fast@@@",
+      "@@@STEP_LINK@fast (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/fast%20-status:Fixed%20-status:Verified&can=1@@@",
       "@@@STEP_LINK@fast (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/fast+starts+failing&description=Failing+test:+suite-name/dir/fast%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
-      "@@@STEP_LINK@slow (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/slow@@@",
+      "@@@STEP_LINK@slow (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+suite-name/dir/slow%20-status:Fixed%20-status:Verified&can=1@@@",
       "@@@STEP_LINK@slow (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/slow+starts+failing&description=Failing+test:+suite-name/dir/slow%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
       "@@@STEP_FAILURE@@@"
     ]
