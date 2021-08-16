@@ -558,6 +558,10 @@ class Test(object):
     that best represents the work performed by this Test.
 
     suffix is 'with patch' or 'without patch'
+
+    Returns:
+      step.StepData for the step representing the test that ran, or None if
+        there was an error when preparing the test.
     """
     raise NotImplementedError()
 
@@ -1151,7 +1155,7 @@ class ExperimentalTest(TestWrapper):
   @recipe_api.composite_step
   def run(self, api, suffix):
     if not self.spec.is_in_experiment:
-      return []
+      return None
 
     try:
       return super(ExperimentalTest,
@@ -1380,7 +1384,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
       self.update_inv_name_from_stderr(result.stderr, suffix)
 
-    return self._test_runs[suffix]
+    return result
 
 
 @attrs()
@@ -2683,6 +2687,7 @@ class LocalIsolatedScriptTest(LocalTest):
 
     resultdb = self.prep_local_rdb(api, temp=temp)
 
+    step_result = None
     try:
       api.isolate.run_isolated(
           self.name,
@@ -2716,7 +2721,7 @@ class LocalIsolatedScriptTest(LocalTest):
         # raise it as a step failure.
         raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
 
-    return self._test_runs[suffix]
+    return step_result
 
 
 @attrs()
@@ -3461,16 +3466,17 @@ class SkylabTest(Test):
         step_failure_msg = (
             'Test was not scheduled because of absent lacros_gcs_path.')
       if step_failure_msg:
-        return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
-                                       step_failure_msg)
+        self._raise_failed_step(api, suffix, step, api.step.FAILURE,
+                                step_failure_msg)
       if not self.ctp_responses:
-        return self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
-                                       'Invalid test result.')
+        self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
+                                'Invalid test result.')
 
       parser = self.gtest_result_parser
       if self.is_tast_test:
         parser = self.tast_result_parser
 
+      result = self.ctp_responses[0]
       if len(self.ctp_responses) == 1:
         self.present_result(api, self.ctp_responses[0], step, suffix, parser)
       else:
@@ -3483,12 +3489,13 @@ class SkylabTest(Test):
           self._failure_on_exit_suffix_map[suffix] = False
         for i, r in enumerate(self.ctp_responses, 1):
           with api.step.nest('attempt: #' + str(i)) as attempt_step:
+            result = attempt_step
             try:
               self.present_result(api, r, attempt_step, suffix, parser)
             except api.step.StepFailure:
               pass
 
-      return self._test_runs[suffix]
+      return result
 
   def compile_targets(self):
     t = [self.spec.target_name, 'lacros_version_metadata']
