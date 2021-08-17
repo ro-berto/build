@@ -6,6 +6,7 @@
       "[CLEANUP]/reclient_log_tmp_1"
     ],
     "env": {
+      "RBE_cache_silo": "test silo",
       "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/Linux_reclient",
       "RBE_deps_cache_max_mb": "256",
       "RBE_instance": "projects/example/instances/default_instance",

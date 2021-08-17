@@ -36,4 +36,10 @@ message InputProperties {
   // Publish trace by rpl2cloudtrace to the cloud trace
   // in the GCP project for the RBE instance.
   bool publish_trace = 7;
+
+  // This specifies a cache silo key, which is added to the key used for
+  // caching remote actions.  This allows remote build caches to be
+  // segregated if so desired.  This is useful in cases such as performance
+  // testing.
+  string cache_silo = 8;
 }

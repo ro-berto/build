@@ -12,7 +12,8 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                  metrics_project=None,
                  rewrapper_env=None,
                  profiler_service=None,
-                 publish_trace=None):
+                 publish_trace=None,
+                 cache_silo="test silo"):
     if rewrapper_env is None:
       rewrapper_env = {}
 
@@ -24,6 +25,7 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                 'rewrapper_env': rewrapper_env,
                 'profiler_service': profiler_service,
                 'publish_trace': publish_trace,
+                'cache_silo': cache_silo,
             },
         }) + self.m.buildbucket.ci_build(
             project='chromium', bucket='ci', builder='Linux reclient')

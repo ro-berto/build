@@ -86,6 +86,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._jobs = props.jobs or None
     self._rewrapper_env = None
     self._reclient_log_dir = None
+    self._cache_silo = props.cache_silo or None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -127,6 +128,10 @@ class ReclientApi(recipe_api.RecipeApi):
       # This heuristic is copied from Goma's recommended_jobs.
       self._jobs = min(10 * self.m.platform.cpu_count, 200)
     return self._jobs
+
+  @property
+  def cache_silo(self):
+    return self._cache_silo
 
   @property
   def rewrapper_env(self):
@@ -268,6 +273,9 @@ class ReclientApi(recipe_api.RecipeApi):
     if self._props.profiler_service:
       env['RBE_profiler_service'] = self._props.profiler_service
       env['RBE_profiler_project_id'] = self.rbe_project
+
+    if self.cache_silo:
+      env['RBE_cache_silo'] = self.cache_silo
 
     with self.m.context(env=env):
       self.m.step(
