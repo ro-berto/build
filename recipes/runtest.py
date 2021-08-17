@@ -904,7 +904,7 @@ def _MainMac(options, args, extra_env):
   )
 
   try:
-    if _UsingGtestJson(options):
+    if options.test_launcher_summary_output:
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
@@ -1154,7 +1154,7 @@ def _MainLinux(options, args, extra_env):
           server_dir=special_xvfb_dir
       )
 
-    if _UsingGtestJson(options):
+    if options.test_launcher_summary_output:
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
@@ -1264,7 +1264,7 @@ def _MainWin(options, args, extra_env):
   )
 
   try:
-    if _UsingGtestJson(options):
+    if options.test_launcher_summary_output:
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
