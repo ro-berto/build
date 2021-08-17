@@ -17,18 +17,26 @@ class BuilderConfigException(Exception):
 
 @attrs()
 class BuilderConfig(object):
-  """"Static" configuration for a bot.
+  """"Static" configuration for a builder.
 
   BuilderConfig provides access to information defined entirely in
   recipes; for a given recipe version BuilderConfig information will be
   the same for all builds of a given builder.
 
-  BuilderConfig wraps multiple bot specs and provides the means for
+  BuilderConfig wraps multiple builder specs and provides the means for
   getting values in a manner that ensures they are compatible between
   all of the wrapped specs. BuilderConfig overrides attribute access so
   that attempting to access any attribute that is defined on the specs
   returns the value on the specs, raising an exception if the value is
-  inconsistent between the specs.
+  inconsistent between the specs. The builders that have their specs
+  wrapped are returned by `builder_ids`.
+
+  In addition to wrapping the BuilderSpecs for some builders, it can
+  also record other builders as being in scope for testing (e.g. a
+  tester triggered by a builder whose spec is wrapped). The builders
+  that are in scope for testing will not have their specs wrapped, but
+  will have their source side spec files included when accessing
+  `source_side_spec_files`.
   """
 
   builder_db = attrib(BuilderDatabase)
@@ -47,6 +55,13 @@ class BuilderConfig(object):
       * python_api - Optional python API. If provided, in the event that
         a BuilderConfigException would be raised, an infra failing step
         will be created with the details instead.
+
+    Returns:
+      A BuilderConfig instance. The BuilderConfig will wrap the
+      specs for the builders in the mirrors in `try_spec`. The testers
+      in the mirrors in `try_spec` will be in scope for testing. If
+      `try_spec.include_all_triggered_testers` is true, then any testers
+      triggered by the wrapped builders will be in scope for testing.
 
     Raises:
       * BuilderConfigException if there isn't configuration matching all
@@ -95,9 +110,10 @@ class BuilderConfig(object):
     Returns:
       A BuilderConfig instance for the associated builder. If try_db was
       provided and has an entry for the builder, the BuilderConfig will
-      use the associated TrySpec, meaning it will wrap the BuilderSpecs
-      for the mirrors in the TrySpec. Otherwise, the BuilderConfig will
-      simply wrap the BuilderSpec associated with the builder.
+      use the associated TrySpec, see the documentation for `create` for
+      specific details. Otherwise, the BuilderConfig will wrap the
+      builder spec for the provided builder ID and any triggered testers
+      will be in scope for testing.
 
     Raises:
       * BuilderConfigException if there isn't configuration matching the
@@ -115,10 +131,13 @@ class BuilderConfig(object):
     if use_try_db and try_db:
       try_spec = try_db.get(builder_id)
 
-    # Some trybots do not mirror a CI bot. In this case, return a configuration
-    # that uses the same <group, buildername> of the triggering trybot.
+    # TODO(gbeaty) Change implementation to not require a TrySpec object
+    # BuilderConfig is implemented in terms of TrySpec, so one gets created for
+    # CI builders and stand-alone try builders that mirrors the indicated
+    # builder and any trigger testers
     if try_spec is None:
-      try_spec = TrySpec.create([builder_id])
+      try_spec = TrySpec.create([builder_id],
+                                include_all_triggered_testers=True)
 
     return cls.create(
         builder_db, try_db=try_db, try_spec=try_spec, python_api=python_api)
@@ -137,7 +156,19 @@ class BuilderConfig(object):
 
   @cached_property
   def builder_ids(self):
+    """The builder IDs that have their specs wrapped by this config."""
     return [m.builder_id for m in self.mirrors]
+
+  @cached_property
+  def builder_ids_in_scope_for_testing(self):
+    """The builder IDs that tests and targets should be built for."""
+    ids = list(self.builder_ids)
+    ids.extend(mirror.tester_id
+               for mirror in self.mirrors
+               if mirror.tester_id is not None)
+    if self._try_spec.include_all_triggered_testers:
+      ids = self.builder_db.builder_graph.get_transitive_closure(ids)
+    return ids
 
   @cached_property
   def mirrors(self):
@@ -164,18 +195,7 @@ class BuilderConfig(object):
     return self._try_spec.regression_test_selection_recall
 
   @cached_property
-  def root_keys(self):
-    keys = list(self.builder_ids)
-    keys.extend(mirror.tester_id
-                for mirror in self.mirrors
-                if mirror.tester_id is not None)
-    return keys
-
-  @cached_property
-  def all_keys(self):
-    return self.builder_db.builder_graph.get_transitive_closure(self.root_keys)
-
-  @cached_property
   def source_side_spec_files(self):
-    groups = set(key.group for key in self.all_keys)
+    groups = set(builder_id.group
+                 for builder_id in self.builder_ids_in_scope_for_testing)
     return {g: '{}.json'.format(g) for g in groups}

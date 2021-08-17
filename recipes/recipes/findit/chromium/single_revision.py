@@ -81,7 +81,7 @@ def RunSteps(api, properties):
         bot_update_step,
         build_config,
         compile_targets,
-        tests_including_triggered=test_objects,
+        tests=test_objects,
         **compile_kwargs)
     if compile_result.status != common_pb.SUCCESS:
       return compile_result
@@ -113,12 +113,12 @@ def _configure_builder(api, target_tester):
   return bot_mirror.builder_id, builder_config, compile_kwargs
 
 
-def _compute_targets_and_tests(api, builder_config, build_config, builder_id,
+def _compute_targets_and_tests(api, builder_config, targets_config, builder_id,
                                requested_tests, compile_targets, skip_analyze):
   if requested_tests:
     # Figure out which test steps to run.
     requested_tests_to_run = [
-        test for test in build_config.all_tests()
+        test for test in targets_config.all_tests
         if test.canonical_name in requested_tests
     ]
 
@@ -155,8 +155,7 @@ def _compute_targets_and_tests(api, builder_config, build_config, builder_id,
     return actual_compile_targets, actual_tests_to_run
 
   # No tests, only compile targets
-  default_compile_targets = build_config.get_compile_targets(
-      build_config.all_tests())
+  default_compile_targets = targets_config.compile_targets
   # If no targets were specifically requested, compile every target in the spec.
   if not compile_targets:
     return default_compile_targets, []

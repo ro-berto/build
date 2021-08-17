@@ -141,9 +141,9 @@ class ANGLEApi(recipe_api.RecipeApi):
 
         compile_targets = sorted(list(set(test_targets)))
         tests = self.m.chromium_tests.tests_in_compile_targets(
-            compile_targets, targets_config.tests_in_scope())
+            compile_targets, targets_config.all_tests)
       else:
-        tests = targets_config.all_tests()
+        tests = targets_config.all_tests
         test_targets = [t.isolate_target for t in tests if t.uses_isolate]
         compile_targets = sorted(list(set(test_targets)))
 

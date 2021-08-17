@@ -422,22 +422,6 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "read test spec (chromium.fyi.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
@@ -903,23 +887,6 @@
     "name": "test r1.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "test r1.read test spec (chromium.fyi.json)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -2434,23 +2401,6 @@
     "name": "test r0.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "test r0.read test spec (chromium.fyi.json)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

@@ -73,7 +73,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
     # Checkout code at the given revision to recompile.
     _, builder_config = (
         api.chromium_tests_builder_config.lookup_builder(builder_id))
-    bot_update_step, build_config = api.chromium_tests.prepare_checkout(
+    bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
         root_solution_revision=revision,
         report_cache_state=False)
@@ -81,8 +81,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
       # If compile targets are not specified, retrieve them from the build spec.
-      compile_targets = build_config.get_compile_targets(
-          build_config.all_tests())
+      compile_targets = targets_config.compile_targets
 
       # Use dependency "analyze" to filter out those that are not impacted by
       # the given revision. This is to reduce the number of targets to be
@@ -109,9 +108,9 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
         builder_id,
         builder_config,
         bot_update_step,
-        build_config,
+        targets_config,
         compile_targets,
-        tests_including_triggered=[],
+        tests=[],
         override_execution_mode=ctbc.COMPILE_AND_TEST)
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED

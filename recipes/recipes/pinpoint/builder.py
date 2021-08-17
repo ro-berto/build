@@ -51,15 +51,11 @@ def RunSteps(api):
         builder_id, use_try_db=False)
 
     api.chromium_tests.configure_build(builder_config)
-    update_step, build_config = (
+    update_step, targets_config = (
         api.chromium_tests.prepare_checkout(builder_config))
-    compile_targets = build_config.get_compile_targets(build_config.all_tests())
-    return api.chromium_tests.compile_specific_targets(builder_id,
-                                                       builder_config,
-                                                       update_step,
-                                                       build_config,
-                                                       compile_targets,
-                                                       build_config.all_tests())
+    return api.chromium_tests.compile_specific_targets(
+        builder_id, builder_config, update_step, targets_config,
+        targets_config.compile_targets, targets_config.all_tests)
 
 
 def GenTests(api):

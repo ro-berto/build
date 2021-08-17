@@ -259,36 +259,42 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='Android arm64 Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_clang_dbg_recipe':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Android ASAN (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_compile_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Android arm Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_compile_x64_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Android x64 Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_compile_x86_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Android x86 Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_cronet':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-cronet-arm-rel',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_mojo':
             try_spec.TrySpec.create_for_single_mirror(
@@ -474,6 +480,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.angle',
                 buildername='fuchsia-angle-builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'ios-angle-try-intel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -634,6 +641,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Fuchsia Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
     },
     'tryserver.chromium.linux': {
@@ -672,6 +680,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='fuchsia-x64-dbg',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'fuchsia-fyi-arm64-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -855,18 +864,21 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux-clang-tidy-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Linux Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux-clang-tidy-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux-rel':
             try_spec.TrySpec.create(
@@ -905,6 +917,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -917,12 +930,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Linux Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Linux Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_archive_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -934,6 +949,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium',
                 buildername='linux-archive-rel',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_chromeos_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -952,6 +968,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Linux Builder (dbg)(32)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_msan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1261,6 +1278,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-kevin-rel',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'chromeos-kevin-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1282,6 +1300,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-dbg',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux-chromeos-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1528,12 +1547,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.mac',
                 buildername='Mac Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'mac_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='Mac Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'mac_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1759,12 +1780,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.win',
                 buildername='Win Builder (dbg)',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'win_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
                 buildername='Win Builder',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'win_chromium_x64_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -2123,36 +2146,42 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='tryserver.webrtc',
                 buildername='win_chromium_compile',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'win_chromium_compile_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='tryserver.webrtc',
                 buildername='win_chromium_compile_dbg',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'mac_chromium_compile':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='tryserver.webrtc',
                 buildername='mac_chromium_compile',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_compile':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='tryserver.webrtc',
                 buildername='linux_chromium_compile',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'linux_chromium_compile_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='tryserver.webrtc',
                 buildername='linux_chromium_compile_dbg',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
         'android_chromium_compile':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='tryserver.webrtc',
                 buildername='android_chromium_compile',
                 execution_mode=try_spec.COMPILE,
+                include_all_triggered_testers=True,
             ),
     },
 })

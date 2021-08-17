@@ -202,14 +202,14 @@ class FinditApi(recipe_api.RecipeApi):
       # Checkout code at the given revision to recompile.
       # TODO(stgao): refactor this out.
       builder_config = self.get_builder_config_for_mirror(bot_mirror)
-      bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
+      bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
           builder_config,
           root_solution_revision=revision,
           report_cache_state=False)
 
       # Figure out which test steps to run.
       requested_tests_to_run = [
-          test for test in build_config.all_tests()
+          test for test in targets_config.all_tests
           if test.canonical_name in requested_tests
       ]
 
@@ -253,9 +253,9 @@ class FinditApi(recipe_api.RecipeApi):
             bot_mirror.builder_id,
             builder_config,
             bot_update_step,
-            build_config,
+            targets_config,
             actual_compile_targets,
-            tests_including_triggered=actual_tests_to_run,
+            tests=actual_tests_to_run,
             override_execution_mode=ctbc.COMPILE_AND_TEST)
 
         if raw_result.status != common_pb.SUCCESS:

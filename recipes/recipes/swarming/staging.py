@@ -73,15 +73,13 @@ def RunSteps(api):
 
   targets_config = (
       api.chromium_tests.create_targets_config(builder_config, update_step))
-  compile_targets = targets_config.get_compile_targets(
-      targets_config.all_tests())
 
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   raw_result = api.chromium_tests.compile_specific_targets(
-      builder_id, builder_config, update_step, targets_config, compile_targets,
-      targets_config.all_tests())
+      builder_id, builder_config, update_step, targets_config,
+      targets_config.compile_targets, targets_config.all_tests)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -95,10 +93,9 @@ def RunSteps(api):
     api.chromium_swarming.set_default_dimension('gpu', None)
     api.chromium_swarming.set_default_dimension('cpu', None)
 
-  test_runner = api.chromium_tests.create_test_runner(
-      targets_config.all_tests())
+  test_runner = api.chromium_tests.create_test_runner(targets_config.all_tests)
   with api.chromium_tests.wrap_chromium_tests(builder_config,
-                                              targets_config.all_tests()):
+                                              targets_config.all_tests):
     return test_runner()
 
 

@@ -61,7 +61,7 @@ def RunSteps(api, target_testername, revision, isolated_targets):
 
   # Find the matching test targets.
   tests = [
-      test for test in build_config.all_tests()
+      test for test in build_config.all_tests
       if test.isolate_target in isolated_targets
   ]
 
@@ -91,7 +91,7 @@ def RunSteps(api, target_testername, revision, isolated_targets):
           bot_update_step,
           build_config,
           compile_targets,
-          tests_including_triggered=tests[:1],  # Only the first test.
+          tests=tests[:1],  # Only the first test.
           override_execution_mode=ctbc.COMPILE_AND_TEST)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result

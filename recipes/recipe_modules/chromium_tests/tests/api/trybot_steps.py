@@ -676,3 +676,80 @@ def GenTests(api):
                        r'Commit message footer Cq-Depend is not supported.*'),
       api.post_process(post_process.DropExpectation),
   )
+
+  builder_db = ctbc.BuilderDatabase.create({
+      'fake-group': {
+          'fake-builder':
+              ctbc.BuilderSpec.create(
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      },
+      'fake-tester-group': {
+          'fake-tester':
+              ctbc.BuilderSpec.create(
+                  execution_mode=ctbc.TEST,
+                  parent_builder_group='fake-group',
+                  parent_buildername='fake-builder',
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      },
+      'fake-unmirrored-tester-group': {
+          'fake-unmirrored-tester':
+              ctbc.BuilderSpec.create(
+                  execution_mode=ctbc.TEST,
+                  parent_builder_group='fake-group',
+                  parent_buildername='fake-builder',
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      },
+  })
+
+  yield api.test(
+      'unmirrored-tester',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                          tester_group='fake-tester-group',
+                          tester='fake-tester',
+                      ),
+              },
+          })),
+      api.post_check(post_process.MustRun,
+                     'read test spec (fake-tester-group.json)'),
+      api.post_check(post_process.DoesNotRun,
+                     'read test spec (fake-unmirrored-tester-group.json)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'unmirrored-tester-include-all-triggered-testers',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                          include_all_triggered_testers=True,
+                      ),
+              },
+          })),
+      api.post_check(post_process.MustRun,
+                     'read test spec (fake-tester-group.json)'),
+      api.post_check(post_process.MustRun,
+                     'read test spec (fake-unmirrored-tester-group.json)'),
+      api.post_process(post_process.DropExpectation),
+  )

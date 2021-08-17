@@ -81,6 +81,9 @@ class TrySpec(object):
 
   # The specifications of the builders being mirrored by the try builder
   mirrors = attrib(sequence[TryMirror])
+  # Whether or not all testers triggered by builders in mirrors should be
+  # considered in scope for testing
+  include_all_triggered_testers = attrib(bool, default=False)
   # The execution mode of the try builder.
   # * COMPILE_AND_TEST - Targets will be compiled and tests will be run.
   # * COMPILE - Targets will only be compiled, no tests will run

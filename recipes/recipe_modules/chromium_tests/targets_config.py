@@ -45,13 +45,11 @@ class TargetsConfig(object):
       tests.extend(self._tests[k])
     return tests
 
+  @cached_property
   def all_tests(self):
-    """Returns all tests."""
-    return self._get_tests_for(self.builder_config.all_keys)
-
-  def tests_in_scope(self):
-    """Returns all tests for the provided bot IDs."""
-    return self._get_tests_for(self.builder_config.root_keys)
+    """Returns all tests in scope for the builder config."""
+    return self._get_tests_for(
+        self.builder_config.builder_ids_in_scope_for_testing)
 
   def tests_on(self, builder_id):
     """Returns all tests for the specified builder."""
@@ -62,7 +60,14 @@ class TargetsConfig(object):
     return self._get_tests_for(
         self.builder_config.builder_db.builder_graph[builder_id])
 
-  def get_compile_targets(self, tests):
+  @cached_property
+  def compile_targets(self):
+    """The compile targets to be built
+
+    The compile targets to be built is the union of the compile targets needed
+    for all tests and any additional compile targets requested by the builders
+    being wrapped by the builder config.
+    """
     compile_targets = set()
 
     for builder_id in self.builder_config.builder_ids:
@@ -71,7 +76,7 @@ class TargetsConfig(object):
       compile_targets.update(
           source_side_spec.get('additional_compile_targets', []))
 
-    for t in tests:
+    for t in self.all_tests:
       compile_targets.update(t.compile_targets())
 
     return sorted(compile_targets)
