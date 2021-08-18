@@ -49,10 +49,14 @@ def RunSteps(api):
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: %r' % test.compile_targets(),
-        'step_metadata: %r' % test.step_metadata(''),
-        'pass_fail_counts: %r' % test.pass_fail_counts(''),
+        'step_metadata: %r' % test.step_metadata('with patch'),
+        'pass_fail_counts: %r' % test.pass_fail_counts('with patch'),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
+
+    # Check the pass_fail_counts for a suffix that was not run for
+    # coverage
+    test.pass_fail_counts('')
 
     test.run(api, 'without patch')
 

@@ -272,8 +272,8 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
-      "@@@STEP_LOG_LINE@details@step_metadata: {'patched': False, 'canonical_step_name': 'base_unittests', 'waterfall_builder_group': None, 'waterfall_buildername': None, 'isolate_target_name': 'base_unittests'}@@@",
-      "@@@STEP_LOG_LINE@details@pass_fail_counts: {}@@@",
+      "@@@STEP_LOG_LINE@details@step_metadata: {'patched': True, 'canonical_step_name': 'base_unittests', 'waterfall_builder_group': None, 'waterfall_buildername': None, 'isolate_target_name': 'base_unittests'}@@@",
+      "@@@STEP_LOG_LINE@details@pass_fail_counts: {'Test.Three': {'pass_count': 1, 'fail_count': 0}, 'Test.One': {'pass_count': 1, 'fail_count': 0}, 'Test.Two': {'pass_count': 1, 'fail_count': 0}}@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
