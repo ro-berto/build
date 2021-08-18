@@ -904,11 +904,16 @@ def _MainMac(options, args, extra_env):
   )
 
   try:
-    if options.test_launcher_summary_output:
+    if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
       command.append('--test-launcher-summary-output=%s' % json_file_name)
+    elif options.test_launcher_summary_output:
+      command.append(
+          '--test-launcher-summary-output=%s' %
+          (options.test_launcher_summary_output)
+      )
 
     pipes = []
     if options.use_symbolization_script:
@@ -1154,11 +1159,16 @@ def _MainLinux(options, args, extra_env):
           server_dir=special_xvfb_dir
       )
 
-    if options.test_launcher_summary_output:
+    if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
       command.append('--test-launcher-summary-output=%s' % json_file_name)
+    elif options.test_launcher_summary_output:
+      command.append(
+          '--test-launcher-summary-output=%s' %
+          (options.test_launcher_summary_output)
+      )
 
     pipes = []
     # See the comment in main() regarding offline symbolization.
@@ -1264,11 +1274,16 @@ def _MainWin(options, args, extra_env):
   )
 
   try:
-    if options.test_launcher_summary_output:
+    if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
           options.test_launcher_summary_output
       )
       command.append('--test-launcher-summary-output=%s' % json_file_name)
+    elif options.test_launcher_summary_output:
+      command.append(
+          '--test-launcher-summary-output=%s' %
+          (options.test_launcher_summary_output)
+      )
 
     command = _GenerateRunIsolatedCommand(
         build_dir, test_exe_path, options, command
