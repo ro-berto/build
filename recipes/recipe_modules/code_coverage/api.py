@@ -128,7 +128,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return (self.use_clang_coverage or self.use_java_coverage or
             self.use_javascript_coverage)
 
-  def _get_binaries(self, tests):
+  def get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.
 
     By default, use the name of the target as the binary.
@@ -430,7 +430,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           result.presentation.properties['merge errors'] = merge_errors.stdout
 
         if not binaries:
-          binaries = self._get_binaries(tests)
+          binaries = self.get_binaries(tests)
           binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
               binaries, merged_profdata)
 

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import itertools
+import pprint
 import sys
 
 from recipe_engine import recipe_api
@@ -13,7 +14,6 @@ from recipe_engine import recipe_api
 # This arbitrary number was selected to be the least surprising value that
 # is likely to work for the purpose above.
 _MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
-
 
 class IsolateApi(recipe_api.RecipeApi):
   """APIs for interacting with isolates."""
@@ -309,3 +309,56 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       self.archive_differences(first_dir, second_dir, step_result.json.output)
       raise e
+
+  def write_isolate_files_for_binary_file_paths(self, file_paths,
+                                                isolate_target_name, build_dir):
+    """Writes .isolate and .isolated.gen.json files for binary files.
+
+    After these .isolate and .isolated.gen.json files are written,
+    isolate_tests() must be called to actually upload the files.
+
+    Args:
+        file_paths ([Path]): List of Paths to binary files to upload
+        isolate_target_name (str): Name to reference isolate
+        build_dir (Path): Path to directory of build artifacts
+    """
+    binaries_to_isolate = [
+        str(self.m.path.relpath(
+            path,
+            build_dir,
+        )) for path in file_paths
+    ]
+
+    isolate_path = self.m.path.join(build_dir, isolate_target_name + '.isolate')
+
+    self.m.file.write_text(
+        'Write ' + str(isolate_path), isolate_path,
+        pprint.pformat(
+            {'variables': {
+                'command': '',
+                'files': binaries_to_isolate,
+            }}) + '\n')
+
+    self.m.file.write_json(
+        'Write ' + str(isolate_path) + 'd.gen.json',
+        self.m.path.abs_to_path(str(isolate_path) + 'd.gen.json'),
+        {
+            'args': [
+                '--isolated',
+                str(
+                    self.m.path.relpath(
+                        '%s/%s.isolated' % (build_dir, isolate_target_name),
+                        self.m.path['checkout'],
+                    )),
+                '--isolate',
+                str(
+                    self.m.path.relpath(
+                        '%s/%s.isolate' % (build_dir, isolate_target_name),
+                        self.m.path['checkout'],
+                    )),
+            ],
+            'dir': str(self.m.path['checkout']),
+            'version': 1,
+        },
+        indent=2,
+    )

@@ -20,13 +20,14 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/python',
     'recipe_engine/step',
     'test_utils',
 ]
 
 PROPERTIES = InputProperties
-
 
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
@@ -43,7 +44,9 @@ def RunSteps(api, properties):
     api.chromium_tests.report_builders(orch_builder_config)
 
     raw_result, task = api.chromium_tests.build_affected_targets(
-        orch_builder_id, orch_builder_config)
+        orch_builder_id,
+        orch_builder_config,
+        isolate_test_binaries_together=True)
 
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
@@ -107,6 +110,8 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.try_build(builder='linux-rel-compilator'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
