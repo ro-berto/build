@@ -399,10 +399,8 @@ class Test(object):
 
     # Used to track results of tests as reported by RDB. Separate from
     # _deterministic_failures above as that is populated by parsing the tests'
-    # JSON results, while this field is populated entirely by RDB's API. Note
-    # that this field is only populated for SwarmingTests, but is initialized
-    # here for compatibility reasons. Also keyed via suffix like
-    # _deterministic_failures above.
+    # JSON results, while this field is populated entirely by RDB's API. Also
+    # keyed via suffix like _deterministic_failures above.
     self._rdb_results = {}
 
     # Maps suffix to wheter or not the test exited non-zero. In conjunction with
@@ -582,14 +580,23 @@ class Test(object):
     and the test failing to even report its results in machine-readable
     format.
     """
-    if suffix not in self._test_runs:
-      return False
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      if suffix not in self._rdb_results:
+        return False
 
-    return self._test_runs[suffix]['valid']
+      return not self._rdb_results[suffix].invalid
+    else:
+      if suffix not in self._test_runs:
+        return False
+
+      return self._test_runs[suffix]['valid']
 
   def pass_fail_counts(self, suffix):
     """Returns a dictionary of pass and fail counts for each test."""
-    return self._test_runs[suffix]['pass_fail_counts']
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return {}  # Unsure if this data is necessary in the new world.
+    else:
+      return self._test_runs[suffix]['pass_fail_counts']
 
   def shards_to_retry_with(self, original_num_shards, num_tests_to_retry):
     """Calculates the number of shards to run when retrying this test.
@@ -642,22 +649,34 @@ class Test(object):
 
   def failures(self, suffix):
     """Return tests that failed at least once (list of strings)."""
-    assert suffix in self._test_runs, (
+    failure_msg = (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to failures() should first check that the data '
         'exists.'.format(suffix))
-
-    return self._test_runs[suffix]['failures']
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      assert suffix in self._rdb_results, failure_msg
+      return self._rdb_results[suffix].unexpected_failing_tests
+    else:
+      assert suffix in self._test_runs, failure_msg
+      return self._test_runs[suffix]['failures']
 
   def deterministic_failures(self, suffix):
     """Return tests that failed on every test run(list of strings)."""
-    assert suffix in self._deterministic_failures, (
+    failure_msg = (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
-    return self._deterministic_failures[suffix]
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      assert suffix in self._rdb_results, failure_msg
+      return self._rdb_results[suffix].unexpected_failing_tests
+    else:
+      assert suffix in self._deterministic_failures, failure_msg
+      return self._deterministic_failures[suffix]
 
   def update_test_run(self, api, suffix, test_run):
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return  # If we're in the new world, leave the old results data empty.
+
     self._test_runs[suffix] = test_run
     self._deterministic_failures[suffix] = (
         api.test_utils.canonical.deterministic_failures(
@@ -1598,7 +1617,8 @@ class LocalGTestTest(LocalTest):
     return step_result
 
   def pass_fail_counts(self, suffix):
-    if self._gtest_results.get(suffix):
+    if (self._gtest_results.get(suffix) and
+        not self.spec.resultdb.use_rdb_results_for_all_decisions):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
     return {}
@@ -2516,6 +2536,8 @@ class SwarmingGTestTest(SwarmingTest):
     return step_result.test_utils.gtest_results.canonical_result_format()
 
   def pass_fail_counts(self, suffix):
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return {}
     return self._gtest_results[suffix].pass_fail_counts
 
   @recipe_api.composite_step
@@ -2814,7 +2836,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     step_result = super(SwarmingIsolatedScriptTest, self).run(api, suffix)
     results = self._isolated_script_results
 
-    if results:
+    if results and not self.spec.resultdb.use_rdb_results_for_all_decisions:
       # Noted when uploading to test-results, the step_name is expected to be an
       # exact match to the step name on the build.
       self.spec.results_handler.upload_results(

@@ -168,6 +168,9 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
 
   rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
   rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
+  rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
+                        ('chromium.chromium_tests.use_rdb_results' in
+                         api.buildbucket.build.input.experiments))
   kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
 
   processed_set_ups = []
@@ -399,7 +402,7 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     yield t
 
 
-def generate_junit_tests(_api,
+def generate_junit_tests(api,
                          chromium_tests_api,
                          builder_group,
                          buildername,
@@ -414,6 +417,9 @@ def generate_junit_tests(_api,
 
     rdb_kwargs = dict(test.get('resultdb', {}))
     rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
+    rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
+                          ('chromium.chromium_tests.use_rdb_results' in
+                           api.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     yield steps.AndroidJunitTestSpec.create(
@@ -433,7 +439,7 @@ def generate_script_tests(api,
                           bot_update_step,
                           scripts_compile_targets_fn=None):
   # Unused arguments
-  del api, bot_update_step
+  del bot_update_step
 
   for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
     if (script_spec.get('ci_only') and
@@ -442,6 +448,9 @@ def generate_script_tests(api,
 
     rdb_kwargs = dict(script_spec.get('resultdb', {'enable': True}))
     rdb_kwargs.setdefault('test_id_prefix', script_spec.get('test_id_prefix'))
+    rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
+                          ('chromium.chromium_tests.use_rdb_results' in
+                           api.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     yield steps.ScriptTestSpec.create(

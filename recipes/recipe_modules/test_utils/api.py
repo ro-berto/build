@@ -353,6 +353,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step_result.presentation.logs['serialzed results'] = (
           self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
 
+    # Re-run _retrieve_bad_results() if we're in the RDB experiment now that
+    # we've fetched the RDB results.
+    if ('chromium.chromium_tests.use_rdb_results' in
+        self.m.buildbucket.build.input.experiments):
+      bad_results_dict = {}
+      (bad_results_dict['invalid'],
+       bad_results_dict['failed']) = self._retrieve_bad_results(
+           test_suites, suffix)
+
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
     if suffix == 'without patch':
