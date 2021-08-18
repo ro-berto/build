@@ -182,7 +182,7 @@ _AddBuildSpec(
     target_arch='arm',
 )
 
-# Adapted from 'chromeos-amd64-generic-lacros-internal' to measure binary size.
+# Adapted from 'lacros-amd64-generic-chrome' to measure binary size.
 SPEC.update({
     'chromeos-amd64-generic-lacros-builder-perf':
         builder_spec.BuilderSpec.create(
