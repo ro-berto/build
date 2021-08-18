@@ -1520,7 +1520,7 @@
       "@@@STEP_LOG_LINE@report@          \"canonical_step_name\": \"gl_tests\", @@@",
       "@@@STEP_LOG_LINE@report@          \"waterfall_builder_group\": \"chromium.win\", @@@",
       "@@@STEP_LOG_LINE@report@          \"waterfall_buildername\": \"Win7 Tests (1)\", @@@",
-      "@@@STEP_LOG_LINE@report@          \"isolate_target_name\": \"gl_tests\"@@@",
+      "@@@STEP_LOG_LINE@report@          \"isolate_target_name\": null@@@",
       "@@@STEP_LOG_LINE@report@        }, @@@",
       "@@@STEP_LOG_LINE@report@        \"pass_fail_counts\": {@@@",
       "@@@STEP_LOG_LINE@report@          \"Test.Three\": {@@@",

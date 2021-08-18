@@ -466,8 +466,18 @@ class Test(object):
 
   @property
   def isolate_target(self):
-    """Returns isolate target name. Defaults to name."""
-    return self.target_name
+    """Returns isolate target name. Defaults to None."""
+    return None
+
+  @property
+  def uses_isolate(self):
+    """Returns true if the test is run via an isolate.
+
+    This does not need to be overridden in any subclasses. Overriding
+    isolate_target to return a non-false value will cause the test to
+    report that it uses isolate.
+    """
+    return bool(self.isolate_target)
 
   @property
   def is_skylabtest(self):
@@ -694,11 +704,6 @@ class Test(object):
       KeyError if the name is not present for the given suffix.
     """
     return self._suffix_step_name_map[suffix]
-
-  @property
-  def uses_isolate(self):
-    """Returns true if the test is run via an isolate."""
-    return False
 
   @property
   def uses_local_devices(self):
@@ -991,10 +996,6 @@ class TestWrapper(Test):  # pragma: no cover
 
   def pass_fail_counts(self, suffix):
     return self._test.pass_fail_counts(suffix)
-
-  @property
-  def uses_isolate(self):
-    return self._test.uses_isolate
 
   @property
   def uses_local_devices(self):
@@ -2175,6 +2176,10 @@ class SwarmingTest(Test):
     return True
 
   @property
+  def isolate_target(self):
+    return self.target_name
+
+  @property
   def isolate_coverage_data(self):
     return bool(self.spec.isolate_coverage_data)
 
@@ -2461,10 +2466,6 @@ class SwarmingTest(Test):
         self._tasks[suffix].failed_shards)
     return step_result
 
-  @property
-  def uses_isolate(self):
-    return True
-
   def step_metadata(self, suffix=None):
     data = super(SwarmingTest, self).step_metadata(suffix)
     if suffix is not None:
@@ -2629,8 +2630,8 @@ class LocalIsolatedScriptTest(LocalTest):
     return self.spec.tear_down
 
   @property
-  def uses_isolate(self):
-    return True
+  def isolate_target(self):
+    return self.target_name
 
   @property
   def isolate_profile_data(self):
@@ -2770,10 +2771,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.target_name]
-
-  @property
-  def uses_isolate(self):
-    return True
 
   @Test.test_options.setter
   def test_options(self, value):
