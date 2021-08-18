@@ -52,7 +52,7 @@ def RunSteps(api):
     test.pre_run(api, '')
     test.run(api, '')
     assert len(test.get_invocation_names('')) > 0
-    assert test.runs_on_swarming and test.is_gtest
+    assert test.runs_on_swarming
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

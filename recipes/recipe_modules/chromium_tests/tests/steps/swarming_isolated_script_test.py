@@ -65,7 +65,7 @@ def RunSteps(api):
       resultdb=steps.ResultDB.create(enable=True))
   test = test_spec.get_test()
   api.chromium_swarming.set_default_dimension('pool', 'foo')
-  assert test.runs_on_swarming and not test.is_gtest
+  assert test.runs_on_swarming
   assert test.shards > 0
 
   if test_repeat_count:

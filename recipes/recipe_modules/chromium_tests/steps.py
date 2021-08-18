@@ -470,10 +470,6 @@ class Test(object):
     return self.target_name
 
   @property
-  def is_gtest(self):
-    return False
-
-  @property
   def is_skylabtest(self):
     return False
 
@@ -967,10 +963,6 @@ class TestWrapper(Test):  # pragma: no cover
   @property
   def isolate_target(self):
     return self._test.isolate_target
-
-  @property
-  def is_gtest(self):
-    return self._test.is_gtest
 
   def compile_targets(self):
     return self._test.compile_targets()
@@ -1513,10 +1505,6 @@ class LocalGTestTest(LocalTest):
   @property
   def uses_local_devices(self):
     return True  # pragma: no cover
-
-  @property
-  def is_gtest(self):
-    return True
 
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]
@@ -2514,10 +2502,6 @@ class SwarmingGTestTest(SwarmingTest):
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
-
-  @property
-  def is_gtest(self):
-    return True
 
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]

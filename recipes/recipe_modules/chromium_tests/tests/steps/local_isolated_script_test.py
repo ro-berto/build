@@ -38,7 +38,7 @@ def RunSteps(api):
 
   test = test_spec.get_test()
 
-  assert not test.is_gtest and not test.runs_on_swarming
+  assert not test.runs_on_swarming
 
   test_repeat_count = api.properties.get('repeat_count')
   if test_repeat_count:

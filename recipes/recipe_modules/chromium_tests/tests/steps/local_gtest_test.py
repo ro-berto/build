@@ -37,7 +37,7 @@ def RunSteps(api):
       'base_unittests',
       resultdb=steps.ResultDB(enable=True, result_format='gtest'),
   ).get_test()
-  assert test.is_gtest and not test.runs_on_swarming
+  assert not test.runs_on_swarming
 
   test_options = steps.TestOptions(
       test_filter=['foo.bar'], retry_limit=3, run_disabled=True)
