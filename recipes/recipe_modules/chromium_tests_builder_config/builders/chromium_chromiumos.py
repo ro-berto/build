@@ -45,7 +45,7 @@ def _config(name,
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'] + (chromium_apply_config or []),
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
       'isolate_server': 'https://isolateserver.appspot.com',
@@ -78,14 +78,10 @@ SPEC.update([
         'lacros-amd64-generic-rel',
         cros_boards='eve',
         cros_boards_with_qemu_images='amd64-generic',
-        # TODO(https://crbug.com/1241517) Remove this
-        chromium_apply_config=['goma_use_local'],
     ),
     _config(
         'lacros-arm-generic-rel',
         cros_boards='arm-generic',
-        # TODO(https://crbug.com/1241517) Remove this
-        chromium_apply_config=['goma_use_local'],
     ),
     _config('linux-ash-chromium-generator-rel'),
     _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
@@ -113,10 +109,7 @@ SPEC.update([
     _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        cros_boards_with_qemu_images='amd64-generic',
-        # TODO(https://crbug.com/1241517) Remove this
-        chromium_apply_config=['goma_use_local'],
-    ),
+        cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-arm-generic-dbg',
         cros_boards='arm-generic',
@@ -126,10 +119,7 @@ SPEC.update([
         'chromeos-arm-generic-rel',
         cros_boards='arm-generic',
         target_arch='arm',
-        target_bits=32,
-        # TODO(https://crbug.com/1241517) Remove this
-        chromium_apply_config=['goma_use_local'],
-    ),
+        target_bits=32),
     _config(
         'chromeos-kevin-rel',
         cros_boards='kevin',
