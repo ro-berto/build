@@ -43,6 +43,9 @@ def RunSteps(api):
       steps.SwarmingIsolatedScriptTestSpec.create(
           'swarming_isolated_script',
           resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True)),
+      steps.LocalIsolatedScriptTestSpec.create(
+          'local_isolated_script',
+          resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True)),
   ]
   tests = [ts.get_test() for ts in test_specs]
 

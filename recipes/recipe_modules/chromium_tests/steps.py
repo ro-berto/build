@@ -2723,7 +2723,7 @@ class LocalIsolatedScriptTest(LocalTest):
       self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
 
       if (api.step.active_result.retcode == 0 and
-          not self._test_runs[suffix]['valid']):
+          not self.has_valid_results(suffix)):
         # This failure won't be caught automatically. Need to manually
         # raise it as a step failure.
         raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
