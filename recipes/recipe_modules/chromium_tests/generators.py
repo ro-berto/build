@@ -142,6 +142,14 @@ def _normalize_optional_dimensions(optional_dimensions):
   return normalized
 
 
+def _should_skip_ci_only_test(api, spec):
+  if not spec.get('ci_only') or not api.m.tryserver.is_tryserver:
+    return False
+  footer_vals = api.m.tryserver.get_footer('Include-Ci-Only-Tests')
+  val = footer_vals[-1].lower() if footer_vals else 'false'
+  return val != 'true'
+
+
 def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
   """Common logic for generating tests from JSON specs.
 
@@ -338,7 +346,7 @@ def generate_gtests(api,
     ]
 
   for spec in get_tests(api):
-    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+    if _should_skip_ci_only_test(chromium_tests_api, spec):
       continue
 
     if spec.get('use_isolated_scripts_api'):
@@ -412,7 +420,7 @@ def generate_junit_tests(api,
   del bot_update_step, scripts_compile_targets_fn
 
   for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
-    if test.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+    if _should_skip_ci_only_test(chromium_tests_api, test):
       continue
 
     rdb_kwargs = dict(test.get('resultdb', {}))
@@ -442,8 +450,7 @@ def generate_script_tests(api,
   del bot_update_step
 
   for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
-    if (script_spec.get('ci_only') and
-        chromium_tests_api.m.tryserver.is_tryserver):
+    if _should_skip_ci_only_test(chromium_tests_api, script_spec):
       continue
 
     rdb_kwargs = dict(script_spec.get('resultdb', {'enable': True}))
@@ -475,7 +482,7 @@ def generate_isolated_script_tests(api,
   del scripts_compile_targets_fn
 
   for spec in source_side_spec.get(buildername, {}).get('isolated_scripts', []):
-    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+    if _should_skip_ci_only_test(chromium_tests_api, spec):
       continue
 
     for test in generate_isolated_script_tests_from_one_spec(
@@ -583,7 +590,7 @@ def generate_skylab_tests(api,
         skylab_test_spec.get('name'), **common_skylab_kwargs)
 
   for spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
-    if spec.get('ci_only') and chromium_tests_api.m.tryserver.is_tryserver:
+    if _should_skip_ci_only_test(chromium_tests_api, spec):
       continue
     yield generate_skylab_tests_from_one_spec(builder_group, buildername, spec)
 

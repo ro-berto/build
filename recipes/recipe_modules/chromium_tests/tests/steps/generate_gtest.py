@@ -530,6 +530,23 @@ def GenTests(api):
   )
 
   yield api.test(
+      'ci_only_test_on_tryserver_with_bypass',
+      api.chromium.try_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.properties(single_spec={
+          'ci_only': True,
+          'test': 'gtest_test',
+      },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'gtest_test'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'ci_only_test_on_ci_builder',
       api.chromium.ci_build(
           builder_group='test_group',
