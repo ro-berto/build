@@ -108,5 +108,30 @@ class TestRunCommand(unittest.TestCase):
     self.assertEqual(1, retval)
 
 
+class TestSortableUploadPathForSortKey(unittest.TestCase):
+
+  def testWithoutBranchName(self):
+    self.assertEqual(
+        chromium_utils.GetSortableUploadPathForSortKey('refs/heads/master', 1),
+        '1'
+    )
+    self.assertEqual(
+        chromium_utils.GetSortableUploadPathForSortKey('refs/heads/main', 1),
+        '1'
+    )
+
+  def testWitBranchName(self):
+    self.assertEqual(
+        chromium_utils.GetSortableUploadPathForSortKey(
+            'refs/heads/mainlike', 1
+        ), 'refs_heads_mainlike-1'
+    )
+    self.assertEqual(
+        chromium_utils.GetSortableUploadPathForSortKey(
+            'refs/heads/branch-heads', 1
+        ), 'refs_heads_branch-heads-1'
+    )
+
+
 if __name__ == '__main__':
   unittest.main()

@@ -1422,7 +1422,7 @@ def GetSortableUploadPathForSortKey(branch, value, delimiter=None):
 
   Returns a canonical sort key path for a sort key. The result will be one of
   the following forms:
-  - (Without Branch or With Branch=='refs/heads/master'): <value> (e.g., 12345)
+  - (Without Branch or With Branch=='refs/heads/main'): <value> (e.g., 12345)
   - (With non-Master Branch): <branch-path>-<value> (e.g.,
         "refs_my-branch-12345")
 
@@ -1443,7 +1443,7 @@ def GetSortableUploadPathForSortKey(branch, value, delimiter=None):
         <value> when constructing the branch-inclusive form. If omitted
         (default), a hyphen ('-') will be used.
   """
-  if branch and branch != 'refs/heads/master':
+  if branch and branch != 'refs/heads/master' and branch != 'refs/heads/main':
     delimiter = delimiter or '-'
     branch = branch.replace('/', '_')
     return '%s%s%s' % (branch, delimiter, value)
@@ -1467,8 +1467,8 @@ def ParseCommitPosition(value):
 def BuildCommitPosition(branch, value):
   """Returns: A constructed commit position.
 
-  An example commit position for branch 'refs/heads/master' value '12345' is:
-  refs/heads/master@{#12345}
+  An example commit position for branch 'refs/heads/main' value '12345' is:
+  refs/heads/main@{#12345}
 
   This value can be parsed via 'ParseCommitPosition'.
 
