@@ -19,7 +19,6 @@ from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from recipe_engine import post_process
 
 DEPS = [
-    'build',
     'chromium',
     'chromium_tests',
     'chromium_tests_builder_config',
@@ -27,8 +26,6 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/json',
-    'recipe_engine/platform',
-    'recipe_engine/properties',
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'skylab',

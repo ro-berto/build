@@ -3,27 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'builder_group',
     'chromium',
     'chromium_swarming',
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/tryserver',
-    'isolate',
-    'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
-    'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
-    'recipe_engine/raw_io',
-    'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_results',
-    'test_utils',
 ]
 
 from recipe_engine import post_process
@@ -48,13 +38,13 @@ def RunSteps(api):
       }
   }
 
-  for test_spec in generators.generate_gtests(api, api.chromium_tests,
-                                              'test_group', 'test_buildername',
+  for test_spec in generators.generate_gtests(api.chromium_tests, 'test_group',
+                                              'test_buildername',
                                               source_side_spec, update_step):
     test = test_spec.get_test()
     try:
-      test.pre_run(api, '')
-      test.run(api, '')
+      test.pre_run(api.chromium_tests.m, '')
+      test.run(api.chromium_tests.m, '')
     finally:
       api.step('details', [])
       api.step.active_result.presentation.logs['details'] = [

@@ -247,7 +247,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
       test_specs_for_generator = generator(
-          self.m,
           self,
           builder_group,
           buildername,

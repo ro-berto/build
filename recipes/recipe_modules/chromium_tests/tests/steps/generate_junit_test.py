@@ -12,15 +12,8 @@ DEPS = [
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/tryserver',
-    'recipe_engine/buildbucket',
-    'recipe_engine/json',
-    'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
-    'recipe_engine/step',
-    'test_results',
     'test_utils',
 ]
 
@@ -39,13 +32,13 @@ def RunSteps(api):
       }
   }
 
-  for test_spec in generators.generate_junit_tests(api, api.chromium_tests,
+  for test_spec in generators.generate_junit_tests(api.chromium_tests,
                                                    'test_group',
                                                    'test_buildername',
                                                    source_side_spec,
                                                    update_step):
     test = test_spec.get_test()
-    test.run(api, '')
+    test.run(api.chromium_tests.m, '')
 
 
 def GenTests(api):

@@ -5,18 +5,11 @@
 from RECIPE_MODULES.build.chromium_tests import generators
 
 DEPS = [
-    'build',
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/tryserver',
-    'recipe_engine/buildbucket',
-    'recipe_engine/json',
-    'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
-    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -38,7 +31,6 @@ def RunSteps(api):
   }
 
   for test_spec in generators.generate_script_tests(
-      api,
       api.chromium_tests,
       'test_group',
       'test_buildername',
@@ -47,8 +39,8 @@ def RunSteps(api):
       scripts_compile_targets_fn=lambda: {'gtest_test.py': ['$name']}):
     test = test_spec.get_test()
     try:
-      test.pre_run(api, '')
-      test.run(api, '')
+      test.pre_run(api.chromium_tests.m, '')
+      test.run(api.chromium_tests.m, '')
     finally:
       api.step('details', [])
       api.step.active_result.presentation.logs['details'] = [

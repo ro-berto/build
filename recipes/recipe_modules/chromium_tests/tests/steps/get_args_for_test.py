@@ -3,15 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'builder_group',
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/tryserver',
     'recipe_engine/assertions',
-    'recipe_engine/buildbucket',
-    'recipe_engine/json',
     'recipe_engine/properties',
     'test_results',
 ]
@@ -31,7 +27,7 @@ def RunSteps(api):
   single_spec = api.properties.get('single_spec')
   test_spec = single_spec if single_spec else {}
 
-  test_args = generators.get_args_for_test(api, api.chromium_tests, test_spec,
+  test_args = generators.get_args_for_test(api.chromium_tests, test_spec,
                                            update_step)
   if 'expected_args' in api.properties:
     # For some reason, we get expected_args as a tuple instead of a list

@@ -15,7 +15,7 @@ from recipe_engine import engine_types
 from RECIPE_MODULES.build import chromium_swarming
 
 
-def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
+def get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step):
   """Gets the argument list for a dynamically generated test, as
   provided by the JSON files in src/testing/buildbot/ in the Chromium
   workspace. This function provides the following build properties in
@@ -68,7 +68,7 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
       'buildbucket_build_id':
           build.id,
       'builder_group':
-          api.builder_group.for_current,
+          chromium_tests_api.m.builder_group.for_current,
       'buildername':
           build.builder.builder,
       'buildnumber':
@@ -96,7 +96,7 @@ def get_args_for_test(api, chromium_tests_api, raw_test_spec, bot_update_step):
       'patch_set':
           cl.patchset if cl else None,
       'xcode_build_version':
-          api.chromium.xcode_build_version
+          chromium_tests_api.m.chromium.xcode_build_version
   }
 
   for conditional in raw_test_spec.get('conditional_args', []):
@@ -142,15 +142,17 @@ def _normalize_optional_dimensions(optional_dimensions):
   return normalized
 
 
-def _should_skip_ci_only_test(api, spec):
-  if not spec.get('ci_only') or not api.m.tryserver.is_tryserver:
+def _should_skip_ci_only_test(chromium_tests_api, spec):
+  if not spec.get('ci_only') or not chromium_tests_api.m.tryserver.is_tryserver:
     return False
-  footer_vals = api.m.tryserver.get_footer('Include-Ci-Only-Tests')
+  footer_vals = chromium_tests_api.m.tryserver.get_footer(
+      'Include-Ci-Only-Tests')
   val = footer_vals[-1].lower() if footer_vals else 'false'
   return val != 'true'
 
 
-def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
+def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
+                     local_delegate):
   """Common logic for generating tests from JSON specs.
 
   Args:
@@ -176,9 +178,10 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
 
   rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
   rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
-  rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
-                        ('chromium.chromium_tests.use_rdb_results' in
-                         api.buildbucket.build.input.experiments))
+  rdb_kwargs.setdefault(
+      'use_rdb_results_for_all_decisions',
+      ('chromium.chromium_tests.use_rdb_results' in
+       chromium_tests_api.m.buildbucket.build.input.experiments))
   kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
 
   processed_set_ups = []
@@ -187,11 +190,11 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
     if script:
       if script.startswith('//'):
         set_up = dict(s)
-        set_up['script'] = api.path['checkout'].join(script[2:].replace(
-            '/', api.path.sep))
+        set_up['script'] = chromium_tests_api.m.path['checkout'].join(
+            script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_set_ups.append(steps.SetUpScript.create(**set_up))
       else:
-        api.python.failing_step(
+        chromium_tests_api.m.python.failing_step(
             'test spec format error',
             textwrap.wrap(
                 textwrap.dedent("""\
@@ -209,11 +212,11 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
     if script:
       if script.startswith('//'):
         tear_down = dict(t)
-        tear_down['script'] = api.path['checkout'].join(script[2:].replace(
-            '/', api.path.sep))
+        tear_down['script'] = chromium_tests_api.m.path['checkout'].join(
+            script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_tear_downs.append(steps.TearDownScript.create(**tear_down))
       else:
-        api.python.failing_step(
+        chromium_tests_api.m.python.failing_step(
             'test spec format error',
             textwrap.wrap(
                 textwrap.dedent("""\
@@ -263,10 +266,10 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
       merge_script = merge.get('script')
       if merge_script:
         if merge_script.startswith('//'):
-          merge['script'] = api.path['checkout'].join(merge_script[2:].replace(
-              '/', api.path.sep))
+          merge['script'] = chromium_tests_api.m.path['checkout'].join(
+              merge_script[2:].replace('/', chromium_tests_api.m.path.sep))
         else:
-          api.python.failing_step(
+          chromium_tests_api.m.python.failing_step(
               'test spec format error',
               textwrap.wrap(
                   textwrap.dedent("""\
@@ -284,10 +287,11 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
       trigger_script_path = trigger_script.get('script')
       if trigger_script_path:
         if trigger_script_path.startswith('//'):
-          trigger_script['script'] = api.path['checkout'].join(
-              trigger_script_path[2:].replace('/', api.path.sep))
+          trigger_script['script'] = chromium_tests_api.m.path['checkout'].join(
+              trigger_script_path[2:].replace('/',
+                                              chromium_tests_api.m.path.sep))
         else:
-          api.python.failing_step(
+          chromium_tests_api.m.python.failing_step(
               'test spec format error',
               textwrap.wrap(
                   textwrap.dedent("""\
@@ -314,13 +318,13 @@ def generator_common(api, raw_test_spec, swarming_delegate, local_delegate):
   experiment_percentage = raw_test_spec.get('experiment_percentage')
   for t in tests:
     if experiment_percentage is not None:
-      yield steps.ExperimentalTestSpec.create(t, experiment_percentage, api)
+      yield steps.ExperimentalTestSpec.create(t, experiment_percentage,
+                                              chromium_tests_api.m)
     else:
       yield t
 
 
-def generate_gtests(api,
-                    chromium_tests_api,
+def generate_gtests(chromium_tests_api,
                     builder_group,
                     buildername,
                     source_side_spec,
@@ -345,7 +349,7 @@ def generate_gtests(api,
         for t in source_side_spec.get(buildername, {}).get('gtest_tests', [])
     ]
 
-  for spec in get_tests(api):
+  for spec in get_tests(chromium_tests_api):
     if _should_skip_ci_only_test(chromium_tests_api, spec):
       continue
 
@@ -354,19 +358,18 @@ def generate_gtests(api,
     else:
       generator = generate_gtests_from_one_spec
 
-    for test in generator(api, chromium_tests_api, builder_group, buildername,
-                          spec, bot_update_step):
+    for test in generator(chromium_tests_api, builder_group, buildername, spec,
+                          bot_update_step):
       yield test
 
 
-def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
+def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
                                   buildername, raw_test_spec, bot_update_step):
 
   def gtest_delegate_common(raw_test_spec, **kwargs):
     del kwargs
     common_gtest_kwargs = {}
-    args = get_args_for_test(api, chromium_tests_api, raw_test_spec,
-                             bot_update_step)
+    args = get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step)
     if raw_test_spec['shard_index'] != 0 or raw_test_spec['total_shards'] != 1:
       args.extend([
           '--test-launcher-shard-index=%d' % raw_test_spec['shard_index'],
@@ -405,13 +408,12 @@ def generate_gtests_from_one_spec(api, chromium_tests_api, builder_group,
     kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.LocalGTestTestSpec.create(**kwargs)
 
-  for t in generator_common(api, raw_test_spec, gtest_swarming_delegate,
-                            gtest_local_delegate):
+  for t in generator_common(chromium_tests_api, raw_test_spec,
+                            gtest_swarming_delegate, gtest_local_delegate):
     yield t
 
 
-def generate_junit_tests(api,
-                         chromium_tests_api,
+def generate_junit_tests(chromium_tests_api,
                          builder_group,
                          buildername,
                          source_side_spec,
@@ -425,9 +427,10 @@ def generate_junit_tests(api,
 
     rdb_kwargs = dict(test.get('resultdb', {}))
     rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
-    rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
-                          ('chromium.chromium_tests.use_rdb_results' in
-                           api.buildbucket.build.input.experiments))
+    rdb_kwargs.setdefault(
+        'use_rdb_results_for_all_decisions',
+        ('chromium.chromium_tests.use_rdb_results' in
+         chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     yield steps.AndroidJunitTestSpec.create(
@@ -439,8 +442,7 @@ def generate_junit_tests(api,
         resultdb=resultdb)
 
 
-def generate_script_tests(api,
-                          chromium_tests_api,
+def generate_script_tests(chromium_tests_api,
                           builder_group,
                           buildername,
                           source_side_spec,
@@ -455,9 +457,10 @@ def generate_script_tests(api,
 
     rdb_kwargs = dict(script_spec.get('resultdb', {'enable': True}))
     rdb_kwargs.setdefault('test_id_prefix', script_spec.get('test_id_prefix'))
-    rdb_kwargs.setdefault('use_rdb_results_for_all_decisions',
-                          ('chromium.chromium_tests.use_rdb_results' in
-                           api.buildbucket.build.input.experiments))
+    rdb_kwargs.setdefault(
+        'use_rdb_results_for_all_decisions',
+        ('chromium.chromium_tests.use_rdb_results' in
+         chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     yield steps.ScriptTestSpec.create(
@@ -472,8 +475,7 @@ def generate_script_tests(api,
         resultdb=resultdb)
 
 
-def generate_isolated_script_tests(api,
-                                   chromium_tests_api,
+def generate_isolated_script_tests(chromium_tests_api,
                                    builder_group,
                                    buildername,
                                    source_side_spec,
@@ -486,12 +488,11 @@ def generate_isolated_script_tests(api,
       continue
 
     for test in generate_isolated_script_tests_from_one_spec(
-        api, chromium_tests_api, builder_group, buildername, spec,
-        bot_update_step):
+        chromium_tests_api, builder_group, buildername, spec, bot_update_step):
       yield test
 
 
-def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
+def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
                                                  builder_group, buildername,
                                                  raw_test_spec,
                                                  bot_update_step):
@@ -504,7 +505,7 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     # The variable substitution and precommit/non-precommit arguments
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
-    common_kwargs['args'] = get_args_for_test(api, chromium_tests_api, test,
+    common_kwargs['args'] = get_args_for_test(chromium_tests_api, test,
                                               bot_update_step)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
@@ -519,7 +520,7 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     # needed.
     results_handler_name = test.get('results_handler', 'default')
     if results_handler_name not in steps.ALLOWED_RESULT_HANDLER_NAMES:
-      api.python.failing_step(
+      chromium_tests_api.m.python.failing_step(
           'isolated_scripts spec format error',
           textwrap.wrap(
               textwrap.dedent("""\
@@ -558,14 +559,13 @@ def generate_isolated_script_tests_from_one_spec(api, chromium_tests_api,
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
     return steps.LocalIsolatedScriptTestSpec.create(**kwargs)
 
-  for t in generator_common(api, raw_test_spec,
+  for t in generator_common(chromium_tests_api, raw_test_spec,
                             isolated_script_swarming_delegate,
                             isolated_script_local_delegate):
     yield t
 
 
-def generate_skylab_tests(api,
-                          chromium_tests_api,
+def generate_skylab_tests(chromium_tests_api,
                           builder_group,
                           buildername,
                           source_side_spec,
@@ -582,7 +582,7 @@ def generate_skylab_tests(api,
         k: v for k, v in skylab_test_spec.items() if k in kwargs_to_forward
     }
     common_skylab_kwargs['test_args'] = get_args_for_test(
-        api, chromium_tests_api, skylab_test_spec, bot_update_step)
+        chromium_tests_api, skylab_test_spec, bot_update_step)
     common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
     common_skylab_kwargs['waterfall_builder_group'] = builder_group
     common_skylab_kwargs['waterfall_buildername'] = buildername
