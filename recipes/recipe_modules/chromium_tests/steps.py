@@ -2513,11 +2513,19 @@ class SwarmingGTestTest(SwarmingTest):
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
         isolated=isolated,
-        cas_input_root=cas_input_root)
+        cas_input_root=cas_input_root,
+        # The gtest-specific collect step changes step display based on results
+        # present in the JSON. So use the default collect-step to avoid
+        # depending on JSON results in the RDB experiment.
+        use_default_collect_step=(
+            self.spec.resultdb.use_rdb_results_for_all_decisions),
+        failure_as_exception=False)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
     return task
 
   def validate_task_results(self, api, step_result):
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return {}
     return step_result.test_utils.gtest_results.canonical_result_format()
 
   def pass_fail_counts(self, suffix):
@@ -2531,19 +2539,20 @@ class SwarmingGTestTest(SwarmingTest):
     step_result = super(SwarmingGTestTest, self).run(api, suffix)
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
-    gtest_results = step_result.test_utils.gtest_results
-    self._gtest_results[suffix] = gtest_results
-    # Only upload test results if we have gtest results.
-    if gtest_results and gtest_results.raw:
-      parsed_gtest_data = gtest_results.raw
-      chrome_revision_cp = api.bot_update.last_returned_properties.get(
-          'got_revision_cp', 'refs/x@{#0}')
-      _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
-      chrome_revision = str(chrome_revision)
-      api.test_results.upload(
-          api.json.input(parsed_gtest_data),
-          chrome_revision=chrome_revision,
-          test_type=step_name)
+    if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+      gtest_results = step_result.test_utils.gtest_results
+      self._gtest_results[suffix] = gtest_results
+      # Only upload test results if we have gtest results.
+      if gtest_results and gtest_results.raw:
+        parsed_gtest_data = gtest_results.raw
+        chrome_revision_cp = api.bot_update.last_returned_properties.get(
+            'got_revision_cp', 'refs/x@{#0}')
+        _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
+        chrome_revision = str(chrome_revision)
+        api.test_results.upload(
+            api.json.input(parsed_gtest_data),
+            chrome_revision=chrome_revision,
+            test_type=step_name)
     return step_result
 
 

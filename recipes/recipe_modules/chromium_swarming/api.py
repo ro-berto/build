@@ -627,6 +627,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                  cipd_packages=None,
                  merge=None,
                  relative_cwd=None,
+                 use_default_collect_step=False,
                  **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -658,11 +659,13 @@ class SwarmingApi(recipe_api.RecipeApi):
         merge or chromium_swarming.MergeScript.create(
             script=self.merge_script_path('standard_gtest_merge.py')))
 
+    if not use_default_collect_step:
+      kwargs.setdefault('collect_step', self._gtest_collect_step)
+
     # Make a task, configure it to be collected through shim script.
     task = self.task(
         name=name,
         cipd_packages=cipd_packages,
-        collect_step=self._gtest_collect_step,
         isolated=isolated,
         cas_input_root=cas_input_root,
         merge=merge,
