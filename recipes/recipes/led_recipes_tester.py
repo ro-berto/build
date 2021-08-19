@@ -544,6 +544,11 @@ def RunSteps(api):
 
   affected_files = _ignore_affected_files(api, repo_path, affected_files,
                                           files_to_ignore)
+  if not affected_files:
+    result = api.step('all affected files ignored', [])
+    result.presentation.step_text = (
+        'all affected files have been ignored, there is nothing to test')
+    return
 
   led_builders = _get_led_builders(api, builders_to_trigger)
   recipes = set(
@@ -694,9 +699,11 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
+          'recipes/foo.py',
           builder_config_path('builders/__init__.py'),
           builder_config_path('builders/chromium.py'),
-          builder_config_path('trybots.py')),
+          builder_config_path('trybots.py'),
+      ),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring per-builder config'),
       api.post_check(post_process.StepTextContains,
@@ -713,8 +720,10 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
+          'recipes/foo.py',
           'recipes/recipe_modules/chromium_swarming/examples/full.py',
-          builder_config_path('tests/builders.py')),
+          builder_config_path('tests/builders.py'),
+      ),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring recipe tests'),
       api.post_check(
@@ -729,14 +738,26 @@ def GenTests(api):
       gerrit_change(),
       affected_recipes(RECIPE),
       affected_files(
+          'recipes/foo.py',
           builder_config_path('OWNERS'),
-          'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
+          'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS',
+      ),
       default_builders(),
       api.post_check(post_process.MustRun, 'ignoring OWNERS files'),
       api.post_check(
           affected_recipes_input_files_does_not_contain,
           builder_config_path('OWNERS'),
           'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'all_affected_files_are_ignored',
+      gerrit_change(),
+      affected_files(builder_config_path('builders/__init__.py')),
+      api.post_check(post_process.MustRun, 'all affected files ignored'),
+      api.post_check(post_process.DoesNotRun, 'determine affected recipes'),
+      api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
