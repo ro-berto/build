@@ -91,4 +91,30 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'win-bootstrap':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='win',
+        ),
+    'win-bootstrap-tests':
+        builder_spec.BuilderSpec.create(
+            execution_mode=builder_spec.TEST,
+            parent_buildername='win-bootstrap',
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='win',
+        ),
 }

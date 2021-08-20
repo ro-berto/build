@@ -2134,6 +2134,11 @@ TRYBOTS = try_spec.TryDatabase.create({
             buildername='linux-bootstrap',
             tester='linux-bootstrap-tests',
         ),
+        'win-bootstrap': try_spec.TrySpec.create_for_single_mirror(
+            builder_group='infra',
+            buildername='win-bootstrap',
+            tester='win-bootstrap-tests',
+        ),
     },
     'tryserver.v8': {
         'v8_linux_blink_rel':
