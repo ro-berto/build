@@ -34,7 +34,7 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'android-perf':
+    'android-pixel4-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -69,7 +69,7 @@ _SPEC = {
         _create_compile_spec('linux-gcc-dbg'),
     'linux-gcc-rel':
         _create_compile_spec('linux-gcc-rel'),
-    'linux-perf':
+    'linux-intel-hd630-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -77,6 +77,13 @@ _SPEC = {
                     buildername='linux-perf',
                     tester='linux-intel-perf',
                 ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
+    'linux-nvidia-p400-perf':
+        try_spec.TrySpec.create(
+            mirrors=[
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='linux-perf',
@@ -153,7 +160,7 @@ _SPEC = {
         _create_compile_spec('win-msvc-x86-dbg'),
     'win-msvc-x86-rel':
         _create_compile_spec('win-msvc-x86-rel'),
-    'win-perf':
+    'win10-intel-hd630-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -161,6 +168,13 @@ _SPEC = {
                     buildername='win-perf',
                     tester='win10-x64-intel-perf',
                 ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
+    'win10-nvidia-p400-perf':
+        try_spec.TrySpec.create(
+            mirrors=[
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='win-perf',
