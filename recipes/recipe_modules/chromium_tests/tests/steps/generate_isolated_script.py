@@ -2,136 +2,134 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = [
-    # 'build',
-    # 'builder_group',
-    'chromium',
-    'chromium_swarming',
-    'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    # 'depot_tools/tryserver',
-    # 'isolate',
-    # 'recipe_engine/buildbucket',
-    # 'recipe_engine/commit_position',
-    'recipe_engine/json',
-    'recipe_engine/path',
-    # 'recipe_engine/platform',
-    'recipe_engine/properties',
-    # 'recipe_engine/python',
-    # 'recipe_engine/raw_io',
-    'recipe_engine/step',
-    'recipe_engine/swarming',
-    # 'test_results',
-    # 'test_utils',
-]
-
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import generators
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
+DEPS = [
+    'chromium_tests',
+    'chromium_tests_builder_config',
+    'filter',
+    'depot_tools/tryserver',
+    'recipe_engine/json',
+    'recipe_engine/properties',
+    'recipe_engine/swarming',
+]
 
 
 def RunSteps(api):
-  api.gclient.set_config('chromium')
-  api.chromium.set_config('chromium')
-
-  update_step = api.bot_update.ensure_checkout()
-  api.chromium_swarming.path_to_merge_scripts = (
-      api.path['cache'].join('merge_scripts'))
-  api.chromium_swarming.set_default_dimension('pool', 'foo')
-
-  single_spec = api.properties.get('single_spec')
-  source_side_spec = {
-      'test_buildername': {
-          'isolated_scripts': [single_spec] if single_spec else [],
-      }
-  }
-
-  for test_spec in generators.generate_isolated_script_tests(
-      api.chromium_tests, 'test_group', 'test_buildername', source_side_spec,
-      update_step):
-    test = test_spec.get_test()
-    try:
-      test.pre_run(api.chromium_tests.m, '')
-      test.run(api.chromium_tests.m, '')
-    finally:
-      api.step('details', [])
-      api.step.active_result.presentation.logs['details'] = [
-          'compile_targets: %r' % test.compile_targets(),
-          'uses_local_devices: %r' % test.uses_local_devices,
-      ]
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  if api.tryserver.is_tryserver:
+    return api.chromium_tests.trybot_steps(builder_id, builder_config)
+  else:
+    return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):
-  # FIXME: These tests should use the post_process.Filter methods to pick which
-  # specific steps are important to the particular test.
+  builder_db = ctbc.BuilderDatabase.create({
+      'test-group': {
+          'test-builder':
+              ctbc.BuilderSpec.create(
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      }
+  })
+  try_db = ctbc.TryDatabase.create({
+      'test-try-group': {
+          'test-try-builder':
+              ctbc.TrySpec.create_for_single_mirror(
+                  builder_group='test-group',
+                  buildername='test-builder',
+              ),
+      }
+  })
+
+  def common_test_data(test_spec):
+    t = api.chromium_tests.read_source_side_spec('test-group', {
+        'test-builder': {
+            'isolated_scripts': [test_spec],
+        },
+    })
+
+    test_name = test_spec['name']
+    isolate_name = test_spec.get('isolate_name') or test_name
+
+    step_filter = post_process.Filter()
+    # Any step with the test name in it
+    step_filter = step_filter.include_re(
+        r'.*\b{}\b'.format(test_name), at_least=0)
+    # Any step with the isolate name in it
+    step_filter = step_filter.include_re(
+        r'.*\b{}\b'.format(isolate_name), at_least=0)
+    # Any errors resulting from generating the test
+    step_filter = step_filter.include_re(r'.*\bspec format error$', at_least=0)
+    # The final result of the recipe
+    step_filter = step_filter.include_re(r'\$result$', at_least=0)
+    t += api.post_process(step_filter)
+
+    return t
+
+  def ci_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.ci_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        **kwargs)
+    t += common_test_data(test_spec)
+    return t
+
+  def try_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.try_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        try_db=try_db,
+        **kwargs)
+    t += api.filter.suppress_analyze()
+    t += common_test_data(test_spec)
+    return t
+
+  def test_spec_format_error(s, step_name='test spec format error'):
+    """Adds a post check for step named `step_name`.
+
+    The prose contained in the details log must contain the substring
+    `s`.
+    """
+
+    def check(check, steps):
+      details = steps[step_name].logs['details']
+      details = details.replace('\n', ' ')
+      check(s in details)
+
+    return api.post_check(check)
 
   yield api.test(
       'basic',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'isolate_name': 'base_unittests_run',
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-  )
-
-  yield api.test(
-      'invalid_test_results',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'isolate_name': 'base_unittests_run',
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.override_step_data('base_unittests',
-                             api.json.output({
-                                 'valid': False,
-                                 'failures': [],
-                             })),
+      ci_build(test_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+      }),
   )
 
   yield api.test(
       'fake_results_handler',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'results_handler': 'fake',
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-      ),
+          }),
   )
 
   yield api.test(
       'swarming',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'test_id_prefix': 'ninja://chrome/test:base_unittests/',
@@ -155,47 +153,31 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-          buildnumber=1),
+          }),
   )
 
   yield api.test(
       'service_account',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'swarming': {
                   'can_use_on_swarming_builders': True,
                   'service_account': 'test-account@serviceaccount.com',
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
       api.post_check(
           api.swarming.check_triggered_request,
-          '[trigger] base_unittests', lambda check, req: check(
+          'test_pre_run.[trigger] base_unittests', lambda check, req: check(
               req.service_account == 'test-account@serviceaccount.com')),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'bad set up',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      'bad tear down',
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'merge': {
@@ -211,21 +193,17 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
+      test_spec_format_error(
+          'contains a custom tear down script "path/to/teardown2.py"'
+          " that doesn't match the expected format"),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'bad tear down',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      'bad set up',
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'merge': {
@@ -241,21 +219,17 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
+      test_spec_format_error(
+          'contains a custom set up script "path/to/setup2.py"'
+          " that doesn't match the expected format"),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'swarming_trigger_script',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'trigger_script': {
@@ -264,21 +238,13 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
   )
 
   yield api.test(
       'swarming_trigger_script_invalid',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'trigger_script': {
@@ -287,21 +253,16 @@ def GenTests(api):
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
+      test_spec_format_error('contains a custom trigger_script "bad"'
+                             " that doesn't match the expected format"),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'swarming_dimension_sets',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'swarming': {
@@ -309,28 +270,20 @@ def GenTests(api):
                   'dimension_sets': [{
                       'os': 'Linux',
                       'foo': None,
-                  },],
+                  }],
                   'optional_dimensions': {
                       '60': {
                           'bar': 'baz',
                       },
                   },
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-      ),
+          }),
   )
 
   yield api.test(
       'swarming_dimension_sets_with_legacy_optional_dimensions',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'swarming': {
@@ -341,31 +294,28 @@ def GenTests(api):
                       }],
                   },
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-      ),
-  )
-
-  yield api.test(
-      'spec_error',
-      api.chromium.ci_build(
-          builder_group='tryserver.chromium.linux',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'isolate_name': 'base_unittests_run',
-              'results_handler': 'bogus',
           }),
   )
 
   yield api.test(
+      'spec_error',
+      ci_build(
+          test_spec={
+              'name': 'base_unittests',
+              'isolate_name': 'base_unittests_run',
+              'results_handler': 'bogus',
+          }),
+      test_spec_format_error(
+          'contains a custom results_handler "bogus"'
+          ' but that result handler was not found',
+          step_name='isolated_scripts spec format error'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'merge_invalid',
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'merge': {
@@ -375,33 +325,27 @@ def GenTests(api):
                   'can_use_on_swarming_builders': True,
               },
           }),
+      test_spec_format_error(
+          'contains a custom merge_script "path/to/script.py"'
+          " that doesn't match the expected format"),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'precommit_args',
-      api.chromium.try_build(
-          builder='linux-rel',
-      ),
-      api.properties(
-          single_spec={
+      try_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'args': ['--should-be-in-output',],
               'precommit_args': ['--should-also-be-in-output',],
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
   )
 
   yield api.test(
       'blink_web_tests_with_suffixes',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'blink_web_tests',
               'isolate_name': 'webkit_tests',
               'results_handler': 'layout tests',
@@ -412,51 +356,28 @@ def GenTests(api):
                       'gpu': '8086:blah',
                   }],
               },
-          },
-          swarm_hashes={
-              'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-      ),
-      api.post_process(
-          post_process.Filter(
-              # Ensure that we still pass the full step name to the test result
-              # upload, but we pass a simplified step name to 'archive results'.
-              'Upload to test-results [blink_web_tests on Intel GPU on Mac]',
-              'archive results for blink_web_tests',
-              '$result')),
+          }),
       api.post_process(post_process.StepSuccess,
                        'archive results for blink_web_tests'),
   )
 
   yield api.test(
       'custom_webkit_tests_step_name',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'custom_webkit_tests',
               'isolate_name': 'webkit_tests',
               'results_handler': 'layout tests',
               'swarming': {
                   'can_use_on_swarming_builders': True,
               },
-          },
-          swarm_hashes={
-              'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-      ),
+          }),
   )
 
   yield api.test(
       'swarming_cipd_packages',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
               'trigger_script': {
@@ -471,14 +392,10 @@ def GenTests(api):
                       'revision': 'version:1.0',
                   }],
               },
-          },
-          swarm_hashes={
-              'base_unittests_run': 'deadbeef',
-          },
-      ),
+          }),
       api.post_process(
           post_process.StepCommandContains,
-          '[trigger (custom trigger script)] base_unittests', [
+          'test_pre_run.[trigger (custom trigger script)] base_unittests', [
               '-cipd-package',
               '../../cipd/package/location:cipd/package/name=version:1.0',
           ]),
@@ -487,38 +404,23 @@ def GenTests(api):
 
   yield api.test(
       'experimental',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
+      ci_build(
+          test_spec={
               'experiment_percentage': '100',
               'name': 'base_unittests',
               'isolate_name': 'base_unittests_run',
-          },
-          swarm_hashes={
-              'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.step_data('base_unittests', retcode=1),
+      api.step_data('base_unittests (experimental)', retcode=1),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'ci_test_on_ci_builder',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'script_test',
-              'ci_only': True,
-          },
-          swarm_hashes={
-              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      ci_build(test_spec={
+          'name': 'script_test',
+          'ci_only': True,
+      }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'script_test'),
       api.post_process(post_process.DropExpectation),
@@ -526,37 +428,23 @@ def GenTests(api):
 
   yield api.test(
       'ci_test_on_try_builder',
-      api.chromium.try_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'script_test',
-              'ci_only': True,
-          },
-          swarm_hashes={
-              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      try_build(test_spec={
+          'name': 'script_test',
+          'ci_only': True,
+      }),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DoesNotRun, 'script_test'),
+      api.post_process(post_process.DoesNotRun, 'script_test (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'local_isolated_script_with_resultdb',
-      api.chromium.try_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.resultdb.result_sink.json_local': True},
-      ),
-      api.properties(
-          single_spec={
+      try_build(
+          test_spec={
               'name': 'script_test',
           },
-          swarm_hashes={
-              'script_test': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+          experiments={'chromium.resultdb.result_sink.json_local': True},
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -4,11 +4,11 @@
       "rdb",
       "stream",
       "-var",
-      "builder:test-builder",
+      "builder:test_buildername",
       "-var",
-      "test_suite:base_unittests",
+      "test_suite:script_test",
       "-tag",
-      "step_name:base_unittests",
+      "step_name:script_test",
       "-coerce-negative-duration",
       "-new",
       "-realm",
@@ -22,19 +22,20 @@
       "--show-path",
       "--",
       "python",
-      "[CACHE]/builder/src/testing/scripts/gtest_test.py",
+      "None/testing/scripts/script.py",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"test-builder\", \"buildnumber\": 571, \"mastername\": \"test-group\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}",
+      "{\"bot_id\": \"fake-bot-id\", \"buildername\": \"test_buildername\", \"buildnumber\": 571, \"mastername\": \"test_group\", \"slavename\": \"fake-bot-id\", \"target_platform\": \"linux\"}",
+      "--args",
+      "[\"some\", \"args\"]",
       "run",
       "--output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
-    "name": "base_unittests",
+    "name": "script_test",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
@@ -46,9 +47,11 @@
   },
   {
     "cmd": [],
-    "name": "query test results.No RDB results for base_unittests",
+    "name": "details",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_LOG_LINE@details@compile_targets: ('other_target',)@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_END@details@@@"
     ]
   },
   {

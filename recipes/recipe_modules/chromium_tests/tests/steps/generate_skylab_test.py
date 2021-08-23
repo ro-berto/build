@@ -22,22 +22,27 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'filter',
+    'skylab',
+    'test_utils',
+    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/json',
     'recipe_engine/resultdb',
     'recipe_engine/step',
-    'skylab',
-    'test_utils',
 ]
 
 
 def RunSteps(api):
-  with api.chromium.chromium_layout():
-    builder_id, builder_config = (
-        api.chromium_tests_builder_config.lookup_builder())
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  if api.tryserver.is_tryserver:
+    return api.chromium_tests.trybot_steps(builder_id, builder_config)
+  else:
     return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
+
 
 
 def GenTests(api):
@@ -104,6 +109,7 @@ def GenTests(api):
           builder_db=builder_db,
           try_db=None,
       )
+      build_gen += api.filter.suppress_analyze()
 
     steps = sum([
         build_gen,
@@ -413,7 +419,7 @@ def GenTests(api):
           should_read_isolate=False),
       api.post_process(
           post_process.DoesNotRun,
-          'basic_EVE_TOT',
+          'basic_EVE_TOT (with patch)',
       ),
       api.post_process(post_process.DropExpectation),
   )

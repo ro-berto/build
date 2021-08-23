@@ -2706,7 +2706,7 @@ class LocalIsolatedScriptTest(LocalTest):
     step_result = None
     try:
       api.isolate.run_isolated(
-          self.name,
+          self.step_name(suffix),
           api.isolate.isolated_tests[self.target_name],
           args,
           pre_args=pre_args,

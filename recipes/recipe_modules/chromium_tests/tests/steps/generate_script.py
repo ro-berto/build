@@ -2,79 +2,100 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from RECIPE_MODULES.build.chromium_tests import generators
-
-DEPS = [
-    'chromium',
-    'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'recipe_engine/properties',
-    'recipe_engine/step',
-    'test_utils',
-]
-
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
+DEPS = [
+    'chromium_tests',
+    'chromium_tests_builder_config',
+    'filter',
+    'depot_tools/tryserver',
+]
 
 def RunSteps(api):
-  api.gclient.set_config('chromium')
-  api.chromium.set_config('chromium')
-
-  update_step = api.bot_update.ensure_checkout()
-
-  single_spec = api.properties.get('single_spec')
-  test_spec = {
-      'test_buildername': {
-          'scripts': [single_spec] if single_spec else [],
-      }
-  }
-
-  for test_spec in generators.generate_script_tests(
-      api.chromium_tests,
-      'test_group',
-      'test_buildername',
-      test_spec,
-      update_step,
-      scripts_compile_targets_fn=lambda: {'gtest_test.py': ['$name']}):
-    test = test_spec.get_test()
-    try:
-      test.pre_run(api.chromium_tests.m, '')
-      test.run(api.chromium_tests.m, '')
-    finally:
-      api.step('details', [])
-      api.step.active_result.presentation.logs['details'] = [
-          'compile_targets: %r' % test.compile_targets(),
-          'uses_local_devices: %r' % test.uses_local_devices,
-      ]
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  if api.tryserver.is_tryserver:
+    return api.chromium_tests.trybot_steps(builder_id, builder_config)
+  else:
+    return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):
+  builder_db = ctbc.BuilderDatabase.create({
+      'test-group': {
+          'test-builder':
+              ctbc.BuilderSpec.create(
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      }
+  })
+  try_db = ctbc.TryDatabase.create({
+      'test-try-group': {
+          'test-try-builder':
+              ctbc.TrySpec.create_for_single_mirror(
+                  builder_group='test-group',
+                  buildername='test-builder',
+              ),
+      }
+  })
+
+  def common_test_data(test_spec):
+    t = api.chromium_tests.read_source_side_spec('test-group', {
+        'test-builder': {
+            'scripts': [test_spec],
+        },
+    })
+
+    test_name = test_spec['name']
+
+    step_filter = post_process.Filter()
+    # Any step with the test name in it
+    step_filter = step_filter.include_re(
+        r'.*\b{}\b'.format(test_name), at_least=0)
+    # The final result of the recipe
+    step_filter = step_filter.include_re(r'\$result$', at_least=0)
+    t += api.post_process(step_filter)
+
+    return t
+
+  def ci_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.ci_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        **kwargs)
+    t += common_test_data(test_spec)
+    return t
+
+  def try_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.try_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        try_db=try_db,
+        **kwargs)
+    t += api.filter.suppress_analyze()
+    t += common_test_data(test_spec)
+    return t
+
   yield api.test(
       'basic',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'script': 'gtest_test.py',
-          },),
+      ci_build(test_spec={
+          'name': 'base_unittests',
+          'script': 'gtest_test.py',
+      }),
   )
 
   yield api.test(
       'ci_only_on_ci_builder',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'ci_only': True,
-              'script': 'gtest_test.py',
-          },),
+      ci_build(test_spec={
+          'name': 'base_unittests',
+          'ci_only': True,
+          'script': 'gtest_test.py',
+      }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'base_unittests'),
       api.post_process(post_process.DropExpectation),
@@ -82,17 +103,12 @@ def GenTests(api):
 
   yield api.test(
       'ci_only_on_try_builder',
-      api.chromium.try_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          single_spec={
-              'name': 'base_unittests',
-              'ci_only': True,
-              'script': 'gtest_test.py',
-          },),
+      try_build(test_spec={
+          'name': 'base_unittests',
+          'ci_only': True,
+          'script': 'gtest_test.py',
+      }),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DoesNotRun, 'base_unittests'),
+      api.post_process(post_process.DoesNotRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )

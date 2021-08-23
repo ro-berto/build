@@ -29,7 +29,7 @@ def RunSteps(api):
       script='script.py',
       all_compile_targets={'script.py': ['compile_target']},
       script_args=['some', 'args'],
-      override_compile_targets=['other_target'])
+      override_compile_targets=api.properties.get('override_compile_targets'))
   test = test_spec.get_test()
 
   try:
@@ -52,6 +52,15 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
+  )
+
+  yield api.test(
+      'override_compile_targets',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(override_compile_targets=['other_target']),
   )
 
   yield api.test(

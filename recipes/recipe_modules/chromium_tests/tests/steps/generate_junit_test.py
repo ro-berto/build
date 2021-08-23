@@ -4,62 +4,100 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import generators
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
-    'chromium',
-    'chromium_android',
     'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'recipe_engine/properties',
-    'recipe_engine/raw_io',
+    'chromium_tests_builder_config',
+    'filter',
     'test_utils',
+    'depot_tools/tryserver',
+    'recipe_engine/raw_io',
 ]
 
 
 def RunSteps(api):
-  api.gclient.set_config('chromium')
-  api.chromium.set_config('chromium', TARGET_PLATFORM='android')
-  api.chromium_android.set_config('main_builder')
-
-  update_step = api.bot_update.ensure_checkout()
-
-  single_spec = api.properties.get('single_spec')
-  source_side_spec = {
-      'test_buildername': {
-          'junit_tests': [single_spec] if single_spec else [],
-      }
-  }
-
-  for test_spec in generators.generate_junit_tests(api.chromium_tests,
-                                                   'test_group',
-                                                   'test_buildername',
-                                                   source_side_spec,
-                                                   update_step):
-    test = test_spec.get_test()
-    test.run(api.chromium_tests.m, '')
+  builder_id, builder_config = (
+      api.chromium_tests_builder_config.lookup_builder())
+  if api.tryserver.is_tryserver:
+    return api.chromium_tests.trybot_steps(builder_id, builder_config)
+  else:
+    return api.chromium_tests.main_waterfall_steps(builder_id, builder_config)
 
 
 def GenTests(api):
+  builder_db = ctbc.BuilderDatabase.create({
+      'test-group': {
+          'test-builder':
+              ctbc.BuilderSpec.create(
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'android',
+                  },
+                  android_config='x86_builder',
+                  gclient_config='chromium',
+              ),
+      }
+  })
+  try_db = ctbc.TryDatabase.create({
+      'test-try-group': {
+          'test-try-builder':
+              ctbc.TrySpec.create_for_single_mirror(
+                  builder_group='test-group',
+                  buildername='test-builder',
+              ),
+      }
+  })
+
+  def common_test_data(test_spec):
+    t = api.chromium_tests.read_source_side_spec('test-group', {
+        'test-builder': {
+            'junit_tests': [test_spec],
+        },
+    })
+
+    test_name = test_spec.get('name') or test_spec['test']
+
+    step_filter = post_process.Filter()
+    # Any step with the test name in it
+    step_filter = step_filter.include_re(
+        r'.*\b{}\b'.format(test_name), at_least=0)
+    # The final result of the recipe
+    step_filter = step_filter.include_re(r'\$result$', at_least=0)
+    t += api.post_process(step_filter)
+
+    return t
+
+  def ci_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.ci_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        **kwargs)
+    t += common_test_data(test_spec)
+    return t
+
+  def try_build(test_spec, **kwargs):
+    t = api.chromium_tests_builder_config.try_build(
+        builder_group='test-group',
+        builder='test-builder',
+        builder_db=builder_db,
+        try_db=try_db,
+        **kwargs)
+    t += api.filter.suppress_analyze()
+    t += common_test_data(test_spec)
+    return t
+
   yield api.test(
       'basic',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(single_spec={
+      ci_build(test_spec={
           'test': 'junit_test',
       }),
   )
 
   yield api.test(
       'different-name',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(single_spec={
+      ci_build(test_spec={
           'test': 'junit_test',
           'name': 'junit_alias',
       }),
@@ -72,11 +110,7 @@ def GenTests(api):
 
   yield api.test(
       'additional-args',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(single_spec={
+      ci_build(test_spec={
           'test': 'junit_test',
           'args': ['--foo=bar'],
       }),
@@ -91,24 +125,23 @@ def GenTests(api):
 
   yield api.test(
       'junit-with-rdb-by-default',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
+      ci_build(
           experiments={'chromium.resultdb.result_sink.junit_tests': True},
+          test_spec={
+              'foo': 'bar',
+              'test': 'junit_test',
+              'args': ['--foo=bar'],
+          },
       ),
-      api.properties(single_spec={
-          'foo': 'bar',
-          'test': 'junit_test',
-          'args': ['--foo=bar'],
-      }),
       api.post_process(post_process.MustRun, 'junit_test'),
       api.override_step_data(
           'junit_test',
           api.test_utils.canned_gtest_output(True),
           stderr=api.raw_io.output(
-              'rdb-stream: included "test-invocation" in "build-invocation"')),
+              'rdb-stream: included "invocations/test-invocation"'
+              ' in "build-invocation"')),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
-          'rdb', 'stream', '-var', 'builder:test_buildername', '-var',
+          'rdb', 'stream', '-var', 'builder:test-builder', '-var',
           'test_suite:junit_test', '-tag', 'step_name:junit_test',
           '-coerce-negative-duration', '-new', '-realm', 'chromium:ci',
           '-include', '-exonerate-unexpected-pass', '--'
@@ -121,13 +154,9 @@ def GenTests(api):
 
   yield api.test(
       'junit-with-test-spec-rdb-override',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
+      ci_build(
           experiments={'chromium.resultdb.result_sink.junit_tests': True},
-      ),
-      api.properties(
-          single_spec={
+          test_spec={
               'foo': 'bar',
               'test': 'junit_test',
               'args': ['--foo=bar'],
@@ -135,13 +164,14 @@ def GenTests(api):
                   'enable': True,
                   'test_id_prefix': 'prefix'
               },
-          }),
+          },
+      ),
       api.post_process(post_process.MustRun, 'junit_test'),
       api.override_step_data('junit_test',
                              api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
-          'builder:test_buildername', '-var', 'test_suite:junit_test', '-tag',
+          'builder:test-builder', '-var', 'test_suite:junit_test', '-tag',
           'step_name:junit_test', '-coerce-negative-duration', '-new', '-realm',
           'chromium:ci', '-include', '-exonerate-unexpected-pass', '--'
       ]),
@@ -153,26 +183,18 @@ def GenTests(api):
 
   yield api.test(
       'ci_only_test_on_tryserver',
-      api.chromium.try_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(single_spec={
+      try_build(test_spec={
           'ci_only': True,
           'test': 'junit_test',
       },),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DoesNotRun, 'junit_test'),
+      api.post_process(post_process.DoesNotRun, 'junit_test (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'ci_only_test_on_ci_builder',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(single_spec={
+      ci_build(test_spec={
           'ci_only': True,
           'test': 'junit_test',
       },),
