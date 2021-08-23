@@ -5,6 +5,7 @@
 
 from recipe_engine import post_process
 from PB.recipes.build.chromium.orchestrator import InputProperties
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
@@ -12,10 +13,13 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_engine import result as result_pb2
 from google.protobuf import json_format
 from google.protobuf import struct_pb2
+from RECIPE_MODULES.build.chromium_tests.api import (
+    ALL_TEST_BINARIES_ISOLATE_NAME)
 
 DEPS = [
     'builder_group',
     'chromium',
+    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
@@ -24,9 +28,12 @@ DEPS = [
     'depot_tools/gitiles',
     'depot_tools/tryserver',
     'isolate',
-    'pgo',
+    'profiles',
     'recipe_engine/buildbucket',
+    'recipe_engine/cas',
+    'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
     'recipe_engine/swarming',
@@ -41,6 +48,9 @@ SWARMING_PROPS_WAIT_TIMEOUT_S = 2 * 60 * 60
 
 
 def RunSteps(api, properties):
+  api.path.mock_add_paths(
+      api.profiles.profile_dir().join('overall-merged.profdata'))
+
   if not properties.compilator:
     raise api.step.InfraFailure('Missing compilator input')
 
@@ -84,9 +94,9 @@ def RunSteps(api, properties):
         api.chromium_tests_builder_config.lookup_builder())
 
     api.chromium_tests.configure_build(builder_config)
-    # Set api.m.chromium.c.compile_py.compiler to empty string so that
+    # Set api.chromium.c.compile_py.compiler to empty string so that
     # prepare_checkout() does not attempt to run ensure_goma()
-    api.m.chromium.c.compile_py.compiler = ''
+    api.chromium.c.compile_py.compiler = ''
     api.chromium_tests.report_builders(builder_config)
 
     api.gclient.c.revisions['src'] = tot_revision
@@ -96,6 +106,18 @@ def RunSteps(api, properties):
         set_output_commit=builder_config.set_output_commit,
         enforce_fetch=True,
         no_fetch_tags=True)
+
+    affected_files = api.chromium_checkout.get_files_affected_by_patch(
+        report_via_property=True)
+    is_deps_only_change = affected_files == ["DEPS"]
+    affected_files = (
+        api.chromium_tests.revise_affected_files_for_deps_autorolls(
+            affected_files))
+
+    # Must happen before without patch steps.
+    if api.code_coverage.using_coverage:
+      api.code_coverage.instrument(
+          affected_files, is_deps_only_change=is_deps_only_change)
 
     def attempts():
       for i in xrange(SWARMING_PROPS_WAIT_TIMEOUT_S /
@@ -161,23 +183,33 @@ def RunSteps(api, properties):
     api.chromium_tests.configure_swarming(
         api.tryserver.is_tryserver, builder_group=builder_id.group)
 
+    if api.code_coverage.using_coverage:
+      api.file.ensure_directory('ensure output directory',
+                                api.chromium.output_dir)
+
+      isolated_hash = api.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME]
+      if '/' in isolated_hash:
+        api.cas.download(
+            'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
+            isolated_hash,
+            api.chromium.output_dir,
+        )
+      else:
+        api.isolate.download_isolate(
+            'downloading isolate {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
+            isolated_input=isolated_hash,
+            directory=api.chromium.output_dir)
+
     with api.chromium_tests.wrap_chromium_tests(builder_config, tests):
       # Run the test. The isolates have already been created.
       _, failing_test_suites = (
-          api.m.test_utils.run_tests_with_patch(
+          api.test_utils.run_tests_with_patch(
               api.chromium_tests.m,
               tests,
               retry_failed_shards=builder_config.retry_failed_shards))
 
       if api.code_coverage.using_coverage:  # pragma: no cover
         api.code_coverage.process_coverage_data(tests)
-
-      # We explicitly do not want trybots to upload profiles to GS. We prevent
-      # this by ensuring all trybots wanting to run the PGO workflow have
-      # skip_profile_upload.
-      if (api.pgo.using_pgo and
-          self.m.pgo.skip_profile_upload):  # pragma: no cover
-        api.pgo.process_pgo_data(tests)
 
       # TODO crbug.com/1203055: Retry without patch
       if failing_test_suites:
@@ -223,6 +255,7 @@ def GenTests(api):
                     'swarming': {
                         'can_use_on_swarming_builders': True
                     },
+                    'isolate_coverage_data': True,
                 }]
             },
         })
@@ -230,18 +263,28 @@ def GenTests(api):
   build_id = 1234
   fake_command_lines_digest = (
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
-  fake_swarming_trigger_properties = {
-      'swarming_command_lines_digest': fake_command_lines_digest,
-      'swarming_command_lines_cwd': 'out/Release',
-      'swarm_hashes': {
-          'browser_tests': '07de23bcf07fe2d5babb5140f727f6e53dbc1d1a'
-      },
-      'can_retry_without_patch': True,
-  }
+  isolate_hash = 'd3854a218981bc0b25893f6d2e791cc44f198b08'
+  cas_hash = 'c596061444a157f27ffaa08bd6bbdd39238fa15202df0570f34547/10799'
+
+  def get_fake_swarming_trigger_properties(use_cas):
+    if use_cas:
+      input_hash = cas_hash
+    else:
+      input_hash = isolate_hash
+    return {
+        'swarming_command_lines_digest': fake_command_lines_digest,
+        'swarming_command_lines_cwd': 'out/Release',
+        'swarm_hashes': {
+            ALL_TEST_BINARIES_ISOLATE_NAME: input_hash,
+            'browser_tests': '07de23bcf07fe2d5babb5140f727f6e53dbc1d1a'
+        },
+        'can_retry_without_patch': True,
+    }
 
   def override_collect_compilator(build_id=build_id,
                                   status=common_pb.SUCCESS,
-                                  summary_markdown=""):
+                                  summary_markdown="",
+                                  use_cas=False):
     return api.buildbucket.simulated_collect_output(
         [
             build_pb2.Build(
@@ -252,7 +295,8 @@ def GenTests(api):
                     properties=json_format.Parse(
                         api.json.dumps({
                             'swarming_trigger_properties':
-                                fake_swarming_trigger_properties
+                                get_fake_swarming_trigger_properties(
+                                    use_cas=use_cas)
                         }), struct_pb2.Struct())))
         ],
         step_name='collect compilator')
@@ -266,12 +310,14 @@ def GenTests(api):
   def override_wait_for_swarming_props(build_id=build_id,
                                        status=common_pb.STARTED,
                                        empty_props=False,
-                                       append_call_number=None):
+                                       append_call_number=None,
+                                       use_cas=False):
     if empty_props:
       swarming_json_obj = {}
     else:
       swarming_json_obj = {
-          'swarming_trigger_properties': fake_swarming_trigger_properties
+          'swarming_trigger_properties':
+              get_fake_swarming_trigger_properties(use_cas=use_cas)
       }
     step_name = (
         'wait for compilator swarming_trigger_properties.buildbucket.get')
@@ -296,6 +342,7 @@ def GenTests(api):
       'basic',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.code_coverage(use_clang_coverage=True),
       fake_tot_revision(),
       override_test_spec(),
       override_collect_compilator(),
@@ -307,6 +354,8 @@ def GenTests(api):
                        'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading isolate all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -504,5 +553,107 @@ def GenTests(api):
           'wait for compilator swarming_trigger_properties.buildbucket.get'),
       api.post_process(post_process.DoesNotRun, 'collect compilator'),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'code_coverage',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.code_coverage(use_clang_coverage=True),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.LogContains, 'trigger compilator',
+                       'request',
+                       ['tryserver.chromium.linux', 'linux-rel-compilator']),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading isolate all_test_binaries'),
+      api.post_process(
+          # Only generates coverage data for the with patch step.
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in 1 tests'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'code_coverage_retry_shard',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.code_coverage(use_clang_coverage=True),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.LogContains, 'trigger compilator',
+                       'request',
+                       ['tryserver.chromium.linux', 'linux-rel-compilator']),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading isolate all_test_binaries'),
+      api.post_process(
+          # Only generates coverage data for the with patch step.
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in 2 tests'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'download_binaries_with_isolated',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.code_coverage(use_clang_coverage=True),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(
+          post_process.MustRun,
+          'downloading isolate {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'download_binaries_with_cas',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.code_coverage(use_clang_coverage=True),
+      fake_tot_revision(),
+      override_test_spec(),
+      override_collect_compilator(use_cas=True),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(use_cas=True),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(
+          post_process.MustRun,
+          'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

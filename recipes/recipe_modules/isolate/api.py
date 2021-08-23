@@ -236,6 +236,24 @@ class IsolateApi(recipe_api.RecipeApi):
       cmd.extend(args)
     self.m.build.python(name, self._run_isolated_path, cmd, **kwargs)
 
+  def download_isolate(self, name, isolated_input, directory):
+    """Downloads isolate from isolated_input hash
+
+    Args:
+        name: Name of step for downloading isolate
+        isolated_input: Hash of uploaded isolate.
+        directory: Directory where files from isolate should be downloaded to
+    """
+    isolated_exe = self.m.path.join(self.m.path['checkout'],
+                                    'tools/luci-go/isolated')
+
+    args = [
+        isolated_exe, 'download', '-output-dir', directory, '-I',
+        self.isolate_server, '--isolated', isolated_input, '--verbose'
+    ]
+
+    self.m.step(name, args)
+
   def archive_differences(self, first_dir, second_dir, values):
     """Archive different files of 2 builds."""
     GS_BUCKET = 'chrome-determinism'

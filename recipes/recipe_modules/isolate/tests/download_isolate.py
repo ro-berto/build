@@ -9,28 +9,27 @@ from RECIPE_MODULES.build.chromium_tests.api import ALL_TEST_BINARIES_ISOLATE_NA
 
 DEPS = [
     'isolate',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  browser_test_path = api.path['checkout'].join('out/Release/browser_tests')
-  api.isolate.write_isolate_files_for_binary_file_paths(
-      file_paths=[browser_test_path],
-      isolate_target_name=ALL_TEST_BINARIES_ISOLATE_NAME,
-      build_dir=api.path['checkout'].join('out', 'Release'),
-  )
+  isolated_input = 'd3854a218981bc0b25893f6d2e791cc44f198b08'
+  out_dir = api.path['checkout'].join('out/Release')
+  api.file.ensure_directory('ensure output directory', out_dir)
+  api.isolate.download_isolate(
+      'downloading {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
+      isolated_input=isolated_input,
+      directory=out_dir)
 
 
 def GenTests(api):
   yield api.test(
-      'basic',
-      api.post_process(post_process.MustRunRE,
-                       r'.*{}.isolate'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
-      api.post_process(
-          post_process.MustRunRE,
-          r'.*{}.isolated.gen.json'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
+      'basic_isolate',
+      api.post_process(post_process.MustRun,
+                       'downloading {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
