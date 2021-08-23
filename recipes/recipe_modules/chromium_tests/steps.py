@@ -2723,8 +2723,10 @@ class LocalIsolatedScriptTest(LocalTest):
       results = step_result.json.output
       presentation = step_result.presentation
 
-      test_results = api.test_utils.create_results_from_json(results)
-      self.spec.results_handler.render_results(api, test_results, presentation)
+      if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+        test_results = api.test_utils.create_results_from_json(results)
+        self.spec.results_handler.render_results(api, test_results,
+                                                 presentation)
 
       self.update_test_run(
           api, suffix, self.spec.results_handler.validate_results(api, results))
@@ -2798,6 +2800,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return task
 
   def validate_task_results(self, api, step_result):
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return {}
     if getattr(step_result, 'json') and getattr(step_result.json, 'output'):
       results_json = step_result.json.output
     else:
