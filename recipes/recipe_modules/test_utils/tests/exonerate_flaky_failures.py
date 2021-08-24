@@ -178,6 +178,10 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  def CheckStepInput(check, step_odict, step_name, test_name):
+    step = step_odict[step_name]
+    check(test_name in step.stdin)
+
   yield api.test(
       'part of the tests are marked as known flaky',
       api.chromium.generic_build(builder_group='g', builder='b'),
@@ -204,6 +208,10 @@ def GenTests(api):
           })),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.MustRun,
+                       'exonerate unrelated test failures'),
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'testA'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -244,6 +252,12 @@ def GenTests(api):
           })),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.MustRun,
+                       'exonerate unrelated test failures'),
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'testA'),
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'testB'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

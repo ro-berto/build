@@ -7,6 +7,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -36,13 +37,22 @@ PROPERTIES = {
 
 
 def RunSteps(api, is_swarming_test=True):
-  test_spec = steps.LocalIsolatedScriptTestSpec.create('base_unittests')
-  if is_swarming_test:
-    test_spec = steps.SwarmingGTestTestSpec.create(
-        'base_unittests',
-        shards=2,
-        test_id_prefix='ninja://chromium/tests:base_unittests/')
-  tests = [test_spec.get_test()]
+  test_specs = [
+      steps.ExperimentalTestSpec.create(
+          steps.MockTestSpec.create(name='experimental_test'),
+          experiment_percentage=0,
+          api=api)
+  ]
+  if not is_swarming_test:
+    test_specs.append(
+        steps.LocalIsolatedScriptTestSpec.create('base_unittests'))
+  else:
+    test_specs.append(
+        steps.SwarmingGTestTestSpec.create(
+            'base_unittests',
+            shards=2,
+            test_id_prefix='ninja://chromium/tests:base_unittests/'))
+  tests = [test_spec.get_test() for test_spec in test_specs]
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
@@ -234,7 +244,7 @@ def GenTests(api):
           step_name='query test results (without patch).base_unittests',
       ),
       api.post_process(post_process.MustRun,
-                       'exonerate unexpected without patch results'),
+                       'exonerate unrelated test failures'),
       api.post_process(post_process.DropExpectation),
   )
 

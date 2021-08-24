@@ -314,7 +314,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # Query test results from ResultDB.
     query_step_name = ('query test results (%s)' %
                        suffix if suffix else 'query test results')
-    all_unexpected_result_invocations = {}
     all_rdb_results = []
     with self.m.step.nest(query_step_name):
       # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
@@ -336,8 +335,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
               step_name=t.name,
               tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
           )
-          all_unexpected_result_invocations.update(
-              unexpected_result_invocations)
           res = RDBPerSuiteResults.create(
               unexpected_result_invocations,
               suite_name=t.canonical_name,
@@ -362,74 +359,70 @@ class TestUtilsApi(recipe_api.RecipeApi):
        bad_results_dict['failed']) = self._retrieve_bad_results(
            test_suites, suffix)
 
-    # If we encounter any unexpected test results that we believe aren't due to
-    # the CL under test, inform RDB of these tests so it keeps a record.
-    if suffix == 'without patch':
-      self._exonerate_without_patch_unexpected_results(
-          all_unexpected_result_invocations)
-
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
-  def _exonerate_without_patch_unexpected_results(
-      self, unexpected_result_invocations):
-    """Notifies RDB of any unexpected test result (except unexpected passes) in
-    without patch steps that won't fail the build.
+  def _exonerate_unrelated_failures(self, test_suites, suffix):
+    """Notifies RDB of any unexpected test failure that doesn't fail the build.
+
+    This includes any type of failure during the 'without patch' phase and any
+    test failure that FindIt is tracking as flaky.
 
     For more details, see http://go/resultdb-concepts#test-exoneration
 
     Args:
-      unexpected_result_invocations: dict of
-        {invocation_id: api.resultdb.Invocation} containing results of any
-        test we ran that had unexpected results.
+      test_suites: list of steps.Test objects representing tests to run
+      suffix: suffix indicating context of the test run
     """
-    step_name = 'exonerate unexpected without patch results'
-
-    # For each invocation, pull out the test variants for every test result
-    # that we should exonerate. Namely: exonerate every unexpected failures
-    # during the "without patch" phase.
-    # Unexpected passes should be already exonerated in tasks.
-    # Keep this logic in-sync with
-    # https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
-    # until that can be removed in favor of RDB.
-    unexpected_result_variants = {}
-    for inv in unexpected_result_invocations.values():
-      for tr in inv.test_results:
-        if tr.expected:
-          continue  # If the test was retried and passed, skip its PASS result.
-        if tr.status == test_result_pb2.PASS:
-          # Skip unexpected passes during the "without patch" phase, because
-          # they have been exonerated.
-          continue
-
-        unexpected_result_variants.setdefault(tr.test_id, [])
-        # TODO(crbug.com/1076650): use variant_hash when it's exposed to proto
-        if all(v != tr.variant for v in unexpected_result_variants[tr.test_id]):
-          unexpected_result_variants[tr.test_id].append(tr.variant)
-
-    explanation_html = (
-        'The test failed in both (with patch) and (without patch) steps, so the'
-        'CL is exonerated for the test failures.'
-        # pylint: disable=line-too-long
-        '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
-        # pylint: enable=line-too-long
-    )
-
+    step_name = 'exonerate unrelated test failures'
     exonerations = []
-    for test_id, variants in unexpected_result_variants.iteritems():
-      for v in variants:
-        exonerations.append(
-            test_result_pb2.TestExoneration(
-                test_id=test_id,
-                variant=v,
-                # TODO(crbug.com/1076096): add deep link to the Milo UI to
-                #  display the exonerated test results.
-                explanation_html=explanation_html,
-            ))
+    for suite in test_suites:
+      results = suite.rdb_results.get(suffix)
+      if not results:
+        continue  # e.g. Experimental suites not in the experiment.
+      if suffix == 'without patch':
+        # Any unexpected failure in the "without patch" phase should be
+        # exonerated. Unexpected passes should be already exonerated in tasks.
+        # Keep this logic in-sync with
+        # https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
+        # until that can be removed in favor of RDB.
+        explanation_html = (
+            'The test failed in both (with patch) and (without patch) steps, '
+            'so the CL is exonerated for the test failures.'
+            # pylint: disable=line-too-long
+            '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
+            # pylint: enable=line-too-long
+        )
+        for test_name in results.unexpected_failing_tests:
+          test_id = results.test_name_to_test_id_mapping.get(
+              test_name, test_name)
+          exonerations.append(
+              test_result_pb2.TestExoneration(
+                  test_id=test_id,
+                  variant_hash=results.variant_hash,
+                  # TODO(crbug.com/1076096): add deep link to the Milo UI to
+                  #  display the exonerated test results.
+                  explanation_html=explanation_html,
+              ))
+      # Any failure known by FindIt to be flaky should also be exonerated.
+      elif suffix == 'with patch':
+        explanation_html = 'FindIt reported this test as being flaky.'
+        for known_flake in suite.known_flaky_failures:
+          test_id = results.test_name_to_test_id_mapping.get(
+              known_flake, known_flake)
+          exonerations.append(
+              test_result_pb2.TestExoneration(
+                  test_id=test_id,
+                  variant_hash=results.variant_hash,
+                  # TODO(crbug.com/1076096): add deep link to the Milo UI to
+                  #  display the exonerated test results.
+                  explanation_html=explanation_html,
+              ))
 
-    self.m.resultdb.exonerate(
-        test_exonerations=exonerations,
-        step_name=step_name,
-    )
+    if exonerations:
+      self.m.resultdb.exonerate(
+          test_exonerations=exonerations,
+          step_name=step_name,
+      )
 
   def _clean_failed_suite_list(self, failed_test_suites):
     """Returns a list of failed suites with flaky-fails-only suites excluded.
@@ -799,6 +792,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if suffix == 'with patch':
       failed_test_suites = self._clean_failed_suite_list(failed_test_suites)
+
+    # If we encounter any unexpected test results that we believe aren't due to
+    # the CL under test, inform RDB of these tests so it keeps a record.
+    self._exonerate_unrelated_failures(test_suites, suffix)
 
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))
