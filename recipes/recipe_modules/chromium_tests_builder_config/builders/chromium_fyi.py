@@ -808,6 +808,7 @@ SPEC = {
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
@@ -822,6 +823,7 @@ SPEC = {
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
+            gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
