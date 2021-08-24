@@ -9,7 +9,7 @@ from . import canonical
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
 
-from RECIPE_MODULES.build.attr_utils import attrib, attrs
+from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping
 
 
 def convert_trie_to_flat_paths(trie, prefix, sep):
@@ -393,10 +393,16 @@ class RDBPerSuiteResults(object):
   here.
   """
 
+  NEEDED_FIELDS = [
+      'testId', 'variant', 'variantHash', 'status', 'tags', 'expected'
+  ]
+
   suite_name = attrib(str)
+  variant_hash = attrib(str)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
   invalid = attrib(bool, default=False)
+  test_name_to_test_id_mapping = attrib(mapping[str, str])
 
   @classmethod
   def create(cls, invocations, suite_name, failure_on_exit=False):
@@ -409,6 +415,8 @@ class RDBPerSuiteResults(object):
           reported, it indicates invalid test results.
     """
     results_by_test_id = collections.defaultdict(list)
+    variant_hash = ''
+    test_name_to_test_id_mapping = {}
     for inv in invocations.values():
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
@@ -419,12 +427,15 @@ class RDBPerSuiteResults(object):
           assert inv_name == suite_name, "Mismatched invocations, %s vs %s" % (
               inv_name, suite_name)
         # The test's ID may not always directly match up with its name (see
-        # go/chrome-test-id for context). So lookup the test's name in the tags.
+        # go/chrome-test-id for context). So lookup the test's name in the tags,
+        # but preserve a mapping from name to ID for easier look-up.
         test_name = tr.test_id
         for tag in tr.tags:
           if tag.key == 'test_name':
             test_name = tag.value
             break
+        test_name_to_test_id_mapping[test_name] = tr.test_id
+        variant_hash = tr.variant_hash
         results_by_test_id[test_name].append(tr)
 
     unexpected_failing_tests = set()
@@ -447,14 +458,16 @@ class RDBPerSuiteResults(object):
     # hardware) and that the results are invalid.
     invalid = failure_on_exit and not unexpected_failing_tests
 
-    return cls(suite_name, unexpected_passing_tests, unexpected_failing_tests,
-               invalid)
+    return cls(suite_name, variant_hash, unexpected_passing_tests,
+               unexpected_failing_tests, invalid, test_name_to_test_id_mapping)
 
   def to_jsonish(self):
     jsonish_repr = {
         'suite_name': self.suite_name,
+        'variant_hash': self.variant_hash,
         'invalid': str(self.invalid),
         'unexpected_passing_tests': list(self.unexpected_passing_tests),
         'unexpected_failing_tests': list(self.unexpected_failing_tests),
+        'test_name_to_test_id_mapping': self.test_name_to_test_id_mapping,
     }
     return jsonish_repr

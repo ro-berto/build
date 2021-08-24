@@ -501,6 +501,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
               },
           }),
           expected=not is_failure,
+          variant_hash=suite + '_hash',
           status=status)
       return self.m.resultdb.Invocation(
           proto=rdb_invocation.Invocation(

@@ -334,7 +334,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
               inv_ids=self.m.resultdb.invocation_ids(invocation_names),
               variants_with_unexpected_results=True,
               step_name=t.name,
-              tr_fields=['testId', 'variant', 'status', 'tags', 'expected'],
+              tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
           )
           all_unexpected_result_invocations.update(
               unexpected_result_invocations)

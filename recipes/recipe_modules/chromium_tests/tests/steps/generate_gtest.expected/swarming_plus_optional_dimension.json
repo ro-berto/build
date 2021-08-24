@@ -275,7 +275,7 @@
       "1000",
       "-u",
       "-tr-fields",
-      "testId,variant,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected",
       "0"
     ],
     "cwd": "[CACHE]/builder",
