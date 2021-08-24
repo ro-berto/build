@@ -102,6 +102,8 @@ ALLOWED_RESULT_HANDLER_NAMES = ('default', 'layout tests', 'fake')
 # calling `rdb stream -new`.
 RDB_INVOCATION_NAME_RE = re.compile(r'rdb-stream: included "(\S+)" in "\S+"')
 
+INCLUDE_CI_FOOTER = 'Include-Ci-Only-Tests'
+
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -241,6 +243,39 @@ def _add_suffix(step_name, suffix):
   return '{} ({})'.format(step_name, suffix)
 
 
+def _present_info_messages(presentation, test):
+  messages = list(test.spec.info_messages)
+  messages.append(presentation.step_text)
+  presentation.step_text = '\n'.join(messages)
+
+
+class DisabledReason(object):
+  """Abstract base class for identifying why a test is disabled."""
+
+  __metaclass__ = abc.ABCMeta
+
+  @abc.abstractmethod
+  def report_tests(self, chromium_tests_api, tests):
+    """Report tests that are disabled for this reason."""
+    raise NotImplementedError()  # pragma: no cover
+
+
+class _CiOnly(DisabledReason):
+  """Identifies a ci_only test that is disabled on try."""
+
+  def report_tests(self, chromium_tests_api, tests):
+    result = chromium_tests_api.m.step('ci_only tests', [])
+    message = [('The following tests are not being run on this try builder'
+                ' because they are marked \'ci_only\', adding "{}: true"'
+                ' to the gerrit footers will cause them to run'
+               ).format(INCLUDE_CI_FOOTER)]
+    message.extend(sorted(tests))
+    result.presentation.step_text = '\n * '.join(message)
+
+
+CI_ONLY = _CiOnly()
+
+
 class TestSpecBase(object):
   """Abstract base class for specs for tests and wrapped tests."""
 
@@ -282,6 +317,8 @@ class TestSpec(TestSpecBase):
 
   _name = attrib(str)
   target_name = attrib(str)
+  disabled_reason = attrib(DisabledReason, default=None)
+  info_messages = attrib(sequence[str], default=())
   full_test_target = attrib(str, default=None)
   waterfall_builder_group = attrib(str, default=None)
   waterfall_buildername = attrib(str, default=None)
@@ -326,6 +363,9 @@ class TestSpec(TestSpecBase):
   def get_test(self):
     """Get the test described by the spec."""
     return self.test_class(self)
+
+  def add_info_message(self, message):
+    return attr.evolve(self, info_messages=self.info_messages + (message,))
 
 
 class Test(object):
@@ -903,6 +943,10 @@ class TestWrapperSpec(TestSpecBase):
     """Get the test described by the spec."""
     return self.test_wrapper_class(self, self.test_spec.get_test())
 
+  @property
+  def disabled_reason(self):
+    return self.test_spec.disabled_reason
+
   @abc.abstractproperty
   def test_wrapper_class(self):
     """The test wrapper class associated with the spec."""
@@ -912,6 +956,9 @@ class TestWrapperSpec(TestSpecBase):
   def name(self):
     """The name of the test."""
     return self.test_spec.name
+
+  def add_info_message(self, m):
+    return attr.evolve(self, test_spec=self.test_spec.add_info_message(m))
 
 
 class TestWrapper(Test):  # pragma: no cover
@@ -1396,6 +1443,8 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
       self.update_inv_name_from_stderr(result.stderr, suffix)
 
+      _present_info_messages(result.presentation, self)
+
     return result
 
 
@@ -1594,6 +1643,9 @@ class LocalGTestTest(LocalTest):
 
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       r = api.test_utils.present_gtest_failures(step_result)
+
+      _present_info_messages(step_result.presentation, self)
+
       if r:
         self._gtest_results[suffix] = r
 
@@ -2464,6 +2516,8 @@ class SwarmingTest(Test):
     self.update_test_run(api, suffix, results)
     self._failure_on_exit_suffix_map[suffix] = bool(
         self._tasks[suffix].failed_shards)
+
+    _present_info_messages(step_result.presentation, self)
     return step_result
 
   def step_metadata(self, suffix=None):
@@ -2733,6 +2787,8 @@ class LocalIsolatedScriptTest(LocalTest):
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
 
+      _present_info_messages(step_result.presentation, self)
+
       if (api.step.active_result.retcode == 0 and
           not self.has_valid_results(suffix)):
         # This failure won't be caught automatically. Need to manually
@@ -2906,6 +2962,9 @@ class AndroidJunitTest(LocalTest):
                            api.test_utils.canonical.result_format())
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
+
+      _present_info_messages(step_result.presentation, self)
+
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
@@ -2919,6 +2978,7 @@ class AndroidJunitTest(LocalTest):
             test_type='.'.join(step_result.name_tokens),
             chrome_revision=api.bot_update.last_returned_properties.get(
                 'got_revision_cp', 'refs/x@{#0}'))
+
 
     return step_result
 
@@ -3378,7 +3438,7 @@ class SkylabTest(Test):
 
   def _raise_failed_step(self, api, suffix, step, status, failure_msg):
     step.presentation.status = status
-    step.presentation.step_text = failure_msg
+    step.presentation.step_text += failure_msg
     self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     raise api.step.StepFailure(status)
 
@@ -3474,9 +3534,10 @@ class SkylabTest(Test):
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    self._suffix_step_name_map[suffix] = self.name
+    self._suffix_step_name_map[suffix] = self.step_name(suffix)
 
-    with api.step.nest(self.name) as step:
+    with api.step.nest(self.step_name(suffix)) as step:
+      _present_info_messages(step, self)
       step_failure_msg = None
       if not self.lacros_gcs_path:
         step_failure_msg = (

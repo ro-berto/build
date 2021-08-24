@@ -11,6 +11,7 @@ DEPS = [
     'chromium_tests_builder_config',
     'filter',
     'depot_tools/tryserver',
+    'recipe_engine/json',
 ]
 
 def RunSteps(api):
@@ -55,6 +56,8 @@ def GenTests(api):
     # Any step with the test name in it
     step_filter = step_filter.include_re(
         r'.*\b{}\b'.format(test_name), at_least=0)
+    # The step for reporting ci_only tests
+    step_filter = step_filter.include_re('ci_only tests$', at_least=0)
     # The final result of the recipe
     step_filter = step_filter.include_re(r'\$result$', at_least=0)
     t += api.post_process(step_filter)
@@ -98,6 +101,8 @@ def GenTests(api):
       }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'base_unittests'),
+      api.post_process(post_process.StepTextContains, 'base_unittests',
+                       ['This test will not be run on try builders']),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -109,6 +114,26 @@ def GenTests(api):
           'script': 'gtest_test.py',
       }),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'ci_only tests',
+                       ['* base_unittests']),
       api.post_process(post_process.DoesNotRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_on_try_builder_bypass',
+      try_build(test_spec={
+          'name': 'base_unittests',
+          'ci_only': True,
+          'script': 'gtest_test.py',
+      }),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'base_unittests (with patch)',
+                       [('This test is being run due to the'
+                         ' Include-Ci-Only-Tests gerrit footer')]),
       api.post_process(post_process.DropExpectation),
   )

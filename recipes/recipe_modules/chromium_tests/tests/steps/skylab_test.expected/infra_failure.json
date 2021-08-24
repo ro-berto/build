@@ -193,7 +193,7 @@
   },
   {
     "cmd": [],
-    "name": "EVE_TOT",
+    "name": "EVE_TOT (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Invalid test result.@@@",
       "@@@STEP_EXCEPTION@@@"

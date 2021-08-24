@@ -203,7 +203,7 @@
   },
   {
     "cmd": [],
-    "name": "EVE_TOT",
+    "name": "EVE_TOT (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>1 passed, 0 failed (1 total)@@@",
       "@@@STEP_LOG_LINE@Test Cases@PASSED:@@@",

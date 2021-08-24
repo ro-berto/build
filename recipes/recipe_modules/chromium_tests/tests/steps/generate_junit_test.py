@@ -12,6 +12,7 @@ DEPS = [
     'filter',
     'test_utils',
     'depot_tools/tryserver',
+    'recipe_engine/json',
     'recipe_engine/raw_io',
 ]
 
@@ -62,6 +63,8 @@ def GenTests(api):
     # Any step with the test name in it
     step_filter = step_filter.include_re(
         r'.*\b{}\b'.format(test_name), at_least=0)
+    # The step for reporting ci_only tests
+    step_filter = step_filter.include_re('ci_only tests$', at_least=0)
     # The final result of the recipe
     step_filter = step_filter.include_re(r'\$result$', at_least=0)
     t += api.post_process(step_filter)
@@ -188,7 +191,25 @@ def GenTests(api):
           'test': 'junit_test',
       },),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'ci_only tests',
+                       ['* junit_test']),
       api.post_process(post_process.DoesNotRun, 'junit_test (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_test_on_tryserver_with_bypass',
+      try_build(test_spec={
+          'ci_only': True,
+          'test': 'junit_test',
+      },),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'junit_test (with patch)'),
+      api.post_process(post_process.StepTextContains, 'junit_test (with patch)',
+                       [('This test is being run due to the'
+                         ' Include-Ci-Only-Tests gerrit footer')]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -202,5 +223,7 @@ def GenTests(api):
                              api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'junit_test'),
+      api.post_process(post_process.StepTextContains, 'junit_test',
+                       ['This test will not be run on try builders']),
       api.post_process(post_process.DropExpectation),
   )

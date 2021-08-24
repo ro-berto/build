@@ -65,6 +65,8 @@ def GenTests(api):
         r'.*\b{}\b'.format(isolate_name), at_least=0)
     # Any errors resulting from generating the test
     step_filter = step_filter.include_re(r'.*\bspec format error$', at_least=0)
+    # The step for reporting ci_only tests
+    step_filter = step_filter.include_re('ci_only tests$', at_least=0)
     # The final result of the recipe
     step_filter = step_filter.include_re(r'\$result$', at_least=0)
     t += api.post_process(step_filter)
@@ -423,6 +425,25 @@ def GenTests(api):
       }),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'script_test'),
+      api.post_process(post_process.StepTextContains, 'script_test',
+                       ['This test will not be run on try builders']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'swarmed_ci_test_on_ci_builder',
+      ci_build(
+          test_spec={
+              'name': 'script_test',
+              'ci_only': True,
+              'swarming': {
+                  'can_use_on_swarming_builders': True
+              },
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'script_test'),
+      api.post_process(post_process.StepTextContains, 'script_test',
+                       ['This test will not be run on try builders']),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -433,7 +454,64 @@ def GenTests(api):
           'ci_only': True,
       }),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'ci_only tests',
+                       ['* script_test']),
       api.post_process(post_process.DoesNotRun, 'script_test (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'swarmed_ci_test_on_try_builder',
+      try_build(
+          test_spec={
+              'name': 'script_test',
+              'ci_only': True,
+              'swarming': {
+                  'can_use_on_swarming_builders': True
+              },
+          }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'ci_only tests',
+                       ['* script_test']),
+      api.post_process(post_process.DoesNotRun, 'script_test (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_test_on_try_builder_with_bypass',
+      try_build(test_spec={
+          'name': 'script_test',
+          'ci_only': True,
+      }),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'script_test (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'script_test (with patch)',
+                       [('This test is being run due to the'
+                         ' Include-Ci-Only-Tests gerrit footer')]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'swarmed_ci_test_on_try_builder_with_bypass',
+      try_build(
+          test_spec={
+              'name': 'script_test',
+              'ci_only': True,
+              'swarming': {
+                  'can_use_on_swarming_builders': True
+              },
+          }),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'script_test (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'script_test (with patch)',
+                       [('This test is being run due to the'
+                         ' Include-Ci-Only-Tests gerrit footer')]),
       api.post_process(post_process.DropExpectation),
   )
 

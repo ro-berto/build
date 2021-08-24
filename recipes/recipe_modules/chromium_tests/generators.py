@@ -142,13 +142,42 @@ def _normalize_optional_dimensions(optional_dimensions):
   return normalized
 
 
-def _should_skip_ci_only_test(chromium_tests_api, spec):
-  if not spec.get('ci_only') or not chromium_tests_api.m.tryserver.is_tryserver:
-    return False
+def _handle_ci_only(chromium_tests_api, raw_spec, test_spec):
+  """Handle the ci_only attribute of test specs.
+
+  Args:
+    * chromium_tests_api - The chromium_tests recipe module API object.
+    * raw_spec - The source-side spec dictionary describing the test.
+    * test_spec - The TestSpec instance for the test.
+
+  Returns:
+    The test_spec object that should be used for the test. If the test
+    is not ci-only, `test_spec` will be returned unchanged. Otherwise,
+    if a CI builder is running, a spec will be returned that includes a
+    message indicating that the test will not be run on try builders.
+    Otherwise, if the Include-Ci-Only-Test gerrit footer is present and
+    evaluates to 'true' when converted to lowercase, a spec will be
+    returned that includes a message indicating that the test is being
+    run due to the footer. Otherwise, a spec will be returned that
+    indicates the test is disabled.
+  """
+  if not raw_spec.get('ci_only'):
+    return test_spec
+  if not chromium_tests_api.m.tryserver.is_tryserver:
+    return test_spec.add_info_message(
+        'This test will not be run on try builders')
+
   footer_vals = chromium_tests_api.m.tryserver.get_footer(
-      'Include-Ci-Only-Tests')
-  val = footer_vals[-1].lower() if footer_vals else 'false'
-  return val != 'true'
+      steps.INCLUDE_CI_FOOTER)
+  disabled = True
+  if footer_vals:
+    disabled = footer_vals[-1].lower() != 'true'
+
+  if disabled:
+    return attr.evolve(test_spec, disabled_reason=steps.CI_ONLY)
+  return test_spec.add_info_message(
+      'This test is being run due to the {} gerrit footer'.format(
+          steps.INCLUDE_CI_FOOTER))
 
 
 def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
@@ -349,18 +378,15 @@ def generate_gtests(chromium_tests_api,
         for t in source_side_spec.get(buildername, {}).get('gtest_tests', [])
     ]
 
-  for spec in get_tests(chromium_tests_api):
-    if _should_skip_ci_only_test(chromium_tests_api, spec):
-      continue
-
-    if spec.get('use_isolated_scripts_api'):
+  for raw_spec in get_tests(chromium_tests_api):
+    if raw_spec.get('use_isolated_scripts_api'):
       generator = generate_isolated_script_tests_from_one_spec
     else:
       generator = generate_gtests_from_one_spec
 
-    for test in generator(chromium_tests_api, builder_group, buildername, spec,
-                          bot_update_step):
-      yield test
+    for test_spec in generator(chromium_tests_api, builder_group, buildername,
+                               raw_spec, bot_update_step):
+      yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
@@ -421,25 +447,23 @@ def generate_junit_tests(chromium_tests_api,
                          scripts_compile_targets_fn=None):
   del bot_update_step, scripts_compile_targets_fn
 
-  for test in source_side_spec.get(buildername, {}).get('junit_tests', []):
-    if _should_skip_ci_only_test(chromium_tests_api, test):
-      continue
-
-    rdb_kwargs = dict(test.get('resultdb', {}))
-    rdb_kwargs.setdefault('test_id_prefix', test.get('test_id_prefix'))
+  for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
+    rdb_kwargs = dict(raw_spec.get('resultdb', {}))
+    rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
     rdb_kwargs.setdefault(
         'use_rdb_results_for_all_decisions',
         ('chromium.chromium_tests.use_rdb_results' in
          chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
-    yield steps.AndroidJunitTestSpec.create(
-        test.get('name', test['test']),
-        target_name=test['test'],
-        additional_args=test.get('args'),
+    test_spec = steps.AndroidJunitTestSpec.create(
+        raw_spec.get('name', raw_spec['test']),
+        target_name=raw_spec['test'],
+        additional_args=raw_spec.get('args'),
         waterfall_builder_group=builder_group,
         waterfall_buildername=buildername,
         resultdb=resultdb)
+    yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_script_tests(chromium_tests_api,
@@ -451,28 +475,25 @@ def generate_script_tests(chromium_tests_api,
   # Unused arguments
   del bot_update_step
 
-  for script_spec in source_side_spec.get(buildername, {}).get('scripts', []):
-    if _should_skip_ci_only_test(chromium_tests_api, script_spec):
-      continue
-
-    rdb_kwargs = dict(script_spec.get('resultdb', {'enable': True}))
-    rdb_kwargs.setdefault('test_id_prefix', script_spec.get('test_id_prefix'))
+  for raw_spec in source_side_spec.get(buildername, {}).get('scripts', []):
+    rdb_kwargs = dict(raw_spec.get('resultdb', {'enable': True}))
+    rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
     rdb_kwargs.setdefault(
         'use_rdb_results_for_all_decisions',
         ('chromium.chromium_tests.use_rdb_results' in
          chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
-    yield steps.ScriptTestSpec.create(
-        str(script_spec['name']),
-        script=script_spec['script'],
+    test_spec = steps.ScriptTestSpec.create(
+        str(raw_spec['name']),
+        script=raw_spec['script'],
         all_compile_targets=scripts_compile_targets_fn(),
-        script_args=script_spec.get('args', []),
-        override_compile_targets=script_spec.get('override_compile_targets',
-                                                 []),
+        script_args=raw_spec.get('args', []),
+        override_compile_targets=raw_spec.get('override_compile_targets', []),
         waterfall_builder_group=builder_group,
         waterfall_buildername=buildername,
         resultdb=resultdb)
+    yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_isolated_script_tests(chromium_tests_api,
@@ -483,13 +504,12 @@ def generate_isolated_script_tests(chromium_tests_api,
                                    scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
-  for spec in source_side_spec.get(buildername, {}).get('isolated_scripts', []):
-    if _should_skip_ci_only_test(chromium_tests_api, spec):
-      continue
-
-    for test in generate_isolated_script_tests_from_one_spec(
-        chromium_tests_api, builder_group, buildername, spec, bot_update_step):
-      yield test
+  for raw_spec in source_side_spec.get(buildername,
+                                       {}).get('isolated_scripts', []):
+    for test_spec in generate_isolated_script_tests_from_one_spec(
+        chromium_tests_api, builder_group, buildername, raw_spec,
+        bot_update_step):
+      yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
@@ -589,10 +609,10 @@ def generate_skylab_tests(chromium_tests_api,
     return steps.SkylabTestSpec.create(
         skylab_test_spec.get('name'), **common_skylab_kwargs)
 
-  for spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
-    if _should_skip_ci_only_test(chromium_tests_api, spec):
-      continue
-    yield generate_skylab_tests_from_one_spec(builder_group, buildername, spec)
+  for raw_spec in source_side_spec.get(buildername, {}).get('skylab_tests', []):
+    test_spec = generate_skylab_tests_from_one_spec(builder_group, buildername,
+                                                    raw_spec)
+    yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 ALL_GENERATORS = [

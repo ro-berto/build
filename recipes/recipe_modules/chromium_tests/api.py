@@ -182,10 +182,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     tests = {}
 
     for builder_id in builder_config.builder_ids_in_scope_for_testing:
-      builder_spec = builder_config.builder_db[builder_id]
       builder_tests = self.generate_tests_from_source_side_spec(
           source_side_specs[builder_id.group],
-          builder_spec,
           builder_id.builder,
           builder_id.group,
           scripts_compile_targets_fn,
@@ -238,27 +236,36 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, targets_config
 
-  def generate_tests_from_source_side_spec(self, source_side_spec, builder_spec,
-                                           buildername, builder_group,
+  def generate_tests_from_source_side_spec(self, source_side_spec, buildername,
+                                           builder_group,
                                            scripts_compile_targets_fn,
                                            bot_update_step):
-    test_specs = collections.OrderedDict()
+    test_specs = []
 
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
-      test_specs_for_generator = generator(
-          self,
-          builder_group,
-          buildername,
-          source_side_spec,
-          bot_update_step,
-          scripts_compile_targets_fn=scripts_compile_targets_fn)
-      for s in test_specs_for_generator:
-        test_specs[s.name] = s
+      test_specs.extend(
+          generator(
+              self,
+              builder_group,
+              buildername,
+              source_side_spec,
+              bot_update_step,
+              scripts_compile_targets_fn=scripts_compile_targets_fn))
 
-    tests = tuple(s.get_test() for s in test_specs.itervalues())
+    tests = []
+    test_specs_by_disabled_reason = collections.defaultdict(list)
+    for test_spec in test_specs:
+      reason = test_spec.disabled_reason
+      if reason:
+        test_specs_by_disabled_reason[reason].append(test_spec)
+      else:
+        tests.append(test_spec.get_test())
 
-    return tests
+    for reason, test_specs in sorted(test_specs_by_disabled_reason.items()):
+      reason.report_tests(self, [t.name for t in test_specs])
+
+    return tuple(tests)
 
   def read_source_side_spec(self, source_side_spec_file):
     source_side_spec_path = self.m.chromium.c.source_side_spec_dir.join(

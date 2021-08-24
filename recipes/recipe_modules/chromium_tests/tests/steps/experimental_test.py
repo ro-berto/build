@@ -76,6 +76,12 @@ def RunSteps(api):
   assert not experimental_test.abort_on_failure
   assert isinstance(experimental_test.pass_fail_counts(''), dict)
 
+  experimental_test_spec = experimental_test_spec.add_info_message(
+      'This is an experimental test')
+  api.assertions.assertEqual(
+      experimental_test_spec.test_spec.test_spec.info_messages,
+      ('This is an experimental test',))
+
 
 def GenTests(api):
 

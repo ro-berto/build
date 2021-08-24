@@ -203,7 +203,7 @@
   },
   {
     "cmd": [],
-    "name": "EVE_TOT",
+    "name": "EVE_TOT (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@No test cases returned.@@@",
       "@@@STEP_LINK@Test Run@https://ci.chromium.org/p/chromeos/builders/test_runner/test_runner/b8839265267168653505@@@",

@@ -405,8 +405,10 @@ def GenTests(api):
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
-      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
-                       ['1 passed, 0 failed (1 total)']),
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT', [
+          'This test will not be run on try builders',
+          '1 passed, 0 failed (1 total)',
+      ]),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -417,9 +419,28 @@ def GenTests(api):
           tast_expr='dummy_tast',
           is_ci_build=False,
           should_read_isolate=False),
+      api.post_process(post_process.StepTextContains, 'ci_only tests',
+                       ['* basic_EVE_TOT']),
       api.post_process(
           post_process.DoesNotRun,
           'basic_EVE_TOT (with patch)',
       ),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ci_only_test_on_trybot_bypass',
+      boilerplate(
+          'chrome-test-builds', tast_expr='dummy_tast', is_ci_build=False),
+      api.step_data('parse description',
+                    api.json.output({'Include-Ci-Only-Tests': ['true']})),
+      api.post_process(
+          post_process.MustRun,
+          'basic_EVE_TOT (with patch)',
+      ),
+      api.post_process(post_process.StepTextContains,
+                       'basic_EVE_TOT (with patch)',
+                       [('This test is being run due to the'
+                         ' Include-Ci-Only-Tests gerrit footer')]),
       api.post_process(post_process.DropExpectation),
   )

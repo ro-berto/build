@@ -203,7 +203,7 @@
   },
   {
     "cmd": [],
-    "name": "EVE_TOT",
+    "name": "EVE_TOT (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>0 passed, 1 failed (1 total)@@@",
       "@@@STEP_LOG_LINE@Test Cases@FAILED:@@@",
@@ -280,7 +280,7 @@
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
-      "{\"bucket\": \"ci\", \"builder\": \"test_buildername\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"EVE_TOT\", \"test_name\": \"red_case\"}]}",
+      "{\"bucket\": \"ci\", \"builder\": \"test_buildername\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"EVE_TOT (with patch)\", \"test_name\": \"red_case\"}]}",
       "--output-path",
       "/path/to/tmp/json"
     ],
@@ -296,7 +296,7 @@
       "@@@STEP_LOG_LINE@input@    \"bucket\": \"ci\", @@@",
       "@@@STEP_LOG_LINE@input@    \"tests\": [@@@",
       "@@@STEP_LOG_LINE@input@        {@@@",
-      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"EVE_TOT\", @@@",
+      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"EVE_TOT (with patch)\", @@@",
       "@@@STEP_LOG_LINE@input@            \"test_name\": \"red_case\"@@@",
       "@@@STEP_LOG_LINE@input@        }@@@",
       "@@@STEP_LOG_LINE@input@    ]@@@",
