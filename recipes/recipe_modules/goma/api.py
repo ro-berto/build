@@ -306,11 +306,12 @@ class GomaApi(recipe_api.RecipeApi):
 
   def _run_jsonstatus(self):
     with self.m.context(env=self._goma_ctl_env):
-      jsonstatus_result = self.m.python(
+      jsonstatus_result = self.m.step(
           name='goma_jsonstatus',
-          script=self.goma_ctl,
-          args=['jsonstatus',
-                self.m.json.output(leak_to=self.json_path)],
+          cmd=[
+              'python3', self.goma_ctl, 'jsonstatus',
+              self.m.json.output(leak_to=self.json_path)
+          ],
           step_test_data=lambda: self.m.json.test_api.output(
               data={
                   'notice': [{
@@ -401,10 +402,9 @@ class GomaApi(recipe_api.RecipeApi):
       try:
         self._make_goma_cache_dir(self.default_cache_path)
         with self.m.context(env=goma_ctl_start_env):
-          result = self.m.python(
+          result = self.m.step(
               name='start_goma',
-              script=self.goma_ctl,
-              args=['restart'],
+              cmd=['python3', self.goma_ctl, 'restart'],
               infra_step=True,
               **kwargs)
           if not self._local_dir:
@@ -432,10 +432,9 @@ class GomaApi(recipe_api.RecipeApi):
               self._run_jsonstatus()
 
               with self.m.context(env=self._goma_ctl_env):
-                self.m.python(
+                self.m.step(
                     name='stop_goma (start failure)',
-                    script=self.goma_ctl,
-                    args=['stop'],
+                    cmd=['python3', self.goma_ctl, 'stop'],
                     **kwargs)
               self._upload_logs(name='upload_goma_start_failed_logs')
           except self.m.step.StepFailure:
@@ -478,10 +477,14 @@ class GomaApi(recipe_api.RecipeApi):
           self._run_jsonstatus()
 
           with self.m.context(env=self._goma_ctl_env):
-            self.m.python(
-                name='goma_stat', script=self.goma_ctl, args=['stat'], **kwargs)
-            self.m.python(
-                name='stop_goma', script=self.goma_ctl, args=['stop'], **kwargs)
+            self.m.step(
+                name='goma_stat',
+                cmd=['python3', self.goma_ctl, 'start'],
+                **kwargs)
+            self.m.step(
+                name='stop_goma',
+                cmd=['python3', self.goma_ctl, 'stop'],
+                **kwargs)
           self._upload_logs(
               ninja_log_outdir=ninja_log_outdir,
               ninja_log_compiler=ninja_log_compiler,

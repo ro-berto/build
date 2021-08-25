@@ -87,8 +87,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
@@ -351,8 +350,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
@@ -398,10 +396,9 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/goma/client/goma_ctl.py",
-      "stat"
+      "start"
     ],
     "env": {
       "BUILDBOT_BUCKET": "ci",
@@ -433,8 +430,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
