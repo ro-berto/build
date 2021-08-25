@@ -3,25 +3,15 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'recipe_engine/step',
   'swarming_client',
 ]
 
 
 def RunSteps(api):
-  # Code coverage for these methods.
-  try:
-    api.swarming_client.path
-  except api.step.StepFailure:
-    pass
+  _ = api.swarming_client.path
 
 
 def GenTests(api):
   yield api.test(
       'basic',
-  )
-
-  yield api.test(
-      'checkout_error',
-      api.step_data('git checkout (swarming_client)', retcode=1),
   )

@@ -21,7 +21,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     self._client_path = None
     self._script_version = {}
 
-  def checkout(self, revision=None, curl_trace_file=None, can_fail_build=True):
+  def checkout(self, revision=None):
     """Returns a step to checkout swarming client into a separate directory.
 
     Ordinarily swarming client is checked out via Chromium DEPS into
@@ -39,16 +39,11 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     if revision is None:
       revision = 'a32a1607f6093d338f756c7e7c7b4333b0c50c9c'
     self._client_path = self.m.path['start_dir'].join('swarming.client')
-    try:
-      self.m.git.checkout(
-          url='https://chromium.googlesource.com/infra/luci/client-py.git',
-          ref=revision,
-          dir_path=self._client_path,
-          step_suffix='swarming_client',
-          curl_trace_file=curl_trace_file)
-    except self.m.step.StepFailure:
-      if can_fail_build:
-        raise
+    self.m.git.checkout(
+        url='https://chromium.googlesource.com/infra/luci/client-py.git',
+        ref=revision,
+        dir_path=self._client_path,
+        step_suffix='swarming_client')
 
   @property
   def path(self):
