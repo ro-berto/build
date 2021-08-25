@@ -438,8 +438,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'preprocess_for_goma',
       'postprocess_for_goma',
       'read revision',
-      'swarming_client',
-      'swarming.py --version',
     ])
     return self.post_process(
         Filter().include_re(r'^((?!(.*\.)?%s).)*$' % '|'.join(skip_fragments)))

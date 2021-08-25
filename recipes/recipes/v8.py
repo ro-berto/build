@@ -136,11 +136,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
         api.chromium.taskkill()
 
       update_step = v8.checkout(clobber=clobber_all)
-      update_properties = update_step.json.output['properties']
-
-      if update_properties.get('got_swarming_client_revision'):
-        additional_trigger_properties['parent_got_swarming_client_revision'] = (
-            update_properties['got_swarming_client_revision'])
 
       v8.set_up_swarming()
       v8.runhooks()

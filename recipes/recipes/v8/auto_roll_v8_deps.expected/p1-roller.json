@@ -19,8 +19,6 @@
       "-m",
       "Rolling tools/luci-go: git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9..git_revision:3d8f881462b1a93c7525499381fafc8a08691be7",
       "-m",
-      "Rolling tools/swarming_client: https://chromium.googlesource.com/external/swarming.client/+log/380e326..380e326",
-      "-m",
       "TBR=liviurau@chromium.org"
     ],
     "cwd": "[CACHE]/builder/p1",
