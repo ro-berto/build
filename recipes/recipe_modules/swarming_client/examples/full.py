@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'recipe_engine/properties',
   'recipe_engine/step',
   'swarming_client',
 ]
@@ -11,26 +10,18 @@ DEPS = [
 
 def RunSteps(api):
   # Code coverage for these methods.
-  result = api.step('client path', [])
-
-  result.presentation.step_text = str(api.swarming_client.path)
-
   try:
-    api.swarming_client.checkout()
+    api.swarming_client.path
   except api.step.StepFailure:
     pass
-
-  _ = api.swarming_client.path
 
 
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(parent_got_swarming_client_revision='sample_sha'),
   )
 
   yield api.test(
       'checkout_error',
-      api.properties(parent_got_swarming_client_revision='sample_sha'),
       api.step_data('git checkout (swarming_client)', retcode=1),
   )

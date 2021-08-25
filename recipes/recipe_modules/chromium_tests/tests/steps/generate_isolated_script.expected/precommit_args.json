@@ -23,7 +23,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "[CACHE]/builder/src/tools/swarming_client/run_isolated.py",
+      "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
       "-I",
       "https://isolateserver.appspot.com",

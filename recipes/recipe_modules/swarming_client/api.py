@@ -28,9 +28,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     src/tools/swarming_client. This step configures recipe module to use
     a separate checkout.
 
-    If |revision| is None, this requires the build property
-    'parent_got_swarming_client_revision' to be present, and raises an exception
-    otherwise. Fail-fast behavior is used because if machines silently fell back
+    Fail-fast behavior is used because if machines silently fell back
     to checking out the entire workspace, that would cause dramatic increases
     in cycle time if a misconfiguration were made and it were no longer possible
     for the bot to check out swarming_client separately.
@@ -39,7 +37,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     # bot is misconfigured, or, if you're testing locally, that you
     # need to pass in some recent legal revision for this property.
     if revision is None:
-      revision = self.m.properties['parent_got_swarming_client_revision']
+      revision = 'a32a1607f6093d338f756c7e7c7b4333b0c50c9c'
     self._client_path = self.m.path['start_dir'].join('swarming.client')
     try:
       self.m.git.checkout(
@@ -55,13 +53,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
   @property
   def path(self):
     """Returns path to a swarming client checkout.
-
-    It's subdirectory of Chromium src/ checkout or a separate directory if
-    'checkout_swarming_client' step was used.
     """
-    if self._client_path:
-      return self._client_path
-    # Default is swarming client path in chromium src/ checkout.
-    # TODO(vadimsh): This line assumes the recipe is working with
-    # Chromium checkout.
-    return self.m.path['checkout'].join('tools', 'swarming_client')
+    if not self._client_path:
+      self.checkout()
+    return self._client_path
