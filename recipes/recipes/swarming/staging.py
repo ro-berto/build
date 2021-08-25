@@ -2,14 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Swarming staging recipe: runs tests for HEAD of chromium using HEAD of
-swarming_client toolset on Swarming staging server instances
-(*-dev.appspot.com).
+"""Swarming staging recipe: runs tests for HEAD of chromium on Swarming staging
+ server instances (*-dev.appspot.com).
 
-Intended to catch bugs in swarming_client and Swarming servers early on, before
-full roll out.
+Intended to catch bugs in Swarming servers early on, before full roll out.
 
-Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
+Waterfall page:
+https://luci-milo-dev.appspot.com/p/chromium/g/chromium.dev/console
 """
 
 from recipe_engine import post_process
@@ -31,7 +30,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
-    'swarming_client',
     'test_results',
     'test_utils',
 ]
@@ -60,8 +58,6 @@ def RunSteps(api):
   api.chromium_swarming.add_default_tag('purpose:staging')
   api.chromium_swarming.default_idempotent = True
 
-  # We are checking out Chromium with swarming_client dep unpinned and pointing
-  # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   api.chromium_swarming.swarming_server = (

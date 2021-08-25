@@ -11,7 +11,6 @@ DEPS = [
     'build/goma',
     'build/isolate',
     'build/perf_dashboard',
-    'build/swarming_client',
     'build/test_results',
     'chromium_tests',
     'depot_tools/bot_update',
