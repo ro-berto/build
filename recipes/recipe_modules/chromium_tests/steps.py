@@ -2593,20 +2593,26 @@ class SwarmingGTestTest(SwarmingTest):
     step_result = super(SwarmingGTestTest, self).run(api, suffix)
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
+
+    raw_json_data = None
     if not self.spec.resultdb.use_rdb_results_for_all_decisions:
       gtest_results = step_result.test_utils.gtest_results
       self._gtest_results[suffix] = gtest_results
-      # Only upload test results if we have gtest results.
       if gtest_results and gtest_results.raw:
-        parsed_gtest_data = gtest_results.raw
-        chrome_revision_cp = api.bot_update.last_returned_properties.get(
-            'got_revision_cp', 'refs/x@{#0}')
-        _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
-        chrome_revision = str(chrome_revision)
-        api.test_results.upload(
-            api.json.input(parsed_gtest_data),
-            chrome_revision=chrome_revision,
-            test_type=step_name)
+        raw_json_data = gtest_results.raw
+    else:
+      raw_json_data = step_result.json.output
+
+    if raw_json_data:
+      chrome_revision_cp = api.bot_update.last_returned_properties.get(
+          'got_revision_cp', 'refs/x@{#0}')
+      _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
+      chrome_revision = str(chrome_revision)
+      api.test_results.upload(
+          api.json.input(raw_json_data),
+          chrome_revision=chrome_revision,
+          test_type=step_name)
+
     return step_result
 
 
@@ -2857,6 +2863,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      # Store the JSON results so we can later send them to the legacy
+      # test-results service, but don't inspect/verify them at all.
+      self._isolated_script_results = step_result.json.output
       return {}
     if getattr(step_result, 'json') and getattr(step_result.json, 'output'):
       results_json = step_result.json.output
@@ -2886,12 +2895,23 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     step_result = super(SwarmingIsolatedScriptTest, self).run(api, suffix)
     results = self._isolated_script_results
 
-    if results and not self.spec.resultdb.use_rdb_results_for_all_decisions:
-      # Noted when uploading to test-results, the step_name is expected to be an
-      # exact match to the step name on the build.
-      self.spec.results_handler.upload_results(
-          api, results, '.'.join(step_result.name_tokens),
-          not bool(self.deterministic_failures(suffix)), suffix)
+    if results:
+      if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+        # Noted when uploading to test-results, the step_name is expected to be
+        # an exact match to the step name on the build.
+        self.spec.results_handler.upload_results(
+            api, results, '.'.join(step_result.name_tokens),
+            not bool(self.deterministic_failures(suffix)), suffix)
+      else:
+        # Only version 3 of results is supported by the upload server.
+        if results and results.get('version', None) == 3:
+          chrome_rev_cp = api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'refs/x@{#0}')
+          _, chrome_rev = api.commit_position.parse(str(chrome_rev_cp))
+          api.test_results.upload(
+              api.json.input(results),
+              chrome_revision=str(chrome_rev),
+              test_type='.'.join(step_result.name_tokens))
     return step_result
 
 

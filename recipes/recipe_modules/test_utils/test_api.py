@@ -81,7 +81,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                           passing,
                           minimal=False,
                           extra_json=None,
-                          legacy_annotation=False):
+                          legacy_annotation=False,
+                          use_passthrough_placeholder=False):
     """Produces mock output for a recipe step that outputs a GTestResults
     object.
 
@@ -95,6 +96,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                           annotated (i.e. emitting @@@annotation). This
                           is for supporting deprecated allow_subannotation
                           feature.
+      use_passthrough_placeholder - If true, will use a standard JSON output
+          placeholder (which doesn't do any inspection of the JSON) rather
+          than the gtest placeholder.
 
     Returns: A gtest_results placeholder
     """
@@ -130,7 +134,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     canned_jsonish.update(extra_json or {})
 
     retcode = None if passing else 1
-    ret = self.gtest_results(json.dumps(canned_jsonish), retcode)
+    if use_passthrough_placeholder:
+      ret = self.m.json.output(canned_jsonish, retcode)
+    else:
+      ret = self.gtest_results(json.dumps(canned_jsonish), retcode)
     if legacy_annotation:
       ret += self.m.legacy_annotation.success_step if passing else (
           self.m.legacy_annotation.failure_step)

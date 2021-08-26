@@ -82,12 +82,16 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=False)),
+              api.test_utils.canned_gtest_output(
+                  passing=True, use_passthrough_placeholder=True),
+              failure=False)),
       api.override_step_data(
           'query test results.swarming_gtest',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
+      api.post_process(post_process.MustRun,
+                       'Upload to test-results [swarming_gtest]'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -105,7 +109,8 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
+              api.test_utils.canned_gtest_output(
+                  passing=False, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
           'query test results.swarming_gtest',
@@ -129,7 +134,9 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=False)),
+              api.test_utils.canned_gtest_output(
+                  passing=True, use_passthrough_placeholder=True),
+              failure=False)),
       api.override_step_data(
           'query test results.swarming_gtest',
           stdout=api.raw_io.output_text(
@@ -153,7 +160,8 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
+              api.test_utils.canned_gtest_output(
+                  passing=False, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
           'query test results.swarming_gtest',
@@ -178,8 +186,34 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=True)),
+              api.test_utils.canned_gtest_output(
+                  passing=True, use_passthrough_placeholder=True),
+              failure=True)),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'upload_to_legacy_test_results',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments={'chromium.chromium_tests.use_rdb_results': True},
+      ),
+      api.properties(swarm_hashes={
+          'swarming_gtest': 'some-hash',
+          'swarming_isolated_script': 'some-hash',
+      }),
+      api.override_step_data(
+          'swarming_gtest',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(
+                  passing=True, use_passthrough_placeholder=True),
+              failure=False)),
+      api.post_process(post_process.MustRun,
+                       'Upload to test-results [swarming_gtest]'),
+      api.post_process(post_process.MustRun,
+                       'Upload to test-results [swarming_isolated_script]'),
       api.post_process(post_process.DropExpectation),
   )
