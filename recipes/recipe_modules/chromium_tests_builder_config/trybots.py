@@ -169,6 +169,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'android-marshmallow-x86-rel-non-cq':
             try_spec.TrySpec.create_for_single_mirror(
