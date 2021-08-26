@@ -1298,6 +1298,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
             },
             execution_mode=builder_spec.TEST,
             parent_builder_group='chromium.win',

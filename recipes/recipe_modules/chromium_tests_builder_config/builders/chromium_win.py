@@ -53,6 +53,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Win x64 Builder',
@@ -102,6 +103,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
             },
             simulation_platform='win',
         ),
@@ -114,6 +116,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Win x64 Builder',

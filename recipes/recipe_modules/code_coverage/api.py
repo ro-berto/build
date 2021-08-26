@@ -222,10 +222,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             break
           # Actual binary file is at {binary}.app/{binary} for iOS.
           binaries.add(self.m.chromium.output_dir.join(binary + '.app', binary))
+        elif self.platform == 'win':
+          binaries.add(self.m.chromium.output_dir.join(binary + '.exe'))
         else:
-          binaries.add(
-              self.m.chromium.output_dir.join(
-                  binary, platform_ext={'win': '.exe'}))
+          binaries.add(self.m.chromium.output_dir.join(binary))
 
         break
 

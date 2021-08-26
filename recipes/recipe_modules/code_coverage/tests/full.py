@@ -861,3 +861,57 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'tryserver_win',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.win',
+          builder='win10-rel-orchestrator'),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
+      api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
+                       _NUM_TESTS, _NUM_TESTS),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.merge '
+          'all profile files into a single .profdata'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload artifact to GS'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'process clang code coverage data for overall test coverage.filter '
+          'binaries with valid data for %s binaries' % (_NUM_TESTS - 2),
+          ['None/out/Release/content_shell.exe']),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.generate '
+          'line number mapping from bot to Gerrit'),
+      # Tests that local isolated scripts are skipped for collecting code
+      # coverage data.
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.filter '
+          'binaries with valid data for %s binaries' % (_NUM_TESTS - 2)),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
