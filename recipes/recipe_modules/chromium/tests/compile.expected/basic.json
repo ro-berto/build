@@ -280,7 +280,7 @@
     "cmd": [
       "python3",
       "[CACHE]/goma/client/goma_ctl.py",
-      "start"
+      "stat"
     ],
     "cwd": "None",
     "env": {

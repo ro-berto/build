@@ -335,7 +335,7 @@
     "cmd": [
       "python3",
       "[CACHE]\\goma\\client\\goma_ctl.py",
-      "start"
+      "stat"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -711,7 +711,7 @@
     "cmd": [
       "python3",
       "[CACHE]\\goma\\client\\goma_ctl.py",
-      "start"
+      "stat"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",

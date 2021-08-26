@@ -479,7 +479,7 @@ class GomaApi(recipe_api.RecipeApi):
           with self.m.context(env=self._goma_ctl_env):
             self.m.step(
                 name='goma_stat',
-                cmd=['python3', self.goma_ctl, 'start'],
+                cmd=['python3', self.goma_ctl, 'stat'],
                 **kwargs)
             self.m.step(
                 name='stop_goma',
