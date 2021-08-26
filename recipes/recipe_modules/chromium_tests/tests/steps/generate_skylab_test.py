@@ -133,6 +133,9 @@ def GenTests(api):
                         'swarming': {},
                         'test':
                             target_name,
+                        'resultdb': {
+                            'enable': True,
+                        },
                         'timeout_sec':
                             7200
                     }],
