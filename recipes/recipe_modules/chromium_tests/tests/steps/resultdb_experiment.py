@@ -46,6 +46,10 @@ def RunSteps(api):
       steps.LocalIsolatedScriptTestSpec.create(
           'local_isolated_script',
           resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True)),
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          'layout_tests',
+          resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True),
+          results_handler_name='layout tests'),
   ]
   tests = [ts.get_test() for ts in test_specs]
 
@@ -68,17 +72,21 @@ def RunSteps(api):
 
 def GenTests(api):
 
+  def common_test_data():
+    return (api.chromium.ci_build(
+        builder_group='test_group',
+        builder='test_buildername',
+        experiments={'chromium.chromium_tests.use_rdb_results': True},
+    ) + api.properties(
+        swarm_hashes={
+            'swarming_gtest': 'gtest-hash',
+            'swarming_isolated_script': 'isolated-script-hash',
+            'layout_tests': 'layout-test-hash',
+        }))
+
   yield api.test(
       'rdb_success_and_json_success',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -97,15 +105,7 @@ def GenTests(api):
 
   yield api.test(
       'rdb_success_but_json_failure',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -122,15 +122,7 @@ def GenTests(api):
 
   yield api.test(
       'rdb_failure_but_json_success',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -148,15 +140,7 @@ def GenTests(api):
 
   yield api.test(
       'rdb_failure_and_json_failure',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -174,15 +158,7 @@ def GenTests(api):
 
   yield api.test(
       'rdb_invalid',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -196,15 +172,7 @@ def GenTests(api):
 
   yield api.test(
       'upload_to_legacy_test_results',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
-      api.properties(swarm_hashes={
-          'swarming_gtest': 'some-hash',
-          'swarming_isolated_script': 'some-hash',
-      }),
+      common_test_data(),
       api.override_step_data(
           'swarming_gtest',
           api.chromium_swarming.canned_summary_output(
@@ -215,5 +183,9 @@ def GenTests(api):
                        'Upload to test-results [swarming_gtest]'),
       api.post_process(post_process.MustRun,
                        'Upload to test-results [swarming_isolated_script]'),
+      api.post_process(post_process.MustRun,
+                       'Upload to test-results [layout_tests]'),
+      api.post_process(post_process.MustRun,
+                       'archive results for layout_tests'),
       api.post_process(post_process.DropExpectation),
   )

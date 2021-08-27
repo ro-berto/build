@@ -1964,6 +1964,61 @@ def _clean_step_name(step_name, suffix):
   return _add_suffix(step_name, suffix)
 
 
+def _archive_layout_test_results(api, step_name, step_suffix=None):
+  # LayoutTest's special archive and upload results
+  results_dir = api.path['start_dir'].join('layout-test-results')
+
+  buildername = api.buildbucket.builder_name
+  buildnumber = api.buildbucket.build.number
+
+  archive_layout_test_results = api.chromium.repo_resource(
+      'recipes', 'chromium', 'archive_layout_test_results.py')
+
+  archive_layout_test_args = [
+      '--results-dir',
+      results_dir,
+      '--build-dir',
+      api.chromium.c.build_dir,
+      '--build-number',
+      buildnumber,
+      '--builder-name',
+      buildername,
+      '--gs-bucket',
+      'gs://chromium-layout-test-archives',
+      '--staging-dir',
+      api.path['cache'].join('chrome_staging'),
+  ]
+  if not api.tryserver.is_tryserver:
+    archive_layout_test_args.append('--store-latest')
+
+  # TODO: The naming of the archive step is clunky, but the step should
+  # really be triggered src-side as part of the post-collect merge and
+  # upload, and so this should go away when we make that change.
+  step_name = _clean_step_name(step_name, step_suffix)
+  archive_layout_test_args += ['--step-name', step_name]
+  archive_step_name = 'archive results for ' + step_name
+
+  archive_layout_test_args += api.build.slave_utils_args
+  # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
+  if api.properties.get('gs_acl'):
+    archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
+  archive_result = api.build.python(archive_step_name,
+                                    archive_layout_test_results,
+                                    archive_layout_test_args)
+
+  # TODO(tansell): Move this to render_results function
+  sanitized_buildername = re.sub('[ .()]', '_', buildername)
+  base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
+          (sanitized_buildername, buildnumber))
+  base += '/' + urllib.quote(step_name)
+
+  archive_result.presentation.links['layout_test_results'] = (
+      base + '/layout-test-results/results.html')
+  archive_result.presentation.links['(zip)'] = (
+      base + '/layout-test-results.zip')
+  return base + '/layout-test-results/results.html'
+
+
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
@@ -1976,60 +2031,10 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     JSONResultsHandler.upload_results(self, api, results, step_name, passed,
                                       step_suffix)
 
-    # LayoutTest's special archive and upload results
-    results_dir = api.path['start_dir'].join('layout-test-results')
-
-    buildername = api.buildbucket.builder_name
-    buildnumber = api.buildbucket.build.number
-
-    archive_layout_test_results = api.chromium.repo_resource(
-        'recipes', 'chromium', 'archive_layout_test_results.py')
-
-    archive_layout_test_args = [
-        '--results-dir',
-        results_dir,
-        '--build-dir',
-        api.chromium.c.build_dir,
-        '--build-number',
-        buildnumber,
-        '--builder-name',
-        buildername,
-        '--gs-bucket',
-        'gs://chromium-layout-test-archives',
-        '--staging-dir',
-        api.path['cache'].join('chrome_staging'),
-    ]
-    if not api.tryserver.is_tryserver:
-      archive_layout_test_args.append('--store-latest')
-
-    # TODO: The naming of the archive step is clunky, but the step should
-    # really be triggered src-side as part of the post-collect merge and
-    # upload, and so this should go away when we make that change.
-    step_name = _clean_step_name(step_name, step_suffix)
-    archive_layout_test_args += ['--step-name', step_name]
-    archive_step_name = 'archive results for ' + step_name
-
-    archive_layout_test_args += api.build.slave_utils_args
-    # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
-    if api.properties.get('gs_acl'):
-      archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
-    archive_result = api.build.python(archive_step_name,
-                                      archive_layout_test_results,
-                                      archive_layout_test_args)
-
-    # TODO(tansell): Move this to render_results function
-    sanitized_buildername = re.sub('[ .()]', '_', buildername)
-    base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
-            (sanitized_buildername, buildnumber))
-    base += '/' + urllib.quote(step_name)
-
     # This keeps track of the link to build summary section for ci and cq.
+    archive_url = _archive_layout_test_results(api, step_name, step_suffix)
     if not 'without patch' in step_suffix:
-      self._layout_test_results = base + '/layout-test-results/results.html'
-    archive_result.presentation.links['layout_test_results'] = (
-        base + '/layout-test-results/results.html')
-    archive_result.presentation.links['(zip)'] = (
-        base + '/layout-test-results.zip')
+      self._layout_test_results = archive_url
 
   @property
   def layout_results_url(self):
@@ -2904,6 +2909,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
             not bool(self.deterministic_failures(suffix)), suffix)
       else:
         # Only version 3 of results is supported by the upload server.
+        upload_step_name = '.'.join(step_result.name_tokens)
         if results and results.get('version', None) == 3:
           chrome_rev_cp = api.bot_update.last_returned_properties.get(
               'got_revision_cp', 'refs/x@{#0}')
@@ -2911,7 +2917,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
           api.test_results.upload(
               api.json.input(results),
               chrome_revision=str(chrome_rev),
-              test_type='.'.join(step_result.name_tokens))
+              test_type=upload_step_name)
+        if self.spec.results_handler_name == 'layout tests':
+          _archive_layout_test_results(api, upload_step_name, step_suffix=None)
     return step_result
 
 
