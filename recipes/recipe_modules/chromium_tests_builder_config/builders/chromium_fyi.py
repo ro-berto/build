@@ -1404,6 +1404,22 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1244441): remove after the migration.
+    'Mac Builder (reclient)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'use_clang_coverage', 'enable_reclient',
+                'reclient_clang_scan_deps'
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
 }
 
 SPEC.update([
