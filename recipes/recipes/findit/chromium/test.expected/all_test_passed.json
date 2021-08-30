@@ -1635,6 +1635,149 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test r1.collect tasks (r1)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]\\resources\\git_setup.py",
+      "--path",
+      "[START_DIR]\\swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/infra/luci/client-py.git"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "name": "test r1.collect tasks (r1).git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "--progress"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "env": {
+      "PATH": "RECIPE_REPO[depot_tools];<PATH>"
+    },
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "a32a1607f6093d338f756c7e7c7b4333b0c50c9c"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).read revision",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]\\swarming.client",
+    "infra_step": true,
+    "name": "test r1.collect tasks (r1).submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_swarming]\\resources\\wait_for_finished_task_set.py",
+      "--swarming-server",
+      "https://chromium-swarm.appspot.com",
+      "--swarming-py-path",
+      "[START_DIR]\\swarming.client\\swarming.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "--input-json",
+      "[[\"0\"]]",
+      "--attempts",
+      "0",
+      "--verbose"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "name": "test r1.collect tasks (r1).wait for tasks (r1)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

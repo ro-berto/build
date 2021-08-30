@@ -1079,6 +1079,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "collect tasks"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1092,7 +1096,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "git setup (swarming_client)"
+    "name": "collect tasks.git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1107,7 +1114,10 @@
       "PATH": "RECIPE_REPO[depot_tools];<PATH>"
     },
     "infra_step": true,
-    "name": "git fetch (swarming_client)"
+    "name": "collect tasks.git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1121,7 +1131,10 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "git checkout (swarming_client)"
+    "name": "collect tasks.git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1134,8 +1147,9 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "read revision",
+    "name": "collect tasks.read revision",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
   },
@@ -1152,7 +1166,10 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "git clean (swarming_client)"
+    "name": "collect tasks.git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1165,7 +1182,10 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "submodule sync (swarming_client)"
+    "name": "collect tasks.submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1180,7 +1200,10 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "submodule update (swarming_client)"
+    "name": "collect tasks.submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1203,8 +1226,9 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "wait for tasks",
+    "name": "collect tasks.wait for tasks",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",

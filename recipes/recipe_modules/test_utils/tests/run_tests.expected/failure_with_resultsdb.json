@@ -343,6 +343,10 @@
     "name": "test3"
   },
   {
+    "cmd": [],
+    "name": "collect tasks"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -352,7 +356,10 @@
       "--url",
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
-    "name": "git setup (swarming_client)"
+    "name": "collect tasks.git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -366,7 +373,10 @@
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
-    "name": "git fetch (swarming_client)"
+    "name": "collect tasks.git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -377,7 +387,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "git checkout (swarming_client)"
+    "name": "collect tasks.git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -387,8 +400,9 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "read revision",
+    "name": "collect tasks.read revision",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
   },
@@ -402,7 +416,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "git clean (swarming_client)"
+    "name": "collect tasks.git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -412,7 +429,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "submodule sync (swarming_client)"
+    "name": "collect tasks.submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -424,7 +444,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "submodule update (swarming_client)"
+    "name": "collect tasks.submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -443,8 +466,9 @@
       "0",
       "--verbose"
     ],
-    "name": "wait for tasks",
+    "name": "collect tasks.wait for tasks",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
@@ -979,6 +1003,41 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "collect tasks (retry shards)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
+      "--swarming-server",
+      "https://chromium-swarm.appspot.com",
+      "--swarming-py-path",
+      "[START_DIR]/swarming.client/swarming.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "--input-json",
+      "[[\"2\"]]",
+      "--attempts",
+      "0",
+      "--verbose"
+    ],
+    "name": "collect tasks (retry shards).wait for tasks (retry shards)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },

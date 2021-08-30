@@ -1270,20 +1270,16 @@ class SwarmingGroup(TestGroup):
     """Executes the |run| method of each test."""
     attempts = 0
     while self._task_ids_to_test:
-      if len(self._task_ids_to_test) == 1:
-        # We only have one test left to collect, just collect it normally.
-        key = list(self._task_ids_to_test.keys())[0]
-        test = self._task_ids_to_test[key]
+      nest_name = 'collect tasks'
+      if suffix:
+        nest_name += ' (%s)' % suffix
+      with caller_api.step.nest(nest_name):
+        finished_sets, attempts = (
+            caller_api.chromium_swarming.wait_for_finished_task_set(
+                list(self._task_ids_to_test),
+                suffix=((' (%s)' % suffix) if suffix else ''),
+                attempts=attempts))
 
-        test.run(caller_api, suffix)
-        del self._task_ids_to_test[key]
-        break
-
-      finished_sets, attempts = (
-          caller_api.chromium_swarming.wait_for_finished_task_set(
-              list(self._task_ids_to_test),
-              suffix=((' (%s)' % suffix) if suffix else ''),
-              attempts=attempts))
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
         test.run(caller_api, suffix)

@@ -148,10 +148,8 @@ def GenTests(api):
               'base_unittests': '[dummy hash for base_unittests]',
               'base_unittests_2': '[dummy hash for base_unittests_2]',
           }),
-      api.chromium_swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([['0'], ['1']], 1),
-      ]),
+      api.chromium_swarming.wait_for_finished_task_set(
+          [([], 1), ([['0'], ['1']], 1)], nest_step_name='collect tasks'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -167,10 +165,8 @@ def GenTests(api):
               'base_unittests': '[dummy hash for base_unittests]',
               'base_unittests_2': '[dummy hash for base_unittests_2]',
           }),
-      api.chromium_swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([['1']], 1),
-      ]),
+      api.chromium_swarming.wait_for_finished_task_set(
+          [([], 1), ([['1']], 1)], nest_step_name='collect tasks'),
       # There's no call to get_states after there's only one test left pending,
       # as the test_utils logic just calls the regular collect logic on that
       # test.
@@ -190,14 +186,9 @@ def GenTests(api):
               'base_unittests': '[dummy hash for base_unittests]',
               'base_unittests_2': '[dummy hash for base_unittests_2]',
           }),
-      api.chromium_swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([['0'], ['1']], 1),
-      ]),
+      api.chromium_swarming.wait_for_finished_task_set(
+          [([], 1), ([], 1), ([], 1), ([], 1), ([], 1), ([['0'], ['1']], 1)],
+          nest_step_name='collect tasks'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -289,10 +280,8 @@ def GenTests(api):
               'base_unittests_invalid_results_2':
                   '[dummy hash for base_unittests_2]',
           }),
-      api.chromium_swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([['0'], ['1']], 1),
-      ]),
+      api.chromium_swarming.wait_for_finished_task_set(
+          [([], 1), ([['0'], ['1']], 1)], nest_step_name='collect tasks'),
       api.post_process(post_process.MustRun,
                        'base_unittests_invalid_results (retry shards)'),
       api.post_process(post_process.DoesNotRun,

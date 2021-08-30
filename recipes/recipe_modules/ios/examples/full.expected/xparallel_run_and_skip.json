@@ -1330,6 +1330,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "collect tasks (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1340,7 +1344,10 @@
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "git setup (swarming_client)"
+    "name": "collect tasks (with patch).git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1354,7 +1361,10 @@
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
-    "name": "git fetch (swarming_client)"
+    "name": "collect tasks (with patch).git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1365,7 +1375,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "git checkout (swarming_client)"
+    "name": "collect tasks (with patch).git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1375,8 +1388,9 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "read revision",
+    "name": "collect tasks (with patch).read revision",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
   },
@@ -1390,7 +1404,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "git clean (swarming_client)"
+    "name": "collect tasks (with patch).git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1400,7 +1417,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "submodule sync (swarming_client)"
+    "name": "collect tasks (with patch).submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1412,7 +1432,10 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
-    "name": "submodule update (swarming_client)"
+    "name": "collect tasks (with patch).submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1432,8 +1455,9 @@
       "--verbose"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "wait for tasks (with patch)",
+    "name": "collect tasks (with patch).wait for tasks (with patch)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
