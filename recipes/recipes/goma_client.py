@@ -13,7 +13,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
 ]
 
@@ -53,14 +52,13 @@ def RunSteps(api, target_cpu):
       gn_args.append('use_link_time_optimization=false')
     else:
       gn_args.append('use_link_time_optimization=true')
-    api.python(
+    api.step(
         name='gn',
-        script=api.depot_tools.gn_py_path,
-        args=[
-            '--root=%s' % str(api.path['checkout']),
-            'gen',
-            build_dir,
-            '--args=%s' % ' '.join(gn_args)])
+        cmd=[
+            'python3', api.depot_tools.gn_py_path,
+            '--root=%s' % str(api.path['checkout']), 'gen', build_dir,
+            '--args=%s' % ' '.join(gn_args)
+        ])
 
     # 2-2. ninja
     api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
@@ -69,23 +67,25 @@ def RunSteps(api, target_cpu):
     # Not on arm because we're cross-building and the intel builder can't run
     # arm test binaries.
     if target_cpu != 'arm64':
-      api.python(
+      api.step(
           name='tests',
-          script=api.path['checkout'].join('build', 'run_unittest.py'),
-          args=['--build-dir', build_out_dir,
-                '--target', build_target, '--non-stop'])
+          cmd=[
+              'python3', api.path['checkout'].join('build', 'run_unittest.py'),
+              '--build-dir', build_out_dir, '--target', build_target,
+              '--non-stop'
+          ])
 
   # 4. Create archive.
   platform = api.platform.name
   if target_cpu == 'arm64':
     platform += '-arm64'
-  api.python(
+  api.step(
       name='archive',
-      script=api.path['checkout'].join('build', 'archive.py'),
-      args=['--platform', platform,
-            '--build_dir', build_out_dir,
-            '--target_dir', build_target,
-            '--dist_dir', api.path['tmp_base']])
+      cmd=[
+          'python3', api.path['checkout'].join('build', 'archive.py'),
+          '--platform', platform, '--build_dir', build_out_dir, '--target_dir',
+          build_target, '--dist_dir', api.path['tmp_base']
+      ])
 
   # 5. Build CIPD package.
   # archive.py creates goma-<platform>/ in out/Release.

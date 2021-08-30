@@ -93,8 +93,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "RECIPE_REPO[depot_tools]\\gn.py",
       "--root=[START_DIR]\\client",
       "gen",
@@ -113,8 +112,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[START_DIR]\\client\\build\\run_unittest.py",
       "--build-dir",
       "[START_DIR]\\client\\out",
@@ -126,8 +124,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[START_DIR]\\client\\build\\archive.py",
       "--platform",
       "win",
