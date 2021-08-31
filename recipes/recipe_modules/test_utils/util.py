@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import collections
 
 from . import canonical
@@ -460,6 +461,24 @@ class RDBPerSuiteResults(object):
 
     return cls(suite_name, variant_hash, unexpected_passing_tests,
                unexpected_failing_tests, invalid, test_name_to_test_id_mapping)
+
+  def with_failure_on_exit(self, failure_on_exit):
+    """Returns a new instance with an updated failure_on_exit value.
+
+    We may end up fetching a test's RDB results before we know its exit code.
+    (e.g. We query RDB before we collect swarming tasks.)
+
+    TODO(crbug.com/1245085): The ordering of events doesn't affect the results
+    in the new Milo UI. So this functionality can be torn out when all users
+    have migrated.
+
+    Args:
+      failure_on_exit: If True, indicates the test harness/runner exited with a
+          non-zero exit code. If this occurs and no unexpected failures were
+          reported, it indicates invalid test results.
+    """
+    return attr.evolve(
+        self, invalid=(failure_on_exit and not self.unexpected_failing_tests))
 
   def to_jsonish(self):
     jsonish_repr = {

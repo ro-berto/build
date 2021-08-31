@@ -609,6 +609,13 @@ class Test(object):
     """
     raise NotImplementedError()
 
+  def update_failure_on_exit(self, suffix, failure_on_exit):
+    self._failure_on_exit_suffix_map[suffix] = failure_on_exit
+    rdb_results = self._rdb_results.get(suffix)
+    if rdb_results:
+      self._rdb_results[suffix] = rdb_results.with_failure_on_exit(
+          failure_on_exit)
+
   def failure_on_exit(self, suffix):
     """Returns True if the test (or any of its shards) exited non-zero.
 
@@ -1435,7 +1442,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
               'pass_fail_counts': pass_fail_counts,
               'findit_notrun': set(),
           })
-      self._failure_on_exit_suffix_map[suffix] = result.retcode != 0
+      self.update_failure_on_exit(suffix, result.retcode != 0)
 
       _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
@@ -1639,7 +1646,7 @@ class LocalGTestTest(LocalTest):
         gtest_results = step_result.test_utils.gtest_results
         self.update_test_run(api, suffix,
                              gtest_results.canonical_result_format())
-      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
+      self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       r = api.test_utils.present_gtest_failures(step_result)
@@ -2519,8 +2526,7 @@ class SwarmingTest(Test):
       results['valid'] = False
 
     self.update_test_run(api, suffix, results)
-    self._failure_on_exit_suffix_map[suffix] = bool(
-        self._tasks[suffix].failed_shards)
+    self.update_failure_on_exit(suffix, bool(self._tasks[suffix].failed_shards))
 
     _present_info_messages(step_result.presentation, self)
     return step_result
@@ -2796,7 +2802,7 @@ class LocalIsolatedScriptTest(LocalTest):
       self.update_test_run(
           api, suffix, self.spec.results_handler.validate_results(api, results))
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
-      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
+      self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
       _present_info_messages(step_result.presentation, self)
 
@@ -2989,7 +2995,7 @@ class AndroidJunitTest(LocalTest):
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
-      self._failure_on_exit_suffix_map[suffix] = step_result.retcode != 0
+      self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
       _present_info_messages(step_result.presentation, self)
 
@@ -3354,7 +3360,7 @@ class SwarmingIosTest(SwarmingTest):
     else:
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
-    self._failure_on_exit_suffix_map[suffix] = bool(swarming_task.failed_shards)
+    self.update_failure_on_exit(suffix, bool(swarming_task.failed_shards))
 
     # Upload test results JSON to the flakiness dashboard.
     shard_output_dir_full_path = api.path.join(
@@ -3588,10 +3594,10 @@ class SkylabTest(Test):
         # Keep the logic simple and consider the test succeed if any
         # of the attempt passed. In long term, we will rely on ResultDB to
         # tell us the test result.
-        self._failure_on_exit_suffix_map[suffix] = True
+        self.update_failure_on_exit(suffix, True)
         if any(r.verdict == "PASSED" for r in self.ctp_responses):
           step.presentation.status = api.step.SUCCESS
-          self._failure_on_exit_suffix_map[suffix] = False
+          self.update_failure_on_exit(suffix, False)
         for i, r in enumerate(self.ctp_responses, 1):
           with api.step.nest('attempt: #' + str(i)) as attempt_step:
             result = attempt_step

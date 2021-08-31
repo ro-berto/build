@@ -18,11 +18,16 @@ DEPS = [
 ]
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import Property
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
+# TODO(crbug.com/1135718): Can remove this property and its associated test
+# after RDB query logic is re-ordered.
+PROPERTIES = {'test_with_new_exit_code': Property(default=None, kind=str)}
 
-def RunSteps(api):
+
+def RunSteps(api, test_with_new_exit_code):
   api.chromium.set_config(
       'chromium',
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
@@ -56,12 +61,16 @@ def RunSteps(api):
   invalid_suites, failed_suites = api.test_utils.run_tests(
       api.chromium_tests.m, tests, '')
   for t in tests:
+    if t.name == test_with_new_exit_code:
+      t.update_failure_on_exit('', True)
     if t.deterministic_failures(''):
       api.step('%s failure' % t.name, cmd=None)
     if not t.has_valid_results(''):
       api.step('%s invalid' % t.name, cmd=None)
     api.assertions.assertEqual(t.failures(''), t.deterministic_failures(''))
     api.assertions.assertFalse(t.pass_fail_counts(''))
+    if t.name == test_with_new_exit_code:
+      continue  # Can't trust run_tests's return vals if we're changing results.
     if t.deterministic_failures(''):
       api.assertions.assertIn(t, failed_suites)
     elif not t.has_valid_results(''):
@@ -165,6 +174,21 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(
                   passing=True, use_passthrough_placeholder=True),
               failure=True)),
+      api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
+      api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'rdb_invalid_after_collect',
+      common_test_data(),
+      api.properties(test_with_new_exit_code='swarming_gtest'),
+      api.override_step_data(
+          'swarming_gtest',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(
+                  passing=True, use_passthrough_placeholder=True),
+              failure=False)),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
       api.post_process(post_process.DropExpectation),
