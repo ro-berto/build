@@ -94,6 +94,8 @@ class TrySpec(object):
   analyze_names = attrib(sequence[str], default=())
   # Whether or not failed shards of tests should be retried
   retry_failed_shards = attrib(bool, default=True)
+  # Whether or not failed test suites should be retried without patch
+  retry_without_patch = attrib(bool, default=True)
   # See http://bit.ly/chromium-rts
   regression_test_selection = attrib(
       enum([ALWAYS, QUICK_RUN_ONLY, NEVER]), default=NEVER)

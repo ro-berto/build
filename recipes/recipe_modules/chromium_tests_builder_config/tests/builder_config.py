@@ -92,6 +92,7 @@ def RunSteps(api):
               execution_mode=try_spec.COMPILE,
               analyze_names=['analyze-name'],
               retry_failed_shards=False,
+              retry_without_patch=False,
               regression_test_selection=try_spec.ALWAYS,
               regression_test_selection_recall=0.5)))
 
@@ -113,6 +114,11 @@ def RunSteps(api):
   api.assertions.assertTrue(builder_config.retry_failed_shards)
   api.assertions.assertFalse(
       builder_config_with_try_overrides.retry_failed_shards)
+
+  # Test retry_without_patch property
+  api.assertions.assertTrue(builder_config.retry_without_patch)
+  api.assertions.assertFalse(
+      builder_config_with_try_overrides.retry_without_patch)
 
   # Test is_compile_only property
   api.assertions.assertFalse(builder_config.is_compile_only)

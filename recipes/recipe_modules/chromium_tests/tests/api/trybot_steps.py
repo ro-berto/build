@@ -58,6 +58,18 @@ _TEST_BUILDERS = ctbc.BuilderDatabase.create({
 
 _TEST_TRYBOTS = ctbc.TryDatabase.create({
     'tryserver.chromium.test': {
+        'disable-retry-wo-patch':
+            ctbc.TrySpec.create(
+                retry_failed_shards=True,
+                retry_without_patch=False,
+                mirrors=[
+                    ctbc.TryMirror.create(
+                        builder_group='chromium.test',
+                        buildername='retry-shards',
+                        tester='retry-shards-test',
+                    ),
+                ],
+            ),
         'retry-shards':
             ctbc.TrySpec.create(
                 retry_failed_shards=True,
@@ -407,6 +419,43 @@ def GenTests(api):
               failure=True)),
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'disable_retry_without_patch',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='disable-retry-wo-patch',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS),
+      api.properties(
+          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,

@@ -1042,21 +1042,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
         self.set_test_command_lines(failing_tests, suffix=' (%s)' % suffix)
 
-  def _should_retry_with_patch_deapplied(self, affected_files):
+  def _should_retry_with_patch_deapplied(self, builder_config, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
     Returns: Boolean
     """
-    # We skip the deapply_patch step if there are modifications that affect the
-    # recipe itself, since that would potentially invalidate the previous test
-    # results.
+    # We skip the deapply_patch step if it is disabled in the try spec or
+    # there are modifications that affect the recipe itself, since that would
+    # potentially invalidate the previous test results.
     exclusion_regexs = [re.compile(path) for path in RECIPE_CONFIG_PATHS]
     for f in affected_files:
       for regex in exclusion_regexs:
         if regex.match(f):
           return False
 
-    return True
+    return builder_config.retry_without_patch
 
   def summarize_test_failures(self, test_suites, retried_suites=()):
     """
@@ -1117,7 +1117,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
-      if not self._should_retry_with_patch_deapplied(task.affected_files):
+      if not self._should_retry_with_patch_deapplied(task.builder_config,
+                                                     task.affected_files):
         self.m.python.succeeding_step(
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +

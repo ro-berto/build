@@ -103,7 +103,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   skip_deapply_patch = api.properties.get(
       'skip_deapply_patch', False)
   if skip_deapply_patch:
-    api.chromium_tests._should_retry_with_patch_deapplied = lambda x: False
+    api.chromium_tests._should_retry_with_patch_deapplied = lambda x, y: False
 
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())

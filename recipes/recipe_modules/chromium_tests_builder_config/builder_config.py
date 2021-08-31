@@ -183,6 +183,10 @@ class BuilderConfig(object):
     return self._try_spec.retry_failed_shards
 
   @cached_property
+  def retry_without_patch(self):
+    return self._try_spec.retry_without_patch
+
+  @cached_property
   def is_compile_only(self):
     return self._try_spec.execution_mode == COMPILE
 
