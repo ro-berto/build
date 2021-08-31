@@ -146,6 +146,26 @@
   },
   {
     "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "0"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "collect tasks.blink_web_tests on Intel GPU on Mac results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -321,26 +341,6 @@
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results/results.html@@@",
       "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "0"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "name": "query test results.blink_web_tests on Intel GPU on Mac",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

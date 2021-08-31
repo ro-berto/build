@@ -96,9 +96,8 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results.base_unittests",
+    "name": "base_unittests results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },

@@ -85,13 +85,6 @@
     "name": "Upload to test-results [junit_test]"
   },
   {
-    "cmd": [],
-    "name": "query test results.No RDB results for junit_test",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**junit_test** failed because of:\n\n- Test.Two"

@@ -80,20 +80,8 @@
   },
   {
     "cmd": [],
-    "name": "query test results"
-  },
-  {
-    "cmd": [],
-    "name": "query test results.No RDB results for base_unittests",
+    "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "query test results.$debug - all results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",

@@ -1209,10 +1209,6 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
-    "cmd": [],
-    "name": "query test results (with patch)"
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -1226,17 +1222,15 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "query test results (with patch).base_unittests",
+    "name": "base_unittests results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "query test results (with patch).$debug - all results",
+    "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",

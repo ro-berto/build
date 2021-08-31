@@ -46,13 +46,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "query test results.No RDB results for base_unittests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "name": "$result"
   }
 ]

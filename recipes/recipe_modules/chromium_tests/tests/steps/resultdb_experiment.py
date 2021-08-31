@@ -106,7 +106,7 @@ def GenTests(api):
                   passing=True, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
-          'query test results.swarming_gtest',
+          'collect tasks.swarming_gtest results',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
@@ -125,7 +125,7 @@ def GenTests(api):
                   passing=False, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
-          'query test results.swarming_gtest',
+          'collect tasks.swarming_gtest results',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
@@ -142,7 +142,7 @@ def GenTests(api):
                   passing=True, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
-          'query test results.swarming_gtest',
+          'collect tasks.swarming_gtest results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(failing_suites=['swarming_gtest']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
@@ -160,7 +160,7 @@ def GenTests(api):
                   passing=False, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
-          'query test results.swarming_gtest',
+          'collect tasks.swarming_gtest results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(failing_suites=['swarming_gtest']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
@@ -227,7 +227,7 @@ def GenTests(api):
                   passing=False, use_passthrough_placeholder=True),
               failure=False)),
       api.override_step_data(
-          'query test results.swarming_gtest',
+          'collect tasks.swarming_gtest results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(skipped_suites=['swarming_gtest']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),

@@ -740,17 +740,6 @@
     "name": "Upload to test-results [browser_tests]"
   },
   {
-    "cmd": [],
-    "name": "query test results"
-  },
-  {
-    "cmd": [],
-    "name": "query test results.No RDB results for base_unittests",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "rdb",
       "query",
@@ -767,17 +756,15 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "query test results.browser_tests",
+    "name": "browser_tests results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "query test results.$debug - all results",
+    "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",

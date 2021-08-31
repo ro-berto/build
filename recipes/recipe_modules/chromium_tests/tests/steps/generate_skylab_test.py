@@ -280,7 +280,7 @@ def GenTests(api):
       simulate_ctp_response(api, 'basic_EVE_TOT', [GTEST_TASK_PASSED]),
       api.resultdb.query(
           inv_bundle,
-          step_name='query test results.basic_EVE_TOT',
+          step_name='basic_EVE_TOT results',
       ),
       api.override_step_data(
           'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
@@ -315,11 +315,11 @@ def GenTests(api):
                        'out/Release/bin/run_%s' % GTEST_TARGET),
       api.post_process(
           post_process.MustRun,
-          'query test results.basic_EVE_TOT',
+          'basic_EVE_TOT results',
       ),
       api.post_process(
           post_process.StepCommandContains,
-          'query test results.basic_EVE_TOT',
+          'basic_EVE_TOT results',
           ['build-8839265267168653505'],
       ),
       api.post_process(post_process.StatusSuccess),

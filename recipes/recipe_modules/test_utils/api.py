@@ -288,7 +288,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       swarming_test_suites.sort(key=lambda t: -t.shards)
 
     groups = [
-        LocalGroup(local_test_suites),
+        LocalGroup(local_test_suites, self.m.resultdb),
         SwarmingGroup(swarming_test_suites, self.m.resultdb),
         SkylabGroup(skylab_test_suites, self.m.resultdb),
     ]
@@ -307,48 +307,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
      bad_results_dict['failed']) = self._retrieve_bad_results(
          test_suites, suffix)
 
-    if not self.m.resultdb.enabled:
-      return (RDBResults.create({}), bad_results_dict['invalid'],
-              bad_results_dict['failed'])
-
-    # Query test results from ResultDB.
-    query_step_name = ('query test results (%s)' %
-                       suffix if suffix else 'query test results')
     all_rdb_results = []
-    with self.m.step.nest(query_step_name):
-      # TODO(crbug.com/1135718): Do this in parallel to speed-up fetching.
-      for t in test_suites:
-        if (isinstance(t, steps.ExperimentalTest) and
-            not t.spec.is_in_experiment):
-          continue
-        invocation_names = t.get_invocation_names(suffix)
-        if not invocation_names:
-          self.m.step('No RDB results for %s' % t.name, [])
-          # TODO(crbug.com/1135718): Make failure to fetch RDB results fatal.
-          res = RDBPerSuiteResults.create({},
-                                          failure_on_exit=False,
-                                          suite_name=t.canonical_name)
-        else:
-          unexpected_result_invocations = self.m.resultdb.query(
-              inv_ids=self.m.resultdb.invocation_ids(invocation_names),
-              variants_with_unexpected_results=True,
-              step_name=t.name,
-              tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
-          )
-          res = RDBPerSuiteResults.create(
-              unexpected_result_invocations,
-              suite_name=t.canonical_name,
-              failure_on_exit=t.failure_on_exit(suffix))
+    for t in test_suites:
+      if t.rdb_results.get(suffix):
+        all_rdb_results.append(t.rdb_results.get(suffix))
 
-        t.update_rdb_results(suffix, res)
-        all_rdb_results.append(res)
-
-      rdb_results = RDBResults.create(all_rdb_results)
-      # Serialize the recipe's internal representation of its test results to a
-      # log. To be used only for debugging.
-      step_result = self.m.step('$debug - all results', cmd=None)
-      step_result.presentation.logs['serialzed results'] = (
-          self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
+    rdb_results = RDBResults.create(all_rdb_results)
+    # Serialize the recipe's internal representation of its test results to a
+    # log. To be used only for debugging.
+    step_result = self.m.step('$debug - all results', cmd=None)
+    step_result.presentation.logs['serialzed results'] = (
+        self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
 
     # Re-run _retrieve_bad_results() if we're in the RDB experiment now that
     # we've fetched the RDB results.
@@ -1231,11 +1200,43 @@ class TestGroup(object):
             self.resultdb_api.invocation_ids(invocation_names),
             step_name=step_name)
 
+  def fetch_rdb_results(self, test, suffix):
+    """Queries RDB for the given test's results.
+
+    Args:
+      test: steps.Test object for the given test.
+      suffix: Test name suffix.
+    """
+    if not self.resultdb_api or not self.resultdb_api.enabled:
+      return
+    if (isinstance(test, steps.ExperimentalTest) and
+        not test.spec.is_in_experiment):
+      return
+
+    invocation_names = test.get_invocation_names(suffix)
+    if not invocation_names:
+      # TODO(crbug.com/1135718): Make failure to fetch RDB results fatal.
+      res = RDBPerSuiteResults.create({},
+                                      failure_on_exit=False,
+                                      suite_name=test.canonical_name)
+    else:
+      unexpected_result_invocations = self.resultdb_api.query(
+          inv_ids=self.resultdb_api.invocation_ids(invocation_names),
+          variants_with_unexpected_results=True,
+          step_name='%s results' % test.name,
+          tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
+      )
+      res = RDBPerSuiteResults.create(
+          unexpected_result_invocations,
+          suite_name=test.canonical_name,
+          failure_on_exit=test.failure_on_exit(suffix))
+    test.update_rdb_results(suffix, res)
+
 
 class LocalGroup(TestGroup):
 
-  def __init__(self, test_suites):
-    super(LocalGroup, self).__init__(test_suites)
+  def __init__(self, test_suites, resultdb):
+    super(LocalGroup, self).__init__(test_suites, resultdb)
 
   def pre_run(self, caller_api, suffix):
     """Executes the |pre_run| method of each test."""
@@ -1246,6 +1247,7 @@ class LocalGroup(TestGroup):
     """Executes the |run| method of each test."""
     for t in self._test_suites:
       self._run_func(t, t.run, caller_api, suffix, True)
+      self.fetch_rdb_results(t, suffix)
 
 
 class SwarmingGroup(TestGroup):
@@ -1279,6 +1281,9 @@ class SwarmingGroup(TestGroup):
                 list(self._task_ids_to_test),
                 suffix=((' (%s)' % suffix) if suffix else ''),
                 attempts=attempts))
+        for task_set in finished_sets:
+          test = self._task_ids_to_test[tuple(task_set)]
+          self.fetch_rdb_results(test, suffix)
 
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
@@ -1304,6 +1309,7 @@ class SwarmingGroup(TestGroup):
       for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
+        self.fetch_rdb_results(test, suffix)
         test.run(caller_api, suffix)
 
 
@@ -1338,6 +1344,7 @@ class SkylabGroup(TestGroup):
       tag_resp = build_resp.responses
     for t in self._test_suites:
       t.ctp_responses = tag_resp.get(t.name, [])
+      self.fetch_rdb_results(t, suffix)
       self._run_func(t, t.run, caller_api, suffix, True)
 
     self.include_rdb_invocation(
