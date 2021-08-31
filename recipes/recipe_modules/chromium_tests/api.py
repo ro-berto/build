@@ -372,10 +372,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return args.get('use_rbe') == 'true'
 
   def _use_cas(self, builder_config):
-    return (self.m.platform.is_win or self.m.platform.is_mac or
-            builder_config.isolate_use_cas or
-            "chromium.chromium_tests.use_rbe_cas" in
-            self.m.buildbucket.build.input.experiments)
+    return ("chromium.chromium_tests.use_isolate" not in
+            self.m.buildbucket.build.input.experiments) and (
+                self.m.platform.is_win or self.m.platform.is_mac or
+                builder_config.isolate_use_cas or
+                "chromium.chromium_tests.use_rbe_cas" in
+                self.m.buildbucket.build.input.experiments)
 
   def compile_specific_targets(self,
                                builder_id,
