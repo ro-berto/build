@@ -1,0 +1,48 @@
+[
+  {
+    "cmd": [
+      "docker",
+      "--config",
+      "[CLEANUP]/.docker",
+      "run",
+      "--rm",
+      "--name",
+      "dummy",
+      "-v",
+      "[CACHE]/builder/v8/tools/clusterfuzz/js_fuzzer:/usr/src/app",
+      "-w",
+      "/usr/src/app",
+      "node:10",
+      "npm",
+      "install"
+    ],
+    "cwd": "[CACHE]/builder/v8/tools/clusterfuzz/js_fuzzer",
+    "name": "js-fuzzer.npm install",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "docker",
+      "--config",
+      "[CLEANUP]/.docker",
+      "run",
+      "--rm",
+      "--name",
+      "dummy",
+      "-v",
+      "[CACHE]/builder/v8/tools/clusterfuzz/js_fuzzer:/usr/src/app",
+      "-w",
+      "/usr/src/app",
+      "node:10",
+      "npm",
+      "test"
+    ],
+    "cwd": "[CACHE]/builder/v8/tools/clusterfuzz/js_fuzzer",
+    "name": "js-fuzzer.npm test",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  }
+]
