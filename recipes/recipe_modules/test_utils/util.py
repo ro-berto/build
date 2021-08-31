@@ -402,6 +402,8 @@ class RDBPerSuiteResults(object):
   variant_hash = attrib(str)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
+  # unexpected_skipped_tests should be a subset of unexpected_failing_tests.
+  unexpected_skipped_tests = attrib(set)
   invalid = attrib(bool, default=False)
   test_name_to_test_id_mapping = attrib(mapping[str, str])
 
@@ -441,6 +443,7 @@ class RDBPerSuiteResults(object):
 
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()
+    unexpected_skipped_tests = set()
     for test_name, test_results in results_by_test_id.items():
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
@@ -451,6 +454,8 @@ class RDBPerSuiteResults(object):
         continue
       if all(tr.status != test_result_pb2.PASS for tr in test_results):
         unexpected_failing_tests.add(test_name)
+        if all(tr.status == test_result_pb2.SKIP for tr in test_results):
+          unexpected_skipped_tests.add(test_name)
       else:
         unexpected_passing_tests.add(test_name)
 
@@ -460,7 +465,8 @@ class RDBPerSuiteResults(object):
     invalid = failure_on_exit and not unexpected_failing_tests
 
     return cls(suite_name, variant_hash, unexpected_passing_tests,
-               unexpected_failing_tests, invalid, test_name_to_test_id_mapping)
+               unexpected_failing_tests, unexpected_skipped_tests, invalid,
+               test_name_to_test_id_mapping)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.
@@ -487,6 +493,7 @@ class RDBPerSuiteResults(object):
         'invalid': str(self.invalid),
         'unexpected_passing_tests': list(self.unexpected_passing_tests),
         'unexpected_failing_tests': list(self.unexpected_failing_tests),
+        'unexpected_skipped_tests': list(self.unexpected_skipped_tests),
         'test_name_to_test_id_mapping': self.test_name_to_test_id_mapping,
     }
     return jsonish_repr

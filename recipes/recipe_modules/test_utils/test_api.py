@@ -489,7 +489,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))
 
-  def rdb_results(self, failing_suites=None):
+  def rdb_results(self, failing_suites=None, skipped_suites=None):
     """Returns a JSON blob used to override data for 'query test results'.
 
     Args:
@@ -498,8 +498,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           result.
     """
 
-    def _generate_invocation(suite, is_failure=False):
-      status = rdb_test_result.FAIL if is_failure else rdb_test_result.PASS
+    def _generate_invocation(suite, status):
       test_result = rdb_test_result.TestResult(
           test_id=suite + '_test_case1',
           variant=rdb_common.Variant(**{
@@ -507,7 +506,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                   'test_suite': suite,
               },
           }),
-          expected=not is_failure,
+          expected=status == rdb_test_result.PASS,
           variant_hash=suite + '_hash',
           status=status)
       return self.m.resultdb.Invocation(
@@ -517,9 +516,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           test_results=[test_result])
 
     failing_suites = failing_suites or []
+    skipped_suites = skipped_suites or []
     invocations = []
     for suite in failing_suites:
-      invocations.append(_generate_invocation(suite, is_failure=True))
+      invocations.append(_generate_invocation(suite, rdb_test_result.FAIL))
+    for suite in skipped_suites:
+      invocations.append(_generate_invocation(suite, rdb_test_result.SKIP))
 
     invocations_by_inv_id = {}
     for i, inv in enumerate(invocations):

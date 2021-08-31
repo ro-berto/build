@@ -77,6 +77,9 @@ def RunSteps(api, test_with_new_exit_code):
       api.assertions.assertIn(t, invalid_suites)
     else:
       api.assertions.assertNotIn(t, failed_suites + invalid_suites)
+    # Tests with status SKIP should count as failures.
+    if t.has_valid_results('') and t.findit_notrun(''):
+      api.assertions.assertIn(t, failed_suites)
 
 
 def GenTests(api):
@@ -211,5 +214,23 @@ def GenTests(api):
                        'Upload to test-results [layout_tests]'),
       api.post_process(post_process.MustRun,
                        'archive results for layout_tests'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'rdb_skip',
+      common_test_data(),
+      api.override_step_data(
+          'swarming_gtest',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(
+                  passing=False, use_passthrough_placeholder=True),
+              failure=False)),
+      api.override_step_data(
+          'query test results.swarming_gtest',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(skipped_suites=['swarming_gtest']))),
+      api.post_process(post_process.MustRun, 'swarming_gtest failure'),
+      api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
       api.post_process(post_process.DropExpectation),
   )

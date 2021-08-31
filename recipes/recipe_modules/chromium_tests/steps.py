@@ -844,7 +844,10 @@ class Test(object):
     assert self.has_valid_results(suffix), (
         'findit_notrun must only be called when the test run is known to have '
         'valid results.')
-    return self._test_runs[suffix]['findit_notrun']
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return self._rdb_results[suffix].unexpected_skipped_tests
+    else:
+      return self._test_runs[suffix]['findit_notrun']
 
   def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
