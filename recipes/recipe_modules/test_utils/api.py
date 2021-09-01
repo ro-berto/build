@@ -1209,9 +1209,6 @@ class TestGroup(object):
     """
     if not self.resultdb_api or not self.resultdb_api.enabled:
       return
-    if (isinstance(test, steps.ExperimentalTest) and
-        not test.spec.is_in_experiment):
-      return
 
     invocation_names = test.get_invocation_names(suffix)
     if not invocation_names:

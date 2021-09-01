@@ -63,6 +63,9 @@ def GenTests(api):
     step_filter = step_filter.include_re(r'.*\berror$', at_least=0)
     # The step for reporting ci_only tests
     step_filter = step_filter.include_re('ci_only tests$', at_least=0)
+    # The step for reporting experimental tests that are not being run
+    step_filter = step_filter.include_re(
+        'experimental tests not in experiment', at_least=0)
     # The final result of the recipe
     step_filter = step_filter.include_re(r'\$result$', at_least=0)
     t += api.post_process(step_filter)
@@ -536,5 +539,29 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'gtest_test'),
       api.post_process(post_process.StepTextContains, 'gtest_test',
                        ['This test will not be run on try builders']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'experimental_test_experiment_off',
+      ci_build(test_spec={
+          'test': 'gtest_test',
+          'experiment_percentage': '0',
+      }),
+      api.post_process(post_process.MustRun,
+                       'experimental tests not in experiment'),
+      api.post_process(post_process.DoesNotRunRE, '.*gtest_test.*'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'experimental_test_experiment_on',
+      ci_build(test_spec={
+          'test': 'gtest_test',
+          'experiment_percentage': '100',
+      }),
+      api.override_step_data('gtest_test (experimental)', retcode=1),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

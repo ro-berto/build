@@ -37,12 +37,7 @@ PROPERTIES = {
 
 
 def RunSteps(api, is_swarming_test=True):
-  test_specs = [
-      steps.ExperimentalTestSpec.create(
-          steps.MockTestSpec.create(name='experimental_test'),
-          experiment_percentage=0,
-          api=api)
-  ]
+  test_specs = []
   if not is_swarming_test:
     test_specs.append(
         steps.LocalIsolatedScriptTestSpec.create('base_unittests'))

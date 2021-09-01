@@ -174,7 +174,7 @@ def _handle_ci_only(chromium_tests_api, raw_spec, test_spec):
     disabled = footer_vals[-1].lower() != 'true'
 
   if disabled:
-    return attr.evolve(test_spec, disabled_reason=steps.CI_ONLY)
+    return test_spec.disable(steps.CI_ONLY)
   return test_spec.add_info_message(
       'This test is being run due to the {} gerrit footer'.format(
           steps.INCLUDE_CI_FOOTER))

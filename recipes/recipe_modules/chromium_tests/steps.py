@@ -291,6 +291,10 @@ class TestSpecBase(object):
     """
     raise NotImplementedError()  # pragma: no cover
 
+  @abc.abstractmethod
+  def disable(self, disabled_reason):
+    raise NotImplementedError()  # pragma: no cover
+
 
 @attrs()
 class TestSpec(TestSpecBase):
@@ -300,6 +304,9 @@ class TestSpec(TestSpecBase):
     * name - The displayed name of the test.
     * target_name - The ninja build target for the test, a key in
       //testing/buildbot/gn_isolate_map.pyl, e.g. "browser_tests".
+    * disabled_reason - A object indicating a reason to disable the test
+      (e.g. a ci_only test that won't be run on a try builder). If this
+      is not None, then get_test should not be called on the spec.
     * full_test_target - A fully qualified Ninja target, e.g.
       "//chrome/test:browser_tests".
     * waterfall_builder_group - The matching waterfall builder group.
@@ -361,8 +368,15 @@ class TestSpec(TestSpecBase):
     raise NotImplementedError()  # pragma: no cover
 
   def get_test(self):
-    """Get the test described by the spec."""
+    """Get the test described by the spec.
+
+    It is an error to call this method if disabled_reason is not None.
+    """
+    assert not self.disabled_reason
     return self.test_class(self)
+
+  def disable(self, disabled_reason):
+    return attr.evolve(self, disabled_reason=disabled_reason)
 
   def add_info_message(self, message):
     return attr.evolve(self, info_messages=self.info_messages + (message,))
@@ -967,6 +981,9 @@ class TestWrapperSpec(TestSpecBase):
     """The name of the test."""
     return self.test_spec.name
 
+  def disable(self, disabled_reason):
+    return attr.evolve(self, test_spec=self.test_spec.disable(disabled_reason))
+
   def add_info_message(self, m):
     return attr.evolve(self, test_spec=self.test_spec.add_info_message(m))
 
@@ -1104,20 +1121,24 @@ class TestWrapper(Test):  # pragma: no cover
     return self._test.update_rdb_results(suffix, results)
 
 
+class _NotInExperiment(DisabledReason):
+  """Identifies an experimental test that is not being triggered."""
+
+  def report_tests(self, chromium_tests_api, tests):
+    result = chromium_tests_api.m.step('experimental tests not in experiment',
+                                       [])
+    message = [('The following experimental tests were not selected'
+                ' for their experiments in this build:')]
+    message.extend(sorted(tests))
+    result.presentation.step_text = '\n * '.join(message)
+
+
+_NOT_IN_EXPERIMENT = _NotInExperiment()
+
+
 @attrs()
 class ExperimentalTestSpec(TestWrapperSpec):
-  """A spec for a test to be executed at some percentage.
-
-  Attributes:
-    * experiment_percentage - The percentage chance that the test will
-      be executed.
-    * is_in_experiment - Whether or not the test is in the experiment.
-  """
-
-  # TODO(gbeaty) This field exists just for comparison while tracking test specs
-  # migrations, once all specs are migrated source-side it can be removed.
-  experiment_percentage = attrib(int)
-  is_in_experiment = attrib(bool)
+  """A spec for a test to be executed at some percentage."""
 
   @classmethod
   def create(cls, test_spec, experiment_percentage, api):  # pylint: disable=line-too-long,arguments-differ
@@ -1134,10 +1155,9 @@ class ExperimentalTestSpec(TestWrapperSpec):
     is_in_experiment = cls._calculate_is_in_experiment(test_spec,
                                                        experiment_percentage,
                                                        api)
-    return super(ExperimentalTestSpec, cls).create(
-        test_spec,
-        experiment_percentage=experiment_percentage,
-        is_in_experiment=is_in_experiment)
+    if not is_in_experiment:
+      test_spec = test_spec.disable(_NOT_IN_EXPERIMENT)
+    return super(ExperimentalTestSpec, cls).create(test_spec)
 
   @property
   def test_wrapper_class(self):
@@ -1191,10 +1211,18 @@ class ExperimentalTest(TestWrapper):
       return 'experimental'
     return '%s, experimental' % (suffix)
 
-  def _is_in_experiment_and_has_valid_results(self, suffix):
-    return (self.spec.is_in_experiment and
-            super(ExperimentalTest, self).has_valid_results(
-                self._experimental_suffix(suffix)))
+  def _actually_has_valid_results(self, suffix):
+    """Check if the underlying test produced valid results.
+
+    The ExperimentalTest reports that it always has valid results, so
+    various result methods (failures, findit_notrun, etc.) will be
+    called. If the underlying test does not have valid results, then
+    calling the superclass version of the method would violate the
+    contract, so this method indicates if calling the superclass version
+    should be safe.
+    """
+    return super(ExperimentalTest,
+                 self).has_valid_results(self._experimental_suffix(suffix))
 
   @property
   def abort_on_failure(self):
@@ -1202,9 +1230,6 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def pre_run(self, api, suffix):
-    if not self.spec.is_in_experiment:
-      return []
-
     try:
       return super(ExperimentalTest,
                    self).pre_run(api, self._experimental_suffix(suffix))
@@ -1213,9 +1238,6 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def name_of_step_for_suffix(self, suffix):
-    # Wraps the parent method since we use a modified suffix internally.
-    if not self.spec.is_in_experiment:
-      return None  # If the experiment isn't on, there won't be any step.
     experimental_suffix = self._experimental_suffix(suffix)
     return super(ExperimentalTest,
                  self).name_of_step_for_suffix(experimental_suffix)
@@ -1223,9 +1245,6 @@ class ExperimentalTest(TestWrapper):
   #override
   @recipe_api.composite_step
   def run(self, api, suffix):
-    if not self.spec.is_in_experiment:
-      return None
-
     try:
       return super(ExperimentalTest,
                    self).run(api, self._experimental_suffix(suffix))
@@ -1234,16 +1253,15 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def has_valid_results(self, suffix):
-    if self.spec.is_in_experiment:
-      # Call the wrapped test's implementation in case it has side effects,
-      # but ignore the result.
-      super(ExperimentalTest,
-            self).has_valid_results(self._experimental_suffix(suffix))
+    # Call the wrapped test's implementation in case it has side effects, but
+    # ignore the result.
+    super(ExperimentalTest,
+          self).has_valid_results(self._experimental_suffix(suffix))
     return True
 
   #override
   def failures(self, suffix):
-    if self._is_in_experiment_and_has_valid_results(suffix):
+    if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).failures(self._experimental_suffix(suffix))
@@ -1251,7 +1269,7 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def deterministic_failures(self, suffix):
-    if self._is_in_experiment_and_has_valid_results(suffix):
+    if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest,
@@ -1260,7 +1278,7 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def findit_notrun(self, suffix):  # pragma: no cover
-    if self._is_in_experiment_and_has_valid_results(suffix):
+    if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest,
@@ -1268,7 +1286,7 @@ class ExperimentalTest(TestWrapper):
     return set()
 
   def pass_fail_counts(self, suffix):
-    if self._is_in_experiment_and_has_valid_results(suffix):
+    if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest,

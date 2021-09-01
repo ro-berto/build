@@ -52,6 +52,13 @@ def RunSteps(api):
       recording_test_spec,
       experiment_percentage=api.properties['experiment_percentage'],
       api=api)
+
+  experiment_on = api.properties['experiment_percentage'] == '100'
+  api.assertions.assertNotEqual(experiment_on,
+                                bool(experimental_test_spec.disabled_reason))
+  if not experiment_on:
+    return
+
   experimental_test = experimental_test_spec.get_test()
 
   api.python.succeeding_step(
@@ -67,8 +74,7 @@ def RunSteps(api):
   experimental_test.update_rdb_results(suffix, {})
 
   step_name = experimental_test.name_of_step_for_suffix(suffix)
-  experiment_on = api.properties['experiment_percentage'] == '100'
-  assert bool(step_name) == experiment_on
+  api.assertions.assertTrue(step_name)
 
   assert experimental_test.has_valid_results('')
   assert not experimental_test.failures('')
