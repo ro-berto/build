@@ -386,8 +386,6 @@ def main():
     return
 
   try:
-    # TODO(crbug/1159938): Revert to using just cmd instead of this filtered
-    # coverage file after verifying if this solves lapsed coverage issue.
     cmd = [
         'java', '-jar',
         os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',
@@ -407,7 +405,6 @@ def main():
         _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
     host_cmd = cmd + host_coverage_files + _create_classfile_args(
         class_files, _HOST_CLASS_EXCLUDE_SUFFIX)
-    # End of TODO changes.
 
     # JaCoCo XML report will be generated temporarily
     # then parsed to json metadata to --output-file.
