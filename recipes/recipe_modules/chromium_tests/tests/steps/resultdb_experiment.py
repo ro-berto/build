@@ -147,6 +147,13 @@ def GenTests(api):
               api.test_utils.rdb_results(failing_suites=['swarming_gtest']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
+      api.post_process(post_process.StepTextContains, 'swarming_gtest', [
+          'deterministic failures [caused step to fail]',
+          'swarming_gtest_test_case1'
+      ]),
+      api.post_process(post_process.LogContains, 'swarming_gtest',
+                       'swarming_gtest_test_case1',
+                       ['Log snippet for the test is unavailable here']),
       api.post_process(post_process.DropExpectation),
   )
 

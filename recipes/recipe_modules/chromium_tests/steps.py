@@ -2550,6 +2550,10 @@ class SwarmingTest(Test):
     self.update_failure_on_exit(suffix, bool(self._tasks[suffix].failed_shards))
 
     _present_info_messages(step_result.presentation, self)
+
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      self.present_rdb_results(api, step_result, self._rdb_results.get(suffix))
+
     return step_result
 
   def step_metadata(self, suffix=None):
@@ -2560,6 +2564,28 @@ class SwarmingTest(Test):
       data['dimensions'] = self._tasks[suffix].request[0].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
+
+  def present_rdb_results(self, api, step_result, rdb_results):
+    """Add a summary of test failures tracked in RDB to the given step_result.
+
+    This duplicates info present in the "Test Results" tab in the new Milo UI.
+    TODO(crbug.com/1245085): Remove this if/when all users have migrated to
+    the new UI.
+    """
+    if not rdb_results or not rdb_results.unexpected_failing_tests:
+      return
+
+    failures, failures_text = api.test_utils.limit_failures(
+        sorted(rdb_results.unexpected_failing_tests))
+    step_result.presentation.step_text += api.test_utils.format_step_text(
+        [['deterministic failures [caused step to fail]:', failures_text]])
+    for failure in failures:
+      step_result.presentation.logs[failure] = [
+          'Test "%s" completed with a failure.' % failure,
+          'Log snippet for the test is unavailable here.',
+          'Please see the "Test Results" tab in the new build page for the '
+          'full test log.'
+      ]
 
 
 @attrs()
@@ -3512,6 +3538,7 @@ class SkylabTest(Test):
     # As of 2021Q3, we can only generate the invocation name from the test
     # runner build ID included in the CTP response.
     # Revisit it once CTP2 is online(go/ctp2-dd).
+    del suffix
     runner_url_re = ('^https://ci.chromium.org/p/chromeos/builders/test_runner'
                      '/test_runner/b([0-9]*)$')
     urls = [str(b.url) for b in self.ctp_responses]
