@@ -1219,9 +1219,10 @@ class TestGroup(object):
     else:
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
-          variants_with_unexpected_results=True,
+          variants_with_unexpected_results=False,
           step_name='%s results' % test.name,
           tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
+          limit=0,
       )
       res = RDBPerSuiteResults.create(
           unexpected_result_invocations,

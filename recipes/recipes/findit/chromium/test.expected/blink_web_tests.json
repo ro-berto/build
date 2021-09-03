@@ -1898,7 +1898,6 @@
       "-json",
       "-n",
       "1000",
-      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "0"
@@ -2088,6 +2087,7 @@
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
@@ -3319,7 +3319,6 @@
       "-json",
       "-n",
       "1000",
-      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "1"
@@ -3502,6 +3501,7 @@
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",

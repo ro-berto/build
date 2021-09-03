@@ -680,15 +680,21 @@ class Test(object):
     tests ran in that case. It doesn't make sense to ask how this test should
     run when retried, if it hasn't run already.
     """
-    with_patch_total = self._test_runs['with patch']['total_tests_ran']
-    with_patch_retry_total = (
-        self._test_runs['retry shards with patch']['total_tests_ran']
-        if 'retry shards with patch' in self._test_runs else 0)
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      with_patch_total = self._rdb_results['with patch'].total_tests_ran
+      with_patch_retry_total = (
+          self._rdb_results['retry shards with patch'].total_tests_ran
+          if 'retry shards with patch' in self._rdb_results else 0)
+    else:
+      with_patch_total = self._test_runs['with patch']['total_tests_ran']
+      with_patch_retry_total = (
+          self._test_runs['retry shards with patch']['total_tests_ran']
+          if 'retry shards with patch' in self._test_runs else 0)
     total_tests_ran = max(with_patch_total, with_patch_retry_total)
     assert total_tests_ran, (
         "We cannot compute the total number of tests to re-run if no tests "
-        "were run 'with patch'. Expected %s to contain key 'total_tests_ran', "
-        "but it didn't" % (self._test_runs['with patch']))
+        "were run 'with patch'. Expected the results tracker to contain key "
+        "'total_tests_ran', but it didn't")
 
     # We want to approximately match the previous shard load. Using only one
     # shard can lead to a single shard running many more tests than it

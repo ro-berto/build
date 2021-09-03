@@ -400,6 +400,7 @@ class RDBPerSuiteResults(object):
 
   suite_name = attrib(str)
   variant_hash = attrib(str)
+  total_tests_ran = attrib(int)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
   # unexpected_skipped_tests should be a subset of unexpected_failing_tests.
@@ -420,6 +421,7 @@ class RDBPerSuiteResults(object):
     results_by_test_id = collections.defaultdict(list)
     variant_hash = ''
     test_name_to_test_id_mapping = {}
+    all_test_ids = set()
     for inv in invocations.values():
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
@@ -429,6 +431,7 @@ class RDBPerSuiteResults(object):
         if inv_name and suite_name:
           assert inv_name == suite_name, "Mismatched invocations, %s vs %s" % (
               inv_name, suite_name)
+        all_test_ids.add(tr.test_id)
         # The test's ID may not always directly match up with its name (see
         # go/chrome-test-id for context). So lookup the test's name in the tags,
         # but preserve a mapping from name to ID for easier look-up.
@@ -437,10 +440,13 @@ class RDBPerSuiteResults(object):
           if tag.key == 'test_name':
             test_name = tag.value
             break
-        test_name_to_test_id_mapping[test_name] = tr.test_id
+        # Don't bother keeping a name map for tests with uninteresting results.
+        if not tr.expected:
+          test_name_to_test_id_mapping[test_name] = tr.test_id
         variant_hash = tr.variant_hash
         results_by_test_id[test_name].append(tr)
 
+    total_tests_ran = len(all_test_ids)
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()
@@ -464,9 +470,9 @@ class RDBPerSuiteResults(object):
     # hardware) and that the results are invalid.
     invalid = failure_on_exit and not unexpected_failing_tests
 
-    return cls(suite_name, variant_hash, unexpected_passing_tests,
-               unexpected_failing_tests, unexpected_skipped_tests, invalid,
-               test_name_to_test_id_mapping)
+    return cls(suite_name, variant_hash, total_tests_ran,
+               unexpected_passing_tests, unexpected_failing_tests,
+               unexpected_skipped_tests, invalid, test_name_to_test_id_mapping)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.
@@ -491,6 +497,7 @@ class RDBPerSuiteResults(object):
         'suite_name': self.suite_name,
         'variant_hash': self.variant_hash,
         'invalid': str(self.invalid),
+        'total_tests_ran': self.total_tests_ran,
         'unexpected_passing_tests': list(self.unexpected_passing_tests),
         'unexpected_failing_tests': list(self.unexpected_failing_tests),
         'unexpected_skipped_tests': list(self.unexpected_skipped_tests),
