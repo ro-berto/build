@@ -55,24 +55,24 @@ def RunSteps(api, properties):
     raise api.step.InfraFailure('Missing compilator input')
 
   with api.chromium.chromium_layout():
-    # Get current ToT revision
+    # Get current revision at HEAD of branch
     # TODO (gbeaty): To support downstream CLs, we need to find the revision
     # of the root solution, not the repo of the CL
     ref = api.tryserver.gerrit_change_target_ref
 
-    tot_revision, _ = api.gitiles.log(
+    head_revision, _ = api.gitiles.log(
         api.tryserver.gerrit_change_repo_url,
         ref,
         limit=1,
-        step_name='read src ToT revision')
-    tot_revision = tot_revision[0]['commit']
+        step_name='read src HEAD revision at {}'.format(ref))
+    head_revision = head_revision[0]['commit']
 
     gitiles_commit = common_pb.GitilesCommit(
         # TODO: Programatically fetch this from tryserver module
         host='chromium.googlesource.com',
         project=api.tryserver.gerrit_change.project,
         ref=ref,
-        id=tot_revision)
+        id=head_revision)
 
     # Scheduled build inherits current build's project and bucket
     request = api.buildbucket.schedule_request(
@@ -99,13 +99,15 @@ def RunSteps(api, properties):
     api.chromium.c.compile_py.compiler = ''
     api.chromium_tests.report_builders(builder_config)
 
-    api.gclient.c.revisions['src'] = tot_revision
+    api.chromium.apply_config('trybot_flavor')
+    api.gclient.c.revisions['src'] = head_revision
     _, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
         timeout=3600,
         set_output_commit=builder_config.set_output_commit,
         enforce_fetch=True,
-        no_fetch_tags=True)
+        no_fetch_tags=True,
+        refs=[ref])
 
     affected_files = api.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
@@ -334,8 +336,8 @@ def GenTests(api):
         step_name=step_name,
     )
 
-  def fake_tot_revision():
-    return api.step_data('read src ToT revision',
+  def fake_head_revision(ref='refs/heads/main'):
+    return api.step_data('read src HEAD revision at {}'.format(ref),
                          api.gitiles.make_log_test_data('deadbeef'))
 
   yield api.test(
@@ -343,11 +345,38 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       api.code_coverage(use_clang_coverage=True),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(),
       override_trigger_compilator(),
       override_wait_for_swarming_props(),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--refs', 'refs/heads/main']),
+      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'collect compilator'),
+      api.post_process(post_process.LogContains, 'trigger compilator',
+                       'request',
+                       ['tryserver.chromium.linux', 'linux-rel-compilator']),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading isolate all_test_binaries'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_branch',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.tryserver.gerrit_change_target_ref('refs/branch-heads/4472'),
+      api.code_coverage(use_clang_coverage=True),
+      fake_head_revision('refs/branch-heads/4472'),
+      override_test_spec(),
+      override_collect_compilator(),
+      override_trigger_compilator(),
+      override_wait_for_swarming_props(),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--refs', 'refs/branch-heads/4472']),
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'collect compilator'),
       api.post_process(post_process.LogContains, 'trigger compilator',
@@ -364,7 +393,7 @@ def GenTests(api):
       'no_tests_to_trigger',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_trigger_compilator(),
       override_wait_for_swarming_props(
@@ -392,7 +421,7 @@ def GenTests(api):
       'failing_test_retry_shard_passed',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_wait_for_swarming_props(),
       override_trigger_compilator(),
@@ -420,7 +449,7 @@ def GenTests(api):
       'failing_test_retry_shard_failed',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_wait_for_swarming_props(),
       override_trigger_compilator(),
@@ -447,7 +476,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       override_test_spec(),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_trigger_compilator(),
       override_wait_for_swarming_props(
           status=common_pb.FAILURE, empty_props=True),
@@ -465,7 +494,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       override_test_spec(),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_trigger_compilator(),
       override_wait_for_swarming_props(
           status=common_pb.INFRA_FAILURE, empty_props=True),
@@ -483,7 +512,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       override_test_spec(),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_trigger_compilator(),
       override_wait_for_swarming_props(
           status=common_pb.CANCELED, empty_props=True),
@@ -500,7 +529,7 @@ def GenTests(api):
       'failed_compilator_local_test',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(
           status=common_pb.FAILURE,
@@ -518,7 +547,7 @@ def GenTests(api):
       'compilator_canceled_at_final_collect',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(status=common_pb.CANCELED),
       override_trigger_compilator(),
@@ -544,7 +573,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       override_test_spec(),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_trigger_compilator(),
       override_wait_for_swarming_props_timeout(),
       api.post_process(post_process.MustRun, 'trigger compilator'),
@@ -561,7 +590,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       api.code_coverage(use_clang_coverage=True),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(),
       override_trigger_compilator(),
@@ -588,7 +617,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       api.code_coverage(use_clang_coverage=True),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(),
       override_trigger_compilator(),
@@ -623,7 +652,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       api.code_coverage(use_clang_coverage=True),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(),
       override_trigger_compilator(),
@@ -643,7 +672,7 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       api.code_coverage(use_clang_coverage=True),
-      fake_tot_revision(),
+      fake_head_revision(),
       override_test_spec(),
       override_collect_compilator(use_cas=True),
       override_trigger_compilator(),
