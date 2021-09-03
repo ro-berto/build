@@ -656,6 +656,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Cast Linux Debug',
             ),
+        'cast_shell_linux_arm64':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='Cast Linux ARM64',
+            ),
         'cast_shell_audio_linux':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',

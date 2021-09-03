@@ -352,6 +352,18 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Cast Linux ARM64':
+        _chromium_linux_spec(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb'],
+            isolate_server='https://isolateserver.appspot.com',
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     'Fuchsia ARM64 Cast Audio':
         _chromium_linux_spec(
             chromium_config='chromium',
