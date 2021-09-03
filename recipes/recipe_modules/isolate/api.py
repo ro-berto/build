@@ -325,6 +325,10 @@ class IsolateApi(recipe_api.RecipeApi):
       self.archive_differences(first_dir, second_dir, step_result.json.output)
     except self.m.step.StepFailure as e:
       step_result = self.m.step.active_result
+      step_result.presentation.step_text = (
+          'See https://chromium.googlesource.com'
+          '/chromium/src/+/HEAD/docs/deterministic_builds.md'
+          '#handling-failures-on-the-deterministic-bots')
       self.archive_differences(first_dir, second_dir, step_result.json.output)
       raise e
 

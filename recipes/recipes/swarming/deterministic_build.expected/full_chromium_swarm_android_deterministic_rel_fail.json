@@ -1163,6 +1163,7 @@
     ],
     "name": "compare_build_artifacts",
     "~followup_annotations": [
+      "@@@STEP_TEXT@See https://chromium.googlesource.com/chromium/src/+/HEAD/docs/deterministic_builds.md#handling-failures-on-the-deterministic-bots@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"expected_diffs\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"flatc\"@@@",
