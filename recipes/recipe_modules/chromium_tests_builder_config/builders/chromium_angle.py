@@ -193,16 +193,6 @@ SPEC = {
     'linux-angle-chromium-nvidia':
         CreateTesterConfig(
             'linux', 64, 'linux-angle-chromium-builder', internal=False),
-    'mac-angle-builder':
-        CreateBuilderConfig('mac', 64, internal=True),
-    'mac-angle-amd':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
-    'mac-angle-amd-exp':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
-    'mac-angle-intel':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
-    'mac-angle-nvidia':
-        CreateTesterConfig('mac', 64, 'mac-angle-builder', internal=True),
     'mac-angle-chromium-builder':
         CreateBuilderConfig('mac', 64, internal=False),
     'mac-angle-chromium-amd':

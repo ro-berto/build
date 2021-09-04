@@ -465,17 +465,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android FYI dEQP Release (Nexus 5X)',
                 retry_failed_shards=False,
             ),
-        'angle-try-mac-amd-exp':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-builder',
-                        tester='mac-angle-amd-exp',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
         'fuchsia-angle-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
@@ -566,27 +555,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.angle',
                         buildername='mac-angle-chromium-builder',
                         tester='mac-angle-chromium-intel',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'mac-angle-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-builder',
-                        tester='mac-angle-amd',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-builder',
-                        tester='mac-angle-intel',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-builder',
-                        tester='mac-angle-nvidia',
                     ),
                 ],
                 retry_failed_shards=False,
