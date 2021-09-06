@@ -172,6 +172,28 @@ class Command(object):
     return cmd
 
 
+def raw_gs_url_template(builder_group, buildername):
+  return ('gs://chromium-v8/isolated/%s/%s/%%s.json' %
+          (builder_group, buildername))
+
+def fallback_buildername(buildername):
+  """V8-side logic for deducing the name of a builder from its compiling
+  builder name, following current naming conventions.
+
+  Foobar - builder -> Foobar.
+  Foobar - debug builder -> Foobar - debug.
+  Foobar - anything -> Foobar - anything.
+
+  The last entry is to simplify code for cases where no compiling builder
+  exists.
+  """
+  if buildername.endswith(' - builder'):
+    return buildername[:-len(' - builder')]
+  if buildername.endswith(' builder'):
+    return buildername[:-len(' builder')]
+  return buildername
+
+
 class Depot(object):
   """Helper class for interacting with remote storage (GS bucket and git)."""
 
@@ -187,16 +209,38 @@ class Depot(object):
           revision.
     """
     self.api = api
-    self.gs_url_template = ('gs://chromium-v8/isolated/%s/%s/%%s.json' %
-                            (builder_group, buildername))
     self.isolated_name = isolated_name
     self.revision = revision
+    # Two templates for looking up the builder before and after a potential
+    # split into builder/tester.
+    self.gs_url_template_first = raw_gs_url_template(
+        builder_group, buildername)
+    self.gs_url_template_second = raw_gs_url_template(
+        builder_group, fallback_buildername(buildername))
+    # Cache for offsets that exist at fallback build location.
+    self.fallback_offsets = set()
     # Cache for mapping offsets to real revisions.
     self.revisions = {0: revision}
     # Cache for cas digests.
     self.cas_digests = {}
     # Offset cache for closest builds with cas digests.
     self.closest_builds = {}
+
+  def gs_url(self, offset):
+    """Chooses the gs_url that points to either the original or a fallback
+    builder in case of a builder split.
+    """
+    rev = self.get_revision(offset)
+    if offset not in self.fallback_offsets:
+      return self.gs_url_template_first % rev
+    return self.gs_url_template_second % rev
+
+  @property
+  def fallback_available(self):
+    """A fallback builder is available if the url templates differ. Otherwise
+    they point to the same builder.
+    """
+    return self.gs_url_template_first != self.gs_url_template_second
 
   def get_revision(self, offset):
     """Returns the git revision at the given offset (cached)."""
@@ -212,15 +256,25 @@ class Depot(object):
         self.revisions[offset + i] = commit['commit']
     return self.revisions[offset]
 
-  def has_build(self, offset):
-    """Checks if a cas digest exists for the given offset."""
+  def _lookup_build_test_data(self):
+    """By default all lookups fail (i.e. no builds available). Override
+    testdata in specific test cases to make lookups pass.
+    """
+    return self.api.raw_io.test_api.stream_output(
+        GSUTIL_NO_MATCH_TXT,
+        stream='stderr',
+        retcode=1,
+    )
+
+  def _lookup_build(self, gs_url_template, name_suffix, offset):
     rev = self.get_revision(offset)
     link = '%s/+/%s' % (REPO, rev)
     try:
       self.api.gsutil.list(
-          self.gs_url_template % rev,
-          name='lookup cas_digests for #%d' % offset,
+          gs_url_template % rev,
+          name='lookup cas_digests for #%d%s' % (offset, name_suffix),
           stderr=self.api.raw_io.output_text(),
+          step_test_data=self._lookup_build_test_data,
       )
       return True
     except self.api.step.StepFailure as e:
@@ -233,6 +287,22 @@ class Depot(object):
       raise  # pragma: no cover
     finally:
       self.api.step.active_result.presentation.links[rev[:8]] = link
+
+  def has_build(self, offset):
+    """Checks if a cas digest exists for the given offset.
+
+    Tries the original requested and a fallback builder if one exists. The
+    "fallback_offsets" will indicate if the fallback builder should be used
+    at this offset, when downloading the build later.
+    """
+    result = self._lookup_build(
+        self.gs_url_template_first, '', offset)
+    if not result and self.fallback_available:
+      # Indicate that this build could potentially be found using the fallback.
+      self.fallback_offsets.add(offset)
+      result = self._lookup_build(
+          self.gs_url_template_second, ' (fallback)', offset)
+    return result
 
   def find_closest_build(self, offset, max_offset=None):
     """Looks backwards for the closest offset with an existing digest (cached).
@@ -261,7 +331,7 @@ class Depot(object):
       return self.cas_digests[offset]
 
     self.api.gsutil.download_url(
-        self.gs_url_template % self.get_revision(offset),
+        self.gs_url(offset),
         self.api.json.output(),
         name='get cas_digests for #%s' % offset,
         step_test_data=lambda: self.api.json.test_api.output(
@@ -615,12 +685,12 @@ def RunSteps(api, bisect_builder_group, bisect_buildername,
 
 
 def GenTests(api):
-  def test(name):
+  def test(name, bisect_buildername='V8 Foobar'):
     return api.test(
         name,
         api.properties(
             bisect_builder_group='foo.v8',
-            bisect_buildername='V8 Foobar',
+            bisect_buildername=bisect_buildername,
             extra_args=['--foo-flag', '--bar-flag'],
             isolated_name='foo_isolated',
             repetitions=64,
@@ -640,14 +710,12 @@ def GenTests(api):
         ),
     )
 
-  def cas_digest_lookup(offset, exists):
-    return api.step_data(
-        'gsutil lookup cas_digests for #%d' % offset,
-        api.raw_io.stream_output(
-            '' if exists else GSUTIL_NO_MATCH_TXT,
-            stream='stderr',
-        ),
-        retcode=0 if exists else 1,
+  def successful_lookup(offset, fallback=False):
+    suffix = ' (fallback)' if fallback else ''
+    return api.override_step_data(
+        'gsutil lookup cas_digests for #%d%s' % (offset, suffix),
+        api.raw_io.stream_output('', stream='stderr'),
+        retcode=0,
     )
 
   def get_revisions(offset, *revisions):
@@ -694,20 +762,18 @@ def GenTests(api):
   # a5: not flaky
   # -> Should result in suspecting range a5..a3.
   yield (
-      test('full_bisect') +
+      test('full_bisect', 'V8 Foobar - builder') +
       # Test path where total timeout isn't used.
       api.properties(total_timeout_sec=0) +
       # Data for resolving offsets to git hashes. Simulate gitiles page size of
       # 3 commits per call.
       get_revisions(1, 'a1', 'a2', 'a3') +
       get_revisions(4, 'a4', 'a5', 'a6') +
-      # CAS digest data simulation for all revisions.
-      cas_digest_lookup(0, False) +
-      cas_digest_lookup(1, True) +
-      cas_digest_lookup(2, True) +
-      cas_digest_lookup(3, True) +
-      cas_digest_lookup(4, False) +
-      cas_digest_lookup(5, True) +
+      # CAS digest data simulation for all existing revisions.
+      successful_lookup(1) +
+      successful_lookup(2) +
+      successful_lookup(3) +
+      successful_lookup(5) +
       # Calibration. We check for flakes until enough are found. First only one
       # shard reports 2 failures.
       is_flaky(1, 1, 2, calibration_attempt=1) +
@@ -735,12 +801,12 @@ def GenTests(api):
       # 8, fetching all data in the first call.
       get_revisions(1, 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8') +
       # CAS digest data simulation for all revisions.
-      cas_digest_lookup(0, True) +
-      cas_digest_lookup(1, True) +
-      cas_digest_lookup(3, True) +
-      cas_digest_lookup(4, True) +
-      cas_digest_lookup(5, True) +
-      cas_digest_lookup(7, True) +
+      successful_lookup(0) +
+      successful_lookup(1) +
+      successful_lookup(3) +
+      successful_lookup(4) +
+      successful_lookup(5) +
+      successful_lookup(7) +
       # Calibration.
       is_flaky(0, 0, 5, calibration_attempt=1) +
       # Bisect backwards from a0 until good revision a7 is found.
@@ -757,11 +823,8 @@ def GenTests(api):
       test('large_gap') +
       get_revisions(1, 'a1', 'a2', 'a3', 'a4') +
       # Simulate a large gap between #0 and #4..
-      cas_digest_lookup(0, True) +
-      cas_digest_lookup(1, False) +
-      cas_digest_lookup(2, False) +
-      cas_digest_lookup(3, False) +
-      cas_digest_lookup(4, True) +
+      successful_lookup(0) +
+      successful_lookup(4) +
       # Bad build #0 wile #4 is a good build using default test data.
       is_flaky(0, 0, 5, calibration_attempt=1) +
       # Check that bisect continues properly after not finding a build in one
@@ -777,11 +840,11 @@ def GenTests(api):
   )
 
   # Simulate not finding any cas_digests.
+  no_cas_digests_test_data = test('no_cas_digests')
+  for i in range(1, MAX_CAS_OFFSET):
+    no_cas_digests_test_data += get_revisions(i, 'a%d' % i)
   yield (
-      test('no_cas_digests') +
-      sum((cas_digest_lookup(i, False) + get_revisions(i, 'a%d' % i)
-           for i in range(1, MAX_CAS_OFFSET)),
-          cas_digest_lookup(0, False)) +
+      no_cas_digests_test_data +
       api.post_process(ResultReasonRE, 'Couldn\'t find cas_digests.') +
       api.post_process(DropExpectation)
   )
@@ -790,7 +853,7 @@ def GenTests(api):
   yield (
       test('repro_only') +
       api.properties(repro_only=True) +
-      cas_digest_lookup(0, True) +
+      successful_lookup(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
       api.post_process(Filter(
@@ -802,8 +865,22 @@ def GenTests(api):
   yield (
       test('repro_only_failed') +
       api.properties(repro_only=True) +
-      cas_digest_lookup(0, True) +
+      successful_lookup(0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate repro-only mode using a fallback debug builder.
+  yield (
+      test('repro_only_fallback', 'V8 Foobar - debug builder') +
+      api.properties(repro_only=True) +
+      get_revisions(1, 'a1', 'a2') +
+      successful_lookup(1, fallback=True) +
+      api.post_process(MustRun, 'gsutil lookup cas_digests for #0') +
+      api.post_process(MustRun, 'gsutil lookup cas_digests for #0 (fallback)') +
+      api.post_process(MustRun, 'gsutil lookup cas_digests for #1') +
+      api.post_process(MustRun, 'gsutil lookup cas_digests for #1 (fallback)') +
+      api.post_process(DoesNotRun, 'gsutil lookup cas_digests for #2') +
       api.post_process(DropExpectation)
   )
 
@@ -819,7 +896,7 @@ def GenTests(api):
       swarming_dimensions=[
           'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
           'device_type:bullhead', 'pool:chromium.tests'
-      ]) + cas_digest_lookup(0, True) + api.post_process(check_dimensions) +
+      ]) + successful_lookup(0) + api.post_process(check_dimensions) +
          api.post_process(DropExpectation))
 
   # Simulate not finding enough flakes during calibration.
@@ -829,7 +906,7 @@ def GenTests(api):
   yield (
       test('no_confidence') +
       api.properties(test_name=long_test_name, num_shards=8) +
-      cas_digest_lookup(0, True) +
+      successful_lookup(0) +
       is_flaky(0, 0, 0, calibration_attempt=1, test_name=shortened_test_name) +
       is_flaky(0, 1, 2, calibration_attempt=2, test_name=shortened_test_name) +
       is_flaky(0, 2, 1, calibration_attempt=3, test_name=shortened_test_name) +
@@ -846,7 +923,7 @@ def GenTests(api):
         repro_only=True, swarming_priority=40, num_shards=2,
         swarming_expiration=7200, total_timeout_sec=240,
         max_calibration_attempts=1) +
-      cas_digest_lookup(0, True) +
+      successful_lookup(0) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +

@@ -8,10 +8,27 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a0.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a0.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #0",
+    "~followup_annotations": [
+      "@@@STEP_LINK@a0@https://chromium.googlesource.com/v8/v8/+/a0@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a0.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil lookup cas_digests for #0 (fallback)",
     "~followup_annotations": [
       "@@@STEP_LINK@a0@https://chromium.googlesource.com/v8/v8/+/a0@@@"
     ]
@@ -58,7 +75,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a1.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a1.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #1",
@@ -82,7 +99,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a1.json",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a1.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
@@ -1271,7 +1288,7 @@
       "@@@STEP_LOG_LINE@config@[@@@",
       "@@@STEP_LOG_LINE@config@  {@@@",
       "@@@STEP_LOG_LINE@config@    \"bisect_builder_group\": \"foo.v8\",@@@",
-      "@@@STEP_LOG_LINE@config@    \"bisect_buildername\": \"V8 Foobar\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"bisect_buildername\": \"V8 Foobar - builder\",@@@",
       "@@@STEP_LOG_LINE@config@    \"bug_url\": \"<bug-url>\",@@@",
       "@@@STEP_LOG_LINE@config@    \"extra_args\": [@@@",
       "@@@STEP_LOG_LINE@config@      \"--foo-flag\",@@@",
@@ -1302,7 +1319,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a2.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a2.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #2",
@@ -1326,7 +1343,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a2.json",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a2.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
@@ -2165,7 +2182,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a4.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a4.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #4",
@@ -2182,7 +2199,24 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a5.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a4.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil lookup cas_digests for #4 (fallback)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@a4@https://chromium.googlesource.com/v8/v8/+/a4@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a5.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #5",
@@ -2206,7 +2240,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a5.json",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a5.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
@@ -3017,7 +3051,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a3.json"
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a3.json"
     ],
     "infra_step": true,
     "name": "gsutil lookup cas_digests for #3",
@@ -3041,7 +3075,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://chromium-v8/isolated/foo.v8/V8 Foobar/a3.json",
+      "gs://chromium-v8/isolated/foo.v8/V8 Foobar - builder/a3.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
