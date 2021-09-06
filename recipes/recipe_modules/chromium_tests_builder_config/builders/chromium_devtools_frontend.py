@@ -24,6 +24,5 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
-            isolate_use_cas=True,
         ),
 }

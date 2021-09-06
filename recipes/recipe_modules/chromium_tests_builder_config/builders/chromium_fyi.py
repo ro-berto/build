@@ -42,7 +42,6 @@ SPEC = {
                 'mb',
             ],
             isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -203,7 +202,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -308,7 +306,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',

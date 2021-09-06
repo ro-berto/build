@@ -215,8 +215,9 @@ def GenTests(api):
               },
           },
           step_suffix=' (2)'),
-      api.post_process(verify_report,
-                       {'browser_tests': '[dummy hash for browser_tests]'}),
+      api.post_process(
+          verify_report,
+          {'browser_tests': '[dummy hash for browser_tests/dummy size]'}),
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
@@ -253,8 +254,9 @@ def GenTests(api):
               },
           },
           step_suffix=' (2)'),
-      api.post_process(verify_report,
-                       {'browser_tests': '[dummy hash for browser_tests]'}),
+      api.post_process(
+          verify_report,
+          {'browser_tests': '[dummy hash for browser_tests/dummy size]'}),
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(

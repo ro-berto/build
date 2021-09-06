@@ -227,7 +227,6 @@ SPEC = {
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'fuchsia_x64'],
             chromium_config_kwargs={
@@ -245,7 +244,6 @@ SPEC = {
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
             isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'fuchsia_arm64', 'fuchsia_arm64_host'

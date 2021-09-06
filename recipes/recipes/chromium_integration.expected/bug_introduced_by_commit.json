@@ -991,8 +991,10 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/blink_web_tests.isolated.gen.json"
     ],
     "env": {
@@ -1001,11 +1003,10 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"}@@@"
     ]
   },
   {
@@ -2705,8 +2706,10 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/blink_web_tests.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder",
@@ -2716,11 +2719,10 @@
     "name": "isolate tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"}@@@"
     ]
   },
   {

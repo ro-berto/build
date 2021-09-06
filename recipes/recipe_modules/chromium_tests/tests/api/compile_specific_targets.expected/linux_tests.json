@@ -911,18 +911,19 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/base_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\": \"[dummy hash for base_unittests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_unittests\": \"[dummy hash for base_unittests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"base_unittests\": \"[dummy hash for base_unittests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"base_unittests\": \"[dummy hash for base_unittests/dummy size]\"}@@@"
     ]
   },
   {

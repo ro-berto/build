@@ -226,7 +226,6 @@ SPEC = {
                 'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
             isolate_server='https://isolateserver.appspot.com',
-            isolate_use_cas=True,
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

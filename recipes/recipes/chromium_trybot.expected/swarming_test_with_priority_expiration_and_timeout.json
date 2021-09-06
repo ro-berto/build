@@ -1257,8 +1257,10 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--verbose",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
       "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "env": {
@@ -1267,11 +1269,10 @@
     "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_with_patch@{\"gl_tests\": \"[dummy hash for gl_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_with_patch@{\"gl_tests\": \"[dummy hash for gl_tests/dummy size]\"}@@@"
     ]
   },
   {

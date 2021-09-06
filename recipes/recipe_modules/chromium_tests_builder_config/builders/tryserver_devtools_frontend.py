@@ -15,7 +15,6 @@ COMMON_BOT_CONFIG = builder_spec.BuilderSpec.create(
     },
     test_results_config='public_server',
     simulation_platform='linux',
-    isolate_use_cas=True,
 )
 
 SPEC = {

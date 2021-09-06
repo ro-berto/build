@@ -9,7 +9,6 @@ def _client_devtools_frontend_integration_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='devtools-frontend',
       luci_project='devtools-frontend',
-      isolate_use_cas=True,
       **kwargs)
 
 

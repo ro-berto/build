@@ -159,10 +159,6 @@ class BuilderSpec(object):
   # `None` rather than something like the public server to avoid accidentally
   # uploading private isolates to the public server.
   isolate_server = attrib(str, default=None)
-  # Whether to use CAS when creating isolates
-  # TODO(crbug.com/chrome-operations/49):
-  # Remove once all tasks are switched to `cas`
-  isolate_use_cas = attrib(bool, default=False)
 
   # URL to override the swarming server to use
   swarming_server = attrib(str, default=None)

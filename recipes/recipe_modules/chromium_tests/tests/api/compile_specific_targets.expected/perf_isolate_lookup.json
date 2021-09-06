@@ -6,7 +6,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"linux-builder-perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"1234567812345678123456781234567812345678\\\", \\\"repository\\\": \\\"chromium\\\"}, {\\\"git_hash\\\": \\\"1234567812345678123456781234567812345678\\\", \\\"repository\\\": \\\"src\\\"}], \\\"patch\\\": {\\\"revision\\\": 12, \\\"change\\\": 456789, \\\"server\\\": \\\"https://chromium-review.googlesource.com\\\"}}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"https://chrome-isolated.appspot.com\"}",
+      "{\"builder_name\": \"linux-builder-perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"1234567812345678123456781234567812345678\\\", \\\"repository\\\": \\\"chromium\\\"}, {\\\"git_hash\\\": \\\"1234567812345678123456781234567812345678\\\", \\\"repository\\\": \\\"src\\\"}], \\\"patch\\\": {\\\"revision\\\": 12, \\\"change\\\": 456789, \\\"server\\\": \\\"https://chromium-review.googlesource.com\\\"}}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",

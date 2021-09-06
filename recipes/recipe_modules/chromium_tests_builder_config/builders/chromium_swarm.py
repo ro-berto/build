@@ -83,6 +83,3 @@ SPEC['linux-rel-swarming-staging'] = (
 
 SPEC['win-rel-swarming-staging'] = (
     SPEC['win-rel-swarming'].evolve(swarming_server=_CHROMIUM_SWARM_STAGING))
-
-for builder in SPEC:
-  SPEC[builder] = SPEC[builder].evolve(isolate_use_cas=True)
