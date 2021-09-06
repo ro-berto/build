@@ -362,10 +362,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.log('android_version_code:%s' % android_version_code)
     return android_version_name, android_version_code
 
-  def _use_goma(self, chromium_config=None):
+  def _use_goma_set_in_recipe(self, chromium_config=None):
     chromium_config = chromium_config or self.m.chromium.c
     return (chromium_config.compile_py.compiler and
             'goma' in chromium_config.compile_py.compiler)
+
+  def _use_goma_set_in_gn_args(self, gn_args):
+    args = self.m.gn.parse_gn_args(gn_args)
+    return args.get('use_goma') == 'true'
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
@@ -838,7 +842,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
-        use_goma_module = self._use_goma()
+        use_goma_module = self._use_goma_set_in_recipe()
         gn_args = self.m.chromium.mb_gen(
             builder_id,
             phase=mb_phase,
@@ -851,6 +855,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             android_version_name=android_version_name,
             use_rts=use_rts,
             rts_recall=rts_recall)
+        use_goma_in_gn_args = self._use_goma_set_in_gn_args(gn_args)
+        if use_goma_module and not use_goma_in_gn_args:
+          self.m.step('goma is disabled by gn', cmd=None)
+          use_goma_module = False
         use_reclient = self._use_reclient(gn_args)
         if use_reclient:
           use_goma_module = False
@@ -2075,7 +2083,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         mb_config_path=mb_config_path,
         chromium_config=parent_chromium_config,
         phase=mb_phase,
-        use_goma=self._use_goma(parent_chromium_config),
+        use_goma=self._use_goma_set_in_recipe(parent_chromium_config),
         android_version_name=android_version_name,
         android_version_code=android_version_code,
         name='lookup builder GN args')
