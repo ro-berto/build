@@ -15,7 +15,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -31,7 +30,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -47,7 +45,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -64,7 +61,6 @@ SPEC = {
             android_config='base_config',
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -83,7 +79,6 @@ SPEC = {
             android_config='base_config',
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -104,7 +99,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -121,7 +115,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -134,7 +127,6 @@ SPEC = {
     'WebRTC Chromium FYI Linux Builder':
         _chromium_webrtc_fyi_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -147,7 +139,6 @@ SPEC = {
     'WebRTC Chromium FYI Linux Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -161,7 +152,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -179,7 +169,6 @@ SPEC = {
                 'dcheck',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -195,7 +184,6 @@ SPEC = {
                 'dcheck',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -212,7 +200,6 @@ SPEC = {
                 'dcheck',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -227,7 +214,6 @@ SPEC = {
     'WebRTC Chromium FYI Win Builder':
         _chromium_webrtc_fyi_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -240,7 +226,6 @@ SPEC = {
     'WebRTC Chromium FYI Win Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -254,7 +239,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -270,7 +254,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -286,7 +269,6 @@ SPEC = {
         _chromium_webrtc_fyi_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

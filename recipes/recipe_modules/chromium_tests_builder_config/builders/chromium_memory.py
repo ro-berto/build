@@ -22,7 +22,6 @@ SPEC = {
             # This doesn't affect the build, but ensures that trybots get
             # the right runtime flags.
             chromium_apply_config=['lsan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'Linux ASan LSan Tests (1)':
@@ -36,7 +35,6 @@ SPEC = {
             # Enable LSan at runtime. This disables the sandbox in browser
             # tests. http://crbug.com/336218
             chromium_apply_config=['lsan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             execution_mode=builder_spec.TEST,
             parent_buildername='Linux ASan LSan Builder',
             simulation_platform='linux',
@@ -50,7 +48,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             # We want to test ASan+sandbox as well, so run browser tests
             # again, this time with LSan disabled.
             execution_mode=builder_spec.TEST,
@@ -61,7 +58,6 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -74,7 +70,6 @@ SPEC = {
             chromium_config='chromium_msan',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -86,7 +81,6 @@ SPEC = {
             chromium_config='chromium_msan',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -101,7 +95,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -114,7 +107,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -128,7 +120,6 @@ SPEC = {
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -141,7 +132,6 @@ SPEC = {
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -154,7 +144,6 @@ SPEC = {
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -174,7 +163,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='mac',
         ),
     'Mac ASan 64 Tests (1)':
@@ -188,7 +176,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             execution_mode=builder_spec.TEST,
             parent_buildername='Mac ASan 64 Builder',
             simulation_platform='mac',
@@ -203,7 +190,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['lsan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'Linux Chromium OS ASan LSan Tests (1)':
@@ -216,7 +202,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['lsan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             parent_buildername='Linux Chromium OS ASan LSan Builder',
             execution_mode=builder_spec.TEST,
             simulation_platform='linux',
@@ -230,7 +215,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['asan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'WebKit Linux MSAN':
@@ -242,7 +226,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['asan', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'WebKit Linux Leak':
@@ -254,7 +237,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='linux',
         ),
     'android-asan':
@@ -262,7 +244,6 @@ SPEC = {
             android_config='main_builder',
             chromium_config='android_asan',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -276,7 +257,6 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -293,7 +273,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             simulation_platform='win',
         ),
 }

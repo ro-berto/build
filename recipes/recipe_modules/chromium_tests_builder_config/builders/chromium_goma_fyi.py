@@ -132,7 +132,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='android',
             chromium_apply_config=['mb', 'download_vr_test_apks'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={

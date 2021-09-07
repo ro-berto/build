@@ -15,7 +15,6 @@ SPEC = {
         _chromium_chromiumos_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -104,7 +103,6 @@ SPEC.update([
         cros_boards_with_qemu_images='amd64-generic'),
     _config(
         'chromeos-amd64-generic-dbg',
-        isolate_server='https://isolateserver.appspot.com',
         cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
     _config(

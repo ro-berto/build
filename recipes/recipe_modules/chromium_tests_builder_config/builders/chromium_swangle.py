@@ -17,7 +17,6 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
       chromium_apply_config=[
           'mb',
       ],
-      isolate_server='https://isolateserver.appspot.com',
       gclient_config='chromium',
       gclient_apply_config=configs,
       chromium_config_kwargs={

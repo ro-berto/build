@@ -94,7 +94,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
@@ -121,7 +120,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
@@ -149,7 +147,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
@@ -313,7 +310,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
@@ -352,7 +348,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),
@@ -429,7 +424,6 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
-                          isolate_server='https://isolateserver.appspot.com',
                       ),
               },
           })),

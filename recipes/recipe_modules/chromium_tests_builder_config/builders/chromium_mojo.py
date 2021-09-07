@@ -9,7 +9,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='android',
             chromium_apply_config=['android'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -24,7 +23,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -38,7 +36,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -50,7 +47,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -62,7 +58,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

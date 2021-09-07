@@ -9,7 +9,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -26,7 +25,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='android',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

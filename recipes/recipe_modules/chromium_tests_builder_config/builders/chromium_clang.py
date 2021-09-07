@@ -55,7 +55,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_linux',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -69,7 +68,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
@@ -87,7 +85,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'win'],
             chromium_config_kwargs={
@@ -105,7 +102,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -122,7 +118,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -136,7 +131,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -150,7 +144,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -198,7 +191,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -212,7 +204,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -226,7 +217,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot', 'fuchsia_x64'],
             chromium_config_kwargs={
@@ -243,7 +233,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'clang_tot', 'fuchsia_arm64', 'fuchsia_arm64_host'
@@ -262,7 +251,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -293,7 +281,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -307,7 +294,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='clang_tot_mac_asan',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -321,7 +307,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -335,7 +320,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -349,7 +333,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -363,7 +346,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -377,7 +359,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_asan_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -391,7 +372,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -405,7 +385,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -419,7 +398,6 @@ SPEC = {
         _chromium_clang_spec(
             chromium_config='chromium_win_clang_tot',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={

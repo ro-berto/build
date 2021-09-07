@@ -24,7 +24,6 @@ def CreateStandardConfig(platform, apply_configs=None):
       chromium_config='chromium',
       # Non-Android builder always uses regular mb.
       chromium_apply_config=(['mb', 'goma_failfast'] + apply_configs),
-      isolate_server='https://isolateserver.appspot.com',
       gclient_config='chromium',
       chromium_config_kwargs={
           'TARGET_BITS': 64,
@@ -50,7 +49,6 @@ def CreateAndroidConfig(bits, apply_configs=None):
   return builder_spec.BuilderSpec.create(
       chromium_config='chromium',
       chromium_apply_config=['goma_failfast'] + apply_configs,
-      isolate_server='https://isolateserver.appspot.com',
       gclient_config='chromium',
       gclient_apply_config=['android'],
       chromium_config_kwargs={
@@ -78,7 +76,6 @@ def CreateIosConfig():
           'mb', 'mac_toolchain', 'goma_failfast', 'goma_client_candidate',
           'clobber'
       ]),
-      isolate_server='https://isolateserver.appspot.com',
       gclient_config='ios',
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',

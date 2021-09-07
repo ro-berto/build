@@ -19,7 +19,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -36,7 +35,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -53,7 +51,6 @@ SPEC = {
             chromium_apply_config=[
                 'errorprone',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -67,7 +64,6 @@ SPEC = {
     'Android x64 Builder (dbg)':
         _chromium_android_spec(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -81,7 +77,6 @@ SPEC = {
     'Android x86 Builder (dbg)':
         _chromium_android_spec(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -98,7 +93,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -115,7 +109,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android', 'enable_wpr_tests'],
             chromium_config_kwargs={
@@ -134,7 +127,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -153,7 +145,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -173,7 +164,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -190,7 +180,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -210,7 +199,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -229,7 +217,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -248,7 +235,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -267,7 +253,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -286,7 +271,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -306,7 +290,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -326,7 +309,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -346,7 +328,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -364,7 +345,6 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -379,7 +359,6 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -394,7 +373,6 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -411,7 +389,6 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -428,7 +405,6 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -478,7 +454,6 @@ def stock_cronet_config(name, config='Release', **kwargs):
       name,
       config=config,
       chromium_apply_config=['cronet_builder'],
-      isolate_server='https://isolateserver.appspot.com',
       **kwargs)
 
 
@@ -486,70 +461,56 @@ SPEC.update([
     stock_config(
         'android-arm64-proguard-rel',
         chromium_apply_config=['download_vr_test_apks'],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-bfcache-rel',
         chromium_apply_config=['download_vr_test_apks'],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 32}),
     stock_config(
         'android-incremental-dbg',
-        isolate_server='https://isolateserver.appspot.com',
         config='Debug'),
     stock_config(
         'android-lollipop-arm-rel',
         chromium_apply_config=['download_vr_test_apks'],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 32}),
     stock_config(
         'android-marshmallow-arm64-rel',
         chromium_apply_config=[
             'download_vr_test_apks',
         ],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',
-        isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['android', 'enable_wpr_tests'],
         android_config='x86_builder'),
     stock_config(
         'android-marshmallow-x86-rel-non-cq',
-        isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['android', 'enable_wpr_tests'],
         android_config='x86_builder'),
     stock_config(
         'android-nougat-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-coverage-experimental-rel',
-        isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['android', 'use_clang_coverage'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-rel',
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-wpt-rel-non-cq',
-        isolate_server='https://isolateserver.appspot.com',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-x86-rel',
-        isolate_server='https://isolateserver.appspot.com',
         android_config='x86_builder'),
     stock_config(
         'android-10-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
-        isolate_server='https://isolateserver.appspot.com',
         gclient_apply_config=['android', 'enable_wpr_tests'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-11-x86-rel',
-        isolate_server='https://isolateserver.appspot.com',
         android_config='x86_builder'),
     stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),

@@ -18,7 +18,6 @@ SPEC = {
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -35,7 +34,6 @@ SPEC = {
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -47,7 +45,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -66,7 +63,6 @@ SPEC = {
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -83,7 +79,6 @@ SPEC = {
                 'goma_enable_global_file_stat_cache',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -97,7 +92,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -111,7 +105,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -126,7 +119,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -138,7 +130,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -151,7 +142,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -164,7 +154,6 @@ SPEC = {
         _chromium_win_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',

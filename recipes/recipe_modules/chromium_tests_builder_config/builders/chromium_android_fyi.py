@@ -19,7 +19,6 @@ SPEC = {
             chromium_apply_config=[
                 'download_vr_test_apks',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -39,7 +38,6 @@ SPEC = {
             chromium_apply_config=[
                 'errorprone',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -57,7 +55,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -72,7 +69,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -86,7 +82,6 @@ SPEC = {
     'Memory Infra Tester':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -100,7 +95,6 @@ SPEC = {
     'android-11-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -114,7 +108,6 @@ SPEC = {
     'android-12-x64-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -129,7 +122,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -144,7 +136,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -159,7 +150,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -174,7 +164,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -189,7 +178,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -204,7 +192,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -219,7 +206,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -234,7 +220,6 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={

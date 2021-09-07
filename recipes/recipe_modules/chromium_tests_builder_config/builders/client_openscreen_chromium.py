@@ -14,7 +14,6 @@ SPEC = {
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],
             chromium_config_kwargs={
@@ -27,7 +26,6 @@ SPEC = {
         _client_openscreen_chromium_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['openscreen_tot'],
             chromium_config_kwargs={

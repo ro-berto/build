@@ -15,7 +15,6 @@ SPEC = {
         _chromium_webrtc_spec(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -32,7 +31,6 @@ SPEC = {
             android_config='base_config',
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb', 'android'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -49,7 +47,6 @@ SPEC = {
     'WebRTC Chromium Linux Builder':
         _chromium_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -63,7 +60,6 @@ SPEC = {
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -78,7 +74,6 @@ SPEC = {
     'WebRTC Chromium Mac Builder':
         _chromium_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -92,7 +87,6 @@ SPEC = {
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -107,7 +101,6 @@ SPEC = {
     'WebRTC Chromium Win Builder':
         _chromium_webrtc_spec(
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -121,7 +114,6 @@ SPEC = {
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -137,7 +129,6 @@ SPEC = {
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -153,7 +144,6 @@ SPEC = {
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
             chromium_apply_config=['dcheck', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

@@ -11,7 +11,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_win_clang_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -30,7 +29,6 @@ SPEC = {
                 'mb',
                 'clobber',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -46,7 +44,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -65,7 +62,6 @@ SPEC = {
                 'mb',
                 'clobber',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -81,7 +77,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -97,7 +92,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -115,7 +109,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -133,7 +126,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -155,7 +147,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -172,7 +163,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -189,7 +179,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -208,7 +197,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -224,7 +212,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -242,7 +229,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -258,7 +244,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -274,7 +259,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_linux_ubsan',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -292,7 +276,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_linux_ubsan_vptr',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

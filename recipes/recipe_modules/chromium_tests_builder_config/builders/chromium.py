@@ -11,7 +11,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
@@ -26,7 +25,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -42,7 +40,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -59,7 +56,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
@@ -74,7 +70,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -89,7 +84,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -107,7 +101,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
@@ -122,7 +115,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -138,7 +130,6 @@ SPEC = {
                 'mb',
                 'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -157,7 +148,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -173,7 +163,6 @@ SPEC = {
                 'mb',
                 'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -191,7 +180,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -206,7 +194,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles'],
             chromium_config_kwargs={
@@ -221,7 +208,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -236,7 +222,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -254,7 +239,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -271,7 +255,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -289,7 +272,6 @@ SPEC = {
                 'clobber',
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={

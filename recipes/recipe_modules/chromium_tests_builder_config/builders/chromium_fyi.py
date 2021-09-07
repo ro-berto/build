@@ -41,7 +41,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -55,7 +54,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -72,7 +70,6 @@ SPEC = {
                 'mb',
                 'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
             ],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -90,7 +87,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -103,7 +99,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -130,7 +125,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
@@ -148,7 +142,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
@@ -166,7 +159,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
             chromium_config_kwargs={
@@ -184,7 +176,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -201,7 +192,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64'],
             chromium_config_kwargs={
@@ -357,7 +347,6 @@ SPEC = {
     'Site Isolation Android':
         builder_spec.BuilderSpec.create(
             chromium_config='android',
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -376,7 +365,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -389,7 +377,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['fuchsia_x64', 'use_clang_coverage'],
             chromium_config_kwargs={
@@ -403,7 +390,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -417,7 +403,6 @@ SPEC = {
             chromium_config='chromium',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -429,7 +414,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -443,7 +427,6 @@ SPEC = {
             chromium_config='chromium',
             gclient_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -458,7 +441,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos', 'use_clang_coverage'],
             chromium_config_kwargs={
@@ -472,7 +454,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos', 'use_clang_coverage'],
             chromium_config_kwargs={
@@ -485,7 +466,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -498,7 +478,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -513,7 +492,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -530,7 +508,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -548,7 +525,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['ios_webkit_tot'],
             chromium_config_kwargs={
@@ -565,7 +541,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -583,7 +558,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -600,7 +574,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -618,7 +591,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -636,7 +608,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -654,7 +625,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -672,7 +642,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -689,7 +658,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -707,7 +675,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -725,7 +692,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=[],
             chromium_config_kwargs={
@@ -743,7 +709,6 @@ SPEC = {
                 'mb',
                 'mac_toolchain',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='ios',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -758,7 +723,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='android',
             chromium_apply_config=['download_vr_test_apks', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android'],
             chromium_config_kwargs={
@@ -773,7 +737,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='android',
             chromium_apply_config=['download_vr_test_apks', 'mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['android', 'use_clang_coverage'],
             chromium_config_kwargs={
@@ -790,7 +753,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb',
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -803,7 +765,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -818,7 +779,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
@@ -833,7 +793,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -845,7 +804,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -857,7 +815,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -869,7 +826,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -885,7 +841,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -902,7 +857,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -918,7 +872,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage', 'enable_reclient'],
             chromium_config_kwargs={
@@ -931,7 +884,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage', 'enable_reclient'],
             chromium_config_kwargs={
@@ -944,7 +896,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -959,7 +910,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -975,7 +925,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -991,7 +940,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
@@ -1007,7 +955,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb', 'goma_enable_cache_silo'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -1020,7 +967,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_tsan2',
             chromium_apply_config=['mb', 'goma_enable_cache_silo'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1036,7 +982,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_tsan2',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1054,7 +999,6 @@ SPEC = {
             chromium_apply_config=[
                 'mb', 'tsan2', 'clobber', 'goma_enable_cache_silo'
             ],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1068,7 +1012,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1085,7 +1028,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1102,7 +1044,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1120,7 +1061,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1137,7 +1077,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1154,7 +1093,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1171,7 +1109,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1189,7 +1126,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1206,7 +1142,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1225,7 +1160,6 @@ SPEC = {
             # removed.
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1241,7 +1175,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_linux_ubsan',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
@@ -1257,7 +1190,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage', 'enable_reclient',
@@ -1273,7 +1205,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage', 'enable_reclient',
@@ -1289,7 +1220,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
@@ -1306,7 +1236,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos', 'enable_reclient'],
             chromium_config_kwargs={
@@ -1321,7 +1250,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos', 'enable_reclient'],
             chromium_config_kwargs={
@@ -1335,7 +1263,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb', 'goma_enable_cache_silo'],
-            isolate_server='https://isolateserver.appspot.com',
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
