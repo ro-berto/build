@@ -8,7 +8,6 @@ from .. import builder_spec
 def _chromium_gpu_fyi_spec(**kwargs):
   if kwargs.get('execution_mode') != builder_spec.PROVIDE_TEST_SPEC:
     kwargs.setdefault('build_gs_bucket', 'chromium-gpu-fyi-archive')
-    kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
   return builder_spec.BuilderSpec.create(**kwargs)
 
 

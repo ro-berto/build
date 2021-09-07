@@ -47,7 +47,6 @@ def _config(name,
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': gclient_apply_config,
-      'isolate_server': 'https://isolateserver.appspot.com',
       'chromium_config_kwargs': {
           'BUILD_CONFIG': build_config,
           'TARGET_ARCH': target_arch,

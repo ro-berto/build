@@ -8,7 +8,6 @@ from .. import builder_spec
 def _chromium_angle_spec(**kwargs):
   kwargs.setdefault('build_gs_bucket', 'chromium-angle-archive')
   kwargs.setdefault('gclient_config', 'chromium')
-  kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
   return builder_spec.BuilderSpec.create(**kwargs)
 
 

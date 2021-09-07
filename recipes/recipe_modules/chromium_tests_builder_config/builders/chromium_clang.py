@@ -44,8 +44,6 @@ def config(name,
     cfg['gclient_apply_config'].append('checkout_pgo_profiles')
     cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
     cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
-  else:
-    cfg['isolate_server'] = 'https://isolateserver.appspot.com'
 
   return name, _chromium_clang_spec(**cfg)
 

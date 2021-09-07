@@ -7,7 +7,6 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
 
 
 def _angle_spec(**kwargs):
-  kwargs.setdefault('isolate_server', 'https://isolateserver.appspot.com')
   kwargs.setdefault('chromium_config', 'angle_clang')
   return builder_spec.BuilderSpec.create(**kwargs)
 
