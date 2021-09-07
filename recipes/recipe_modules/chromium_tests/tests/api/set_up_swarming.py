@@ -6,11 +6,8 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
-    'isolate',
     'recipe_engine/assertions',
     'recipe_engine/platform',
-    'recipe_engine/properties',
-    'recipe_engine/python',
 ]
 
 from recipe_engine import post_process
@@ -26,7 +23,6 @@ def RunSteps(api):
           'test_group': {
               'test_buildername':
                   ctbc.BuilderSpec.create(
-                      isolate_server='https://example/isolate',
                       swarming_server='https://example/swarming',
                   ),
           },
@@ -34,19 +30,13 @@ def RunSteps(api):
 
   api.chromium_tests.set_up_swarming(builder_config)
   api.assertions.assertEqual(api.chromium_swarming.swarming_server,
-                             api.properties.get('expected_swarming_server'))
-  api.assertions.assertEqual(api.isolate.isolate_server,
-                             api.properties.get('expected_isolate_server'))
+                             'https://example/swarming')
 
 
 def GenTests(api):
   yield api.test(
       'luci',
       api.platform.name('linux'),
-      api.properties(
-          expected_swarming_server='https://example/swarming',
-          expected_isolate_server='https://example/isolate',
-          expected_isolate_service_account=None),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
