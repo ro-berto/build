@@ -16,8 +16,7 @@ import urllib
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-# pylint: disable=relative-import
-from builders import TestSpec
+from .builders import TestSpec
 from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
 from . import bisection

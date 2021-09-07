@@ -2,7 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
 import json
+import zlib
 
 from google.protobuf import struct_pb2
 from google.protobuf import json_format
@@ -76,4 +78,4 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
   def _base64_compress_proto(self, proto):
     """Encode proto message to a base64 string."""
     wire_format = proto.SerializeToString()
-    return wire_format.encode('zlib_codec').encode('base64_codec')
+    return base64.encodebytes(zlib.compress(wire_format)).decode('ascii')

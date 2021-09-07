@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
                                         StepCommandContains, StatusFailure,
                                         StatusSuccess)
@@ -261,7 +263,7 @@ def GenTests(api):
     props_proto.target_builder.builder = target_builder
     for t in compile_targets:
       props_proto.compile_targets.append(t)
-    for k, v in tests.iteritems():
+    for k, v in six.iteritems(tests):
       new_message = props_proto.tests[k]
       for t in v:
         new_message.names.append(t)

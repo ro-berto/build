@@ -6,6 +6,8 @@
 Recipe for building and running tests for Libyuv stand-alone.
 """
 
+import six
+
 from recipe_engine import post_process
 from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -104,7 +106,7 @@ def GenTests(api):
     test += api.properties(buildnumber=1337)
     return test
 
-  for builder_group, group_config in builders.iteritems():
+  for builder_group, group_config in six.iteritems(builders):
     for buildername in group_config['builders'].keys():
       yield generate_builder(builder_group, buildername, revision='a' * 40)
 

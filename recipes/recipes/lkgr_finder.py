@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine import post_process
 from recipe_engine.config import Single
 from recipe_engine.engine_types import freeze
@@ -217,7 +219,7 @@ def GenTests(api):
         'read lkgr from ref',
         api.gitiles.make_commit_test_data('deadbeef1', 'Commit1')))
 
-  for buildername, botconfig in BUILDERS.iteritems():
+  for buildername, botconfig in six.iteritems(BUILDERS):
     yield (api.test(botconfig['project']) + test_props_and_data(buildername))
 
   yield (api.test('v8_experimental') + test_props_and_data('V8 lkgr finder') +

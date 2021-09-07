@@ -4,6 +4,7 @@
 
 import attr
 import collections
+import six
 
 from . import canonical
 
@@ -17,7 +18,7 @@ def convert_trie_to_flat_paths(trie, prefix, sep):
   # Cloned from webkitpy.layout_tests.layout_package.json_results_generator
   # so that this code can stand alone.
   result = {}
-  for name, data in trie.iteritems():
+  for name, data in six.iteritems(trie):
     if prefix:
       name = prefix + sep + name
 

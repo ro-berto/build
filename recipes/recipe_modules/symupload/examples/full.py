@@ -100,7 +100,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  encoded_api_key = base64.b64encode('encrypted_api_key')
+  encoded_api_key = base64.b64encode(b'encrypted_api_key')
 
   input_properties_v2 = properties.InputProperties()
   symupload_data = input_properties_v2.symupload_datas.add()

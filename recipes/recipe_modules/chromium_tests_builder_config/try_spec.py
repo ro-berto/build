@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import six
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
                                              sequence)
@@ -180,8 +181,8 @@ class TryDatabase(collections.Mapping):
     """
     db = {}
 
-    for group, trybots_for_group in trybots_dict.iteritems():
-      for builder_name, try_spec in trybots_for_group.iteritems():
+    for group, trybots_for_group in six.iteritems(trybots_dict):
+      for builder_name, try_spec in six.iteritems(trybots_for_group):
         builder_id = BuilderId.create_for_group(group, builder_name)
         db[builder_id] = try_spec
 

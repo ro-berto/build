@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common
@@ -30,7 +32,7 @@ def GenTests(api):
 
   def repo_path_map(paths_by_repo):
     return api.properties(
-        repo_path_map={k: (v, 'HEAD') for k, v in paths_by_repo.iteritems()})
+        repo_path_map={k: (v, 'HEAD') for k, v in six.iteritems(paths_by_repo)})
 
   def expect_revisions(revisions):
     return sum([

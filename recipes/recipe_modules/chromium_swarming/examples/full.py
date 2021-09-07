@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+from six.moves import range  # pylint: disable=redefined-builtin
 
 DEPS = [
     'isolate',
@@ -475,7 +476,7 @@ def GenTests(api):
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  failed_test_names=['test-%d' % i for i in xrange(100)]))),
+                  failed_test_names=['test-%d' % i for i in range(100)]))),
       api.properties(gtest_task=True),
   )
 
@@ -524,8 +525,10 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
-      api.step_data('hello_world on Windows-7-SP1',
-                    api.raw_io.output_dir({'summary.json': json.dumps(data)})),
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir(
+              {'summary.json': json.dumps(data).encode('utf-8')})),
       api.properties(isolated_script_task=True),
   )
 
@@ -551,8 +554,10 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
-      api.step_data('hello_world on Windows-7-SP1',
-                    api.raw_io.output_dir({'summary.json': json.dumps(data)})),
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir(
+              {'summary.json': json.dumps(data).encode('utf-8')})),
       api.properties(isolated_script_task=True),
   )
 
@@ -570,22 +575,24 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(data)}), data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(data).encode('utf-8')}), data)),
       api.properties(isolated_script_task=True),
   )
 
   data['shards'][0]['state'] = 'TIMED_OUT'
   del data['shards'][0]['exit_code']
 
-  big_output_dir = {'summary.json': json.dumps(data)}
+  big_output_dir = {'summary.json': json.dumps(data).encode('utf-8')}
   for i, shard_data in enumerate(
         api.test_utils.generate_simplified_json_results(range(4), True, True)):
-    big_output_dir['%s/output.json' % i] = json.dumps(shard_data)
+    big_output_dir['%s/output.json' % i] = (
+        json.dumps(shard_data).encode('utf-8'))
   # Will cause unicode decode error if tried to decode.
-  big_output_dir['0/binary.png'] = '\x00\x00\x89'
-  big_output_dir['0/invalid.txt'] = '\x00\x00\x89'
+  big_output_dir['0/binary.png'] = b'\x00\x00\x89'
+  big_output_dir['0/invalid.txt'] = b'\x00\x00\x89'
   # Large text file
-  big_output_dir['0/big_text.txt'] = 'lots of text\n' * 2000
+  big_output_dir['0/big_text.txt'] = b'lots of text\n' * 2000
   yield api.test(
       'isolated_large_outdir',
       api.chromium.ci_build(
@@ -629,8 +636,9 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
-              + api.json.output(json_results), summary_data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
+              api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
           merge=chromium_swarming.MergeScript.create(
@@ -649,8 +657,9 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
-              + api.json.output(json_results), summary_data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
+              api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
           trigger_script=chromium_swarming.TriggerScript.create(
@@ -675,8 +684,9 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
-              + api.json.output(json_results), summary_data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
+              api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
           trigger_script=chromium_swarming.TriggerScript.create(
@@ -751,8 +761,9 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
-              + api.test_utils.canned_gtest_output(False), summary_data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
+              api.test_utils.canned_gtest_output(False), summary_data)),
       api.properties(platforms=('linux',), gtest_task=True),
   )
   yield api.test(
@@ -767,7 +778,8 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}),
               summary_data)),
       api.properties(platforms=('linux',), isolated_script_task=True),
   )
@@ -783,8 +795,9 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)})
-              + api.test_utils.canned_gtest_output(False), summary_data)),
+              api.raw_io.output_dir(
+                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
+              api.test_utils.canned_gtest_output(False), summary_data)),
       api.properties(platforms=('linux',), gtest_task=True),
       api.post_process(post_process.StepFailure, 'hello_world'),
       api.post_process(post_process.DropExpectation))
@@ -820,9 +833,11 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data_deduped)}) +
-              api.test_utils.canned_gtest_output(False), summary_data_deduped)),
+              api.raw_io.output_dir({
+                  'summary.json':
+                      json.dumps(summary_data_deduped).encode('utf-8')
+              }) + api.test_utils.canned_gtest_output(False),
+              summary_data_deduped)),
       api.properties(platforms=('linux',), gtest_task=True),
   )
 

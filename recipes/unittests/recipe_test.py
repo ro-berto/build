@@ -25,7 +25,7 @@ if len(sys.argv) > ALLOWED_ARGS+1:
   print 'To interact with the recipes, please use %s directly.' % RECIPES_PY
   sys.exit(1)
 
-MODULE_WHITELIST = ['attr']
+MODULE_ALLOWLIST = ['attr', 'six']
 
 
 def recipes_py(*args):
@@ -35,4 +35,4 @@ def recipes_py(*args):
 
 recipes_py('test', 'run')
 
-recipes_py('lint', *('-w' + m for m in MODULE_WHITELIST))
+recipes_py('lint', *('-w' + m for m in MODULE_ALLOWLIST))

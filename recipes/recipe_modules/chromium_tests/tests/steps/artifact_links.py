@@ -20,6 +20,8 @@ DEPS = [
     'test_utils',
 ]
 
+from six.moves import range  # pylint: disable=redefined-builtin
+
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -104,7 +106,7 @@ def GenTests(api):
   bulk_expectations = {
     bulk_log_title: [],
   }
-  for i in xrange(15):
+  for i in range(15):
     bulk_artifacts.setdefault('test1', {}).setdefault(
         'Test1', {})['%d' % i] = ['https://somesite.com']
     bulk_expectations[bulk_log_title].append(

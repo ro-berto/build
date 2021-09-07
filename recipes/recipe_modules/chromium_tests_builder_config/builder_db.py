@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import six
 
 from . import builder_spec as builder_spec_module
 
@@ -42,8 +43,8 @@ class BuilderDatabase(collections.Mapping):
     """
     db = {}
 
-    for group, builders_for_group in builder_dict.iteritems():
-      for builder_name, builder_spec in builders_for_group.iteritems():
+    for group, builders_for_group in six.iteritems(builder_dict):
+      for builder_name, builder_spec in six.iteritems(builders_for_group):
         builder_id = BuilderId.create_for_group(group, builder_name)
 
         db[builder_id] = builder_spec
@@ -82,7 +83,7 @@ class BuilderGraph(collections.Mapping):
   def create(cls, db):
     graph = {key: set() for key in db}
 
-    for builder_id, builder_spec in db.iteritems():
+    for builder_id, builder_spec in six.iteritems(db):
       if builder_spec.parent_buildername is None:
         continue
 

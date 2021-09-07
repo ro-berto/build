@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+from six.moves import range  # pylint: disable=redefined-builtin
 
 from google.protobuf import json_format
 
@@ -667,7 +668,7 @@ def GenTests(api):
         ]
     failure_count = 3
     all_results = {}
-    for i in xrange(100):
+    for i in range(100):
       result_dict = failure_dict if i < failure_count else success_dict
       name = 'Test{}'.format(i)
       all_results[name] = result_dict

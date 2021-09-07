@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.recipe_api import Property
@@ -33,52 +35,56 @@ PROPERTIES = {
     'autoroller_config':
         Property(
             kind=ConfigGroup(
-              # Subject of the rolling CL
-              subject=Single(basestring),
-              # Configuration parameters of the project where dependencies will
-              # be rolled in. The source is always Chromium project.
-              target_config=ConfigGroup(
-                # Solution name to be used for project checkout
-                solution_name=Single(str, required=True),
-                # Project name. Together with the 'base_url' it will form the
-                # location for the project
-                project_name=Single(basestring, required=True),
-                # The name of the account used to create the roll CL
-                account=Single(str),
-                # Template for the commit message used with regular
-                # dependencies
-                log_template=Single(basestring),
-                # Template for the commit message used with cipd dependencies
-                cipd_log_template=Single(basestring),
-                # Gerrit URL to be used for rolling CL review
-                gerrit_base_url=Single(basestring, required=True,
-                  empty_val='https://chromium-review.googlesource.com'),
-                # Repo base URL together with 'project_name' to locate the repo
-                # where the rolling CL will be landed
-                base_url=Single(basestring, required=True,
-                  empty_val='https://chromium.googlesource.com/'),
-              ),
-              # List of (target side) dependencies to be expcluded from rolling
-              # with the current config
-              excludes=Single(list, empty_val=None),
-              # List of (target side) dependencies to be included when rolling
-              # with the current config
-              includes=Single(list, empty_val=None),
-              # Mapping between the dependency name in the target project and
-              # the name in the source project
-              deps_key_mapping=Dict(value_type=str),
-              # List of reviewers of the roll CL
-              reviewers=List(str),
-              # Add extra log entries to the commit message.
-              show_commit_log=Single(bool),
-              # Flag for rolling the binary chromium pin in target project
-              roll_chromium_pin=Single(bool, empty_val=False),
-              # Bugs included in roll CL description
-              # TODO(liviurau): Remove obsolete feature from configs and
-              # remove the parameters here afterwards
-              bugs=Single(basestring),
-            ),
-        ),
+                # Subject of the rolling CL
+                subject=Single(six.string_types),
+                # Configuration parameters of the project where dependencies
+                # will be rolled in. The source is always Chromium project.
+                target_config=ConfigGroup(
+                    # Solution name to be used for project checkout
+                    solution_name=Single(str, required=True),
+                    # Project name. Together with the 'base_url' it will form
+                    # the location for the project
+                    project_name=Single(six.string_types, required=True),
+                    # The name of the account used to create the roll CL
+                    account=Single(str),
+                    # Template for the commit message used with regular
+                    # dependencies
+                    log_template=Single(six.string_types),
+                    # Template for the commit message used with cipd
+                    # dependencies
+                    cipd_log_template=Single(six.string_types),
+                    # Gerrit URL to be used for rolling CL review
+                    gerrit_base_url=Single(
+                        six.string_types,
+                        required=True,
+                        empty_val='https://chromium-review.googlesource.com'),
+                    # Repo base URL together with 'project_name' to locate the
+                    # repo where the rolling CL will be landed
+                    base_url=Single(
+                        six.string_types,
+                        required=True,
+                        empty_val='https://chromium.googlesource.com/'),
+                ),
+                # List of (target side) dependencies to be expcluded from
+                # rolling with the current config
+                excludes=Single(list, empty_val=None),
+                # List of (target side) dependencies to be included when rolling
+                # with the current config
+                includes=Single(list, empty_val=None),
+                # Mapping between the dependency name in the target project and
+                # the name in the source project
+                deps_key_mapping=Dict(value_type=str),
+                # List of reviewers of the roll CL
+                reviewers=List(str),
+                # Add extra log entries to the commit message.
+                show_commit_log=Single(bool),
+                # Flag for rolling the binary chromium pin in target project
+                roll_chromium_pin=Single(bool, empty_val=False),
+                # Bugs included in roll CL description
+                # TODO(liviurau): Remove obsolete feature from configs and
+                # remove the parameters here afterwards
+                bugs=Single(six.string_types),
+            )),
 }
 
 GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'

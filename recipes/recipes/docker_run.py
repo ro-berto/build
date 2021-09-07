@@ -4,6 +4,8 @@
 
 """A generic recipe that runs a given docker container and exits."""
 
+import six
+
 from recipe_engine.recipe_api import Property
 from recipe_engine.config import Dict, Single, List
 
@@ -13,38 +15,37 @@ DEPS = [
     'recipe_engine/properties',
 ]
 
-PROPERTIES=dict(
-  server=Property(
-    kind=Single(basestring),
-    default='gcr.io',
-    help='GCP container registry to pull images from',
-  ),
-  project=Property(
-    kind=Single(basestring),
-    default='chromium-container-registry',
-    help='Cloud project containing the image',
-  ),
-  image=Property(
-    kind=Single(basestring),
-    help='Image name within the cloud project',
-  ),
-  cmd_args=Property(
-    kind=List(basestring),
-    default=None,
-    help='Docker command args',
-  ),
-  env=Property(
-    kind=Dict(value_type=basestring),
-    default=None,
-    help='Dictionary of env for the container',
-  ),
-  inherit_luci_context=Property(
-    kind=Dict(value_type=bool),
-    default=False,
-    help='Inherit current LUCI Context (including auth). '
-         'CAUTION: removes network isolation between the container and the '
-         'docker host. Read more https://docs.docker.com/network/host/'
-  ),
+PROPERTIES = dict(
+    server=Property(
+        kind=Single(six.string_types),
+        default='gcr.io',
+        help='GCP container registry to pull images from',
+    ),
+    project=Property(
+        kind=Single(six.string_types),
+        default='chromium-container-registry',
+        help='Cloud project containing the image',
+    ),
+    image=Property(
+        kind=Single(six.string_types),
+        help='Image name within the cloud project',
+    ),
+    cmd_args=Property(
+        kind=List(six.string_types),
+        default=None,
+        help='Docker command args',
+    ),
+    env=Property(
+        kind=Dict(value_type=six.string_types),
+        default=None,
+        help='Dictionary of env for the container',
+    ),
+    inherit_luci_context=Property(
+        kind=Dict(value_type=bool),
+        default=False,
+        help='Inherit current LUCI Context (including auth). '
+        'CAUTION: removes network isolation between the container and the '
+        'docker host. Read more https://docs.docker.com/network/host/'),
 )
 
 def RunSteps(api, server, project, image, cmd_args, env):

@@ -4,6 +4,7 @@
 
 from collections import defaultdict
 import json
+import six
 
 from recipe_engine.config import Dict
 from recipe_engine.config import List
@@ -35,35 +36,45 @@ from recipe_engine import post_process
 
 
 PROPERTIES = {
-    'target_testername': Property(
-        kind=str,
-        help='The target tester to match test config to. If the tests are run '
-             'on a builder, just treat the builder as a tester.'),
-    'good_revision': Property(
-        kind=str, help='The last known good revision.'),
-    'bad_revision': Property(
-        kind=str, help='The first known good revision.'),
-    'tests': Property(
-        kind=Dict(value_type=list),
-        default={},
-        help='The failed tests, the test name should be full name, e.g.: {'
-             '  "browser_tests": ['
-             '    "suite.test1", "suite.test2"'
-             '  ]'
-             '}'),
-    'use_analyze': Property(
-        kind=Single(bool, empty_val=False, required=False), default=True,
-        help='Use analyze to skip commits that do not affect tests.'),
-    'suspected_revisions': Property(
-        kind=List(basestring), default=[],
-        help='A list of suspected revisions from heuristic analysis.'),
-    'test_on_good_revision': Property(
-        kind=Single(bool, empty_val=False, required=False), default=True,
-        help='Run test on good revision as well if the first revision '
-             'in range is suspected.'),
-    'test_repeat_count': Property(
-        kind=Single(int, required=False), default=20,
-        help='How many times to repeat the tests.'),
+    'target_testername':
+        Property(
+            kind=str,
+            help='The target tester to match test config to. If the tests are '
+            'run on a builder, just treat the builder as a tester.'),
+    'good_revision':
+        Property(kind=str, help='The last known good revision.'),
+    'bad_revision':
+        Property(kind=str, help='The first known good revision.'),
+    'tests':
+        Property(
+            kind=Dict(value_type=list),
+            default={},
+            help='The failed tests, the test name should be full name, e.g.: {'
+            '  "browser_tests": ['
+            '    "suite.test1", "suite.test2"'
+            '  ]'
+            '}'),
+    'use_analyze':
+        Property(
+            kind=Single(bool, empty_val=False, required=False),
+            default=True,
+            help='Use analyze to skip commits that do not affect tests.'),
+    'suspected_revisions':
+        Property(
+            kind=List(six.string_types),
+            default=[],
+            help='A list of suspected revisions from heuristic analysis.'),
+    'test_on_good_revision':
+        Property(
+            kind=Single(bool, empty_val=False, required=False),
+            default=True,
+            help='Run test on good revision as well if the first revision '
+            'in range is suspected.'),
+    'test_repeat_count':
+        Property(
+            kind=Single(int, required=False),
+            default=20,
+            help='How many times to repeat the tests.'),
 }
 
 

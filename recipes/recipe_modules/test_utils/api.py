@@ -5,7 +5,7 @@
 from collections import defaultdict
 import itertools
 import json
-import urlparse
+import six.moves.urllib_parse as urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util

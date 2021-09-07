@@ -41,14 +41,14 @@ import re
 import string
 import struct
 import urllib
-import urlparse
+import six.moves.urllib_parse as urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
 from recipe_engine.engine_types import freeze
 from recipe_engine.engine_types import FrozenDict
 
-from resultdb import ResultDB
+from .resultdb import ResultDB
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 

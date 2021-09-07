@@ -44,4 +44,4 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
 
     summary_path = str(swarming_number) + '/summary.json'
     return self.m.raw_io.output_dir(
-        {summary_path: json.dumps(summary_contents)})
+        {summary_path: json.dumps(summary_contents).encode('utf-8')})

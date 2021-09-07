@@ -82,7 +82,8 @@ def GenTests(api):
       summary_contents['logs']['failed tests'] = ['FAILED_TEST']
 
     summary_path = '0/summary.json'
-    return api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})
+    return api.raw_io.output_dir(
+        {summary_path: json.dumps(summary_contents).encode('utf-8')})
 
   def generate_passing_test(api, simulator):
     step_name = 'dummy step name on iOS-dummy OS'
@@ -161,9 +162,8 @@ def GenTests(api):
       'test_results_parser',
       api.step_data(
           'dummy step name on iOS-dummy OS',
-          api.raw_io.output_dir({
-              summary_path: json.dumps(summary_contents)
-          })),
+          api.raw_io.output_dir(
+              {summary_path: json.dumps(summary_contents).encode('utf-8')})),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -190,8 +190,8 @@ def GenTests(api):
     summary_path = '0/summary.json'
     perf_results_path = '0/Documents/perf_result.json'
     output_dir_data = {
-        summary_path: json.dumps(summary_contents),
-        perf_results_path: json.dumps(perf_data)
+        summary_path: json.dumps(summary_contents).encode('utf-8'),
+        perf_results_path: json.dumps(perf_data).encode('utf-8'),
     }
     return api.raw_io.output_dir(output_dir_data)
 

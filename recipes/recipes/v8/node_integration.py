@@ -4,6 +4,8 @@
 
 """Recipe to test v8/node.js integration."""
 
+import six
+
 from contextlib import contextmanager
 
 from recipe_engine.engine_types import freeze
@@ -97,9 +99,9 @@ BUILDERS = freeze({
 # TODO(machenbach): Temporary code to migrate to flattened builder configs.
 # Clean up the config above and remove this after testing in prod.
 FLATTENED_BUILDERS = {}
-for _, group_config in BUILDERS.iteritems():
+for _, group_config in six.iteritems(BUILDERS):
   builders = group_config['builders']
-  for _buildername, _bot_config in builders.iteritems():
+  for _buildername, _bot_config in six.iteritems(builders):
     assert _buildername not in FLATTENED_BUILDERS, _buildername
     FLATTENED_BUILDERS[_buildername] = _bot_config
 FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
@@ -307,8 +309,8 @@ def _sanitize_nonalpha(*chunks):
 
 
 def GenTests(api):
-  for group, group_cfg in BUILDERS.iteritems():
-    for buildername, bot_config in group_cfg['builders'].iteritems():
+  for group, group_cfg in six.iteritems(BUILDERS):
+    for buildername, bot_config in six.iteritems(group_cfg['builders']):
       buildbucket_kwargs = {
           'builder_group':
               group,

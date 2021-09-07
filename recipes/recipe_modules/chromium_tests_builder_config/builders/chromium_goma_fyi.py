@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from .. import builder_spec
 from . import chromium
 from . import chromium_chromiumos
@@ -160,5 +162,5 @@ SPEC['android-archive-dbg-goma-rbe-ats-latest'] = (
 # Many of the FYI specs are made by transforming specs from other files, so
 # rather than have to do 2 different things for specs based on other specs and
 # specs created within this file, just evolve all of the specs afterwards
-for name, spec in SPEC.iteritems():
+for name, spec in six.iteritems(SPEC):
   SPEC[name] = spec.evolve(build_gs_bucket='chromium-fyi-archive')

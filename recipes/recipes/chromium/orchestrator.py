@@ -560,7 +560,7 @@ def GenTests(api):
 
   def override_wait_for_swarming_props_timeout():
     test_data = []
-    counter_max = SWARMING_PROPS_WAIT_TIMEOUT_S / SWARMING_PROPS_GET_INTERVAL_S
+    counter_max = SWARMING_PROPS_WAIT_TIMEOUT_S // SWARMING_PROPS_GET_INTERVAL_S
     test_data.append(override_wait_for_swarming_props(empty_props=True))
     for i in range(2, counter_max + 1):
       test_data.append(

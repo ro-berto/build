@@ -8,8 +8,7 @@ import re
 import sys
 import os
 
-# pylint: disable=relative-import
-import manual_bisect_files
+from . import manual_bisect_files
 
 from google.protobuf import json_format
 

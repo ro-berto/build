@@ -9,6 +9,8 @@ chromium_tests.configure_build can be called with a BuilderConfig for
 that builder without error.
 """
 
+import six
+
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
@@ -82,7 +84,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for builder_id, builder_spec in sorted(ctbc.builders.BUILDERS.iteritems()):
+  for builder_id, builder_spec in sorted(six.iteritems(ctbc.builders.BUILDERS)):
     if builder_spec.execution_mode == ctbc.PROVIDE_TEST_SPEC:
       continue
     builder_group = builder_id.group

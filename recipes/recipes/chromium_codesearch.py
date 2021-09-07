@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine import config
 from recipe_engine.engine_types import freeze
 from recipe_engine.recipe_api import Property
@@ -350,7 +352,7 @@ SAMPLE_GN_DESC_OUTPUT = '''
 '''
 
 def GenTests(api):
-  for buildername, _ in SPEC['builders'].iteritems():
+  for buildername, _ in six.iteritems(SPEC['builders']):
     yield api.test(
         'full_%s' % (_sanitize_nonalpha(buildername)),
         api.chromium.generic_build(builder=buildername),
@@ -359,7 +361,7 @@ def GenTests(api):
             api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
     )
 
-  for buildername, _ in SPEC['builders'].iteritems():
+  for buildername, _ in six.iteritems(SPEC['builders']):
     yield api.test(
         'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
         api.chromium.generic_build(builder=buildername),

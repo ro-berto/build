@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import six
 
 from recipe_engine import recipe_test_api
 
@@ -267,8 +268,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       else:
         tests_run = {}
 
-      for test_basename, subtests in tests_run.iteritems():
-        for test_name, test_dict in subtests.iteritems():
+      for test_basename, subtests in six.iteritems(tests_run):
+        for test_name, test_dict in six.iteritems(subtests):
           test_artifacts = artifacts.get(test_basename, {}).get(test_name, {})
           if test_artifacts:
             test_dict['artifacts'] = test_artifacts
@@ -391,6 +392,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       step_test_data += self.m.json.output(per_shard_results[0])
 
       files_dict['summary.json'] = json.dumps(jsonish_summary)
+      files_dict = {k: v.encode('utf-8') for k, v in six.iteritems(files_dict)}
       step_test_data += self.m.raw_io.output_dir(files_dict)
 
       return step_test_data
@@ -466,7 +468,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         convert_flat_test_to_trie(
           test_name_parts[1:], test_result, trie_test[test_name_parts[0]])
 
-    for test_name, test_result in flat_tests.iteritems():
+    for test_name, test_result in six.iteritems(flat_tests):
       parts = test_name.split(path_delimiter)
       convert_flat_test_to_trie(
         parts, test_result, tests)
@@ -484,7 +486,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         'internal_failure': False,
         'exit_code': 1 if failed_test_names else 0,
     }
-    files_dict = {'summary.json': json.dumps(jsonish_summary)}
+    files_dict = {'summary.json': json.dumps(jsonish_summary).encode('utf-8')}
     retcode = 1 if failed_test_names else 0
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))

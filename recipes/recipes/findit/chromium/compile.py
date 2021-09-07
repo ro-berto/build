@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import six
 
 from recipe_engine.config import List
 from recipe_engine.config import Single
@@ -33,30 +34,41 @@ DEPS = [
 
 
 PROPERTIES = {
-    'target_buildername': Property(
-        kind=str, help='The target builder to match compile config to.'),
-    'good_revision': Property(
-        kind=str, help='The last known good chromium revision.'),
-    'bad_revision': Property(
-        kind=str, help='The first known bad chromium revision.'),
-    'compile_targets': Property(
-        kind=List(basestring), default=None,
-        help='The failed compile targets, eg: browser_tests, '
-             'obj/path/to/source.o, gen/path/to/generated.cc, etc.'),
-    'use_analyze': Property(
-        kind=Single(bool, empty_val=False, required=False), default=True,
-        help='Use analyze to filter out affected targets.'),
-    'suspected_revisions': Property(
-        kind=List(basestring), default=[],
-        help='A list of suspected revisions from heuristic analysis.'),
-    'use_bisect': Property(
-        kind=Single(bool, empty_val=False, required=False), default=True,
-        help='Use bisect to skip more revisions. '
-             'Effective only when compile_targets is given.'),
-    'compile_on_good_revision': Property(
-        kind=Single(bool, empty_val=False, required=False), default=True,
-        help='Run compile on good revision as well if the first revision '
-             'in range is the suspected culprit.'),
+    'target_buildername':
+        Property(
+            kind=str, help='The target builder to match compile config to.'),
+    'good_revision':
+        Property(kind=str, help='The last known good chromium revision.'),
+    'bad_revision':
+        Property(kind=str, help='The first known bad chromium revision.'),
+    'compile_targets':
+        Property(
+            kind=List(six.string_types),
+            default=None,
+            help='The failed compile targets, eg: browser_tests, '
+            'obj/path/to/source.o, gen/path/to/generated.cc, etc.'),
+    'use_analyze':
+        Property(
+            kind=Single(bool, empty_val=False, required=False),
+            default=True,
+            help='Use analyze to filter out affected targets.'),
+    'suspected_revisions':
+        Property(
+            kind=List(six.string_types),
+            default=[],
+            help='A list of suspected revisions from heuristic analysis.'),
+    'use_bisect':
+        Property(
+            kind=Single(bool, empty_val=False, required=False),
+            default=True,
+            help='Use bisect to skip more revisions. '
+            'Effective only when compile_targets is given.'),
+    'compile_on_good_revision':
+        Property(
+            kind=Single(bool, empty_val=False, required=False),
+            default=True,
+            help='Run compile on good revision as well if the first revision '
+            'in range is the suspected culprit.'),
 }
 
 

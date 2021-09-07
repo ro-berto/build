@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import functools
+from six.moves import range  # pylint: disable=redefined-builtin
 
 from recipe_engine import post_process
 
@@ -53,7 +54,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in xrange(10))
+  args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in range(10))
   yield api.test(
       'many_args',
       _test_args(api, args),
@@ -65,7 +66,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in xrange(10))
+  args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in range(10))
   yield api.test(
       'present_to_text',
       _test_args(api, args),
