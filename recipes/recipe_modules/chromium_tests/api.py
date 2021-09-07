@@ -1354,8 +1354,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if self.m.chromium.c.project_generator.tool == 'mb':
         additional_trigger_properties['swarming_command_lines_digest'] = (
-            self.archive_command_lines(self.swarming_command_lines,
-                                       builder_config.isolate_server))
+            self.archive_command_lines(self.swarming_command_lines))
         additional_trigger_properties['swarming_command_lines_cwd'] = (
             self.m.path.relpath(self.m.chromium.output_dir,
                                 self.m.path['checkout']))
@@ -1460,7 +1459,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       package_transfer_reasons.append(" - %s doesn't use isolate" % t.name)
     return package_transfer_reasons
 
-  def archive_command_lines(self, command_lines, isolate_server):
+  def archive_command_lines(self, command_lines):
     command_lines_file = self.m.path['cleanup'].join('command_lines.json')
     self.m.file.write_json('write command lines', command_lines_file,
                            command_lines)

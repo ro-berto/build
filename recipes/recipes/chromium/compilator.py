@@ -56,8 +56,7 @@ def RunSteps(api, properties):
       trigger_properties = {}
       trigger_properties['swarming_command_lines_digest'] = (
           api.chromium_tests.archive_command_lines(
-              api.chromium_tests.swarming_command_lines,
-              orch_builder_config.isolate_server))
+              api.chromium_tests.swarming_command_lines))
       trigger_properties['swarming_command_lines_cwd'] = (
           api.m.path.relpath(api.m.chromium.output_dir, api.m.path['checkout']))
       trigger_properties['swarm_hashes'] = api.isolate.isolated_tests
