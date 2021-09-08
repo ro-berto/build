@@ -1,0 +1,16 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.verification",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@1 action(s) mismatched@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  }
+]

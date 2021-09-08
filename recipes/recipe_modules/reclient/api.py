@@ -87,6 +87,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._rewrapper_env = None
     self._reclient_log_dir = None
     self._cache_silo = props.cache_silo or None
+    self._mismatch = None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -164,6 +165,10 @@ class ReclientApi(recipe_api.RecipeApi):
   def _rpl2cloudtrace_bin_path(self):
     return self._get_reclient_exe_path('rpl2cloudtrace')
 
+  @property
+  def _ensure_verified(self):
+    return self._props.ensure_verified
+
   def _get_platform_exe_name(self, exe_name):
     if self.m.platform.is_win:
       exe_name += '.exe'
@@ -240,6 +245,11 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_rpl(reclient_log_dir, gzip_name_maker)
         self._upload_logs(reclient_log_dir, gzip_name_maker)
         self.m.file.rmtree('cleanup reclient log dir', reclient_log_dir)
+        if self._ensure_verified:
+          if self._mismatch:
+            self.m.python.infra_failing_step('verification', self._mismatch)
+          else:
+            self.m.python.succeeding_step('verification', self._mismatch)
 
   def _install_reclient_cfgs(self):
     """Install reclient cfgs."""
@@ -270,7 +280,7 @@ class ReclientApi(recipe_api.RecipeApi):
     Args:
       reclient_log_dir: Directory to hold the logs produced by reclient.
                         Specifically, it contains the .rpl file, which can be of
-                        several GB. 
+                        several GB.
     """
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
@@ -349,6 +359,9 @@ class ReclientApi(recipe_api.RecipeApi):
         reclient_log_dir.join('rbe_metrics.pb'),
         test_data=make_test_rbe_stats_pb().SerializeToString())
     bq_pb.stats.ParseFromString(stats_raw)
+    if self._ensure_verified:
+      self._check_mismatch(bq_pb.stats)
+
     bq_json_dict = json_format.MessageToDict(
         message=bq_pb, preserving_proto_field_name=True)
     # "environment" is a map field and gets serialized to a JSON map.
@@ -376,6 +389,29 @@ class ReclientApi(recipe_api.RecipeApi):
         infra_step=True)
     step_result.presentation.logs['rbe_metrics'] = json.dumps(
         bq_json_dict, indent=2)
+
+  def _check_mismatch(self, stats):
+    """Update self._mismatch if there is mismatches."""
+
+    def StatsValue(name):
+      for x in stats.stats:
+        if x.name == name:
+          return x.count
+      return None
+
+    num_actions = stats.num_records
+    if num_actions == 0:
+      # No need to verify because no compiles happened.
+      return
+
+    total_verified = StatsValue('LocalMetadata.Verification.TotalVerified')
+    if total_verified is None:
+      self._mismatch = 'No TotalVerified found in the metrics.'
+    if total_verified == 0:
+      self._mismatch = 'No compiles are verified.'
+    num_mismatches = stats.verification.total_mismatches
+    if num_mismatches > 0:
+      self._mismatch = '%d action(s) mismatched' % num_mismatches
 
   def _upload_reclient_traces(self, reclient_log_dir):
     attributes = ','.join([

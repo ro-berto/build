@@ -4,8 +4,11 @@
 
 from recipe_engine import post_process
 
+import PB.go.chromium.org.foundry_x.re_client.api.stats.stats as stats_pb
+
 DEPS = [
     'recipe_engine/context',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -26,6 +29,16 @@ def RunSteps(api):
   _ = api.reclient.rewrapper_path
   _ = api.reclient.metrics_project
   _ = api.reclient.jobs
+
+
+def MakeTestRBEStats(num_records=0, total_verified=None, total_mismatches=None):
+  stats = stats_pb.Stats(num_records=num_records)
+  if total_verified is not None:
+    stats.stats.add(
+        name='LocalMetadata.Verification.TotalVerified', count=total_verified)
+  if total_mismatches is not None:
+    stats.verification.total_mismatches = total_mismatches
+  return stats.SerializeToString()
 
 
 def GenTests(api):
@@ -63,3 +76,52 @@ def GenTests(api):
          api.post_process(
              post_process.Filter(
                  'postprocess for reclient.upload reclient traces')))
+
+  yield (api.test('ensure_verified_succeed') +
+         api.reclient.properties(ensure_verified=True) + api.step_data(
+             'postprocess for reclient.load rbe_metrics.pb',
+             api.file.read_raw(
+                 content=MakeTestRBEStats(num_records=1, total_verified=1))) +
+         api.post_process(post_process.StepSuccess,
+                          'postprocess for reclient.verification') +
+         api.post_process(
+             post_process.Filter('postprocess for reclient.verification')))
+
+  yield (api.test('ensure_verified_no_records') +
+         api.reclient.properties(ensure_verified=True) + api.step_data(
+             'postprocess for reclient.load rbe_metrics.pb',
+             api.file.read_raw(content=MakeTestRBEStats(num_records=0))) +
+         api.post_process(post_process.StepSuccess,
+                          'postprocess for reclient.verification') +
+         api.post_process(
+             post_process.Filter('postprocess for reclient.verification')))
+
+  yield (api.test('ensure_verified_no_verified_field') +
+         api.reclient.properties(ensure_verified=True) + api.step_data(
+             'postprocess for reclient.load rbe_metrics.pb',
+             api.file.read_raw(content=MakeTestRBEStats(num_records=1))) +
+         api.post_process(post_process.StepException,
+                          'postprocess for reclient.verification') +
+         api.post_process(
+             post_process.Filter('postprocess for reclient.verification')))
+
+  yield (api.test('ensure_verified_no_verification') +
+         api.reclient.properties(ensure_verified=True) + api.step_data(
+             'postprocess for reclient.load rbe_metrics.pb',
+             api.file.read_raw(
+                 content=MakeTestRBEStats(num_records=1, total_verified=0))) +
+         api.post_process(post_process.StepException,
+                          'postprocess for reclient.verification') +
+         api.post_process(
+             post_process.Filter('postprocess for reclient.verification')))
+
+  yield (api.test('ensure_verified_mismatches') +
+         api.reclient.properties(ensure_verified=True) + api.step_data(
+             'postprocess for reclient.load rbe_metrics.pb',
+             api.file.read_raw(
+                 content=MakeTestRBEStats(
+                     num_records=1, total_verified=1, total_mismatches=1))) +
+         api.post_process(post_process.StepException,
+                          'postprocess for reclient.verification') +
+         api.post_process(
+             post_process.Filter('postprocess for reclient.verification')))

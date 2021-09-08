@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
-// NEXT ID TO USE: 7
+// NEXT ID TO USE: 10
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -42,4 +42,10 @@ message InputProperties {
   // segregated if so desired.  This is useful in cases such as performance
   // testing.
   string cache_silo = 8;
+
+  // Postprocess step fails either no artifacts verified or mismatch found.
+  // This is expected to set to a builder to verify build artifacts are the
+  // same between remote and local.  Such builders must confirm compile
+  // runs with verify mode and no mismatches.
+  bool ensure_verified = 9;
 }
