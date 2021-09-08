@@ -83,6 +83,8 @@ from recipe_engine.config_types import Path
 from recipe_engine.engine_types import FrozenDict, freeze
 from recipe_engine.util import Placeholder
 
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+
 _NOTHING = object()
 
 
@@ -290,7 +292,7 @@ sequence = _UnparameterizedSequence.create()
 # The set of allowed types should be kept in sync with the types allowed by
 # _validate_cmd_list in
 # https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/recipe_modules/step/api.py
-command_args = sequence[(int, long, basestring, Path, Placeholder)]
+command_args = sequence[(int, six.string_types[0], Path, Placeholder)]
 
 
 @attr.s(frozen=True, slots=True)
@@ -322,7 +324,7 @@ class _Mapping(AttributeConstraint):
 
   def convert(self, value):
     try:
-      itr = value.iteritems()
+      itr = six.iteritems(value)
     except AttributeError:
       # Let the validator provide a more helpful exception message
       return value
@@ -422,8 +424,8 @@ def attrs(slots=True, **kwargs):
         try:
           a.validator(None, a, a.default)
         except Exception as e:
-          message = 'default for ' + e.message
-          raise type(e)(message), None, sys.exc_info()[2]
+          message = 'default for {}'.format(e)
+          six.reraise(type(e), type(e)(message), sys.exc_info()[2])
 
     return cls
 
@@ -448,7 +450,7 @@ class FieldMapping(collections.Mapping):
     raise KeyError(key)
 
   def _non_none_attrs(self):
-    for k, v in attr.asdict(self).iteritems():
+    for k, v in six.iteritems(attr.asdict(self)):
       if v is not None:
         yield k
 
