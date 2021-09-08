@@ -77,13 +77,11 @@ class ANGLEApi(recipe_api.RecipeApi):
     cmd = [
         'vpython3',
         'src/tests/capture_replay_tests.py',
-        '--use-goma',
         '--goma-dir=%s' % self.m.goma.goma_dir,
         '--log',
         'debug',
         '--gtest_filter=%s' % gtest_filter,
         '--out-dir=%s' % checkout.join('out', 'CaptureReplayTest'),
-        '--depot-tools-path=%s' % self.m.depot_tools.root,
     ]
     if self.m.platform.is_linux:
       cmd += ['--xvfb']

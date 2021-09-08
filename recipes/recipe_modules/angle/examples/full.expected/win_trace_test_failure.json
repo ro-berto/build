@@ -293,13 +293,11 @@
     "cmd": [
       "vpython3",
       "src/tests/capture_replay_tests.py",
-      "--use-goma",
       "--goma-dir=[CACHE]\\goma\\client",
       "--log",
       "debug",
       "--gtest_filter=*/ES2_Vulkan_SwiftShader",
-      "--out-dir=[CACHE]\\builder\\angle\\out\\CaptureReplayTest",
-      "--depot-tools-path=RECIPE_REPO[depot_tools]"
+      "--out-dir=[CACHE]\\builder\\angle\\out\\CaptureReplayTest"
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "name": "GLES 2.0 trace tests",
