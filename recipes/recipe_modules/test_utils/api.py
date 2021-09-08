@@ -315,7 +315,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     rdb_results = RDBResults.create(all_rdb_results)
     # Serialize the recipe's internal representation of its test results to a
     # log. To be used only for debugging.
-    step_result = self.m.step('$debug - all results', cmd=None)
+    step_result = self.m.step(
+        '$debug - all results%s' % ('' if not suffix else ' (%s)' % suffix),
+        cmd=None)
     step_result.presentation.logs['serialzed results'] = (
         self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
 

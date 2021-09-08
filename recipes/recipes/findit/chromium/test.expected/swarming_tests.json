@@ -2039,7 +2039,7 @@
   },
   {
     "cmd": [],
-    "name": "test r1.$debug - all results",
+    "name": "test r1.$debug - all results (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",

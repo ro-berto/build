@@ -2044,7 +2044,7 @@
   },
   {
     "cmd": [],
-    "name": "test r2.$debug - all results",
+    "name": "test r2.$debug - all results (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
@@ -3438,7 +3438,7 @@
   },
   {
     "cmd": [],
-    "name": "test r3.$debug - all results",
+    "name": "test r3.$debug - all results (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",

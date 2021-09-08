@@ -2058,7 +2058,7 @@
   },
   {
     "cmd": [],
-    "name": "test r4.$debug - all results",
+    "name": "test r4.$debug - all results (r4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
@@ -3454,7 +3454,7 @@
   },
   {
     "cmd": [],
-    "name": "test r5.$debug - all results",
+    "name": "test r5.$debug - all results (r5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
@@ -4850,7 +4850,7 @@
   },
   {
     "cmd": [],
-    "name": "test r6.$debug - all results",
+    "name": "test r6.$debug - all results (r6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
@@ -6232,7 +6232,7 @@
   },
   {
     "cmd": [],
-    "name": "test r2.$debug - all results",
+    "name": "test r2.$debug - all results (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
@@ -7626,7 +7626,7 @@
   },
   {
     "cmd": [],
-    "name": "test r3.$debug - all results",
+    "name": "test r3.$debug - all results (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",

@@ -1208,7 +1208,7 @@
   },
   {
     "cmd": [],
-    "name": "$debug - all results (2)",
+    "name": "$debug - all results (retry shards)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",

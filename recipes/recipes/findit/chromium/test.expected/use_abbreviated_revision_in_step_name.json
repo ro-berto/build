@@ -2053,7 +2053,7 @@
   },
   {
     "cmd": [],
-    "name": "test gfedcba.$debug - all results",
+    "name": "test gfedcba.$debug - all results (gfedcba)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
