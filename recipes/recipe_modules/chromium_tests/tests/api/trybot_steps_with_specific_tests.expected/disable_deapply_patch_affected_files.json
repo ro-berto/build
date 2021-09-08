@@ -1218,15 +1218,12 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
+    "cmd": [],
     "name": "without patch steps are skipped",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>because this CL changed following recipe config paths:<br/>testing/buildbot/.*json$<br/>testing/buildbot/.*pyl$@@@"
+      "@@@STEP_TEXT@* test specs that are consumed by the builder are also affected by the CL@@@",
+      "@@@STEP_LOG_LINE@affected_spec_files@[CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_LOG_END@affected_spec_files@@@"
     ]
   },
   {

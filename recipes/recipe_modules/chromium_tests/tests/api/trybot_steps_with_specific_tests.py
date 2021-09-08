@@ -18,6 +18,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
@@ -100,11 +101,6 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   if fail_mb_and_compile:
     api.chromium_tests.run_mb_and_compile = compile_override
-
-  skip_deapply_patch = api.properties.get(
-      'skip_deapply_patch', False)
-  if skip_deapply_patch:
-    api.chromium_tests._should_retry_with_patch_deapplied = lambda x, y: False
 
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
@@ -211,11 +207,31 @@ def GenTests(api):
 
   yield api.test(
       'skip_without_patch_does_not_prevent_cq_retry',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              },
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                          retry_without_patch=False,
+                      ),
+              },
+          }),
+      ),
       api.properties(
           retry_failed_shards=True,
-          skip_deapply_patch=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),

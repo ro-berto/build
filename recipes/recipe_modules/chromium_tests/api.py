@@ -25,13 +25,6 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from . import generators
 from .targets_config import TargetsConfig
 
-# Paths which affect recipe config and behavior in a way that survives
-# deapplying user's patch.
-RECIPE_CONFIG_PATHS = [
-    r'testing/buildbot/.*json$',
-    r'testing/buildbot/.*pyl$',
-]
-
 # These account ids are obtained by looking at gerrit API responses.
 # Specifically, just find a build from a desired CL author, look at the
 # json output of the "gerrit fetch current CL info" recipe step, and find the
@@ -1049,21 +1042,39 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
         self.set_test_command_lines(failing_tests, suffix=' (%s)' % suffix)
 
-  def _should_retry_with_patch_deapplied(self, builder_config, affected_files):
-    """Whether to retry failing test suites with patch deapplied.
+  def _maybe_skip_without_patch(self, builder_config, affected_files):
+    """Determine whether the without patch steps should be skipped.
 
-    Returns: Boolean
+    If the without patch steps should be skipped, a no-op step will be
+    output to indicate why it's being skipped.
+
+    Returns: Whether or not the without patch steps should be skipped.
     """
-    # We skip the deapply_patch step if it is disabled in the try spec or
-    # there are modifications that affect the recipe itself, since that would
-    # potentially invalidate the previous test results.
-    exclusion_regexs = [re.compile(path) for path in RECIPE_CONFIG_PATHS]
-    for f in affected_files:
-      for regex in exclusion_regexs:
-        if regex.match(f):
-          return False
+    reasons = []
+    logs = {}
 
-    return builder_config.retry_without_patch
+    absolute_affected_files = set(
+        str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
+            '/', self.m.path.sep) for f in affected_files)
+    absolute_spec_files = set(
+        str(self.m.chromium.c.source_side_spec_dir.join(f))
+        for f in builder_config.source_side_spec_files.itervalues())
+    affected_spec_files = absolute_spec_files & absolute_affected_files
+    if affected_spec_files:
+      reasons.append('test specs that are consumed by the builder '
+                     'are also affected by the CL')
+      logs['affected_spec_files'] = sorted(affected_spec_files)
+
+    if not builder_config.retry_without_patch:
+      reasons.append('retry without patch is disabled in builder config')
+
+    if not reasons:
+      return False
+
+    result = self.m.step('without patch steps are skipped', [])
+    result.presentation.step_text = '\n'.join('* {}'.format(r) for r in reasons)
+    result.presentation.logs.update(logs)
+    return True
 
   def summarize_test_failures(self, test_suites, retried_suites=()):
     """
@@ -1124,12 +1135,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
-      if not self._should_retry_with_patch_deapplied(task.builder_config,
-                                                     task.affected_files):
-        self.m.python.succeeding_step(
-            'without patch steps are skipped',
-            '<br/>because this CL changed following recipe config paths:<br/>' +
-            '<br/>'.join(RECIPE_CONFIG_PATHS))
+      if self._maybe_skip_without_patch(task.builder_config,
+                                        task.affected_files):
         self.summarize_test_failures(task.test_suites)
         return None, failing_test_suites
 
