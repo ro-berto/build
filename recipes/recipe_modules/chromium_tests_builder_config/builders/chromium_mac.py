@@ -108,7 +108,7 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'mac-arm64-rel-tests':
+    'mac11-arm64-rel-tests':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             gclient_config='chromium',
