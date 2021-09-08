@@ -569,11 +569,10 @@ class Test(object):
         include=True)
     return resultdb
 
-  def get_invocation_names(self, _suffix):  # pragma: no cover
+  @abc.abstractmethod
+  def get_invocation_names(self, _suffix):
     """Returns the invocation names tracking the test's results in RDB."""
-    # TODO(crbug.com/1135718): Raise a NotImplementedError once all subclasses
-    # have an implementation.
-    return []
+    raise NotImplementedError()  # pragma: no cover
 
   @property
   def rdb_results(self):
@@ -3163,6 +3162,9 @@ class MockTest(Test):
     return {}
 
   def compile_targets(self):  # pragma: no cover
+    return []
+
+  def get_invocation_names(self, _suffix):
     return []
 
   @property
