@@ -129,7 +129,6 @@ def GenTests(api):
   yield api.test(
       'junit-with-rdb-by-default',
       ci_build(
-          experiments={'chromium.resultdb.result_sink.junit_tests': True},
           test_spec={
               'foo': 'bar',
               'test': 'junit_test',
@@ -158,7 +157,6 @@ def GenTests(api):
   yield api.test(
       'junit-with-test-spec-rdb-override',
       ci_build(
-          experiments={'chromium.resultdb.result_sink.junit_tests': True},
           test_spec={
               'foo': 'bar',
               'test': 'junit_test',

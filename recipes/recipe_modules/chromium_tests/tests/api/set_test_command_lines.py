@@ -340,8 +340,6 @@ def GenTests(api):
       api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          # TODO(crbug.com/1108016): Remove experiments
-          experiments=['chromium.resultdb.result_sink'],
           builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
@@ -417,7 +415,6 @@ def GenTests(api):
       api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          experiments=['chromium.resultdb.result_sink'],
           builder_db=ctbc.BuilderDatabase.create({
               fake_group: {
                   fake_tester:
