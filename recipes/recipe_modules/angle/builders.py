@@ -110,10 +110,16 @@ _SPEC = {
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
         _create_tester_config('mac', 64, 'mac-rel'),
+    'mac-amd-exp':
+        _create_tester_config('mac', 64, 'mac-exp'),
     'mac-dbg':
         _create_builder_config('mac', 'Debug', 64),
+    'mac-exp':
+        _create_builder_config('mac', 'Release', 64),
     'mac-intel':
         _create_tester_config('mac', 64, 'mac-rel'),
+    'mac-intel-exp':
+        _create_tester_config('mac', 64, 'mac-exp'),
     'mac-nvidia':
         _create_tester_config('mac', 64, 'mac-rel'),
     'mac-rel':

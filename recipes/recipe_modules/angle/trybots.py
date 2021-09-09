@@ -97,6 +97,23 @@ _SPEC = {
         _create_compile_spec('linux-trace-rel'),
     'mac-dbg':
         _create_compile_spec('mac-dbg'),
+    'mac-exp':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='mac-exp',
+                    tester='mac-amd-exp',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='mac-exp',
+                    tester='mac-intel-exp',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'mac-rel':
         try_spec.TrySpec.create(
             mirrors=[
