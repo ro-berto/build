@@ -19,7 +19,7 @@ DEPS = [
 DISABLE_STRICT_COVERAGE = True
 
 # Forward symbols for other modules to import
-from .builder_config import BuilderConfig
+from .builder_config import BuilderConfig, delegate_to_builder_spec
 from .builder_db import BuilderDatabase
 from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC
 from .try_spec import TryDatabase, TryMirror, TrySpec, COMPILE_AND_TEST, COMPILE

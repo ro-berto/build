@@ -31,7 +31,8 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
                      builder_id=None,
                      builder_db=None,
                      try_db=None,
-                     use_try_db=None):
+                     use_try_db=None,
+                     builder_config_class=None):
     """Lookup a builder, getting the matching bot config.
 
     Args:
@@ -49,11 +50,17 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
         TrySpec. Otherwise, the BuilderConfig will wrap the BuilderSpec
         for the builder identified by builder_id. By default, the try_db
         will be used if self.m.tryserver.is_tryserver is True.
+      * builder_config_class - The class of the builder config to
+        create. If not provided, BuilderConfig will be used. The class
+        must have a lookup method that takes the builder_id, builder_db
+        and try_db as positional arguments and keyword arguments
+        use_try_db and python_api. use_try_db acts as indicated above.
+        python_api is the API object for the python recipe module and
+        should be used for creating an infra failing step if creation of
+        the builder config fails.
 
-    Returns:
-      A 2-tuple:
-        * The BuilderId of the builder the BuilderConfig is for.
-        * The BuilderConfig for the builder.
+    Returns: A 2-tuple: * The BuilderId of the builder the BuilderConfig
+      is for. * The BuilderConfig for the builder.
     """
     builder_id = builder_id or self.m.chromium.get_builder_id()
 
@@ -65,7 +72,8 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
     if use_try_db is None:
       use_try_db = self.m.tryserver.is_tryserver
 
-    builder_config = BuilderConfig.lookup(
+    builder_config_class = builder_config_class or BuilderConfig
+    builder_config = builder_config_class.lookup(
         builder_id,
         builder_db,
         try_db,

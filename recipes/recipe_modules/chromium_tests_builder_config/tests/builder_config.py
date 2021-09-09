@@ -143,6 +143,33 @@ def RunSteps(api):
           'fake-group3': 'fake-group3.json'
       })
 
+  # Test BuilderSpec-consistent properties
+  builder_config_with_matched_values = (
+      builder_config_module.BuilderConfig.create(
+          builders,
+          try_spec.TrySpec.create(mirrors=[
+              try_spec.TryMirror.create(
+                  builder_group='fake-group', buildername='fake-builder'),
+              try_spec.TryMirror.create(
+                  builder_group='fake-group2', buildername='fake-builder2'),
+          ])))
+  api.assertions.assertEqual(builder_config_with_matched_values.execution_mode,
+                             builder_spec.COMPILE_AND_TEST)
+
+  builder_config_with_mismatched_values = (
+      builder_config_module.BuilderConfig.create(
+          builders,
+          try_spec.TrySpec.create(mirrors=[
+              try_spec.TryMirror.create(
+                  builder_group='fake-group', buildername='fake-builder'),
+              try_spec.TryMirror.create(
+                  builder_group='fake-group3', buildername='fake-tester2'),
+          ])))
+  with api.assertions.assertRaises(ValueError) as caught:
+    # pylint: disable=pointless-statement
+    builder_config_with_mismatched_values.execution_mode
+  api.assertions.assertIn('Inconsistent value', caught.exception.message)
+
 
 def GenTests(api):
   yield api.test(

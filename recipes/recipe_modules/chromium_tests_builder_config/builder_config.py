@@ -2,8 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
+import inspect
 import traceback
 
+from .builder_spec import BuilderSpec
 from .builder_db import BuilderDatabase
 from .try_spec import TryDatabase, TrySpec, COMPILE
 
@@ -15,6 +18,70 @@ class BuilderConfigException(Exception):
   pass
 
 
+class _BuilderSpecProperty(object):
+  """A non-data descriptor that delegates attributes to BuilderSpecs.
+
+  This descriptor must be attached to the BuilderConfig class. The value
+  for the attribute will be read from each of the BuilderSpecs that are
+  wrapped by the BuilderConfig instance and an exception will be raised
+  if there is more than one value.
+
+  A descriptor is being used instead of overriding __getattr__ because
+  the presence of a __getattr__ method on the type results in errors in
+  property methods being hidden because python will fall back to calling
+  __getattr__ if a property raises an exception.
+  """
+
+  def __init__(self, a):
+    self._attr = a
+
+  def __get__(self, obj, objtype=None):
+    del objtype
+    if obj is None:
+      return self  # pragma: no cover
+    per_builder_values = {}
+    for builder_id in obj.builder_ids:
+      builder_spec = obj.builder_db[builder_id]
+      value = getattr(builder_spec, self._attr)
+      per_builder_values[builder_id] = value
+    values = list(set(per_builder_values.values()))
+    if len(values) != 1:
+      message = ['Inconsistent value for {!r}:'.format(self._attr)]
+      message.extend(
+          '{!r}: {!r}'.format(k, v) for k, v in per_builder_values.iteritems())
+      raise ValueError('\n  '.join(message))
+    return values[0]
+
+
+def delegate_to_builder_spec(builder_spec_class):
+  """A decorator to delegate attribute and property access to specs.
+
+  The decorator can be applied to a BuilderConfig subclass and takes a
+  BuilderSpec subclass. For each attr Attribute or descriptor on the
+  class, if the attribute's name is not a python magic name (begins and
+  ends with double-underscore), a non-data descriptor will be added to
+  the BuilderConfig subclass that will delegate to the wrapped builder
+  specs and ensure a consistent value between them.
+  """
+  assert issubclass(builder_spec_class, BuilderSpec)
+
+  def delegate(cls):
+    for a in attr.fields_dict(builder_spec_class):
+      setattr(cls, a, _BuilderSpecProperty(a))
+    for a in dir(builder_spec_class):
+      if a.startswith('__') and a.endswith('__'):
+        continue
+      val = getattr(builder_spec_class, a)
+      if inspect.ismethod(val):
+        continue
+      if hasattr(val, '__get__'):
+        setattr(cls, a, _BuilderSpecProperty(a))
+    return cls
+
+  return delegate
+
+
+@delegate_to_builder_spec(BuilderSpec)
 @attrs()
 class BuilderConfig(object):
   """"Static" configuration for a builder.
@@ -141,18 +208,6 @@ class BuilderConfig(object):
 
     return cls.create(
         builder_db, try_db=try_db, try_spec=try_spec, python_api=python_api)
-
-  def __getattr__(self, attr):
-    per_builder_values = {}
-    for builder_id in self.builder_ids:
-      builder_spec = self.builder_db[builder_id]
-      value = getattr(builder_spec, attr)
-      per_builder_values[builder_id] = value
-    values = list(set(per_builder_values.values()))
-    assert len(values) == 1, 'Inconsistent value for {!r}:\n  {}'.format(
-        attr, '\n  '.join('{!r}: {!r}'.format(k, v)
-                          for k, v in per_builder_values.iteritems()))
-    return values[0]
 
   @cached_property
   def builder_ids(self):
