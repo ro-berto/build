@@ -40,11 +40,18 @@ def main():
       metavar='COMPILER',
       help='compiler name used for the build.'
   )
+  # TODO(shinyak): Remove this when everyone is using --ninja-log-command-file.
+  parser.add_argument(
+      '--ninja-log-command',
+      metavar='COMMAND',
+      help='command line options of the build.'
+  )
   parser.add_argument(
       '--ninja-log-command-file',
       metavar='FILE',
       help='command line options of the build, which is '
-      'written in the file.'
+      'written in the file. this option is preferred to '
+      '--ninja-log-command.'
   )
   parser.add_argument(
       '--build-exit-status',
@@ -74,9 +81,6 @@ def main():
   parser.add_argument(
       '--json-status',
       metavar='JSON',
-      # To handle timeout without causing Goma error, assertion is
-      # moved to here. (crbug.com/1213839)
-      required=True,
       help='path of json file generated from'
       ' ./goma_ctl.py jsonstatus'
   )
