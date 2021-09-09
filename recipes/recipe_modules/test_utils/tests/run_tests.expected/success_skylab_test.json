@@ -201,7 +201,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "build-8839265267168653505"

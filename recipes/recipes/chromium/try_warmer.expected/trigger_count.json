@@ -42,7 +42,7 @@
       "SWARMING_TASK_ID": null
     },
     "name": "get linux_warmed.led edit",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux_warmed\", \n\"project\": \"chromium\"\n}\n}\n}\n}\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux_warmed\",\n          \"project\": \"chromium\"\n        }\n      }\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -71,7 +71,7 @@
       "SWARMING_TASK_ID": null
     },
     "name": "led launch",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux_warmed\", \n\"project\": \"chromium\"\n}, \n\"scheduling_timeout\": \"3600s\"\n}\n}, \n\"name\": \"led: warm linux_warmed\"\n}\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux_warmed\",\n          \"project\": \"chromium\"\n        },\n        \"scheduling_timeout\": \"3600s\"\n      }\n    },\n    \"name\": \"led: warm linux_warmed\"\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
@@ -92,7 +92,7 @@
       "SWARMING_TASK_ID": null
     },
     "name": "led launch (2)",
-    "stdin": "{\n\"buildbucket\": {\n\"bbagent_args\": {\n\"build\": {\n\"builder\": {\n\"bucket\": \"try\", \n\"builder\": \"linux_warmed\", \n\"project\": \"chromium\"\n}, \n\"scheduling_timeout\": \"3600s\"\n}\n}, \n\"name\": \"led: warm linux_warmed\"\n}\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux_warmed\",\n          \"project\": \"chromium\"\n        },\n        \"scheduling_timeout\": \"3600s\"\n      }\n    },\n    \"name\": \"led: warm linux_warmed\"\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",

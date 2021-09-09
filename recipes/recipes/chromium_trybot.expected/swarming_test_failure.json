@@ -1709,7 +1709,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "0"
@@ -2220,7 +2220,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "1"

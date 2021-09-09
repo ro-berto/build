@@ -1826,7 +1826,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "1"
@@ -1845,7 +1845,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "2"
@@ -1864,7 +1864,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "0"
