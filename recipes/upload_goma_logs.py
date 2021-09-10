@@ -40,18 +40,11 @@ def main():
       metavar='COMPILER',
       help='compiler name used for the build.'
   )
-  # TODO(shinyak): Remove this when everyone is using --ninja-log-command-file.
-  parser.add_argument(
-      '--ninja-log-command',
-      metavar='COMMAND',
-      help='command line options of the build.'
-  )
   parser.add_argument(
       '--ninja-log-command-file',
       metavar='FILE',
       help='command line options of the build, which is '
-      'written in the file. this option is preferred to '
-      '--ninja-log-command.'
+      'written in the file.'
   )
   parser.add_argument(
       '--build-exit-status',

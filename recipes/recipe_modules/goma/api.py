@@ -105,7 +105,7 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.path['tmp_base'].join('goma_jsonstatus.json')
 
   @property
-  def jsonstatus(self):
+  def jsonstatus(self):  # maybe only for test?
     assert self._jsonstatus
     return self._jsonstatus
 
@@ -550,20 +550,23 @@ class GomaApi(recipe_api.RecipeApi):
             '.INFO.20170329-222936.4420.gz')
     }
 
-    assert self._goma_jsonstatus_called
-    args.extend(['--json-status', self.json_path])
+    if self._goma_jsonstatus_called:
+      args.extend(['--json-status', self.json_path])
 
     if ninja_log_outdir:
-      assert ninja_log_command is not None
 
       # Since ninja_log_command can be long, it exceeds command line length
       # limit. So we write it to a file.
       args.extend([
           '--ninja-log-outdir',
           ninja_log_outdir,
-          '--ninja-log-command-file',
-          self.m.json.input(ninja_log_command),
       ])
+      if ninja_log_command is not None:
+        args.extend([
+            '--ninja-log-command-file',
+            self.m.json.input(ninja_log_command),
+        ])
+
       json_test_data['ninja_log'] = (
           'https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/'
           'build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz')
