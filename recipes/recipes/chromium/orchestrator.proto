@@ -7,5 +7,10 @@ syntax = "proto3";
 package recipes.build.chromium.orchestrator;
 
 message InputProperties {
+  // Name of compilator builder that is triggered by this orchestrator build
   string compilator = 1;
+  // For launching sub_builds with the infra/chromium/compilator_watcher cipd
+  // package.
+  // git revision is for repo https://chromium.googlesource.com/infra/infra
+  string compilator_watcher_git_revision = 2;
 }
