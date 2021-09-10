@@ -3520,9 +3520,7 @@ class SkylabTest(Test):
         exe_rel_path=self.exe_rel_path,
         timeout_sec=self.spec.timeout_sec,
         retries=self.spec.retries,
-        # TODO(crbug.com/1238139): Migrate tast to rdb once we could handle
-        # tast result in the runner script.
-        resultdb=None if self.is_tast_test else self.prep_skylab_rdb(),
+        resultdb=self.prep_skylab_rdb(),
     ) if self.lacros_gcs_path else None
 
   def _raise_failed_step(self, api, suffix, step, status, failure_msg):
@@ -3538,9 +3536,19 @@ class SkylabTest(Test):
         base_variant=dict(
             self.spec.resultdb.base_variant or {},
             test_suite=self.canonical_name),
-        result_format='gtest',
-        result_file='output.json',
-        artifact_directory='')
+        result_format='tast' if self.is_tast_test else 'gtest',
+        # Skylab's result_file is hard-coded by the autotest wrapper in OS
+        # repo, and not required by callers. It suppose to be None, but then
+        # ResultDB will pass the default value ${ISOLATED_OUTDIR}/output.json
+        # which is confusing for Skylab test runner. So explicitly set it an
+        # empty string, as well as artifact_directory.
+        result_file='',
+        # Tast adapter is designed mostly for Skylab, so it collects the
+        # artifact for us. No need to configure any path, plus we do not
+        # know the runtime path of the artifact on the host server in Skylab.
+        # For gtest, we have to explicitly set the relative path of artifacts
+        # to the adapter.
+        artifact_directory='' if self.is_tast_test else 'chromium/debug')
 
   def get_invocation_names(self, suffix):
     # As of 2021Q3, we can only generate the invocation name from the test
