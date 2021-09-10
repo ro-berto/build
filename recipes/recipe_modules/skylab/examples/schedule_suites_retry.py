@@ -59,8 +59,8 @@ def GenTests(api):
       api.properties(retries=6),
       api.expect_exception('ValueError'),
       api.post_process(
-          post_process.ResultReason,
-          u'Uncaught Exception: ValueError("\'retries\' must be in '
-          u'(0, 1, 2, 3, 4, 5) (got 6)",)'),
+          post_process.ResultReasonRE,
+          r'Uncaught Exception: ValueError\b.*\bretries\b.* must be in '
+          r'\(0, 1, 2, 3, 4, 5\) \(got 6\)"'),
       api.post_process(post_process.DropExpectation),
   )
