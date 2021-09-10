@@ -8,9 +8,10 @@ import traceback
 
 from .builder_spec import BuilderSpec
 from .builder_db import BuilderDatabase
-from .try_spec import TryDatabase, TrySpec, COMPILE
+from .try_spec import TryDatabase, TryMirror, ALWAYS, NEVER, QUICK_RUN_ONLY
 
-from RECIPE_MODULES.build.attr_utils import attrib, attrs, cached_property
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
+                                             enum, sequence)
 
 
 class BuilderConfigException(Exception):
@@ -108,52 +109,80 @@ class BuilderConfig(object):
 
   builder_db = attrib(BuilderDatabase)
   try_db = attrib(TryDatabase, default=TryDatabase.create({}))
-  _try_spec = attrib(TrySpec)
+
+  # TODO(gbeaty) The following fields are copied from TrySpec (with some
+  # changed defaults), but if all builders are switched to using the
+  # module properties (once available) then TrySpec could be removed.
+
+  # The specifications of the builders being mirrored by the try builder
+  mirrors = attrib(sequence[TryMirror])
+  # Whether or not all testers triggered by builders in mirrors should be
+  # considered in scope for testing
+  include_all_triggered_testers = attrib(bool, default=True)
+  # Whether the try builder is compile only or not
+  is_compile_only = attrib(bool, default=False)
+  # Additional names to add when analyzing the change to determine affected
+  # targets
+  analyze_names = attrib(sequence[str], default=())
+  # Whether or not failed shards of tests should be retried
+  retry_failed_shards = attrib(bool, default=True)
+  # Whether or not failed test suites should be retried without patch
+  retry_without_patch = attrib(bool, default=True)
+  # See http://bit.ly/chromium-rts
+  regression_test_selection = attrib(
+      enum([ALWAYS, QUICK_RUN_ONLY, NEVER]), default=NEVER)
+  regression_test_selection_recall = attrib(float, default=0.95)
 
   @classmethod
-  def create(cls, builder_db, try_spec, try_db=None, python_api=None):
+  def create(cls, builder_db, mirrors, python_api=None, **kwargs):
     """Create a BuilderConfig instance.
 
     Args:
       * builder_db - The BuilderDatabase containing the builders of
-        try_spec.mirrors.
-      * try_spec - A TrySpec instance that specifies the builders to
-        mirror and any try-specific settings.
+        `mirrors`.
+      * mirrors - A non-empty collection of BuilderId or TryMirror
+        instances specifying the builders to wrap and those that in
+        scope for testing. BuilderId instances will be normalized to
+        TryMirror instances with builder_id set to the BuilderId.
       * python_api - Optional python API. If provided, in the event that
         a BuilderConfigException would be raised, an infra failing step
         will be created with the details instead.
+      * kwargs - Any additional arguments to initialize fields of the
+        BuilderConfig.
 
     Returns:
-      A BuilderConfig instance. The BuilderConfig will wrap the
-      specs for the builders in the mirrors in `try_spec`. The testers
-      in the mirrors in `try_spec` will be in scope for testing. If
-      `try_spec.include_all_triggered_testers` is true, then any testers
-      triggered by the wrapped builders will be in scope for testing.
+      A BuilderConfig instance. The BuilderConfig will wrap the specs
+      for the builders in `mirrors`. The testers in `mirrors` will be in
+      scope for testing. If `include_all_triggered_testers` is true,
+      then any testers triggered by the wrapped builders will be in
+      scope for testing.
 
     Raises:
       * BuilderConfigException if there isn't configuration matching all
-        of builders in try_spec.mirrors and python_api is None.
+        of builders in mirrors and python_api is None.
       * InfraFailure if there isn't configuration matching all of
-        builders in try_spec.mirrors and python_api is not None.
+        builders in mirrors and python_api is not None.
     """
     try:
-      return cls(builder_db, try_db, try_spec)
+      if not mirrors:
+        raise BuilderConfigException('No mirrors specified')
+      mirrors = [TryMirror.normalize(m) for m in mirrors]
+      for mirror in mirrors:
+        if not mirror.builder_id.group in builder_db.builders_by_group:
+          raise BuilderConfigException(
+              "No configuration present for group '{}'".format(
+                  mirror.builder_id.group))
+        if not mirror.builder_id in builder_db:
+          raise BuilderConfigException(
+              "No configuration present for builder '{}' in group '{}'".format(
+                  mirror.builder_id.builder, mirror.builder_id.group))
     except BuilderConfigException as e:
       if python_api is not None:
         python_api.infra_failing_step(
             str(e), [traceback.format_exc()], as_log='details')
       raise
 
-  def __attrs_post_init__(self):
-    for mirror in self.mirrors:
-      if not mirror.builder_id.group in self.builder_db.builders_by_group:
-        raise BuilderConfigException(
-            'No configuration present for group {!r}'.format(
-                mirror.builder_id.group))
-      if not mirror.builder_id in self.builder_db:
-        raise BuilderConfigException(
-            'No configuration present for builder {!r} in group {!r}'.format(
-                mirror.builder_id.builder, mirror.builder_id.group))
+    return cls(builder_db, mirrors=mirrors, **kwargs)
 
   @classmethod
   def lookup(cls,
@@ -198,16 +227,13 @@ class BuilderConfig(object):
     if use_try_db and try_db:
       try_spec = try_db.get(builder_id)
 
-    # TODO(gbeaty) Change implementation to not require a TrySpec object
-    # BuilderConfig is implemented in terms of TrySpec, so one gets created for
-    # CI builders and stand-alone try builders that mirrors the indicated
-    # builder and any trigger testers
     if try_spec is None:
-      try_spec = TrySpec.create([builder_id],
-                                include_all_triggered_testers=True)
+      kwargs = dict(mirrors=[builder_id])
+    else:
+      kwargs = attr.asdict(try_spec, recurse=False)
 
     return cls.create(
-        builder_db, try_db=try_db, try_spec=try_spec, python_api=python_api)
+        builder_db, try_db=try_db, python_api=python_api, **kwargs)
 
   @cached_property
   def builder_ids(self):
@@ -221,37 +247,9 @@ class BuilderConfig(object):
     ids.extend(mirror.tester_id
                for mirror in self.mirrors
                if mirror.tester_id is not None)
-    if self._try_spec.include_all_triggered_testers:
+    if self.include_all_triggered_testers:
       ids = self.builder_db.builder_graph.get_transitive_closure(ids)
     return ids
-
-  @cached_property
-  def mirrors(self):
-    return self._try_spec.mirrors
-
-  @cached_property
-  def analyze_names(self):
-    return self._try_spec.analyze_names
-
-  @cached_property
-  def retry_failed_shards(self):
-    return self._try_spec.retry_failed_shards
-
-  @cached_property
-  def retry_without_patch(self):
-    return self._try_spec.retry_without_patch
-
-  @cached_property
-  def is_compile_only(self):
-    return self._try_spec.execution_mode == COMPILE
-
-  @cached_property
-  def regression_test_selection(self):
-    return self._try_spec.regression_test_selection
-
-  @cached_property
-  def regression_test_selection_recall(self):
-    return self._try_spec.regression_test_selection_recall
 
   @cached_property
   def source_side_spec_files(self):

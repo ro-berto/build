@@ -39,10 +39,9 @@ class FinditApi(recipe_api.RecipeApi):
         tester_group=tester_id.group)
 
   def get_builder_config_for_mirror(self, mirror, builders=None):
-    try_spec = ctbc.TrySpec.create([mirror])
     return ctbc.BuilderConfig.create(
-        builders or self.m.chromium_tests_builder_config.builder_db,
-        try_spec,
+        builders or self.m.chromium_tests_builder_config.builder_db, [mirror],
+        include_all_triggered_testers=False,
         python_api=self.m.python)
 
   def _calculate_repo_dir(self, solution_name):
