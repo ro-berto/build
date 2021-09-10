@@ -225,7 +225,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('pool_name and pool_size must be defined with `tests`.',)"
+      "humanReason": "Uncaught Exception: ValueError('pool_name and pool_size must be defined with `tests`.')"
     },
     "name": "$result"
   }

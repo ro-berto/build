@@ -16,7 +16,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('Trying to take the mean of an empty list.',)"
+      "humanReason": "Uncaught Exception: ValueError('Trying to take the mean of an empty list.')"
     },
     "name": "$result"
   }

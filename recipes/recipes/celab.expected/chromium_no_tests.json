@@ -16,7 +16,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('Chromium bots must define `tests`.',)"
+      "humanReason": "Uncaught Exception: ValueError('Chromium bots must define `tests`.')"
     },
     "name": "$result"
   }

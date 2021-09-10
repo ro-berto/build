@@ -14,7 +14,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('Invalid `project`. Accepted values: celab, chromium, chrome.',)"
+      "humanReason": "Uncaught Exception: ValueError('Invalid `project`. Accepted values: celab, chromium, chrome.')"
     },
     "name": "$result"
   }

@@ -325,7 +325,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: Exception(\"malformatted DEPS entry '['src/buildtools:', '', 'https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762']'\",)"
+      "humanReason": "Uncaught Exception: Exception('malformatted DEPS entry '['src/buildtools:', '', 'https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762']'')"
     },
     "name": "$result"
   }

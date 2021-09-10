@@ -185,7 +185,7 @@
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: AssertionError('Trying to check out generated files repo, but the repo is not indicated',)"
+      "humanReason": "Uncaught Exception: AssertionError('Trying to check out generated files repo, but the repo is not indicated')"
     },
     "name": "$result"
   }
