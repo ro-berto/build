@@ -138,9 +138,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_android.apply_config(c)
 
   def set_up_swarming(self, builder_config):
-    if builder_config.isolate_server:
-      self.m.isolate.isolate_server = builder_config.isolate_server
-
     if builder_config.swarming_server:
       self.m.chromium_swarming.swarming_server = builder_config.swarming_server
 

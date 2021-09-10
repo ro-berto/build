@@ -159,6 +159,7 @@ class BuilderSpec(object):
   # URL to specify the isolate server to use. This is explicitly set to
   # `None` rather than something like the public server to avoid accidentally
   # uploading private isolates to the public server.
+  # TODO(https://crbug.com/1224266): remove this.
   isolate_server = attrib(str, default=None)
 
   # URL to override the swarming server to use
