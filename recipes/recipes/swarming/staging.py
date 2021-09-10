@@ -22,7 +22,6 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'depot_tools/gclient',
-    'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
@@ -36,8 +35,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  # Configure isolate & swarming modules to use staging instances.
-  api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
+  # Configure swarming modules to use staging instances.
   api.chromium_swarming.verbose = True
 
   # Run tests from chromium.swarm buildbot with a relatively high priority
