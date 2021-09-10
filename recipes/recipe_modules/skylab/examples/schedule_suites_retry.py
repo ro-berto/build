@@ -61,6 +61,6 @@ def GenTests(api):
       api.post_process(
           post_process.ResultReasonRE,
           r'Uncaught Exception: ValueError\b.*\bretries\b.* must be in '
-          r'\(0, 1, 2, 3, 4, 5\) \(got 6\)"'),
+          r'\(0, 1, 2, 3, 4, 5\) \(got 6\)'),
       api.post_process(post_process.DropExpectation),
   )
