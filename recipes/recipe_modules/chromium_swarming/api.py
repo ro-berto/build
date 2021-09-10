@@ -929,7 +929,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Some flags with "--" are read by trigger script too.
     args = [
       '--swarming', self.swarming_server,
-      '--isolate-server', self.m.isolate.isolate_server,
       '--priority', str(task_request.priority),
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),
@@ -987,11 +986,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       for key, paths in sorted(dict(task_slice.env_prefixes).items()):
         for path in paths:
           args.extend(('-env-prefix', '%s=%s' % (key, path)))
-
-    # What isolated command to trigger.
-    if task_slice.isolated:
-      # TODO(crbug.com/1143122): remove this after migration.
-      args.extend(('--isolated', task_slice.isolated))
 
     if task_slice.cas_input_root:
       args.extend(('--digest', task_slice.cas_input_root))

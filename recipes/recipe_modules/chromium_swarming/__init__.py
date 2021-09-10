@@ -9,7 +9,6 @@ DEPS = [
     'chromium_checkout',
     'code_coverage',
     'depot_tools/tryserver',
-    'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',

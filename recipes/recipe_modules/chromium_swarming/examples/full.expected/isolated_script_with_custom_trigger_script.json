@@ -9,8 +9,6 @@
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
       "--priority",
       "30",
       "--task-name",
@@ -75,8 +73,6 @@
       "-enable-resultdb",
       "-cipd-package",
       "bin:super/awesome/pkg=git_revision:deadbeef",
-      "--isolated",
-      "hash_for_win",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"

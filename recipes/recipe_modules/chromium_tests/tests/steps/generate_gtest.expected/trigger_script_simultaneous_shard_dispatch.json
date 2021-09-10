@@ -9,8 +9,6 @@
       "5",
       "--swarming",
       "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
       "--priority",
       "25",
       "--task-name",

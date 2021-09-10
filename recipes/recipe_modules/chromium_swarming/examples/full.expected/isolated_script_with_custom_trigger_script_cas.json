@@ -9,8 +9,6 @@
       "trigger",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
       "--priority",
       "30",
       "--task-name",
