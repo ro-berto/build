@@ -1326,7 +1326,6 @@ SPEC.update([
     stock_config('mac11.0-blink-rel-dummy', staging=False),
     stock_config('mac11.0.arm64-blink-rel-dummy', staging=False),
     stock_config('win7-blink-rel-dummy', target_bits=32, staging=False),
-    stock_config('win10-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win10.20h2-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('VR Linux'),
     stock_config(
