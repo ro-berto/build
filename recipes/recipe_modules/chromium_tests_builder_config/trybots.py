@@ -1915,6 +1915,14 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Dawn Mac x64 Experimental Release (AMD)',
                 ),
             ]),
+        'dawn-try-mac-intel-exp':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.dawn',
+                    buildername='Dawn Mac x64 Builder',
+                    tester='Dawn Mac x64 Experimental Release (Intel)',
+                ),
+            ]),
         'dawn-win10-x86-deps-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
