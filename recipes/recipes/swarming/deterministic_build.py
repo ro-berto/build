@@ -14,6 +14,8 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'builder_group',
     'chromium',

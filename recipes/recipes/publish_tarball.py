@@ -9,6 +9,8 @@ from recipe_engine import post_process, recipe_api
 import contextlib
 import re
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'depot_tools/bot_update',

@@ -8,6 +8,8 @@ from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_swarming',

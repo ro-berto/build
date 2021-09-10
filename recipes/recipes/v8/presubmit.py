@@ -8,6 +8,8 @@ Recipe for running presubmit in V8 CI.
 
 from recipe_engine.post_process import Filter
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'chromium',
   'depot_tools/gclient',

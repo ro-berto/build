@@ -28,6 +28,8 @@ from recipe_engine.recipe_api import Property
 
 
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',

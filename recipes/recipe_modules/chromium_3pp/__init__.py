@@ -4,6 +4,8 @@
 
 from PB.recipe_modules.build.chromium_3pp import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',

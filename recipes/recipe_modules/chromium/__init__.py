@@ -6,6 +6,8 @@ from . import types
 
 from PB.recipe_modules.build.chromium import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/bot_update',
     'depot_tools/depot_tools',

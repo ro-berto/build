@@ -7,6 +7,8 @@ from recipe_engine import post_process
 
 from PB.recipe_modules.build.symupload import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'recipe_engine/file',

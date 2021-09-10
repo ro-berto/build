@@ -6,6 +6,8 @@ import json
 
 from recipe_engine import post_process
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'ios',

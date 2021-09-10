@@ -8,6 +8,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from recipe_engine import post_process
 import textwrap
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/gclient',
     'depot_tools/presubmit',

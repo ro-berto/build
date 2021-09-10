@@ -4,6 +4,8 @@
 
 from PB.recipe_modules.build.binary_size import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_android',

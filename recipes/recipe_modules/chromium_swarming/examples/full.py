@@ -5,6 +5,8 @@
 import json
 from six.moves import range  # pylint: disable=redefined-builtin
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'isolate',
     'chromium',

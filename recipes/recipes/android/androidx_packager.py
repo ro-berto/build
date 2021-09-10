@@ -10,6 +10,8 @@ from PB.recipes.build.android import sdk_packager
 
 import math
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_checkout',

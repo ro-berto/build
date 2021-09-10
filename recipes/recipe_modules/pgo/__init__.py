@@ -4,6 +4,8 @@
 
 from PB.recipe_modules.build.pgo import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'code_coverage',

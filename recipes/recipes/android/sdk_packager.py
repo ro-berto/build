@@ -11,6 +11,8 @@ from PB.recipe_engine import result as result_pb
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipes.build.android import sdk_packager
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_checkout',

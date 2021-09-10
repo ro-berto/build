@@ -7,6 +7,8 @@ from six.moves import range  # pylint: disable=redefined-builtin
 
 from recipe_engine import post_process
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'gn',
     'recipe_engine/path',

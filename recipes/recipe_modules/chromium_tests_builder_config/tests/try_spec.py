@@ -8,6 +8,8 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests_builder_config import (try_spec as
                                                                 try_spec_module)
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'recipe_engine/assertions',
 ]

@@ -4,6 +4,8 @@
 
 """Small example of using the puppet_service_account api."""
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'puppet_service_account',
   'recipe_engine/platform',

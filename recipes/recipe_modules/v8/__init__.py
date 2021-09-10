@@ -4,6 +4,8 @@
 
 from recipe_engine.config import ConfigGroup, Single
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'archive',
     'build',

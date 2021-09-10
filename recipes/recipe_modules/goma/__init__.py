@@ -1,3 +1,5 @@
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'build',
     'builder_group',

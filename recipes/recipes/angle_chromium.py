@@ -4,6 +4,8 @@
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'adb',
     'build',

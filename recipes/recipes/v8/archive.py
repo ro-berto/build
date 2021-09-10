@@ -13,6 +13,8 @@ from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun, StatusFailure)
 from recipe_engine.recipe_api import Property
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'depot_tools/git',

@@ -19,6 +19,8 @@ https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/tools/dirmd
 from RECIPE_MODULES.build import chromium
 
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',

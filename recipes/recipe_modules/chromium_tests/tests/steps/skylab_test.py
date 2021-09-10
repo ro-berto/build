@@ -16,6 +16,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_tests',

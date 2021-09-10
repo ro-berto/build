@@ -61,6 +61,8 @@ You must call `read_build_config()` before calling `test_swarming()`.
 
 A sample recipe can be constructed using the public methods documented above:
 ```python
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'ios',
 ]

@@ -9,6 +9,8 @@ from recipe_engine.config import Single
 from recipe_engine.engine_types import freeze
 from recipe_engine.recipe_api import Property
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium_checkout',
     'depot_tools/bot_update',

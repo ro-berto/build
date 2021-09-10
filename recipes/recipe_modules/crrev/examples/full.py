@@ -6,6 +6,8 @@ import re
 
 from recipe_engine import recipe_api
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'crrev',
     'recipe_engine/properties',

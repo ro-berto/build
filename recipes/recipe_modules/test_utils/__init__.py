@@ -4,6 +4,8 @@
 
 from PB.recipe_modules.build.test_utils import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'build',
     'chromium',

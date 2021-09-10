@@ -15,6 +15,8 @@ linked by commit hash.
 
 from datetime import datetime
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/git',
     'recipe_engine/buildbucket',

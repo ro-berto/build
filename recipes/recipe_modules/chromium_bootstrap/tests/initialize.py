@@ -6,6 +6,8 @@ import textwrap
 
 from recipe_engine import post_process
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium_bootstrap',
     'recipe_engine/assertions',

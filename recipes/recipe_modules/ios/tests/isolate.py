@@ -8,6 +8,8 @@ from recipe_engine import config
 from recipe_engine import post_process
 from recipe_engine import recipe_api
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'ios',

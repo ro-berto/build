@@ -176,7 +176,7 @@
       "The recipe has crashed at point 'Uncaught exception'!",
       "",
       "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py\", line 27, in RunSteps",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py\", line 29, in RunSteps",
       "    api.codesearch.checkout_generated_files_repo_and_sync()",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 253, in checkout_generated_files_repo_and_sync",
       "    'Trying to check out generated files repo,'",

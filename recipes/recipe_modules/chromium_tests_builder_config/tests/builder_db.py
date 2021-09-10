@@ -8,6 +8,8 @@ from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec)
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'recipe_engine/assertions',
 ]

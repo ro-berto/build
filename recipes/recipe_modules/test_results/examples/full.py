@@ -4,6 +4,8 @@
 
 from recipe_engine.recipe_api import Property
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'builder_group',
     'recipe_engine/buildbucket',

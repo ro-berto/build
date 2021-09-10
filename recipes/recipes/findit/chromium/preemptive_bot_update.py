@@ -10,6 +10,8 @@ jobs they have as low latency as possible in their bot_update steps."""
 
 from RECIPE_MODULES.build import chromium
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'builder_group',
     'chromium_checkout',

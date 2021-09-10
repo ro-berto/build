@@ -4,6 +4,8 @@
 
 import base64
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'chromium',
   'depot_tools/bot_update',

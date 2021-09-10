@@ -8,6 +8,8 @@ The changes are:
 * The Chromium checkout uses WebRTC ToT in src/third_party/WebRTC
 """
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'builder_group',
     'chromium',

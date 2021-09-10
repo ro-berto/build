@@ -21,6 +21,8 @@ from recipe_engine.post_process import (
     StatusFailure, StatusSuccess, StepException, StepFailure)
 
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/gitiles',
     'recipe_engine/buildbucket',

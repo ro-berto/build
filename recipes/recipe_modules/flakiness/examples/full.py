@@ -11,6 +11,8 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import resultdb as resultdb_pb2
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'flakiness',
     'recipe_engine/assertions',

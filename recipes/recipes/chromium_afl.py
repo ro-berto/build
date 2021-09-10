@@ -8,6 +8,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build.attr_utils import attrs, attrib
 from RECIPE_MODULES.build import chromium
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'archive',
   'chromium',

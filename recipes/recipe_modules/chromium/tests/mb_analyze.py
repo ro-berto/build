@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 import textwrap
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'chromium',
   'chromium_checkout',

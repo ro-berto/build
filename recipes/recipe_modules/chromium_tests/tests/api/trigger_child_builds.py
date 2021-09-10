@@ -8,6 +8,8 @@ from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_tests',

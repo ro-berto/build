@@ -246,7 +246,7 @@
       "The recipe has crashed at point 'Uncaught exception'!",
       "",
       "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py\", line 34, in RunSteps",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py\", line 36, in RunSteps",
       "    commit_hash=kythe_commit_hash, commit_timestamp=1337000000)",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 177, in create_and_upload_kythe_index_pack",
       "    'Trying to upload Kythe index pack but no google storage bucket name')",

@@ -4,6 +4,8 @@
 
 from PB.recipe_modules.build.flakiness import properties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/properties',

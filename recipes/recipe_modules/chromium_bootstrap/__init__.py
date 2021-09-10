@@ -6,6 +6,8 @@ from PB.infra.chromium import chromium_bootstrap
 
 PROPERTIES = chromium_bootstrap.ChromiumBootstrapModuleProperties
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/gclient',
     'recipe_engine/json',

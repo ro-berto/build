@@ -5,6 +5,8 @@
 import json
 import re
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'goma',

@@ -20,6 +20,8 @@ import re
 
 from recipe_engine.post_process import DropExpectation, MustRun
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'builder_group',
     'depot_tools/gclient',

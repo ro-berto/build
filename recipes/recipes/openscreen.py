@@ -4,6 +4,8 @@
 
 """Recipe for building and running tests for Open Screen stand-alone."""
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'code_coverage',
     'depot_tools/bot_update',

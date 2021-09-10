@@ -6,6 +6,8 @@
 from RECIPE_MODULES.build import chromium
 from recipe_engine import post_process
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'chromium',
     'chromium_checkout',

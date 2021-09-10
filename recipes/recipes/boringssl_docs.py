@@ -5,6 +5,8 @@
 """Generates BoringSSL documentation and uploads it to Cloud Storage."""
 
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
   'chromium',
   'depot_tools/bot_update',

@@ -8,6 +8,8 @@ from recipe_engine import post_process
 from recipe_engine.config import List
 from recipe_engine.recipe_api import Property
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'gn',
     'recipe_engine/path',

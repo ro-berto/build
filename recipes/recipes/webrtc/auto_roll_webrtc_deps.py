@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 
+PYTHON_VERSION_COMPATIBILITY = "PY2"
+
 DEPS = [
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
