@@ -332,8 +332,10 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
+            gclient_apply_config=['arm64'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
