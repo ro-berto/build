@@ -4,12 +4,14 @@
 
 import attr
 import inspect
+import six
 import traceback
 
 from .builder_spec import BuilderSpec
 from .builder_db import BuilderDatabase
 from .try_spec import TryDatabase, TryMirror, ALWAYS, NEVER, QUICK_RUN_ONLY
 
+from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              enum, sequence)
 
@@ -108,7 +110,10 @@ class BuilderConfig(object):
   """
 
   builder_db = attrib(BuilderDatabase)
-  try_db = attrib(TryDatabase, default=TryDatabase.create({}))
+
+  # The try builders that mirror the builder that this BuilderConfig
+  # wraps
+  mirroring_try_builders = attrib(sequence[BuilderId], default=())
 
   # TODO(gbeaty) The following fields are copied from TrySpec (with some
   # changed defaults), but if all builders are switched to using the
@@ -223,17 +228,32 @@ class BuilderConfig(object):
     assert try_db is None or isinstance(try_db, TryDatabase), \
         'Expected TryDatabase for try_db, got {}'.format(type(try_db))
 
+    kwargs = {}
+
     try_spec = None
-    if use_try_db and try_db:
-      try_spec = try_db.get(builder_id)
+    if try_db:
+      if builder_id not in try_db:
+
+        def is_builder_mirrored(spec):
+          for mirror in spec.mirrors:
+            if builder_id in (mirror.builder_id, mirror.tester_id):
+              return True
+          return False
+
+        kwargs['mirroring_try_builders'] = [
+            try_id for try_id, spec in six.iteritems(try_db)
+            if is_builder_mirrored(spec)
+        ]
+
+      elif use_try_db:
+        try_spec = try_db.get(builder_id)
 
     if try_spec is None:
-      kwargs = dict(mirrors=[builder_id])
+      kwargs['mirrors'] = [builder_id]
     else:
-      kwargs = attr.asdict(try_spec, recurse=False)
+      kwargs.update(attr.asdict(try_spec, recurse=False))
 
-    return cls.create(
-        builder_db, try_db=try_db, python_api=python_api, **kwargs)
+    return cls.create(builder_db, python_api=python_api, **kwargs)
 
   @cached_property
   def builder_ids(self):

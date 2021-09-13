@@ -1258,9 +1258,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         and a failure message if a failure occurred.
       - None if no failures
     """
-    mirrored_builders = self._get_mirroring_try_builders(
-        builder_id, builder_config.try_db)
-    self.report_builders(builder_config, mirrored_builders)
+    self.report_builders(builder_config, report_mirroring_builders=True)
     self.configure_build(builder_config)
     update_step, targets_config = self.prepare_checkout(
         builder_config,
@@ -1703,30 +1701,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return '\n\n'.join(test_summary_lines)
 
-  def _get_mirroring_try_builders(self, builder_id, try_db):
-    """Gets a list of try builders that are mirrors of |builder_id|.
-
-    Args:
-      builder_id: A BuilderId for the builder being checked.
-      try_db: A TryDatabase containing the CI/try mapping.
-
-    Returns:
-      A list of strings. If |builder_id| is a trybot, it will be an empty list.
-      If |builder_id| is a CI builder, it will contain all the builders that
-      mirror |builder_id|. String format is "group:builder".
-    """
-    is_trybot = builder_id in try_db
-    mirrors = set()
-    if not is_trybot:
-      for try_builder_id in try_db:
-        builder_spec = try_db.get(try_builder_id)
-        for try_mirror in builder_spec.mirrors:
-          if try_mirror.builder_id == builder_id:
-            mirrors.add(try_builder_id)
-          if try_mirror.tester_id == builder_id:
-            mirrors.add(try_builder_id)
-    return sorted(['%s:%s' % (b.group, b.builder) for b in mirrors])
-
   def determine_compilation_targets(self, builder_id, builder_config,
                                     affected_files, targets_config):
     compile_targets = targets_config.compile_targets
@@ -1972,7 +1946,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return None
 
-  def report_builders(self, builder_config, mirrored_builders=None):
+  def report_builders(self, builder_config, report_mirroring_builders=False):
     """Reports the builders being executed by the bot."""
 
     def bot_type(execution_mode):
@@ -1994,8 +1968,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     result = self.m.python.succeeding_step('report builders',
                                            '<br/>'.join(lines))
 
-    if mirrored_builders:
-      result.presentation.properties['mirrored_builders'] = mirrored_builders
+    if report_mirroring_builders and builder_config.mirroring_try_builders:
+      # TODO(gbeaty): This property is not well named, it suggests the opposite
+      # relationship of what it is
+      result.presentation.properties['mirrored_builders'] = sorted([
+          '{}:{}'.format(m.group, m.builder)
+          for m in builder_config.mirroring_try_builders
+      ])
 
     def as_dict(bot_mirror):
       if bot_mirror.tester_id:

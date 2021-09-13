@@ -6,6 +6,7 @@ from recipe_engine import post_process, recipe_api
 from recipe_engine.config import Dict
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium import BuilderId
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
@@ -59,6 +60,8 @@ def GenTests(api):
       api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
       api.properties(
           expected_attrs=dict(
+              mirroring_try_builders=(BuilderId.create_for_group(
+                  'fake-try-group', 'fake-try-builder'),),
               mirrors=(ctbc.TryMirror.create('fake-group', 'fake-builder'),),
               include_all_triggered_testers=True,
               is_compile_only=False,
@@ -99,6 +102,7 @@ def GenTests(api):
           builder_group='fake-try-group', builder='fake-try-builder'),
       api.properties(
           expected_attrs=dict(
+              mirroring_try_builders=(),
               mirrors=(ctbc.TryMirror.create('fake-group', 'fake-builder'),),
               include_all_triggered_testers=False,
               is_compile_only=True,
