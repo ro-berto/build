@@ -2977,7 +2977,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
               chrome_revision=str(chrome_rev),
               test_type=upload_step_name)
         if self.spec.results_handler_name == 'layout tests':
-          _archive_layout_test_results(api, upload_step_name, step_suffix=None)
+          _archive_layout_test_results(
+              api, upload_step_name, step_suffix=suffix)
     return step_result
 
 

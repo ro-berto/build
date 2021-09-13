@@ -229,7 +229,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'Upload to test-results [layout_tests (with patch)]'),
       api.post_process(post_process.MustRun,
-                       'archive results for layout_tests'),
+                       'archive results for layout_tests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
