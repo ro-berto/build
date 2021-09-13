@@ -159,6 +159,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ],
             ),
+        'android-marshmallow-arm64-rel-rts':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.android',
+                    buildername='android-marshmallow-arm64-rel',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='Android Release (Nexus 5X)',
+                ),
+            ],
+            regression_test_selection=try_spec.ALWAYS,
+            ),
         'android-marshmallow-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
