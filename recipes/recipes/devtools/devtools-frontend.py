@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
 ]
 
@@ -148,12 +149,12 @@ def run_script(api, step_name, script, args=None):
     api.python(step_name, sc_path, args=args)
 
 
-def run_node_script(api, step_name, script, args=None):
+def run_node_script(api, step_name, script, args=None, **kwargs):
   with api.context(cwd=api.path['checkout']):
     sc_path = api.path.join('third_party', 'node', 'node.py')
     node_args = ['--output', api.path.join('scripts', 'test', script)]
     node_args.extend(args or [])
-    api.python(step_name, sc_path, args=node_args)
+    api.python(step_name, sc_path, args=node_args, **kwargs)
 
 
 def run_unit_tests(api, builder_config):
@@ -169,12 +170,13 @@ def run_lint_check(api):
 
 
 def run_e2e(api, builder_config, args=None):
+  rdb_wrapper = api.resultdb.wrap([])
   run_node_script(api, 'E2E tests', 'run_test_suite.js', [
       "--test-suite-path=gen/test/e2e",
       "--test-suite-source-dir=test/e2e",
       "--test-server-type='hosted-mode'",
       "--target=" + builder_config
-    ] + (args or []))
+    ] + (args or []), wrapper = rdb_wrapper)
 
 
 def run_interactions(api, builder_config):
