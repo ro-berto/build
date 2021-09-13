@@ -100,7 +100,7 @@ class TrySpec(object):
   regression_test_selection_recall = attrib(float, default=0.95)
 
   @classmethod
-  def create(cls, mirrors, execution_mode=None, is_compile_only=None, **kwargs):
+  def create(cls, mirrors, **kwargs):
     """Create a TrySpec.
 
     Args:
@@ -114,15 +114,8 @@ class TrySpec(object):
       * The remaining fields are initialized with the values passed in kwargs.
     """
     assert mirrors
-    if execution_mode is not None:
-      # TODO(gbeaty) Switch all uses to is_compile_only and remove this
-      assert execution_mode in (COMPILE_AND_TEST, COMPILE), (
-          'unknown execution_mode: {}'.format(execution_mode))
-      assert is_compile_only is None, (
-          'only 1 of execution_mode or is_compile_only may be set')
-      is_compile_only = execution_mode == COMPILE
     mirrors = [TryMirror.normalize(m) for m in mirrors]
-    return cls(mirrors=mirrors, is_compile_only=is_compile_only, **kwargs)
+    return cls(mirrors=mirrors, **kwargs)
 
   @classmethod
   def create_for_single_mirror(cls,

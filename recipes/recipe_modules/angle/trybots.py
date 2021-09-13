@@ -11,7 +11,7 @@ def _create_compile_spec(buildername):
   return try_spec.TrySpec.create_for_single_mirror(
       builder_group='angle',
       buildername=buildername,
-      execution_mode=try_spec.COMPILE,
+      is_compile_only=True,
   )
 
 
