@@ -1976,25 +1976,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for m in builder_config.mirroring_try_builders
       ])
 
-    def as_dict(bot_mirror):
-      if bot_mirror.tester_id:
-        return {
-            'execution_mode': ctbc.COMPILE_AND_TEST,
-            'builder_group': bot_mirror.builder_id.group,
-            'buildername': bot_mirror.builder_id.builder,
-            'tester_buildername': bot_mirror.tester_id.builder,
-            'tester_group': bot_mirror.tester_id.group,
-        }
-      return {
-          'execution_mode': builder_config.execution_mode,
-          'builder_group': bot_mirror.builder_id.group,
-          'buildername': bot_mirror.builder_id.builder,
-      }
-
-    bots_json = [as_dict(b) for b in builder_config.mirrors]
-    result.presentation.logs['bots.json'] = self.m.json.dumps(
-        bots_json, indent=2).split('/n')
-
     # Links to upstreams help people figure out if upstreams are broken too
     # TODO(gbeaty): When we switch to using buckets to identify builders instead
     # of group, we can have an authoritative value for the bucket to use

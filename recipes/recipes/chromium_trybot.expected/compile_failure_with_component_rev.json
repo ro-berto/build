@@ -124,14 +124,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'V8 Linux GN' on group 'client.v8.fyi'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"client.v8.fyi\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"V8 Linux GN\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/v8/builders/ci/V8%20Linux%20GN@@@"
     ]
   },

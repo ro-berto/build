@@ -8,14 +8,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'linux-builder' on group 'angle'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"angle\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-builder\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@linux-builder@https://ci.chromium.org/p/angle/builders/ci/linux-builder@@@"
     ]
   },

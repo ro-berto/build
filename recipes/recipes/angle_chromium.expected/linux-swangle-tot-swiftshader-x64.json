@@ -121,14 +121,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'linux-swangle-tot-swiftshader-x64' on group 'chromium.swangle'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.swangle\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-swangle-tot-swiftshader-x64\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@linux-swangle-tot-swiftshader-x64@https://ci.chromium.org/p/chromium/builders/ci/linux-swangle-tot-swiftshader-x64@@@"
     ]
   },

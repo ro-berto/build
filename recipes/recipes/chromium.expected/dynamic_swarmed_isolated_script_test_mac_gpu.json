@@ -11,14 +11,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on group 'chromium.mac'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Mac10.13 Tests\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@Mac10.13 Tests@https://ci.chromium.org/p/chromium/builders/ci/Mac10.13%20Tests@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.mac:mac_chromium_10.13_rel_ng\"]@@@"
     ]

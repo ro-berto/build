@@ -11,14 +11,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'Linux Builder' on group 'chromium.linux'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux Builder\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Builder@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-1mbu-compile-fyi-rel\", \"tryserver.chromium.linux:linux-clang-tidy-rel\", \"tryserver.chromium.linux:linux-dcheck-off-rel\", \"tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel\", \"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-rel-orchestrator\", \"tryserver.chromium.linux:linux-rel-rts\", \"tryserver.chromium.linux:linux-warmed\", \"tryserver.chromium.linux:linux_chromium_compile_rel_ng\"]@@@"
     ]

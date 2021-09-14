@@ -179,16 +179,6 @@
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running tester 'linux-angle-chromium-intel' on group 'chromium.angle' against builder 'linux-angle-chromium-builder' on group 'chromium.angle'@@@",
-      "@@@STEP_LOG_LINE@bots.json@[@@@",
-      "@@@STEP_LOG_LINE@bots.json@  {@@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"builder_group\": \"chromium.angle\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"linux-angle-chromium-builder\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"execution_mode\": \"compile/test\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"linux-angle-chromium-intel\", @@@",
-      "@@@STEP_LOG_LINE@bots.json@    \"tester_group\": \"chromium.angle\"@@@",
-      "@@@STEP_LOG_LINE@bots.json@  }@@@",
-      "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@",
       "@@@STEP_LINK@linux-angle-chromium-intel@https://ci.chromium.org/p/chromium/builders/ci/linux-angle-chromium-intel@@@",
       "@@@STEP_LINK@linux-angle-chromium-builder@https://ci.chromium.org/p/chromium/builders/ci/linux-angle-chromium-builder@@@"
     ]
