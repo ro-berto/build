@@ -209,19 +209,11 @@ def RunSteps(api, properties):
     if api.code_coverage.using_coverage:
       api.file.ensure_directory('ensure output directory',
                                 api.chromium.output_dir)
-
-      isolated_hash = api.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME]
-      if '/' in isolated_hash:
-        api.cas.download(
-            'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
-            isolated_hash,
-            api.chromium.output_dir,
-        )
-      else:
-        api.isolate.download_isolate(
-            'downloading isolate {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
-            isolated_input=isolated_hash,
-            directory=api.chromium.output_dir)
+      api.cas.download(
+          'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
+          api.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
+          api.chromium.output_dir,
+      )
 
     with api.chromium_tests.wrap_chromium_tests(builder_config, tests):
       _, failing_test_suites = (
@@ -281,20 +273,17 @@ def GenTests(api):
   build_id = 1234
   fake_command_lines_digest = (
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
-  isolate_hash = 'd3854a218981bc0b25893f6d2e791cc44f198b08'
-  cas_hash = 'c596061444a157f27ffaa08bd6bbdd39238fa15202df0570f34547/10799'
+  cas_digest = 'c596061444a157f27ffaa08bd6bbdd39238fa15202df0570f34547/10799'
 
-  def get_fake_swarming_trigger_properties(use_cas):
-    if use_cas:
-      input_hash = cas_hash
-    else:
-      input_hash = isolate_hash
+  def get_fake_swarming_trigger_properties():
+    brwoser_tests_digest = (
+        '797e944dad5241e7fe111cfd01e45f02e2f4937dd34b248603e603d2948e174e/1298')
     return {
         'swarming_command_lines_digest': fake_command_lines_digest,
         'swarming_command_lines_cwd': 'out/Release',
         'swarm_hashes': {
-            ALL_TEST_BINARIES_ISOLATE_NAME: input_hash,
-            'browser_tests': '07de23bcf07fe2d5babb5140f727f6e53dbc1d1a'
+            ALL_TEST_BINARIES_ISOLATE_NAME: cas_digest,
+            'browser_tests': brwoser_tests_digest,
         },
     }
 
@@ -308,14 +297,13 @@ def GenTests(api):
                                 sub_build_status=common_pb.SUCCESS,
                                 sub_build_summary='',
                                 empty_props=False,
-                                use_cas=False,
                                 is_swarming_phase=True):
     output_json_obj = {}
     if is_swarming_phase:
       if not empty_props:
         output_json_obj = {
             'swarming_trigger_properties':
-                get_fake_swarming_trigger_properties(use_cas=use_cas)
+                get_fake_swarming_trigger_properties()
         }
 
     sub_build = build_pb2.Build(
@@ -362,7 +350,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
-                       'downloading isolate all_test_binaries'),
+                       'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -383,7 +371,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
-                       'downloading isolate all_test_binaries'),
+                       'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -407,7 +395,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'trigger compilator'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
-                       'downloading isolate all_test_binaries'),
+                       'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -628,7 +616,7 @@ def GenTests(api):
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
-                       'downloading isolate all_test_binaries'),
+                       'downloading cas digest all_test_binaries'),
       api.post_process(
           # Only generates coverage data for the with patch step.
           post_process.MustRun,
@@ -662,50 +650,12 @@ def GenTests(api):
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
-                       'downloading isolate all_test_binaries'),
+                       'downloading cas digest all_test_binaries'),
       api.post_process(
           # Only generates coverage data for the with patch step.
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.generate '
           'metadata for overall test coverage in 2 tests'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'download_binaries_with_isolated',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
-      api.properties(InputProperties(compilator='linux-rel-compilator')),
-      api.code_coverage(use_clang_coverage=True),
-      fake_head_revision(),
-      override_test_spec(),
-      override_compilator_steps(),
-      override_compilator_steps(is_swarming_phase=False),
-      override_trigger_compilator(),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
-      api.post_process(
-          post_process.MustRun,
-          'downloading isolate {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'download_binaries_with_cas',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
-      api.properties(InputProperties(compilator='linux-rel-compilator')),
-      api.code_coverage(use_clang_coverage=True),
-      fake_head_revision(),
-      override_test_spec(),
-      override_compilator_steps(use_cas=True),
-      override_compilator_steps(is_swarming_phase=False),
-      override_trigger_compilator(),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
-      api.post_process(
-          post_process.MustRun,
-          'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
