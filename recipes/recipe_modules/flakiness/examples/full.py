@@ -15,8 +15,11 @@ PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
     'flakiness',
+    'depot_tools/tryserver',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/properties',
     'recipe_engine/resultdb',
 ]
 
@@ -41,13 +44,15 @@ def RunSteps(api):
       'test2_invocations/9hash',
       'test2_invocations/10hash',
   }
-  found_tests = api.flakiness.identify_new_tests()
+  found_tests = api.flakiness.check_tests_for_flakiness()
   if found_tests:
     found_tests = set([
         str('_'.join([test_id, variant_hash]))
         for test_id, variant_hash in found_tests
     ])
-  api.assertions.assertEqual(new_tests, found_tests)
+    api.assertions.assertEqual(new_tests, found_tests)
+  else:
+    api.assertions.assertFalse(found_tests)
 
 
 def GenTests(api):
@@ -136,12 +141,37 @@ def GenTests(api):
 
   yield api.test(
       'no identification',
+      api.buildbucket.try_build(
+          'chromium',
+          'mac',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
       api.flakiness(
           identify_new_tests=False,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.expect_exception('AssertionError'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'skip footer',
+      api.buildbucket.try_build(
+          'chromium',
+          'mac',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.tryserver.gerrit_change_target_ref('refs/heads/experiment'),
+      api.flakiness(
+          identify_new_tests=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.step_data('parse description',
+                    api.json.output({'Validate-Test-Flakiness': ['Skip']})),
       api.post_process(post_process.DropExpectation),
   )

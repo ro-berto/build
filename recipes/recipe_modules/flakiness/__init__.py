@@ -7,6 +7,7 @@ from PB.recipe_modules.build.flakiness import properties
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
+    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/resultdb',

@@ -15,6 +15,7 @@ class FlakinessApi(recipe_api.RecipeApi):
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._using_test_identifier = properties.identify_new_tests
+    self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
     self.current_query_count = properties.current_query_count or 10000
@@ -267,3 +268,23 @@ class FlakinessApi(recipe_api.RecipeApi):
           builder=current_builder.builder)
       presentation.logs['new_tests'] = join_tests(new_tests)
     return new_tests
+
+  def check_tests_for_flakiness(self):
+    """Coordinating method for verifying whether tests are flaky.
+
+    (crbug/1204163) - Ensures that tests identified as new are not flaky.
+    Note: This is WIP and should not be invoked.
+
+    Returns:
+      list of test tuples (test_id, variant_hash)
+    """
+    # 1. check if there are endorser footers to parse
+    commit_footer_values = [
+        val.lower()
+        for val in self.m.tryserver.get_footer(self.COMMIT_FOOTER_KEY)
+    ]
+    if 'skip' in commit_footer_values:
+      # No action for endorsing logic
+      return None
+
+    return self.identify_new_tests()
