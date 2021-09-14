@@ -1410,75 +1410,75 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
       run_args.extend(['--filter-file',
                        api.json.input(tests_to_retry)])  # pragma: no cover
 
-    result = None
-    try:
-      resultdb = self.prep_local_rdb(api)
+    resultdb = self.prep_local_rdb(api)
 
-      script_args = []
-      if self.spec.script_args:
-        script_args = ['--args', api.json.input(self.spec.script_args)]
-      api.build.python(
-          self.step_name(suffix),
-          # Enforce that all scripts are in the specified directory
-          # for consistency.
-          api.path['checkout'].join('testing', 'scripts',
-                                    api.path.basename(self.spec.script)),
-          args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
-                ['run', '--output', api.json.output()] + run_args),
-          resultdb=resultdb if resultdb else None,
-          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
-          venv=True,  # Runs the test through vpython.
-          step_test_data=lambda: api.json.test_api.output({
-              'valid': True,
-              'failures': []
-          }))
-    finally:
-      result = api.step.active_result
-      self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
+    script_args = []
+    if self.spec.script_args:
+      script_args = ['--args', api.json.input(self.spec.script_args)]
+    result = api.build.python(
+        self.step_name(suffix),
+        # Enforce that all scripts are in the specified directory for
+        # consistency.
+        api.path['checkout'].join('testing', 'scripts',
+                                  api.path.basename(self.spec.script)),
+        args=(api.chromium_tests.get_common_args_for_scripts() + script_args +
+              ['run', '--output', api.json.output()] + run_args),
+        raise_on_failure=False,
+        resultdb=resultdb if resultdb else None,
+        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        venv=True,  # Runs the test through vpython.
+        step_test_data=lambda: api.json.test_api.output({
+            'valid': True,
+            'failures': []
+        }))
 
-      failures = None
-      if result.json.output:
-        failures = result.json.output.get('failures')
-      if failures is None:
-        self.update_test_run(api, suffix,
-                             api.test_utils.canonical.result_format())
-        api.python.failing_step(
-            '%s with suffix %s had an invalid result' % (self.name, suffix),
-            'The recipe expected the result to contain the key \'failures\'.'
-            ' Contents are:\n%s' % api.json.dumps(result.json.output, indent=2))
+    status = result.presentation.status
 
-      # Most scripts do not emit 'successes'. If they start emitting
-      # 'successes', then we can create a proper results dictionary.
-      pass_fail_counts = {}
-      for failing_test in failures:
-        pass_fail_counts.setdefault(failing_test, {
-            'pass_count': 0,
-            'fail_count': 0
+    self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
+
+    failures = None
+    if result.json.output:
+      failures = result.json.output.get('failures')
+    if failures is None:
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format())
+      api.python.failing_step(
+          '%s with suffix %s had an invalid result' % (self.name, suffix),
+          'The recipe expected the result to contain the key \'failures\'.'
+          ' Contents are:\n%s' % api.json.dumps(result.json.output, indent=2))
+
+    # Most scripts do not emit 'successes'. If they start emitting 'successes',
+    # then we can create a proper results dictionary.
+    pass_fail_counts = {}
+    for failing_test in failures:
+      pass_fail_counts.setdefault(failing_test, {
+          'pass_count': 0,
+          'fail_count': 0
+      })
+      pass_fail_counts[failing_test]['fail_count'] += 1
+
+    # It looks like the contract we have with these tests doesn't expose how
+    # many tests actually ran. Just say it's the number of failures for now,
+    # this should be fine for these tests.
+    self.update_test_run(
+        api, suffix, {
+            'failures': failures,
+            'valid': result.json.output['valid'] and result.retcode == 0,
+            'total_tests_ran': len(failures),
+            'pass_fail_counts': pass_fail_counts,
+            'findit_notrun': set(),
         })
-        pass_fail_counts[failing_test]['fail_count'] += 1
+    self.update_failure_on_exit(suffix, result.retcode != 0)
 
-      # It looks like the contract we have with these tests doesn't expose how
-      # many tests actually ran. Just say it's the number of failures for now,
-      # this should be fine for these tests.
-      self.update_test_run(
-          api, suffix, {
-              'failures': failures,
-              'valid': result.json.output['valid'] and result.retcode == 0,
-              'total_tests_ran': len(failures),
-              'pass_fail_counts': pass_fail_counts,
-              'findit_notrun': set(),
-          })
-      self.update_failure_on_exit(suffix, result.retcode != 0)
+    _, failures = api.test_utils.limit_failures(failures)
+    result.presentation.step_text += (
+        api.test_utils.format_step_text([['failures:', failures]]))
 
-      _, failures = api.test_utils.limit_failures(failures)
-      result.presentation.step_text += (
-          api.test_utils.format_step_text([['failures:', failures]]))
+    self.update_inv_name_from_stderr(result.stderr, suffix)
 
-      self.update_inv_name_from_stderr(result.stderr, suffix)
+    _present_info_messages(result.presentation, self)
 
-      _present_info_messages(result.presentation, self)
-
-    return result
+    return api.step.raise_on_failure(result, status)
 
 
 @attrs()
@@ -1645,50 +1645,49 @@ class LocalGTestTest(LocalTest):
       kwargs['perf_dashboard_id'] = self.spec.name
       kwargs['perf_builder_name_alias'] = self.spec.perf_builder_name_alias
 
-    try:
-      api.chromium.runtest(
-          self.target_name,
-          revision=self.spec.revision,
-          webkit_revision=self.spec.webkit_revision,
-          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
-          **kwargs)
-      # TODO(kbr): add functionality to generate_gtest to be able to
-      # force running these local gtests via isolate from the src-side
-      # JSON files. crbug.com/584469
-    finally:
-      step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-      if not hasattr(step_result, 'test_utils'):  # pragma: no cover
-        self.update_test_run(api, suffix,
-                             api.test_utils.canonical.result_format())
-      # For perf tests, these runs do not return json data about
-      # which tests were executed as they report to ChromePerf
-      # dashboard.
-      # Here we just need to be sure that all tests have passed.
-      elif step_result.retcode == 0 and self.spec.perf_config:
-        self.update_test_run(api, suffix,
-                             api.test_utils.canonical.result_format(valid=True))
-      else:
-        gtest_results = step_result.test_utils.gtest_results
-        self.update_test_run(api, suffix,
-                             gtest_results.canonical_result_format())
-      self.update_failure_on_exit(suffix, step_result.retcode != 0)
+    step_result = api.chromium.runtest(
+        self.target_name,
+        revision=self.spec.revision,
+        webkit_revision=self.spec.webkit_revision,
+        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        raise_on_failure=False,
+        **kwargs)
 
-      self.update_inv_name_from_stderr(step_result.stderr, suffix)
-      r = api.test_utils.present_gtest_failures(step_result)
+    status = step_result.presentation.status
 
-      _present_info_messages(step_result.presentation, self)
+    # TODO(kbr): add functionality to generate_gtest to be able to force running
+    # these local gtests via isolate from the src-side JSON files.
+    # crbug.com/584469
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
+    if not hasattr(step_result, 'test_utils'):  # pragma: no cover
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format())
+    # For perf tests, these runs do not return json data about which tests were
+    # executed as they report to ChromePerf dashboard.
+    # Here we just need to be sure that all tests have passed.
+    elif step_result.retcode == 0 and self.spec.perf_config:
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format(valid=True))
+    else:
+      gtest_results = step_result.test_utils.gtest_results
+      self.update_test_run(api, suffix, gtest_results.canonical_result_format())
+    self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
-      if r:
-        self._gtest_results[suffix] = r
+    self.update_inv_name_from_stderr(step_result.stderr, suffix)
+    r = api.test_utils.present_gtest_failures(step_result)
 
-        api.test_results.upload(
-            api.json.input(r.raw),
-            test_type=self.name,
-            chrome_revision=api.bot_update.last_returned_properties.get(
-                self.spec.commit_position_property, 'refs/x@{#0}'))
+    _present_info_messages(step_result.presentation, self)
 
-    return step_result
+    if r:
+      self._gtest_results[suffix] = r
+
+      api.test_results.upload(
+          api.json.input(r.raw),
+          test_type=self.name,
+          chrome_revision=api.bot_update.last_returned_properties.get(
+              self.spec.commit_position_property, 'refs/x@{#0}'))
+
+    return api.step.raise_on_failure(step_result, status)
 
   def pass_fail_counts(self, suffix):
     if (self._gtest_results.get(suffix) and
@@ -2826,45 +2825,43 @@ class LocalIsolatedScriptTest(LocalTest):
 
     resultdb = self.prep_local_rdb(api, temp=temp)
 
-    step_result = None
-    try:
-      api.isolate.run_isolated(
-          self.step_name(suffix),
-          api.isolate.isolated_tests[self.target_name],
-          args,
-          pre_args=pre_args,
-          step_test_data=step_test_data,
-          resultdb=resultdb if resultdb else None,
-          stderr=api.raw_io.output(add_output_log=True, name='stderr'),
-          **kwargs)
-    finally:
-      # TODO(kbr, nedn): the logic of processing the output here is very similar
-      # to that of SwarmingIsolatedScriptTest. They probably should be shared
-      # between the two.
-      step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-      results = step_result.json.output
-      presentation = step_result.presentation
+    step_result = api.isolate.run_isolated(
+        self.step_name(suffix),
+        api.isolate.isolated_tests[self.target_name],
+        args,
+        pre_args=pre_args,
+        step_test_data=step_test_data,
+        raise_on_failure=False,
+        resultdb=resultdb if resultdb else None,
+        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        **kwargs)
 
-      if not self.spec.resultdb.use_rdb_results_for_all_decisions:
-        test_results = api.test_utils.create_results_from_json(results)
-        self.spec.results_handler.render_results(api, test_results,
-                                                 presentation)
+    status = step_result.presentation.status
 
-      self.update_test_run(
-          api, suffix, self.spec.results_handler.validate_results(api, results))
-      self.update_inv_name_from_stderr(step_result.stderr, suffix)
-      self.update_failure_on_exit(suffix, step_result.retcode != 0)
+    # TODO(kbr, nedn): the logic of processing the output here is very similar
+    # to that of SwarmingIsolatedScriptTest. They probably should be shared
+    # between the two.
+    self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
+    results = step_result.json.output
+    presentation = step_result.presentation
 
-      _present_info_messages(step_result.presentation, self)
+    if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+      test_results = api.test_utils.create_results_from_json(results)
+      self.spec.results_handler.render_results(api, test_results, presentation)
 
-      if (api.step.active_result.retcode == 0 and
-          not self.has_valid_results(suffix)):
-        # This failure won't be caught automatically. Need to manually
-        # raise it as a step failure.
-        raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+    self.update_test_run(
+        api, suffix, self.spec.results_handler.validate_results(api, results))
+    self.update_inv_name_from_stderr(step_result.stderr, suffix)
+    self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
-    return step_result
+    _present_info_messages(step_result.presentation, self)
+
+    if step_result.retcode == 0 and not self.has_valid_results(suffix):
+      # This failure won't be caught automatically. Need to manually
+      # raise it as a step failure.
+      raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+
+    return api.step.raise_on_failure(step_result, status)
 
 
 @attrs()

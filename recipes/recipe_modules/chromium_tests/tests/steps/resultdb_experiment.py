@@ -8,6 +8,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'isolate',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/path',
@@ -59,6 +60,12 @@ def RunSteps(api, test_with_new_exit_code):
           results_handler_name='layout tests'),
   ]
   tests = [ts.get_test() for ts in test_specs]
+  isolated_tests = {
+      t.isolate_target: '[dummy hash for {}/1]'.format(t.isolate_target)
+      for t in tests
+      if t.uses_isolate
+  }
+  api.isolate.set_isolated_tests(isolated_tests)
 
   invalid_suites, failed_suites = api.test_utils.run_tests_with_patch(
       api.chromium_tests.m, tests)
@@ -92,16 +99,11 @@ def RunSteps(api, test_with_new_exit_code):
 def GenTests(api):
 
   def common_test_data():
-    return (api.chromium.ci_build(
+    return api.chromium.ci_build(
         builder_group='test_group',
         builder='test_buildername',
         experiments={'chromium.chromium_tests.use_rdb_results': True},
-    ) + api.properties(
-        swarm_hashes={
-            'swarming_gtest': 'gtest-hash',
-            'swarming_isolated_script': 'isolated-script-hash',
-            'layout_tests': 'layout-test-hash',
-        }))
+    )
 
   yield api.test(
       'rdb_success_and_json_success',

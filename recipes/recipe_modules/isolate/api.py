@@ -234,7 +234,7 @@ class IsolateApi(recipe_api.RecipeApi):
     if args:
       cmd.append('--')
       cmd.extend(args)
-    self.m.build.python(name, self._run_isolated_path, cmd, **kwargs)
+    return self.m.build.python(name, self._run_isolated_path, cmd, **kwargs)
 
   def download_isolate(self, name, isolated_input, directory):
     """Downloads isolate from isolated_input hash
