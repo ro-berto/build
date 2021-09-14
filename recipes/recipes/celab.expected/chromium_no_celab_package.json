@@ -914,7 +914,7 @@
       "    version = _GetCelabVersionFromVPython(api, test_root.join(\".vpython\"))",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 118, in _GetCelabVersionFromVPython",
       "    raise ValueError('Couldn\\'t find CELab version in vpython file: %s' % path)",
-      "ValueError: Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython"
+      "ValueError('Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython')"
     ]
   },
   {

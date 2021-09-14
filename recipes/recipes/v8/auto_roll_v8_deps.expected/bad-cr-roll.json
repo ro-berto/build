@@ -320,7 +320,7 @@
       "    cr_deps = GetDEPS(api, 'src', CR_PROJECT_NAME, BASE_URL)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/v8/auto_roll_v8_deps.py\", line 132, in GetDEPS",
       "    raise Exception(\"malformatted DEPS entry '%s'\" % tokens)",
-      "Exception: malformatted DEPS entry '['src/buildtools:', '', 'https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762']'"
+      "Exception('malformatted DEPS entry '['src/buildtools:', '', 'https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762']'')"
     ]
   },
   {

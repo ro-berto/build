@@ -9,7 +9,7 @@
       "Traceback (most recent call last):",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 76, in RunSteps",
       "    'Invalid `project`. Accepted values: celab, chromium, chrome.')",
-      "ValueError: Invalid `project`. Accepted values: celab, chromium, chrome."
+      "ValueError('Invalid `project`. Accepted values: celab, chromium, chrome.')"
     ]
   },
   {

@@ -11,7 +11,7 @@
       "    compile_failure = _RunStepsChromium(api)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 124, in _RunStepsChromium",
       "    raise ValueError('Chromium bots must define `tests`.')",
-      "ValueError: Chromium bots must define `tests`."
+      "ValueError('Chromium bots must define `tests`.')"
     ]
   },
   {

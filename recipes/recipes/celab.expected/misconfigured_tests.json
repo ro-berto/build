@@ -220,7 +220,7 @@
       "    tests)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 274, in _RunTests",
       "    raise ValueError('pool_name and pool_size must be defined with `tests`.')",
-      "ValueError: pool_name and pool_size must be defined with `tests`."
+      "ValueError('pool_name and pool_size must be defined with `tests`.')"
     ]
   },
   {
