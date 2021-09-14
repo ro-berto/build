@@ -25,32 +25,14 @@ DEPS = [
 
 
 def RunSteps(api):
-  new_tests = {
-      'test1_invocations/2hash',
-      'test1_invocations/4hash',
-      'test1_invocations/5hash',
-      'test1_invocations/6hash',
-      'test1_invocations/7hash',
-      'test1_invocations/8hash',
-      'test1_invocations/9hash',
-      'test1_invocations/10hash',
-      'test2_invocations/2hash',
-      'test2_invocations/3hash',
-      'test2_invocations/4hash',
-      'test2_invocations/5hash',
-      'test2_invocations/6hash',
-      'test2_invocations/7hash',
-      'test2_invocations/8hash',
-      'test2_invocations/9hash',
-      'test2_invocations/10hash',
-  }
   found_tests = api.flakiness.check_tests_for_flakiness()
   if found_tests:
     found_tests = set([
         str('_'.join([test_id, variant_hash]))
         for test_id, variant_hash in found_tests
     ])
-    api.assertions.assertEqual(new_tests, found_tests)
+    api.assertions.assertEqual(
+        len(found_tests), api.flakiness._max_test_targets)
   else:
     api.assertions.assertFalse(found_tests)
 

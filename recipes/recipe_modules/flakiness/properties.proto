@@ -26,4 +26,8 @@ message InputProperties {
     // determining current build tests. This is optional and will default to
     // 10,000 if not specified.
     int32 current_query_count = 4;
+
+    /// The max number of tests to rerun. Defaults to 40, and if more tests are
+    /// found than this value, a random subset will be selected for testing.
+    int32 max_test_targets = 5;
 }

@@ -11,7 +11,8 @@ class FlakinessTestApi(recipe_test_api.RecipeTestApi):
                identify_new_tests=False,
                build_count=100,
                historical_query_count=1000,
-               current_query_count=10000):
+               current_query_count=10000,
+               max_test_targets=10):
     return self.m.properties(
         **{
             '$build/flakiness': {
@@ -19,5 +20,6 @@ class FlakinessTestApi(recipe_test_api.RecipeTestApi):
                 'build_count': build_count,
                 'historical_query_count': historical_query_count,
                 'current_query_count': current_query_count,
+                'max_test_targets': max_test_targets,
             }
         })

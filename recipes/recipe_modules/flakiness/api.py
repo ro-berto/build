@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import random
+
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
@@ -15,6 +17,7 @@ class FlakinessApi(recipe_api.RecipeApi):
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._using_test_identifier = properties.identify_new_tests
+    self._max_test_targets = properties.max_test_targets or 40
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
@@ -287,4 +290,10 @@ class FlakinessApi(recipe_api.RecipeApi):
       # No action for endorsing logic
       return None
 
-    return self.identify_new_tests()
+    new_tests = self.identify_new_tests()
+    if new_tests and len(new_tests) > self._max_test_targets:
+      # There are more new tests detected than what we're permitting, so we're
+      # taking a random subset to re-run
+      new_tests = random.sample(new_tests, self._max_test_targets)
+
+    return new_tests
