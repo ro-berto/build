@@ -60,7 +60,7 @@ PROPERTIES = {
         Property(
             kind=str,
             help='Parameters to be passed down to the test runner for running'
-            ' stess e2e tests. If set we only compile and run e2e tests.',
+            ' stress e2e tests. If set we only compile and run e2e tests.',
             default=None),
 }
 
@@ -86,7 +86,7 @@ def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
       return compilation_result
 
     # TODO(liviurau): move this logic in a separate recipe
-    # to maybe even add bysection later on
+    # to maybe even add bisection later on
     builder_name = api.buildbucket.builder_name
     if (e2e_env or runner_args) and builder_name.startswith("e2e"):
       # run only e2e stress tests
@@ -170,17 +170,16 @@ def run_lint_check(api):
 
 
 def run_e2e(api, builder_config, args=None):
-  rdb_wrapper = api.resultdb.wrap([])
-  run_node_script(api, 'E2E tests', 'run_test_suite.js', [
+  rdb_node_script(api, 'E2E tests', 'run_test_suite.js', [
       "--test-suite-path=gen/test/e2e",
       "--test-suite-source-dir=test/e2e",
       "--test-server-type='hosted-mode'",
       "--target=" + builder_config
-    ] + (args or []), wrapper = rdb_wrapper)
+    ] + (args or []))
 
 
 def run_interactions(api, builder_config):
-  run_node_script(
+  rdb_node_script(
       api,
       'Interactions',
       'run_test_suite.js',
@@ -193,7 +192,12 @@ def run_interactions(api, builder_config):
   )
 
 
-# TODO(liviurau): remove this temp hack after devtools refactorings that
+def rdb_node_script(api, step_name, script, args=None):
+  rdb_wrapper = api.resultdb.wrap([])
+  run_node_script(api, step_name, script, args, wrapper = rdb_wrapper)
+
+
+# TODO(liviurau): remove this temp hack after devtools refactoring that
 # involve .gitignore are done
 def _git_clean(api):
   with api.context(cwd=api.path['checkout']):

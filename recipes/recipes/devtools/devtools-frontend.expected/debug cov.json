@@ -580,6 +580,9 @@
   },
   {
     "cmd": [
+      "rdb",
+      "stream",
+      "--",
       "python",
       "-u",
       "third_party/node/node.py",
