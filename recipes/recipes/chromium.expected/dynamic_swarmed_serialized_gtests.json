@@ -10,7 +10,8 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Linux FYI Release (NVIDIA)' on group 'chromium.gpu.fyi'@@@",
+      "@@@STEP_TEXT@<br/>running tester 'Linux FYI Release (NVIDIA)' on group 'chromium.gpu.fyi' against builder 'GPU FYI Linux Builder' on group 'chromium.gpu.fyi'@@@",
+      "@@@STEP_LINK@GPU FYI Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/GPU%20FYI%20Linux%20Builder@@@",
       "@@@STEP_LINK@Linux FYI Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux%20FYI%20Release%20(NVIDIA)@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel\"]@@@"
     ]

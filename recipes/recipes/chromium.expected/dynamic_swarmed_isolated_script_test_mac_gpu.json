@@ -10,7 +10,8 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on group 'chromium.mac'@@@",
+      "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on group 'chromium.mac' against builder 'Mac Builder' on group 'chromium.mac'@@@",
+      "@@@STEP_LINK@Mac Builder@https://ci.chromium.org/p/chromium/builders/ci/Mac%20Builder@@@",
       "@@@STEP_LINK@Mac10.13 Tests@https://ci.chromium.org/p/chromium/builders/ci/Mac10.13%20Tests@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.mac:mac_chromium_10.13_rel_ng\"]@@@"
     ]

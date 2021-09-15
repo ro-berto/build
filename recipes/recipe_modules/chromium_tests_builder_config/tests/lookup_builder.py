@@ -62,7 +62,10 @@ def GenTests(api):
           expected_attrs=dict(
               mirroring_try_builders=(BuilderId.create_for_group(
                   'fake-try-group', 'fake-try-builder'),),
-              mirrors=(ctbc.TryMirror.create('fake-group', 'fake-builder'),),
+              builder_ids=(
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),),
+              builder_ids_in_scope_for_testing=set(
+                  [BuilderId.create_for_group('fake-group', 'fake-builder')]),
               include_all_triggered_testers=True,
               is_compile_only=False,
               analyze_names=(),
@@ -103,7 +106,10 @@ def GenTests(api):
       api.properties(
           expected_attrs=dict(
               mirroring_try_builders=(),
-              mirrors=(ctbc.TryMirror.create('fake-group', 'fake-builder'),),
+              builder_ids=(
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),),
+              builder_ids_in_scope_for_testing=set(
+                  [BuilderId.create_for_group('fake-group', 'fake-builder')]),
               include_all_triggered_testers=False,
               is_compile_only=True,
               analyze_names=('foo', 'bar'),

@@ -10,7 +10,8 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on group 'chromium.win'@@@",
+      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on group 'chromium.win' against builder 'Win Builder' on group 'chromium.win'@@@",
+      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win%20Builder@@@",
       "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7%20Tests%20(1)@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.win:win7-rel\"]@@@"
     ]

@@ -1951,24 +1951,40 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def report_builders(self, builder_config, report_mirroring_builders=False):
     """Reports the builders being executed by the bot."""
 
-    def bot_type(execution_mode):
-      return 'builder' if execution_mode == ctbc.COMPILE_AND_TEST else 'tester'
+    # Tester - returns (parent ID, builder ID)
+    # Builder - returns (builder ID, )
+    # This way testers sort after their triggering builder and before
+    # other builders
+    def details(builder_id):
+      spec = builder_config.builder_db[builder_id]
+      if not spec.parent_buildername:
+        return (builder_id,)
+      parent_builder_id = chromium.BuilderId.create_for_group(
+          spec.parent_builder_group or builder_id.group,
+          spec.parent_buildername)
+      return (parent_builder_id, builder_id)
 
-    def present_bot(bot_mirror):
-      if bot_mirror.tester_id:
-        return ("running tester '%s' on group '%s'"
-                " against builder '%s' on group '%s'" %
-                (bot_mirror.tester_id.builder, bot_mirror.tester_id.group,
-                 bot_mirror.builder_id.builder, bot_mirror.builder_id.group))
-      execution_mode = (
-          builder_config.builder_db[bot_mirror.builder_id].execution_mode)
-      return ("running %s '%s' on group '%s'" %
-              (bot_type(execution_mode), bot_mirror.builder_id.builder,
-               bot_mirror.builder_id.group))
+    builder_ids = (
+        builder_config.builder_ids_in_scope_for_testing
+        if self.m.tryserver.is_tryserver else builder_config.builder_ids)
 
-    lines = [''] + [present_bot(m) for m in builder_config.mirrors]
-    result = self.m.python.succeeding_step('report builders',
-                                           '<br/>'.join(lines))
+    builder_details = sorted(details(b) for b in builder_ids)
+
+    def present(details):
+      if len(details) == 1:
+        builder_id = details[0]
+        return "running builder '{}' on group '{}'".format(
+            builder_id.builder, builder_id.group)
+      else:
+        parent_builder_id, builder_id = details
+        return ("running tester '{}' on group '{}'"
+                " against builder '{}' on group '{}'").format(
+                    builder_id.builder, builder_id.group,
+                    parent_builder_id.builder, parent_builder_id.group)
+
+    lines = [''] + [present(d) for d in sorted(builder_details)]
+
+    result = self.m.python.succeeding_step('report builders', '\n'.join(lines))
 
     if report_mirroring_builders and builder_config.mirroring_try_builders:
       # TODO(gbeaty): This property is not well named, it suggests the opposite
@@ -1983,23 +1999,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # of group, we can have an authoritative value for the bucket to use
     # in these links, for now rely on convention:
     # try -> ci
-    # try-beta -> ci-beta
-    # try-stable -> ci-stable
-    for bot_mirror in builder_config.mirrors:
-      if bot_mirror.tester_id:
-        result.presentation.links[bot_mirror.tester_id.builder] = (
-            'https://ci.chromium.org/p/%s/builders/%s/%s' % (
+    for d in builder_details:
+      for builder_id in d:
+        result.presentation.links[builder_id.builder] = (
+            'https://ci.chromium.org/p/{}/builders/{}/{}'.format(
                 self.m.buildbucket.build.builder.project,
                 self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
-                bot_mirror.tester_id.builder,
+                builder_id.builder,
             ))
-
-      result.presentation.links[bot_mirror.builder_id.builder] = (
-          'https://ci.chromium.org/p/%s/builders/%s/%s' % (
-              self.m.buildbucket.build.builder.project,
-              self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
-              bot_mirror.builder_id.builder,
-          ))
 
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""

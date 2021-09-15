@@ -4,6 +4,7 @@
 
 import attr
 import inspect
+import itertools
 import six
 import traceback
 
@@ -111,6 +112,9 @@ class BuilderConfig(object):
 
   builder_db = attrib(BuilderDatabase)
 
+  builder_ids = attrib(sequence[BuilderId])
+  _builder_ids_in_scope_for_testing = attrib(sequence[BuilderId])
+
   # The try builders that mirror the builder that this BuilderConfig
   # wraps
   mirroring_try_builders = attrib(sequence[BuilderId], default=())
@@ -119,9 +123,7 @@ class BuilderConfig(object):
   # changed defaults), but if all builders are switched to using the
   # module properties (once available) then TrySpec could be removed.
 
-  # The specifications of the builders being mirrored by the try builder
-  mirrors = attrib(sequence[TryMirror])
-  # Whether or not all testers triggered by builders in mirrors should be
+  # Whether or not all testers triggered by builders in builder_ids should be
   # considered in scope for testing
   include_all_triggered_testers = attrib(bool, default=True)
   # Whether the try builder is compile only or not
@@ -139,16 +141,23 @@ class BuilderConfig(object):
   regression_test_selection_recall = attrib(float, default=0.95)
 
   @classmethod
-  def create(cls, builder_db, mirrors, python_api=None, **kwargs):
+  def create(cls,
+             builder_db,
+             builder_ids,
+             builder_ids_in_scope_for_testing=None,
+             python_api=None,
+             **kwargs):
     """Create a BuilderConfig instance.
 
     Args:
-      * builder_db - The BuilderDatabase containing the builders of
-        `mirrors`.
-      * mirrors - A non-empty collection of BuilderId or TryMirror
-        instances specifying the builders to wrap and those that in
-        scope for testing. BuilderId instances will be normalized to
-        TryMirror instances with builder_id set to the BuilderId.
+      * builder_db - The BuilderDatabase containing the builders
+        identified by `builder_ids` and
+        `builder_ids_in_scope_for_testing`.
+      * builder_ids - The IDs of the builders to wrap the builder specs
+        for.
+      * builder_ids_in_scope_for_testing - The IDs of the builders to
+        only collect targets and tests from. Any IDs present in
+        `builder_ids` will not be present in the final value.
       * python_api - Optional python API. If provided, in the event that
         a BuilderConfigException would be raised, an infra failing step
         will be created with the details instead.
@@ -156,11 +165,11 @@ class BuilderConfig(object):
         BuilderConfig.
 
     Returns:
-      A BuilderConfig instance. The BuilderConfig will wrap the specs
-      for the builders in `mirrors`. The testers in `mirrors` will be in
-      scope for testing. If `include_all_triggered_testers` is true,
-      then any testers triggered by the wrapped builders will be in
-      scope for testing.
+      A BuilderConfig instance. The specs for the builders in
+      `builder_ids` will be wrapped. The testers in
+      `builder_ids_in_scope_for_testing` will be in scope for testing.
+      If `include_all_triggered_testers` is true, then any testers
+      triggered by the wrapped builders will be in scope for testing.
 
     Raises:
       * BuilderConfigException if there isn't configuration matching all
@@ -168,26 +177,30 @@ class BuilderConfig(object):
       * InfraFailure if there isn't configuration matching all of
         builders in mirrors and python_api is not None.
     """
+    builder_ids_in_scope_for_testing = builder_ids_in_scope_for_testing or []
+
     try:
-      if not mirrors:
-        raise BuilderConfigException('No mirrors specified')
-      mirrors = [TryMirror.normalize(m) for m in mirrors]
-      for mirror in mirrors:
-        if not mirror.builder_id.group in builder_db.builders_by_group:
+      if not builder_ids:
+        raise BuilderConfigException('No builder IDs specified')
+      for b in itertools.chain(builder_ids, builder_ids_in_scope_for_testing):
+        if not b.group in builder_db.builders_by_group:
           raise BuilderConfigException(
-              "No configuration present for group '{}'".format(
-                  mirror.builder_id.group))
-        if not mirror.builder_id in builder_db:
+              "No configuration present for group '{}'".format(b.group))
+        if not b in builder_db:
           raise BuilderConfigException(
               "No configuration present for builder '{}' in group '{}'".format(
-                  mirror.builder_id.builder, mirror.builder_id.group))
+                  b.builder, b.group))
     except BuilderConfigException as e:
       if python_api is not None:
         python_api.infra_failing_step(
             str(e), [traceback.format_exc()], as_log='details')
       raise
 
-    return cls(builder_db, mirrors=mirrors, **kwargs)
+    return cls(
+        builder_db,
+        builder_ids=builder_ids,
+        builder_ids_in_scope_for_testing=builder_ids_in_scope_for_testing,
+        **kwargs)
 
   @classmethod
   def lookup(cls,
@@ -249,24 +262,23 @@ class BuilderConfig(object):
         try_spec = try_db.get(builder_id)
 
     if try_spec is None:
-      kwargs['mirrors'] = [builder_id]
+      kwargs['builder_ids'] = [builder_id]
     else:
-      kwargs.update(attr.asdict(try_spec, recurse=False))
+      try_spec_kwargs = attr.asdict(try_spec, recurse=False)
+      mirrors = try_spec_kwargs.pop('mirrors')
+      kwargs.update(try_spec_kwargs)
+      kwargs['builder_ids'] = [m.builder_id for m in mirrors]
+      kwargs['builder_ids_in_scope_for_testing'] = [
+          m.tester_id for m in mirrors if m.tester_id
+      ]
 
     return cls.create(builder_db, python_api=python_api, **kwargs)
 
   @cached_property
-  def builder_ids(self):
-    """The builder IDs that have their specs wrapped by this config."""
-    return [m.builder_id for m in self.mirrors]
-
-  @cached_property
   def builder_ids_in_scope_for_testing(self):
     """The builder IDs that tests and targets should be built for."""
-    ids = list(self.builder_ids)
-    ids.extend(mirror.tester_id
-               for mirror in self.mirrors
-               if mirror.tester_id is not None)
+    ids = set(self.builder_ids)
+    ids.update(self._builder_ids_in_scope_for_testing)
     if self.include_all_triggered_testers:
       ids = self.builder_db.builder_graph.get_transitive_closure(ids)
     return ids

@@ -7,7 +7,8 @@
     ],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux'@@@",
+      "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'@@@",
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Builder@@@",
       "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Tests@@@",
       "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux-dcheck-off-rel\", \"tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel\", \"tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel\", \"tryserver.chromium.linux:linux-rel\", \"tryserver.chromium.linux:linux-rel-orchestrator\", \"tryserver.chromium.linux:linux-rel-rts\"]@@@"
     ]

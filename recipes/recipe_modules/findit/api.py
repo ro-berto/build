@@ -40,7 +40,10 @@ class FinditApi(recipe_api.RecipeApi):
 
   def get_builder_config_for_mirror(self, mirror, builders=None):
     return ctbc.BuilderConfig.create(
-        builders or self.m.chromium_tests_builder_config.builder_db, [mirror],
+        builders or self.m.chromium_tests_builder_config.builder_db,
+        builder_ids=[mirror.builder_id],
+        builder_ids_in_scope_for_testing=([mirror.tester_id]
+                                          if mirror.tester_id else []),
         include_all_triggered_testers=False,
         python_api=self.m.python)
 
