@@ -10,6 +10,8 @@ import json
 import re
 import traceback
 
+from six.moves.urllib.parse import urlencode
+
 from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
 from recipe_engine.engine_types import FrozenDict
@@ -2205,3 +2207,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           test_success=test_success)
 
       return test_failure_summary
+
+  def get_milo_test_results_url(self, test_name):
+    """Returns a URL to the "Test Results" tab in Milo for the current build."""
+    url = 'https://luci-milo.appspot.com/ui/inv/'
+    inv_name = self.m.resultdb.current_invocation
+    if inv_name.startswith('invocations/'):
+      inv_name = inv_name[12:]
+    return url + inv_name + '/test-results?' + urlencode({'q': test_name})

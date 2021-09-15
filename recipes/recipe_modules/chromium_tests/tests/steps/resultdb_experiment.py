@@ -161,9 +161,6 @@ def GenTests(api):
                            'deterministic failures [caused step to fail]',
                            'swarming_gtest_test_case1'
                        ]),
-      api.post_process(post_process.LogContains, 'swarming_gtest (with patch)',
-                       'swarming_gtest_test_case1',
-                       ['Log snippet for the test is unavailable here']),
       api.post_process(post_process.DropExpectation),
   )
 

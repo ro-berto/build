@@ -2584,12 +2584,8 @@ class SwarmingTest(Test):
     step_result.presentation.step_text += api.test_utils.format_step_text(
         [['deterministic failures [caused step to fail]:', failures_text]])
     for failure in failures:
-      step_result.presentation.logs[failure] = [
-          'Test "%s" completed with a failure.' % failure,
-          'Log snippet for the test is unavailable here.',
-          'Please see the "Test Results" tab in the new build page for the '
-          'full test log.'
-      ]
+      results_url = api.chromium_tests.get_milo_test_results_url(failure)
+      step_result.presentation.links[failure] = results_url
 
 
 @attrs()
