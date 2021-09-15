@@ -534,15 +534,3 @@ def GenTests(api):
                          ' Include-Ci-Only-Tests gerrit footer')]),
       api.post_process(post_process.DropExpectation),
   )
-
-  yield api.test(
-      'local_isolated_script_with_resultdb',
-      try_build(
-          test_spec={
-              'name': 'script_test',
-          },
-          experiments={'chromium.resultdb.result_sink.json_local': True},
-      ),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )

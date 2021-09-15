@@ -111,7 +111,6 @@ def GenTests(api):
   yield api.test(
       'basic',
       ci_build(
-          experiments={'chromium.resultdb.result_sink.gtests_local': True},
           test_spec={
               'test': 'base_unittests',
               'total_shards': 2,
