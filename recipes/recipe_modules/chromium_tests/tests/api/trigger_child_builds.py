@@ -23,14 +23,15 @@ def RunSteps(api):
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   api.chromium_tests.configure_build(builder_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(
+      builder_config, set_output_commit=True)
   api.chromium_tests.trigger_child_builds(builder_id, update_step,
                                           builder_config)
 
 
 def GenTests(api):
 
-  def builder_with_tester_to_trigger():
+  def builder_with_tester_to_trigger(**kwargs):
     return api.chromium_tests_builder_config.ci_build(
         builder_group='fake-group',
         builder='fake-builder',
@@ -49,11 +50,20 @@ def GenTests(api):
                         parent_buildername='fake-builder',
                     )
             }
-        }))
+        }),
+        **kwargs)
 
   yield api.test(
       'scheduler',
       builder_with_tester_to_trigger(),
+      api.post_check(post_process.StatusSuccess),
+  )
+
+  yield api.test(
+      'scheduler-use_gitiles_trigger-experiment',
+      builder_with_tester_to_trigger(experiments={
+          'chromium.chromium_tests.use_gitiles_trigger': 100,
+      }),
       api.post_check(post_process.StatusSuccess),
   )
 

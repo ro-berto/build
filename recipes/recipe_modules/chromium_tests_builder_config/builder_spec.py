@@ -151,9 +151,9 @@ class BuilderSpec(object):
   test_results_config = attrib(str, default=None)
 
   # Whether or not we should fetch tags for the repo being checked out
-  # TODO(https://crbug.com/1191617) Once bot_update will automatically fetch
-  # single tags when necessary, this can be removed and we can always pass
-  # no_fetch_tags=True
+  # TODO(https://crbug.com/1249938) Once the Android official testers are
+  # triggered with a gitiles commit containing the ref, this can be removed and
+  # we can always pass no_fetch_tags=True
   fetch_tags = attrib(bool, default=False)
 
   # URL to override the swarming server to use
@@ -250,7 +250,7 @@ class BuilderSpec(object):
   simulation_platform = attrib(str, default=None)
 
   # Whether to set the buildbucket output commit for the build
-  # TODO(https://crbug.com/1170220) Remove this once we're able to specify
+  # TODO(https://crbug.com/1249938) Remove this once we're able to specify
   # gitiles input and properties so that Android official builders correctly
   # propagate ref information to Android official testers
   set_output_commit = attrib(bool, default=True)

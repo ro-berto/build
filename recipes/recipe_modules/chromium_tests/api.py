@@ -761,9 +761,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._trigger_led_builds(to_trigger, properties)
 
       else:
+        # TODO(crbug.com/1249938) Once all builders are switched to using
+        # gitiles trigger, remove this experiment and the buildbucket trigger
+        # path
+        if ('chromium.chromium_tests.use_gitiles_trigger' in
+            self.m.buildbucket.build.input.experiments):
+          commit = self.m.buildbucket.build.output.gitiles_commit
+          repo = 'https://{}/{}'.format(commit.host, commit.project)
+          trigger = self.m.scheduler.GitilesTrigger(
+              repo=repo,
+              ref=commit.ref,
+              revision=commit.id,
+              properties=properties,
+          )
+        else:
+          trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+
         scheduler_triggers = []
         for project, builders in to_trigger.iteritems():
-          trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
           scheduler_triggers.append((trigger, project, builders))
         self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
