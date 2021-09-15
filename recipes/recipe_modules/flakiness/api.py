@@ -11,6 +11,37 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
 
 
+class TestResult():
+  """A class to handle ResultDB test information
+
+  Attributes:
+    * is_presubmit: boolean to determine whether the provided test_id is
+        associated with a presubmit test. We won't be endorsing tests
+        for presubmits. presubmit tests must begin wtih 'presubmit' instead of
+        'ninja'
+    * fully_qualified_ninja_target: (string) ninja target parsed from test_id.
+        ie/ for test_id = "ninja://sample/test:some_test/TestSuite.Test1",
+        the ninja target here would be //sample/test:some_test. This is used to
+        find the Test objects generated for the given run.
+        See: chromium_tests/steps.py TestSpec's full_test_target attribute
+        (http://shortn/_ktlTcH0zwo)
+    * test: (string) test_suite and test parsed from test_id. This is used to
+        update TestOptions test filter so that only this test is run.
+        ie/ for test_id = "ninja://sample/test:some_test/TestSuite.Test1",
+        test = TestSuite.Test1
+    * test_id: (string) ResultDB's test_id (go/resultdb-concepts)
+    * variant_hash: (stirng) ResultDB's variant_hash (go/resultdb-concepts)
+  """
+
+  def __init__(self, test_id, variant_hash):
+    self.is_presubmit = test_id.startswith('presubmit')
+    base = test_id[test_id.index(':') + 1:]
+    self.fully_qualified_ninja_target = base[:base.rindex('/')]
+    self.test = base[base.rindex('/') + 1:]
+    self.test_id = test_id
+    self.variant_hash = variant_hash
+
+
 class FlakinessApi(recipe_api.RecipeApi):
   """A module for new test identification on try builds."""
 
@@ -270,9 +301,14 @@ class FlakinessApi(recipe_api.RecipeApi):
           excluded_invs=excluded_invs,
           builder=current_builder.builder)
       presentation.logs['new_tests'] = join_tests(new_tests)
+
+      new_tests = [
+          TestResult(test_id, variant_hash)
+          for test_id, variant_hash in new_tests
+      ]
     return new_tests
 
-  def check_tests_for_flakiness(self):
+  def check_tests_for_flakiness(self, test_objects):
     """Coordinating method for verifying whether tests are flaky.
 
     (crbug/1204163) - Ensures that tests identified as new are not flaky.
@@ -281,7 +317,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     Returns:
       list of test tuples (test_id, variant_hash)
     """
-    # 1. check if there are endorser footers to parse
+    # Check if there are endorser footers to parse
     commit_footer_values = [
         val.lower()
         for val in self.m.tryserver.get_footer(self.COMMIT_FOOTER_KEY)
