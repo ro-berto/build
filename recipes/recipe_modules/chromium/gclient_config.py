@@ -414,4 +414,4 @@ def reclient_test(c):
 @CONFIG_CTX()
 def reclient_clang_scan_deps(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.38.0.c3845b1'
+  cv['reclient_version'] = 're_client_version:0.40.0.40ff5a5'
