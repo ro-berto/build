@@ -1,7 +1,6 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Test to ensure the validity of the entries within BUILDERS.
 
 Each entry in the BUILDERS dict will be checked to ensure
@@ -26,6 +25,7 @@ DEPS = [
     'recipe_engine/properties',
 ]
 
+
 def _normalize(x):
   if isinstance(x, (list, tuple)):
     return set(x)
@@ -35,10 +35,10 @@ def _normalize(x):
 VALIDATORS = {
     ('chromium.memory', 'Linux ASan Tests (sandboxed)',
      'chromium_apply_config'):
-    lambda tester_value, builder_value: (
-        builder_value - tester_value == set(['lsan']),
-        'chromium_apply_config for tester should be '
-        "the same as its builder with 'lsan' removed"),
+        lambda tester_value, builder_value:
+        (builder_value - tester_value == set(['lsan']),
+         'chromium_apply_config for tester should be '
+         "the same as its builder with 'lsan' removed"),
 }
 
 

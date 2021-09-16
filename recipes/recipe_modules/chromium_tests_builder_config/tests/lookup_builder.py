@@ -19,6 +19,7 @@ DEPS = [
 
 PROPERTIES = {
     'expected_attrs': recipe_api.Property(kind=Dict(), default={}),
+    'use_static_dbs': recipe_api.Property(kind=bool, default=False),
 }
 
 BUILDER_DB = ctbc.BuilderDatabase.create({
@@ -44,9 +45,12 @@ TRY_DB = ctbc.TryDatabase.create({
 })
 
 
-def RunSteps(api, expected_attrs):
+def RunSteps(api, expected_attrs, use_static_dbs):
+  lookup_kwargs = {}
+  if not use_static_dbs:
+    lookup_kwargs = {'builder_db': BUILDER_DB, 'try_db': TRY_DB}
   _, builder_config = api.chromium_tests_builder_config.lookup_builder(
-      builder_db=BUILDER_DB, try_db=TRY_DB)
+      **lookup_kwargs)
   for k, v in expected_attrs.iteritems():
     value = getattr(builder_config, k)
     api.assertions.assertEqual(
@@ -118,6 +122,15 @@ def GenTests(api):
               regression_test_selection=ctbc.QUICK_RUN_ONLY,
               regression_test_selection_recall=0.5,
           )),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'static-dbs',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(use_static_dbs=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

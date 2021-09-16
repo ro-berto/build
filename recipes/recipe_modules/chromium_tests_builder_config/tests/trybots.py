@@ -1,7 +1,6 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Test to ensure the validity of the entries within TRYBOTS.
 
 Each entry in the TRYBOTS dict will be checked to ensure
@@ -23,11 +22,13 @@ DEPS = [
     'recipe_engine/step',
 ]
 
+
 def RunSteps(api):
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   api.chromium_tests.trybot_steps(builder_id, builder_config)
   api.step('Success', ['echo', 'Success!'])
+
 
 def GenTests(api):
   for builder_id in sorted(ctbc.trybots.TRYBOTS):
