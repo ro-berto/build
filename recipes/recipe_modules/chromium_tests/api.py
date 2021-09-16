@@ -748,7 +748,32 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                            builder_id,
                            update_step,
                            builder_config,
-                           additional_properties=None):
+                           additional_properties=None,
+                           commit=None):
+    """Trigger builders that configure the current builder as parent.
+
+    Args:
+      * builder_id - The ID of the running builder. The
+        `parent_builder_group` and `parent_buildername` properties will
+        be set to refer to this builder.
+      * update_step - The step result of the bot_update step. For each
+        property in `update_step.presentation.properties` that starts
+        with `got_`, the returned properties will contain a property
+        with `parent_` prepended to the property and the same value. If
+        `update_step.presentation.properties` contains a `got_revision`
+        property, then the returned properties will have the `revision`
+        property set to the same value. The `fixed_revisions` field of
+        the `$build/chromium_tests` property will be set with a mapping
+        to ensure that the triggered build checks out the same versions
+        for the paths in `update_step.json.output['manifest']`.
+      * builder_config - The configuration of the running builder.
+      * additional_properties - Additional properties to set for the
+        triggered builds. These properties will take precedence over
+        properties computed from `builder_id` and `update_step`.
+      * commit - The GitilesCommit message to set on the input of the
+        triggered builds. If not provided,
+        buildbucket.build.output.gitiles_commit will be used.
+    """
     with self.m.context(infra_steps=True):
       to_trigger = self._get_builders_to_trigger(builder_id, builder_config)
       if not to_trigger:
@@ -759,28 +784,32 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if self.m.led.launched_by_led:
         self._trigger_led_builds(to_trigger, properties)
+        return
 
-      else:
-        # TODO(crbug.com/1249938) Once all builders are switched to using
-        # gitiles trigger, remove this experiment and the buildbucket trigger
-        # path
-        if ('chromium.chromium_tests.use_gitiles_trigger' in
-            self.m.buildbucket.build.input.experiments):
+      # TODO(crbug.com/1249938) Once all builders are switched to using
+      # gitiles trigger, remove this experiment and the buildbucket trigger
+      # path
+      trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+
+      if ('chromium.chromium_tests.use_gitiles_trigger' in
+          self.m.buildbucket.build.input.experiments):
+        if (commit is None and
+            self.m.buildbucket.build.output.HasField('gitiles_commit')):
           commit = self.m.buildbucket.build.output.gitiles_commit
-          repo = 'https://{}/{}'.format(commit.host, commit.project)
-          trigger = self.m.scheduler.GitilesTrigger(
-              repo=repo,
-              ref=commit.ref,
-              revision=commit.id,
-              properties=properties,
-          )
-        else:
-          trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
 
-        scheduler_triggers = []
-        for project, builders in to_trigger.iteritems():
-          scheduler_triggers.append((trigger, project, builders))
-        self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+      if commit is not None:
+        repo = 'https://{}/{}'.format(commit.host, commit.project)
+        trigger = self.m.scheduler.GitilesTrigger(
+            repo=repo,
+            ref=commit.ref,
+            revision=commit.id,
+            properties=properties,
+        )
+
+      scheduler_triggers = []
+      for project, builders in to_trigger.iteritems():
+        scheduler_triggers.append((trigger, project, builders))
+      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
   def _get_trigger_properties(self,
                               builder_id,
