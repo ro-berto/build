@@ -100,6 +100,12 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.chromium.android': {
+        'android-10-x86-fyi-rel-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android.fyi',
+                buildername='android-x86-fyi-rel',
+                tester='android-10-x86-fyi-rel-tests',
+            ),
         'android-10-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
