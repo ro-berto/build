@@ -97,7 +97,7 @@ def RunSteps(api, properties):
           packages_by_name.get(package.sdk_package_name, {}).get('version'))
       if package_version:
         tags['version'] = package_version
-      api.cipd.create_from_yaml(cipd_yaml, tags=tags)
+      api.cipd.create_from_yaml(cipd_yaml, tags=tags, refs=['latest'])
 
 
 def GenTests(api):
