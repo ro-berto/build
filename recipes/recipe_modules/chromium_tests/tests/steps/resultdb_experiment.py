@@ -58,6 +58,9 @@ def RunSteps(api, test_with_new_exit_code):
           'layout_tests',
           resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True),
           results_handler_name='layout tests'),
+      steps.LocalGTestTestSpec.create(
+          'local_gtest',
+          resultdb=steps.ResultDB(use_rdb_results_for_all_decisions=True)),
   ]
   tests = [ts.get_test() for ts in test_specs]
   isolated_tests = {
@@ -73,13 +76,18 @@ def RunSteps(api, test_with_new_exit_code):
     rdb_results = t.rdb_results['with patch']
     if t.name == test_with_new_exit_code:
       t.update_failure_on_exit('with patch', True)
-    if t.deterministic_failures('with patch'):
+    failures = t.deterministic_failures('with patch')
+    if failures:
       api.step('%s failure' % t.name, cmd=None)
+      for f in failures:
+        api.assertions.assertTrue(
+            t.pass_fail_counts('with patch')[f]['FAIL_COUNT'] > 0)
+    else:
+      api.assertions.assertFalse(t.pass_fail_counts('with patch'))
     if not t.has_valid_results('with patch'):
       api.step('%s invalid' % t.name, cmd=None)
     api.assertions.assertEqual(
         t.failures('with patch'), t.deterministic_failures('with patch'))
-    api.assertions.assertFalse(t.pass_fail_counts('with patch'))
     if t.name == test_with_new_exit_code:
       continue  # Can't trust run_tests's return vals if we're changing results.
     if t.deterministic_failures('with patch'):

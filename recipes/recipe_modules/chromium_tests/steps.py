@@ -658,9 +658,27 @@ class Test(object):
       return self._test_runs[suffix]['valid']
 
   def pass_fail_counts(self, suffix):
-    """Returns a dictionary of pass and fail counts for each test."""
+    """Returns a dictionary of pass and fail counts for each test.
+
+    Format looks like:
+    {
+      'test1': {
+        'PASS_COUNT': int,
+        'FAIL_COUNT': int,
+      },
+      ...
+    }
+    """
     if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return {}  # Unsure if this data is necessary in the new world.
+      # All we're tracking via RDB is the results for tests that failed. So
+      # simply just list the failed tests in the return.
+      pass_fail_counts = {}
+      for t in self._rdb_results[suffix].unexpected_failing_tests:
+        pass_fail_counts[t] = {
+            'PASS_COUNT': 0,
+            'FAIL_COUNT': 1,
+        }
+      return pass_fail_counts
     else:
       return self._test_runs[suffix]['pass_fail_counts']
 
@@ -1690,8 +1708,9 @@ class LocalGTestTest(LocalTest):
     return api.step.raise_on_failure(step_result, status)
 
   def pass_fail_counts(self, suffix):
-    if (self._gtest_results.get(suffix) and
-        not self.spec.resultdb.use_rdb_results_for_all_decisions):
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return super(LocalGTestTest, self).pass_fail_counts(suffix)
+    elif self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
     return {}
@@ -2642,7 +2661,7 @@ class SwarmingGTestTest(SwarmingTest):
 
   def pass_fail_counts(self, suffix):
     if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return {}
+      return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
     return self._gtest_results[suffix].pass_fail_counts
 
   @recipe_api.composite_step
