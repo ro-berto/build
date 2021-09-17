@@ -603,7 +603,10 @@ def generate_skylab_tests(chromium_tests_api,
         k: v for k, v in skylab_test_spec.items() if k in kwargs_to_forward
     }
     rdb_kwargs = dict(skylab_test_spec.pop('resultdb', {}))
-    common_skylab_kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
+    rdb_kwargs.setdefault(
+        'base_variant',
+        {'builder': chromium_tests_api.m.buildbucket.builder_name})
+    common_skylab_kwargs['resultdb'] = rdb_kwargs
     common_skylab_kwargs['test_args'] = get_args_for_test(
         chromium_tests_api, skylab_test_spec, bot_update_step)
     common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')

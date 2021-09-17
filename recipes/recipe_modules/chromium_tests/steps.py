@@ -964,6 +964,24 @@ class Test(object):
     # all the tests fail to pass a suffix.
     return None
 
+  def present_rdb_results(self, api, step_result, rdb_results):
+    """Add a summary of test failures tracked in RDB to the given step_result.
+
+    This duplicates info present in the "Test Results" tab in the new Milo UI.
+    TODO(crbug.com/1245085): Remove this if/when all users have migrated to
+    the new UI.
+    """
+    if not rdb_results or not rdb_results.unexpected_failing_tests:
+      return
+
+    failures, failures_text = api.test_utils.limit_failures(
+        sorted(rdb_results.unexpected_failing_tests))
+    step_result.presentation.step_text += api.test_utils.format_step_text(
+        [['deterministic failures [caused step to fail]:', failures_text]])
+    for failure in failures:
+      results_url = api.chromium_tests.get_milo_test_results_url(failure)
+      step_result.presentation.links[failure] = results_url
+
 
 @attrs()
 class TestWrapperSpec(TestSpecBase):
@@ -2588,25 +2606,6 @@ class SwarmingTest(Test):
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
 
-  def present_rdb_results(self, api, step_result, rdb_results):
-    """Add a summary of test failures tracked in RDB to the given step_result.
-
-    This duplicates info present in the "Test Results" tab in the new Milo UI.
-    TODO(crbug.com/1245085): Remove this if/when all users have migrated to
-    the new UI.
-    """
-    if not rdb_results or not rdb_results.unexpected_failing_tests:
-      return
-
-    failures, failures_text = api.test_utils.limit_failures(
-        sorted(rdb_results.unexpected_failing_tests))
-    step_result.presentation.step_text += api.test_utils.format_step_text(
-        [['deterministic failures [caused step to fail]:', failures_text]])
-    for failure in failures:
-      results_url = api.chromium_tests.get_milo_test_results_url(failure)
-      step_result.presentation.links[failure] = results_url
-
-
 @attrs()
 class SwarmingGTestTestSpec(SwarmingTestSpec):
   """A spec for a test that runs a gtest-based test via swarming.
@@ -3499,6 +3498,22 @@ class SkylabTestSpec(TestSpec):
   # Revisit this when we integrate CQ to Skylab.
   retries = attrib(int, default=3)
 
+  @classmethod
+  def create(cls, name, **kwargs):
+    """Create a SkylabTestSpec.
+
+    Arguments:
+      * name - The name of the test.
+      * kwargs - Keyword arguments to initialize the attributes of the
+        SkylabTestSpec.
+    """
+    rdb_kwargs = kwargs.pop('resultdb', {})
+    return super(SkylabTestSpec, cls).create(
+        name,
+        resultdb=ResultDB.create(
+            use_rdb_results_for_all_decisions=True, **rdb_kwargs),
+        **kwargs)
+
   @property
   def test_class(self):
     return SkylabTest
@@ -3539,16 +3554,22 @@ class SkylabTest(Test):
   def _raise_failed_step(self, api, suffix, step, status, failure_msg):
     step.presentation.status = status
     step.presentation.step_text += failure_msg
+    self.update_failure_on_exit(suffix, True)
     self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     raise api.step.StepFailure(status)
 
   def prep_skylab_rdb(self):
+    var = dict(
+        self.spec.resultdb.base_variant or {}, test_suite=self.canonical_name)
+    var.update({
+        'device_type': self.spec.cros_board,
+        'os': 'ChromeOS',
+        'cros_img': self.spec.cros_img,
+    })
     return attr.evolve(
         self.spec.resultdb,
         test_id_prefix=self.spec.test_id_prefix,
-        base_variant=dict(
-            self.spec.resultdb.base_variant or {},
-            test_suite=self.canonical_name),
+        base_variant=var,
         result_format='tast' if self.is_tast_test else 'gtest',
         # Skylab's result_file is hard-coded by the autotest wrapper in OS
         # repo, and not required by callers. It suppose to be None, but then
@@ -3578,70 +3599,13 @@ class SkylabTest(Test):
         inv_names.append('invocations/build-%s' % match.group(1))
     return inv_names
 
-  def tast_result_parser(self, api, result, suffix, step):
-    """Return result dict.
-
-    CTP response contains tast case result. Parse it to get the step's
-    output presentation.
-    """
-    if not result.test_cases:
-      self._raise_failed_step(api, suffix, step, api.step.FAILURE,
-                              'No test cases returned.')
-
-    pass_fail_counts = {}
-    passed_cases, failed_cases = [], []
-    for tc in result.test_cases:
-      pass_fail_counts.setdefault(tc.name, {'pass_count': 0, 'fail_count': 0})
-      if tc.verdict == 'PASSED':
-        pass_fail_counts[tc.name]['pass_count'] += 1
-        passed_cases.append(tc.name)
-        continue
-      pass_fail_counts[tc.name]['fail_count'] += 1
-      failed_cases.append(tc.name)
-    step_log = []
-    if passed_cases:
-      step_log += ['PASSED:'] + passed_cases + ['']
-    if failed_cases:
-      step_log += ['FAILED:'] + failed_cases
-    step.logs['Test Cases'] = step_log if step_log else ['No test cases found']
-    step.step_text += (
-        '<br/>%s passed, %s failed (%s total)' %
-        (len(passed_cases), len(failed_cases), len(result.test_cases)))
-    self.update_test_run(
-        api, suffix, {
-            'failures': failed_cases,
-            'valid': result is not None,
-            'total_tests_ran': len(result.test_cases),
-            'pass_fail_counts': pass_fail_counts,
-            'findit_notrun': set(),
-        })
-
-  def gtest_result_parser(self, api, result, suffix, step):
-    gtest_results_file = api.gsutil.download_url(
-        '%s/autoserv_test/chromium/results/output.json' % result.log_gs_uri,
-        api.test_utils.gtest_results(add_json_log=False),
-        name='Download test result for %s' % self.name)
-    if not gtest_results_file.test_utils.gtest_results.raw:
-      return self._raise_failed_step(api, suffix, step, api.step.FAILURE,
-                                     'No valid result file returned.')
-    gtest_results = api.test_utils.present_gtest_failures(
-        gtest_results_file, presentation=step.presentation)
-    if gtest_results:
-      self.update_test_run(api, suffix, gtest_results.canonical_result_format())
-      api.test_results.upload(
-          api.json.input(gtest_results.raw),
-          test_type='.'.join(gtest_results_file.name_tokens),
-          chrome_revision=api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'refs/x@{#0}'))
-
-  def present_result(self, api, resp, step, suffix, parser):
-    if resp.verdict != "PASSED":
-      step.presentation.status = api.step.FAILURE
+  #TODO(crbug.com/1238139): Read the test runner url and log link from RDB once
+  # we add them to the invocation level artifact.
+  def attach_links_to_test_run(self, resp, step, suffix):
     if resp.url:
       step.links['Test Run'] = resp.url
     if resp.log_url:
       step.links['Logs(stainless)'] = resp.log_url
-    return parser(api, resp, suffix, step)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -3660,30 +3624,33 @@ class SkylabTest(Test):
         self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
                                 'Invalid test result.')
 
-      parser = self.gtest_result_parser
-      if self.is_tast_test:
-        parser = self.tast_result_parser
-
-      result = self.ctp_responses[0]
-      if len(self.ctp_responses) == 1:
-        self.present_result(api, self.ctp_responses[0], step, suffix, parser)
+      rdb_results = self._rdb_results.get(suffix)
+      if rdb_results.total_tests_ran:
+        # If any test result reported by RDB, it means the test run has exited
+        # as expected from CrOS lab.
+        self.update_failure_on_exit(suffix, False)
       else:
-        # Keep the logic simple and consider the test succeed if any
-        # of the attempt passed. In long term, we will rely on ResultDB to
-        # tell us the test result.
-        self.update_failure_on_exit(suffix, True)
-        if any(r.verdict == "PASSED" for r in self.ctp_responses):
-          step.presentation.status = api.step.SUCCESS
-          self.update_failure_on_exit(suffix, False)
+        self._raise_failed_step(
+            api, suffix, step, api.step.EXCEPTION,
+            'Test did not run or failed to report to ResultDB.')
+
+      if rdb_results.unexpected_failing_tests:
+        step.presentation.status = api.step.FAILURE
+      self.present_rdb_results(api, step, rdb_results)
+
+      if len(self.ctp_responses) == 1:
+        self.attach_links_to_test_run(self.ctp_responses[0], step, suffix)
+      else:
         for i, r in enumerate(self.ctp_responses, 1):
           with api.step.nest('attempt: #' + str(i)) as attempt_step:
-            result = attempt_step
-            try:
-              self.present_result(api, r, attempt_step, suffix, parser)
-            except api.step.StepFailure:
-              pass
+            self.attach_links_to_test_run(r, attempt_step, suffix)
+            # TODO(crbug.com/1238139): For retried attempt, we should use its
+            # build status to represent step result. Then we could get away
+            # from the protobuf of CTP response.
+            if r.verdict != "PASSED":
+              attempt_step.presentation.status = api.step.FAILURE
 
-      return result
+    return step
 
   def compile_targets(self):
     t = [self.spec.target_name, 'lacros_version_metadata']

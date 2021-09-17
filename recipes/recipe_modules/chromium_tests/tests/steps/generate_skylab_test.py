@@ -8,8 +8,6 @@ import json
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
-from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
-                                                       invocation_pb2)
 
 from PB.test_platform.taskstate import TaskState
 from PB.test_platform.steps.execution import ExecuteResponse
@@ -32,7 +30,7 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/json',
-    'recipe_engine/resultdb',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -246,11 +244,6 @@ def GenTests(api):
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE, TASK_PASSED]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
-      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT'),
-      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #1'),
-      api.post_process(post_process.StepTextContains,
-                       'basic_EVE_TOT.attempt: #2',
-                       ['1 passed, 0 failed (1 total)']),
       api.post_process(check_req_by_default_enabled_retry),
       api.post_process(
           post_process.MustRun,
@@ -264,15 +257,22 @@ def GenTests(api):
            'Generic Archiving Steps.'
            'Copy file metadata.json') % TAST_TARGET,
       ),
+      api.override_step_data(
+          'basic_EVE_TOT results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  failing_suites=['basic_EVE_TOT'],
+                  skipped_suites=['basic_EVE_TOT']))),
+      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #1'),
+      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #2'),
+      api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
+      api.post_process(
+          post_process.ResultReason,
+          '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
+          'failed because of:\n\n- basic_EVE_TOT_test_case1'),
       api.post_process(post_process.DropExpectation),
   )
 
-  inv_bundle = {
-      'build-8839265267168653505':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),),
-  }
   yield api.test(
       'basic for gtest',
       boilerplate(
@@ -280,26 +280,12 @@ def GenTests(api):
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
       simulate_ctp_response(api, 'basic_EVE_TOT', [GTEST_TASK_PASSED]),
-      api.resultdb.query(
-          inv_bundle,
-          step_name='basic_EVE_TOT results',
-      ),
       api.override_step_data(
-          'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
-          api.test_utils.gtest_results(
-              json.dumps({
-                  'per_iteration_data': [{
-                      'SpammyTest': [{
-                          'elapsed_time_ms': 1000,
-                          'output_snippet': 'line 1\nline 2',
-                          'status': 'SUCCESS',
-                      }],
-                  }],
-              }))),
-      api.post_process(post_process.StepCommandContains, 'compile',
-                       [GTEST_TARGET]),
-      api.post_process(
-          archive_gsuri_should_match_skylab_req, target=GTEST_TARGET),
+          'basic_EVE_TOT results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  failing_suites=['basic_EVE_TOT'],
+                  skipped_suites=['basic_EVE_TOT']))),
       api.post_process(
           post_process.MustRun,
           'prepare skylab tests.'
@@ -313,44 +299,49 @@ def GenTests(api):
            'Generic Archiving Steps.'
            'Copy folder testing/buildbot/filters') % GTEST_TARGET,
       ),
+      api.post_process(post_process.StepCommandContains, 'compile',
+                       [GTEST_TARGET]),
+      api.post_process(
+          archive_gsuri_should_match_skylab_req, target=GTEST_TARGET),
       api.post_process(check_exe_rel_path_for_gtest,
                        'out/Release/bin/run_%s' % GTEST_TARGET),
-      api.post_process(
-          post_process.MustRun,
-          'basic_EVE_TOT results',
-      ),
-      api.post_process(
-          post_process.StepCommandContains,
-          'basic_EVE_TOT results',
-          ['build-8839265267168653505'],
-      ),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'gtest with invalid json result',
-      boilerplate('chrome-test-builds', target_name=GTEST_TARGET),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
-      api.override_step_data(
-          'basic_EVE_TOT.gsutil Download test result for basic_EVE_TOT',
-          api.test_utils.gtest_results('not json')),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
-      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
-                       ['No valid result file returned.']),
+      api.post_process(
+          post_process.ResultReason,
+          '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
+          'failed because of:\n\n- basic_EVE_TOT_test_case1'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'CTP response with empty test case result',
+      'RDB returned empty test_results',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE]),
+      api.override_step_data(
+          'basic_EVE_TOT results',
+          stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
-      api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
+      api.post_process(post_process.StepException, 'basic_EVE_TOT'),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
-                       ['No test cases returned.']),
+                       ['Test did not run or failed to report to ResultDB.']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # CrOS lab has outage and no response from the buildbucket call.
+  yield api.test(
+      'Skylab outage',
+      boilerplate(
+          'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
+      api.buildbucket.simulated_schedule_output(
+          builds_service_pb2.BatchResponse(
+              responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
+          step_name=(
+              'test_pre_run.schedule tests on skylab.buildbucket.schedule')),
+      api.post_process(post_process.StepException, 'basic_EVE_TOT'),
+      api.post_process(post_process.ResultReason,
+                       '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed.'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -412,7 +403,6 @@ def GenTests(api):
       simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT', [
           'This test will not be run on try builders',
-          '1 passed, 0 failed (1 total)',
       ]),
       api.post_process(post_process.DropExpectation),
   )
