@@ -3,12 +3,18 @@
 # found in the LICENSE file.
 
 import random
+import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
+
+# A regular expression for file paths indicating that change in the matched file
+# might introduce new tests.
+_FILE_PATH_ADDING_TESTS_PATTERN = ('^(.+(BUILD\.gn|DEPS|\.gni)|'
+                                   'src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$')
 
 
 class TestResult():
@@ -65,6 +71,16 @@ class FlakinessApi(recipe_api.RecipeApi):
         A boolean of whether the build is identifying new tests.
     """
     return self._using_test_identifier
+
+  def should_identify_new_tests(self):
+    """Returns whether the module should identify new tests.
+
+    At this time, it checks the list of affected file to see if any file is
+    possible to add a new test.
+    """
+    affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
+    pattern = re.compile(_FILE_PATH_ADDING_TESTS_PATTERN)
+    return any(pattern.match(file_path) for file_path in affected_files)
 
   def get_associated_invocations(self):
     """Gets ResultDB Invocation names from the same CL as the current build.
@@ -326,7 +342,9 @@ class FlakinessApi(recipe_api.RecipeApi):
       # No action for endorsing logic
       return None
 
-    new_tests = self.identify_new_tests()
+    new_tests = []
+    if self.should_identify_new_tests():
+      new_tests = self.identify_new_tests()
     if new_tests and len(new_tests) > self._max_test_targets:
       # There are more new tests detected than what we're permitting, so we're
       # taking a random subset to re-run

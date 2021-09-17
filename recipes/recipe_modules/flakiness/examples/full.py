@@ -15,16 +15,19 @@ PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
     'flakiness',
+    'depot_tools/gclient',
     'depot_tools/tryserver',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/resultdb',
 ]
 
 
 def RunSteps(api):
+  api.gclient.set_config('chromium')
   api.flakiness.check_tests_for_flakiness(test_objects=[])
 
 
@@ -88,6 +91,9 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       api.buildbucket.simulated_search_results(
           builds=[basic_build],
           step_name='searching_for_new_tests.fetching_builds_for_given_cl'),
@@ -102,6 +108,27 @@ def GenTests(api):
           step_name='searching_for_new_tests.get_historical_test_variants'),
       api.resultdb.get_test_result_history(
           res, step_name='searching_for_new_tests.verify_new_tests'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'skip identifying when no test file change',
+      api.buildbucket.try_build(
+          'chromium',
+          'try',
+          'mac',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.flakiness(
+          identify_new_tests=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/file1.cc\ncomponents/file2.cc')),
       api.post_process(post_process.DropExpectation),
   )
 
