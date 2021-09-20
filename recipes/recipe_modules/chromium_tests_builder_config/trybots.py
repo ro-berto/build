@@ -2022,6 +2022,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Dawn Win10 x64 ASAN Release',
             ),
     },
+    # Rust language bots
+    'tryserver.chromium.rust': {
+        'android-rust-arm-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.rust',
+                buildername='android-rust-arm-rel',
+            ),
+        'linux-rust-x64-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.rust',
+                buildername='linux-rust-x64-rel',
+            ),
+    },
     # SWANGLE bots
     'tryserver.chromium.swangle': {
         'linux-swangle-chromium-try-x64':

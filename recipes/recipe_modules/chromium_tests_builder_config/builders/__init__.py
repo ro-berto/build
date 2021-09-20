@@ -25,6 +25,7 @@ from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
 from . import chromium_reclient_fyi
+from . import chromium_rust
 from . import chromium_swangle
 from . import chromium_swarm
 from . import chromium_updater
@@ -86,6 +87,8 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_calibration.SPEC,
     'chromium.reclient.fyi':
         chromium_reclient_fyi.SPEC,
+    'chromium.rust':
+        chromium_rust.SPEC,
     'chromium.swangle':
         chromium_swangle.SPEC,
     'chromium.staging':
