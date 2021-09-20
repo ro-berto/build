@@ -32,6 +32,11 @@ DEPS = [
 PROPERTIES = InputProperties
 
 def RunSteps(api, properties):
+  if not api.buildbucket.gitiles_commit.id:
+    raise api.step.InfraFailure(
+        'Compilator requires gitiles_commit to know which revision to check '
+        'out')
+
   with api.chromium.chromium_layout():
     orchestrator = properties.orchestrator.builder_name
     builder_group = properties.orchestrator.builder_group
@@ -45,16 +50,44 @@ def RunSteps(api, properties):
 
     api.chromium_tests.report_builders(orch_builder_config)
 
-    raw_result, task = api.chromium_tests.build_affected_targets(
-        orch_builder_id,
-        orch_builder_config,
-        isolate_test_binaries_together=True)
+    # Implies that this compilator build must be compiled without a patch
+    # so that the orchestrator can retry these swarming tests without patch
+    if properties.swarming_targets:
+      api.chromium.apply_config('trybot_flavor')
+      bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
+          orch_builder_config,
+          timeout=3600,
+          set_output_commit=orch_builder_config.set_output_commit,
+          no_fetch_tags=True,
+          enforce_fetch=True,
+          patch=False,
+          runhooks_suffix='without patch')
+
+      # properties.swarming_targets should only be targets required for
+      # isolated swarming tests, but a non-isolated swarming test could,
+      # although rare, have a target_name that is also used by an isolated
+      # swarming test. Checking for t.uses_isolate makes sure that we don't
+      # include those non-isolated tests and end up running them too in this
+      # build.
+      test_suites = [
+          t for t in targets_config.all_tests
+          if t.target_name in properties.swarming_targets and t.uses_isolate
+      ]
+      raw_result = api.chromium_tests.build_and_isolate_failing_tests(
+          orch_builder_id, orch_builder_config, test_suites, bot_update_step,
+          'without patch')
+    else:
+      raw_result, task = api.chromium_tests.build_affected_targets(
+          orch_builder_id,
+          orch_builder_config,
+          isolate_test_binaries_together=True)
+      test_suites = task.test_suites
 
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
     # Isolate the tests first so the Orchestrator can trigger them asap
-    if any(t.uses_isolate for t in task.test_suites):
+    if any(t.uses_isolate for t in test_suites):
       trigger_properties = {}
       trigger_properties['swarming_command_lines_digest'] = (
           api.chromium_tests.archive_command_lines(
@@ -70,7 +103,7 @@ def RunSteps(api, properties):
           'swarming_trigger_properties'] = api.m.json.dumps(
               trigger_properties, indent=2)
 
-    non_isolated_tests = [t for t in task.test_suites if not t.uses_isolate]
+    non_isolated_tests = [t for t in test_suites if not t.uses_isolate]
     if non_isolated_tests:
       test_runner = api.chromium_tests.create_test_runner(
           non_isolated_tests,
@@ -110,7 +143,8 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.properties(
@@ -124,16 +158,64 @@ def GenTests(api):
           "running tester 'Linux Tests' on group 'chromium.linux' against "
           "builder 'Linux Builder' on group 'chromium.linux'"
       ]),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--patch_ref']),
       api.post_process(post_process.MustRun, 'compile (with patch)'),
       api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
       api.post_process(post_process.MustRun, 'swarming trigger properties'),
+      api.post_process(post_process.MustRun,
+                       'check_static_initializers (with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'missing_gitiles_commit',
+      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.platform.name('linux'),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'))),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'without_patch',
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'),
+              swarming_targets=['browser_tests'])),
+      override_test_spec(),
+      api.post_process(post_process.StepTextContains, 'report builders', [
+          "running tester 'Linux Tests' on group 'chromium.linux' against "
+          "builder 'Linux Builder' on group 'chromium.linux'"
+      ]),
+      api.post_process(post_process.StepCommandDoesNotContain,
+                       'bot_update (without patch)', ['--patch_ref']),
+      api.post_process(post_process.MustRun, 'compile (without patch)'),
+      api.post_process(post_process.MustRun, 'isolate tests (without patch)'),
+      api.post_process(post_process.MustRun, 'swarming trigger properties'),
+      api.post_process(post_process.DoesNotRun, 'compile (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'check_static_initializers (with patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'no_compile_no_isolate',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
@@ -153,7 +235,8 @@ def GenTests(api):
 
   yield api.test(
       'compile_failed',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
@@ -174,7 +257,8 @@ def GenTests(api):
 
   yield api.test(
       'failing_local_test',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(

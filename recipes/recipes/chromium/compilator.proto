@@ -11,5 +11,15 @@ message InputProperties {
     string builder_name = 1;
     string builder_group = 2;
   }
+
+  // Orchestrator builder that triggered this Compilator build
   Orchestrator orchestrator = 1;
+
+  // Targets to compile without patch
+
+  // When this field is absent, the Compilator will compile (with patch) all
+  // targets affected by the patch.
+  // When this field is populated, the Compilator will compile these targets
+  // without a patch.
+  repeated string swarming_targets = 2;
 }

@@ -143,8 +143,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if builder_config.swarming_server:
       self.m.chromium_swarming.swarming_server = builder_config.swarming_server
 
-  def runhooks(self, update_step):
-    if self.m.tryserver.is_tryserver:
+  def runhooks(self, update_step, suffix=None):
+    if suffix:
+      self.m.chromium.runhooks(name='runhooks ({})'.format(suffix))
+    elif self.m.tryserver.is_tryserver:
       try:
         self.m.chromium.runhooks(name='runhooks (with patch)')
       except self.m.step.StepFailure:
@@ -188,8 +190,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         source_side_specs=source_side_specs,
         tests=tests)
 
-  def prepare_checkout(self, builder_config, report_cache_state=True,
-                       root_solution_revision=None, **kwargs):
+  def prepare_checkout(self,
+                       builder_config,
+                       report_cache_state=True,
+                       root_solution_revision=None,
+                       runhooks_suffix=None,
+                       **kwargs):
+    """
+    Args:
+      runhooks_suffix: Suffix for gclient runhooks step name
+    """
     if report_cache_state:
       with self.m.step.nest('builder cache') as presentation:
         contents = self.m.file.listdir('check if empty',
@@ -222,7 +232,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.ensure_toolchains()
 
     self.set_up_swarming(builder_config)
-    self.runhooks(update_step)
+    self.runhooks(update_step, suffix=runhooks_suffix)
 
     targets_config = self.create_targets_config(builder_config, update_step)
 
@@ -1031,8 +1041,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def _build_and_isolate_failing_tests(self, builder_id, builder_config,
-                                       failing_tests, bot_update_step, suffix):
+  def build_and_isolate_failing_tests(self, builder_id, builder_config,
+                                      failing_tests, bot_update_step, suffix):
     """Builds and isolates test suites in |failing_tests|.
 
     Args:
@@ -1085,7 +1095,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
         self.set_test_command_lines(failing_tests, suffix=' (%s)' % suffix)
 
-  def _maybe_skip_without_patch(self, builder_config, affected_files):
+  def should_skip_without_patch(self, builder_config, affected_files):
     """Determine whether the without patch steps should be skipped.
 
     If the without patch steps should be skipped, a no-op step will be
@@ -1178,15 +1188,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return None, invalid_test_suites or []
 
       # Also exit if there are failures but we shouldn't deapply the patch
-      if self._maybe_skip_without_patch(task.builder_config,
+      if self.should_skip_without_patch(task.builder_config,
                                         task.affected_files):
         self.summarize_test_failures(task.test_suites)
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
-      raw_result = self._build_and_isolate_failing_tests(
-          builder_id, task.builder_config, failing_test_suites,
-          task.bot_update_step, 'without patch')
+      raw_result = self.build_and_isolate_failing_tests(builder_id,
+                                                        task.builder_config,
+                                                        failing_test_suites,
+                                                        task.bot_update_step,
+                                                        'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result, []
 
@@ -1657,18 +1669,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not unrecoverable_test_suites:
         return None
 
-      # This means there was a failure of some sort
-      if self.m.tryserver.is_tryserver:
-        _, invalid_suites = self._get_valid_and_invalid_results(
-            unrecoverable_test_suites)
-        # For DEPS autoroll analysis
-        if not invalid_suites:
-          self.m.cq.set_do_not_retry_build()
+      self.handle_invalid_test_suites(unrecoverable_test_suites)
 
       return result_pb2.RawResult(
           summary_markdown=self._format_unrecoverable_failures(
               unrecoverable_test_suites, 'with patch'),
           status=common_pb.FAILURE)
+
+  def handle_invalid_test_suites(self, test_suites):
+    # This means there was a failure of some sort
+    if self.m.tryserver.is_tryserver:
+      _, invalid_suites = self._get_valid_and_invalid_results(test_suites)
+      # For DEPS autoroll analysis
+      if not invalid_suites:
+        self.m.cq.set_do_not_retry_build()
 
   def _format_unrecoverable_failures(self,
                                      unrecoverable_test_suites,
@@ -1680,7 +1694,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     Args:
       unrecoverable_test_suites: List of failed Test
           (definition can be found in steps.py)
-      suffix: current Test suffix, which represents the phase
+      suffix: phase of the build to format tests for.
+              Note: not necessarily the current phase of the build.
       size_limit: max size of the message in characters
       failure_limit: max number of deterministic failures listed per test suite
 

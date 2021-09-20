@@ -39,6 +39,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/swarming',
     'recipe_engine/time',
@@ -48,6 +49,8 @@ DEPS = [
 PROPERTIES = InputProperties
 
 
+# TODO (kimstephanie): break up RunSteps into separate methods for each phase
+# of the build
 def RunSteps(api, properties):
   api.path.mock_add_paths(
       api.profiles.profile_dir().join('overall-merged.profdata'))
@@ -69,8 +72,7 @@ def RunSteps(api, properties):
     head_revision = head_revision[0]['commit']
 
     gitiles_commit = common_pb.GitilesCommit(
-        # TODO: Programatically fetch this from tryserver module
-        host='chromium.googlesource.com',
+        host=api.tryserver.gerrit_change_repo_host,
         project=api.tryserver.gerrit_change.project,
         ref=ref,
         id=head_revision)
@@ -88,8 +90,8 @@ def RunSteps(api, properties):
         gitiles_commit=gitiles_commit,
         tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
-    build = api.buildbucket.schedule([request],
-                                     step_name='trigger compilator')[0]
+    build = api.buildbucket.schedule(
+        [request], step_name='trigger compilator (with patch)')[0]
 
     builder_id, builder_config = (
         api.chromium_tests_builder_config.lookup_builder())
@@ -102,7 +104,7 @@ def RunSteps(api, properties):
 
     api.chromium.apply_config('trybot_flavor')
     api.gclient.c.revisions['src'] = head_revision
-    _, targets_config = api.chromium_tests.prepare_checkout(
+    bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
         timeout=3600,
         set_output_commit=builder_config.set_output_commit,
@@ -122,7 +124,7 @@ def RunSteps(api, properties):
       api.code_coverage.instrument(
           affected_files, is_deps_only_change=is_deps_only_change)
 
-    def launch_compilator_watcher(build, is_swarming_phase=True):
+    def launch_compilator_watcher(build, is_swarming_phase, with_patch):
       git_revision = properties.compilator_watcher_git_revision
       cipd_pkg = 'infra/chromium/compilator_watcher/${platform}'
       if git_revision:
@@ -144,9 +146,13 @@ def RunSteps(api, properties):
       else:
         cmd.append('-get-local-tests')
 
+      if with_patch:
+        name = 'compilator steps (with patch)'
+      else:
+        name = 'compilator steps (without patch)'
       build_url = api.buildbucket.build_url(build_id=build.id)
       try:
-        ret = api.step.sub_build('compilator steps', cmd, sub_build)
+        ret = api.step.sub_build(name, cmd, sub_build)
         ret.presentation.links['compilator build: ' + str(build.id)] = build_url
         return ret.step.sub_build
       except api.step.StepFailure:
@@ -157,7 +163,8 @@ def RunSteps(api, properties):
           raise api.step.InfraFailure('sub_build missing from step')
         return sub_build
 
-    def process_sub_build(sub_build, is_swarming_phase):
+    def process_sub_build(sub_build, is_swarming_phase, with_patch):
+
       # This condition should be rare as swarming only propagates
       # cancelations from parent -> child
       if sub_build.status == common_pb.CANCELED:
@@ -167,13 +174,19 @@ def RunSteps(api, properties):
       if is_swarming_phase and swarming_prop_key in sub_build.output.properties:
         return sub_build.output.properties[swarming_prop_key], None
 
+      if not with_patch and sub_build.status == common_pb.SUCCESS:
+        raise api.step.InfraFailure(
+            'Missing swarming_trigger_properties from without patch '
+            'compilator')
+
       return None, result_pb2.RawResult(
           status=sub_build.status, summary_markdown=sub_build.summary_markdown)
 
-    sub_build = launch_compilator_watcher(build, is_swarming_phase=True)
+    sub_build = launch_compilator_watcher(
+        build, is_swarming_phase=True, with_patch=True)
 
     swarming_props, maybe_raw_result = process_sub_build(
-        sub_build, is_swarming_phase=True)
+        sub_build, is_swarming_phase=True, with_patch=True)
 
     # Can be either SUCCESS or FAILURE/INFRA_FAILURE result
     # SUCCESS means that there's no swarming tests to trigger
@@ -186,7 +199,6 @@ def RunSteps(api, properties):
 
       swarm_hashes = swarming_props['swarm_hashes']
       swarm_hashes = dict(zip(swarm_hashes.keys(), swarm_hashes.values()))
-      assert api.isolate.isolated_tests == {}
       api.isolate.set_isolated_tests(swarm_hashes)
 
       tests = [
@@ -222,33 +234,116 @@ def RunSteps(api, properties):
               tests,
               retry_failed_shards=builder_config.retry_failed_shards))
 
-      if api.code_coverage.using_coverage:  # pragma: no cover
+      if api.code_coverage.using_coverage:
         api.code_coverage.process_coverage_data(tests)
 
     # Check to make sure the compilator completed any local scripts/tests
-    sub_build = launch_compilator_watcher(build, is_swarming_phase=False)
+    local_tests_sub_build = launch_compilator_watcher(
+        build, is_swarming_phase=False, with_patch=True)
 
-    _, raw_result = process_sub_build(sub_build, is_swarming_phase=False)
+    _, local_tests_raw_result = process_sub_build(
+        local_tests_sub_build, is_swarming_phase=False, with_patch=True)
 
-    # TODO crbug.com/1203055: Retry without patch
-    if failing_test_suites:
-      api.chromium_tests.summarize_test_failures(failing_test_suites)
+    def handle_completed_tests(tests, failing_test_suites=None):
+      api.chromium_swarming.report_stats()
+      api.test_utils.summarize_findit_flakiness(api.chromium_tests.m, tests)
+
+      if failing_test_suites:
+        api.chromium_tests.handle_invalid_test_suites(failing_test_suites)
+        api.chromium_tests.summarize_test_failures(failing_test_suites)
+
+    if not failing_test_suites:
+      handle_completed_tests(tests)
+      return local_tests_raw_result
+
+    if api.chromium_tests.should_skip_without_patch(builder_config,
+                                                    affected_files):
+      handle_completed_tests(tests, failing_test_suites=failing_test_suites)
 
       summary_markdown = api.chromium_tests._format_unrecoverable_failures(
           failing_test_suites, 'with patch')
-      if raw_result and raw_result.status != common_pb.SUCCESS:
+      if (local_tests_raw_result and
+          local_tests_raw_result.status != common_pb.SUCCESS):
         summary_markdown += '\n\n From compilator:\n{}'.format(
-            raw_result.summary_markdown)
+            local_tests_raw_result.summary_markdown)
 
       return result_pb2.RawResult(
           summary_markdown=summary_markdown, status=common_pb.FAILURE)
 
-    return raw_result
+    # without patch phase
+    request = api.buildbucket.schedule_request(
+        builder=properties.compilator,
+        swarming_parent_run_id=api.swarming.task_id,
+        properties={
+            'orchestrator': {
+                'builder_name': api.buildbucket.builder_name,
+                'builder_group': api.builder_group.for_current
+            },
+            'swarming_targets':
+                list(set(t.target_name for t in failing_test_suites)),
+        },
+        gitiles_commit=gitiles_commit,
+        tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
+
+    wo_build = api.buildbucket.schedule(
+        [request], step_name='trigger compilator (without patch)')[0]
+
+    api.chromium_tests.deapply_patch(bot_update_step)
+    targets_config = api.chromium_tests.create_targets_config(
+        builder_config, bot_update_step)
+
+    sub_build = launch_compilator_watcher(
+        wo_build, is_swarming_phase=True, with_patch=False)
+    swarming_props, maybe_raw_result = process_sub_build(
+        sub_build, is_swarming_phase=True, with_patch=False)
+
+    # FAILURE/INFRA_FAILURE result
+    if maybe_raw_result != None:
+      handle_completed_tests(tests)
+      return maybe_raw_result
+
+    process_swarming_props(swarming_props, builder_config, targets_config)
+
+    with api.chromium_tests.wrap_chromium_tests(builder_config,
+                                                failing_test_suites):
+      _, unrecoverable_test_suites = api.test_utils.run_tests(
+          api.chromium_tests.m,
+          failing_test_suites,
+          'without patch',
+          sort_by_shard=True)
+
+    handle_completed_tests(tests, failing_test_suites=unrecoverable_test_suites)
+
+    summary_markdown = ''
+    final_status = common_pb.SUCCESS
+
+    if unrecoverable_test_suites:
+      summary_markdown += api.chromium_tests._format_unrecoverable_failures(
+          unrecoverable_test_suites, 'with patch')
+      final_status = common_pb.FAILURE
+
+    if (local_tests_raw_result and
+        local_tests_raw_result.status != common_pb.SUCCESS):
+      summary_markdown += '\n\n From compilator:\n{}'.format(
+          local_tests_raw_result.summary_markdown)
+      if final_status == common_pb.SUCCESS:
+        final_status = local_tests_raw_result.status
+
+    return result_pb2.RawResult(
+        summary_markdown=summary_markdown, status=final_status)
 
 
 def GenTests(api):
 
-  def override_test_spec():
+  def override_test_spec(tests=None):
+    tests = tests or ['browser_tests']
+    gtest_tests = [{
+        'name': test,
+        'swarming': {
+            'can_use_on_swarming_builders': True
+        },
+        'isolate_coverage_data': True,
+    } for test in tests]
     return api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
             'Linux Builder': {
@@ -260,50 +355,49 @@ def GenTests(api):
                 }],
             },
             'Linux Tests': {
-                'gtest_tests': [{
-                    'name': 'browser_tests',
-                    'swarming': {
-                        'can_use_on_swarming_builders': True
-                    },
-                    'isolate_coverage_data': True,
-                }]
+                'gtest_tests': gtest_tests
             },
         })
 
   build_id = 1234
   fake_command_lines_digest = (
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')
-  cas_digest = 'c596061444a157f27ffaa08bd6bbdd39238fa15202df0570f34547/10799'
 
-  def get_fake_swarming_trigger_properties():
-    brwoser_tests_digest = (
+  def get_fake_swarming_trigger_properties(tests):
+    input_hash = (
         '797e944dad5241e7fe111cfd01e45f02e2f4937dd34b248603e603d2948e174e/1298')
+    swarm_hashes = {test: input_hash for test in tests}
+    swarm_hashes[ALL_TEST_BINARIES_ISOLATE_NAME] = input_hash
     return {
         'swarming_command_lines_digest': fake_command_lines_digest,
         'swarming_command_lines_cwd': 'out/Release',
-        'swarm_hashes': {
-            ALL_TEST_BINARIES_ISOLATE_NAME: cas_digest,
-            'browser_tests': brwoser_tests_digest,
-        },
+        'swarm_hashes': swarm_hashes,
     }
 
-  def override_trigger_compilator():
+  def override_trigger_compilator(with_patch=True):
+    if with_patch:
+      name = 'trigger compilator (with patch)'
+    else:
+      name = 'trigger compilator (without patch)'
     return api.buildbucket.simulated_schedule_output(
         builds_service_pb2.BatchResponse(
             responses=[dict(schedule_build=build_pb2.Build(id=build_id))]),
-        step_name='trigger compilator')
+        step_name=name)
 
   def override_compilator_steps(comp_build_id=1234,
                                 sub_build_status=common_pb.SUCCESS,
                                 sub_build_summary='',
                                 empty_props=False,
-                                is_swarming_phase=True):
+                                is_swarming_phase=True,
+                                with_patch=True,
+                                tests=None):
+    tests = tests or ['browser_tests']
     output_json_obj = {}
     if is_swarming_phase:
       if not empty_props:
         output_json_obj = {
             'swarming_trigger_properties':
-                get_fake_swarming_trigger_properties()
+                get_fake_swarming_trigger_properties(tests)
         }
 
     sub_build = build_pb2.Build(
@@ -313,7 +407,10 @@ def GenTests(api):
         output=dict(
             properties=json_format.Parse(
                 api.json.dumps(output_json_obj), struct_pb2.Struct())))
-    name = 'compilator steps'
+    if with_patch:
+      name = 'compilator steps (with patch)'
+    else:
+      name = 'compilator steps (without patch)'
     if not is_swarming_phase:
       name += ' (2)'
     return api.override_step_data(
@@ -340,6 +437,8 @@ def GenTests(api):
       fake_head_revision(),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--refs', 'refs/heads/main']),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--patch_ref']),
       override_test_spec(),
       api.post_process(
           post_process.StepCommandContains,
@@ -347,7 +446,7 @@ def GenTests(api):
               '-ensure-file', 'infra/chromium/compilator_watcher/${platform} '
               'git_revision:e841fc'
           ]),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
@@ -368,7 +467,7 @@ def GenTests(api):
       override_trigger_compilator(),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--refs', 'refs/branch-heads/4472']),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
@@ -392,7 +491,7 @@ def GenTests(api):
               '-ensure-file',
               'infra/chromium/compilator_watcher/${platform} latest'
           ]),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
@@ -408,10 +507,10 @@ def GenTests(api):
       override_test_spec(),
       override_trigger_compilator(),
       override_compilator_steps(empty_props=True),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.DoesNotRun, 'browser_tests (with patch)'),
-      api.post_process(post_process.LogContains, 'trigger compilator',
-                       'request',
+      api.post_process(post_process.LogContains,
+                       'trigger compilator (with patch)', 'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -420,7 +519,8 @@ def GenTests(api):
   yield api.test(
       'no_builder_to_trigger_passed_in',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
-      api.post_process(post_process.DoesNotRun, 'trigger compilator'),
+      api.post_process(post_process.DoesNotRun,
+                       'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -442,18 +542,19 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(True), failure=False)),
       override_compilator_steps(),
       override_compilator_steps(is_swarming_phase=False),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun,
                        'browser_tests (retry shards with patch)'),
-      api.post_process(post_process.LogContains, 'trigger compilator',
-                       'request',
-                       ['tryserver.chromium.linux', 'linux-rel-compilator']),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'failing_test_retry_shard_failed',
+      'failing_test_retry_shard_failed_skip_without_patch',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_head_revision(),
@@ -467,6 +568,9 @@ def GenTests(api):
           sub_build_status=common_pb.FAILURE,
       ),
       api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('testing/buildbot/chromium.linux.json')),
+      api.override_step_data(
           'browser_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)),
@@ -474,13 +578,223 @@ def GenTests(api):
           'browser_tests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.DoesNotRun,
+                       'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun,
                        'browser_tests (retry shards with patch)'),
       api.post_process(post_process.ResultReasonRE,
                        '.*headless_python_unittests.*'),
       api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
+      api.post_process(post_process.DoesNotRun,
+                       'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_without_patch_passes',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_test_spec(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(is_swarming_phase=False),
+      override_compilator_steps(with_patch=False),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.override_step_data(
+          'browser_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'content_unittests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_without_patch_passes_local_tests_failed',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_test_spec(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(
+          is_swarming_phase=False,
+          sub_build_summary=("1 Test Suite(s) failed.\n\n"
+                             "**headless_python_unittests** failed."),
+          sub_build_status=common_pb.FAILURE,
+      ),
+      override_compilator_steps(with_patch=False),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.override_step_data(
+          'browser_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'content_unittests (without patch)'),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*headless_python_unittests.*'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_without_patch_fails_tests',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(tests=['browser_tests', 'content_unittests']),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      override_compilator_steps(with_patch=False),
+      api.override_step_data(
+          'content_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_without_patch_fails_tests_and_local_tests',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(tests=['browser_tests', 'content_unittests']),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_compilator_steps(
+          is_swarming_phase=False,
+          sub_build_summary=("1 Test Suite(s) failed.\n\n"
+                             "**headless_python_unittests** failed."),
+          sub_build_status=common_pb.FAILURE,
+      ),
+      override_compilator_steps(with_patch=False),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*headless_python_unittests.*'),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'without_patch_compilator_missing_swarming_props',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_compilator_steps(),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      override_compilator_steps(with_patch=False, empty_props=True),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'browser_tests (without patch)'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -497,7 +811,37 @@ def GenTests(api):
           sub_build_summary='Step compile (with patch) failed.'),
       api.post_process(post_process.ResultReason,
                        'Step compile (with patch) failed.'),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_wo_patch_compilator',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(),
+      override_trigger_compilator(),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      override_trigger_compilator(with_patch=False),
+      override_compilator_steps(),
+      override_compilator_steps(
+          with_patch=False,
+          empty_props=True,
+          sub_build_status=common_pb.FAILURE),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -515,7 +859,7 @@ def GenTests(api):
           sub_build_summary='Timeout waiting for compilator build'),
       api.post_process(post_process.ResultReason,
                        'Timeout waiting for compilator build'),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -531,7 +875,7 @@ def GenTests(api):
           sub_build_status=common_pb.CANCELED,
           empty_props=True,
           sub_build_summary='Canceled'),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -543,11 +887,11 @@ def GenTests(api):
       fake_head_revision(),
       override_test_spec(),
       api.override_step_data(
-          'compilator steps',
+          'compilator steps (with patch)',
           api.step.sub_build(None),
       ),
       override_trigger_compilator(),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -565,7 +909,17 @@ def GenTests(api):
           sub_build_summary=("1 Test Suite(s) failed.\n\n"
                              "**headless_python_unittests** failed.")),
       override_trigger_compilator(),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -582,7 +936,7 @@ def GenTests(api):
           is_swarming_phase=False,
           sub_build_summary='Canceled'),
       override_compilator_steps(),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -595,7 +949,7 @@ def GenTests(api):
       fake_head_revision(),
       override_trigger_compilator(),
       override_compilator_steps(sub_build_status=common_pb.INFRA_FAILURE),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -610,9 +964,9 @@ def GenTests(api):
       override_trigger_compilator(),
       override_compilator_steps(),
       override_compilator_steps(is_swarming_phase=False),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.LogContains, 'trigger compilator',
-                       'request',
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.LogContains,
+                       'trigger compilator (with patch)', 'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
@@ -644,9 +998,9 @@ def GenTests(api):
           'browser_tests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(True), failure=False)),
-      api.post_process(post_process.MustRun, 'trigger compilator'),
-      api.post_process(post_process.LogContains, 'trigger compilator',
-                       'request',
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.LogContains,
+                       'trigger compilator (with patch)', 'request',
                        ['tryserver.chromium.linux', 'linux-rel-compilator']),
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,

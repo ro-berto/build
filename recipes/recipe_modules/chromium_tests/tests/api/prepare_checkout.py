@@ -15,6 +15,7 @@ DEPS = [
 ]
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import Property
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -43,11 +44,16 @@ DUMMY_BUILDERS = ctbc.BuilderDatabase.create({
     },
 })
 
+PROPERTIES = {
+    'runhooks_suffix': Property(default=None, kind=str),
+}
 
-def RunSteps(api):
+
+def RunSteps(api, runhooks_suffix):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
-  api.chromium_tests.prepare_checkout(builder_config)
+  api.chromium_tests.prepare_checkout(
+      builder_config, runhooks_suffix=runhooks_suffix)
 
 
 def GenTests(api):
@@ -55,6 +61,27 @@ def GenTests(api):
       'basic',
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
+      api.post_process(post_process.MustRun, 'gclient runhooks'),
+  )
+
+  yield api.test(
+      'basic_try',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.post_process(post_process.MustRun, 'gclient runhooks (with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'without_patch',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(runhooks_suffix='without patch'),
+      api.post_process(post_process.MustRun,
+                       'gclient runhooks (without patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
