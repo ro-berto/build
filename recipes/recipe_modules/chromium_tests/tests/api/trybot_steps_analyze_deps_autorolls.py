@@ -55,6 +55,7 @@ def GenTests(api):
             '_account_id': 1302611
         },
         'branch': 'master',
+        'current_revision': 'abcd1234',
         'revisions': {
             'abcd1234': {
                 '_number': '1',
