@@ -318,6 +318,62 @@ def GenTests(api):
   )
 
   yield api.test(
+      'retry_shards_without_patch_rdb_experiment',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='retry-shards',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.properties(
+          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.override_step_data(
+          'collect tasks (with patch).base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+      api.override_step_data(
+          'collect tasks (retry shards with patch).base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+      api.override_step_data(
+          'collect tasks (without patch).base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.summary(
+              {},
+              api.chromium_swarming.canned_summary_output_raw(failure=True))),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.summary(
+              {},
+              api.chromium_swarming.canned_summary_output_raw(failure=True))),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.summary(
+              {},
+              api.chromium_swarming.canned_summary_output_raw(failure=True))),
+      api.filter.suppress_analyze(),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'retry_shards_invalid',
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.test',
