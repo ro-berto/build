@@ -807,14 +807,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.buildbucket.build.output.HasField('gitiles_commit')):
           commit = self.m.buildbucket.build.output.gitiles_commit
 
-      if commit is not None:
-        repo = 'https://{}/{}'.format(commit.host, commit.project)
-        trigger = self.m.scheduler.GitilesTrigger(
-            repo=repo,
-            ref=commit.ref,
-            revision=commit.id,
-            properties=properties,
-        )
+        if commit is not None:
+          repo = 'https://{}/{}'.format(commit.host, commit.project)
+          trigger = self.m.scheduler.GitilesTrigger(
+              repo=repo,
+              ref=commit.ref,
+              revision=commit.id,
+              properties=properties,
+          )
 
       scheduler_triggers = []
       for project, builders in to_trigger.iteritems():

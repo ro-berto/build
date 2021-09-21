@@ -2,8 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine import post_process
+from recipe_engine import post_process, recipe_api
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -17,16 +18,22 @@ DEPS = [
     'recipe_engine/properties',
 ]
 
+PROPERTIES = {
+    'commit': recipe_api.Property(default=None),
+}
 
-def RunSteps(api):
+
+def RunSteps(api, commit):
   builder_id = api.chromium.get_builder_id()
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   api.chromium_tests.configure_build(builder_config)
   update_step, _ = api.chromium_tests.prepare_checkout(
       builder_config, set_output_commit=True)
-  api.chromium_tests.trigger_child_builds(builder_id, update_step,
-                                          builder_config)
+  if commit is not None:
+    commit = common_pb.GitilesCommit(**commit)
+  api.chromium_tests.trigger_child_builds(
+      builder_id, update_step, builder_config, commit=commit)
 
 
 def GenTests(api):
@@ -70,6 +77,20 @@ def GenTests(api):
       builder_with_tester_to_trigger(experiments={
           'chromium.chromium_tests.use_gitiles_trigger': 100,
       }),
+      api.post_check(post_process.StatusSuccess),
+      filter_to_trigger(),
+  )
+
+  yield api.test(
+      'scheduler-commit-provided-not-in-use_gitiles_trigger-experiment',
+      builder_with_tester_to_trigger(),
+      api.properties(
+          commit=common_pb.GitilesCommit(
+              host='fake-host',
+              project='fake-project',
+              ref='fake-ref',
+              id='fake-revision',
+          )),
       api.post_check(post_process.StatusSuccess),
       filter_to_trigger(),
   )
