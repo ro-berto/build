@@ -401,7 +401,7 @@ class RDBPerSuiteResults(object):
 
   suite_name = attrib(str)
   variant_hash = attrib(str)
-  total_tests_ran = attrib(int)
+  total_tests_ran = attrib(six.integer_types)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
   # unexpected_skipped_tests should be a subset of unexpected_failing_tests.
@@ -410,7 +410,11 @@ class RDBPerSuiteResults(object):
   test_name_to_test_id_mapping = attrib(mapping[str, str])
 
   @classmethod
-  def create(cls, invocations, suite_name, failure_on_exit=False):
+  def create(cls,
+             invocations,
+             suite_name,
+             total_tests_ran,
+             failure_on_exit=False):
     """
     Args:
       invocations, dict of {invocation_id: api.resultdb.Invocation} as
@@ -422,8 +426,9 @@ class RDBPerSuiteResults(object):
     results_by_test_id = collections.defaultdict(list)
     variant_hash = ''
     test_name_to_test_id_mapping = {}
-    all_test_ids = set()
+    total_unexpected_results = 0
     for inv in invocations.values():
+      total_unexpected_results += len(inv.test_results)
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
         inv_name = variant_def['test_suite']
@@ -432,7 +437,6 @@ class RDBPerSuiteResults(object):
         if inv_name and suite_name:
           assert inv_name == suite_name, "Mismatched invocations, %s vs %s" % (
               inv_name, suite_name)
-        all_test_ids.add(tr.test_id)
         # The test's ID may not always directly match up with its name (see
         # go/chrome-test-id for context). So lookup the test's name in the tags,
         # but preserve a mapping from name to ID for easier look-up.
@@ -447,7 +451,7 @@ class RDBPerSuiteResults(object):
         variant_hash = tr.variant_hash
         results_by_test_id[test_name].append(tr)
 
-    total_tests_ran = len(all_test_ids)
+    total_tests_ran = total_tests_ran or total_unexpected_results
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()

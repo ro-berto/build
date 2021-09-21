@@ -204,10 +204,31 @@
   {
     "cmd": [
       "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "infra_step": true,
+    "name": "EVE_TOT stats",
+    "stdin": "{\"invocations\": [\"invocations/build-8839265267168653505\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/build-8839265267168653505\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
       "query",
       "-json",
       "-n",
-      "0",
+      "1000",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "build-8839265267168653505"

@@ -1217,18 +1217,21 @@ class TestGroup(object):
       # TODO(crbug.com/1135718): Make failure to fetch RDB results fatal.
       res = RDBPerSuiteResults.create({},
                                       failure_on_exit=False,
+                                      total_tests_ran=0,
                                       suite_name=test.canonical_name)
     else:
+      test_stats = self.resultdb_api.query_test_result_statistics(
+          invocations=invocation_names, step_name='%s stats' % test.name)
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
           variants_with_unexpected_results=False,
           step_name='%s results' % test.name,
           tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
-          limit=0,
       )
       res = RDBPerSuiteResults.create(
           unexpected_result_invocations,
           suite_name=test.canonical_name,
+          total_tests_ran=test_stats.total_test_results,
           failure_on_exit=test.failure_on_exit(suffix))
     test.update_rdb_results(suffix, res)
 
