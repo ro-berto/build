@@ -31,12 +31,12 @@ def chromium_apply_configs(base_config, chromium_config_names,
 
 SPEC = {
     # Staging reclient
-    'Linux Builder Re-Client Staging':
+    'Linux Builder reclient staging':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
                                ['enable_reclient', 'reclient_staging']),
 
     # Test reclient
-    'Linux Builder Re-Client Test':
+    'Linux Builder reclient test':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
                                ['enable_reclient', 'reclient_test']),
 }
