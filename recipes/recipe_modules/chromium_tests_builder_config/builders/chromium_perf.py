@@ -188,6 +188,7 @@ SPEC.update({
             chromium_config='chromium_perf',
             gclient_apply_config=['chromeos'],
             gclient_config='chromium_perf',
+            perf_isolate_upload=True,
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
