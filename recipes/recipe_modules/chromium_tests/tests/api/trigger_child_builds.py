@@ -31,6 +31,11 @@ def RunSteps(api):
 
 def GenTests(api):
 
+  # Check the status before applying the filter so that the $result step
+  # doesn't need to be retained
+  def filter_to_trigger():
+    return api.post_process(post_process.Filter().include_re('^trigger.*'))
+
   def builder_with_tester_to_trigger(**kwargs):
     return api.chromium_tests_builder_config.ci_build(
         builder_group='fake-group',
@@ -57,6 +62,7 @@ def GenTests(api):
       'scheduler',
       builder_with_tester_to_trigger(),
       api.post_check(post_process.StatusSuccess),
+      filter_to_trigger(),
   )
 
   yield api.test(
@@ -65,6 +71,7 @@ def GenTests(api):
           'chromium.chromium_tests.use_gitiles_trigger': 100,
       }),
       api.post_check(post_process.StatusSuccess),
+      filter_to_trigger(),
   )
 
   led_properties = led_properties_pb.InputProperties()
@@ -82,4 +89,5 @@ def GenTests(api):
               },
           }),
       api.post_check(post_process.StatusSuccess),
+      filter_to_trigger(),
   )
