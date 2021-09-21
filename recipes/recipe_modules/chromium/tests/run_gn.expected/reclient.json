@@ -7,7 +7,7 @@
       "--root=None",
       "gen",
       "//out/Debug",
-      "--args=is_debug=true target_cpu=\"x64\" use_rbe=true"
+      "--args=is_debug=true target_cpu=\"x64\" use_remoteexec=true"
     ],
     "cwd": "None",
     "env": {

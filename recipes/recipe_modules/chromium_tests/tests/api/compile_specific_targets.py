@@ -70,7 +70,7 @@ def GenTests(api):
           builder='Linux Builder (j-500) (reclient)'),
       api.properties(swarming_gtest=True),
       api.step_data('lookup GN args',
-                    api.raw_io.stream_output('use_rbe = true\n')),
+                    api.raw_io.stream_output('use_remoteexec = true\n')),
       # Check that we do use reclient as the distributed compiler
       api.post_process(post_process.MustRun,
                        'preprocess for reclient.start reproxy via bootstrap'),

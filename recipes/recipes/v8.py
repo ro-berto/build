@@ -75,7 +75,7 @@ PROPERTIES = {
     # Weather to use goma for compilation.
     'use_goma': Property(default=True, kind=bool),
     # Weather to use reclient for compilation.
-    'use_rbe': Property(default=False, kind=bool),
+    'use_remoteexec': Property(default=False, kind=bool),
 }
 
 
@@ -83,11 +83,12 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
              enable_swarming, gclient_vars, mb_config_path, target_arch,
              target_platform, track_build_dependencies, triggers,
-             triggers_proxy, use_goma, use_rbe):
+             triggers_proxy, use_goma, use_remoteexec):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
-      v8.bot_config_by_buildername(use_goma=use_goma, use_rbe=use_rbe),
+      v8.bot_config_by_buildername(
+          use_goma=use_goma, use_remoteexec=use_remoteexec),
       binary_size_tracking,
       clusterfuzz_archive,
       coverage,
@@ -992,7 +993,7 @@ def GenTests(api):
                                'goma_dir = "/b/build/slave/cache/goma_client"\n'
                                'target_cpu = "x64"\n'
                                'use_goma = false\n'
-                               'use_rbe = true\n'
+                               'use_remoteexec = true\n'
                                '""" to _path_/args.gn.\n')
 
   # Cover running gcov coverage.
@@ -1072,7 +1073,7 @@ def GenTests(api):
       'V8 Foobar',
       'rbe',
       use_goma=False,
-      use_rbe=True,
+      use_remoteexec=True,
   ) + api.step_data('build.lookup GN args',
                     api.raw_io.stream_output(fake_gn_args_x64_reclient)) +
          api.post_process(DropExpectation))

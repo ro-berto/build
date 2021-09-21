@@ -43,7 +43,7 @@ PROPERTIES = {
     # One of android|fuchsia|linux|mac|win.
     'target_platform': Property(default=None, kind=str),
     # Whether to use reclient for compilation.
-    'use_rbe': Property(default=False, kind=bool),
+    'use_remoteexec': Property(default=False, kind=bool),
     # Whether to upload archive.
     'upload_archive': Property(default=True, kind=bool),
 }
@@ -61,7 +61,7 @@ def make_archive(api,
                  archive_type,
                  step_suffix='',
                  archive_suffix='',
-                 use_rbe=False,
+                 use_remoteexec=False,
                  upload_archive=True):
   with api.step.nest('sync' + step_suffix):
     api.v8.apply_bot_config(bot_config)
@@ -98,7 +98,7 @@ def make_archive(api,
 
   build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   with api.step.nest('build' + step_suffix):
-    compile_failure = api.v8.compile(use_reclient=use_rbe)
+    compile_failure = api.v8.compile(use_reclient=use_remoteexec)
     if compile_failure:
       return None, compile_failure
 
@@ -192,7 +192,7 @@ def make_archive(api,
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform,
-             use_rbe, upload_archive):
+             use_remoteexec, upload_archive):
   target_bits = int(target_bits)
 
   with api.step.nest('initialization'):
@@ -207,7 +207,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'chromium_apply_config': ['default_compiler', 'gn'],
         'v8_config_kwargs': {},
     }
-    if use_rbe:
+    if use_remoteexec:
       bot_config['gclient_apply_config'] = ['enable_reclient']
     else:
       bot_config['chromium_apply_config'].append('goma')
@@ -228,7 +228,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         ref,
         None,
         'all',
-        use_rbe=use_rbe,
+        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -239,7 +239,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         ref,
         None,
         'exe',
-        use_rbe=use_rbe,
+        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -253,7 +253,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'lib',
         ' (libs)',
         '-libs',
-        use_rbe=use_rbe,
+        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -269,7 +269,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
           version,
           'ref',
           ' (ref)',
-          use_rbe=use_rbe,
+          use_remoteexec=use_remoteexec,
           upload_archive=upload_archive)
       if compile_failure:
         return compile_failure
@@ -553,7 +553,7 @@ def GenTests(api):
       api.properties(
           build_config='Release',
           target_bits=64,
-          use_rbe=True,
+          use_remoteexec=True,
           upload_archive=False), api.platform('linux', 64),
       api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',

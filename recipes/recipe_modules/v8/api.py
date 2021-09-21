@@ -118,15 +118,15 @@ class V8Api(recipe_api.RecipeApi):
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
-    return args.get('use_rbe') == 'true'
+    return args.get('use_remoteexec') == 'true'
 
   def bot_config_by_buildername(self,
                                 builders=None,
                                 use_goma=True,
-                                use_rbe=False):
+                                use_remoteexec=False):
     default = {}
-    # use_goma and use_rbe cannot be set at the same time.
-    assert not use_goma or not use_rbe
+    # use_goma and use_remoteexec cannot be set at the same time.
+    assert not use_goma or not use_remoteexec
     if not self.m.properties.get('parent_buildername'):
       # Builders and builder_testers both build and need the following set of
       # default chromium configs:
@@ -138,7 +138,7 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = [
             'default_compiler', 'mb', 'mb_no_luci_auth'
         ]
-      if use_rbe:
+      if use_remoteexec:
         default['gclient_apply_config'] = [
             'enable_reclient',
         ]

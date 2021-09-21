@@ -1185,7 +1185,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       gn_env['GOMA_USE_LOCAL'] = 'false'
 
     if use_reclient:
-      gn_args.append('use_rbe=true')
+      gn_args.append('use_remoteexec=true')
 
     gn_args.extend(self.c.project_generator.args)
 
