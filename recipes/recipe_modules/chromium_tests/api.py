@@ -1129,15 +1129,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     result.presentation.logs.update(logs)
     return True
 
-  def summarize_test_failures(self, test_suites, retried_suites=()):
+  def summarize_test_failures(self,
+                              test_suites,
+                              retried_without_patch_suites=()):
     """
     Takes test suites and an optional list of suites retried without patch.
     Summarizes the test results in the step UI, and returns the suites which
     can be presumptively attributed to the CL.
     Args:
       test_suites: Iterable of test suites
-      retried_suites (optional): Iterable of test suites retried on ToT.
-        Must be a subset of the test_suites field. Default ().
+      retried_without_patch_suites (optional): Iterable of test suites retried
+        on ToT. Must be a subset of the test_suites field. Default ().
     Returns:
       An array of test suites which failed and should not be forgiven.
     """
@@ -1145,7 +1147,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for t in test_suites:
       if not t.has_failures_to_summarize():
         continue
-      if t not in retried_suites:
+      if t not in retried_without_patch_suites:
         self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
         continue
       is_tot_fail = self.m.test_utils.summarize_test_with_patch_deapplied(

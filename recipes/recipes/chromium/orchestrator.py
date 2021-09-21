@@ -244,21 +244,23 @@ def RunSteps(api, properties):
     _, local_tests_raw_result = process_sub_build(
         local_tests_sub_build, is_swarming_phase=False, with_patch=True)
 
-    def handle_completed_tests(tests, failing_test_suites=None):
+    def report_stats_and_flakiness(tests):
       api.chromium_swarming.report_stats()
       api.test_utils.summarize_findit_flakiness(api.chromium_tests.m, tests)
 
-      if failing_test_suites:
-        api.chromium_tests.handle_invalid_test_suites(failing_test_suites)
-        api.chromium_tests.summarize_test_failures(failing_test_suites)
+    def handle_failed_with_patch_tests(tests, failed_test_suites):
+      report_stats_and_flakiness(tests)
+
+      api.chromium_tests.handle_invalid_test_suites(failing_test_suites)
+      api.chromium_tests.summarize_test_failures(tests)
 
     if not failing_test_suites:
-      handle_completed_tests(tests)
+      report_stats_and_flakiness(tests)
       return local_tests_raw_result
 
     if api.chromium_tests.should_skip_without_patch(builder_config,
                                                     affected_files):
-      handle_completed_tests(tests, failing_test_suites=failing_test_suites)
+      handle_failed_with_patch_tests(tests, failing_test_suites)
 
       summary_markdown = api.chromium_tests._format_unrecoverable_failures(
           failing_test_suites, 'with patch')
@@ -299,25 +301,31 @@ def RunSteps(api, properties):
 
     # FAILURE/INFRA_FAILURE result
     if maybe_raw_result != None:
-      handle_completed_tests(tests)
+      handle_failed_with_patch_tests(tests, failing_test_suites)
       return maybe_raw_result
 
     process_swarming_props(swarming_props, builder_config, targets_config)
 
     with api.chromium_tests.wrap_chromium_tests(builder_config,
                                                 failing_test_suites):
-      _, unrecoverable_test_suites = api.test_utils.run_tests(
+      api.test_utils.run_tests(
           api.chromium_tests.m,
           failing_test_suites,
           'without patch',
           sort_by_shard=True)
 
-    handle_completed_tests(tests, failing_test_suites=unrecoverable_test_suites)
+    # unrecoverable_test_suites are those that passed without a patch, so the
+    # failures must be due to the CL
+    unrecoverable_test_suites = api.chromium_tests.summarize_test_failures(
+        tests, retried_without_patch_suites=failing_test_suites)
+
+    report_stats_and_flakiness(tests)
 
     summary_markdown = ''
     final_status = common_pb.SUCCESS
 
     if unrecoverable_test_suites:
+      api.chromium_tests.handle_invalid_test_suites(unrecoverable_test_suites)
       summary_markdown += api.chromium_tests._format_unrecoverable_failures(
           unrecoverable_test_suites, 'with patch')
       final_status = common_pb.FAILURE
@@ -594,7 +602,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'retry_without_patch_passes',
+      'retry_without_patch_passes_tryjob_fails',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_head_revision(),
@@ -631,7 +639,7 @@ def GenTests(api):
                        'content_unittests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
-      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -685,7 +693,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'retry_without_patch_fails_tests',
+      'retry_without_patch_fails_tryjob_succeeds',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
       fake_head_revision(),
@@ -720,7 +728,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
-      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
