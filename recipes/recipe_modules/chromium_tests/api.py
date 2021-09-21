@@ -375,7 +375,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
-    return args.get('use_remoteexec') == 'true'
+    return args.get('use_remoteexec') == 'true' or args.get('use_rbe') == 'true'
 
   def _use_cas(self, builder_config):
     # TODO(crbug.com/1143122): remove after migration.
