@@ -12,30 +12,33 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
       self, shards=1, shard_indices=None, failure=False,
       internal_failure=False):
     shard_indices = range(shards) if shard_indices is None else shard_indices
+    cas_hash = (
+        '24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca')
     return {
-      'shards': [
-        {
-          'bot_id': 'vm30',
-          'completed_ts': '2014-09-25T01:43:11.123',
-          'created_ts': '2014-09-25T01:41:00.123',
-          'duration': 31.5,
-          'exit_code': 1 if failure else 0,
-          'failure': failure,
-          'task_id': '148aa78d7aa%02d00' % i,
-          'internal_failure': internal_failure,
-          'modified_ts': '2014-09-25 01:42:00',
-          'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
-          'output': 'Heart beat succeeded on win32.\n'
-          'Foo',
-          'outputs_ref': {
-            'isolated': 'abc123',
-            'isolatedserver': 'https://isolateserver.appspot.com',
-            'namespace': 'default-gzip',
-          },
-          'started_ts': '2014-09-25T01:42:11.123',
-          'state': 'COMPLETED',
-        } for i in shard_indices
-      ],
+        'shards': [{
+            'bot_id': 'vm30',
+            'completed_ts': '2014-09-25T01:43:11.123',
+            'created_ts': '2014-09-25T01:41:00.123',
+            'duration': 31.5,
+            'exit_code': 1 if failure else 0,
+            'failure': failure,
+            'task_id': '148aa78d7aa%02d00' % i,
+            'internal_failure': internal_failure,
+            'modified_ts': '2014-09-25 01:42:00',
+            'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
+            'output': 'Heart beat succeeded on win32.\n'
+                      'Foo',
+            'cas_output_root': {
+                'cas_instance':
+                    'projects/example-project/instances/default_instance',
+                'digest': {
+                    'hash': cas_hash,
+                    'size_bytes': 73,
+                },
+            },
+            'started_ts': '2014-09-25T01:42:11.123',
+            'state': 'COMPLETED',
+        } for i in shard_indices],
     }
 
   def merge_script_log_file(self, data):

@@ -253,9 +253,11 @@ def GenTests(api):
   )
 
   step = 'dummy step name on iOS-dummy OS'
-  link = 'shard #0 isolated out'
-  url = ('https://isolateserver.appspot.com/browse?namespace=default-gzip'
-         '&hash=abc123')
+  link = 'shard #0 cas output'
+  url = ('https://cas-viewer.appspot.com/projects/example-cas-server/' +
+         'instances/default_instance/blobs/' +
+         '24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/' +
+         '73/tree')
   yield api.test(
       'output_refs',
       generate_passing_test(api, simulator=False),

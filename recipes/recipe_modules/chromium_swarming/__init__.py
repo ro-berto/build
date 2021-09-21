@@ -12,6 +12,7 @@ DEPS = [
     'code_coverage',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
+    'recipe_engine/cas',
     'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/json',

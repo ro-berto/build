@@ -1759,6 +1759,12 @@ class SwarmingApi(recipe_api.RecipeApi):
           links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
             outputs_ref['isolatedserver'], outputs_ref['namespace'],
             outputs_ref['isolated'])
+        cas_output_root = shard.get('cas_output_root')
+        if cas_output_root:
+          link_name = 'shard #%d cas output' % index
+          d = cas_output_root['digest']
+          links[link_name] = self.m.cas.viewer_url('%s/%s' %
+                                                   (d['hash'], d['size_bytes']))
 
       if url and should_show_shard:
         links[display_text] = url
