@@ -724,21 +724,22 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
+      "\nfrom __future__ import print_function\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print('Attempting to root device %s ...' % device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print('Finished rooting device %s' % device)\n",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Root devices",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@from __future__ import print_function@@@",
       "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
       "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Attempting to root device %s ...' % (device)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print('Attempting to root device %s ...' % device)@@@",
       "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
       "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print 'Finished rooting device %s' % (device)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  print('Finished rooting device %s' % device)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
