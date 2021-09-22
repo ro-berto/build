@@ -15,6 +15,7 @@ from google.protobuf import json_format
 from google.protobuf import struct_pb2
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
+from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
@@ -57,6 +58,19 @@ def RunSteps(api, properties):
 
   if not properties.compilator:
     raise api.step.InfraFailure('Missing compilator input')
+
+  # CrOS CQ supports linking & testing CLs across different repos in one
+  # build via the `Cq-Depends` footer. But Chrome's CQ does not. So check
+  # if the CL author has mistakenly added the footer to their chromium CL
+  # and fail loudly in that case to avoid confusion.
+  if api.tryserver.is_tryserver:
+    cq_depends_footer = api.tryserver.get_footer(
+        api.tryserver.constants.CQ_DEPEND_FOOTER)
+    if cq_depends_footer:
+      raise api.step.StepFailure(
+          'Commit message footer {} is not supported on Chrome builders. '
+          'Please remove the line(s) from the commit message and try '
+          'again.'.format(api.tryserver.constants.CQ_DEPEND_FOOTER))
 
   with api.chromium.chromium_layout():
     # Get current revision at HEAD of branch
@@ -530,6 +544,20 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'depend_on_footer_failure',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.step_data(
+          'parse description',
+          api.json.output(
+              {tryserver.constants.CQ_DEPEND_FOOTER: 'chromium:123456'})),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.ResultReasonRE,
+                       r'Commit message footer Cq-Depend is not supported.*'),
       api.post_process(post_process.DropExpectation),
   )
 
