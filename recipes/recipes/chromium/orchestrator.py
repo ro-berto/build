@@ -242,7 +242,7 @@ def RunSteps(api, properties):
       )
 
     with api.chromium_tests.wrap_chromium_tests(builder_config, tests):
-      _, failing_test_suites = (
+      invalid_test_suites, failing_test_suites = (
           api.test_utils.run_tests_with_patch(
               api.chromium_tests.m,
               tests,
@@ -270,10 +270,12 @@ def RunSteps(api, properties):
 
     if not failing_test_suites:
       report_stats_and_flakiness(tests)
+      # There could be exonerated failed tests from FindIt flakes
+      api.chromium_tests.summarize_test_failures(tests)
       return local_tests_raw_result
 
-    if api.chromium_tests.should_skip_without_patch(builder_config,
-                                                    affected_files):
+    if invalid_test_suites or api.chromium_tests.should_skip_without_patch(
+        builder_config, affected_files):
       handle_failed_with_patch_tests(tests, failing_test_suites)
 
       summary_markdown = api.chromium_tests._format_unrecoverable_failures(
@@ -590,6 +592,33 @@ def GenTests(api):
   )
 
   yield api.test(
+      'retry_shards_all_invalid_results',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results('invalid', retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results('invalid', retcode=1),
+              failure=True)),
+      override_compilator_steps(),
+      override_compilator_steps(is_swarming_phase=False),
+      api.post_process(post_process.MustRun,
+                       'browser_tests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'failing_test_retry_shard_failed_skip_without_patch',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.properties(InputProperties(compilator='linux-rel-compilator')),
@@ -803,6 +832,108 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {},
+      'Step Layer Flakiness': {},
+      'Step Layer Skipped Known Flakiness': {
+          'base_unittests (with patch)': ['Test.Two'],
+      },
+  }
+  yield api.test(
+      'succeeded_to_exonerate_flaky_failures',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(tests=['base_unittests']),
+      api.properties(**{
+          '$build/test_utils': {
+              'should_exonerate_flaky_failures': True,
+          },
+      }),
+      override_compilator_steps(tests=['base_unittests']),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'Test.Two',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
+      api.post_process(
+          post_process.StepTextContains,
+          'base_unittests (test results summary)', [
+              'Tests failed with patch, but ignored as they are known to be '
+              'flaky:<br/>Test.Two: crbug.com/999<br/>'
+          ]),
+      api.post_process(
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          api.json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {
+          'base_unittests (with patch)': ['Test.Two'],
+      },
+      'Step Layer Flakiness': {},
+      'Step Layer Skipped Known Flakiness': {},
+  }
+
+  yield api.test(
+      'failed_to_exonerate_flaky_failures',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(tests=['base_unittests']),
+      override_compilator_steps(tests=['base_unittests']),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      override_compilator_steps(with_patch=False, tests=['base_unittests']),
+      api.properties(**{
+          '$build/test_utils': {
+              'should_exonerate_flaky_failures': True,
+          },
+      }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.step_data('query known flaky failures on CQ', api.json.output([])),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
+      api.post_process(
+          post_process.StepTextContains,
+          'base_unittests (test results summary)', [
+              'Tests failed with patch, and caused build to fail:<br/>'
+              'Test.Two<br/>'
+          ]),
+      api.post_process(
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          api.json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
