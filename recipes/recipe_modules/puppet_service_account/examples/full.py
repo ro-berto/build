@@ -4,7 +4,7 @@
 
 """Small example of using the puppet_service_account api."""
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'puppet_service_account',
