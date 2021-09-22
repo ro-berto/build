@@ -2,16 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import functools
-
 from recipe_engine import post_process
 from recipe_engine.config import List
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'gn',
+    'recipe_engine/assertions',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -28,7 +27,7 @@ def RunSteps(api, targets, output_type):
       api.path['checkout'].join('out', 'Release'),
       targets,
       output_type=output_type)
-  assert refs == set(['target3', 'target4'])
+  api.assertions.assertEqual(refs, set(['target3', 'target4']))
 
 
 def GenTests(api):

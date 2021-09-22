@@ -171,7 +171,8 @@ class GnApi(recipe_api.RecipeApi):
     cmd.append(build_dir)
     cmd.extend(inputs)
     step_result = self._gn_cmd(step_name, cmd, log_name='refs', **kwargs)
-    return set(step_result.stdout.splitlines())
+    output = step_result.stdout.decode('utf-8')
+    return set(output.splitlines())
 
   def ls(self, build_dir, inputs, output_type=None, output_format='label',
          step_name='list gn targets'):
@@ -202,7 +203,8 @@ class GnApi(recipe_api.RecipeApi):
     cmd.append(build_dir)
     cmd.extend(inputs)
     step_result = self._gn_cmd(step_name, cmd, log_name='targets')
-    return set(step_result.stdout.splitlines())
+    output = step_result.stdout.decode('utf-8')
+    return set(output.splitlines())
 
   def clean(self, build_dir, step_name='clean outdir'):
     """Cleans the output directory except for args.gn and needed ninja files.
