@@ -215,6 +215,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-pie-arm64-rel',
             ),
+        'android-pie-arm64-rel-rts':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-pie-arm64-rel',
+                regression_test_selection=try_spec.ALWAYS,
+            ),
         'android-pie-arm64-wpt-rel-non-cq':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
@@ -912,6 +918,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
             ),
+        'linux_chromium_asan_rel_ng_rts':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux ASan LSan Builder',
+                tester='Linux ASan LSan Tests (1)',
+                regression_test_selection=try_spec.ALWAYS,
+            ),
         'linux_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
@@ -968,6 +981,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux TSan Builder',
                 tester='Linux TSan Tests',
+            ),
+        'linux_chromium_tsan_rel_ng_rts':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux TSan Builder',
+                tester='Linux TSan Tests',
+                regression_test_selection=try_spec.ALWAYS,
             ),
          # TODO(crbug.com/1200904): Remove after migration
         'linux_chromium_tsan_rel_ng_bionic':
