@@ -6,6 +6,7 @@
 from recipe_engine import post_process
 from PB.recipes.build.chromium.orchestrator import InputProperties
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
@@ -110,7 +111,8 @@ def RunSteps(api, properties):
     builder_id, builder_config = (
         api.chromium_tests_builder_config.lookup_builder())
 
-    api.chromium_tests.configure_build(builder_config)
+    api.chromium_tests.configure_build(
+        builder_config, api.chromium_tests.should_use_rts(builder_config))
     # Set api.chromium.c.compile_py.compiler to empty string so that
     # prepare_checkout() does not attempt to run ensure_goma()
     api.chromium.c.compile_py.compiler = ''
@@ -520,6 +522,56 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'quick run rts',
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='rts-rel',
+          builder_db=ctbc.BuilderDatabase.create({
+              'chromium.test': {
+                  'chromium-rel':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              }
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'tryserver.chromium.test': {
+                  'rts-rel':
+                      ctbc.TrySpec.create(
+                          mirrors=[
+                              ctbc.TryMirror.create(
+                                  builder_group='chromium.test',
+                                  buildername='chromium-rel',
+                                  tester='chromium-rel',
+                              ),
+                          ],
+                          regression_test_selection=try_spec.QUICK_RUN_ONLY,
+                      ),
+              }
+          }),
+      ),
+      fake_head_revision(),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      api.chromium_tests.read_source_side_spec('chromium.test', {
+          'chromium-rel': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.post_process(post_process.MustRun, 'quick run options'),
       api.post_process(post_process.DropExpectation),
   )
 

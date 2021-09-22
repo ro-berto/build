@@ -1870,6 +1870,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if task_output_stdout:
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
+  def should_use_rts(self, builder_config):
+    use_rts = (
+        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
+        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
+    ) or builder_config.regression_test_selection == try_spec.ALWAYS
+    if use_rts:
+      step_result = self.m.step('quick run options', [])
+      step_result.presentation.properties['rts_was_used'] = use_rts
+      step_result.presentation.links[
+          'use_rts: true'] = 'https://bit.ly/chromium-rts'
+      step_result.presentation.links['file a bug'] = (
+          'https://bugs.chromium.org/p/chromium/issues/entry?'
+          'template=Quick%20Run%20Issue')
+    # RTS-enabled Quick Run builds can't be reused for non-quick runs because
+    # they are slightly less safe than normal builds
+    if (use_rts and
+        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY):
+      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
+
+    return use_rts
+
   def build_affected_targets(self,
                              builder_id,
                              builder_config,
@@ -1895,23 +1916,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           and the failure message if it failed
         Configuration of the build/test.
     """
-    use_rts = (
-        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
-        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
-    ) or builder_config.regression_test_selection == try_spec.ALWAYS
-    if use_rts:
-      step_result = self.m.step('quick run options', [])
-      step_result.presentation.properties['rts_was_used'] = use_rts
-      step_result.presentation.links[
-          'use_rts: true'] = 'https://bit.ly/chromium-rts'
-      step_result.presentation.links['file a bug'] = (
-          'https://bugs.chromium.org/p/chromium/issues/entry?'
-          'template=Quick%20Run%20Issue')
-    # RTS-enabled Quick Run builds can't be reused for non-quick runs because
-    # they are slightly less safe than normal builds
-    if (use_rts and
-        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY):
-      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
+    use_rts = self.should_use_rts(builder_config)
 
     self.configure_build(builder_config, use_rts)
 
