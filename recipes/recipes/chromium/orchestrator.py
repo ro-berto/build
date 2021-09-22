@@ -209,7 +209,23 @@ def RunSteps(api, properties):
     if maybe_raw_result != None:
       return maybe_raw_result
 
-    def process_swarming_props(swarming_props, builder_config, targets_config):
+    def process_swarming_props(swarming_props,
+                               builder_config,
+                               targets_config,
+                               tests=None):
+      """Read isolate hashes swarming_props content and download command lines
+
+      Args:
+        swarming_props (dict): contains information about swarming tests to
+          trigger
+        builder_config (BuilderConfig): configuration for the Orchestrator
+          builder
+        targets_config (TargetsConfig): configuration for the tests' targets
+        tests (list(Test)): Test objects to update with swarming info. If None,
+          new Test objects will be created.
+      Returns:
+        List of Test objects with swarming info
+      """
       swarming_digest = swarming_props['swarming_command_lines_digest']
       swarming_cwd = swarming_props['swarming_command_lines_cwd']
 
@@ -217,10 +233,15 @@ def RunSteps(api, properties):
       swarm_hashes = dict(zip(swarm_hashes.keys(), swarm_hashes.values()))
       api.isolate.set_isolated_tests(swarm_hashes)
 
-      tests = [
-          t for t in targets_config.all_tests
-          if t.uses_isolate and t.target_name in api.isolate.isolated_tests
-      ]
+      if not tests:
+        tests = [
+            t for t in targets_config.all_tests
+            if t.uses_isolate and t.target_name in api.isolate.isolated_tests
+        ]
+
+      # CLs that update the test command lines are actually blocked from
+      # running a without patch step, so the command lines aren't actually
+      # updated to anything different.
       api.chromium_tests.download_command_lines_for_tests(
           tests,
           builder_config,
@@ -309,8 +330,6 @@ def RunSteps(api, properties):
         [request], step_name='trigger compilator (without patch)')[0]
 
     api.chromium_tests.deapply_patch(bot_update_step)
-    targets_config = api.chromium_tests.create_targets_config(
-        builder_config, bot_update_step)
 
     sub_build = launch_compilator_watcher(
         wo_build, is_swarming_phase=True, with_patch=False)
@@ -322,7 +341,8 @@ def RunSteps(api, properties):
       handle_failed_with_patch_tests(tests, failing_test_suites)
       return maybe_raw_result
 
-    process_swarming_props(swarming_props, builder_config, targets_config)
+    process_swarming_props(
+        swarming_props, builder_config, targets_config, tests=tests)
 
     with api.chromium_tests.wrap_chromium_tests(builder_config,
                                                 failing_test_suites):
@@ -835,6 +855,66 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  fake_command_lines = {
+      'browser_tests': [
+          './%s' % 'browser_tests', '--fake-without-patch-flag',
+          '--fake-log-file', '$ISOLATED_OUTDIR/fake.log'
+      ]
+  }
+
+  def is_subsequence(containing, contained):
+    containing_str = ' '.join(containing)
+    contained_str = ' '.join(contained)
+    return contained_str in containing_str
+
+  yield api.test(
+      'without_patch_tests_contain_command_lines_from_without_patch_compilator',
+      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.properties(InputProperties(compilator='linux-rel-compilator')),
+      fake_head_revision(),
+      override_test_spec(tests=['browser_tests', 'content_unittests']),
+      override_compilator_steps(tests=['browser_tests', 'content_unittests']),
+      override_trigger_compilator(),
+      override_trigger_compilator(with_patch=False),
+      override_compilator_steps(with_patch=True, is_swarming_phase=False),
+      override_compilator_steps(with_patch=False),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_command_lines)),
+      api.override_step_data(
+          'content_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'content_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'browser_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.post_process(post_process.MustRun,
+                       'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(
+          api.swarming.check_triggered_request,
+          'test_pre_run (without patch).[trigger] '
+          'browser_tests (without patch)', lambda check, req: check(
+              is_subsequence(req[0].command, fake_command_lines['browser_tests']
+                            ))),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusSuccess),
