@@ -75,11 +75,7 @@ SPEC = freeze({
             'build_config': 'android',
         },
         'codesearch-gen-chromium-lacros': {
-            'compile_targets': [
-                # TODO(https://crbug.com/1105242): Compile all targets when they
-                # are fixed. See https://crbug.com/1106980.
-                'chrome',
-            ],
+            'compile_targets': ['all',],
             'platform': 'lacros',
             'sync_generated_files': True,
             'gen_repo_branch': 'main',
