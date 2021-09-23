@@ -17,7 +17,8 @@ def RunSteps(api):
       BUILD_CONFIG=api.properties.get('build_config', 'Release'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
-  use_remoteexec = api.properties.get('use_remoteexec', False)
+  use_remoteexec = api.properties.get(
+      'use_remoteexec', False) or api.properties.get('use_rbe', False)
   use_goma = not use_remoteexec
 
   api.chromium.run_gn(
