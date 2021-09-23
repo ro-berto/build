@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
-                                        StatusFailure, StatusSuccess,
-                                        StepCommandContains)
+                                        MustRun, StatusException, StatusFailure,
+                                        StatusSuccess, StepCommandContains,
+                                        StepTextContains)
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
@@ -26,6 +27,7 @@ DEPS = [
     'recipe_engine/commit_position',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/led',
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -39,6 +41,17 @@ DEPS = [
 
 
 def RunSteps(api):
+  if not api.tryserver.is_tryserver:
+    result = api.step('not a tryjob', [])
+    result.presentation.step_text = (
+        'This recipe requires a gerrit CL for the source under test')
+    result.presentation.status = api.step.EXCEPTION
+    if api.led.launched_by_led:
+      result.presentation.step_text += (
+          "\n run 'led edit-cr-cl <chromium/src CL URL>' to attach a CL to test"
+      )
+      result.presentation.status = api.step.FAILURE
+    api.step.raise_on_failure(result)
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
@@ -66,6 +79,35 @@ def GenTests(api):
             },
         }
     )
+
+  yield api.test(
+      'not-a-tryjob',
+      api.chromium.generic_build(
+          builder_group='fake-group', builder='fake-builder'),
+      api.post_check(MustRun, 'not a tryjob'),
+      api.post_check(StatusException),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'led-not-a-tryjob',
+      api.chromium.generic_build(
+          builder_group='fake-group', builder='fake-builder'),
+      api.properties(
+          **{
+              '$recipe_engine/led': {
+                  'led_run_id': 'fake-run-id',
+                  'isolated_input': {
+                      'hash': 'fake-hash',
+                  },
+              },
+          }),
+      api.post_check(MustRun, 'not a tryjob'),
+      api.post_check(StepTextContains, 'not a tryjob',
+                     ["run 'led edit-cr-cl <chromium/src CL URL>'"]),
+      api.post_check(StatusFailure),
+      api.post_process(DropExpectation),
+  )
 
   # Regression test for http://crbug.com/453471#c16
   yield api.test(
