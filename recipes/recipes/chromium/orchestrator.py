@@ -60,18 +60,7 @@ def RunSteps(api, properties):
   if not properties.compilator:
     raise api.step.InfraFailure('Missing compilator input')
 
-  # CrOS CQ supports linking & testing CLs across different repos in one
-  # build via the `Cq-Depends` footer. But Chrome's CQ does not. So check
-  # if the CL author has mistakenly added the footer to their chromium CL
-  # and fail loudly in that case to avoid confusion.
-  if api.tryserver.is_tryserver:
-    cq_depends_footer = api.tryserver.get_footer(
-        api.tryserver.constants.CQ_DEPEND_FOOTER)
-    if cq_depends_footer:
-      raise api.step.StepFailure(
-          'Commit message footer {} is not supported on Chrome builders. '
-          'Please remove the line(s) from the commit message and try '
-          'again.'.format(api.tryserver.constants.CQ_DEPEND_FOOTER))
+  api.chromium_tests.raise_failure_if_cq_depends_footer_exists()
 
   with api.chromium.chromium_layout():
     # Get current revision at HEAD of branch
