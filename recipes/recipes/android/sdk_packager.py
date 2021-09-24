@@ -110,31 +110,28 @@ def GenTests(api):
               }
           ])
   )
-  package_version_steps = (
-      api.override_step_data(
-          'package versions.list',
-          stdout=api.raw_io.output_text(textwrap.dedent(
-              '''\
-              Available Packages:
-              -------------------
-              emulator
-                  Description: Android Emulator
-                  Version:     29.0.11
-              '''))) +
-      api.override_step_data(
-          'package versions.parse',
-          api.json.output({
-              'available': [
-                  {
-                      'name': 'emulator',
-                      'description': 'Android Emulator',
-                      'version': '29.0.11',
-                      'installed location': None,
-                  },
-              ],
-              'installed': [],
-          }))
-  )
+
+  def package_version_steps():
+    return (api.override_step_data(
+        'package versions.list',
+        stdout=api.raw_io.output_text(
+            textwrap.dedent('''\
+                Available Packages:
+                -------------------
+                emulator
+                    Description: Android Emulator
+                    Version:     29.0.11
+                '''))) + api.override_step_data(
+                'package versions.parse',
+                api.json.output({
+                    'available': [{
+                        'name': 'emulator',
+                        'description': 'Android Emulator',
+                        'version': '29.0.11',
+                        'installed location': None,
+                    },],
+                    'installed': [],
+                })))
 
   yield api.test(
       'basic',
@@ -144,11 +141,12 @@ def GenTests(api):
           builder='android-sdk-packager'),
       emulator_package_properties,
       api.path.exists(
-          api.path['checkout'].join(
-              'third_party', 'android_sdk', 'public', 'cmdline-tools', 'latest',
-              'bin', 'sdkmanager'), api.path['checkout'].join(
-                  'third_party', 'android_sdk', 'public', 'emulator.yaml')),
-      package_version_steps,
+          api.path['checkout'].join('third_party', 'android_sdk', 'public',
+                                    'cmdline-tools', 'latest', 'bin',
+                                    'sdkmanager'),
+          api.path['checkout'].join('third_party', 'android_sdk', 'public',
+                                    'emulator.yaml')),
+      package_version_steps(),
       api.post_process(post_process.MustRun, 'emulator.install'),
       api.post_process(post_process.MustRun, 'emulator.create emulator.yaml'),
       api.post_process(post_process.StatusSuccess),
@@ -183,6 +181,8 @@ def GenTests(api):
               [UNPARSEABLE]
               '''))),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.ResultReason,
+                       'Unable to parse sdkmanager output.'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -196,7 +196,8 @@ def GenTests(api):
       api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
                                                 'public', 'cmdline-tools',
                                                 'latest', 'bin', 'sdkmanager')),
-      package_version_steps,
+      package_version_steps(),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.ResultReasonRE, 'Unable to find yaml file'),
       api.post_process(post_process.DropExpectation),
   )
