@@ -5,6 +5,8 @@
 import base64
 from recipe_engine import recipe_api
 
+from PB.recipe_modules.build.symupload import properties as symupload_properties
+
 
 class SymuploadApi(recipe_api.RecipeApi):
   """Chromium specific module for symuploads."""
@@ -129,16 +131,36 @@ class SymuploadApi(recipe_api.RecipeApi):
 
     return binary_name
 
-  def __call__(self, build_dir, experimental=False):
+  def __call__(self, build_dir, config_file_path=None, experimental=False):
     """
     Args:
       build_dir: The absolute path to the build output directory, e.g.
                  [slave-build]/src/out/Release.
+      config_file_path: (str) Absolute path to a config file to utilize
+                        instead of the recipe_module property. The format of
+                        the file must be the same as the structure of
+                        the symupload proto definition. See properties.proto
+                        for moree details.
       experimental: (bool) flag for experimental, meaning it will skip
                     symuploads.
     """
-    if not self._properties.symupload_datas:
+    if not self._properties.symupload_datas and not config_file_path:
       return
+
+    if config_file_path:
+      # read the file content and load it as a symupload_datas object
+      # for the remainder of the workflow to run.
+      config = self.m.file.read_json(
+          'read config from file',
+          config_file_path,
+          test_data=[{
+              'artifacts': ['some_artifact.txt'],
+              'url': 'https://some.url.com',
+              'base64_api_key': base64.b64encode(b'encrypted_api_key'),
+              'kms_key_path': 'some/key/path'
+          }])
+      self._properties = symupload_properties.InputProperties(
+          symupload_datas=config)
 
     with self.m.step.nest('symupload') as presentation:
       # Check binary before moving on
