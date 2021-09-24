@@ -90,13 +90,6 @@
     ]
   },
   {
-    "cmd": [
-      "echo",
-      "[('src/foo', 'foo'), ('src/bar', 'bar')]"
-    ],
-    "name": "repo list echo"
-  },
-  {
     "name": "$result"
   }
 ]

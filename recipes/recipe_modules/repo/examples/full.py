@@ -2,11 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+from recipe_engine import post_process
+
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'recipe_engine/raw_io',
     'repo',
+    'recipe_engine/assertions',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
 
@@ -28,12 +31,12 @@ def RunSteps(api):
   api.repo.manifest()
 
   repos = api.repo.list()
-  assert repos == [('src/foo', 'foo'), ('src/bar', 'bar')]
-  api.step('repo list echo', ['echo', str(repos)])
+  api.assertions.assertEqual(repos, [('src/foo', 'foo'), ('src/bar', 'bar')])
 
 
 def GenTests(api):
   yield api.test(
       'setup_repo',
       api.step_data('repo list', api.raw_io.stream_output(REPO_LIST_OUTPUT)),
+      api.post_process(post_process.StatusSuccess),
   )
