@@ -223,6 +223,7 @@
       "-json",
       "-n",
       "1000",
+      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "build-8839265267168653505"

@@ -1719,6 +1719,7 @@
       "-json",
       "-n",
       "1000",
+      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "0"
@@ -2258,6 +2259,7 @@
       "-json",
       "-n",
       "1000",
+      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "1"

@@ -693,6 +693,7 @@
       "-json",
       "-n",
       "1000",
+      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "some-inv-name"
@@ -824,6 +825,7 @@
       "-json",
       "-n",
       "1000",
+      "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
       "some-inv-name"
