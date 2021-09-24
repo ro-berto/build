@@ -233,6 +233,24 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='linux',
         ),
+    'linux-archive-tagged':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            archive_build=True,
+            gs_bucket='chromium-browser-snapshots',
+            gs_build_name='experimental/Linux_x64_Tagged',
+            gs_acl='public-read',
+            simulation_platform='linux',
+        ),
     'android-official':
         builder_spec.BuilderSpec.create(
             chromium_config='android',
