@@ -2,6 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
+
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
@@ -24,58 +29,55 @@ DEPS = [
     'test_utils',
 ]
 
-from recipe_engine import post_process
-import json
-
-from RECIPE_MODULES.build.chromium_tests import steps
-
 
 def RunSteps(api):
-  api.chromium.set_build_properties({
-      'got_webrtc_revision': 'webrtc_sha',
-      'got_v8_revision': 'v8_sha',
-  })
-  api.chromium.set_config('chromium')
-  # Fake path, as the real one depends on having done a chromium checkout.
-  api.profiles._merge_scripts_dir = api.path['start_dir']
+  # Create a nested step so that setup steps can be easily filtered out
+  with api.step.nest('setup steps'):
+    api.chromium.set_build_properties({
+        'got_webrtc_revision': 'webrtc_sha',
+        'got_v8_revision': 'v8_sha',
+    })
+    api.chromium.set_config('chromium')
+    # Fake path, as the real one depends on having done a chromium checkout.
+    api.profiles._merge_scripts_dir = api.path['start_dir']
 
-  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
-  api.chromium_tests.configure_build(builder_config)
-  api.chromium_tests.prepare_checkout(builder_config)
+    _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+    api.chromium_tests.configure_build(builder_config)
+    api.chromium_tests.prepare_checkout(builder_config)
 
-  test_repeat_count = api.properties.get('repeat_count')
-  if api.properties.get('swarm_hashes'):
-    swarm_hashes = api.properties['swarm_hashes']
-    assert len(swarm_hashes) == 1
-    test_name = list(swarm_hashes.keys())[0]
-  else:
-    # Needed for a test
-    test_name = 'base_unittests'
-  isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
-  test_spec = steps.SwarmingIsolatedScriptTestSpec.create(
-      name=test_name,
-      ignore_task_failure=api.properties.get('ignore_task_failure'),
-      override_compile_targets=api.properties.get('override_compile_targets'),
-      io_timeout=120,
-      hard_timeout=360,
-      expiration=7200,
-      shards=int(api.properties.get('shards', '1')) or 1,
-      dimensions=api.properties.get('dimensions', {
-          'gpu': '8086',
-      }),
-      isolate_coverage_data=isolate_coverage_data,
-      resultdb=steps.ResultDB.create(enable=True))
-  test = test_spec.get_test()
-  api.chromium_swarming.set_default_dimension('pool', 'foo')
-  assert test.runs_on_swarming
-  assert test.shards > 0
+    test_repeat_count = api.properties.get('repeat_count')
+    if api.properties.get('swarm_hashes'):
+      swarm_hashes = api.properties['swarm_hashes']
+      assert len(swarm_hashes) == 1
+      test_name = list(swarm_hashes.keys())[0]
+    else:
+      # Needed for a test
+      test_name = 'base_unittests'
+    isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
+    test_spec = steps.SwarmingIsolatedScriptTestSpec.create(
+        name=test_name,
+        ignore_task_failure=api.properties.get('ignore_task_failure'),
+        override_compile_targets=api.properties.get('override_compile_targets'),
+        io_timeout=120,
+        hard_timeout=360,
+        expiration=7200,
+        shards=int(api.properties.get('shards', '1')) or 1,
+        dimensions=api.properties.get('dimensions', {
+            'gpu': '8086',
+        }),
+        isolate_coverage_data=isolate_coverage_data,
+        resultdb=steps.ResultDB.create(enable=True))
+    test = test_spec.get_test()
+    api.chromium_swarming.set_default_dimension('pool', 'foo')
+    assert test.runs_on_swarming
+    assert test.shards > 0
 
-  if test_repeat_count:
-    test.test_options = steps.TestOptions(
-        test_filter=api.properties.get('test_filter'),
-        repeat_count=test_repeat_count,
-        retry_limit=0,
-        run_disabled=bool(test_repeat_count))
+    if test_repeat_count:
+      test.test_options = steps.TestOptions(
+          test_filter=api.properties.get('test_filter'),
+          repeat_count=test_repeat_count,
+          retry_limit=0,
+          run_disabled=bool(test_repeat_count))
 
   try:
     test.pre_run(api, 'with patch')
@@ -103,6 +105,16 @@ def RunSteps(api):
 
 def GenTests(api):
 
+  def filter_out_setup_steps():
+
+    def step_filter(check, step_odict):
+      del check
+      return collections.OrderedDict([(k, v)
+                                      for k, v in step_odict.iteritems()
+                                      if not k.startswith('setup steps')])
+
+    return api.post_process(step_filter)
+
   def verify_log_fields(check, step_odict, expected_fields):
     """Verifies fields in details log are with expected values."""
     step = step_odict['details']
@@ -120,6 +132,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -376,6 +389,7 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           override_compile_targets=['base_unittests_run']),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -401,6 +415,7 @@ def GenTests(api):
                   output_chartjson=True,
                   use_json_test_format=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   # Uses simplified json
@@ -429,6 +444,7 @@ def GenTests(api):
                   valid=True,
                   output_chartjson=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -455,6 +471,7 @@ def GenTests(api):
                   output_chartjson=True,
                   use_json_test_format=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   # Uses simplied json
@@ -483,6 +500,7 @@ def GenTests(api):
                   output_chartjson=True),
               shards=2),
           retcode=0),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -509,6 +527,7 @@ def GenTests(api):
                   use_json_test_format=True),
               shards=2),
           retcode=102),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -523,6 +542,7 @@ def GenTests(api):
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -541,6 +561,7 @@ def GenTests(api):
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(None, 255), failure=True)),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -567,6 +588,7 @@ def GenTests(api):
                   output_chartjson=True,
                   use_json_test_format=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -593,6 +615,7 @@ def GenTests(api):
                   benchmark_enabled=False,
                   use_json_test_format=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   # Uses simplied json
@@ -622,6 +645,7 @@ def GenTests(api):
                   output_chartjson=True,
                   benchmark_enabled=False),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   placeholder_test_output = (api.test_utils.canned_isolated_script_output(
@@ -649,6 +673,7 @@ def GenTests(api):
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               placeholder_test_output, shards=2)),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -678,6 +703,7 @@ def GenTests(api):
                   use_json_test_format=True,
                   output_histograms=True),
               shards=2)),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -694,6 +720,7 @@ def GenTests(api):
               'gpu': '8086',
               'os': 'Windows',
           }),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -710,6 +737,7 @@ def GenTests(api):
               'gpu': '8086',
               'os': 'Mac',
           }),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -727,6 +755,7 @@ def GenTests(api):
               'os': 'Mac',
               'hidpi': '1',
           }),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -793,6 +822,7 @@ def GenTests(api):
               'device_os': 'LOL123',
               'os': 'Android',
           }),
+      filter_out_setup_steps(),
   )
 
   yield api.test(

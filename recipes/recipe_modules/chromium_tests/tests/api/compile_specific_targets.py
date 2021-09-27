@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+
 from recipe_engine import post_process
 from recipe_engine.post_process import Filter
 
@@ -18,6 +20,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 BUILDERS = ctbc.BuilderDatabase.create({
@@ -35,16 +38,19 @@ BUILDERS = ctbc.BuilderDatabase.create({
 
 
 def RunSteps(api):
+  # Create a nested step so that setup steps can be easily filtered out
+  with api.step.nest('setup steps'):
+    builder_id, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder())
+    api.chromium_tests.configure_build(builder_config)
+    update_step, targets_config = (
+        api.chromium_tests.prepare_checkout(builder_config))
+
   tests = []
   if api.properties.get('swarming_gtest'):
     tests.append(
         steps.SwarmingGTestTestSpec.create('base_unittests').get_test())
 
-  builder_id, builder_config = (
-      api.chromium_tests_builder_config.lookup_builder())
-  api.chromium_tests.configure_build(builder_config)
-  update_step, targets_config = (
-      api.chromium_tests.prepare_checkout(builder_config))
   return api.chromium_tests.compile_specific_targets(
       builder_id,
       builder_config,
@@ -56,11 +62,23 @@ def RunSteps(api):
 
 
 def GenTests(api):
+
+  def filter_out_setup_steps():
+
+    def step_filter(check, step_odict):
+      del check
+      return collections.OrderedDict([(k, v)
+                                      for k, v in step_odict.iteritems()
+                                      if not k.startswith('setup steps')])
+
+    return api.post_process(step_filter)
+
   yield api.test(
       'linux_tests',
       api.chromium.ci_build(
           builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -83,6 +101,7 @@ def GenTests(api):
           builder_group='chromium.linux', builder='Linux Tests'),
       api.properties(swarming_gtest=True),
       api.step_data('compile', retcode=1),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -90,6 +109,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.step_data('compile (with patch)', retcode=1),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -108,6 +128,7 @@ def GenTests(api):
       'android',
       api.chromium.ci_build(
           builder_group='chromium.android', builder='android-cronet-arm-rel'),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -117,4 +138,5 @@ def GenTests(api):
           builder='Test Version',
           builder_db=BUILDERS),
       api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
+      filter_out_setup_steps(),
   )
