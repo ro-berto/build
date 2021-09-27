@@ -2185,7 +2185,7 @@
       "@@@STEP_LOG_LINE@Dex Method Diff@!dex_methods!@@@",
       "@@@STEP_LOG_END@Dex Method Diff@@@",
       "@@@STEP_LINK@Supersize HTML Diff@https://foo.com/https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson@@@",
-      "@@@SET_BUILD_PROPERTY@binary_size_plugin@{\"extras\": [{\"text\": \"Supersize HTML Diff\", \"url\": \"https://foo.com/https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson\"}, {\"text\": \"SuperSize Text Diff\", \"url\": \"https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.txt\"}], \"listings\": [{\"allowed\": true, \"delta\": \"500 bytes\", \"log_name\": \"resource_sizes_log\", \"name\": \"Normalised APK size\", \"url\": \"https:///logs///+/steps/Trybot_Results/0/logs/Resource_Sizes_Diff__high-level_metrics_/0\"}]}@@@"
+      "@@@SET_BUILD_PROPERTY@binary_size_plugin@{\"extras\": [{\"text\": \"Supersize HTML Diff\", \"url\": \"https://foo.com/https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson\"}, {\"text\": \"SuperSize Text Diff\", \"url\": \"https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.txt\"}], \"listings\": [{\"allowed\": true, \"delta\": \"500 bytes\", \"log_name\": \"resource_sizes_log\", \"name\": \"Normalised APK size\", \"url\": \"https:///logs///+/u/Trybot_Results/Resource_Sizes_Diff__high-level_metrics_\"}]}@@@"
     ]
   },
   {

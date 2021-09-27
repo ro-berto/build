@@ -416,9 +416,11 @@ class BinarySizeApi(recipe_api.RecipeApi):
     normalized_log_name = _normalize_name(log_name)
     normalized_step_name = _normalize_name(step_name)
     logdog = self.m.buildbucket.build.infra.logdog
-    url = 'https://{}/logs/{}/{}/+/steps/{}/0/logs/{}/0'.format(
-        logdog.hostname, logdog.project, logdog.prefix, normalized_step_name,
-        normalized_log_name)
+    url = 'https://{}/logs/{}/{}/+/u/{}/{}'.format(logdog.hostname,
+                                                   logdog.project,
+                                                   logdog.prefix,
+                                                   normalized_step_name,
+                                                   normalized_log_name)
     return url
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,
