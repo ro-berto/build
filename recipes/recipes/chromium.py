@@ -97,8 +97,8 @@ def GenTests(api):
           parent_buildername='GPU FYI Linux Builder'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-              'browser_tests': 'ffffffffffffffffffffffffffffff',
+              'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
+              'browser_tests': 'ffffffffffffffffffffffffffffff/size',
           }),
       api.chromium_tests.read_source_side_spec(
           'chromium.gpu.fyi',
@@ -151,7 +151,7 @@ def GenTests(api):
           parent_buildername='Mac Builder',
       ),
       api.properties(swarm_hashes={
-          'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac',
@@ -188,7 +188,7 @@ def GenTests(api):
       api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.linux', builder='Linux Builder'),
       api.properties(swarm_hashes={
-          'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -227,7 +227,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -257,7 +257,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -286,7 +286,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -316,7 +316,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -346,7 +346,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -375,7 +375,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -405,7 +405,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -434,7 +434,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -515,7 +515,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -542,7 +542,7 @@ def GenTests(api):
       api.properties(
           version='v23523',
           swarm_hashes={
-              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'
           }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -579,7 +579,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -616,7 +616,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -644,7 +644,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -680,7 +680,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -716,7 +716,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -752,7 +752,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -789,7 +789,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -827,7 +827,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -868,7 +868,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -906,7 +906,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux',
@@ -940,7 +940,7 @@ def GenTests(api):
           builder='Mac10.13 Tests',
           parent_buildername='Mac Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac',
@@ -980,7 +980,7 @@ def GenTests(api):
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.win',
@@ -1024,7 +1024,7 @@ def GenTests(api):
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
@@ -1050,7 +1050,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1083,7 +1083,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1116,7 +1116,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1152,7 +1152,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1187,7 +1187,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1423,7 +1423,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1449,7 +1449,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1474,7 +1474,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.step_data('fake_test', api.json.output(json_results)),
       api.chromium_tests.read_source_side_spec(
@@ -1502,7 +1502,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -1528,7 +1528,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.step_data('fake_test', api.json.output(json_results)),
       api.chromium_tests.read_source_side_spec(
@@ -1560,7 +1560,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.step_data('fake_test', api.json.output(json_results)),
       api.chromium_tests.read_source_side_spec(
@@ -1586,7 +1586,7 @@ def GenTests(api):
           builder='Linux Tests',
           parent_buildername='Linux Builder'),
       api.properties(swarm_hashes={
-          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {

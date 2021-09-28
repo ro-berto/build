@@ -31,7 +31,7 @@ def GenTests(api):
     swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
-        swarm_hashes[test] = '[dummy hash for %s]' % test
+        swarm_hashes[test] = '[dummy hash for %s/size]' % test
 
     return sum([
         api.properties(swarm_hashes=swarm_hashes),

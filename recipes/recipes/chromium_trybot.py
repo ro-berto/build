@@ -68,7 +68,7 @@ def GenTests(api):
   def swarm_hashes(swarm_hashes=None, extra_swarmed_tests=None):
     swarm_hashes = dict(swarm_hashes or {})
     for test in extra_swarmed_tests or []:
-      swarm_hashes[test] = '[dummy hash for %s]' % test
+      swarm_hashes[test] = '[dummy hash for %s/size]' % test
     return api.properties(swarm_hashes=swarm_hashes)
 
   def base_unittests_additional_compile_target():
