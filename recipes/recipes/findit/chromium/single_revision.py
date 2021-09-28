@@ -40,8 +40,6 @@ PROPERTIES = InputProperties
 def RunSteps(api, properties):
   if properties.isolate_targets:
     for target in properties.isolate_targets:
-      api.isolate.isolate_server = target.server
-
       args = [
           '--isolated-script-test-repeat=%d' % properties.test_repeat_count
       ] if properties.test_repeat_count else []

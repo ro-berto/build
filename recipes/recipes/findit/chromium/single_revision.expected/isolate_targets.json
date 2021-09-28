@@ -94,9 +94,9 @@
       "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
-      "-I",
-      "server1",
-      "--isolated",
+      "--cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "--cas-digest",
       "hash1"
     ],
     "name": "Run isolated test 'hash1'"
@@ -112,9 +112,9 @@
       "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
-      "-I",
-      "server2",
-      "--isolated",
+      "--cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "--cas-digest",
       "hash2"
     ],
     "name": "Run isolated test 'hash2'"

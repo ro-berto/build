@@ -22,19 +22,7 @@ class IsolateApi(recipe_api.RecipeApi):
     super(IsolateApi, self).__init__(**kwargs)
     # TODO(maruel): Delete this recipe and use upstream isolated instead.
     # https://crbug.com/944904
-    # TODO(crbug.com/1143123): remove this.
-    self._isolate_server = 'https://isolateserver.appspot.com'
     self._isolated_tests = {}
-
-  @property
-  def isolate_server(self):
-    """URL of Isolate server to use, default is a production one."""
-    return self._isolate_server
-
-  @isolate_server.setter
-  def isolate_server(self, value):
-    """Changes URL of Isolate server to use."""
-    self._isolate_server = value
 
   def check_swarm_hashes(self, targets):
     """Asserts that all the targets in the passed list are present as keys in
@@ -199,23 +187,11 @@ class IsolateApi(recipe_api.RecipeApi):
     """Runs an isolated test."""
     cmd = [
         '--verbose',
+        '--cas-instance',
+        self.m.cas.instance,
+        '--cas-digest',
+        isolated_input,
     ]
-
-    if '/' in isolated_input:
-      cmd.extend([
-          '--cas-instance',
-          self.m.cas.instance,
-          '--cas-digest',
-          isolated_input,
-      ])
-    else:
-      # TODO(crbug.com/1143122): remove this after migration
-      cmd.extend([
-          '-I',
-          self.isolate_server,
-          '--isolated',
-          isolated_input,
-      ])
 
     if 'env' in kwargs and isinstance(kwargs['env'], dict):
       for k, v in sorted(kwargs.pop('env').iteritems()):

@@ -20,10 +20,6 @@ def RunSteps(api):
   # 'isolate_tests' step needs swarming checkout.
   api.swarming_client.checkout('master')
 
-  # Code coverage for isolate_server property.
-  api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
-  assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
-
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())
   expected_targets = step_result.stdout

@@ -8,7 +8,6 @@ from six.moves import range  # pylint: disable=redefined-builtin
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
-    'isolate',
     'chromium',
     'chromium_checkout',
     'chromium_swarming',
@@ -60,8 +59,7 @@ def RunSteps(api, platforms, custom_trigger_script,
   api.gclient.set_config('chromium')
   api.chromium_checkout.ensure_checkout()
 
-  # Configure isolate & swarming modules (this is optional).
-  api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
+  # Configure swarming modules (this is optional).
   api.chromium_swarming.swarming_server = (
       'https://chromium-swarm-dev.appspot.com')
   api.chromium_swarming.add_default_tag('builder_group:tryserver')
