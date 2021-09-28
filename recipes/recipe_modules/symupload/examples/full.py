@@ -172,3 +172,28 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
+  input_properties_file = properties.InputProperties(source_side_spec_path=[
+      'src-internal',
+      'infra',
+      'official_configs',
+      'bling',
+      'symupload_configs.json',
+  ])
+
+  yield api.test(
+      'linux_symupload_v2_config_file',
+      api.properties(target_platform='linux', host_platform='linux'),
+      api.path.exists(api.path['tmp_base'].join('symupload')),
+      api.symupload(input_properties_file),
+      api.post_process(post_process.MustRun, 'symupload.symupload_v2'),
+      api.post_process(post_process.StepCommandContains,
+                       'symupload.symupload_v2', [
+                           '--artifacts',
+                           '[TMP_BASE]/some_artifact.txt',
+                           '--api-key-file',
+                           '[CLEANUP]/symupload-api-key.txt',
+                       ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

@@ -37,4 +37,24 @@ message SymuploadData {
 }
 
 // Next id: 2
-message InputProperties { repeated SymuploadData symupload_datas = 1; }
+message InputProperties {
+  repeated SymuploadData symupload_datas = 1;
+
+  // The path (relative to checkout_dir) to the file containing
+  // specs for archive data. symupload_datas will both
+  // be ignored if this path is specfied.
+  //
+  // An example file looks like
+  // [
+  //   {
+  //      "artifacts": [
+  //        "Chrome.app-arm64.breakpad",
+  //        "content_widget_extension.appex-arm64.breakpad",
+  //      ],
+  //      "url": "https://prod-crashsymbolcollector-pa.googleapis.com",
+  //      "base64_api_key": "base64_encoded_key",
+  //      "kms_key_path": "path/to/key"
+  //   }
+  // ]
+  repeated string source_side_spec_path = 2;
+}

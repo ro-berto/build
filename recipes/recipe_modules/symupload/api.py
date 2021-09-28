@@ -144,8 +144,13 @@ class SymuploadApi(recipe_api.RecipeApi):
       experimental: (bool) flag for experimental, meaning it will skip
                     symuploads.
     """
-    if not self._properties.symupload_datas and not config_file_path:
+    if not (self._properties.symupload_datas or
+            self._properties.source_side_spec_path or config_file_path):
       return
+
+    if self._properties.source_side_spec_path:
+      config_file_path = self.m.chromium_checkout.checkout_dir.join(
+          *self._properties.source_side_spec_path)
 
     if config_file_path:
       # read the file content and load it as a symupload_datas object
