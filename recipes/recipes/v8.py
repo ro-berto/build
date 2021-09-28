@@ -76,6 +76,8 @@ PROPERTIES = {
     'use_goma': Property(default=True, kind=bool),
     # Weather to use reclient for compilation.
     'use_remoteexec': Property(default=False, kind=bool),
+    # Whether to use reclient for compilation (deprecated).
+    'use_rbe': Property(default=False, kind=bool),
 }
 
 
@@ -83,13 +85,13 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
              enable_swarming, gclient_vars, mb_config_path, target_arch,
              target_platform, track_build_dependencies, triggers,
-             triggers_proxy, use_goma, use_remoteexec):
+             triggers_proxy, use_goma, use_remoteexec, use_rbe):
   link_to_parent(api)
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(
-          use_goma=use_goma, use_remoteexec=use_remoteexec),
+          use_goma=use_goma, use_remoteexec=use_remoteexec or use_rbe),
       binary_size_tracking,
       clusterfuzz_archive,
       coverage,
