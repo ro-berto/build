@@ -37,7 +37,7 @@ def RunSteps(api):
     api.isolate.isolate_tests(
         build_path, expected_targets)
     api.isolate.isolate_tests(
-        build_path, expected_targets, use_cas=True)
+        build_path, expected_targets)
 
 
 def GenTests(api):

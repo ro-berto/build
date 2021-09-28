@@ -153,8 +153,6 @@ class ANGLEApi(recipe_api.RecipeApi):
           self.m.chromium.output_dir,
           targets=compile_targets,
           verbose=True,
-          # TODO(crbug.com/1224266): remove this after migration.
-          use_cas=True,
       )
       self.m.chromium_tests.set_test_command_lines(tests, "")
       # ANGLE marks entire failing shards as invalid. We retry them here.

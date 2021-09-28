@@ -65,9 +65,6 @@ class IsolateApi(recipe_api.RecipeApi):
       swarm_hashes_property_name='swarm_hashes',
       step_name=None,
       suffix='',
-      # TODO(crbug.com/chrome-operations/49): remove this after
-      # isolate server shutdown.
-      use_cas=True,
       **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
@@ -88,7 +85,6 @@ class IsolateApi(recipe_api.RecipeApi):
             make sure to pass different propery names for each invocation.
         suffix: suffix of isolate_tests step.
             e.g. ' (with patch)', ' (without patch)'.
-        use_cas: whether upload files to RBE-CAS or not.
     """
 
     # No isolated tests found.
@@ -114,13 +110,10 @@ class IsolateApi(recipe_api.RecipeApi):
         self.m.json.output(),
     ] + (['--verbose'] if verbose else [])
 
-    if use_cas:
-      args.extend(['-cas-instance', self.m.cas.instance])
+    args.extend(['-cas-instance', self.m.cas.instance])
 
-      # TODO(b/187913980): this is for investigation of upload failures.
-      args.extend(['-log-level', 'debug'])
-    else:
-      args.extend(['--isolate-server', self._isolate_server])
+    # TODO(b/187913980): this is for investigation of upload failures.
+    args.extend(['-log-level', 'debug'])
 
     args.extend([
         build_dir.join('%s.isolated.gen.json' % t)
@@ -131,7 +124,7 @@ class IsolateApi(recipe_api.RecipeApi):
         step_name or ('isolate tests%s' % suffix),
         args,
         step_test_data=lambda: self.test_api.output_json(
-            targets, use_cas=use_cas),
+            targets),
         **kwargs)
 
     swarm_hashes = {}
@@ -149,9 +142,6 @@ class IsolateApi(recipe_api.RecipeApi):
 
     if swarm_hashes:
       self.set_isolated_tests(swarm_hashes)
-
-    if not use_cas:
-      step_result.presentation.properties['isolate_server'] = self._isolate_server
 
     if (swarm_hashes_property_name and
         len(swarm_hashes) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH):

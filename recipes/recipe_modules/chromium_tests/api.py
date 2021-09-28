@@ -377,11 +377,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     args = self.m.gn.parse_gn_args(gn_args)
     return args.get('use_remoteexec') == 'true' or args.get('use_rbe') == 'true'
 
-  def _use_cas(self, builder_config):
-    # TODO(crbug.com/1143122): remove after migration.
-    return ("chromium.chromium_tests.use_isolate" not in
-            self.m.buildbucket.build.input.experiments)
-
   def compile_specific_targets(self,
                                builder_id,
                                builder_config,
@@ -515,15 +510,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             suffix=name_suffix,
             targets=list(set(isolated_targets)),
             verbose=True,
-            use_cas=self._use_cas(builder_config),
             swarm_hashes_property_name=swarm_hashes_property_name)
 
         self.set_test_command_lines(tests, name_suffix)
 
         if builder_config.perf_isolate_upload:
-          instance = (
-              self.m.cas.instance if self._use_cas(builder_config) else
-              self.m.isolate.isolate_server)
+          instance = self.m.cas.instance
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
               self.m.perf_dashboard.get_change_info([{
@@ -1089,7 +1081,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.chromium.output_dir,
             failing_swarming_tests,
             suffix=' (%s)' % suffix,
-            use_cas=self._use_cas(builder_config),
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
