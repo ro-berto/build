@@ -1,6 +1,13 @@
 [
   {
     "cmd": [],
+    "name": "triggered by",
+    "~followup_annotations": [
+      "@@@STEP_LINK@parent build@https://someinfrasite.com/build/123@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "initialization"
   },
   {

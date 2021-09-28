@@ -1354,6 +1354,7 @@ class V8Api(recipe_api.RecipeApi):
     properties = {
       'parent_got_revision': self.revision,
       'parent_buildername': self.m.buildbucket.builder_name,
+      'parent_build': self.m.buildbucket.build_url(),
     }
     if self.m.scheduler.triggers:
       sched_trs = self.m.scheduler.triggers

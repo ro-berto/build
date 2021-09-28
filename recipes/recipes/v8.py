@@ -84,6 +84,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              enable_swarming, gclient_vars, mb_config_path, target_arch,
              target_platform, track_build_dependencies, triggers,
              triggers_proxy, use_goma, use_remoteexec):
+  link_to_parent(api)
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
@@ -183,6 +184,13 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
   if api.v8.should_collect_post_compile_metrics:
     with api.step.nest('measurements'):
       api.v8.collect_post_compile_metrics()
+
+
+def link_to_parent(api):
+  value = api.properties.get('parent_build')
+  if value :
+    step_result = api.step('triggered by', [])
+    step_result.presentation.links['parent build'] = value
 
 
 def GenTests(api):

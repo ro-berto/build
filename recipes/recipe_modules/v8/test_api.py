@@ -537,6 +537,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
+          parent_build='https://someinfrasite.com/build/123',
       )
       test += self.m.scheduler(triggers=[
         self.example_scheduler_buildbucket_trigger('a'),
