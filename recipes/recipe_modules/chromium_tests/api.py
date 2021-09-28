@@ -193,6 +193,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def prepare_checkout(self,
                        builder_config,
                        report_cache_state=True,
+                       set_output_commit=None,
                        root_solution_revision=None,
                        runhooks_suffix=None,
                        **kwargs):
@@ -200,6 +201,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     Args:
       runhooks_suffix: Suffix for gclient runhooks step name
     """
+    if set_output_commit is None:
+      set_output_commit = builder_config.set_output_commit
     if report_cache_state:
       with self.m.step.nest('builder cache') as presentation:
         contents = self.m.file.listdir('check if empty',
@@ -221,7 +224,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     root_solution_revision = (root_solution_revision or
                               self.m.properties.get('root_solution_revision'))
     update_step = self.m.chromium_checkout.ensure_checkout(
-        builder_config, root_solution_revision=root_solution_revision, **kwargs)
+        builder_config,
+        set_output_commit=set_output_commit,
+        root_solution_revision=root_solution_revision,
+        **kwargs)
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
@@ -1314,7 +1320,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step, targets_config = self.prepare_checkout(
         builder_config,
         timeout=3600,
-        set_output_commit=builder_config.set_output_commit,
         root_solution_revision=root_solution_revision,
         no_fetch_tags=not builder_config.fetch_tags,
         add_blamelists=True)
@@ -1923,7 +1928,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_update_step, targets_config = self.prepare_checkout(
         builder_config,
         timeout=3600,
-        set_output_commit=builder_config.set_output_commit,
         no_fetch_tags=True,
         root_solution_revision=root_solution_revision)
 

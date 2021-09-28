@@ -38,7 +38,8 @@ def RunSteps(api):
       chromium.BuilderId.create_for_group('chromium.linux', 'Linux Builder'))
   # configure_build() is required by prepare-checkout
   api.chromium_tests.configure_build(builder_config)
-  api.chromium_tests.prepare_checkout(builder_config, report_cache_state=False)
+  api.chromium_tests.prepare_checkout(
+      builder_config, set_output_commit=False, report_cache_state=False)
 
   api.step('dirmd chromium-update', [
     api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),

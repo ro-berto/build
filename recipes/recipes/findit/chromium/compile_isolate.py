@@ -59,7 +59,10 @@ def RunSteps(api, target_testername, revision, isolated_targets):
 
   builder_config = api.findit.get_builder_config_for_mirror(bot_mirror)
   bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
-      builder_config, root_solution_revision=revision, report_cache_state=False)
+      builder_config,
+      root_solution_revision=revision,
+      set_output_commit=False,
+      report_cache_state=False)
 
   # Find the matching test targets.
   tests = [

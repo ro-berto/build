@@ -90,6 +90,7 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
     bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
         root_solution_revision=revision,
+        set_output_commit=False,
         report_cache_state=False)
 
     compile_targets = sorted(set(compile_targets or []))
@@ -160,6 +161,7 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
   api.chromium_tests.prepare_checkout(
       builder_config,
       root_solution_revision=bad_revision,
+      set_output_commit=False,
       report_cache_state=False)
 
   # Retrieve revisions in the regression range. The returned revisions are in

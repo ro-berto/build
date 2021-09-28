@@ -87,7 +87,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
         builder_config,
         timeout=3600,
-        set_output_commit=builder_config.set_output_commit,
         enforce_fetch=True,
         no_fetch_tags=True,
         refs=[ref])

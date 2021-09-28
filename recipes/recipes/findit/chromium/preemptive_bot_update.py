@@ -100,7 +100,7 @@ def RunSteps(api):
     refresh_checkout = checkout_age_seconds > NOT_FRESH
   if refresh_checkout:
     api.chromium_tests.prepare_checkout(
-        builder_config, report_cache_state=False)
+        builder_config, set_output_commit=False, report_cache_state=False)
 
 
 def GenTests(api):

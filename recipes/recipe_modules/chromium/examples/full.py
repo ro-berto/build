@@ -36,7 +36,7 @@ def RunSteps(api):
     for config in configs:
       api.chromium.apply_config(config)
 
-    api.chromium_tests.prepare_checkout(builder_config)
+    api.chromium_tests.prepare_checkout(builder_config, set_output_commit=False)
 
     mb_config_path = api.properties.get('mb_config_path')
 

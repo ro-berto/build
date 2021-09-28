@@ -207,6 +207,7 @@ class FinditApi(recipe_api.RecipeApi):
       bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
           builder_config,
           root_solution_revision=revision,
+          set_output_commit=False,
           report_cache_state=False)
 
       # Figure out which test steps to run.
@@ -372,6 +373,7 @@ class FinditApi(recipe_api.RecipeApi):
     self.m.chromium_tests.prepare_checkout(
         builder_config,
         root_solution_revision=revision,
+        set_output_commit=False,
         report_cache_state=False)
 
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
