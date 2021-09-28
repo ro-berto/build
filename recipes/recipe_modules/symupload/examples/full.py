@@ -184,7 +184,11 @@ def GenTests(api):
   yield api.test(
       'linux_symupload_v2_config_file',
       api.properties(target_platform='linux', host_platform='linux'),
-      api.path.exists(api.path['tmp_base'].join('symupload')),
+      api.path.exists(
+          api.path['tmp_base'].join('symupload'),
+          api.path['cache'].join('builder', 'src-internal', 'infra',
+                                 'official_configs', 'bling',
+                                 'symupload_configs.json')),
       api.symupload(input_properties_file),
       api.post_process(post_process.MustRun, 'symupload.symupload_v2'),
       api.post_process(post_process.StepCommandContains,

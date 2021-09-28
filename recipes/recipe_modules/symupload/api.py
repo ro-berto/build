@@ -152,7 +152,7 @@ class SymuploadApi(recipe_api.RecipeApi):
       config_file_path = self.m.chromium_checkout.checkout_dir.join(
           *self._properties.source_side_spec_path)
 
-    if config_file_path:
+    if config_file_path and self.m.path.exists(config_file_path):
       # read the file content and load it as a symupload_datas object
       # for the remainder of the workflow to run.
       config = self.m.file.read_json(

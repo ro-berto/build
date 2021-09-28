@@ -26,7 +26,8 @@ def RunSteps(api):
       })
 
   api.symupload(
-      api.path['tmp_base'], config_file_path='/some/path/to/config.json')
+      api.path['tmp_base'],
+      config_file_path=api.path['cache'].join('path', 'to', 'config.json'))
 
 
 def GenTests(api):
@@ -34,7 +35,8 @@ def GenTests(api):
   yield api.test(
       'symupload_file',
       api.properties(target_platform='mac', host_platform='mac'),
-      api.path.exists(api.path['tmp_base'].join('symupload')),
+      api.path.exists(api.path['tmp_base'].join('symupload'),
+                      api.path['cache'].join('path', 'to', 'config.json')),
       api.post_process(
           post_process.StepCommandContains, 'symupload.symupload_v2', [
               "--artifacts", "[TMP_BASE]/some_artifact.txt", "--api-key-file",
