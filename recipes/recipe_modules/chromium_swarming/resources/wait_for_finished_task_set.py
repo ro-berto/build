@@ -148,12 +148,12 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server):
       # Do exponential backoff.
       attempts += 1
       time_to_sleep_sec = 2 ** attempts
-      # Cap the sleep time at 2 minutes. Waiting longer than that could start to
-      # impact the actual cycle time of the builder; if we wait for 16 minutes,
-      # and (potentially) the final task finished one minute into that sleep,
-      # we'd waste 15 minutes of time just sitting there. Ideally this would be
-      # interrupt driven.
-      time_to_sleep_sec = min(time_to_sleep_sec, 2 * 60)
+      # Cap the sleep time at 15 seconds. Waiting longer than that could start
+      # to impact the actual cycle time of the builder; if we wait for 16
+      # minutes, and (potentially) the final task finished one minute into that
+      # sleep, we'd waste 15 minutes of time just sitting there. Ideally this
+      # would be interrupt driven.
+      time_to_sleep_sec = min(time_to_sleep_sec, 15)
       logging.info('sleeping for %d seconds' % time_to_sleep_sec)
       time.sleep(time_to_sleep_sec)
   finally:
