@@ -147,8 +147,8 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
           }),
       api.chromium_swarming.wait_for_finished_task_set(
           [([], 1), ([['0'], ['1']], 1)], nest_step_name='collect tasks'),
@@ -164,8 +164,8 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
           }),
       api.chromium_swarming.wait_for_finished_task_set(
           [([], 1), ([['1']], 1)], nest_step_name='collect tasks'),
@@ -185,8 +185,8 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
           }),
       api.chromium_swarming.wait_for_finished_task_set(
           [([], 1), ([], 1), ([], 1), ([], 1), ([], 1), ([['0'], ['1']], 1)],
@@ -278,9 +278,9 @@ def GenTests(api):
           retry_invalid_shards=True,
           swarm_hashes={
               'base_unittests_invalid_results':
-                  '[dummy hash for base_unittests]',
+                  '[dummy hash for base_unittests/size]',
               'base_unittests_invalid_results_2':
-                  '[dummy hash for base_unittests_2]',
+                  '[dummy hash for base_unittests_2/size]',
           }),
       api.chromium_swarming.wait_for_finished_task_set(
           [([], 1), ([['0'], ['1']], 1)], nest_step_name='collect tasks'),
@@ -324,9 +324,9 @@ def GenTests(api):
           test_swarming=True,
           swarm_hashes={
               'base_unittests_failed_results':
-                  '[dummy hash for base_unittests]',
+                  '[dummy hash for base_unittests/size]',
               'base_unittests_failed_results_2':
-                  '[dummy hash for base_unittests_2]',
+                  '[dummy hash for base_unittests_2/size]',
           },
           retry_failed_shards=True,
           retry_invalid_shards=True,
@@ -344,9 +344,9 @@ def GenTests(api):
           test_swarming=True,
           swarm_hashes={
               'base_unittests_failed_results':
-                  '[dummy hash for base_unittests]',
+                  '[dummy hash for base_unittests/size]',
               'base_unittests_failed_results_2':
-                  '[dummy hash for base_unittests_2]',
+                  '[dummy hash for base_unittests_2/size]',
           },
           retry_failed_shards=True,
           retry_invalid_shards=True,
@@ -367,8 +367,8 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
           },
           retry_failed_shards=True,
           retry_invalid_shards=True,
@@ -391,8 +391,8 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests]',
-              'base_unittests_2': '[dummy hash for base_unittests_2]',
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
           },
           retry_failed_shards=True,
           retry_invalid_shards=True,

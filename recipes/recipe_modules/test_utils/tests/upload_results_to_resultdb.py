@@ -81,7 +81,7 @@ def GenTests(api):
       api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
@@ -113,7 +113,7 @@ def GenTests(api):
       api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
@@ -157,7 +157,7 @@ def GenTests(api):
       api.properties(
           is_swarming_test=False,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.post_process(post_process.DropExpectation),
   )
@@ -205,7 +205,7 @@ def GenTests(api):
       api.chromium.try_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
@@ -250,7 +250,7 @@ def GenTests(api):
       api.builder_group.for_current('g'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
@@ -312,7 +312,7 @@ def GenTests(api):
       api.chromium.ci_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
@@ -360,7 +360,7 @@ def GenTests(api):
       api.chromium.ci_build(builder_group='g', builder='linux-rel'),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           is_swarming_test=True,
       ),
