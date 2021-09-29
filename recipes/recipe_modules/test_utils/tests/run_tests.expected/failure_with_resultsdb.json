@@ -653,29 +653,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.dump memory stats",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "rdb",
       "rpc",
       "luci.resultdb.v1.ResultDB",
@@ -737,52 +714,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.dump memory stats (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.dump memory stats (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -850,29 +781,6 @@
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_failed_results_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"base_unittests_failed_results_test_case1\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests_failed_results\"}}, \"variantHash\": \"base_unittests_failed_results_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.dump memory stats (4)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1482,29 +1390,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (retry shards).dump memory stats",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "rdb",
       "rpc",
       "luci.resultdb.v1.ResultDB",
@@ -1566,29 +1451,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_utils]/resources/print_mem_stats.py",
-      "123456789"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (retry shards).dump memory stats (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

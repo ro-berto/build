@@ -5,7 +5,6 @@
 from collections import defaultdict
 import itertools
 import json
-import os
 import six.moves.urllib_parse as urlparse
 
 from recipe_engine import recipe_api
@@ -290,8 +289,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     groups = [
         LocalGroup(local_test_suites, self.m.resultdb),
-        SwarmingGroup(swarming_test_suites, self.m.resultdb,
-                      self.print_mem_stats),
+        SwarmingGroup(swarming_test_suites, self.m.resultdb),
         SkylabGroup(skylab_test_suites, self.m.resultdb),
     ]
 
@@ -1147,22 +1145,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     return GTestResultsOutputPlaceholder(self, add_json_log, leak_to=leak_to)
 
-  def print_mem_stats(self):
-    """Displays a step that prints the memory usage of the current recipe proc.
-
-    Excessive amounts of test failures can make the recipe run into OOM errors
-    on smaller machines. So print some basic memory stats as we collect test
-    results. This should hopefully narrow down what's consuming the most mem.
-    TODO(crbug.com/1254021): Remove this.
-    """
-    current_pid = os.getpid() if not self._test_data.enabled else '123456789'
-    cmd = [
-        'vpython3' + ('.exe' if self.m.platform.is_win else ''),
-        self.resource('print_mem_stats.py'),
-        current_pid,
-    ]
-    self.m.step('dump memory stats', cmd)
-
 
 class TestGroup(object):
   """Abstract class defines the shared interface for tests.
@@ -1170,7 +1152,6 @@ class TestGroup(object):
   Attributes:
     * test_suites - Iterable of objects implementing the steps.Test interface.
     * resultdb_api - Recipe API object for the resultdb recipe module.
-    * collect_callback - A callback to invoke upon test collection.
   """
 
   def __init__(self, test_suites, resultdb_api=None):
@@ -1252,7 +1233,6 @@ class TestGroup(object):
           suite_name=test.canonical_name,
           total_tests_ran=test_stats.total_test_results,
           failure_on_exit=test.failure_on_exit(suffix))
-
     test.update_rdb_results(suffix, res)
 
 
@@ -1275,10 +1255,9 @@ class LocalGroup(TestGroup):
 
 class SwarmingGroup(TestGroup):
 
-  def __init__(self, test_suites, resultdb, collect_callback):
+  def __init__(self, test_suites, resultdb):
     super(SwarmingGroup, self).__init__(test_suites, resultdb)
     self._task_ids_to_test = {}
-    self._collect_callback = collect_callback
 
   def pre_run(self, caller_api, suffix):
     """Executes the |pre_run| method of each test."""
@@ -1307,9 +1286,7 @@ class SwarmingGroup(TestGroup):
                 attempts=attempts))
         for task_set in finished_sets:
           test = self._task_ids_to_test[tuple(task_set)]
-          self._collect_callback()
           self.fetch_rdb_results(test, suffix)
-          self._collect_callback()
 
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
