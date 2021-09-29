@@ -95,6 +95,24 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='win',
         ),
+    'win-archive-tagged':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['checkout_pgo_profiles'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+            },
+            archive_build=True,
+            gs_bucket='chromium-browser-versioned',
+            gs_build_name='experimental/Win_x64_Tagged',
+            gs_acl='public-read',
+            simulation_platform='win',
+        ),
     'mac-official':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
