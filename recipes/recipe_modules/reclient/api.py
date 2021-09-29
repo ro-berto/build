@@ -380,15 +380,18 @@ class ReclientApi(recipe_api.RecipeApi):
     # `bqupload`'s expected JSON proto format is different from that of the
     # protobuf's native MessageToJson, so we have to dump this json to string on
     # our own.
+    # TODO(gbeaty) Once support for python2 is dropped, the json.dumps calls
+    # don't need sort_keys or separators arguments
     step_result = self.m.step(
         'upload RBE metrics to BigQuery', [
             bqupload_cipd_path,
             BQ_TABLE_NAME,
         ],
-        stdin=self.m.raw_io.input(data=json.dumps(bq_json_dict)),
+        stdin=self.m.raw_io.input(
+            data=json.dumps(bq_json_dict, sort_keys=True)),
         infra_step=True)
     step_result.presentation.logs['rbe_metrics'] = json.dumps(
-        bq_json_dict, indent=2)
+        bq_json_dict, sort_keys=True, indent=2, separators=(',', ': '))
 
   def _check_mismatch(self, stats):
     """Update self._mismatch if there is mismatches."""
@@ -488,7 +491,7 @@ class ReclientApi(recipe_api.RecipeApi):
       # https://github.com/python/cpython/blob/8dfe15625e6ea4357a13fec7989a0e6ba2bf1359/Lib/gzip.py#L259
       mtime = time.mktime(time_now.timetuple())
       with gzip.GzipFile(fileobj=f_out, mode='w', mtime=mtime) as gzip_out:
-        gzip_out.write(data_txt)
+        gzip_out.write(data_txt.encode('utf-8'))
 
       gzip_data = f_out.getvalue()
       if self._test_data.enabled:
