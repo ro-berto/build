@@ -5,6 +5,7 @@
 from recipe_engine import post_process, recipe_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.go.chromium.org.luci.swarming.proto.api import swarming as swarming_pb
 from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -95,19 +96,23 @@ def GenTests(api):
       filter_to_trigger(),
   )
 
-  led_properties = led_properties_pb.InputProperties()
-  led_properties.led_run_id = 'fake-id'
   yield api.test(
       'led',
       builder_with_tester_to_trigger(),
       api.properties(
           **{
-              '$recipe_engine/led': {
-                  'led_run_id': 'fake-run-id',
-                  'isolated_input': {
-                      'hash': 'fake-hash',
-                  },
-              },
+              '$recipe_engine/led':
+                  led_properties_pb.InputProperties(
+                      led_run_id='fake-run-id',
+                      rbe_cas_input=swarming_pb.CASReference(
+                          cas_instance=(
+                              'projects/example/instances/default_instance'),
+                          digest=swarming_pb.Digest(
+                              hash='examplehash',
+                              size_bytes=71,
+                          ),
+                      ),
+                  ),
           }),
       api.post_check(post_process.StatusSuccess),
       filter_to_trigger(),
