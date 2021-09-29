@@ -145,7 +145,7 @@ class BuilderConfig(object):
              builder_db,
              builder_ids,
              builder_ids_in_scope_for_testing=None,
-             python_api=None,
+             step_api=None,
              **kwargs):
     """Create a BuilderConfig instance.
 
@@ -158,8 +158,8 @@ class BuilderConfig(object):
       * builder_ids_in_scope_for_testing - The IDs of the builders to
         only collect targets and tests from. Any IDs present in
         `builder_ids` will not be present in the final value.
-      * python_api - Optional python API. If provided, in the event that
-        a BuilderConfigException would be raised, an infra failing step
+      * step_api - Optional step API. If provided, in the event that a
+        BuilderConfigException would be raised, an infra failing step
         will be created with the details instead.
       * kwargs - Any additional arguments to initialize fields of the
         BuilderConfig.
@@ -173,9 +173,9 @@ class BuilderConfig(object):
 
     Raises:
       * BuilderConfigException if there isn't configuration matching all
-        of builders in mirrors and python_api is None.
+        of builders in mirrors and step_api is None.
       * InfraFailure if there isn't configuration matching all of
-        builders in mirrors and python_api is not None.
+        builders in mirrors and step_api is not None.
     """
     builder_ids_in_scope_for_testing = builder_ids_in_scope_for_testing or []
 
@@ -191,9 +191,11 @@ class BuilderConfig(object):
               "No configuration present for builder '{}' in group '{}'".format(
                   b.builder, b.group))
     except BuilderConfigException as e:
-      if python_api is not None:
-        python_api.infra_failing_step(
-            str(e), [traceback.format_exc()], as_log='details')
+      if step_api is not None:
+        result = step_api(str(e), [])
+        result.presentation.status = step_api.EXCEPTION
+        result.presentation.logs['details'] = traceback.format_exc()
+        step_api.raise_on_failure(result)
       raise
 
     return cls(
@@ -208,7 +210,7 @@ class BuilderConfig(object):
              builder_db,
              try_db=None,
              use_try_db=True,
-             python_api=None):
+             step_api=None):
     """Create a BuilderConfig by looking up a builder.
 
     Args:
@@ -217,8 +219,8 @@ class BuilderConfig(object):
         up in.
       * try_db - An optional TryDatabase that the builder will be looked
         up in.
-      * python_api - Optional python API. If provided, in the event that
-        a BuilderConfigException would be raised, an infra failing step
+      * step_api - Optional step API. If provided, in the event that a
+        BuilderConfigException would be raised, an infra failing step
         will be created with the details instead.
 
     Returns:
@@ -231,9 +233,9 @@ class BuilderConfig(object):
 
     Raises:
       * BuilderConfigException if there isn't configuration matching the
-        indicated builder and python_api is None.
+        indicated builder and step_api is None.
       * InfraFailure if there isn't configuration matching the indicated
-        builder and python_api is not None.
+        builder and step_api is not None.
     """
     assert isinstance(builder_db, BuilderDatabase), (
         'Expected BuilderDatabase for builder_db, got {}'.format(
@@ -272,7 +274,7 @@ class BuilderConfig(object):
           m.tester_id for m in mirrors if m.tester_id
       ]
 
-    return cls.create(builder_db, python_api=python_api, **kwargs)
+    return cls.create(builder_db, step_api=step_api, **kwargs)
 
   @cached_property
   def builder_ids_in_scope_for_testing(self):

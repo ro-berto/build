@@ -54,8 +54,8 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
         create. If not provided, BuilderConfig will be used. The class
         must have a lookup method that takes the builder_id, builder_db
         and try_db as positional arguments and keyword arguments
-        use_try_db and python_api. use_try_db acts as indicated above.
-        python_api is the API object for the python recipe module and
+        use_try_db and step_api. use_try_db acts as indicated above.
+        step_api is the API object for the step recipe module and
         should be used for creating an infra failing step if creation of
         the builder config fails.
 
@@ -78,5 +78,5 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
         builder_db,
         try_db,
         use_try_db=use_try_db,
-        python_api=self.m.python)
+        step_api=self.m.step)
     return builder_id, builder_config

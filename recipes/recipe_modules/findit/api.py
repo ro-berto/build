@@ -45,7 +45,7 @@ class FinditApi(recipe_api.RecipeApi):
         builder_ids_in_scope_for_testing=([mirror.tester_id]
                                           if mirror.tester_id else []),
         include_all_triggered_testers=False,
-        python_api=self.m.python)
+        step_api=self.m.step)
 
   def _calculate_repo_dir(self, solution_name):
     """Returns the relative path of the solution checkout to the root one."""

@@ -9,7 +9,7 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'recipe_engine/platform',
-    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 # Forward symbols for other modules to import

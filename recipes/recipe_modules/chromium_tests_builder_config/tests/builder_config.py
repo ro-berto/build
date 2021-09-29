@@ -66,12 +66,12 @@ def RunSteps(api):
              " in group 'fake-group'")
   api.assertions.assertEqual(str(caught.exception), message)
 
-  # Test create failure when using python API
+  # Test create failure when using step API
   with api.assertions.assertRaises(api.step.InfraFailure) as caught:
     builder_config_module.BuilderConfig.create(
         builders,
         [BuilderId.create_for_group('non-existent-group', 'fake-builder')],
-        python_api=api.python)
+        step_api=api.step)
   name = "No configuration present for group 'non-existent-group'"
   api.assertions.assertEqual(caught.exception.result.name, name)
 
