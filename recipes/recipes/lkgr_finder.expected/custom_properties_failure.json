@@ -32,6 +32,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -87,6 +99,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -101,6 +125,18 @@
       "--format",
       "json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read lkgr from ref",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -138,6 +174,18 @@
       "[CACHE]/builder/lw"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "mkdirs builder/lw"
   },
   {
@@ -160,6 +208,18 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/infra",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "calculate custom lkgr",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
@@ -182,6 +242,18 @@
       "gs://custom/lkgr-status/custom-lkgr-status.html"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@custom-lkgr-status.html@https://storage.cloud.google.com/custom/lkgr-status/custom-lkgr-status.html@@@"

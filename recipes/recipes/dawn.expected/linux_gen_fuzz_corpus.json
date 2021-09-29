@@ -12,6 +12,18 @@
       "[CACHE]/builder"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "init cache if not exists"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -104,6 +128,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -124,6 +160,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -154,6 +202,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -181,6 +241,18 @@
       "--args=is_debug=false is_component_build=true use_goma=true dawn_use_swiftshader=true goma_dir=\"[CACHE]/goma/client\" dawn_enable_d3d12=false"
     ],
     "cwd": "[CACHE]/builder/dawn",
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gn gen"
   },
   {
@@ -200,6 +272,18 @@
       "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -221,6 +305,18 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -253,6 +349,18 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -268,6 +376,18 @@
       "dawn_unittests",
       "dawn_end2end_tests"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja"
   },
   {
@@ -289,6 +409,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -321,6 +453,18 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -340,6 +484,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -389,6 +545,18 @@
       "--buildbot-buildername",
       "linux"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,
     "~followup_annotations": [
@@ -417,6 +585,18 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -435,6 +615,18 @@
       "[TMP_BASE]/testcases"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "mkdir [TMP_BASE]/testcases"
   },
   {
@@ -450,6 +642,18 @@
       "[TMP_BASE]/hashed_testcases"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "mkdir [TMP_BASE]/hashed_testcases"
   },
   {
@@ -458,6 +662,18 @@
       "--use-wire",
       "--wire-trace-dir=[TMP_BASE]/testcases"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Trace the dawn_unittests"
   },
   {
@@ -467,6 +683,18 @@
       "--use-wire",
       "--wire-trace-dir=[TMP_BASE]/testcases"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Trace the dawn_end2end_tests with SwiftShader"
   },
   {
@@ -480,6 +708,18 @@
       "[TMP_BASE]/testcases"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "listdir [TMP_BASE]/testcases",
     "~followup_annotations": [
       "@@@STEP_LOG_END@listdir@@@"
@@ -491,6 +731,18 @@
       "-u",
       "\nimport hashlib\nfrom shutil import copyfile\nimport os\nimport sys\n\nfor arg in sys.argv[1:]:\n  h = hashlib.md5(open(arg, \"rb\").read()).hexdigest()\n  copyfile(arg, os.path.join(\"[TMP_BASE]/hashed_testcases\", \"trace_\" + h))\n"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Hash testcases",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -523,6 +775,18 @@
       "gs://clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_frontend_fuzzer"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil Upload to the dawn_wire_server_and_frontend_fuzzer seed corpus",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://console.cloud.google.com/storage/browser/clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_frontend_fuzzer@@@"
@@ -546,6 +810,18 @@
       "gs://clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_vulkan_backend_fuzzer"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil Upload to the dawn_wire_server_and_vulkan_backend_fuzzer seed corpus",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://console.cloud.google.com/storage/browser/clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_vulkan_backend_fuzzer@@@"
@@ -569,6 +845,18 @@
       "gs://clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_d3d12_backend_fuzzer"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil Upload to the dawn_wire_server_and_d3d12_backend_fuzzer seed corpus",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://console.cloud.google.com/storage/browser/clusterfuzz-corpus/libfuzzer/dawn_wire_server_and_d3d12_backend_fuzzer@@@"

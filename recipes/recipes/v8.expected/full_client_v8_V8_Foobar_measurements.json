@@ -16,6 +16,18 @@
         "[CACHE]/builder/v8/third_party/depot_tools"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "measurements.track build dependencies (fyi)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -49,6 +61,18 @@
       "-t",
       "extra.secret.token.should.not.be.logged"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "measurements.perf dashboard post",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -69,6 +93,18 @@
       "[CACHE]/builder/v8/out/build/d8"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "measurements.Check binary size",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -89,6 +125,18 @@
       "-t",
       "extra.secret.token.should.not.be.logged"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "measurements.perf dashboard post (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -49,6 +49,18 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "base_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output[stderr]@rdb-stream: included \"invocations/some-inv-name\" in \"invocations/parent-inv-name\"@@@",
@@ -78,6 +90,18 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Upload to test-results [base_unittests]"
   },
   {
@@ -89,6 +113,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "base_unittests stats",
     "stdin": "{\"invocations\": [\"invocations/some-inv-name\"]}",
     "~followup_annotations": [
@@ -116,6 +152,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "base_unittests results",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"

@@ -33,6 +33,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -83,6 +95,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -100,6 +124,18 @@
     ],
     "cwd": "[START_DIR]/crashpad",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -124,6 +160,18 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read SetEnv.x86.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -165,6 +213,18 @@
         "[CACHE]/windows_sdk/win_sdk/bin/x64"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate build files x86"
   },
   {
@@ -176,6 +236,18 @@
       "mspdbsrv.exe"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "taskkill mspdbsrv"
   },
   {
@@ -193,6 +265,18 @@
     ],
     "cwd": "[START_DIR]/crashpad",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -217,6 +301,18 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read SetEnv.x64.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -258,6 +354,18 @@
         "[CACHE]/windows_sdk/win_sdk/bin/x64"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate build files x64"
   },
   {
@@ -269,6 +377,18 @@
       "mspdbsrv.exe"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "taskkill mspdbsrv (2)"
   },
   {
@@ -285,6 +405,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -308,6 +440,18 @@
       "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x86.json",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read SetEnv.x86.json (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -346,6 +490,18 @@
         "[CACHE]/windows_sdk/win_sdk/bin/x64"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja x86"
   },
   {
@@ -356,6 +512,18 @@
       "/im",
       "mspdbsrv.exe"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "taskkill mspdbsrv (3)"
   },
   {
@@ -372,6 +540,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -395,6 +575,18 @@
       "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read SetEnv.x64.json (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -433,6 +625,18 @@
         "[CACHE]/windows_sdk/win_sdk/bin/x64"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja x64"
   },
   {
@@ -443,6 +647,18 @@
       "/im",
       "mspdbsrv.exe"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "taskkill mspdbsrv (4)"
   },
   {
@@ -452,6 +668,18 @@
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug_x86"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run tests",
     "timeout": 300
   },
@@ -464,6 +692,18 @@
     ],
     "env": {
       "CRASHPAD_TEST_32_BIT_OUTPUT": "[START_DIR]/crashpad/out/Debug_x86"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "run tests (2)",
     "timeout": 300
@@ -480,6 +720,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read swarming_test_spec",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming_test_spec.pyl@[@@@",
@@ -513,6 +765,18 @@
       "os",
       "Chrome"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run_tests_on_x86"
   },
   {

@@ -12,6 +12,18 @@
       "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "init src_root if not exists"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -104,6 +128,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -119,6 +155,18 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -162,6 +210,18 @@
         "[START_DIR]\\packages\\bin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install deps"
   },
   {
@@ -182,6 +242,18 @@
         "[START_DIR]\\packages",
         "[START_DIR]\\packages\\bin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "build"
   },
@@ -204,6 +276,18 @@
         "[START_DIR]\\packages\\bin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "create python package"
   },
   {
@@ -223,6 +307,18 @@
       "[START_DIR]\\hosts"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup tests.init host_dir if not exists",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -241,6 +337,18 @@
       "[START_DIR]\\logs"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup tests.init logs_dir if not exists",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -259,6 +367,18 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup tests.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -292,6 +412,18 @@
       "[START_DIR]\\hosts"
     ],
     "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\scripts\\tests",
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup tests.generate host files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -327,6 +459,18 @@
         "[START_DIR]\\packages_tests\\bin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run all tests"
   },
   {
@@ -346,6 +490,18 @@
       "PATH": [
         "[START_DIR]\\packages_tests\\bin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "celab:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test summary.parse summary",
     "~followup_annotations": [

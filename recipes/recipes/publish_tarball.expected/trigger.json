@@ -11,6 +11,18 @@
       "gs://chromium-browser-official/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil ls"
   },
   {
@@ -25,6 +37,18 @@
       "--outfile",
       "/path/to/tmp/"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "GET https://omahaproxy.appspot.com/history"
   },
   {
@@ -36,6 +60,18 @@
       "scheduler.Scheduler.EmitTriggers"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "luci-scheduler.EmitTriggers",
     "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"publish_tarball\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"version\": \"74.0.3729.169\"}, \"tags\": [\"parent_buildername:builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"builder/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [

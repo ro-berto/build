@@ -12,6 +12,18 @@
       "RBE_instance": "projects/example/instances/default_instance"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess for reclient.install reclient_cfgs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -30,6 +42,18 @@
       "[CACHE]/builder/reclient/deps/Linux_reclient"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess for reclient.reclient cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -46,6 +70,18 @@
       "[CACHE]/builder/reclient/deps/Linux_reclient"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess for reclient.list reclient cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -73,6 +109,18 @@
       "RBE_use_gce_credentials": "true"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess for reclient.start reproxy via bootstrap",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -99,6 +147,18 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess for reclient.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -115,6 +175,18 @@
       "RBE_BAR": "bar",
       "RBE_FOO": "foo",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "compile (reclient)"
   },
@@ -136,6 +208,18 @@
       "unix:///[TMP_BASE]/reproxy.sock"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.shutdown reproxy via bootstrap",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -156,6 +240,18 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -173,6 +269,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.load rbe_metrics.pb",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -198,6 +306,18 @@
       "[CACHE]/cipd/infra/tools/bqupload/latest"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.install infra/tools/bqupload.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -217,6 +337,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.install infra/tools/bqupload.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -239,6 +371,18 @@
       "goma-logs.rbe_metrics.builds"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.upload RBE metrics to BigQuery",
     "stdin": "{\"build_id\": \"8945511751514863184\", \"created_at\": \"2012-05-14T12:53:21.500Z\", \"stats\": {\"environment\": [{\"value\": \"false\", \"key\": \"foo\"}, {\"value\": \"42\", \"key\": \"bar\"}]}}",
     "~followup_annotations": [
@@ -274,6 +418,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.read ninja log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -291,6 +447,18 @@
       "[TMP_BASE]/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.create ninja log gzip",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -309,6 +477,18 @@
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.gsutil upload ninja_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -332,6 +512,18 @@
       "[TMP_BASE]/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.gzip reproxy RPL",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -350,6 +542,18 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.gsutil upload reproxy RPL",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -367,6 +571,18 @@
       "[CLEANUP]/reclient_log_tmp_1"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.list reclient log directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -386,6 +602,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.read reclient log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -403,6 +631,18 @@
       "[TMP_BASE]/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.create reclient log tar",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -421,6 +661,18 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.gsutil upload reclient logs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -438,6 +690,18 @@
       "[CLEANUP]/reclient_log_tmp_1"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess for reclient.cleanup reclient log dir",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

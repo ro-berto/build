@@ -34,6 +34,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -91,6 +103,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -121,6 +145,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -155,6 +191,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -178,6 +226,18 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "lookup GN args",
     "~followup_annotations": [
@@ -209,6 +269,18 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "generate_build_files",
     "~followup_annotations": [
@@ -255,6 +327,18 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -281,6 +365,18 @@
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -317,6 +413,18 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -367,6 +475,18 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile"
   },
   {
@@ -408,6 +528,18 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile confirm no-op"
   },
   {
@@ -430,6 +562,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -463,6 +607,18 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -483,6 +639,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -536,6 +704,18 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,
     "~followup_annotations": [
@@ -568,6 +748,18 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -585,6 +777,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read infra revision",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
@@ -608,6 +812,18 @@
       "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/luci/isolate.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -627,6 +843,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/luci/isolate.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -671,6 +899,18 @@
       "[CACHE]/builder/src/out/Android64_M_Nexus5X/voip_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X/webrtc_nonparallel_tests.isolated.gen.json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -707,6 +947,18 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "find command lines",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -731,6 +983,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -751,6 +1015,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -774,12 +1050,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"AppRTCMobile_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for AppRTCMobile_test_apk/dummy size]\", \"name:AppRTCMobile_test_apk\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:AppRTCMobile_test_apk on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for AppRTCMobile_test_apk\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"AppRTCMobile_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for AppRTCMobile_test_apk/dummy size]\", \"name:AppRTCMobile_test_apk\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:AppRTCMobile_test_apk on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for AppRTCMobile_test_apk\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] AppRTCMobile_test_apk on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -803,6 +1091,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"AppRTCMobile_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -898,12 +1187,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for android_instrumentation_test_apk/dummy size]\", \"name:android_instrumentation_test_apk\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:android_instrumentation_test_apk on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for android_instrumentation_test_apk\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for android_instrumentation_test_apk/dummy size]\", \"name:android_instrumentation_test_apk\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:android_instrumentation_test_apk on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for android_instrumentation_test_apk\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] android_instrumentation_test_apk on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -927,6 +1228,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1022,12 +1324,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for audio_decoder_unittests/dummy size]\", \"name:audio_decoder_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:audio_decoder_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for audio_decoder_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for audio_decoder_unittests/dummy size]\", \"name:audio_decoder_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:audio_decoder_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for audio_decoder_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] audio_decoder_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1051,6 +1365,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1146,12 +1461,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"name:common_audio_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:common_audio_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"name:common_audio_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:common_audio_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1175,6 +1502,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1270,12 +1598,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for common_video_unittests/dummy size]\", \"name:common_video_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:common_video_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_video_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for common_video_unittests/dummy size]\", \"name:common_video_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:common_video_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_video_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] common_video_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1299,6 +1639,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1394,12 +1735,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"dcsctp_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for dcsctp_unittests/dummy size]\", \"name:dcsctp_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:dcsctp_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dcsctp_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"dcsctp_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for dcsctp_unittests/dummy size]\", \"name:dcsctp_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:dcsctp_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dcsctp_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] dcsctp_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1423,6 +1776,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"dcsctp_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1518,12 +1872,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:2\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_tests/dummy size]\", \"name:modules_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:2\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_tests/dummy size]\", \"name:modules_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_tests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1547,6 +1913,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1650,12 +2017,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:2\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_tests/dummy size]\", \"name:modules_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:2\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_tests/dummy size]\", \"name:modules_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_tests on Android (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1679,6 +2058,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1782,12 +2162,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1811,6 +2203,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1914,12 +2307,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1943,6 +2348,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2046,12 +2452,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2075,6 +2493,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2178,12 +2597,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2207,6 +2638,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2310,12 +2742,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2339,6 +2783,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2442,12 +2887,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for modules_unittests/dummy size]\", \"name:modules_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:modules_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] modules_unittests on Android (6)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2471,6 +2928,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2574,12 +3032,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] peerconnection_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2603,6 +3073,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2706,12 +3177,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] peerconnection_unittests on Android (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2735,6 +3218,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2838,12 +3322,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] peerconnection_unittests on Android (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2867,6 +3363,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -2970,12 +3467,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"name:peerconnection_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:peerconnection_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] peerconnection_unittests on Android (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2999,6 +3508,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3102,12 +3612,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_stats_unittests/dummy size]\", \"name:rtc_stats_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_stats_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_stats_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_stats_unittests/dummy size]\", \"name:rtc_stats_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_stats_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_stats_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_stats_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3131,6 +3653,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3226,12 +3749,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3255,6 +3790,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3358,12 +3894,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3387,6 +3935,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3490,12 +4039,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3519,6 +4080,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3622,12 +4184,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3651,6 +4225,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3754,12 +4329,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android (5)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3783,6 +4370,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:4:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3886,12 +4474,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"name:rtc_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:rtc_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] rtc_unittests on Android (6)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3915,6 +4515,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1:5:6\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4018,12 +4619,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for system_wrappers_unittests/dummy size]\", \"name:system_wrappers_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:system_wrappers_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for system_wrappers_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for system_wrappers_unittests/dummy size]\", \"name:system_wrappers_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:system_wrappers_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for system_wrappers_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] system_wrappers_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4047,6 +4660,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4142,12 +4756,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for test_support_unittests/dummy size]\", \"name:test_support_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:test_support_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for test_support_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for test_support_unittests/dummy size]\", \"name:test_support_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:test_support_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for test_support_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] test_support_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4171,6 +4797,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4266,12 +4893,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for tools_unittests/dummy size]\", \"name:tools_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:tools_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for tools_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for tools_unittests/dummy size]\", \"name:tools_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:tools_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for tools_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] tools_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4295,6 +4934,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4390,12 +5030,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] video_engine_tests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4419,6 +5071,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:0:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4522,12 +5175,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] video_engine_tests on Android (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4551,6 +5216,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:1:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4654,12 +5320,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] video_engine_tests on Android (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4683,6 +5361,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:2:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4786,12 +5465,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"name:video_engine_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:video_engine_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] video_engine_tests on Android (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4815,6 +5506,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/-1:3:4\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4918,12 +5610,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"voip_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for voip_unittests/dummy size]\", \"name:voip_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:voip_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for voip_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"voip_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for voip_unittests/dummy size]\", \"name:voip_unittests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:voip_unittests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for voip_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] voip_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4947,6 +5651,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"voip_unittests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -5042,12 +5747,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for webrtc_nonparallel_tests/dummy size]\", \"name:webrtc_nonparallel_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:webrtc_nonparallel_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_nonparallel_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Android64 (M Nexus5X)\", \"data:[dummy hash for webrtc_nonparallel_tests/dummy size]\", \"name:webrtc_nonparallel_tests\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Android64 (M Nexus5X)\", \"stepname:webrtc_nonparallel_tests on Android\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_nonparallel_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "[trigger] webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5071,6 +5788,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -5166,6 +5884,18 @@
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "AppRTCMobile zip archive",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Android64_M_Nexus5X/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[CACHE]/builder/src/out/Android64_M_Nexus5X/apks\"}"
   },
@@ -5185,6 +5915,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android64%20(M%20Nexus5X)/AppRTCMobile_apk_170242.zip@@@"
@@ -5232,6 +5974,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "AppRTCMobile_test_apk on Android",
     "~followup_annotations": [
@@ -5315,6 +6069,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "android_instrumentation_test_apk on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -5396,6 +6162,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
@@ -5479,6 +6257,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -5560,6 +6350,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
@@ -5643,6 +6445,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "dcsctp_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -5724,6 +6538,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "modules_tests on Android",
     "~followup_annotations": [
@@ -5830,6 +6656,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "modules_unittests on Android",
     "~followup_annotations": [
@@ -6033,6 +6871,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (2m 6s) + overhead(1m 54s): 4m 0s@@@",
@@ -6187,6 +7037,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -6268,6 +7130,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
@@ -6471,6 +7345,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -6552,6 +7438,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
@@ -6635,6 +7533,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "tools_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -6716,6 +7626,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
@@ -6871,6 +7793,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "voip_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -6953,6 +7887,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -7002,6 +7948,18 @@
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "android_examples_junit_tests"
   },
   {
@@ -7013,6 +7971,18 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "android_sdk_junit_tests"
   },

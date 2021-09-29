@@ -14,6 +14,18 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.gn",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -44,6 +56,18 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -71,6 +95,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive.filter build files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -87,6 +123,18 @@
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive.zipping",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/icudtl.dat\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/build\"}",
     "~followup_annotations": [
@@ -108,6 +156,18 @@
       "gs://chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -132,6 +192,18 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "build (libs).gn",
     "~followup_annotations": [
@@ -163,6 +235,18 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build (libs).compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -190,6 +274,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive (libs).filter build files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -206,6 +302,18 @@
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive (libs).zipping",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CACHE]/builder/v8/out/build/icudtl.dat\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[CACHE]/builder/v8/out/build\"}",
     "~followup_annotations": [
@@ -227,6 +335,18 @@
       "gs://chromium-v8/official/3.4/v8-android-arm64-libs-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive (libs).gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

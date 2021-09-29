@@ -12,6 +12,18 @@
       "[CACHE]\\builder"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "init cache if not exists"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -104,6 +128,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -118,6 +154,18 @@
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true symbol_level=1 is_clang=false"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gn gen"
   },
   {
@@ -127,6 +175,18 @@
       "[CACHE]\\builder\\pdfium\\out\\debug_xfa_v8_msvc",
       "pdfium_all"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja"
   },
   {
@@ -134,6 +194,18 @@
       "[CACHE]\\builder\\pdfium\\out\\debug_xfa_v8_msvc\\pdfium_unittests.exe"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "unittests"
   },
   {
@@ -141,6 +213,18 @@
       "[CACHE]\\builder\\pdfium\\out\\debug_xfa_v8_msvc\\pdfium_embeddertests.exe"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "embeddertests"
   },
   {
@@ -161,6 +245,18 @@
       "clang false debug true is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true xfa_runtime enabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "javascript tests"
   },
   {
@@ -182,6 +278,18 @@
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "javascript tests (javascript disabled)"
   },
   {
@@ -203,6 +311,18 @@
       "--disable-xfa"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "javascript tests (xfa disabled)"
   },
   {
@@ -223,6 +343,18 @@
       "clang false debug true is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true xfa_runtime enabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "pixel tests"
   },
   {
@@ -244,6 +376,18 @@
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "pixel tests (javascript disabled)"
   },
   {
@@ -265,6 +409,18 @@
       "--disable-xfa"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "pixel tests (xfa disabled)"
   },
   {
@@ -285,6 +441,18 @@
       "clang false debug true is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true xfa_runtime enabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "corpus tests"
   },
   {
@@ -306,6 +474,18 @@
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "corpus tests (javascript disabled)"
   },
   {
@@ -327,6 +507,18 @@
       "--disable-xfa"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "corpus tests (xfa disabled)"
   },
   {

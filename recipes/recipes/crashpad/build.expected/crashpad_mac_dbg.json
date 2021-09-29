@@ -33,6 +33,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -83,6 +95,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -94,6 +118,18 @@
       "--args=target_os=\"mac\" target_cpu=\"x64\" is_debug=true"
     ],
     "cwd": "[START_DIR]/crashpad",
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate build files"
   },
   {
@@ -102,6 +138,18 @@
       "-C",
       "[START_DIR]/crashpad/out/Debug"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja"
   },
   {
@@ -111,6 +159,18 @@
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run tests",
     "timeout": 300
   },
@@ -126,6 +186,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "crashpad:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read swarming_test_spec",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming_test_spec.pyl@[@@@",

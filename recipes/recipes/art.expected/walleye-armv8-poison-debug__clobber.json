@@ -13,6 +13,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo init"
   },
   {
@@ -29,6 +41,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo sync"
   },
   {
@@ -44,6 +68,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo manifest"
   },
   {
@@ -58,6 +94,18 @@
     ],
     "cwd": "[CACHE]/art",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "clobber"
   },
   {
@@ -87,6 +135,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build target"
   },
   {
@@ -114,6 +174,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "device pre-run cleanup"
   },
@@ -144,6 +216,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup device"
   },
   {
@@ -170,6 +254,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "sync target"
   },
@@ -198,6 +294,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test gtest"
   },
@@ -231,6 +339,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test gtest: adb logcat"
   },
   {
@@ -258,6 +378,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test gtest: crashes"
   },
@@ -288,6 +420,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test gtest: adb clear log"
   },
@@ -321,6 +465,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test optimizing"
   },
   {
@@ -353,6 +509,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test optimizing: adb logcat"
   },
   {
@@ -380,6 +548,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test optimizing: crashes"
   },
@@ -410,6 +590,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test optimizing: adb clear log"
   },
@@ -444,6 +636,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test debuggable"
   },
   {
@@ -476,6 +680,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test debuggable: adb logcat"
   },
   {
@@ -503,6 +719,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test debuggable: crashes"
   },
@@ -533,6 +761,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test debuggable: adb clear log"
   },
@@ -567,6 +807,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test jit debuggable"
   },
   {
@@ -599,6 +851,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test jit debuggable: adb logcat"
   },
   {
@@ -626,6 +890,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test jit debuggable: crashes"
   },
@@ -656,6 +932,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test jit debuggable: adb clear log"
   },
@@ -689,6 +977,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test interpreter"
   },
   {
@@ -721,6 +1021,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test interpreter: adb logcat"
   },
   {
@@ -748,6 +1060,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test interpreter: crashes"
   },
@@ -778,6 +1102,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test interpreter: adb clear log"
   },
@@ -811,6 +1147,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test baseline"
   },
   {
@@ -843,6 +1191,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test baseline: adb logcat"
   },
   {
@@ -870,6 +1230,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test baseline: crashes"
   },
@@ -900,6 +1272,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test baseline: adb clear log"
   },
@@ -933,6 +1317,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test jit"
   },
   {
@@ -965,6 +1361,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test jit: adb logcat"
   },
   {
@@ -992,6 +1400,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test jit: crashes"
   },
@@ -1022,6 +1442,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test jit: adb clear log"
   },
@@ -1055,6 +1487,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test speed-profile"
   },
   {
@@ -1087,6 +1531,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test speed-profile: adb logcat"
   },
   {
@@ -1114,6 +1570,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test speed-profile: crashes"
   },
@@ -1145,6 +1613,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test speed-profile: adb clear log"
   },
   {
@@ -1175,6 +1655,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libcore"
   },
@@ -1208,6 +1700,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libcore: adb logcat"
   },
   {
@@ -1235,6 +1739,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libcore: crashes"
   },
@@ -1266,6 +1782,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libcore: adb clear log"
   },
   {
@@ -1296,6 +1824,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libjdwp jit"
   },
@@ -1329,6 +1869,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libjdwp jit: adb logcat"
   },
   {
@@ -1356,6 +1908,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libjdwp jit: crashes"
   },
@@ -1386,6 +1950,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libjdwp jit: adb clear log"
   },
@@ -1419,6 +1995,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libjdwp interpreter"
   },
   {
@@ -1451,6 +2039,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libjdwp interpreter: adb logcat"
   },
   {
@@ -1478,6 +2078,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libjdwp interpreter: crashes"
   },
@@ -1509,6 +2121,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libjdwp interpreter: adb clear log"
   },
   {
@@ -1537,6 +2161,18 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "tear down device"
   },
   {
@@ -1564,6 +2200,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "device post-run cleanup"
   },

@@ -40,6 +40,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "initialization.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -130,6 +142,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "initialization.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -158,6 +182,18 @@
       "PATH": [
         "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "build.gn",
     "~followup_annotations": [
@@ -193,6 +229,18 @@
         "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.compile",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -221,6 +269,18 @@
         "[CACHE]/builder/node-ci/third_party/depot_tools"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.compile confirm no-op",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -239,6 +299,18 @@
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "archive.zipping",
     "stdin": "{\"entries\": [{\"archive_name\": \"bin/node\", \"path\": \"[CACHE]/builder/node-ci/out/Release/node\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/node-linux-rel-187054-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CACHE]/builder/node-ci/out/Release\"}",
     "~followup_annotations": [
@@ -260,6 +332,18 @@
       "gs://chromium-v8/node-linux-rel/node-linux-rel-187054-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "archive.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -274,6 +358,18 @@
       "cr-buildbucket.appspot.com"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "trigger",
     "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"v8_foobar_perf\", \"project\": \"v8-internal\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"project\": \"v8/node-ci\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"parent_buildername\": \"V8 Foobar\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#187054}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
@@ -336,6 +432,18 @@
       "[CACHE]/builder/node-ci/out/Release/node_cctest"
     ],
     "cwd": "[CACHE]/builder/node-ci/node",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run cctest"
   },
   {
@@ -356,6 +464,18 @@
       "addons"
     ],
     "cwd": "[CACHE]/builder/node-ci/node",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test addons"
   },
   {
@@ -374,6 +494,18 @@
       "default"
     ],
     "cwd": "[CACHE]/builder/node-ci/node",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test default"
   },
   {
@@ -394,6 +526,18 @@
       "js-native-api"
     ],
     "cwd": "[CACHE]/builder/node-ci/node",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test js-native-api"
   },
   {
@@ -414,6 +558,18 @@
       "node-api"
     ],
     "cwd": "[CACHE]/builder/node-ci/node",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test node-api"
   },
   {

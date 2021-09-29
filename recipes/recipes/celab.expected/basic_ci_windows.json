@@ -12,6 +12,18 @@
       "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "init src_root if not exists"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -104,6 +128,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -119,6 +155,18 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -162,6 +210,18 @@
         "[START_DIR]\\packages\\bin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install deps"
   },
   {
@@ -182,6 +242,18 @@
         "[START_DIR]\\packages",
         "[START_DIR]\\packages\\bin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "build"
   },
@@ -204,6 +276,18 @@
         "[START_DIR]\\packages\\bin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "create python package"
   },
   {
@@ -218,6 +302,18 @@
       "*.whl"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "find python packages",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@glob@[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\out\\test.whl@@@",
@@ -230,6 +326,18 @@
       "-u",
       "RECIPE_MODULE[infra::zip]\\resources\\zip.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "zip archive",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\\\\windows_amd64\\\\bin\\\\cel_ctl.exe\", \"type\": \"file\"}, {\"path\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\\\\windows_amd64\\\\bin\\\\resources\", \"type\": \"dir\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\\\\test.whl\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]\\\\cel.zip\", \"root\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\"}"
   },
@@ -246,6 +354,18 @@
       "gs://celab/builder/2012/05/14/8945511751514863184/cel.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "celab:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload CELab binaries",
     "~followup_annotations": [
       "@@@STEP_LINK@CELab binaries@https://storage.cloud.google.com/celab/builder/2012/05/14/8945511751514863184/cel.zip@@@"

@@ -34,6 +34,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -179,6 +191,18 @@
       "[CACHE]/builder/src/ios/build/bots/chromium.fyi/ios.json",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "read build config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -223,6 +247,18 @@
       "[CACHE]/builder/src/build/mac_files"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure xcode.delete deprecated Xcode cache",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -241,6 +277,18 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure xcode.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -269,6 +317,18 @@
       "[CACHE]/xcode_ios_11m336w.app"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure xcode.install xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -282,6 +342,18 @@
       "[CACHE]/xcode_ios_11m336w.app"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure xcode.select xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -294,6 +366,18 @@
       "list"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure xcode.reload simctl",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -317,6 +401,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -332,6 +428,18 @@
       "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure output directory"
   },
   {
@@ -346,6 +454,18 @@
       "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "create compile guard",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
@@ -369,6 +489,18 @@
       "[CACHE]/builder/src/out/Debug-iphonesimulator"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_directory //out/Debug-iphonesimulator"
   },
   {
@@ -383,6 +515,18 @@
       "[CACHE]/builder/src/out/Debug-iphonesimulator/args.gn"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "write args.gn",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x86\"@@@",
@@ -403,6 +547,18 @@
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate build files (gn)"
   },
   {
@@ -418,6 +574,18 @@
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile"
   },
   {
@@ -431,6 +599,18 @@
       "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "remove compile guard"
   },
   {
@@ -454,6 +634,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -509,6 +701,18 @@
       "[CACHE]/builder/src/out/Debug-iphonesimulator/EG2_test-Runner.app/PlugIns/EG2_test.xctest/EG2_test"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.shard EarlGrey test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -527,6 +731,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.generate 0_0.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -605,6 +821,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.copy 0_0.isolate symlink",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -684,6 +912,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.generate 0_1.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -762,6 +1002,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.copy 0_1.isolate symlink",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -841,6 +1093,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.generate 0_2.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -919,6 +1183,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.copy 0_2.isolate symlink",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -998,6 +1274,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.generate 1.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1076,6 +1364,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.copy 1.isolate symlink",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1155,6 +1455,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.read infra revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1183,6 +1495,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.install infra/tools/luci/isolate.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1203,6 +1527,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.install infra/tools/luci/isolate.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1236,6 +1572,18 @@
       "[CLEANUP]/isolate_tmp_1/1.isolated.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "isolate.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1278,6 +1626,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1298,6 +1658,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1321,12 +1693,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 0 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_0/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 0 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"CacheTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 0 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_0/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 0 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"CacheTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).[trigger] EG2_test (Real device iOS 13.1.2) shard 0 (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1351,6 +1735,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"EG2_test (Real device iOS 13.1.2) shard 0 (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1483,12 +1868,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 1 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_1/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 1 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"TabUITestCase\", \"-t\", \"PasswordsTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 1 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_1/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 1 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"TabUITestCase\", \"-t\", \"PasswordsTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).[trigger] EG2_test (Real device iOS 13.1.2) shard 1 (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1513,6 +1910,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"EG2_test (Real device iOS 13.1.2) shard 1 (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1647,12 +2045,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 2 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_2/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 2 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"KeyboardTestCase\", \"-t\", \"ToolBarTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"EG2_test (Real device iOS 13.1.2) shard 2 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_2/dummy size]\", \"device_type:Real device\", \"ios_version:13.1.2\", \"name:EG2_test\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG2_test (Real device iOS 13.1.2) shard 2 (with patch)\", \"test:EG2_test\", \"test_id_prefix:\", \"test_suite:EG2_test (Real device iOS 13.1.2) shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1_2\", \"path\": \"Runtime-ios-13.1.2\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG2_test-Runner.app\", \"--host-app\", \"src/out/Debug-iphonesimulator/fake host.app\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"KeyboardTestCase\", \"-t\", \"ToolBarTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1.2\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).[trigger] EG2_test (Real device iOS 13.1.2) shard 2 (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1677,6 +2087,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"EG2_test (Real device iOS 13.1.2) shard 2 (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1811,12 +2222,24 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"EG1_test2 (Real device iOS 13.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 1/dummy size]\", \"device_type:Real device\", \"ios_version:13.1\", \"name:EG1_test2\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG1_test2 (Real device iOS 13.1) (with patch)\", \"test:EG1_test2\", \"test_id_prefix:\", \"test_suite:EG1_test2 (Real device iOS 13.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1\", \"path\": \"Runtime-ios-13.1\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG1_test2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"EG1_test2 (Real device iOS 13.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fyi\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 1/dummy size]\", \"device_type:Real device\", \"ios_version:13.1\", \"name:EG1_test2\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:EG1_test2 (Real device iOS 13.1) (with patch)\", \"test:EG1_test2\", \"test_id_prefix:\", \"test_suite:EG1_test2 (Real device iOS 13.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_1\", \"path\": \"Runtime-ios-13.1\"}, {\"name\": \"xcode_ios_11m336w\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/EG1_test2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"11M336w\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"Real device\", \"--version\", \"13.1\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).[trigger] EG1_test2 (Real device iOS 13.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1841,6 +2264,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"EG1_test2 (Real device iOS 13.1) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -1974,6 +2398,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run (with patch).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\", \"invocations/1\", \"invocations/2\", \"invocations/3\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
@@ -2007,6 +2443,18 @@
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2024,6 +2472,18 @@
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).git fetch (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2038,6 +2498,18 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).git checkout (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2051,6 +2523,18 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).read revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2067,6 +2551,18 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).git clean (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2080,6 +2576,18 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).submodule sync (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2095,6 +2603,18 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2118,6 +2638,18 @@
       "--verbose"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).wait for tasks (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2150,6 +2682,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) stats",
     "stdin": "{\"invocations\": [\"invocations/3\"]}",
     "~followup_annotations": [
@@ -2178,6 +2722,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2193,6 +2749,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 1 stats",
     "stdin": "{\"invocations\": [\"invocations/1\"]}",
     "~followup_annotations": [
@@ -2221,6 +2789,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 1 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2236,6 +2816,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 2 stats",
     "stdin": "{\"invocations\": [\"invocations/2\"]}",
     "~followup_annotations": [
@@ -2264,6 +2856,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 2 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2279,6 +2883,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
@@ -2307,6 +2923,18 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2354,6 +2982,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "EG1_test2 (Real device iOS 13.1) (with patch)",
     "~followup_annotations": [
@@ -2434,6 +3074,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG2_test (Real device iOS 13.1.2) shard 1 (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -2513,6 +3165,18 @@
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG2_test (Real device iOS 13.1.2) shard 2 (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -2591,6 +3255,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "EG2_test (Real device iOS 13.1.2) shard 0 (with patch)",
     "~followup_annotations": [
@@ -2688,6 +3364,18 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG2_test (Real device iOS 13.1.2) shard 0",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
@@ -2700,6 +3388,18 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG2_test (Real device iOS 13.1.2) shard 1",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
@@ -2712,6 +3412,18 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG2_test (Real device iOS 13.1.2) shard 2",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
@@ -2724,6 +3436,18 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "EG1_test2 (Real device iOS 13.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"

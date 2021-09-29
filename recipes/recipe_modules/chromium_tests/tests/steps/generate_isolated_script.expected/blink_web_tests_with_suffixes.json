@@ -12,6 +12,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_pre_run.[trigger] blink_web_tests on Intel GPU on Mac",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -155,6 +167,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks.blink_web_tests on Intel GPU on Mac stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
@@ -183,6 +207,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect tasks.blink_web_tests on Intel GPU on Mac results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -232,6 +268,18 @@
       "PATH": [
         "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "blink_web_tests on Intel GPU on Mac",
     "~followup_annotations": [
@@ -331,6 +379,18 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Upload to test-results [blink_web_tests on Intel GPU on Mac]"
   },
   {
@@ -362,6 +422,18 @@
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "archive results for blink_web_tests",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results/results.html@@@",

@@ -10,6 +10,18 @@
       "--adb-path",
       "None/third_party/android_sdk/public/platform-tools/adb"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_suite"
   },
   {
@@ -30,6 +42,18 @@
       "--adb-path",
       "None/third_party/android_sdk/public/platform-tools/adb"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test_suite-with-rdb"
   },
   {

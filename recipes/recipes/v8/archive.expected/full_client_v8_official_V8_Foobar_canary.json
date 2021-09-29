@@ -14,6 +14,18 @@
       "gs://chromium-v8/official/canary/v8-linux64-rel-3.4.3.1.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -35,6 +47,18 @@
       "gs://chromium-v8/official/canary/v8-linux64-rel-latest.json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "make archive.gsutil upload json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

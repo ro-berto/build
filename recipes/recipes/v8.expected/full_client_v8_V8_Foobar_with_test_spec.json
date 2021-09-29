@@ -11,6 +11,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -62,6 +74,18 @@
       "debug",
       "[CACHE]/builder/v8/out/build/mjsunit.isolated.gen.json"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -78,7 +102,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571:0:2\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - sweet\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sweet\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"noodle\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571:0:2\", \"priority\": \"25\", \"realm\": \"v8:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - sweet\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sweet\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"noodle\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -91,7 +115,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571:1:2\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - sweet\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sweet\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"noodle\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571:1:2\", \"priority\": \"25\", \"realm\": \"v8:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - sweet\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sweet\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"noodle\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -104,7 +128,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"Mjsunit - everything/Ubuntu-16.04/[dummy has/V8 Foobar/571\", \"priority\": \"100\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - everything\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sour\", \"--extra-flags\", \"--flag1 --flag2\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"override\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"Mjsunit - everything/Ubuntu-16.04/[dummy has/V8 Foobar/571\", \"priority\": \"100\", \"realm\": \"v8:ci\", \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.v8\", \"buildername:V8 Foobar\", \"buildnumber:571\", \"data:[dummy hash for mjsunit/dummy size]\", \"name:Mjsunit\", \"project:v8\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:v8.ci:V8 Foobar\", \"stepname:Mjsunit - everything\"], \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for mjsunit\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir\", \"out/build\", \"--random-seed=2140216864\", \"mjsunit\", \"--variants=sour\", \"--extra-flags\", \"--flag1 --flag2\", \"--rerun-failures-count=2\", \"--mastername\", \"client.v8\", \"--buildername\", \"V8 Foobar\", \"--swarming\", \"--json-test-results\", \"${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"quantum\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"override\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -154,6 +178,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Mjsunit - sweet",
     "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
@@ -221,6 +257,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Mjsunit - everything",
     "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [

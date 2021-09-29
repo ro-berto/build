@@ -11,6 +11,18 @@
       "gs://chromium-browser-official/"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil ls"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update - 87.0.4273.0",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -194,6 +218,18 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "git clean"
   },
   {
@@ -217,6 +253,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient sync"
   },
   {
@@ -224,6 +272,18 @@
       "touch",
       "[START_DIR]/src/chrome/test/data/webui/i18n_process_css_test.html"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "touch chrome/test/data/webui/i18n_process_css_test.html"
   },
   {
@@ -234,6 +294,18 @@
       "-o",
       "[START_DIR]/src/build/util/LASTCHANGE"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "Generate LASTCHANGE"
   },
   {
@@ -248,6 +320,18 @@
       "[START_DIR]/src/buildtools/linux64/clang-format"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "copy clang-format"
   },
   {
@@ -259,6 +343,18 @@
       "--skip-build",
       "--without-fuchsia"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "download clang sources"
   },
   {
@@ -270,6 +366,18 @@
       "update",
       "--gs-url-base=chromium-optimization-profiles/pgo_profiles"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "fetch Linux PGO profiles"
   },
   {
@@ -285,6 +393,18 @@
       "-s",
       "[START_DIR]/src/third_party/node/node_modules.tar.gz.sha1"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "webui_node_modules"
   },
   {
@@ -294,6 +414,18 @@
       "https://gn.googlesource.com/gn",
       "[CLEANUP]/gn_tmp_1/gn"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "checkout gn"
   },
   {
@@ -301,6 +433,18 @@
       "[START_DIR]/src/buildtools/linux64/gn",
       "--version"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "get gn version"
   },
   {
@@ -311,6 +455,18 @@
       "checkout",
       "0790d304"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "checkout gn commit"
   },
   {
@@ -319,6 +475,18 @@
       "-u",
       "[CLEANUP]/gn_tmp_1/gn/build/gen.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate last_commit_position.h"
   },
   {
@@ -332,6 +500,18 @@
       "[START_DIR]/src/tools/gn/README.md"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rm README.md"
   },
   {
@@ -345,6 +525,18 @@
       "[CLEANUP]/gn_tmp_1/gn"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "listdir gn",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@listdir@[CLEANUP]/gn_tmp_1/gn/.git@@@",
@@ -364,6 +556,18 @@
       "[START_DIR]/src/tools/gn/build"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "move gn build"
   },
   {
@@ -378,6 +582,18 @@
       "[START_DIR]/src/tools/gn/bootstrap/last_commit_position.h"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "move last_commit_position.h"
   },
   {
@@ -391,6 +607,18 @@
       "[CLEANUP]/gn_tmp_1"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir"
   },
   {
@@ -406,6 +634,18 @@
       "[START_DIR]/src"
     ],
     "cwd": "[CLEANUP]/export_tarball_tmp_1",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "export_tarball"
   },
   {
@@ -423,6 +663,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0.tar.xz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0.tar.xz",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0.tar.xz@@@"
@@ -436,6 +688,18 @@
       "[CLEANUP]/export_tarball_tmp_1/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate_hashes"
   },
   {
@@ -453,6 +717,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0.tar.xz.hashes"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0.tar.xz.hashes",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0.tar.xz.hashes@@@"
@@ -469,6 +745,18 @@
       "[CLEANUP]/export_tarball_tmp_1"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (2)"
   },
   {
@@ -480,6 +768,18 @@
       "scheduler.Scheduler.EmitTriggers"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "luci-scheduler.EmitTriggers",
     "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Build From Tarball\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"version\": \"87.0.4273.0\"}, \"tags\": [\"parent_buildername:builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"builder/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
@@ -525,6 +825,18 @@
       "[START_DIR]/src"
     ],
     "cwd": "[CLEANUP]/export_tarball_tmp_2",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "export_tarball (2)"
   },
   {
@@ -542,6 +854,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-testdata.tar.xz",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz@@@"
@@ -555,6 +879,18 @@
       "[CLEANUP]/export_tarball_tmp_2/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate_hashes (2)"
   },
   {
@@ -572,6 +908,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz.hashes"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-testdata.tar.xz.hashes",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz.hashes@@@"
@@ -588,6 +936,18 @@
       "[CLEANUP]/export_tarball_tmp_2"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (3)"
   },
   {
@@ -603,6 +963,18 @@
       "[CLEANUP]/tmp_tmp_1/src"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "copytree"
   },
   {
@@ -628,6 +1000,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune android_webview"
   },
   {
@@ -653,6 +1037,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune buildtools/third_party/libc++"
   },
   {
@@ -678,6 +1074,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune chrome/android"
   },
   {
@@ -703,6 +1111,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune chromecast"
   },
   {
@@ -728,6 +1148,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune ios"
   },
   {
@@ -753,6 +1185,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune native_client"
   },
   {
@@ -778,6 +1222,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune native_client_sdk"
   },
   {
@@ -803,6 +1259,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/android_platform"
   },
   {
@@ -828,6 +1296,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/chromite"
   },
   {
@@ -853,6 +1333,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/closure_compiler"
   },
   {
@@ -878,6 +1370,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/freetype"
   },
   {
@@ -903,6 +1407,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/icu"
   },
   {
@@ -928,6 +1444,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/libjpeg_turbo"
   },
   {
@@ -953,6 +1481,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/libxml/src"
   },
   {
@@ -978,6 +1518,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/snappy"
   },
   {
@@ -1003,6 +1555,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune third_party/webgl"
   },
   {
@@ -1028,6 +1592,18 @@
       "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune tools/win"
   },
   {
@@ -1040,6 +1616,18 @@
       "-empty",
       "-delete"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "prune empty directories"
   },
   {
@@ -1055,6 +1643,18 @@
       "[CLEANUP]/tmp_tmp_1/src"
     ],
     "cwd": "[CLEANUP]/export_tarball_tmp_3",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "export_tarball (3)"
   },
   {
@@ -1072,6 +1672,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-lite.tar.xz",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz@@@"
@@ -1085,6 +1697,18 @@
       "[CLEANUP]/export_tarball_tmp_3/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate_hashes (3)"
   },
   {
@@ -1102,6 +1726,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz.hashes"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-lite.tar.xz.hashes",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz.hashes@@@"
@@ -1118,6 +1754,18 @@
       "[CLEANUP]/export_tarball_tmp_3"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (4)"
   },
   {
@@ -1131,6 +1779,18 @@
       "[CLEANUP]/tmp_tmp_1"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (5)"
   },
   {
@@ -1146,6 +1806,18 @@
       "[CLEANUP]/tmp_tmp_2/src"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "copytree (2)"
   },
   {
@@ -1158,6 +1830,18 @@
       "--sync-only",
       "--disable-git-cache"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "download pnacl toolchain dependencies"
   },
   {
@@ -1173,6 +1857,18 @@
       "[CLEANUP]/tmp_tmp_2/src"
     ],
     "cwd": "[CLEANUP]/export_tarball_tmp_4",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "export_tarball (4)"
   },
   {
@@ -1190,6 +1886,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-nacl.tar.xz",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz@@@"
@@ -1203,6 +1911,18 @@
       "[CLEANUP]/export_tarball_tmp_4/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "generate_hashes (4)"
   },
   {
@@ -1220,6 +1940,18 @@
       "gs://chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz.hashes"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload chromium-87.0.4273.0-nacl.tar.xz.hashes",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz.hashes@@@"
@@ -1236,6 +1968,18 @@
       "[CLEANUP]/export_tarball_tmp_4"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (6)"
   },
   {
@@ -1249,6 +1993,18 @@
       "[CLEANUP]/tmp_tmp_2"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "rmtree temp dir (7)"
   },
   {

@@ -12,6 +12,18 @@
       "[CACHE]/builder"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "init cache if not exists"
   },
   {
@@ -49,6 +61,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -104,6 +128,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -124,6 +160,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -154,6 +202,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure_goma.ensure_installed (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -182,6 +242,18 @@
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_asan=true is_lsan=true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gn gen"
   },
   {
@@ -201,6 +273,18 @@
       "[CACHE]/goma/data/linux_asan_lsan"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -222,6 +306,18 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -254,6 +350,18 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -268,6 +376,18 @@
       "80",
       "pdfium_all"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "compile with ninja"
   },
   {
@@ -289,6 +409,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -321,6 +453,18 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -340,6 +484,18 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -389,6 +545,18 @@
       "--buildbot-buildername",
       "linux_asan_lsan"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.upload_log",
     "timeout": 300,
     "~followup_annotations": [
@@ -417,6 +585,18 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -430,6 +610,18 @@
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "unittests"
   },
   {
@@ -439,6 +631,18 @@
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "embeddertests"
   },
@@ -462,6 +666,18 @@
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "javascript tests"
   },
@@ -487,6 +703,18 @@
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "javascript tests (javascript disabled)"
   },
   {
@@ -509,6 +737,18 @@
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "pixel tests"
   },
@@ -534,6 +774,18 @@
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "pixel tests (javascript disabled)"
   },
   {
@@ -556,6 +808,18 @@
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "corpus tests"
   },
@@ -580,6 +844,18 @@
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "ASAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "corpus tests (javascript disabled)"
   },

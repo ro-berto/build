@@ -9,6 +9,18 @@
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "uname"
   },
   {
@@ -37,6 +49,18 @@
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gerrit fetch current CL info",
     "timeout": 60,
     "~followup_annotations": [
@@ -98,6 +122,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -151,6 +187,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -169,6 +217,18 @@
       "GOPATH": "[CACHE]/gopath"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "clean"
   },
   {
@@ -189,6 +249,18 @@
       "GOPATH": "[CACHE]/gopath"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "mkdir"
   },
   {
@@ -208,6 +280,18 @@
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "cmake"
   },
   {
@@ -223,6 +307,18 @@
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "ninja"
   },
@@ -240,6 +336,18 @@
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "check filenames"
   },
@@ -259,6 +367,18 @@
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "unit tests",
     "~followup_annotations": [
@@ -283,6 +403,18 @@
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]/gopath"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "ssl tests",
     "~followup_annotations": [

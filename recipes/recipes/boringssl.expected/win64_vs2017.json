@@ -37,6 +37,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -91,6 +103,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gclient runhooks"
   },
   {
@@ -110,6 +134,18 @@
       "GYP_MSVS_VERSION": "2017"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "clean"
   },
   {
@@ -131,6 +167,18 @@
       "GYP_MSVS_VERSION": "2017"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "mkdir"
   },
   {
@@ -155,6 +203,18 @@
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "cmake"
   },
   {
@@ -175,6 +235,18 @@
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ninja"
   },
   {
@@ -192,6 +264,18 @@
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "check filenames"
   },
@@ -215,6 +299,18 @@
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "unit tests",
     "~followup_annotations": [
@@ -282,6 +378,18 @@
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
     },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -340,6 +448,18 @@
       "GOFLAGS": "-mod=readonly",
       "GOPATH": "[CACHE]\\gopath",
       "GYP_MSVS_VERSION": "2017"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "taskkill mspdbsrv"
   },

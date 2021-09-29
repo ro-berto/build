@@ -13,6 +13,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo init"
   },
   {
@@ -29,6 +41,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo sync"
   },
   {
@@ -44,6 +68,18 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo manifest"
   },
   {
@@ -70,6 +106,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build"
   },
   {
@@ -95,6 +143,18 @@
       "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test gtest"
   },
@@ -124,6 +184,18 @@
       "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test optimizing"
   },
@@ -155,6 +227,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test debuggable"
   },
   {
@@ -185,6 +269,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test interpreter"
   },
   {
@@ -213,6 +309,18 @@
       "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test baseline"
   },
@@ -243,6 +351,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test jit"
   },
   {
@@ -272,6 +392,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test speed-profile"
   },
   {
@@ -299,6 +431,18 @@
       "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test libcore"
   },
@@ -329,6 +473,18 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
     },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "test libjdwp jit"
   },
   {
@@ -352,6 +508,18 @@
       "TARGET_BUILD_UNBUNDLED": "true",
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "armv8"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "art:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "test dx"
   },

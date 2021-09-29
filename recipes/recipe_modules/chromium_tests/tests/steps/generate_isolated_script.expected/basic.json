@@ -34,6 +34,18 @@
       "[CLEANUP]/tmp_tmp_1"
     ],
     "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "base_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",

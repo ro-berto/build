@@ -18,6 +18,18 @@
       "123"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:try.triggered"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect builds.FunctionCallSample.wait",
     "timeout": 14400,
     "~followup_annotations": [
@@ -32,6 +44,18 @@
       "cr-buildbucket.appspot.com"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:try.triggered"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "collect builds.FunctionCallSample.get",
     "stdin": "{\"requests\": [{\"getBuild\": {\"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"id\": \"123\"}}]}",
     "~followup_annotations": [

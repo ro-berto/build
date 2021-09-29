@@ -40,6 +40,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "initialization.bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -112,6 +124,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "initialization.gclient runhooks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -125,6 +149,18 @@
       "[CACHE]/builder/v8",
       "[CACHE]/builder/node.js"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "update v8"
   },
   {
@@ -142,6 +178,18 @@
       "use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.configure node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -153,6 +201,18 @@
       "-j8"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.build node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -164,6 +224,18 @@
       "test-addons-clean"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.clean addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -176,6 +248,18 @@
       "clear-stalled"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.clear stalled",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -188,6 +272,18 @@
       "build-addons"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.build addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -200,6 +296,18 @@
       "build-addons-napi"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.build addons-napi",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -212,6 +320,18 @@
       "doc-only"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build.build doc-only",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -222,6 +342,18 @@
       "out/Release/cctest"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run cctest"
   },
   {
@@ -241,6 +373,18 @@
       "doctool"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run tests"
   },
   {
@@ -263,6 +407,18 @@
       "use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build and upload.configure node.js - install",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -281,6 +437,18 @@
       "[CLEANUP]/archive-build"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build and upload.install directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -294,6 +462,18 @@
       "DESTDIR=[CLEANUP]/archive-build"
     ],
     "cwd": "[CACHE]/builder/node.js",
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build and upload.build and install node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -305,6 +485,18 @@
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build and upload.zipping",
     "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/archive-build/bin/node\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/node-linux-rel-50110-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
     "~followup_annotations": [
@@ -326,6 +518,18 @@
       "gs://chromium-v8/experimental/node-linux-rel/node-linux-rel-50110-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build and upload.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
