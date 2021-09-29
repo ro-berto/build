@@ -52,7 +52,8 @@ class PgoApi(recipe_api.RecipeApi):
 
     Template:
     chrome-{platform}-{branch number}-{timestamp}-{profile_hash}.profdata
-    * {platform} refers to the platform, which is one of [win32, win64 and mac].
+    * {platform} refers to the platform, which is one of
+        [android32, android64, linux, win32, win64 and mac].
     * {branch number} refers to the branch number, such as 4103.
     * {timestamp} refers to the timestamp of the commit at HEAD.
     * {profile_hash} refers to the sha1 hash of the profdata content.
@@ -64,11 +65,12 @@ class PgoApi(recipe_api.RecipeApi):
     # without internal sources. Update this prefix when support is introduced.
     profdata_template = 'chrome-%s-%s-%s-%s.profdata'
 
-    # platform from recipe_engine/platform recipe_module
-    # if is_win, should append bits [32,64]
+    # if is_win or if android, should append bits [32,64]
+    # note: android only arm supported.
     platform = self.m.platform.name
-
-    if self.m.platform.is_win:
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      platform = 'android'
+    if self.m.platform.is_win or platform == 'android':
       platform += str(self.m.chromium.c.TARGET_BITS)
 
     # timestamp from git commit HEAD. under the hood invokes
