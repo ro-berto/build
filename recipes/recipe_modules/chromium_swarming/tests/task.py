@@ -16,11 +16,9 @@ from recipe_engine import recipe_test_api, post_process
 
 def RunSteps(api):
   opt_dims = api.properties.get('optional_dimensions')
-  cas_input_root = api.properties.get('cas_input_root', '')
+  cas_input_root = api.properties.get('cas_input_root')
   task = api.chromium_swarming.task(
       name=api.properties.get('task_name', 'sample_task'),
-      isolated=(None if cas_input_root else
-                '0123456789012345678901234567890123456789'),
       cas_input_root=cas_input_root,
       optional_dimensions=opt_dims,
       env_prefixes={'FOO': ['some/path']})

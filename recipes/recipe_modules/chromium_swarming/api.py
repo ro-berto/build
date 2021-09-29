@@ -459,7 +459,6 @@ class SwarmingApi(recipe_api.RecipeApi):
            failure_as_exception=True,
            idempotent=None,
            ignore_task_failure=False,
-           isolated='',
            cas_input_root='',
            merge=None,
            named_caches=None,
@@ -489,8 +488,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     Args:
       * name: name of the test, used as part of a task ID.
-      * isolated: hash of isolated test on isolate server, the test should
-          be already isolated there, see 'isolate' recipe module.
       * cas_input_root: digeste of isolated test on RBE-CAS, the test should
           be already isolated there, see 'isolate' recipe module.
       * ignore_task_failure: whether to ignore the test failure of swarming
@@ -590,9 +587,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       with_io_timeout_secs(self.default_io_timeout).
       with_idempotent(idempotent))
 
-    if isolated:
-      req_slice = req_slice.with_isolated(isolated)
-
     if cas_input_root:
       req_slice = req_slice.with_cas_input_root(cas_input_root)
 
@@ -622,7 +616,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   def gtest_task(self,
                  raw_cmd,
                  name=None,
-                 isolated='',
                  cas_input_root='',
                  cipd_packages=None,
                  merge=None,
@@ -666,7 +659,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     task = self.task(
         name=name,
         cipd_packages=cipd_packages,
-        isolated=isolated,
         cas_input_root=cas_input_root,
         merge=merge,
         raw_cmd=raw_cmd,
@@ -677,7 +669,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   def isolated_script_task(self,
                            raw_cmd=None,
                            relative_cwd=None,
-                           isolated='',
                            cas_input_root=''):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -708,7 +699,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     task = self.task(
         raw_cmd=raw_cmd,
         relative_cwd=relative_cwd,
-        isolated=isolated,
         cas_input_root=cas_input_root)
     task.extra_args = extra_args
     task.merge = merge
@@ -799,8 +789,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     tags.update(task_request.tags or ())
     tags.update(self._default_tags)
 
-    if task_slice.isolated:
-      tags.add('data:' + task_slice.isolated)
     if task_slice.cas_input_root:
       tags.add('data:' + task_slice.cas_input_root)
     tags.add('name:' + task_request.name.split(' ')[0])

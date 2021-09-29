@@ -111,7 +111,7 @@ def RunSteps(api, platforms, custom_trigger_script,
         ],
         stdout=api.raw_io.output_text())
     # TODO(vadimsh): Pass result from isolate though --output-json option.
-    task_input = step_result.stdout.split()[0].strip()
+    cas_input_root = step_result.stdout.split()[0].strip()
 
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
@@ -120,7 +120,7 @@ def RunSteps(api, platforms, custom_trigger_script,
       task = api.chromium_swarming.gtest_task(
           raw_cmd=['hello_world.exe'],
           name='hello_world',
-          isolated=task_input,
+          cas_input_root=cas_input_root,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge)
     elif isolated_script_task:
@@ -128,18 +128,11 @@ def RunSteps(api, platforms, custom_trigger_script,
       task_request = task.request
       task_slice = task_request[0]
 
-      if '/' in task_input:
-        task_slice = (
-            task_slice.with_cas_input_root(task_input).with_env_vars(**{
-                'IS_GTEST': '',
-                'IS_SCRIPTTEST': 'True'
-            }))
-      else:
-        task_slice = (
-            task_slice.with_isolated(task_input).with_env_vars(**{
-                'IS_GTEST': '',
-                'IS_SCRIPTTEST': 'True'
-            }))
+      task_slice = (
+          task_slice.with_cas_input_root(cas_input_root).with_env_vars(**{
+              'IS_GTEST': '',
+              'IS_SCRIPTTEST': 'True'
+          }))
       task.request = (
           task_request.with_slice(0, task_slice).with_name('hello_world'))
 
@@ -153,7 +146,7 @@ def RunSteps(api, platforms, custom_trigger_script,
     else:
       task = api.chromium_swarming.task(
           name='hello_world',
-          isolated=task_input,
+          cas_input_root=cas_input_root,
           extra_args=['--foo', '42'],
           task_output_dir=temp_dir.join('task_output_dir'),
           named_caches=named_caches,
@@ -235,13 +228,16 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(platforms=('win', 'linux', 'mac')),
   )
 
@@ -253,7 +249,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(platforms=('mac',), custom_trigger_script=True),
       api.post_process(
           post_process.StepCommandContains,
@@ -274,7 +271,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash hello_world.isolated')),
+          stdout=api.raw_io.output_text('hash/size hello_world.isolated')),
       api.properties(platforms=('linux',), custom_trigger_script=False),
       api.post_check(
           api.swarming.check_triggered_request,
@@ -299,13 +296,16 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       # This is probably how you'd use the test api; testing what happens if one
       # set of tasks finishes first. This example code doesn't care what is
       # returned, but calling code of this usually does.
@@ -325,14 +325,16 @@ def GenTests(api):
         api.runtime(is_experimental=exp),
         api.step_data(
             'archive for win',
-            stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+            stdout=api.raw_io.output_text(
+                'hash_for_win/size hello_world.isolated')),
         api.step_data(
             'archive for linux',
             stdout=api.raw_io.output_text(
-                'hash_for_linux hello_world.isolated')),
+                'hash_for_linux/size hello_world.isolated')),
         api.step_data(
             'archive for mac',
-            stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+            stdout=api.raw_io.output_text(
+                'hash_for_mac/size hello_world.isolated')),
         api.properties(platforms=('win', 'linux', 'mac')),
     )
 
@@ -344,7 +346,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(
           platforms=('mac',),
           named_caches={
@@ -361,13 +364,16 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(
           platforms=(
               'win',
@@ -386,14 +392,16 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src'),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
   )
 
   yield api.test(
       'show_outputs_ref_in_collect_step',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.properties(show_outputs_ref_in_collect_step=False),
   )
 
@@ -413,7 +421,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.canned_summary_output(
@@ -437,7 +446,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -456,7 +466,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -471,7 +482,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.canned_summary_output(
@@ -512,7 +524,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
                     api.chromium_swarming.summary(None, data)),
   )
@@ -524,7 +537,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir(
@@ -541,7 +555,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
                     api.chromium_swarming.summary(None, data)),
   )
@@ -553,7 +568,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir(
@@ -571,7 +587,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -601,7 +618,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
                     api.raw_io.output_dir(big_output_dir)),
       api.properties(isolated_script_task=True),
@@ -632,7 +650,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -653,34 +671,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data).encode('utf-8')}) +
-              api.json.output(json_results), summary_data)),
-      api.properties(
-          isolated_script_task=True,
-          trigger_script=chromium_swarming.TriggerScript.create(
-              script=api.path['cache'].join('fake_custom_trigger_script.py'),
-              args=['foo', 'bar'],
-          )),
-      api.post_process(
-          post_process.Filter(
-              '[trigger (custom trigger script)] hello_world on Windows-7-SP1')
-      ),
-  )
-
-  yield api.test(
-      'isolated_script_with_custom_trigger_script_cas',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('digest_for_win/hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -707,13 +698,16 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(
           platforms=('win', 'linux', 'mac'),
           realm="test:task_realm",
@@ -726,13 +720,16 @@ def GenTests(api):
           project='chromium', builder='linux', build_number=1),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_mac/size hello_world.isolated')),
       api.properties(
           platforms=('win', 'linux', 'mac'),
           isolated_script_task=True,
@@ -757,7 +754,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -774,7 +771,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -791,7 +788,7 @@ def GenTests(api):
       ), api.m.code_coverage(use_clang_coverage=True),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -829,7 +826,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -851,7 +848,7 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(

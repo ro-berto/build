@@ -30,9 +30,8 @@ def RunSteps(api, task_to_retry, expected_value):
       def __init__(self):
         self.trigger_output = task_to_retry
     kwargs['task_to_retry'] = FakeTask()
-  task = api.chromium_swarming.task(name='test-task',
-                                    isolated='00deadbeef00',
-                                    **kwargs)
+  task = api.chromium_swarming.task(
+      name='test-task', cas_input_root='00deadbeef00/size', **kwargs)
   task._trigger_output = {
       'tasks': {
         0: {

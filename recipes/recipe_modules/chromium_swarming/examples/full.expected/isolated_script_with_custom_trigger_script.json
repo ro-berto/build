@@ -51,7 +51,7 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:hash_for_win",
+      "data:hash_for_win/size",
       "--tag",
       "name:hello_world",
       "--tag",
@@ -73,6 +73,8 @@
       "-enable-resultdb",
       "-cipd-package",
       "bin:super/awesome/pkg=git_revision:deadbeef",
+      "--digest",
+      "hash_for_win/size",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
