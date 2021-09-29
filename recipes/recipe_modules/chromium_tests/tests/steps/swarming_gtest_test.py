@@ -82,21 +82,6 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-      }),
-      api.override_step_data(
-          'base_unittests',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=False)),
-  )
-
-  yield api.test(
-      'basic_cas',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
       }),
       api.post_process(post_process.DropExpectation),
@@ -111,7 +96,7 @@ def GenTests(api):
       api.properties(
           ignore_task_failure=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests',
@@ -131,7 +116,7 @@ def GenTests(api):
       api.properties(
           target_platform='android',
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
   )
 
@@ -142,7 +127,7 @@ def GenTests(api):
           override_compile_targets=['base_unittests_run'],
           builder_group='test_group',
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
   )
 
@@ -153,7 +138,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -168,7 +153,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -187,7 +172,7 @@ def GenTests(api):
       api.properties(
           isolate_coverage_data=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.post_check(
           api.swarming.check_triggered_request,

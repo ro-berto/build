@@ -88,7 +88,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -121,7 +121,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -153,7 +153,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -188,7 +188,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',
@@ -210,7 +210,7 @@ def GenTests(api):
           builder='test_buildername',
       ),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests',

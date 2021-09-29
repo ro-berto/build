@@ -253,7 +253,9 @@ def GenTests(api):
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS),
       api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},),
+          swarm_hashes={
+              'base_unittests': '[dummy hash for base_unittests/size]'
+          },),
   ], api.empty_test_data())
 
   yield api.test(
@@ -325,8 +327,9 @@ def GenTests(api):
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS,
           experiments={'chromium.chromium_tests.use_rdb_results': True}),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -380,8 +383,9 @@ def GenTests(api):
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -414,8 +418,9 @@ def GenTests(api):
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -452,8 +457,9 @@ def GenTests(api):
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -492,8 +498,9 @@ def GenTests(api):
           builder='disable-retry-wo-patch',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -527,8 +534,9 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
@@ -561,8 +569,9 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
@@ -600,8 +609,9 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
@@ -661,7 +671,7 @@ def GenTests(api):
       api.properties(
           swarm_hashes={
               'performance_test_suite':
-                  '[dummy hash for performance_test_suite]'
+                  '[dummy hash for performance_test_suite/size]'
           },),
       api.pgo(use_pgo=True, skip_profile_upload=True),
       api.platform('mac', 64),

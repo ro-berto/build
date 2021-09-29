@@ -61,8 +61,8 @@ def GenTests(api):
       }
   })
   fake_swarm_hashes = {
-      fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      webgl_fake_test: 'gggggggggggggggggggggggggg'
+      fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
+      webgl_fake_test: 'gggggggggggggggggggggggggg/size'
   }
   fake_command_lines_digest = (
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/0')

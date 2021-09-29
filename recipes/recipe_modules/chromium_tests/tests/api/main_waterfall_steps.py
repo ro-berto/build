@@ -304,8 +304,9 @@ def GenTests(api):
       'code_coverage_ci_bots',
       api.chromium.ci_build(
           builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
-      api.properties(
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
@@ -338,10 +339,12 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_js_ci_bot',
-      api.chromium.ci_build(builder_group='chromium.fyi',
+      api.chromium.ci_build(
+          builder_group='chromium.fyi',
           builder='linux-chromeos-js-code-coverage'),
       api.properties(
-          swarm_hashes={'browser_tests': '[dummy hash for browser_tests]'}),
+          swarm_hashes={'browser_tests': '[dummy hash for browser_tests/size]'
+                       }),
       api.code_coverage(use_javascript_coverage=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
@@ -366,7 +369,7 @@ def GenTests(api):
       api.properties(
           swarm_hashes={
               'performance_test_suite':
-                  '[dummy hash for performance_test_suite]'
+                  '[dummy hash for performance_test_suite/size]'
           },
           xcode_build_version='11c29',
       ),
@@ -403,7 +406,8 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='chromium.fyi', builder='android-code-coverage'),
       api.properties(swarm_hashes={
-          'chrome_public_test_apk': '[dummy hash for chrome_public_test_apk]'
+          'chrome_public_test_apk':
+              '[dummy hash for chrome_public_test_apk/size]'
       }),
       api.code_coverage(use_java_coverage=True),
       api.chromium_tests.read_source_side_spec(
@@ -484,7 +488,7 @@ def GenTests(api):
           bot_id='isolated_transfer_tester_id',
           builder_db=CUSTOM_BUILDERS),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
@@ -604,7 +608,7 @@ def GenTests(api):
           bot_id='packaged_transfer_tester_id',
           builder_db=CUSTOM_BUILDERS),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
@@ -742,7 +746,7 @@ def GenTests(api):
       'ci_bot_expose_trigger_properties',
       api.properties(
           config='Release',
-          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
+          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'},
       ),
       api.platform('linux', 64),
       api.chromium_tests_builder_config.ci_build(

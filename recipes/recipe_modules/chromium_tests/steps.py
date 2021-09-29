@@ -2336,17 +2336,6 @@ class SwarmingTest(Test):
   def relative_cwd(self, value):
     self._relative_cwd = value
 
-  # TODO(https://crbug.com/chrome-operations/49):
-  # remove this after isolate shutdown.
-  def _get_isolated_or_cas_input_root(self, task_input):
-    """
-    This checks format of |task_input| and returns appropriate value as
-    (isolated, cas_input_root).
-    """
-    if '/' in task_input:
-      return '', task_input
-    return task_input, ''
-
   def create_task(self, api, suffix, task_input):
     """Creates a swarming task. Must be overridden in subclasses.
 
@@ -2637,12 +2626,10 @@ class SwarmingGTestTest(SwarmingTest):
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]
 
-  def create_task(self, api, suffix, task_input):
-    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
+  def create_task(self, api, suffix, cas_input_root):
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
-        isolated=isolated,
         cas_input_root=cas_input_root,
         # The gtest-specific collect step changes step display based on results
         # present in the JSON. So use the default collect-step to avoid
@@ -2923,12 +2910,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def test_options(self, value):
     self._test_options = value
 
-  def create_task(self, api, suffix, task_input):
-    isolated, cas_input_root = self._get_isolated_or_cas_input_root(task_input)
+  def create_task(self, api, suffix, cas_input_root):
     task = api.chromium_swarming.isolated_script_task(
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
-        isolated=isolated,
         cas_input_root=cas_input_root)
 
     self._apply_swarming_task_config(task, api, suffix,
@@ -3321,15 +3306,12 @@ class SwarmingIosTest(SwarmingTest):
     if raw_cmd is not None:
       raw_cmd = list(raw_cmd)
 
-    isolated, cas_input_root = self._get_isolated_or_cas_input_root(
-        task['task input'])
     swarming_task = api.chromium_swarming.task(
         name=task['step name'],
         task_output_dir=task_output_dir,
         failure_as_exception=False,
-        isolated=isolated,
         relative_cwd=task.get('relative_cwd'),
-        cas_input_root=cas_input_root,
+        cas_input_root=task['task input'],
         raw_cmd=raw_cmd)
 
     self._apply_swarming_task_config(

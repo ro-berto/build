@@ -128,19 +128,6 @@ def GenTests(api):
           builder_group='chromium.linux',
           builder='Linux Tests',
       ),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },),
-      filter_out_setup_steps(),
-  )
-
-  yield api.test(
-      'basic_cas',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
       }),
@@ -155,7 +142,8 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
           },),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
@@ -176,7 +164,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           isolate_coverage_data=True,
       ),
@@ -199,7 +187,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },),
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
@@ -216,7 +204,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           shards=20,
           run_without_patch=True,
@@ -254,7 +242,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           run_without_patch='a'),
       api.override_step_data(
@@ -310,7 +298,8 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20),
@@ -350,7 +339,8 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20),
@@ -386,7 +376,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           override_compile_targets=['base_unittests_run']),
       filter_out_setup_steps(),
@@ -400,7 +390,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -428,7 +418,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url',
@@ -455,7 +445,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url',
@@ -484,7 +474,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -511,7 +501,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -538,7 +528,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -553,7 +543,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -572,7 +562,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           git_revision='test_sha',
           version='test-version',
@@ -599,7 +589,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -629,7 +619,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
@@ -662,7 +652,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
@@ -684,7 +674,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
@@ -714,7 +704,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
               'gpu': '8086',
@@ -731,7 +721,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
               'gpu': '8086',
@@ -748,7 +738,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
               'gpu': '8086',
@@ -766,7 +756,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
               'gpu': '8086',
@@ -815,7 +805,7 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
               'device_type': 'hammerhead',
@@ -833,7 +823,8 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20),
@@ -853,7 +844,8 @@ def GenTests(api):
       ),
       api.properties(
           swarm_hashes={
-              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20),

@@ -47,7 +47,7 @@ def GenTests(api):
             builder=builder,
             parent_buildername='Linux Builder'),
         api.properties.generic(
-            swarm_hashes={'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'},
+            swarm_hashes={'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'},
             **kwargs),
         api.chromium_tests.read_source_side_spec(
             builder_group, {

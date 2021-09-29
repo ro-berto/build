@@ -120,7 +120,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -146,7 +146,7 @@ def GenTests(api):
       api.properties(
           fail_mb_and_compile=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -165,7 +165,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -190,7 +190,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       # Initial tests & retry shards with patch produce invalid results.
       api.override_step_data(
@@ -235,7 +235,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -257,7 +257,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       # Initial tests & retry shards with patch produce invalid results.
       api.override_step_data('bot_update', retcode=1),
@@ -273,7 +273,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -295,7 +295,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -375,7 +375,8 @@ def GenTests(api):
             retry_failed_shards=True,
             shards=2,
             swarm_hashes={
-                'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+                'base_unittests':
+                    'ffffffffffffffffffffffffffffffffffffffff/size',
             }),
         # Override 'with patch' collect step output.
         api.override_step_data(
@@ -434,7 +435,7 @@ def GenTests(api):
           use_custom_dimensions=True,
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch) on Windows-10',
@@ -464,7 +465,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -529,7 +530,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -564,7 +565,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -618,7 +619,8 @@ def GenTests(api):
         api.properties(
             retry_failed_shards=True,
             swarm_hashes={
-                'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+                'base_unittests':
+                    'ffffffffffffffffffffffffffffffffffffffff/size',
             }),
         api.override_step_data(
             'base_unittests (with patch)',
@@ -648,7 +650,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -702,7 +704,7 @@ def GenTests(api):
       api.properties(
           shards=20,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -743,7 +745,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
 
       # canned_gtest_output(passing=False)) marks Test.One as a success,
@@ -775,7 +777,7 @@ def GenTests(api):
       api.properties(
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -790,7 +792,7 @@ def GenTests(api):
       api.properties(
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -836,7 +838,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
       api.override_step_data(
           'base_unittests (with patch)',
@@ -925,7 +927,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           expected_jsonish_result={
               'status':
@@ -970,7 +972,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           **{
               '$build/test_utils': {
@@ -1024,7 +1026,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           **{
               '$build/test_utils': {
@@ -1108,7 +1110,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           **{
               '$build/test_utils': {
@@ -1207,7 +1209,7 @@ def GenTests(api):
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           **{
               '$build/test_utils': {
@@ -1307,9 +1309,12 @@ def GenTests(api):
           retry_failed_shards=True,
           additional_gtest_targets=['component_unittests', 'url_unittests'],
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-              'component_unittests': 'cccccccccccccccccccccccccccccccccccccccc',
-              'url_unittests': 'dddddddddddddddddddddddddddddddddddddddd',
+              'base_unittests':
+                  'ffffffffffffffffffffffffffffffffffffffff/size',
+              'component_unittests':
+                  'cccccccccccccccccccccccccccccccccccccccc/size',
+              'url_unittests':
+                  'dddddddddddddddddddddddddddddddddddddddd/size',
           },
           **{
               '$build/test_utils': {

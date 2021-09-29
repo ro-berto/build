@@ -113,9 +113,9 @@ def GenTests(api):
                         ),
                 }
             })),
-        api.properties(
-            swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'
-                         },),
+        api.properties(swarm_hashes={
+            'base_unittests': '[dummy hash for base_unittests/size]'
+        }),
         api.chromium_tests.read_source_side_spec(
             'chromium.test', {
                 'retry-shards': {
