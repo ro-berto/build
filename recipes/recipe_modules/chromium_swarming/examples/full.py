@@ -503,7 +503,6 @@ def GenTests(api):
         'failure': False,
         'id': '148aa78d7aa0100',
         'internal_failure': False,
-        'outputs_ref': None,
         'modified_ts': '2014-09-25 01:42:00',
         'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
         'outputs': [],

@@ -95,29 +95,32 @@ def GenTests(api):
         step_name, generate_test_results_placeholder(api, failing_test=False))
 
   def generate_failing_summary(state, exit_code):
-    return {'shards': [
-        {
-          'bot_id': 'vm30',
-          'completed_ts': '2014-09-25T01:43:11.123',
-          'created_ts': '2014-09-25T01:41:00.123',
-          'duration': 31.5,
-          'exit_code': exit_code,
-          'failure': True,
-          'task_id': '148aa78d7aa%02d00',
-          'internal_failure': False,
-          'modified_ts': '2014-09-25 01:42:00',
-          'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
-          'output': 'Heart beat succeeded on win32.\n'
-          'Foo',
-          'outputs_ref': {
-            'isolated': 'abc123',
-            'isolatedserver': 'https://isolateserver.appspot.com',
-            'namespace': 'default-gzip',
-          },
-          'started_ts': '2014-09-25T01:42:11.123',
-          'state': state,
-        }
-    ]}
+    return {
+        'shards': [{
+            'bot_id': 'vm30',
+            'completed_ts': '2014-09-25T01:43:11.123',
+            'created_ts': '2014-09-25T01:41:00.123',
+            'duration': 31.5,
+            'exit_code': exit_code,
+            'failure': True,
+            'task_id': '148aa78d7aa%02d00',
+            'internal_failure': False,
+            'modified_ts': '2014-09-25 01:42:00',
+            'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
+            'output': 'Heart beat succeeded on win32.\n'
+                      'Foo',
+            'cas_output_root': {
+                'digest': {
+                    'hash':
+                        'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca49599'
+                        '1b7852b855',
+                    'size_bytes': '0',
+                },
+            },
+            'started_ts': '2014-09-25T01:42:11.123',
+            'state': state,
+        }]
+    }
 
   yield api.test(
       'basic',

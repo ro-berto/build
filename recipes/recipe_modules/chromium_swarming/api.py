@@ -1741,12 +1741,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         should_show_shard = task_id in dispatched_task_ids
 
       if shard and self.show_outputs_ref_in_collect_step and should_show_shard:
-        outputs_ref = shard.get('outputs_ref')
-        if outputs_ref:
-          link_name = 'shard #%d isolated out' % index
-          links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
-            outputs_ref['isolatedserver'], outputs_ref['namespace'],
-            outputs_ref['isolated'])
         cas_output_root = shard.get('cas_output_root')
         if cas_output_root:
           link_name = 'shard #%d cas output' % index
@@ -1988,7 +1982,6 @@ class SwarmingTask(object):
         self.builder_info[0], self.builder_info[1])
 
     return '%s/%s/%s%s' % (self.request.name, self.request[0].dimensions['os'],
-                           self.request[0].isolated[:10] or
                            self.request[0].cas_input_root[:10],
                            task_name_suffix)
 
