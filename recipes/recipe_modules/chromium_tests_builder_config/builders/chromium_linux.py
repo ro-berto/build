@@ -96,6 +96,36 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'Linux Builder (Wayland)':
+        _chromium_linux_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
+    'Linux Tests (Wayland)':
+        _chromium_linux_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['use_clang_coverage'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.TEST,
+            parent_buildername='Linux Builder (Wayland)',
+            simulation_platform='linux',
+        ),
     'linux-ozone-rel':
         _chromium_linux_spec(
             chromium_config='chromium',

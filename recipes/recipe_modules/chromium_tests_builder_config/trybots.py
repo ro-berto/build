@@ -841,6 +841,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ],
             ),
+        'linux-wayland-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='Linux Builder (Wayland)',
+                tester='Linux Tests (Wayland)',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
         'linux-webkit-msan-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
