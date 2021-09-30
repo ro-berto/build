@@ -487,8 +487,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/builder/src/tools/clang/scripts/package.py",
       "--upload"
     ],

@@ -91,10 +91,10 @@ def RunSteps(api):
       args = ['--upload']
       if api.buildbucket.builder_name == 'mac_upload_clang_arm':
         args += ['--build-mac-arm']
-      api.python(
-          'package clang',
-          api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
-          args=args)
+      api.step('package clang', [
+          'python3', api.path['checkout'].join('tools', 'clang', 'scripts',
+                                               'package.py')
+      ] + args)
 
 
 def GenTests(api):
