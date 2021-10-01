@@ -38,7 +38,9 @@ DEPS = [
 
 
 # If present in a CL description, will override the existing default builders
-# with a custom list. Format is expected to be "<bucket>.<builder>".
+# with a custom list. Format is expected to be:
+# "luci.<project>.<bucket>:<builder>"
+# For example: "luci.chromium.try:some-builder"
 BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
