@@ -229,6 +229,25 @@ SPEC = {
             gs_acl='public-read',
             simulation_platform='mac',
         ),
+    'mac-arm64-archive-tagged':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'clobber',
+                'mb',
+                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=['checkout_pgo_profiles'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+            },
+            archive_build=True,
+            gs_bucket='chromium-browser-versioned',
+            gs_build_name='experimental/Mac_Arm_Tagged',
+            gs_acl='public-read',
+            simulation_platform='mac',
+        ),
     'fuchsia-official':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
