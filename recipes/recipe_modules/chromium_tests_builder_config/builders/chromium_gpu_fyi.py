@@ -1007,23 +1007,6 @@ SPEC = {
             simulation_platform='mac',
             serialize_tests=True,
         ),
-    'Mac FYI GPU ASAN Release':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'Android FYI Release (Nexus 5)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
