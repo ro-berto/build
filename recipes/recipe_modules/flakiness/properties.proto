@@ -30,4 +30,8 @@ message InputProperties {
     /// The max number of tests to rerun. Defaults to 40, and if more tests are
     /// found than this value, a random subset will be selected for testing.
     int32 max_test_targets = 5;
+
+    /// The number of times to repeat a test when verifying for flakiness.
+    /// Defaults to 20.
+    int32 repeat_count = 6;
 }

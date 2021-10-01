@@ -3,9 +3,12 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+from RECIPE_MODULES.build.chromium_tests import steps
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import common as resultdb_common
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
@@ -28,19 +31,38 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
-  api.flakiness.check_tests_for_flakiness(test_objects=[])
+  test_objects = [
+      steps.SwarmingIsolatedScriptTest(
+          steps.SwarmingIsolatedScriptTestSpec.create(
+              **{
+                  "target_name": "TestSuite.Test",
+                  "isolate_profile_data": True,
+                  "name": "TestSuite Test",
+                  "test_id_prefix": "ninja://sample/test:some_test"
+              }))
+  ]
+  ret = api.flakiness.check_tests_for_flakiness(test_objects=test_objects)
+
+  if ret:
+    for test_obj in ret:
+      api.assertions.assertEqual(test_obj._test_options.retry_limit, 0)
+      api.assertions.assertEqual(test_obj._test_options.repeat_count,
+                                 api.flakiness._repeat_count)
 
 
 def GenTests(api):
   build_database, inv_bundle = [], {}
+  builder = builder_pb2.BuilderID(
+      builder='ios-simulator-full-configs', project='chromium', bucket='try')
   for i in range(10):
     inv = "invocations/{}".format(i + 1)
     build = build_pb2.Build(
-        builder=builder_pb2.BuilderID(builder='Builder'),
+        builder=builder,
         infra=build_pb2.BuildInfra(
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=inv)),
     )
     build_database.append(build)
+
     test_results = [
         test_result_pb2.TestResult(
             test_id='ninja://sample/test:some_test/TestSuite.Test' + str(i),
@@ -68,19 +90,17 @@ def GenTests(api):
   ])
 
   basic_build = build_pb2.Build(
-      builder=builder_pb2.BuilderID(
-          builder='Builder', project='chromium', bucket='try'),
+      builder=builder,
       infra=build_pb2.BuildInfra(
           resultdb=build_pb2.BuildInfra.ResultDB(invocation='invocations/100')),
-      input=build_pb2.Build.Input(
-          gerrit_changes=[
-              common_pb2.GerritChange(
-                  host='chromium-review.googlesource.com',
-                  project='chromium/src',
-                  change=10,
-                  patchset=3,
-              )
-          ],))
+      input=build_pb2.Build.Input(gerrit_changes=[
+          common_pb2.GerritChange(
+              host='chromium-review.googlesource.com',
+              project='chromium/src',
+              change=10,
+              patchset=3,
+          )
+      ]))
 
   yield api.test(
       'basic',

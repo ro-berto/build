@@ -2,10 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
 import random
 import re
 
 from recipe_engine import recipe_api
+from RECIPE_MODULES.build.chromium_tests import steps
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
@@ -17,35 +19,25 @@ _FILE_PATH_ADDING_TESTS_PATTERN = ('^(.+(BUILD\.gn|DEPS|\.gni)|'
                                    'src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$')
 
 
-class TestResult():
-  """A class to handle ResultDB test information
+class TestDefinition():
+  """A class to contain ResultDB TestReuslt Proto information
 
   Attributes:
-    * is_presubmit: boolean to determine whether the provided test_id is
-        associated with a presubmit test. We won't be endorsing tests
-        for presubmits. presubmit tests must begin wtih 'presubmit' instead of
-        'ninja'
-    * fully_qualified_ninja_target: (string) ninja target parsed from test_id.
-        ie/ for test_id = "ninja://sample/test:some_test/TestSuite.Test1",
-        the ninja target here would be //sample/test:some_test. This is used to
-        find the Test objects generated for the given run.
-        See: chromium_tests/steps.py TestSpec's full_test_target attribute
-        (http://shortn/_ktlTcH0zwo)
-    * test: (string) test_suite and test parsed from test_id. This is used to
-        update TestOptions test filter so that only this test is run.
-        ie/ for test_id = "ninja://sample/test:some_test/TestSuite.Test1",
-        test = TestSuite.Test1
-    * test_id: (string) ResultDB's test_id (go/resultdb-concepts)
     * variant_hash: (stirng) ResultDB's variant_hash (go/resultdb-concepts)
   """
 
-  def __init__(self, test_id, variant_hash):
-    self.is_presubmit = test_id.startswith('presubmit')
-    base = test_id[test_id.index(':') + 1:]
-    self.fully_qualified_ninja_target = base[:base.rindex('/')]
-    self.test = base[base.rindex('/') + 1:]
-    self.test_id = test_id
-    self.variant_hash = variant_hash
+  def __init__(self, test_result):
+    self.tags = test_result.tags if test_result.tags else []
+    self.test_id = test_result.test_id
+    self.variants = getattr(test_result.variant,
+                            'def') if test_result.variant else {}
+    self.variant_hash = test_result.variant_hash
+
+  def __eq__(self, t2):
+    return (self.test_id, self.variant_hash) == t2
+
+  def __hash__(self):
+    return hash((self.test_id, self.variant_hash))
 
 
 class FlakinessApi(recipe_api.RecipeApi):
@@ -55,6 +47,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._using_test_identifier = properties.identify_new_tests
     self._max_test_targets = properties.max_test_targets or 40
+    self._repeat_count = properties.repeat_count or 20
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
@@ -189,7 +182,7 @@ class FlakinessApi(recipe_api.RecipeApi):
         step_name (str): The name of the step in which this call is made.
 
     Returns:
-        A set of (test_id, test variant hash) tuples.
+        A set of TestDefinition objects.
     """
     test_query_count = test_query_count or self.historical_query_count
     step_name = step_name or 'get_test_variants'
@@ -201,7 +194,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     test_set = set()
     for inv in inv_dict.values():
       for test_result in inv.test_results:
-        test_set.add((test_result.test_id, test_result.variant_hash))
+        test_set.add(TestDefinition(test_result))
 
     return test_set
 
@@ -216,8 +209,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     the past day and iterates through response to eliminate any false positives
     from the preliminary new test list.
     Args:
-      prelim_tests (set of tuples of str): the set of (test_id,test variant
-        hash) tuples identified as potential new tests to be cross-referenced
+      prelim_tests (set of TestDefinition objects): the set of TestDefinition
+        objects identified as potential new tests to be cross-referenced
         with ResultDB. This set will be modified by this method to contain only
         tests not found in ResultDB existing tests.
       excluded_invs (set of str): the invocation names belonging to builds
@@ -228,12 +221,12 @@ class FlakinessApi(recipe_api.RecipeApi):
         test results.
 
     Returns:
-      A set of (test_id, test variant hash) tuples representing new tests.
+      A set of TestDefinition objects.
 
     """
     results = self.m.resultdb.get_test_result_history(
         realm=self.m.buildbucket.builder_realm,
-        test_id_regexp='|'.join(t[0] for t in list(prelim_tests)),
+        test_id_regexp='|'.join(t.test_id for t in list(prelim_tests)),
         variant_predicate=predicate_pb2.VariantPredicate(
             contains={'def': {
                 'builder': builder
@@ -264,9 +257,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           historical builds are found.
 
     Returns:
-        A set of strings representing test_id + variant_hash concatenations
-        for all tests present in the current build but absent in the historical
-        build data.
+        A set of TestDefinition objects.
     """
 
     def join_tests(test_set):
@@ -277,12 +268,12 @@ class FlakinessApi(recipe_api.RecipeApi):
       strings.
       """
       return sorted([
-          '_'.join([test_id, variant_hash])
-          for test_id, variant_hash in test_set
+          '_'.join([test_result.test_id, test_result.variant_hash])
+          for test_result in test_set
       ])
 
     if not self.using_test_identifier:
-      return None
+      return set([])
 
     variant_step = variant_step or 'get_current_cl_test_variants'
     history_step = history_step or 'get_historical_test_variants'
@@ -318,10 +309,6 @@ class FlakinessApi(recipe_api.RecipeApi):
           builder=current_builder.builder)
       presentation.logs['new_tests'] = join_tests(new_tests)
 
-      new_tests = [
-          TestResult(test_id, variant_hash)
-          for test_id, variant_hash in new_tests
-      ]
     return new_tests
 
   def check_tests_for_flakiness(self, test_objects):
@@ -329,25 +316,42 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     (crbug/1204163) - Ensures that tests identified as new are not flaky.
     Note: This is WIP and should not be invoked.
-
-    Returns:
-      list of test tuples (test_id, variant_hash)
     """
     # Check if there are endorser footers to parse
     commit_footer_values = [
         val.lower()
         for val in self.m.tryserver.get_footer(self.COMMIT_FOOTER_KEY)
     ]
-    if 'skip' in commit_footer_values:
+    if not self.should_identify_new_tests() or 'skip' in commit_footer_values:
       # No action for endorsing logic
-      return None
+      return []
 
-    new_tests = []
-    if self.should_identify_new_tests():
-      new_tests = self.identify_new_tests()
+    new_tests = self.identify_new_tests()
     if new_tests and len(new_tests) > self._max_test_targets:
       # There are more new tests detected than what we're permitting, so we're
       # taking a random subset to re-run
       new_tests = random.sample(new_tests, self._max_test_targets)
 
-    return new_tests
+    # This operation is O(len(test_obj) * len(new_tests)) because parsing
+    # test_id is only intended for LUCI UI grouping, see
+    # http://shortn/_StMScXolrz. max_test_targets will also bind the number of
+    # iterations here. We loop the test objects and check all new tests to see
+    # if the test_id start similarly.
+    new_test_objects = []
+    for test in test_objects:
+      # find whether there exists a Test object that has a matching test_id.
+      for new_test in new_tests:
+        if test.spec.test_id_prefix in new_test.test_id:
+          test_copy = copy.deepcopy(test)
+          # test_id = test_id_prefix + {A full test_suite + test_name
+          # representation}, so we use the test_id_prefix to split out
+          # the test_suite and test_name
+          test_filter = [new_test.test_id.split(test.spec.test_id_prefix)[-1]]
+          options = steps.TestOptions(
+              test_filter=test_filter,
+              repeat_count=self._repeat_count,
+              retry_limit=0)
+          test_copy._test_options = options
+          new_test_objects.append(test_copy)
+
+    return new_test_objects
