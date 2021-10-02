@@ -1611,6 +1611,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Mac Builder',
                 tester='Mac Pro FYI Release (AMD)',
             ),
+        'gpu-fyi-try-mac-amd-retina-asan':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Mac Builder (asan)',
+                tester='Mac FYI Retina ASAN (AMD)',
+            ),
         'gpu-fyi-try-mac-amd-retina-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1634,6 +1640,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Mac arm64 Builder',
                 tester='Mac FYI Release (Apple M1)',
+            ),
+        'gpu-fyi-try-mac-intel-asan':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='GPU FYI Mac Builder (asan)',
+                tester='Mac FYI ASAN (Intel)',
             ),
         'gpu-fyi-try-mac-intel-dbg':
             try_spec.TrySpec.create_for_single_mirror(
