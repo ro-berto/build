@@ -62,10 +62,6 @@ SPEC = {
             chromium_config_kwargs={
                 'TARGET_BITS': 32,
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-versioned',
-            gs_build_name='experimental/Win_Tagged',
-            gs_acl='public-read',
             simulation_platform='win',
         ),
     'win-official':
@@ -125,10 +121,6 @@ SPEC = {
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-versioned',
-            gs_build_name='experimental/Win_x64_Tagged',
-            gs_acl='public-read',
             simulation_platform='win',
         ),
     'mac-official':
@@ -190,10 +182,6 @@ SPEC = {
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-versioned',
-            gs_build_name='experimental/Mac_Tagged',
-            gs_acl='public-read',
             simulation_platform='mac',
         ),
     'mac-arm64-archive-dbg':
@@ -242,10 +230,6 @@ SPEC = {
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-versioned',
-            gs_build_name='experimental/Mac_Arm_Tagged',
-            gs_acl='public-read',
             simulation_platform='mac',
         ),
     'fuchsia-official':
@@ -320,10 +304,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-versioned',
-            gs_build_name='experimental/Linux_x64_Tagged',
-            gs_acl='public-read',
             simulation_platform='linux',
         ),
     'android-official':
