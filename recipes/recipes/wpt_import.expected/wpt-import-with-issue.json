@@ -255,8 +255,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
+      "vpython3",
       "[START_DIR]/src/third_party/blink/tools/wpt_import.py",
       "--credentials-json",
       "[CLEANUP]/wpt-import-export.json",

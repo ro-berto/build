@@ -13,7 +13,7 @@ See: //docs/testing/web_platform_tests.md (https://goo.gl/rSRGmZ)
 
 import contextlib
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -28,6 +28,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/runtime',
+    'recipe_engine/step',
 ]
 
 # The credentials JSON is encrypted with KMS_CRYPTO_KEY and then stored in
@@ -86,8 +87,9 @@ def RunSteps(api):
 
     try:
       with api.context(cwd=blink_dir):
-        api.python(
-            'Import changes from WPT to Chromium', script, args, venv=True)
+        cmd = ['vpython3', script] + args
+        api.step(
+            'Import changes from WPT to Chromium', cmd)
     finally:
       git_cl_issue_link(api)
 
