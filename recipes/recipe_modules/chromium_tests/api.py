@@ -1817,51 +1817,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_targets, compile_targets
 
-  def revise_affected_files_for_deps_autorolls(self, affected_files):
-    # When DEPS is autorolled, typically the change is an updated git revision.
-    # We use the following logic to figure out which files really changed.
-    # by checking out the old DEPS file and recursively running git diff on all
-    # of the repos listed in DEPS.
-    # When successful, diff_deps() replaces just ['DEPS'] with an actual list of
-    # affected files. When not successful, it falls back to the original logic
-    # We don't apply this logic to manual DEPS rolls, as they can contain
-    # changes to other variables, whose effects are not easily discernible.
-    owner = self.m.tryserver.gerrit_change_owner
-    should_revise = (
-        affected_files == ['DEPS'] and owner and
-        owner.get('_account_id') in AUTOROLLER_ACCOUNT_IDS)
-
-    if not should_revise:
-      return affected_files
-
-    with self.m.step.nest('Analyze DEPS autorolls'):
-      try:
-        revised_affected_files = self.m.gclient.diff_deps(
-            self.m.chromium_checkout.checkout_dir.join(
-                self.m.gclient.get_gerrit_patch_root()))
-
-        # Strip the leading src/
-        def remove_src_prefix(src_file):
-          if src_file.startswith('src/'):
-            return src_file[len('src/'):]
-          return src_file
-
-        revised_affected_files = [
-            remove_src_prefix(src_file) for src_file in revised_affected_files
-        ]
-        result = self.m.step('Revised affected files', [])
-        result.presentation.logs['files'] = revised_affected_files
-        return revised_affected_files
-      except self.m.gclient.DepsDiffException:
-        # Sometimes it can't figure out what changed, so it'll throw this.
-        # In this case, we'll test everything, so it's safe to return
-        self.m.step('Skip', [])
-        return affected_files
-      except Exception:
-        result = self.m.step('error', [])
-        result.presentation.logs['backtrace'] = traceback.format_exc()
-        return affected_files
-
   def configure_swarming(self, precommit, task_output_stdout=None, **kwargs):
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=precommit, **kwargs)
@@ -1938,8 +1893,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         report_via_property=True
     )
     is_deps_only_change = affected_files == ["DEPS"]
-    affected_files = self.revise_affected_files_for_deps_autorolls(
-        affected_files)
 
     # Must happen before without patch steps.
     if self.m.code_coverage.using_coverage:
