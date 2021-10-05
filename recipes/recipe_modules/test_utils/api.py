@@ -1320,7 +1320,7 @@ class SkylabGroup(TestGroup):
 
   def __init__(self, test_suites, result_db):
     super(SkylabGroup, self).__init__(test_suites, result_db)
-    self.ctp_build_id = 0
+    self.ctp_build_by_tag = {}
     self.ctp_build_timeout_sec = 3600
 
   def pre_run(self, caller_api, suffix):
@@ -1335,15 +1335,15 @@ class SkylabGroup(TestGroup):
       build_timeout = max([r.timeout_sec for r in reqs])
       if build_timeout > self.ctp_build_timeout_sec:
         self.ctp_build_timeout_sec = build_timeout
-      self.ctp_build_id = caller_api.skylab.schedule_suites(
-          'schedule tests on skylab', reqs)
+      self.ctp_build_by_tag = caller_api.skylab.schedule_suites(
+          reqs, 'schedule tests on skylab')
 
   def run(self, caller_api, suffix):
     """Fetch the responses for each test request."""
     tag_resp = {}
-    if self.ctp_build_id:
+    if self.ctp_build_by_tag:
       build_resp = caller_api.skylab.wait_on_suites(
-          self.ctp_build_id, timeout_seconds=self.ctp_build_timeout_sec)
+          self.ctp_build_by_tag, timeout_seconds=self.ctp_build_timeout_sec)
       tag_resp = build_resp.responses
     for t in self._test_suites:
       t.ctp_responses = tag_resp.get(t.name, [])

@@ -8,7 +8,14 @@
     "name": "test_pre_run.schedule tests on skylab",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@suite link@https://cr-buildbucket.appspot.com/build/1234@@@"
+      "@@@STEP_LINK@basic_EVE_TOT@https://cr-buildbucket.appspot.com/build/1234@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run.schedule tests on skylab.basic_EVE_TOT",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

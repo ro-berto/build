@@ -47,7 +47,8 @@ class SkylabRequest(object):
   suites.
 
   Attributes:
-    * request_tag: The tag to identify a request in the CTP build.
+    * request_tag: The tag to identify a request from CTP build(s). Within a
+          Chromium/Chrome build, each skylab test has its unique request_tag.
     * board: The CrOS build target name, e.g. eve, kevin.
     * cros_img: The GS path presenting CrOS image to provision the DUT,
           e.g. atlas-release/R88-13545.0.0

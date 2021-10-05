@@ -194,21 +194,17 @@ def GenTests(api):
             responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
         step_name=(
             'test_pre_run.schedule tests on skylab.buildbucket.schedule'))
+
     test_data += api.buildbucket.simulated_collect_output(
-        [
-            api.skylab.test_with_multi_response(1234,
-                                                gen_tag_resp(api, tag, tasks)),
-        ],
+        api.skylab.test_with_multi_response(1234,
+                                            [gen_tag_resp(api, tag, tasks)]),
         step_name='collect skylab results.buildbucket.collect')
     return test_data
 
   def _extract_skylab_req(steps):
-    build_req = api.json.loads(
-        steps['test_pre_run.schedule tests on skylab.buildbucket.schedule']
-        .logs['request'])
-    properties = build_req['requests'][0]['scheduleBuild'].get('properties', [])
-    for req in properties['requests'].values():
-      yield req
+    return api.skylab.step_logs_to_ctp_by_tag(
+        steps['test_pre_run.schedule tests on skylab.buildbucket.schedule'].logs
+    )
 
   def archive_gsuri_should_match_skylab_req(check, steps, target=TAST_TARGET):
     archive_step = ('prepare skylab tests.'
@@ -218,22 +214,20 @@ def GenTests(api):
                     'lacros_compressed.squash').format(target=target)
     archive_link = steps[archive_step].links['gsutil.upload']
     gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
-    for req in _extract_skylab_req(steps):
+    for req in _extract_skylab_req(steps).values():
       sw_deps = req['params']['softwareDependencies']
       dep_of_lacros = [
-          '%s/lacros_compressed.squash' % d['lacrosGcsPath']
-          for d in sw_deps
-          if d.get('lacrosGcsPath')
+          d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
       ]
-      check(gs_uri in dep_of_lacros)
+      check(gs_uri == '%s/lacros_compressed.squash' % dep_of_lacros[0])
 
   def check_req_by_default_enabled_retry(check, steps):
-    for req in _extract_skylab_req(steps):
+    for req in _extract_skylab_req(steps).values():
       params_retry = req['params']['retry']
       check(params_retry['allow'] == True and params_retry['max'] == 3)
 
   def check_exe_rel_path_for_gtest(check, steps, rel_path):
-    for req in _extract_skylab_req(steps):
+    for req in _extract_skylab_req(steps).values():
       test = req['testPlan']['test'][0]
       check(rel_path in test['autotest']['testArgs'])
 

@@ -217,22 +217,19 @@ def GenTests(api):
           step_name=(
               'test_pre_run.schedule tests on skylab.buildbucket.schedule')),
       api.buildbucket.simulated_collect_output(
-          [
-              api.skylab.test_with_multi_response(
-                  1234, {
-                      'basic_EVE_TOT':
-                          api.skylab.gen_json_execution_response([
-                              api.skylab.gen_task_result(
-                                  'lacros.Basic',
-                                  [
-                                      ExecuteResponse.TaskResult.TestCaseResult(
-                                          name='green_case',
-                                          verdict=TaskState.VERDICT_PASSED)
-                                  ],
-                              )
-                          ]),
-                  }),
-          ],
+          api.skylab.test_with_multi_response(1234, [{
+              'basic_EVE_TOT':
+                  api.skylab.gen_json_execution_response([
+                      api.skylab.gen_task_result(
+                          'lacros.Basic',
+                          [
+                              ExecuteResponse.TaskResult.TestCaseResult(
+                                  name='green_case',
+                                  verdict=TaskState.VERDICT_PASSED)
+                          ],
+                      )
+                  ]),
+          }]),
           step_name='collect skylab results.buildbucket.collect'),
   )
 

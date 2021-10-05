@@ -12,6 +12,8 @@ from google.protobuf import json_format
 from recipe_engine import recipe_test_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
+                                                       builds_service_pb2)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.test_platform.steps.execution import ExecuteResponse, ExecuteResponses
 from PB.test_platform.taskstate import TaskState
@@ -58,12 +60,16 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
       build_id,
       tag_resp,
   ):
-    """Create a CTP build wrapping multiple CTP responses."""
-    return build_pb2.Build(
-        id=build_id,
-        status=common_pb2.SUCCESS,
-        output=build_pb2.Build.Output(
-            properties=self._multi_response(tag_resp)))
+    """Create a list of CTP build for each tagged response."""
+    builds = []
+    for i, t in enumerate(tag_resp):
+      builds.append(
+          build_pb2.Build(
+              id=(build_id + i),
+              status=common_pb2.SUCCESS,
+              output=build_pb2.Build.Output(
+                  properties=self._multi_response(t))))
+    return builds
 
   def _multi_response(self, tag_resp):
     """Translate the tagged response into a struct_pb2 object."""
@@ -79,3 +85,28 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
     """Encode proto message to a base64 string."""
     wire_format = proto.SerializeToString()
     return base64.encodebytes(zlib.compress(wire_format)).decode('ascii')
+
+  def step_logs_to_ctp_by_tag(self, step_log):
+    """Helper to convey the step_log into a dict of CTP request."""
+    request = self.m.json.loads(step_log['request'])
+    ctp_by_tag = {}
+    for r in request['requests']:
+      ctp_by_tag.update(r['scheduleBuild']['properties']['requests'])
+    return ctp_by_tag
+
+  def gen_schedule_build_resps(self, step_name, req_num):
+    """Emulates the step of schedule_suites().
+
+    Args:
+    * step_name: The step name to overwrite the return.
+    * req_num: The number of buildbucket responses to mock.
+
+    Returns:
+      A step with mock response.
+    """
+    resp = []
+    for i in xrange(req_num):
+      resp.append(dict(schedule_build=build_pb2.Build(id=(800 + i))))
+    return self.m.buildbucket.simulated_schedule_output(
+        builds_service_pb2.BatchResponse(responses=resp),
+        step_name='%s.buildbucket.schedule' % step_name)

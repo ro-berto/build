@@ -13,22 +13,19 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.skylab.wait_on_suites(1234, timeout_seconds=10)
+  api.skylab.wait_on_suites({'foo': 1234}, timeout_seconds=10)
 
 
 def GenTests(api):
 
-  def check_step_status(check, steps, expected):
-    s = steps['collect skylab results']
-    check(s.status == expected)
-
-  # If timeout, 'collect skylab results' step should raise a FAILURE.
+  # If timeout, 'collect skylab results' step should raise an EXCEPTION.
   yield api.test(
       'collect_results_failure_by_timeout',
       api.step_data(
           'collect skylab results.buildbucket.collect.wait',
           times_out_after=12),
-      api.post_check(check_step_status, 'FAILURE'),
+      api.post_process(post_process.StepException, 'collect skylab results'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -40,6 +37,7 @@ def GenTests(api):
           'collect skylab results.buildbucket.collect.wait',
           times_out_after=9,
           retcode=1),
-      api.post_check(check_step_status, 'EXCEPTION'),
+      api.post_process(post_process.StepException, 'collect skylab results'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
