@@ -61,6 +61,11 @@ _SPEC = {
                     buildername='linux-clang-rel',
                     tester='linux-nvidia',
                 ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-clang-rel',
+                    tester='linux-swiftshader',
+                ),
             ],
             analyze_names=['angle'],
             retry_failed_shards=False,
@@ -147,6 +152,11 @@ _SPEC = {
                     builder_group='angle',
                     buildername='win-clang-x86-rel',
                     tester='win7-x86-amd',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-clang-x86-rel',
+                    tester='win10-x86-swiftshader',
                 ),
             ],
             analyze_names=['angle'],

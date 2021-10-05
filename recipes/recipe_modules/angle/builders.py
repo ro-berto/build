@@ -106,6 +106,8 @@ _SPEC = {
     'linux-perf':
         _create_builder_config(
             'linux', 'Release', 64, perf_isolate_upload=True),
+    'linux-swiftshader':
+        _create_tester_config('linux', 64, 'linux-clang-rel'),
     'linux-trace-rel':
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
@@ -152,6 +154,8 @@ _SPEC = {
         _create_tester_config('win', 64, 'win-clang-x64-rel'),
     'win10-x64-nvidia-perf':
         _create_tester_config('win', 64, 'win-perf'),
+    'win10-x86-swiftshader':
+        _create_tester_config('win', 32, 'win-clang-x86-rel'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({
