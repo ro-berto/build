@@ -36,60 +36,84 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.m.chromium_tests.raise_failure_if_cq_depends_footer_exists()
 
-    # Get current revision at HEAD of branch
-    # TODO (gbeaty): To support downstream CLs, we need to find the revision
-    # of the root solution, not the repo of the CL
-    ref = self.m.tryserver.gerrit_change_target_ref
+    builder_id, builder_config = self.configure_build()
 
-    head_revision, _ = self.m.gitiles.log(
-        self.m.tryserver.gerrit_change_repo_url,
-        ref,
+    patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
+    gerrit_change_project = self.m.tryserver.gerrit_change.project
+
+    if gerrit_change_project == 'chromium/src':
+      # Usually refs/heads/main for ToT CLs, but can be branch heads for
+      # branch CLs
+      src_ref = patch_repo_ref
+    else:
+      # This assumes that non chromium/src projects only runs builds on
+      # the main branch of src.
+      src_ref = 'refs/heads/main'
+
+    src_head_revision, _ = self.m.gitiles.log(
+        'https://chromium.googlesource.com/chromium/src',
+        src_ref,
         limit=1,
-        step_name='read src HEAD revision at {}'.format(ref))
-    head_revision = head_revision[0]['commit']
-
-    gitiles_commit = common_pb.GitilesCommit(
-        host=self.m.tryserver.gerrit_change_repo_host,
-        project=self.m.tryserver.gerrit_change.project,
-        ref=ref,
-        id=head_revision)
+        step_name='read src HEAD revision at {}'.format(src_ref))
+    src_head_revision = src_head_revision[0]['commit']
 
     # Trigger compilator to compile and build targets with patch
     # Scheduled build inherits current build's project and bucket
+    compilator_properties = {
+        'orchestrator': {
+            'builder_name': self.m.buildbucket.builder_name,
+            'builder_group': self.m.builder_group.for_current
+        }
+    }
+
+    gitiles_commit = None
+    root_solution_revision = None
+    patch_repo_head_revision = None
+
+    gclient_soln_name = self.m.gclient.get_repo_path(
+        self.m.tryserver.gerrit_change_repo_url)
+
+    if gerrit_change_project == 'chromium/src':
+      patch_repo_head_revision = src_head_revision
+      gitiles_commit = common_pb.GitilesCommit(
+          host=self.m.tryserver.gerrit_change_repo_host,
+          project=self.m.tryserver.gerrit_change.project,
+          ref=src_ref,
+          id=src_head_revision)
+    else:
+      patch_repo_head_revision, _ = self.m.gitiles.log(
+          self.m.tryserver.gerrit_change_repo_url,
+          patch_repo_ref,
+          limit=1,
+          step_name='read {} HEAD revision at {}'.format(
+              gerrit_change_project, patch_repo_ref))
+      patch_repo_head_revision = patch_repo_head_revision[0]['commit']
+      root_solution_revision = src_head_revision
+
+      compilator_properties['root_solution_revision'] = root_solution_revision
+      compilator_properties['deps_revision_overrides'] = {
+          gclient_soln_name: patch_repo_head_revision
+      }
+
+    self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
+
     request = self.m.buildbucket.schedule_request(
         builder=self.compilator,
         swarming_parent_run_id=self.m.swarming.task_id,
-        properties={
-            'orchestrator': {
-                'builder_name': self.m.buildbucket.builder_name,
-                'builder_group': self.m.builder_group.for_current
-            }
-        },
+        properties=compilator_properties,
         gitiles_commit=gitiles_commit,
         tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
     build = self.m.buildbucket.schedule(
         [request], step_name='trigger compilator (with patch)')[0]
 
-    builder_id, builder_config = (
-        self.m.chromium_tests_builder_config.lookup_builder())
-
-    self.m.chromium_tests.configure_build(
-        builder_config, self.m.chromium_tests.should_use_rts(builder_config))
-
-    # Set self.m.chromium.c.compile_py.compiler to empty string so that
-    # prepare_checkout() does not attempt to run ensure_goma()
-    self.m.chromium.c.compile_py.compiler = ''
-    self.m.chromium_tests.report_builders(builder_config)
-
-    self.m.chromium.apply_config('trybot_flavor')
-    self.m.gclient.c.revisions['src'] = gitiles_commit.id
     bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
         builder_config,
         timeout=3600,
         enforce_fetch=True,
         no_fetch_tags=True,
-        refs=[ref])
+        root_solution_revision=root_solution_revision,
+        refs=[patch_repo_ref])
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
@@ -180,17 +204,13 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # =====================================================================
 
     # Trigger another compilator build with the targets needed
+    compilator_properties['swarming_targets'] = list(
+        set(t.target_name for t in failing_test_suites))
+
     request = self.m.buildbucket.schedule_request(
         builder=self.compilator,
         swarming_parent_run_id=self.m.swarming.task_id,
-        properties={
-            'orchestrator': {
-                'builder_name': self.m.buildbucket.builder_name,
-                'builder_group': self.m.builder_group.for_current
-            },
-            'swarming_targets':
-                list(set(t.target_name for t in failing_test_suites)),
-        },
+        properties=compilator_properties,
         gitiles_commit=gitiles_commit,
         tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
 
@@ -249,6 +269,21 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     return result_pb2.RawResult(
         summary_markdown=summary_markdown, status=final_status)
+
+  def configure_build(self):
+    builder_id, builder_config = (
+        self.m.chromium_tests_builder_config.lookup_builder())
+
+    self.m.chromium_tests.configure_build(
+        builder_config, self.m.chromium_tests.should_use_rts(builder_config))
+
+    # Set self.m.chromium.c.compile_py.compiler to empty string so that
+    # prepare_checkout() does not attempt to run ensure_goma()
+    self.m.chromium.c.compile_py.compiler = ''
+    self.m.chromium_tests.report_builders(builder_config)
+
+    self.m.chromium.apply_config('trybot_flavor')
+    return builder_id, builder_config
 
   def launch_compilator_watcher(self, build, is_swarming_phase, with_patch):
     """Launches a sub_build displaying a subset of the Compilator's steps

@@ -22,4 +22,15 @@ message InputProperties {
   // When this field is populated, the Compilator will compile these targets
   // without a patch.
   repeated string swarming_targets = 2;
+
+  // Sets which revision to check out for the dependency
+  // Maps dependency repo's path name (like 'src/v8') to revision
+  // This is required for other non-src projects running a builder using
+  // orchestrators and compilators
+  map<string, string> deps_revision_overrides = 3;
+
+  // Sets which revision to check out for chromium/src
+  // This is required for other non-src projects running a builder using
+  // orchestrators and compilators
+  string root_solution_revision = 4;
 }

@@ -34,10 +34,11 @@ PROPERTIES = InputProperties
 
 
 def RunSteps(api, properties):
-  if not api.buildbucket.gitiles_commit.id:
+  if not api.buildbucket.gitiles_commit.id and not (
+      properties.deps_revision_overrides and properties.root_solution_revision):
     raise api.step.InfraFailure(
-        'Compilator requires gitiles_commit to know which revision to check '
-        'out')
+        'Compilator requires gitiles_commit or deps_revision_overrides to know'
+        ' which revision to check out')
 
   with api.chromium.chromium_layout():
     orchestrator = properties.orchestrator.builder_name
@@ -200,7 +201,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'missing_gitiles_commit',
+      'missing_gitiles_commit_and_deps_revision_overrides',
       api.chromium.try_build(builder='linux-rel-compilator'),
       api.platform.name('linux'),
       api.properties(
@@ -209,6 +210,60 @@ def GenTests(api):
                   builder_name='linux-rel-orchestrator',
                   builder_group='tryserver.chromium.linux'))),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'missing_root_solution_revision',
+      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.platform.name('linux'),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'),
+              deps_revision_overrides={'src/v8': 'v8deadbeef'})),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'deps_revision_overrides_and_root_solution_revision',
+      api.chromium.try_build(
+          builder='linux-rel-compilator',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'),
+              deps_revision_overrides={'src/v8': 'v8deadbeef'},
+              root_solution_revision='srcdeadbeef')),
+      api.override_step_data(
+          'read filter exclusion spec',
+          api.json.output({
+              'base': {
+                  'exclusions': ['v8/f.*'],
+              },
+              'chromium': {
+                  'exclusions': [],
+              },
+          })),
+      override_test_spec(),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--patch_ref']),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--revision', 'src@srcdeadbeef']),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--revision', 'src/v8@v8deadbeef']),
+      api.post_process(post_process.MustRun, 'compile (with patch)'),
+      api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
+      api.post_process(post_process.MustRun, 'swarming trigger properties'),
+      api.post_process(post_process.MustRun,
+                       'check_static_initializers (with patch)'),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

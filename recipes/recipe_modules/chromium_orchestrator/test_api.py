@@ -91,5 +91,6 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
     )
 
   def fake_head_revision(self, ref='refs/heads/main'):
+    result = {'log': [{'commit': 'deadbeef'},]}
     return self.step_data('read src HEAD revision at {}'.format(ref),
-                          self.m.gitiles.make_log_test_data('deadbeef'))
+                          self.m.json.output(result))

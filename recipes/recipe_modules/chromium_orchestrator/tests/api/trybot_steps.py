@@ -109,6 +109,42 @@ def GenTests(api):
   )
 
   yield api.test(
+      'non_src_CL',
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.code_coverage(use_clang_coverage=True),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.override_step_data(
+          'read v8/v8 HEAD revision at refs/heads/main',
+          api.m.json.output({'log': [{
+              'commit': 'v8deadbeef'
+          }]})),
+      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--revision', 'src@{}'.format('deadbeef')]),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--revision', 'src/v8@{}'.format('v8deadbeef')]),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading cas digest all_test_binaries'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'no_builder_to_trigger_passed_in',
       api.chromium.try_build(builder='linux-rel-orchestrator'),
       api.post_process(post_process.DoesNotRun,
