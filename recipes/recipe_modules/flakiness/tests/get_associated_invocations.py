@@ -44,10 +44,11 @@ def GenTests(api):
       'basic', api.flakiness(identify_new_tests=True),
       api.buildbucket.build(basic_build),
       api.buildbucket.simulated_search_results(
-          builds=[basic_build], step_name='fetching_builds_for_given_cl'),
+          builds=[basic_build],
+          step_name='fetching associated builds with current gerrit patchset'),
       api.post_process(
           post_process.StepCommandContains,
-          'fetching_builds_for_given_cl',
+          'fetching associated builds with current gerrit patchset',
           [
               "-predicate",
               "{\"builder\": {}, \"gerritChanges\": [{\"change\": \"10\","
@@ -63,7 +64,7 @@ def GenTests(api):
       ),
       api.post_process(
           post_process.LogEquals,
-          'fetching_builds_for_given_cl',
+          'fetching associated builds with current gerrit patchset',
           'excluded_invocation_list',
           'invocations/1',
       ), api.post_process(post_process.DropExpectation))

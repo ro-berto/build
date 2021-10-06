@@ -114,7 +114,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     search_results = self.m.buildbucket.search(
         predicate=predicates,
         report_build=False,
-        step_name='fetching_builds_for_given_cl',
+        step_name='fetching associated builds with current gerrit patchset',
         fields=['infra.resultdb.invocation'],
     )
 
@@ -151,7 +151,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     """
     if excluded_invs is None:
       excluded_invs = set()
-    step_name = 'get_historical_invocations'
+    step_name = 'fetch previously run invocations'
     predicate = builds_service_pb2.BuildPredicate(builder=builder_id)
     search_results = self.m.buildbucket.search(
         predicate=predicate,
@@ -185,7 +185,7 @@ class FlakinessApi(recipe_api.RecipeApi):
         A set of TestDefinition objects.
     """
     test_query_count = test_query_count or self.historical_query_count
-    step_name = step_name or 'get_test_variants'
+    step_name = step_name or 'fetch test variants from ResultDB'
     inv_dict = self.m.resultdb.query(
         inv_ids=self.m.resultdb.invocation_ids(inv_list),
         limit=test_query_count,
@@ -232,7 +232,7 @@ class FlakinessApi(recipe_api.RecipeApi):
                 'builder': builder
             }}),
         page_size=page_size,
-        step_name='verify_new_tests')
+        step_name='cross reference newly identified tests against ResultDB')
 
     for entry in results.entries:
       test_tuple = (entry.result.test_id, entry.result.variant_hash)
@@ -241,6 +241,14 @@ class FlakinessApi(recipe_api.RecipeApi):
         prelim_tests.remove(test_tuple)
 
     return prelim_tests
+
+  def trim_new_tests(self, new_tests):
+    if new_tests and len(new_tests) > self._max_test_targets:
+      # There are more new tests detected than what we're permitting, so we're
+      # taking a random subset to re-run
+      return random.sample(new_tests, self._max_test_targets)
+
+    return new_tests
 
   def identify_new_tests(self, variant_step=None, history_step=None):
     """Coordinating method for identifying new tests on the current build.
@@ -275,10 +283,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     if not self.using_test_identifier:
       return set([])
 
-    variant_step = variant_step or 'get_current_cl_test_variants'
-    history_step = history_step or 'get_historical_test_variants'
-
-    with self.m.step.nest('searching_for_new_tests') as presentation:
+    with self.m.step.nest('searching_for_new_tests'):
       current_builder = self.m.buildbucket.build.builder
       current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
       excluded_invs = self.get_associated_invocations()
@@ -289,11 +294,15 @@ class FlakinessApi(recipe_api.RecipeApi):
       current_tests = self.get_test_variants(
           inv_list=[current_inv],
           test_query_count=self.current_query_count,
-          step_name=variant_step)
+          step_name='fetch test variants for current patchset')
       self.m.step.active_result.presentation.logs[
           'current_build_tests'] = join_tests(current_tests)
+
       historical_tests = self.get_test_variants(
-          inv_list=inv_list, step_name=history_step)
+          inv_list=inv_list,
+          step_name='fetch test variants from previous invocations')
+      self.m.step.active_result.presentation.logs[
+          'historical_tests'] = join_tests(historical_tests)
 
       # Comparing the current build test list to the ResultDB query test list to
       # get a preliminary set of potential new tests.
@@ -307,7 +316,6 @@ class FlakinessApi(recipe_api.RecipeApi):
           prelim_tests=preliminary_new_tests,
           excluded_invs=excluded_invs,
           builder=current_builder.builder)
-      presentation.logs['new_tests'] = join_tests(new_tests)
 
     return new_tests
 
@@ -327,10 +335,34 @@ class FlakinessApi(recipe_api.RecipeApi):
       return []
 
     new_tests = self.identify_new_tests()
-    if new_tests and len(new_tests) > self._max_test_targets:
-      # There are more new tests detected than what we're permitting, so we're
-      # taking a random subset to re-run
-      new_tests = random.sample(new_tests, self._max_test_targets)
+    new_tests = self.trim_new_tests(new_tests)
+
+    def _do_variants_match(test_object, new_test):
+      # The 3 basic variants include builder, os, and test_suite. We compare
+      # os through comparison of all dimensions.
+      # * Builder we don't need to check, since we're comparing test results
+      #   for the builder in question
+      # see http://shortn/_Z3mUIaeQrB for variant_hash hashing alg.
+
+      # Variants in testing/buildbot/ only update the naming. The device
+      # information isn't uploaded to ResultDB, so we compare with test's
+      # canonical name.
+      variants = new_test.variants
+      if ('test_suite' in variants and
+          variants['test_suite'] != test_object.spec.canonical_name):
+        return False
+
+      if hasattr(test_object.spec, 'dimensions'):
+        dimensions = test_object.spec.dimensions
+        # Go through all variants, and if specified in 'dimensions', ensure that
+        # the values are the same.
+        for k, v in variants.items():
+          if k in dimensions and dimensions[k] != v:
+            return False
+
+      # Non-swarming Test runs only record builder and test_suite, so we assume
+      # that the other two basic variants match here.
+      return True
 
     # This operation is O(len(test_obj) * len(new_tests)) because parsing
     # test_id is only intended for LUCI UI grouping, see
@@ -341,8 +373,9 @@ class FlakinessApi(recipe_api.RecipeApi):
     for test in test_objects:
       # find whether there exists a Test object that has a matching test_id.
       for new_test in new_tests:
-        if test.spec.test_id_prefix in new_test.test_id:
-          test_copy = copy.deepcopy(test)
+        if (test.spec.test_id_prefix in new_test.test_id and
+            _do_variants_match(test, new_test)):
+          test_copy = test
           # test_id = test_id_prefix + {A full test_suite + test_name
           # representation}, so we use the test_id_prefix to split out
           # the test_suite and test_name
@@ -354,4 +387,10 @@ class FlakinessApi(recipe_api.RecipeApi):
           test_copy._test_options = options
           new_test_objects.append(test_copy)
 
-    return new_test_objects
+    with self.m.chromium_tests.wrap_chromium_tests(None, new_test_objects):
+      # Run the test. The isolates have already been created.
+      rdb_results, invalid_test_suites, failed_test_suites = (
+          self.m.test_utils._run_tests_once(self.m, new_test_objects,
+                                            'check flakiness'))
+
+    return rdb_results, invalid_test_suites, failed_test_suites

@@ -103,25 +103,33 @@ def GenTests(api):
       ),
       api.buildbucket.simulated_search_results(
           builds=[basic_build],
-          step_name='searching_for_new_tests.fetching_builds_for_given_cl'),
+          step_name=('searching_for_new_tests.fetching associated builds with '
+                     'current gerrit patchset')),
       api.buildbucket.simulated_search_results(
           builds=build_database,
-          step_name='searching_for_new_tests.get_historical_invocations'),
+          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=inv_bundle,
-          step_name='searching_for_new_tests.get_current_cl_test_variants'),
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants for current patchset')),
       api.resultdb.query(
           inv_bundle={'invocations/1': inv_bundle['invocations/1']},
-          step_name='searching_for_new_tests.get_historical_test_variants'),
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants from previous invocations')),
       api.resultdb.get_test_result_history(
-          res, step_name='searching_for_new_tests.verify_new_tests'),
-      api.post_process(post_process.StepCommandContains,
-                       'searching_for_new_tests.verify_new_tests', [
-                           'rdb',
-                           'rpc',
-                           'luci.resultdb.v1.ResultDB',
-                           'GetTestResultHistory',
-                       ]),
+          res,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.post_process(
+          post_process.StepCommandContains,
+          ('searching_for_new_tests.'
+           'cross reference newly identified tests against ResultDB'), [
+               'rdb',
+               'rpc',
+               'luci.resultdb.v1.ResultDB',
+               'GetTestResultHistory',
+           ]),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -43,7 +43,7 @@ def GenTests(api):
       api.buildbucket.build(build_database[0]),
       api.properties(excluded_invs={'invocations/1', 'invocations/5'}),
       api.buildbucket.simulated_search_results(
-          builds=build_database, step_name='get_historical_invocations'),
+          builds=build_database, step_name='fetch previously run invocations'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -53,6 +53,7 @@ def GenTests(api):
       api.buildbucket.build(build_database[0]),
       api.properties(excluded_invs=None),
       api.buildbucket.simulated_search_results(
-          builds=build_database[1:4], step_name='get_historical_invocations'),
+          builds=build_database[1:4],
+          step_name='fetch previously run invocations'),
       api.post_process(post_process.DropExpectation),
   )
