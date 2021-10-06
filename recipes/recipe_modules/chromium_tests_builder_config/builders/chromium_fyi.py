@@ -1192,6 +1192,36 @@ SPEC = {
             cf_archive_build=False,
             simulation_platform='linux',
         ),
+    'MSAN Release (no origins) (reclient shadow)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'msan', 'clobber'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
+    'MSAN Release (chained origins) (reclient shadow)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_clang',
+            chromium_apply_config=['mb', 'msan', 'clobber'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
     'UBSan Release (reclient)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_linux_ubsan',
