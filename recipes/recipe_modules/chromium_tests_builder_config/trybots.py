@@ -189,6 +189,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel-non-cq',
            ),
+        'android-marshmallow-x86-rel-orchestrator':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-marshmallow-x86-rel',
+            ),
         'android-marshmallow-x86-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
