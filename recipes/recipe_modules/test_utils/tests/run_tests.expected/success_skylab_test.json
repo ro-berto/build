@@ -5,15 +5,15 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run.schedule tests on skylab",
+    "name": "test_pre_run.schedule skylab tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@basic_EVE_TOT@https://cr-buildbucket.appspot.com/build/1234@@@"
+      "@@@STEP_LINK@basic_EVE_TOT@https://cr-buildbucket.appspot.com/build/800@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "test_pre_run.schedule tests on skylab.basic_EVE_TOT",
+    "name": "test_pre_run.schedule skylab tests.basic_EVE_TOT",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -38,15 +38,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.schedule tests on skylab.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"label-board:eve\", \"lacros_gcs_path:gs://dummy/lacros.zip\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"suite:tast.lacros\", \"exe_rel_path:out/Lacros/chrome\", \"tast-expr:lacros.Basic\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"retry\": {\"allow\": true, \"max\": 3.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}, {\"lacrosGcsPath\": \"gs://dummy/lacros.zip\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= exe_rel_path=out/Lacros/chrome\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "name": "test_pre_run.schedule skylab tests.buildbucket.schedule",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"label-board:eve\", \"lacros_gcs_path:gs://dummy/lacros.zip\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"suite:tast.lacros\", \"exe_rel_path:out/Lacros/chrome\", \"tast-expr:lacros.Basic\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"retry\": {\"allow\": true, \"max\": 3.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}, {\"lacrosGcsPath\": \"gs://dummy/lacros.zip\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"scheduleBuild\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"800\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
@@ -113,7 +113,7 @@
       "@@@STEP_LOG_LINE@request@                  {@@@",
       "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
       "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 tast_expr_b64=bGFjcm9zLkJhc2lj resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= exe_rel_path=out/Lacros/chrome\"@@@",
+      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome\"@@@",
       "@@@STEP_LOG_LINE@request@                    }@@@",
       "@@@STEP_LOG_LINE@request@                  }@@@",
       "@@@STEP_LOG_LINE@request@                ]@@@",
@@ -137,16 +137,12 @@
       "@@@STEP_LOG_LINE@request@  ]@@@",
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
+      "@@@STEP_LINK@800@https://cr-buildbucket.appspot.com/build/800@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "collect skylab results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@return value@basic_EVE_TOT@@@",
-      "@@@STEP_LOG_END@return value@@@"
-    ]
+    "name": "collect skylab results"
   },
   {
     "cmd": [],
@@ -163,7 +159,7 @@
       "cr-buildbucket.appspot.com",
       "-interval",
       "60s",
-      "1234"
+      "800"
     ],
     "infra_step": true,
     "luci_context": {
@@ -205,19 +201,14 @@
       }
     },
     "name": "collect skylab results.buildbucket.collect.get",
-    "stdin": "{\"requests\": [{\"getBuild\": {\"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"id\": \"1234\"}}]}",
+    "stdin": "{\"requests\": [{\"getBuild\": {\"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"id\": \"800\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"getBuild\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"output\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"compressed_responses\": \"eJxVj71qwzAUhbHJEExbjMeMHQuyZDv+ScZCli5dQulSjKyoikD2NffK5FUKXfsMfb42blPo9p3l\\nfOckn2F03Umyqt097dr94z75CJPFMoiD1XsYvYXJ89H7kbacK5uqI0Jvpz4FNHzkc9RAvJusO2gk\\n7jX5Fqdh0PiPu6YpNnlV5lWdVU1VFqUoV4vlGAe3V04qBErvzyPuXi428tIOThOlCnBMDYBx+pt7\\n3iGcSP/JmZw8nF0MNU3OE6eTxN4Ohq3rTFZFpzZq3WQiE3x7E0UGtR5aJUnHwcMmqs387VI2Fzkw\\nP1fY7/wR4cBzkWdMVEzk/BXgCwDrZnU=\\n\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          }@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"800\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"status\": \"SUCCESS\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -229,13 +220,53 @@
       "@@@STEP_LOG_LINE@request@    {@@@",
       "@@@STEP_LOG_LINE@request@      \"getBuild\": {@@@",
       "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"id\": \"1234\"@@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"800\"@@@",
       "@@@STEP_LOG_LINE@request@      }@@@",
       "@@@STEP_LOG_LINE@request@    }@@@",
       "@@@STEP_LOG_LINE@request@  ]@@@",
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@1234@https://cr-buildbucket.appspot.com/build/1234@@@"
+      "@@@STEP_LINK@800@https://cr-buildbucket.appspot.com/build/800@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "find test runner build"
+  },
+  {
+    "cmd": [
+      "bb",
+      "ls",
+      "-host",
+      "cr-buildbucket.appspot.com",
+      "-json",
+      "-nopage",
+      "-n",
+      "1000",
+      "-fields",
+      "builder,create_time,created_by,critical,end_time,id,input,number,output,start_time,status,update_time",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"test_runner\", \"builder\": \"test_runner\", \"project\": \"chromeos\"}, \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"800\"}]}"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find test runner build.buildbucket.search",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"id\": \"900\", \"status\": \"SUCCESS\"}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@",
+      "@@@STEP_LINK@900@https://cr-buildbucket.appspot.com/build/900@@@"
     ]
   },
   {
@@ -259,13 +290,13 @@
       }
     },
     "name": "basic_EVE_TOT stats",
-    "stdin": "{\"invocations\": [\"invocations/build-8839265267168653505\"]}",
+    "stdin": "{\"invocations\": [\"invocations/build-900\"]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/build-8839265267168653505\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/build-900\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -281,7 +312,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "build-8839265267168653505"
+      "build-900"
     ],
     "infra_step": true,
     "luci_context": {
@@ -305,7 +336,8 @@
     "cmd": [],
     "name": "basic_EVE_TOT",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Test did not run or failed to report to ResultDB.@@@",
+      "@@@STEP_TEXT@Test did not run or failed to report to ResultDB.Check the CTP build for details.@@@",
+      "@@@STEP_LINK@CTP Build@https://ci.chromium.org/b/800@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },
@@ -331,13 +363,13 @@
       }
     },
     "name": "include skylab_test_runner invocations",
-    "stdin": "{\"addInvocations\": [\"invocations/build-8839265267168653505\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "stdin": "{\"addInvocations\": [\"invocations/build-900\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/build-8839265267168653505\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/build-900\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",

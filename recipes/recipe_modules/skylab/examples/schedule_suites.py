@@ -16,13 +16,6 @@ import base64
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
-                                                       builds_service_pb2)
-from PB.test_platform.taskstate import TaskState
-from PB.test_platform.steps.execution import ExecuteResponse
-
 from recipe_engine import post_process
 
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
@@ -126,49 +119,11 @@ def GenTests(api):
           base64.b64decode(got.get('resultdb_settings')))
       check(all([rdb_config[k] == v for k, v in RESULTDB_CONFIG.items()]))
 
-  def gen_tag_resps():
-    case_foo = ExecuteResponse.TaskResult.TestCaseResult(
-        name="foo_test_case", verdict=TaskState.VERDICT_PASSED)
-    task_passed = api.skylab.gen_task_result(
-        'cheets_NotificationTest',
-        [case_foo],
-    )
-    task_failed = api.skylab.gen_task_result(
-        'cheets_NotificationTest',
-        [case_foo],
-        verdict=TaskState.VERDICT_FAILED,
-    )
-    task_aborted = api.skylab.gen_task_result(
-        'cheets_NotificationTest',
-        [case_foo],
-        life_cycle=TaskState.LIFE_CYCLE_ABORTED,
-        verdict=TaskState.VERDICT_NO_VERDICT,
-    )
-    return [
-        {
-            'm88_tast_with_retry':
-                api.skylab.gen_json_execution_response(
-                    [task_passed, task_failed, task_aborted])
-        },
-        {
-            'm88_gtest_test_args':
-                api.skylab.gen_json_execution_response(
-                    [task_passed, task_failed, task_aborted])
-        },
-        {
-            'm88_nearby_dut_pool':
-                api.skylab.gen_json_execution_response(
-                    [task_passed, task_failed, task_aborted])
-        },
-    ]
-
   yield api.test(
       'basic',
       api.skylab.gen_schedule_build_resps('schedule skylab tests',
                                           len(REQUESTS)),
-      api.buildbucket.simulated_collect_output(
-          api.skylab.test_with_multi_response(1234, gen_tag_resps()),
-          step_name='collect skylab results.buildbucket.collect'),
+      api.skylab.wait_on_suites('find test runner build', len(REQUESTS)),
       api.post_check(check_has_req_tags, REQUESTS),
       api.post_check(check_req_has_enable_retry, 'm88_tast_with_retry', 3),
       api.post_check(check_pool, 'm88_gtest_test_args', managed=True),

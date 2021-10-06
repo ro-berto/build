@@ -7,7 +7,6 @@ from recipe_engine import post_process
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
-    'recipe_engine/buildbucket',
     'skylab',
 ]
 
@@ -35,7 +34,6 @@ def GenTests(api):
       'collect_results_exception_by_infra_failure',
       api.step_data(
           'collect skylab results.buildbucket.collect.wait',
-          times_out_after=9,
           retcode=1),
       api.post_process(post_process.StepException, 'collect skylab results'),
       api.post_process(post_process.StatusException),

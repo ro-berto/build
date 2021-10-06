@@ -1324,29 +1324,24 @@ class SkylabGroup(TestGroup):
     self.ctp_build_timeout_sec = 3600
 
   def pre_run(self, caller_api, suffix):
-    """Schedule the Skylab test requests to a CTP build.
-
-    cros_test_platform(CTP) supports multiple request in a single build.
-    With batch request, tests can run concurrently.
-    """
+    """Schedule each Skylab test request to a CTP build."""
     reqs = [t.skylab_req for t in self._test_suites if t.skylab_req]
     if reqs:
       # Respect timeout of each test run by this CTP build.
       build_timeout = max([r.timeout_sec for r in reqs])
       if build_timeout > self.ctp_build_timeout_sec:
         self.ctp_build_timeout_sec = build_timeout
-      self.ctp_build_by_tag = caller_api.skylab.schedule_suites(
-          reqs, 'schedule tests on skylab')
+      self.ctp_build_by_tag = caller_api.skylab.schedule_suites(reqs)
 
   def run(self, caller_api, suffix):
     """Fetch the responses for each test request."""
     tag_resp = {}
     if self.ctp_build_by_tag:
-      build_resp = caller_api.skylab.wait_on_suites(
+      tag_resp = caller_api.skylab.wait_on_suites(
           self.ctp_build_by_tag, timeout_seconds=self.ctp_build_timeout_sec)
-      tag_resp = build_resp.responses
     for t in self._test_suites:
-      t.ctp_responses = tag_resp.get(t.name, [])
+      t.ctp_build_id = self.ctp_build_by_tag.get(t.name)
+      t.test_runner_builds = tag_resp.get(t.name, [])
       self.fetch_rdb_results(t, suffix)
       self._run_func(t, t.run, caller_api, suffix, True)
 

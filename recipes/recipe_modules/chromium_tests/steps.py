@@ -3505,7 +3505,16 @@ class SkylabTest(Test):
 
   def __init__(self, spec):
     super(SkylabTest, self).__init__(spec)
-    self.ctp_responses = []
+    # cros_test_platform build, aka CTP is the entrance for the CrOS hardware
+    # tests, which kicks off test_runner builds for our test suite.
+    # Each test suite has a CTP build ID, as long as the buildbucket call is
+    # successful.
+    self.ctp_build_id = 0
+    # test_runner build represents the test execution in Skylab. Tests can be
+    # retried, so multiple runs are possible.
+    # If CTP failed to schedule test runners, this list could be empty. Use
+    # ctp_build_id to troubleshoot.
+    self.test_runner_builds = []
     self.lacros_gcs_path = None
     self.exe_rel_path = None
 
@@ -3567,69 +3576,50 @@ class SkylabTest(Test):
         artifact_directory='' if self.is_tast_test else 'chromium/debug')
 
   def get_invocation_names(self, suffix):
-    # As of 2021Q3, we can only generate the invocation name from the test
-    # runner build ID included in the CTP response.
-    # Revisit it once CTP2 is online(go/ctp2-dd).
+    # TODO(crbug.com/1248693): Use the invocation included by the parent builds.
     del suffix
-    runner_url_re = ('^https://ci.chromium.org/p/chromeos/builders/test_runner'
-                     '/test_runner/b([0-9]*)$')
-    urls = [str(b.url) for b in self.ctp_responses]
     inv_names = []
-    for url in urls:
-      match = re.search(runner_url_re, url)
-      if match:
-        inv_names.append('invocations/build-%s' % match.group(1))
+    for b in self.test_runner_builds:
+      inv_names.append('invocations/build-%d' % b.id)
     return inv_names
-
-  #TODO(crbug.com/1238139): Read the test runner url and log link from RDB once
-  # we add them to the invocation level artifact.
-  def attach_links_to_test_run(self, resp, step, suffix):
-    if resp.url:
-      step.links['Test Run'] = resp.url
-    if resp.log_url:
-      step.links['Logs(stainless)'] = resp.log_url
 
   @recipe_api.composite_step
   def run(self, api, suffix):
     self._suffix_step_name_map[suffix] = self.step_name(suffix)
+    bb_url = 'https://ci.chromium.org/b/%d'
 
     with api.step.nest(self.step_name(suffix)) as step:
       _present_info_messages(step, self)
-      step_failure_msg = None
       if not self.lacros_gcs_path:
-        step_failure_msg = (
+        self._raise_failed_step(
+            api, suffix, step, api.step.FAILURE,
             'Test was not scheduled because of absent lacros_gcs_path.')
-      if step_failure_msg:
-        self._raise_failed_step(api, suffix, step, api.step.FAILURE,
-                                step_failure_msg)
-      if not self.ctp_responses:
-        self._raise_failed_step(api, suffix, step, api.step.EXCEPTION,
-                                'Invalid test result.')
 
       rdb_results = self._rdb_results.get(suffix)
       if rdb_results.total_tests_ran:
-        # If any test result reported by RDB, it means the test run has exited
-        # as expected from CrOS lab.
+        # If any test result was reported by RDB, the test run completed
+        # its lifecycle as expected.
         self.update_failure_on_exit(suffix, False)
       else:
+        step.links['CTP Build'] = bb_url % self.ctp_build_id
         self._raise_failed_step(
             api, suffix, step, api.step.EXCEPTION,
-            'Test did not run or failed to report to ResultDB.')
+            'Test did not run or failed to report to ResultDB.'
+            'Check the CTP build for details.')
 
       if rdb_results.unexpected_failing_tests:
         step.presentation.status = api.step.FAILURE
       self.present_rdb_results(api, step, rdb_results)
 
-      if len(self.ctp_responses) == 1:
-        self.attach_links_to_test_run(self.ctp_responses[0], step, suffix)
+      if len(self.test_runner_builds) == 1:
+        step.links['Test Run'] = bb_url % self.test_runner_builds[0].id
       else:
-        for i, r in enumerate(self.ctp_responses, 1):
-          with api.step.nest('attempt: #' + str(i)) as attempt_step:
-            self.attach_links_to_test_run(r, attempt_step, suffix)
-            # TODO(crbug.com/1238139): For retried attempt, we should use its
-            # build status to represent step result. Then we could get away
-            # from the protobuf of CTP response.
-            if r.verdict != "PASSED":
+        for i, b in enumerate(self.test_runner_builds):
+          with api.step.nest('attempt: #' + str(i + 1)) as attempt_step:
+            attempt_step.links['Test Run'] = bb_url % b.id
+            if b.status == common_pb2.INFRA_FAILURE:
+              attempt_step.presentation.status = api.step.EXCEPTION
+            elif b.status == common_pb2.FAILURE:
               attempt_step.presentation.status = api.step.FAILURE
 
     return step

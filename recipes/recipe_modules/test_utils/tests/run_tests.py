@@ -211,26 +211,9 @@ def GenTests(api):
           }],
           test_skylab=True,
       ),
-      api.buildbucket.simulated_schedule_output(
-          builds_service_pb2.BatchResponse(
-              responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
-          step_name=(
-              'test_pre_run.schedule tests on skylab.buildbucket.schedule')),
-      api.buildbucket.simulated_collect_output(
-          api.skylab.test_with_multi_response(1234, [{
-              'basic_EVE_TOT':
-                  api.skylab.gen_json_execution_response([
-                      api.skylab.gen_task_result(
-                          'lacros.Basic',
-                          [
-                              ExecuteResponse.TaskResult.TestCaseResult(
-                                  name='green_case',
-                                  verdict=TaskState.VERDICT_PASSED)
-                          ],
-                      )
-                  ]),
-          }]),
-          step_name='collect skylab results.buildbucket.collect'),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.skylab.wait_on_suites('find test runner build', 1),
   )
 
   yield api.test(

@@ -11,10 +11,12 @@ from recipe_engine import recipe_api
 
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
+from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
+                                                       builds_service_pb2)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
 from PB.test_platform.request import Request
-from PB.test_platform.steps.execution import ExecuteResponse, ExecuteResponses
-from PB.test_platform.taskstate import TaskState
 
 from . import structs
 
@@ -72,6 +74,14 @@ class SkylabApi(recipe_api.RecipeApi):
               'suite': autotest_name,
           }
           test_args = ['dummy=crbug.com/984103']
+          assert s.resultdb and s.resultdb.enable, ('Skylab tests should '
+                                                    'have resultdb enabled.')
+          rdb_str = self.m.json.dumps({
+              k: getattr(s.resultdb, k)
+              for k in attr.fields_dict(ResultDB)
+              if not getattr(s.resultdb, k) in [None, '']
+          })
+          test_args.append('resultdb_settings=%s' % base64.b64encode(rdb_str))
           if s.dut_pool:
             req.params.scheduling.unmanaged_pool = s.dut_pool
             tags['label-pool'] = s.dut_pool
@@ -87,13 +97,6 @@ class SkylabApi(recipe_api.RecipeApi):
           if s.test_args:
             test_args.append('test_args_b64=%s' % base64.b64encode(s.test_args))
             tags['test_args'] = s.test_args
-          if s.resultdb and s.resultdb.enable:
-            rdb_str = self.m.json.dumps({
-                k: getattr(s.resultdb, k)
-                for k in attr.fields_dict(ResultDB)
-                if not getattr(s.resultdb, k) in [None, '']
-            })
-            test_args.append('resultdb_settings=%s' % base64.b64encode(rdb_str))
           if s.lacros_gcs_path:
             lacros_dep = req.params.software_dependencies.add()
             lacros_dep.lacros_gcs_path = s.lacros_gcs_path
@@ -151,31 +154,32 @@ class SkylabApi(recipe_api.RecipeApi):
         giving up.
 
     Returns:
-      list[SkylabSuiteResponse]: The results for the provided requests.
+      A dict of test runner builds with the key of request tag.
     """
-    with self.m.step.nest('collect skylab results') as presentation:
-      ctp_builds = self.m.buildbucket.collect_builds(
+    with self.m.step.nest('collect skylab results'):
+      self.m.buildbucket.collect_builds(
           ctp_by_tag.values(), timeout=timeout_seconds)
 
-      tagged_ctp_resp = {}
-      tagged_responses = {}
-      for ctp_build in ctp_builds.values():
-        tagged_ctp_resp.update(self._get_multi_response_binary(ctp_build))
-      for t in tagged_ctp_resp:
-        # Note, request tag is mapped to a list of responses, because CTP has
-        # retry logic. A single request may have multiple attempts executed.
-        tagged_responses[t] = self._translate_result(
-            tagged_ctp_resp.get(t, self._default_failed_response()))
+    # TODO(crbug.com/1245438): Remove below once the test runner's invocation
+    # is included into its parent build's invocation.
+    with self.m.step.nest('find test runner build'):
+      test_runners_by_tag = {}
+      for t, ctp_build_id in ctp_by_tag.items():
+        builds = self.m.buildbucket.search(
+            builds_service_pb2.BuildPredicate(
+                builder=builder_pb2.BuilderID(
+                    project='chromeos',
+                    bucket='test_runner',
+                    builder='test_runner',
+                ),
+                tags=[
+                    common_pb2.StringPair(
+                        key='parent_buildbucket_id', value=str(ctp_build_id))
+                ],
+                include_experimental=self.m.runtime.is_experimental))
+        test_runners_by_tag[t] = builds
 
-      presentation.logs['return value'] = [str(t) for t in tagged_responses]
-
-      return structs.SkylabTaggedResponses.create(
-          # The CTP build status is not important as we will switch to get
-          # test result from RDB in the next CL. So just use the first build
-          # here.
-          build_id=int(ctp_builds.values()[0].id),
-          status=ctp_builds.values()[0].status,
-          responses=tagged_responses)
+    return test_runners_by_tag
 
   def _enable_test_retries(self, req, retries):
     """Enable test retries within a single CTP build.
@@ -186,69 +190,3 @@ class SkylabApi(recipe_api.RecipeApi):
     """
     req.params.retry.max = retries
     req.params.retry.allow = True
-
-  def _get_skylab_task_result(self, execute_response):
-    """Emit the skylab task, aka tast suite, result from a CTP response."""
-    for c in execute_response.consolidated_results:
-      for a in c.attempts:
-        yield a
-
-  def _get_multi_response_binary(self, build):
-    """Get the tagged CTP response dict from a Buildbucket call."""
-    try:
-      resps = build.output.properties['compressed_responses']
-    # Defer the exception later, because there may be still good results
-    # from other CTP builds.
-    # If the build object has no output field, it does not
-    # matter what we return here. So no cover. Plus, the entire
-    # CTP response related code will be removed by the following CL.
-    except ValueError:  # pragma: no cover
-      return ExecuteResponses().tagged_responses
-    wire_format = resps.decode('base64_codec').decode('zlib_codec')
-    responses = ExecuteResponses.FromString(wire_format)
-    return responses.tagged_responses
-
-  def _default_failed_response(self):
-    """Generate a failed empty CTP response."""
-    response = ExecuteResponse()
-    response.state.verdict = TaskState.VERDICT_FAILED
-    response.state.life_cycle = TaskState.LIFE_CYCLE_COMPLETED
-    return response
-
-  def _translate_result(self, execute_response):
-    """Translates result to a list of SkylabResponse."""
-    results = []
-    for task in self._get_skylab_task_result(execute_response):
-      # TODO(crbug/1145385): Use terzetto or result DB to fetch the test
-      # result, instead of calculating it here.
-      if task.state.verdict == TaskState.VERDICT_PASSED:
-        status = common_pb2.SUCCESS
-      elif task.state.life_cycle in (TaskState.LIFE_CYCLE_CANCELLED,
-                                     TaskState.LIFE_CYCLE_PENDING,
-                                     TaskState.LIFE_CYCLE_ABORTED,
-                                     TaskState.LIFE_CYCLE_REJECTED):
-        status = common_pb2.INFRA_FAILURE
-      else:
-        status = common_pb2.FAILURE
-      results.append(
-          structs.SkylabResponse.create(
-              tast_suite=task.name,
-              url=task.task_url,
-              status=status,
-              log_url=task.log_url,
-              log_gs_uri=task.log_data.gs_url,
-              verdict=self._unify_verdict(task.state.verdict),
-              test_cases=self._get_test_cases(task.test_cases)))
-    return results
-
-  def _get_test_cases(self, test_cases):
-    """Translate the test case result to SkylabTestCase."""
-    cases = []
-    for c in test_cases:
-      cases.append(
-          structs.SkylabTestCase.create(
-              name=c.name, verdict=self._unify_verdict(c.verdict)))
-    return cases
-
-  def _unify_verdict(self, verdict):
-    return "PASSED" if verdict == TaskState.VERDICT_PASSED else "FAILED"

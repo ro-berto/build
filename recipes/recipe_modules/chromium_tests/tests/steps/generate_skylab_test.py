@@ -5,12 +5,7 @@
 import itertools
 import json
 
-from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
-                                                       builds_service_pb2)
-
-from PB.test_platform.taskstate import TaskState
-from PB.test_platform.steps.execution import ExecuteResponse
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
@@ -161,50 +156,11 @@ def GenTests(api):
           'prepare skylab tests.'
           'collect runtime deps for %s.read isolate file' % target_name,
           api.file.read_text(isolate_content))
-
     return steps
-
-  GREEN_CASE = ExecuteResponse.TaskResult.TestCaseResult(
-      name='green_case', verdict=TaskState.VERDICT_PASSED)
-
-  TASK_PASSED = api.skylab.gen_task_result(
-      'tast.lacros',
-      [GREEN_CASE],
-  )
-
-  TASK_NO_CASE = api.skylab.gen_task_result(
-      'tast.lacros',
-      [],
-      verdict=TaskState.VERDICT_FAILED,
-  )
-
-  GTEST_TASK_PASSED = api.skylab.gen_task_result(
-      'gtest',
-      [],
-  )
-
-  def gen_tag_resp(api, tag, tasks):
-    return {
-        tag: api.skylab.gen_json_execution_response(tasks),
-    }
-
-  def simulate_ctp_response(api, tag, tasks):
-    test_data = api.buildbucket.simulated_schedule_output(
-        builds_service_pb2.BatchResponse(
-            responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
-        step_name=(
-            'test_pre_run.schedule tests on skylab.buildbucket.schedule'))
-
-    test_data += api.buildbucket.simulated_collect_output(
-        api.skylab.test_with_multi_response(1234,
-                                            [gen_tag_resp(api, tag, tasks)]),
-        step_name='collect skylab results.buildbucket.collect')
-    return test_data
 
   def _extract_skylab_req(steps):
     return api.skylab.step_logs_to_ctp_by_tag(
-        steps['test_pre_run.schedule tests on skylab.buildbucket.schedule'].logs
-    )
+        steps['test_pre_run.schedule skylab tests.buildbucket.schedule'].logs)
 
   def archive_gsuri_should_match_skylab_req(check, steps, target=TAST_TARGET):
     archive_step = ('prepare skylab tests.'
@@ -235,7 +191,14 @@ def GenTests(api):
       'basic for tast',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE, TASK_PASSED]),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.skylab.wait_on_suites(
+          'find test runner build',
+          1,
+          runner_builds=[(901, common_pb2.FAILURE),
+                         (902, common_pb2.INFRA_FAILURE),
+                         (903, common_pb2.SUCCESS)]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(check_req_by_default_enabled_retry),
@@ -257,8 +220,9 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   failing_suites=['basic_EVE_TOT'],
                   skipped_suites=['basic_EVE_TOT']))),
-      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #1'),
-      api.post_process(post_process.MustRun, 'basic_EVE_TOT.attempt: #2'),
+      api.post_process(post_process.StepFailure, 'basic_EVE_TOT.attempt: #1'),
+      api.post_process(post_process.StepException, 'basic_EVE_TOT.attempt: #2'),
+      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.attempt: #3'),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
       api.post_process(
           post_process.ResultReason,
@@ -273,7 +237,12 @@ def GenTests(api):
           'chrome-test-builds',
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [GTEST_TASK_PASSED]),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.skylab.wait_on_suites(
+          'find test runner build',
+          1,
+          runner_builds=[(902, common_pb2.SUCCESS)]),
       api.override_step_data(
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(
@@ -311,7 +280,9 @@ def GenTests(api):
       'RDB returned empty test_results',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_NO_CASE]),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.skylab.wait_on_suites('find test runner build', 1),
       api.override_step_data(
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
@@ -328,11 +299,8 @@ def GenTests(api):
       'Skylab outage',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.buildbucket.simulated_schedule_output(
-          builds_service_pb2.BatchResponse(
-              responses=[dict(schedule_build=build_pb2.Build(id=1234))]),
-          step_name=(
-              'test_pre_run.schedule tests on skylab.buildbucket.schedule')),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
       api.post_process(post_process.StepException, 'basic_EVE_TOT'),
       api.post_process(post_process.ResultReason,
                        '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed.'),
@@ -394,7 +362,9 @@ def GenTests(api):
       'ci_only_test_on_ci_builder',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      simulate_ctp_response(api, 'basic_EVE_TOT', [TASK_PASSED]),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.skylab.wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT', [
           'This test will not be run on try builders',
       ]),
