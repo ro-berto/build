@@ -1411,6 +1411,18 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'linux-headless-shell-rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.COMPILE_AND_TEST,
+            simulation_platform='linux',
+        ),
 }
 
 SPEC.update([
