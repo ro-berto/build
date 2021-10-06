@@ -70,6 +70,8 @@ def GenTests(api):
   """
 
   def boilerplate(skylab_gcs,
+                  builder_group='chromium.chromiumos',
+                  builder='lacros-amd64-generic-rel',
                   tast_expr='',
                   test_args='',
                   isolate_content=GOOD_ISOLATE_TEXT,
@@ -77,8 +79,6 @@ def GenTests(api):
                   is_ci_build=True,
                   target_name=TAST_TARGET,
                   should_read_isolate=True):
-    builder_group = 'chromium.chromiumos'
-    builder = 'lacros-amd64-generic-rel'
     builder_db = ctbc.BuilderDatabase.create({
         builder_group: {
             builder:
@@ -187,6 +187,13 @@ def GenTests(api):
       test = req['testPlan']['test'][0]
       check(rel_path in test['autotest']['testArgs'])
 
+  def check_qs_account(check, steps, expected_qs):
+    for req in _extract_skylab_req(steps).values():
+      if expected_qs:
+        check(req['params']['scheduling']['qsAccount'] == expected_qs)
+      else:
+        check('qsAccount' not in req['params']['scheduling'])
+
   yield api.test(
       'basic for tast',
       boilerplate(
@@ -202,6 +209,7 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(check_req_by_default_enabled_retry),
+      api.post_process(check_qs_account, 'lacros'),
       api.post_process(
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'
@@ -273,6 +281,15 @@ def GenTests(api):
           post_process.ResultReason,
           '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
           'failed because of:\n\n- basic_EVE_TOT_test_case1'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'test from fyi builder',
+      boilerplate('chrome-test-builds', builder='lacros-amd64-generic-fyi'),
+      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
+                                          1),
+      api.post_process(check_qs_account, ''),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -20,6 +20,9 @@ from PB.test_platform.request import Request
 
 from . import structs
 
+# Skylab prioritizes tests by the Quota Scheduler account attached in the
+# request. We have applied high priority account for lacros, but it is limited
+# and supposed to grant to the production builders only.
 QS_ACCOUNT = 'lacros'
 CTP_BUILDER = 'cros_test_platform'
 CTP_BUILDER_DEV = 'cros_test_platform-dev'
@@ -60,7 +63,9 @@ class SkylabApi(recipe_api.RecipeApi):
           req.params.metadata.debug_symbols_archive_url = gs_img_uri
           sw_dep = req.params.software_dependencies.add()
           sw_dep.chromeos_build = s.cros_img
-          req.params.scheduling.qs_account = QS_ACCOUNT
+          # Not grant lacros quota if this is an FYI builder.
+          if not 'fyi' in self.m.buildbucket.builder_name:
+            req.params.scheduling.qs_account = QS_ACCOUNT
           req.params.software_attributes.build_target.name = s.board
           req.params.time.maximum_duration.seconds = s.timeout_sec
           autotest_to_create = req.test_plan.test.add()
