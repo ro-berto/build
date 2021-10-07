@@ -219,6 +219,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-pie-arm64-rel',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'android-pie-arm64-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
@@ -929,6 +930,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'linux_chromium_asan_rel_ng_rts':
             try_spec.TrySpec.create_for_single_mirror(
@@ -993,6 +995,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux TSan Builder',
                 tester='Linux TSan Tests',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'linux_chromium_tsan_rel_ng_rts':
             try_spec.TrySpec.create_for_single_mirror(
