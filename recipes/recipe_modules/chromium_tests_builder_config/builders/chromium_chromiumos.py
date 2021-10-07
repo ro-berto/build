@@ -94,19 +94,15 @@ SPEC.update([
         'linux-lacros-tester-rel',
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
-    _config(
-        'chromeos-amd64-generic-asan-rel',
-        cros_boards_with_qemu_images='amd64-generic'),
+    _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel',
-        cros_boards_with_qemu_images='amd64-generic'),
+        cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-dbg', cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-rel',
-        # TODO(crbug.com/1254850): Remove 'amd64-generic' after the bot's MB
-        # configs have been updated to read from amd64-generic-vm.gni.
-        cros_boards_with_qemu_images='amd64-generic:amd64-generic-vm'),
+        cros_boards_with_qemu_images='amd64-generic-vm'),
     _config(
         'chromeos-arm-generic-dbg',
         cros_boards='arm-generic',
