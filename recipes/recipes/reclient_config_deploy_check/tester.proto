@@ -1,0 +1,34 @@
+// Copyright 2021 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipes.build.reclient_config_deploy_check.tester;
+
+message ProjectConfigVerification {
+  // Next ID: 3
+
+  // Required, the rbe project name to fetch configurations for.
+  string name = 1;
+
+  // Required, a list of config files that should be present
+  // after fetching.  These are checked for existence, and the presubmit
+  // will fail if they do not exist.
+  repeated string cfg_file = 2;
+}
+
+message InputProperties {
+  // Next ID: 3
+
+  // Required, the path within the repo to the fetch script that can be used to
+  // pull the reclient configs from CIPD.
+  //
+  // The script must be executable with a command of the form:
+  // <fetch_script> --rbe_project <rbe_project.name>
+  // where <rbe_project.name> is the name from the rbe_project repeated field.
+  string fetch_script = 1;
+
+  // Required, a set of ProjectConfigVerification messages that should have their
+  // configs pulled from CIPD and verified for existence.
+  repeated ProjectConfigVerification rbe_project = 2;
+}
