@@ -253,5 +253,8 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
     ]
+  },
+  {
+    "name": "$result"
   }
 ]

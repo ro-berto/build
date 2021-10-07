@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
+
 from recipe_engine import post_process, recipe_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -17,6 +19,7 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/properties',
+    'recipe_engine/step',
 ]
 
 PROPERTIES = {
@@ -25,26 +28,33 @@ PROPERTIES = {
 
 
 def RunSteps(api, commit):
-  builder_id = api.chromium.get_builder_id()
-  builder_id, builder_config = (
-      api.chromium_tests_builder_config.lookup_builder())
-  api.chromium_tests.configure_build(builder_config)
-  update_step, _ = api.chromium_tests.prepare_checkout(
-      builder_config, set_output_commit=True)
-  if commit is not None:
-    commit = common_pb.GitilesCommit(**commit)
+  # Create a nested step so that setup steps can be easily filtered out
+  with api.step.nest('setup steps'):
+    builder_id = api.chromium.get_builder_id()
+    builder_id, builder_config = (
+        api.chromium_tests_builder_config.lookup_builder())
+    api.chromium_tests.configure_build(builder_config)
+    update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
+    if commit is not None:
+      commit = common_pb.GitilesCommit(**commit)
+
   api.chromium_tests.trigger_child_builds(
       builder_id, update_step, builder_config, commit=commit)
 
 
 def GenTests(api):
 
-  # Check the status before applying the filter so that the $result step
-  # doesn't need to be retained
-  def filter_to_trigger():
-    return api.post_process(post_process.Filter().include_re('^trigger.*'))
+  def filter_out_setup_steps():
 
-  def builder_with_tester_to_trigger(**kwargs):
+    def step_filter(check, steps):
+      del check
+      return collections.OrderedDict([(k, v)
+                                      for k, v in steps.iteritems()
+                                      if not k.startswith('setup steps')])
+
+    return api.post_process(step_filter)
+
+  def builder_with_tester_to_trigger(set_output_commit=True, **kwargs):
     return api.chromium_tests_builder_config.ci_build(
         builder_group='fake-group',
         builder='fake-builder',
@@ -54,6 +64,7 @@ def GenTests(api):
                     ctbc.BuilderSpec.create(
                         chromium_config='chromium',
                         gclient_config='chromium',
+                        set_output_commit=set_output_commit,
                     ),
                 'fake-tester':
                     ctbc.BuilderSpec.create(
@@ -70,20 +81,19 @@ def GenTests(api):
       'scheduler',
       builder_with_tester_to_trigger(),
       api.post_check(post_process.StatusSuccess),
-      filter_to_trigger(),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
-      'scheduler-use_gitiles_trigger-experiment',
-      builder_with_tester_to_trigger(experiments={
-          'chromium.chromium_tests.use_gitiles_trigger': 100,
-      }),
-      api.post_check(post_process.StatusSuccess),
-      filter_to_trigger(),
+      'scheduler-with-no-commit',
+      builder_with_tester_to_trigger(set_output_commit=False),
+      api.post_check(post_process.MustRun, 'no commit for trigger'),
+      api.post_check(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'scheduler-commit-provided-not-in-use_gitiles_trigger-experiment',
+      'scheduler-with-commit-provided',
       builder_with_tester_to_trigger(),
       api.properties(
           commit=common_pb.GitilesCommit(
@@ -93,7 +103,7 @@ def GenTests(api):
               id='fake-revision',
           )),
       api.post_check(post_process.StatusSuccess),
-      filter_to_trigger(),
+      filter_out_setup_steps(),
   )
 
   yield api.test(
@@ -115,5 +125,5 @@ def GenTests(api):
                   ),
           }),
       api.post_check(post_process.StatusSuccess),
-      filter_to_trigger(),
+      filter_out_setup_steps(),
   )

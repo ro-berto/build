@@ -820,25 +820,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self._trigger_led_builds(to_trigger, properties)
         return
 
-      # TODO(crbug.com/1249938) Once all builders are switched to using
-      # gitiles trigger, remove this experiment and the buildbucket trigger
-      # path
-      trigger = self.m.scheduler.BuildbucketTrigger(properties=properties)
+      if (commit is None and
+          self.m.buildbucket.build.output.HasField('gitiles_commit')):
+        commit = self.m.buildbucket.build.output.gitiles_commit
 
-      if ('chromium.chromium_tests.use_gitiles_trigger' in
-          self.m.buildbucket.build.input.experiments):
-        if (commit is None and
-            self.m.buildbucket.build.output.HasField('gitiles_commit')):
-          commit = self.m.buildbucket.build.output.gitiles_commit
+      if commit is None:
+        step_result = self.m.step('no commit for trigger', [])
+        step_result.presentation.status = self.m.step.EXCEPTION
+        step_result.presentation.step_text = '\n'.join([
+            'no commit was provided for trigger',
+            'one of the following fixes should be made to the recipe:',
+            '* pass `set_output_commit=True` to bot_update',
+            "* pass `commit` to trigger_child_builds",
+        ])
+        self.m.step.raise_on_failure(step_result)
 
-        if commit is not None:
-          repo = 'https://{}/{}'.format(commit.host, commit.project)
-          trigger = self.m.scheduler.GitilesTrigger(
-              repo=repo,
-              ref=commit.ref,
-              revision=commit.id,
-              properties=properties,
-          )
+      repo = 'https://{}/{}'.format(commit.host, commit.project)
+      trigger = self.m.scheduler.GitilesTrigger(
+          repo=repo,
+          ref=commit.ref,
+          revision=commit.id,
+          properties=properties,
+      )
 
       scheduler_triggers = []
       for project, builders in to_trigger.iteritems():
