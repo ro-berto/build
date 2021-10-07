@@ -189,10 +189,7 @@ def GenTests(api):
 
   def check_qs_account(check, steps, expected_qs):
     for req in _extract_skylab_req(steps).values():
-      if expected_qs:
-        check(req['params']['scheduling']['qsAccount'] == expected_qs)
-      else:
-        check('qsAccount' not in req['params']['scheduling'])
+      check(req['params']['scheduling']['qsAccount'] == expected_qs)
 
   yield api.test(
       'basic for tast',
@@ -289,7 +286,7 @@ def GenTests(api):
       boilerplate('chrome-test-builds', builder='lacros-amd64-generic-fyi'),
       api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
                                           1),
-      api.post_process(check_qs_account, ''),
+      api.post_process(check_qs_account, 'lacros_fyi'),
       api.post_process(post_process.DropExpectation),
   )
 
