@@ -1472,6 +1472,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              recursive_lookup=False,
              use_rts=False,
              rts_recall=None,
+             use_st=False,
              **kwargs):
     """Generate the build files in the source tree.
 
@@ -1501,7 +1502,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       rts_recall - A float from (0 to 1] indicating what change recall rts
         should aim for, 0 being the fastest and 1 being the safest, and
         typically between .9 and 1
-
+      use_st - A boolean indicating whether to filter out stable tests
 
     Returns:
       The content of the args.gn file.
@@ -1541,6 +1542,9 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       if rts_recall:
         mb_args += ['--rts-target-change-recall', str(rts_recall)]
+
+    if use_st:
+      mb_args += ['--use-st']
 
     name = name or 'generate_build_files'
     with self.mb_failure_handler(name):

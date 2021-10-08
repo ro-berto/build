@@ -54,10 +54,11 @@ def RunSteps(api, properties):
 
     # Implies that this compilator build must be compiled without a patch
     # so that the orchestrator can retry these swarming tests without patch
+    use_rts, _ = api.chromium_tests.get_quickrun_options(orch_builder_config)
     if properties.swarming_targets:
       api.chromium_tests.configure_build(
           orch_builder_config,
-          api.chromium_tests.should_use_rts(orch_builder_config),
+          use_rts,
       )
       api.chromium.apply_config('trybot_flavor')
       bot_update_step, targets_config = api.chromium_tests.prepare_checkout(

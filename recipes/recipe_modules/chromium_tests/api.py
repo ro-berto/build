@@ -422,6 +422,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                override_execution_mode=None,
                                use_rts=False,
                                rts_recall=None,
+                               use_st=False,
                                isolate_test_binaries_together=False):
     """Runs compile and related steps for given builder.
 
@@ -456,6 +457,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         typically between .9 and 1
       isolate_test_binaries_together: Whether to also upload all test
         binaries to one hash.
+      use_st - A boolean indicating whether to filter out stable tests
 
     Returns:
       RawResult object with compile step status and failure message
@@ -501,7 +503,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           android_version_code=android_version_code,
           android_version_name=android_version_name,
           use_rts=use_rts,
-          rts_recall=rts_recall)
+          rts_recall=rts_recall,
+          use_st=use_st)
 
       if raw_result.status != common_pb.SUCCESS:
         self.m.tryserver.set_compile_failure_tryjob_result()
@@ -911,7 +914,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          android_version_code=None,
                          android_version_name=None,
                          use_rts=False,
-                         rts_recall=None):
+                         rts_recall=None,
+                         use_st=False):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
       if self.m.chromium.c.project_generator.tool == 'mb':
@@ -927,7 +931,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             android_version_code=android_version_code,
             android_version_name=android_version_name,
             use_rts=use_rts,
-            rts_recall=rts_recall)
+            rts_recall=rts_recall,
+            use_st=use_st)
         use_goma_in_gn_args = self._use_goma_set_in_gn_args(gn_args)
         if use_goma_module and not use_goma_in_gn_args:
           self.m.step('goma is disabled by gn', cmd=None)
@@ -1853,26 +1858,41 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if task_output_stdout:
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
-  def should_use_rts(self, builder_config):
+  def get_quickrun_options(self, builder_config):
     use_rts = (
         self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
     ) or builder_config.regression_test_selection == try_spec.ALWAYS
-    if use_rts:
-      step_result = self.m.step('quick run options', [])
-      step_result.presentation.properties['rts_was_used'] = use_rts
-      step_result.presentation.links[
-          'use_rts: true'] = 'https://bit.ly/chromium-rts'
-      step_result.presentation.links['file a bug'] = (
-          'https://bugs.chromium.org/p/chromium/issues/entry?'
-          'template=Quick%20Run%20Issue')
-    # RTS-enabled Quick Run builds can't be reused for non-quick runs because
-    # they are slightly less safe than normal builds
-    if (use_rts and
-        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY):
-      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
 
-    return use_rts
+    use_st = (self.m.cq.active and
+              self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
+              builder_config.filter_stable_test == try_spec.QUICK_RUN_ONLY
+             ) or builder_config.filter_stable_test == try_spec.ALWAYS
+
+    if use_rts or use_st:
+      step_result = self.m.step('quick run options', [])
+      if use_rts:
+        step_result.presentation.properties['rts_was_used'] = use_rts
+        step_result.presentation.links[
+            'use_rts: true'] = 'https://bit.ly/chromium-rts'
+        step_result.presentation.links['file a bug'] = (
+            'https://bugs.chromium.org/p/chromium/issues/entry?'
+            'template=Quick%20Run%20Issue')
+
+        # RTS-enabled Quick Run builds can't be reused for non-quick runs
+        # because they are slightly less safe than normal builds
+        if builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY:
+          self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
+
+      if use_st:
+        step_result.presentation.properties['st_was_used'] = use_st
+
+        # RTS-enabled Quick Run builds can't be reused for non-quick runs
+        # because they are slightly less safe than normal builds
+        if builder_config.filter_stable_test == try_spec.QUICK_RUN_ONLY:
+          self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
+
+    return (use_rts, use_st)
 
   def build_affected_targets(self,
                              builder_id,
@@ -1899,7 +1919,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           and the failure message if it failed
         Configuration of the build/test.
     """
-    use_rts = self.should_use_rts(builder_config)
+    use_rts, use_st = self.get_quickrun_options(builder_config)
 
     self.configure_build(builder_config, use_rts)
 
@@ -1963,6 +1983,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           override_execution_mode=ctbc.COMPILE_AND_TEST,
           use_rts=use_rts,
           rts_recall=builder_config.regression_test_selection_recall,
+          use_st=use_st,
           isolate_test_binaries_together=isolate_test_binaries_together)
     else:
       # Even though the patch doesn't require a compile on this platform,
