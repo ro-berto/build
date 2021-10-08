@@ -633,6 +633,7 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     binary = object()
+    tidy_checks = object()
     timeout_action = tidy._TidyAction(
         cc_file='timeout', target='timeout.o', in_dir='in/', flags='')
     fail_action = tidy._TidyAction(
@@ -646,8 +647,9 @@ class Tests(unittest.TestCase):
     bad_diag = _build_tidy_diagnostic(
         file_path='oh_no', line_number=1, diag_name='-Whee', message='oh no')
 
-    def runner(arg_binary, action):
+    def runner(arg_binary, checks, action):
       self.assertIs(arg_binary, binary)
+      self.assertIs(checks, tidy_checks)
       if action.cc_file == 'timeout':
         return None, '', []
       if action.cc_file == 'fail':
@@ -660,6 +662,7 @@ class Tests(unittest.TestCase):
         runner,
         tidy_jobs=len(actions),
         clang_tidy_binary=binary,
+        clang_tidy_checks=tidy_checks,
         use_threads=True)
 
     self.assertEqual(failed_cc_files, {fail_action})

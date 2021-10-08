@@ -415,7 +415,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
     command = [clang_tidy_binary]
 
     if checks is not None:
-      command.append('-checks=%s' % ','.join(checks))
+      command.append('-checks=' + checks)
 
     command += [
         cc_file,
@@ -498,7 +498,7 @@ _TidyAction = collections.namedtuple('_TidyAction',
                                      ['in_dir', 'cc_file', 'flags', 'target'])
 
 
-def _run_tidy_action(tidy_binary, action):
+def _run_tidy_action(tidy_binary, checks, action):
   """Runs clang-tidy, given a _TidyAction.
 
   The return value here is a bit complicated:
@@ -515,7 +515,7 @@ def _run_tidy_action(tidy_binary, action):
     start_time = time.time()
     exit_code, stdout, findings = _run_clang_tidy(
         clang_tidy_binary=tidy_binary,
-        checks=None,
+        checks=checks,
         in_dir=action.in_dir,
         cc_file=action.cc_file,
         compile_command=action.flags)
@@ -979,19 +979,21 @@ def _generate_tidy_actions(out_dir,
 
 
 def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
-                          clang_tidy_binary, use_threads):
+                          clang_tidy_binary, clang_tidy_checks, use_threads):
   """Runs a series of tidy actions, returning the status of all of that.
 
   Args:
     tidy_actions: a list of clang-tidy actions to perform.
     run_tidy_action: the function to call when running a tidy action. Takes a
-      clang-tidy binary and a _TidyAction; returns a tuple of (exit_code,
-      stdout, findings):
+      clang-tidy binary, a list of clang-tidy checks, and a _TidyAction;
+      returns a tuple of (exit_code, stdout, findings):
         - exit_code is the exit code of tidy. None if it timed out.
         - stdout is tidy's raw stdout.
         - findings is a list of _TidyDiagnostic from the invocation.
     tidy_jobs: how many jobs should be run in parallel.
     clang_tidy_binary: the clang-tidy binary to pass into run_tidy_action.
+    clang_tidy_checks: the set of checks to pass to clang-tidy. If None, no
+      explicit check list will be passed.
     use_threads: if True, we'll use a threadpool. Opts for a process pool
       otherwise.
 
@@ -1014,8 +1016,9 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   results = []
   for action in tidy_actions:
     results.append(
-        (action, pool.apply_async(run_tidy_action,
-                                  (clang_tidy_binary, action))))
+        (action,
+         pool.apply_async(run_tidy_action,
+                          (clang_tidy_binary, clang_tidy_checks, action))))
   pool.close()
 
   all_findings = set()
@@ -1295,6 +1298,11 @@ def main():
       action='store_false',
       help='Keep existing object files around. Handle with care: this might '
       'cause the production of invalid diagnostics.')
+  parser.add_argument(
+      '--tidy_checks',
+      help="An explicit value for clang-tidy's -checks=${foo} argument. If "
+      'none is provided, clang-tidy will gather a check list from '
+      '.clang-tidy files in the source tree.')
   args = parser.parse_args()
 
   base_path = os.path.realpath(args.base_path)
@@ -1364,6 +1372,7 @@ def main():
       _run_tidy_action,
       args.tidy_jobs,
       clang_tidy_binary,
+      args.tidy_checks,
       use_threads=False)
 
   results = _convert_tidy_output_json_obj(base_path, tidy_actions,
