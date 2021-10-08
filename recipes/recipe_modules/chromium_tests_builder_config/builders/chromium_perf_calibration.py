@@ -27,7 +27,8 @@ def _AddCalibrationTestSpec(name, platform, target_bits):
 
   kwargs['bisect_archive_build'] = False
 
-  kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
+  # crbug/1257650: try removing this tag to allow download wpr
+  # kwargs['gclient_apply_config'].append('chromium_skip_wpr_archives_download')
 
   spec = builder_spec.BuilderSpec.create(**kwargs)
 
