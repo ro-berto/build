@@ -115,9 +115,12 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
-                'TARGET_BITS': 64,
-                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
-                'TARGET_PLATFORM': 'chromeos',
+                'TARGET_BITS':
+                    64,
+                'CROS_BOARDS_WITH_QEMU_IMAGES':
+                    'amd64-generic:amd64-generic-vm',
+                'TARGET_PLATFORM':
+                    'chromeos',
             },
             simulation_platform='linux',
             test_results_config='staging_server',
@@ -697,7 +700,7 @@ SPEC = {
             gclient_config='ios',
             gclient_apply_config=[
                 'enable_reclient',
-                'reclient_clang_scan_deps',
+                'reclient_gomaip_exp',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1262,9 +1265,12 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['chromeos', 'enable_reclient'],
             chromium_config_kwargs={
-                'TARGET_BITS': 64,
-                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
-                'TARGET_PLATFORM': 'chromeos',
+                'TARGET_BITS':
+                    64,
+                'CROS_BOARDS_WITH_QEMU_IMAGES':
+                    'amd64-generic:amd64-generic-vm',
+                'TARGET_PLATFORM':
+                    'chromeos',
             },
             simulation_platform='linux',
         ),
@@ -1289,9 +1295,12 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
-                'TARGET_BITS': 64,
-                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
-                'TARGET_PLATFORM': 'chromeos',
+                'TARGET_BITS':
+                    64,
+                'CROS_BOARDS_WITH_QEMU_IMAGES':
+                    'amd64-generic:amd64-generic-vm',
+                'TARGET_PLATFORM':
+                    'chromeos',
             },
             simulation_platform='linux',
         ),
@@ -1358,8 +1367,9 @@ SPEC = {
             chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'use_clang_coverage', 'enable_reclient',
-                'reclient_clang_scan_deps'
+                'use_clang_coverage',
+                'enable_reclient',
+                'reclient_gomaip_exp',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1374,7 +1384,8 @@ SPEC = {
             chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'enable_reclient', 'reclient_clang_scan_deps'
+                'enable_reclient',
+                'reclient_gomaip_exp',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
