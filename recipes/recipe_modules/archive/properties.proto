@@ -51,7 +51,7 @@ message ArchiveData {
   //     got_src_revision_cp if it is not set).
   // {%commit%} -> commit hash from got_revision.
   // {%timestamp%} -> UTC timestamp in %Y%m%d%H%M%S.
-  // {$chromium_version%} -> Chromium version extracted from chrome/VERSION file
+  // {%chromium_version%} -> Chromium version extracted from chrome/VERSION file
   //     in {major}.{minor}.{build}.{patch} format.
   // {%builder_name%} -> name of the builder, fetched from buildbucket
   // {%build_number%} -> number of the current build, fetched from buildbucket
