@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import six
 import re
 
 from recipe_engine.config import config_item_context, ConfigGroup
@@ -23,57 +24,59 @@ def BaseConfig(CBB_CONFIG=None, CBB_BRANCH=None, CBB_BUILD_NUMBER=None,
                CBB_DEBUG=False, CBB_CLOBBER=False, CBB_BUILDBUCKET_ID=None,
                CBB_MASTER_BUILD_ID=None, CBB_EXTRA_ARGS=None, **_kwargs):
   cgrp = ConfigGroup(
-    # Base mapping of repository key to repository name.
-    repositories = Dict(value_type=Set(basestring)),
+      # Base mapping of repository key to repository name.
+      repositories=Dict(value_type=Set(six.string_types)),
 
-    # Checkout Chromite at this branch. "origin/" will be prepended.
-    chromite_branch = Single(basestring, empty_val=CBB_BRANCH or 'master'),
+      # Checkout Chromite at this branch. "origin/" will be prepended.
+      chromite_branch=Single(
+          six.string_types, empty_val=CBB_BRANCH or 'master'),
 
-    # Should the Chrome version be supplied to cbuildbot?
-    use_chrome_version = Single(bool),
+      # Should the Chrome version be supplied to cbuildbot?
+      use_chrome_version=Single(bool),
 
-    # Should the CrOS manifest commit message be parsed and added to 'cbuildbot'
-    # flags?
-    read_cros_manifest = Single(bool),
+      # Should the CrOS manifest commit message be parsed and added to
+      # 'cbuildbot' flags?
+      read_cros_manifest=Single(bool),
 
-    # cbuildbot tool flags.
-    cbb = ConfigGroup(
-      # The Chromite configuration to use.
-      config = Single(basestring, empty_val=CBB_CONFIG),
+      # cbuildbot tool flags.
+      cbb=ConfigGroup(
+          # The Chromite configuration to use.
+          config=Single(six.string_types, empty_val=CBB_CONFIG),
 
-      # If supplied, forward to cbuildbot as '--master-build-id'.
-      build_id = Single(basestring, empty_val=CBB_MASTER_BUILD_ID),
+          # If supplied, forward to cbuildbot as '--master-build-id'.
+          build_id=Single(six.string_types, empty_val=CBB_MASTER_BUILD_ID),
 
-      # If supplied, forward to cbuildbot as '--buildnumber'.
-      build_number = Single(int, empty_val=CBB_BUILD_NUMBER),
+          # If supplied, forward to cbuildbot as '--buildnumber'.
+          build_number=Single(int, empty_val=CBB_BUILD_NUMBER),
 
-      # If supplied, forward to cbuildbot as '--chrome_version'.
-      chrome_version = Single(basestring),
+          # If supplied, forward to cbuildbot as '--chrome_version'.
+          chrome_version=Single(six.string_types),
 
-      # If True, add cbuildbot flag: '--debug'.
-      debug = Single(bool, empty_val=CBB_DEBUG),
+          # If True, add cbuildbot flag: '--debug'.
+          debug=Single(bool, empty_val=CBB_DEBUG),
 
-      # If True, add cbuildbot flag: '--clobber'.
-      clobber = Single(bool, empty_val=CBB_CLOBBER),
+          # If True, add cbuildbot flag: '--clobber'.
+          clobber=Single(bool, empty_val=CBB_CLOBBER),
 
-      # The (optional) configuration repository to use.
-      config_repo = Single(basestring),
+          # The (optional) configuration repository to use.
+          config_repo=Single(six.string_types),
 
-      # If supplied, forward to cbuildbot as '--buildbucket-id'
-      buildbucket_id = Single(basestring, empty_val=CBB_BUILDBUCKET_ID),
+          # If supplied, forward to cbuildbot as '--buildbucket-id'
+          buildbucket_id=Single(six.string_types, empty_val=CBB_BUILDBUCKET_ID),
 
-      # Extra arguments passed to cbuildbot.
-      extra_args = List(basestring),
-    ),
+          # Extra arguments passed to cbuildbot.
+          extra_args=List(six.string_types),
+      ),
 
-    # If "chromite_branch" includes a branch version, this will be set to the
-    # version value. Otherwise, this will be None.
-    #
-    # Set in "base".
-    branch_version = Single(int),
+      # If "chromite_branch" includes a branch version, this will be set to the
+      # version value. Otherwise, this will be None.
+      #
+      # Set in "base".
+      branch_version=Single(int),
 
-    # If true, the canary version of goma is used instead of the stable version.
-    use_goma_canary = Single(bool),
+      # If true, the canary version of goma is used instead of the stable
+      # version.
+      use_goma_canary=Single(bool),
   )
 
   return cgrp
