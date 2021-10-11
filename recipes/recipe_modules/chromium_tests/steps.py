@@ -3614,6 +3614,7 @@ class SkylabTest(Test):
       if len(self.test_runner_builds) == 1:
         step.links['Test Run'] = bb_url % self.test_runner_builds[0].id
       else:
+        self.test_runner_builds.sort(key=lambda b: b.create_time.seconds)
         for i, b in enumerate(self.test_runner_builds):
           with api.step.nest('attempt: #' + str(i + 1)) as attempt_step:
             attempt_step.links['Test Run'] = bb_url % b.id

@@ -264,7 +264,7 @@
     "name": "find test runner build.buildbucket.search",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"id\": \"900\", \"status\": \"SUCCESS\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"createTime\": \"2020-08-25T07:15:00Z\", \"id\": \"900\", \"status\": \"SUCCESS\"}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@",
       "@@@STEP_LINK@900@https://cr-buildbucket.appspot.com/build/900@@@"
     ]
