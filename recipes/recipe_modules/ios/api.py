@@ -930,12 +930,14 @@ class iOSApi(recipe_api.RecipeApi):
     ]
 
     files = [
-      # .apps are directories. Need the trailing slash to isolate the
-      # contents of a directory.
-      '<(app_path)/',
-      '<(additional_app_path)/',
-      '%s/' % scripts_dir,
-      'src/.vpython',
+        # .apps are directories. Need the trailing slash to isolate the
+        # contents of a directory.
+        '<(app_path)/',
+        '<(additional_app_path)/',
+        '%s/' % scripts_dir,
+        # This is needed for variations runner import.
+        'src/testing/scripts/variations_seed_access_helper.py',
+        'src/.vpython',
     ]
     if self.__config.get('additional files'):
       files.extend(self.__config.get('additional files'))
