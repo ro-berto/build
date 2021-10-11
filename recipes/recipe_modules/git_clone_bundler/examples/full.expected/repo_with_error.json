@@ -86,7 +86,7 @@
     "infra_step": true,
     "name": "create bundle (src/foo)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Exception: Infra Failure: Step(u'create bundle (src/foo)') (retcode: 1)@@@",
+      "@@@STEP_TEXT@Exception: Infra Failure: Step('create bundle (src/foo)') (retcode: 1)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

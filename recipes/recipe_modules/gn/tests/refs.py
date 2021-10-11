@@ -35,7 +35,8 @@ def GenTests(api):
       'basic',
       api.properties(targets=['target1', 'target2']),
       api.override_step_data(
-          'calculate gn refs', stdout=api.raw_io.output('target3\ntarget4')),
+          'calculate gn refs',
+          stdout=api.raw_io.output_text('target3\ntarget4')),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -46,6 +47,7 @@ def GenTests(api):
           output_type='executable',
       ),
       api.override_step_data(
-          'calculate gn refs', stdout=api.raw_io.output('target3\ntarget4')),
+          'calculate gn refs',
+          stdout=api.raw_io.output_text('target3\ntarget4')),
       api.post_process(post_process.DropExpectation),
   )

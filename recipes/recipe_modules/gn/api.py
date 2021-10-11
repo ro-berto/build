@@ -171,7 +171,7 @@ class GnApi(recipe_api.RecipeApi):
     cmd.append(build_dir)
     cmd.extend(inputs)
     step_result = self._gn_cmd(step_name, cmd, log_name='refs', **kwargs)
-    output = step_result.stdout.decode('utf-8')
+    output = step_result.stdout
     return set(output.splitlines())
 
   def ls(self, build_dir, inputs, output_type=None, output_format='label',
@@ -203,7 +203,7 @@ class GnApi(recipe_api.RecipeApi):
     cmd.append(build_dir)
     cmd.extend(inputs)
     step_result = self._gn_cmd(step_name, cmd, log_name='targets')
-    output = step_result.stdout.decode('utf-8')
+    output = step_result.stdout
     return set(output.splitlines())
 
   def clean(self, build_dir, step_name='clean outdir'):

@@ -82,7 +82,7 @@ class RepoApi(recipe_api.RecipeApi):
     kwargs.setdefault('name', 'repo list')
     step_result = self(['list'], **kwargs)
 
-    output = step_result.stdout.decode('utf-8')
+    output = step_result.stdout
     result = []
     for line in output.splitlines():
       match = self._REPO_LIST_RE.match(line)
