@@ -1379,13 +1379,19 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-js-code-coverage',
             ),
-       'linux-lacros-rel':
+        # TODO(crbug.com/1233247) Adds the CI tester when it's available.
+        'linux-lacros-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-lacros-dbg',
+            ),
+        'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-lacros-builder-rel',
                 tester='linux-lacros-tester-rel',
             ),
-       'linux-lacros-rel-rts':
+        'linux-lacros-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-lacros-builder-rel',
