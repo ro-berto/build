@@ -781,6 +781,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='linux-gcc-rel',
             ),
+        'linux-headless-shell-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-headless-shell-rel',
+            ),
         # This trybot mirrors the trybot linux-rel
         'linux-inverse-fieldtrials-fyi-rel':
             try_spec.TrySpec.create([
