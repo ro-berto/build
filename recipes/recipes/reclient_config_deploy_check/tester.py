@@ -53,17 +53,20 @@ def RunSteps(api, properties):
     for p in properties.rbe_project:
       with api.step.nest(p.name):
         fetch_cmd = [fetch_script, '--rbe_project', p.name]
-        api.step('fetch configs', fetch_cmd, infra_step=True)
+        try:
+          api.step('fetch configs', fetch_cmd, infra_step=True)
 
-        with api.step.nest('verify'):
-          with api.step.defer_results():
-            for cfg in p.cfg_file:
-              cfg = repo_path.join(cfg)
-              # Mock the cfg files as existing for the purposes of testing.
-              if api.properties.get('mock_cfgs', False):
-                api.path.mock_add_paths(cfg)
-              if not api.path.exists(cfg):
-                bad_reclient_configs.append(p.name + ": " + str(cfg))
+          with api.step.nest('verify'):
+            with api.step.defer_results():
+              for cfg in p.cfg_file:
+                cfg = repo_path.join(cfg)
+                # Mock the cfg files as existing for the purposes of testing.
+                if api.properties.get('mock_cfgs', False):
+                  api.path.mock_add_paths(cfg)
+                if not api.path.exists(cfg):
+                  bad_reclient_configs.append(p.name + ": " + str(cfg))
+        except api.step.StepFailure:
+          bad_reclient_configs.append(p.name + ": failure during config fetch")
 
         with api.step.nest('restore'):
           api.git('restore', '.', infra_step=True)
@@ -118,4 +121,21 @@ def GenTests(api):
           'rbe-project-1.verify',
       ),
       api.post_check(post_process.StatusFailure),
+  )
+
+  yield api.test(
+      'failed fetch',
+      api.buildbucket.try_build(),
+      api.properties(
+          tester_pb.InputProperties(
+              fetch_script='fetch-script',
+              rbe_project=[
+                  tester_pb.ProjectConfigVerification(
+                      name='rbe-project-1', cfg_file=['rewrapper-linux.cfg'])
+              ])),
+      api.properties(mock_cfgs=False),
+      api.step_data('rbe-project-1.fetch configs', retcode=1),
+      api.post_check(post_process.StepException, 'rbe-project-1'),
+      api.post_check(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
