@@ -35,6 +35,10 @@ CROS_BUCKET = 'gs://chromeos-image-archive/'
 POOL = Request.Params.Scheduling.MANAGED_POOL_QUOTA
 
 
+def _base64_encode_str(s):
+  return base64.b64encode(s.encode('utf-8')).decode('ascii')
+
+
 class SkylabApi(recipe_api.RecipeApi):
   """Module for issuing commands to Skylab"""
 
@@ -89,7 +93,7 @@ class SkylabApi(recipe_api.RecipeApi):
               for k in attr.fields_dict(ResultDB)
               if not getattr(s.resultdb, k) in [None, '']
           })
-          test_args.append('resultdb_settings=%s' % base64.b64encode(rdb_str))
+          test_args.append('resultdb_settings=%s' % _base64_encode_str(rdb_str))
           if s.dut_pool:
             req.params.scheduling.unmanaged_pool = s.dut_pool
             tags['label-pool'] = s.dut_pool
@@ -100,10 +104,12 @@ class SkylabApi(recipe_api.RecipeApi):
             # Due to crbug/1173329, skylab does not support arbitrary tast
             # expressions. As a workaround, we encode test argument which may
             # contain complicated patterns to base64.
-            test_args.append('tast_expr_b64=%s' % base64.b64encode(s.tast_expr))
+            test_args.append('tast_expr_b64=%s' %
+                             _base64_encode_str(s.tast_expr))
             tags['tast-expr'] = s.tast_expr
           if s.test_args:
-            test_args.append('test_args_b64=%s' % base64.b64encode(s.test_args))
+            test_args.append('test_args_b64=%s' %
+                             _base64_encode_str(s.test_args))
             tags['test_args'] = s.test_args
           if s.lacros_gcs_path:
             lacros_dep = req.params.software_dependencies.add()
@@ -166,7 +172,7 @@ class SkylabApi(recipe_api.RecipeApi):
     """
     with self.m.step.nest('collect skylab results'):
       self.m.buildbucket.collect_builds(
-          ctp_by_tag.values(), timeout=timeout_seconds)
+          list(ctp_by_tag.values()), timeout=timeout_seconds)
 
     # TODO(crbug.com/1245438): Remove below once the test runner's invocation
     # is included into its parent build's invocation.

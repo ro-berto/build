@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from six.moves import range  # pylint: disable=redefined-builtin
+
 from recipe_engine import recipe_test_api
 
 from google.protobuf import timestamp_pb2
@@ -26,7 +28,7 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
       A step with mock response.
     """
     resp = []
-    for i in xrange(req_num):
+    for i in range(req_num):
       resp.append(dict(schedule_build=build_pb2.Build(id=(800 + i))))
     return self.m.buildbucket.simulated_schedule_output(
         builds_service_pb2.BatchResponse(responses=resp),
@@ -48,7 +50,7 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
       A list of steps with mock response.
     """
     steps = []
-    for i in xrange(req_num):
+    for i in range(req_num):
       retry_suffix = (' (%d)' % (i + 1)) if i else ''
       steps.append(
           self.m.buildbucket.simulated_search_results(

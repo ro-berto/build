@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -94,6 +94,9 @@ def GenTests(api):
     else:
       check(scheduling['unmanagedPool'] == pool)
 
+  def _decode_b64_str(s):
+    return base64.b64decode(s).decode('utf-8')
+
   def check_test_arg(check,
                      steps,
                      tag,
@@ -110,9 +113,11 @@ def GenTests(api):
     test = ctp_reqs[tag]['testPlan']['test'][0]
     got = _args_to_dict(test['autotest']['testArgs'])
     if got.get('tast_expr_b64'):
-      check(tast_expr == base64.b64decode(got['tast_expr_b64']))
+      decoded_tast_expr_b64 = _decode_b64_str(got['tast_expr_b64'])
+      check(tast_expr == decoded_tast_expr_b64)
     else:
-      check(test_args == base64.b64decode(got['test_args_b64']))
+      decoded_test_args_b64 = _decode_b64_str(got['test_args_b64'])
+      check(test_args == decoded_test_args_b64)
 
     if got.get('resultdb_settings'):
       rdb_config = api.json.loads(
