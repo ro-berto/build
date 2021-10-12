@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import copy
+import six
 
 from recipe_engine import recipe_api
 
@@ -128,7 +129,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
     gclient_config.revisions = {
         k: _replace_revision_resolver(v)
-        for k, v in gclient_config.revisions.iteritems()
+        for k, v in six.iteritems(gclient_config.revisions)
     }
 
     for s in gclient_config.solutions:
