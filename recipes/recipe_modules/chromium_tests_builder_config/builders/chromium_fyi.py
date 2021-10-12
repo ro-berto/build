@@ -1212,6 +1212,21 @@ SPEC = {
             cf_archive_build=False,
             simulation_platform='linux',
         ),
+    'UBSan vptr Release (reclient shadow)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_linux_ubsan_vptr',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            cf_archive_build=False,
+            simulation_platform='linux',
+        ),
     'Win x64 Builder (reclient)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
