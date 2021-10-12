@@ -5,7 +5,7 @@
 import json
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'recipe_engine/path',
