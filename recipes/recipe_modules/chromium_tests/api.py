@@ -1886,6 +1886,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if use_st:
         step_result.presentation.properties['st_was_used'] = use_st
+        step_result.presentation.step_text += '<br/>use_st: true'
 
         # RTS-enabled Quick Run builds can't be reused for non-quick runs
         # because they are slightly less safe than normal builds
