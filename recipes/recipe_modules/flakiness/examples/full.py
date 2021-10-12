@@ -89,7 +89,7 @@ def GenTests(api):
   # containing 2 failed test results. Total of 20 test results.
   test_id = (
       'ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/'
-  )
+      'TestSuite.test_a')
 
   def _generate_build(builder, invocation, build_input=None):
     return build_pb2.Build(
@@ -237,7 +237,6 @@ def GenTests(api):
                   swarming=True,
               ),
               failure=False)),
-      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

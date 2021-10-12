@@ -158,23 +158,32 @@ def _merge_arg(args, flag, value):
     return args + [flag]
 
 
-def _merge_args_and_test_options(test, args, options):
+def _supports_test_arguments(test, api):
+  if isinstance(test, (SwarmingGTestTest, LocalGTestTest)):
+    return True
+  if (isinstance(test,
+                 (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
+      'blink_web_tests' in test.target_name):
+    return True
+
+  return api.chromium.c and api.chromium.c.TARGET_PLATFORM == 'ios'
+
+
+def _merge_args_and_test_options(test, args, options, api):
   """Adds args from test options.
 
   Args:
     test: A test suite. An instance of a subclass of Test.
     args: The list of args of extend.
     options: The TestOptions to use to extend args.
+    api: An api object providing access to Chromium configs
 
   Returns:
     The extended list of args.
   """
   args = list(args)
 
-  if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or
-          (isinstance(test,
-                      (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
-           'blink_web_tests' in test.target_name)):
+  if not _supports_test_arguments(test, api):
     # The args that are being merged by this function are only supported
     # by gtest and blink_web_tests.
     return args
@@ -1648,7 +1657,7 @@ class LocalGTestTest(LocalTest):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
-    args = _merge_args_and_test_options(self, self.spec.args, test_options)
+    args = _merge_args_and_test_options(self, self.spec.args, test_options, api)
 
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
@@ -2356,7 +2365,7 @@ class SwarmingTest(Test):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
-    args = _merge_args_and_test_options(self, self.spec.args, test_options)
+    args = _merge_args_and_test_options(self, self.spec.args, test_options, api)
 
     shards = self.spec.shards
 
@@ -2792,7 +2801,7 @@ class LocalIsolatedScriptTest(LocalTest):
 
     cmd = list(self.raw_cmd)
     cmd.extend(self.spec.args)
-    args = _merge_args_and_test_options(self, cmd, test_options)
+    args = _merge_args_and_test_options(self, cmd, test_options, api)
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 

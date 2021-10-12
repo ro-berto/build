@@ -370,6 +370,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     # iterations here. We loop the test objects and check all new tests to see
     # if the test_id start similarly.
     new_test_objects = []
+    suffix = 'check flakiness'
     for test in test_objects:
       # find whether there exists a Test object that has a matching test_id.
       for new_test in new_tests:
@@ -390,7 +391,6 @@ class FlakinessApi(recipe_api.RecipeApi):
     with self.m.chromium_tests.wrap_chromium_tests(None, new_test_objects):
       # Run the test. The isolates have already been created.
       rdb_results, invalid_test_suites, failed_test_suites = (
-          self.m.test_utils._run_tests_once(self.m, new_test_objects,
-                                            'check flakiness'))
+          self.m.test_utils._run_tests_once(self.m, new_test_objects, suffix))
 
     return rdb_results, invalid_test_suites, failed_test_suites
