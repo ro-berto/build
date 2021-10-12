@@ -18,6 +18,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'code_coverage',
     'filter',
     'isolate',
     'recipe_engine/buildbucket',
@@ -69,6 +70,11 @@ def RunSteps(api, properties):
           enforce_fetch=True,
           patch=False,
           runhooks_suffix='without patch')
+
+      # code coverage is ignored for without patch steps, but compile will
+      # error if there is no files_to_instrument.txt file
+      if api.code_coverage.using_coverage:
+        api.code_coverage.instrument([])
 
       # properties.swarming_targets should only be targets required for
       # isolated swarming tests, but a non-isolated swarming test could,
@@ -333,6 +339,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder='linux-rel-compilator', revision='deadbeef'),
       api.platform.name('linux'),
+      api.code_coverage(use_clang_coverage=True),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.properties(
           InputProperties(
