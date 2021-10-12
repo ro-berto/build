@@ -1234,7 +1234,7 @@
       "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",
-      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[failure_summary]@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1471,7 +1471,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: #### Step _compile (with patch)_ failed. Error logs are shown below:\n```\n(retcode=1) No failure summary provided.\n```\n#### More information in raw_io.output[failure_summary]"
+      "humanReason": "Infra compile failure: #### Step _compile (with patch)_ failed. Error logs are shown below:\n```\n(retcode=1) No failure summary provided.\n```\n#### More information in raw_io.output_text[failure_summary]"
     },
     "name": "$result"
   }

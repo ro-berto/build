@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import pipes
+import six
 
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Dict, List, Single, Static, Set, BadConf
@@ -35,15 +36,15 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
       compile_py=ConfigGroup(
-          default_targets=Set(basestring),
-          build_args=List(basestring),
-          compiler=Single(basestring, required=False),
-          mode=Single(basestring, required=False),
+          default_targets=Set(six.string_types),
+          build_args=List(six.string_types),
+          compiler=Single(six.string_types, required=False),
+          mode=Single(six.string_types, required=False),
           goma_dir=Single(Path, required=False),
-          goma_client_type=Single(basestring, required=False),
+          goma_client_type=Single(six.string_types, required=False),
           goma_use_local=Single(bool, empty_val=False, required=False),
           show_ninja_stats=Single(bool, empty_val=False, required=False),
-          goma_hermetic=Single(basestring, required=False),
+          goma_hermetic=Single(six.string_types, required=False),
           goma_failfast=Single(bool, empty_val=False, required=False),
           goma_max_active_fail_fallback_tasks=Single(
               int, empty_val=None, required=False),
@@ -54,7 +55,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       ),
       gyp_env=ConfigGroup(
           DOWNLOAD_VR_TEST_APKS=Single(int, required=False),
-          GYP_DEFINES=Dict(equal_fn, ' '.join, (basestring, int, Path)),
+          GYP_DEFINES=Dict(equal_fn, ' '.join, (six.string_types, int, Path)),
       ),
       # This allows clients to opt out of using GYP variables in the
       # environment.
@@ -62,26 +63,27 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       use_gyp_env=Single(bool, empty_val=True, required=False),
       env=ConfigGroup(
           PATH=List(Path),
-          GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
-          GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),
+          GOMA_RPC_EXTRA_PARAMS=Single(six.string_types, required=False),
+          GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(
+              six.string_types, required=False),
           GOMA_STORE_ONLY=Single(bool, empty_val=False, required=False),
           GOMA_DEPS_CACHE_MAX_PROTO_SIZE_IN_MB=Single(int, required=False),
           FORCE_MAC_TOOLCHAIN=Single(int, required=False),
-          FORCE_MAC_SDK_MIN=Single(basestring, required=False),
+          FORCE_MAC_SDK_MIN=Single(six.string_types, required=False),
       ),
       mac_toolchain=ConfigGroup(
           enabled=Single(bool, empty_val=False, required=False),
           # Xcode installer configs. These normally don't change with Xcode
           # version.
-          installer_cipd_package=Single(basestring),
-          installer_version=Single(basestring),
-          installer_cmd=Single(basestring),
-          kind=Single(basestring),
+          installer_cipd_package=Single(six.string_types),
+          installer_version=Single(six.string_types),
+          installer_cmd=Single(six.string_types),
+          kind=Single(six.string_types),
       ),
       project_generator=ConfigGroup(
-          tool=Single(basestring, empty_val='mb'),
+          tool=Single(six.string_types, empty_val='mb'),
           config_path=Single(Path),
-          args=Set(basestring),
+          args=Set(six.string_types),
           isolate_map_paths=List(Path),
           # TODO(crbug.com/1060857): Remove this once swarming task templates
           # support command prefixes.
@@ -93,7 +95,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       build_dir=Single(Path),
       cros_sdk=ConfigGroup(
           external=Single(bool, empty_val=True, required=False),
-          args=List(basestring),
+          args=List(six.string_types),
       ),
       runtests=ConfigGroup(
           enable_memcheck=Single(bool, empty_val=False, required=False),
@@ -109,7 +111,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
 
       # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
       # passed as --target on the command line.
-      build_config_fs=Single(basestring),
+      build_config_fs=Single(six.string_types),
       BUILD_CONFIG=Static(check(BUILD_CONFIG, BUILD_CONFIGS)),
       HOST_PLATFORM=Static(check(HOST_PLATFORM, HOST_PLATFORMS)),
       HOST_ARCH=Static(check(HOST_ARCH, HOST_ARCHS)),
@@ -120,7 +122,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       TARGET_CROS_BOARDS=Static(TARGET_CROS_BOARDS),
       CROS_BOARDS_WITH_QEMU_IMAGES=Static(CROS_BOARDS_WITH_QEMU_IMAGES),
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
-      gn_args=List(basestring),
+      gn_args=List(six.string_types),
       clobber_before_runhooks=Single(
           bool, empty_val=False, required=False, hidden=False),
   )

@@ -467,9 +467,9 @@
       "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
       "@@@STEP_LOG_END@json.output[ninja_info]@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
-      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[failure_summary]@[1/1] CXX a.o@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[failure_summary]@filename:row:col: error: error info@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[failure_summary]@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -724,7 +724,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output_text[failure_summary]"
     },
     "name": "$result"
   }

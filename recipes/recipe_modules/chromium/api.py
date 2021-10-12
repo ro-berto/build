@@ -284,7 +284,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # The estimated length of a line will be 1 / 7th of the char limit.
     # The default case will 100 characters per line
-    AVG_LINE_SIZE = (char_limit / 7)
+    AVG_LINE_SIZE = (char_limit // 7)
 
     summary_lines = failure_summary.splitlines()
     for index in range(len(summary_lines)):
@@ -308,7 +308,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     header = '#### Step _%s_ failed. Error logs are shown below:' % step_name
     summary_lines.insert(0, header)
     # Ensure footer is within a reasonable size,
-    if len(footer) <= AVG_LINE_SIZE:
+    if len(footer) <= 2 * AVG_LINE_SIZE:
       summary_lines.append('#### %s' % footer)
 
     return '\n'.join(summary_lines)
@@ -342,7 +342,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--ninja_info_output',
         self.m.json.output(add_json_log='on_failure', name='ninja_info'),
         '--failure_output',
-        self.m.raw_io.output(
+        self.m.raw_io.output_text(
             add_output_log='on_failure', name='failure_summary'),
     ]
     if kwargs.get('no_prune_venv'):
@@ -365,7 +365,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         filename:row:col: error: error info
     """)
     step_test_data = (lambda: self.m.json.test_api.output(
-        example_json, name='ninja_info') + self.m.raw_io.test_api.output(
+        example_json, name='ninja_info') + self.m.raw_io.test_api.output_text(
             example_failure_output, name='failure_summary'))
     try:
       with self.m.context(env=ninja_env):
@@ -384,8 +384,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       failure_summary = ('(retcode=%d) No failure summary provided.' %
                          ninja_step_result.retcode)
-      if ninja_step_result.raw_io.output:
-        failure_summary = ninja_step_result.raw_io.output
+      if ninja_step_result.raw_io.output_text:
+        failure_summary = ninja_step_result.raw_io.output_text
 
       return CompileResult(
           failure_summary=failure_summary, retcode=ninja_step_result.retcode)
@@ -417,7 +417,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           ninja_command_explain,
           stdout=self.m.raw_io.output_text(),
           step_test_data=(
-              lambda: self.m.raw_io.test_api.stream_output(ninja_no_work)))
+              lambda: self.m.raw_io.test_api.stream_output_text(ninja_no_work)))
 
     if ninja_no_work in step_result.stdout:
       # No dependency issue found.
@@ -759,7 +759,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if ninja_result.retcode:
       failure_summary = self._format_failures(
           ninja_result.failure_summary, name or 'compile',
-          'More information in raw_io.output[failure_summary]')
+          'More information in raw_io.output_text[failure_summary]')
       if use_goma_module:
         # It's possible for the StepFailure of the compile step to have
         # a goma failure, so to avoid the message getting repeated it
@@ -1440,7 +1440,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         additional_args=additional_args,
         ok_ret='any',
         stdout=self.m.raw_io.output_text(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output_text(
             lookup_test_data))
 
     gn_args = result.stdout

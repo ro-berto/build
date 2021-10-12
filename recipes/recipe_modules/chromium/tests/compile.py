@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'chromium',
@@ -152,7 +152,7 @@ def GenTests(api):
       api.chromium.change_line_limit(50),
       api.override_step_data(
           'compile',
-          api.raw_io.output(
+          api.raw_io.output_text(
               gomacc_path + textwrap.dedent("""
             [1/1] CXX a.o
             filename:row:col: error: error info
@@ -169,7 +169,7 @@ def GenTests(api):
           [1/1] CXX a.o
           filename:row:col: error: error info
           ```
-          #### More information in raw_io.output[failure_summary]
+          #### More information in raw_io.output_text[failure_summary]
           """).strip()),
       api.post_process(post_process.DropExpectation),
   )
@@ -181,7 +181,7 @@ def GenTests(api):
       api.chromium.change_line_limit(50),
       api.override_step_data(
           'compile',
-          api.raw_io.output(
+          api.raw_io.output_text(
               gomacc_path + textwrap.dedent("""
           [1/1] CXX a.o
           filename error 1 info
@@ -217,7 +217,7 @@ def GenTests(api):
           More stuff that happened in the error
           ```
           ##### ...The message was too long...
-          #### More information in raw_io.output[failure_summary]
+          #### More information in raw_io.output_text[failure_summary]
           """).strip()),
       api.post_process(post_process.DropExpectation),
   )

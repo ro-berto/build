@@ -2622,7 +2622,7 @@
       "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",
-      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[failure_summary]@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
