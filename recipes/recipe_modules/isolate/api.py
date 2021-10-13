@@ -4,7 +4,7 @@
 
 import itertools
 import pprint
-import sys
+import six
 
 from recipe_engine import recipe_api
 
@@ -117,7 +117,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
     swarm_hashes = {}
     if step_result.json.output:
-      for k, v in step_result.json.output.iteritems():
+      for k, v in six.iteritems(step_result.json.output):
         # TODO(tansell): Raise an error here when it can't clobber an
         # existing error. This code is currently inside a finally block,
         # meaning it could be executed when an existing error is occurring.
@@ -136,7 +136,7 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.properties[
           swarm_hashes_property_name] = swarm_hashes
 
-    missing = sorted(t for t, h in self._isolated_tests.iteritems() if not h)
+    missing = sorted(t for t, h in six.iteritems(self._isolated_tests) if not h)
     if missing:
       step_result.presentation.logs['failed to isolate'] = (
           ['Failed to isolate following targets:'] + missing +
@@ -168,10 +168,7 @@ class IsolateApi(recipe_api.RecipeApi):
     # instead of an empty dictionary, or similar.
     if not hashes:
       return {} # pragma: no covergae
-    return {
-      k.encode('ascii'): v.encode('ascii')
-      for k, v in hashes.iteritems()
-    }
+    return dict(hashes)
 
   @property
   def _run_isolated_path(self):
@@ -194,7 +191,7 @@ class IsolateApi(recipe_api.RecipeApi):
     ]
 
     if 'env' in kwargs and isinstance(kwargs['env'], dict):
-      for k, v in sorted(kwargs.pop('env').iteritems()):
+      for k, v in sorted(six.iteritems(kwargs.pop('env'))):
         cmd.extend(['--env', '%s=%s' % (k, v)])
     cmd.extend(pre_args or [])
     if args:
@@ -215,7 +212,7 @@ class IsolateApi(recipe_api.RecipeApi):
     #   'deps_diff': [ ...filenames... ],
     # }
     # Join all three filename lists in the values into a single list.
-    diffs = list(itertools.chain.from_iterable(values.itervalues()))
+    diffs = list(itertools.chain.from_iterable(six.itervalues(values)))
     if not diffs:  # pragma: no cover
       return
 
