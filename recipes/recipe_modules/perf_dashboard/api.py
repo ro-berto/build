@@ -3,8 +3,7 @@
 # found in the LICENSE file.
 
 import json
-import os
-import urllib
+from six.moves.urllib.parse import urlencode
 
 from recipe_engine import recipe_api
 
@@ -54,12 +53,12 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     assert revision
     # TODO(https://crbug.com/1113290) Update the dashboard to refer to groups
     # instead of masters
-    params = urllib.urlencode({
-        'masters': self.m.builder_group.for_current,
-        'bots': bot or self.m.buildbucket.builder_name,
-        'tests': test,
-        'rev': revision,
-    })
+    params = urlencode([
+        ('masters', self.m.builder_group.for_current),
+        ('bots', bot or self.m.buildbucket.builder_name),
+        ('tests', test),
+        ('rev', revision),
+    ])
     presentation.links['Results Dashboard'] = (
         '%s/report?%s' % (_BASE_URL, params))
 
@@ -69,7 +68,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
   def add_point(self, data, halt_on_failure=False, name=None, **kwargs):
     return self.post(name or 'perf dashboard post', '%s/add_point' % _BASE_URL,
-                     {'data': json.dumps(data)}, halt_on_failure, **kwargs)
+                     {'data': json.dumps(data, sort_keys=True)},
+                     halt_on_failure, **kwargs)
 
   def upload_isolate(self, builder_name, change, isolate_server,
                      isolate_map, halt_on_failure=False, **kwargs):
