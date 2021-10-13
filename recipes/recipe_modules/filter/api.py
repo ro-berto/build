@@ -2,14 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import contextlib
-import json
-import os
 import posixpath
 import re
 
 from recipe_engine import recipe_api
-from recipe_engine import util as recipe_util
 
 class FilterApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -341,9 +337,8 @@ class FilterApi(recipe_api.RecipeApi):
         'self.m.filter.test_targets': self.test_targets,
         'compile_targets': compile_targets,
     }
-    with contextlib.closing(recipe_util.StringListIO()) as listio:
-      json.dump(analyze_details, listio, indent=2, sort_keys=True)
+    details_json = self.m.json.dumps(analyze_details, indent=2, sort_keys=True)
     step_result = self.m.step.active_result
-    step_result.presentation.logs['analyze_details'] = listio.lines
+    step_result.presentation.logs['analyze_details'] = details_json.splitlines()
 
     return self.test_targets, compile_targets
