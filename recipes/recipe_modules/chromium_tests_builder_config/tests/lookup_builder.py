@@ -8,6 +8,11 @@ from recipe_engine.config import Dict
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium import BuilderId
 
+from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
+                                                                   properties_pb
+                                                                  )
+from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
+
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
@@ -132,5 +137,142 @@ def GenTests(api):
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(use_static_dbs=True),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'builder-config-from-properties',
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          properties_pb.InputProperties(
+              builder_config=properties_pb.BuilderConfig(
+                  builder_db=properties_pb.BuilderDatabase(entries=[
+                      properties_pb.BuilderDatabase.Entry(
+                          builder_id=builder_pb.BuilderID(
+                              project='fake-project',
+                              bucket='ci',
+                              builder='fake-builder',
+                          ),
+                          builder_spec=properties_pb.BuilderSpec(
+                              builder_group='fake-group',
+                              execution_mode='COMPILE_AND_TEST',
+                              legacy_gclient_config=properties_pb.BuilderSpec
+                              .LegacyGclientRecipeModuleConfig(
+                                  config='chromium'),
+                              legacy_chromium_config=properties_pb.BuilderSpec
+                              .LegacyChromiumRecipeModuleConfig(
+                                  config='chromium',
+                                  target_bits=64,
+                                  target_cros_boards=[
+                                      'fake-board1',
+                                      'fake-board2',
+                                  ]),
+                          ),
+                      ),
+                      properties_pb.BuilderDatabase.Entry(
+                          builder_id=builder_pb.BuilderID(
+                              project='fake-project',
+                              bucket='ci',
+                              builder='fake-tester',
+                          ),
+                          builder_spec=properties_pb.BuilderSpec(
+                              builder_group='fake-group',
+                              execution_mode='TEST',
+                              parent=builder_pb.BuilderID(
+                                  project='fake-project',
+                                  bucket='ci',
+                                  builder='fake-builder',
+                              ),
+                              legacy_gclient_config=properties_pb.BuilderSpec
+                              .LegacyGclientRecipeModuleConfig(
+                                  config='chromium'),
+                              legacy_chromium_config=properties_pb.BuilderSpec
+                              .LegacyChromiumRecipeModuleConfig(
+                                  config='chromium',
+                                  target_bits=64,
+                                  target_cros_boards=[
+                                      'fake-board1',
+                                      'fake-board2',
+                                  ]),
+                          ),
+                      ),
+                  ]),
+                  builder_ids=[
+                      builder_pb.BuilderID(
+                          project='fake-project',
+                          bucket='ci',
+                          builder='fake-builder',
+                      ),
+                  ],
+                  builder_ids_in_scope_for_testing=[
+                      builder_pb.BuilderID(
+                          project='fake-project',
+                          bucket='ci',
+                          builder='fake-tester',
+                      ),
+                  ],
+              ))),
+      api.properties(
+          expected_attrs=dict(
+              builder_db=ctbc.BuilderDatabase.create({
+                  'fake-group': {
+                      'fake-builder':
+                          ctbc.BuilderSpec.create(
+                              luci_project='fake-project',
+                              execution_mode=ctbc.COMPILE_AND_TEST,
+                              gclient_config='chromium',
+                              chromium_config='chromium',
+                              chromium_config_kwargs={
+                                  'TARGET_BITS':
+                                      64,
+                                  'TARGET_CROS_BOARDS':
+                                      'fake-board1:fake-board2',
+                              },
+                          ),
+                      'fake-tester':
+                          ctbc.BuilderSpec.create(
+                              luci_project='fake-project',
+                              execution_mode=ctbc.TEST,
+                              parent_builder_group='fake-group',
+                              parent_buildername='fake-builder',
+                              gclient_config='chromium',
+                              chromium_config='chromium',
+                              chromium_config_kwargs={
+                                  'TARGET_BITS':
+                                      64,
+                                  'TARGET_CROS_BOARDS':
+                                      'fake-board1:fake-board2',
+                              },
+                          ),
+                  },
+              }),
+              mirroring_try_builders=(),
+              builder_ids=(
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),),
+              builder_ids_in_scope_for_testing=set([
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),
+                  BuilderId.create_for_group('fake-group', 'fake-tester'),
+              ]),
+              include_all_triggered_testers=False,
+              is_compile_only=False,
+              analyze_names=(),
+              retry_failed_shards=False,
+              retry_without_patch=False,
+              regression_test_selection=ctbc.NEVER,
+              regression_test_selection_recall=0.95,
+          )),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'invalid-properties',
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          properties_pb.InputProperties(
+              builder_config=properties_pb.BuilderConfig())),
+      api.post_process(post_process.MustRun,
+                       'invalid chromium_tests_builder_config properties'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )

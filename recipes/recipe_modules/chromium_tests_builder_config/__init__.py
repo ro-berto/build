@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from PB.recipe_modules.build.chromium_tests_builder_config import properties
+
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
@@ -9,8 +11,11 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'recipe_engine/platform',
+    'recipe_engine/properties',
     'recipe_engine/step',
 ]
+
+PROPERTIES = properties.InputProperties
 
 # Forward symbols for other modules to import
 from .builder_config import BuilderConfig, delegate_to_builder_spec

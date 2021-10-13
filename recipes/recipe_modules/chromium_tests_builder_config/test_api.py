@@ -6,10 +6,19 @@ from recipe_engine import recipe_test_api
 
 from RECIPE_MODULES.build.chromium import BuilderId
 
+from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
+                                                                   properties_pb
+                                                                  )
+
 from . import builders, trybots, BuilderConfig, BuilderDatabase, TryDatabase
 
 
 class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
+
+  def properties(self, properties):
+    assert isinstance(properties, properties_pb.InputProperties)
+    return self.m.properties(
+        **{'$build/chromium_tests_builder_config': properties})
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):

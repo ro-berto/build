@@ -10,7 +10,7 @@ import traceback
 
 from .builder_spec import BuilderSpec
 from .builder_db import BuilderDatabase
-from .try_spec import TryDatabase, TryMirror, ALWAYS, NEVER, QUICK_RUN_ONLY
+from .try_spec import TryDatabase, ALWAYS, NEVER, QUICK_RUN_ONLY
 
 from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,

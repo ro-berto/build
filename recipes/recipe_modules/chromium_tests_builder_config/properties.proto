@@ -1,0 +1,271 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipe_modules.build.chromium_tests_builder_config;
+
+import "go.chromium.org/luci/buildbucket/proto/builder.proto";
+
+// The details configuring execution for a single builder
+//
+// Next ID: 16
+message BuilderSpec {
+  // Required, the builder group that the builder is a part of
+  //
+  // This enables looking up information for the builder where it's organized by
+  // builder group rather project/bucket e.g. the MB config and testing specs.
+  string builder_group = 1;
+
+  // Required, the execution mode of the builder
+  enum ExecutionMode {
+    EXECUTION_MODE_UNSPECIFIED = 0;
+    // The builder will perform compilation of any targets configured in the
+    // testing spec as well as any tests that will be run by the builder or any
+    // triggered builders.
+    COMPILE_AND_TEST = 1;
+    // The builder will only execute tests, which another builder must have
+    // already compiled and either isolated or transferred using the legacy
+    // package transfer mechanism.
+    TEST = 2;
+    // The builder will not actually be executed and instead exists only to
+    // provide an additional testing spec that can be referred to in a mirror
+    // spec to provide additional test configurations.
+    //
+    // This is used by GPU try builders to run the same test against multiple
+    // hardware configurations, which was otherwise unsupported when they were
+    // implemented.
+    //
+    // Eventually, this execution mode will be removed once testing specs are
+    // moved out of source side spec files and into the starlark builder
+    // definitions.
+    PROVIDE_TEST_SPEC = 3;
+  }
+  ExecutionMode execution_mode = 2;
+
+  // ID of an optional parent
+  //
+  // This is set according to the triggering relationship between builders in
+  // the starlark builder definitions.
+  buildbucket.v2.BuilderID parent = 3;
+
+  // Required, details for configuring the gclient recipe module using the
+  // recipe engine's config item facility
+  //
+  // Next ID: 3
+  //
+  // TODO(gbeaty) Replace this with a message that describes the actual gclient
+  // config instead of named config items
+  message LegacyGclientRecipeModuleConfig {
+    // Required, the name of the recipe module config item to use
+    string config = 1;
+    // The names of additional configs to apply
+    repeated string apply_configs = 2;
+  }
+  LegacyGclientRecipeModuleConfig legacy_gclient_config = 4;
+
+  // Required, details for configuring the chromium recipe module using the
+  // recipe engine's config item facility
+  //
+  // Next ID: 9
+  //
+  // TODO(gbeaty) Replace this with a message that describes the actual chromium
+  // config instead of named config items
+  message LegacyChromiumRecipeModuleConfig {
+    // Required, the name of the recipe module config item to use
+    string config = 1;
+    // The names of additional configs to apply
+    repeated string apply_configs = 2;
+
+    // Additional fields for the keyword arguments that get provided when
+    // setting the config
+    optional string build_config = 3;
+
+    optional string target_arch = 4;
+    optional int32 target_bits = 5;
+    optional string target_platform = 6;
+
+    repeated string target_cros_boards = 7;
+    repeated string cros_boards_with_qemu_images = 8;
+  }
+  LegacyChromiumRecipeModuleConfig legacy_chromium_config = 5;
+
+  // Details for configuring the android recipe module using the recipe engine's
+  // config item facility
+  //
+  // Next ID: 3
+  //
+  // TODO(gbeaty) Replace this with a message that describes the actual chromium
+  // config instead of named config items
+  message LegacyAndroidRecipeModuleConfig {
+    // Required, the name of the recipe module config item to use
+    string config = 1;
+    // The names of additional configs to apply
+    repeated string apply_configs = 2;
+  }
+  LegacyAndroidRecipeModuleConfig legacy_android_config = 6;
+
+  // Details for configuring the test_results recipe module using the recipe
+  // engine's config item facility
+  //
+  // Next ID: 2
+  //
+  // TODO(gbeaty) Replace this with a message that describes the actual chromium
+  // config instead of named config items
+  message LegacyTestResultsRecipeModuleConfig {
+    // Required, the name of the recipe module config item to use
+    string config = 1;
+  }
+  LegacyTestResultsRecipeModuleConfig legacy_test_results_config = 7;
+
+  // URL to override the swarming server to use
+  string swarming_server = 8;
+
+  // A path relative to the checkout to a file containing the Chrome version
+  // information for Android
+  string android_version_file = 9;
+
+  // Whether to have bot_update perform a clobber of any pre-existing build
+  // outputs
+  bool clobber = 10;
+
+  // Name of a Google Storage bucket to use when using the legacy package
+  // transfer where build outputs are uploaded to Google Storage and then
+  // downloaded by the tester
+  //
+  // This must be set for builders with the BUILDER bot type that trigger
+  // testers that will run non-isolated tests.
+  string build_gs_bucket = 11;
+
+  // Whether swarming tests should be run serially
+  //
+  // If not true, requests for test tasks are issued to swarming in parallel.
+  //
+  // Running tests in serial can be useful if you have limited hardware
+  // capacity.
+  bool run_tests_serially = 12;
+
+  // Whether or not an isolate is uploaded to the perf dashboard
+  bool perf_isolate_upload = 13;
+
+  // Whether or not properties set on triggers should be exposed
+  //
+  // If true, the 'trigger_properties' output property will be present on the
+  // build.  It will contain the properties normally set when triggering
+  // subsequent builds, which includes the isolate digests, the digest of a file
+  // containing the command lines for each isolate to execute, and the cwd of
+  // the checkout. This will only do something if the build actually produces
+  // isolates. This also only works on CI builders.
+  //
+  // This is normally not necessary. Builders only need to archive command lines
+  // if another build will need to use them. The chromium recipe automatically
+  // does this if your build triggers another build using the chromium recipe.
+  // Only set this value if something other than a triggered chromium builder
+  // needs to use the isolates created during a build execution.
+  bool expose_trigger_properties = 14;
+
+  // The location to upload tests when using the lacros on skylab pipeline
+  //
+  // This must be set if the builder triggers tests on skylab.
+  //
+  // Next ID: 3
+  message SkylabUploadLocation {
+      // Required, the Google Storage bucket used by lacros on skylab pipeline
+      string gs_bucket = 1;
+      // Additional URL components to add to the Google Storage URL for lacros
+      // on skylab pipeline
+      string gs_extra = 2;
+  }
+  SkylabUploadLocation skylab_upload_location = 15;
+}
+
+// A database of builder specs that can be used during a build
+//
+// Next ID: 2
+message BuilderDatabase {
+  // Required, the builders stored in the database
+  //
+  // Next ID: 3
+  message Entry {
+    // Required, ID of the builder
+    buildbucket.v2.BuilderID builder_id = 1;
+    // Required, the builder spec for the builder
+    BuilderSpec builder_spec = 2;
+  }
+  repeated Entry entries = 1;
+}
+
+// The combined details of 1 or more builders
+//
+// Next ID: 10
+message BuilderConfig {
+  // Required, the database of builders that can be accessed via the builder
+  // config
+  //
+  // The database must contain entries for each builder ID in builder_ids and
+  // builder_ids_in_scope_for_testing.
+  BuilderDatabase builder_db = 1;
+
+  // Required, IDs of builders that configuration will be applied for
+  //
+  // At runtime, many of the values read from BuilderSpecs will be checked for
+  // consistency among the specs for the builders identified by this field.
+  repeated buildbucket.v2.BuilderID builder_ids = 2;
+  // IDs of additional builds that contribute compile targets and tests
+  repeated buildbucket.v2.BuilderID builder_ids_in_scope_for_testing = 3;
+
+  // Information that identifies builders that mirror the builder that this
+  // BuilderConfig wraps
+  //
+  // BuilderID is not used in this case because the information about mirroring
+  // builders will not necessarily be contained in builder_db.
+  message BuilderGroupAndName {
+      // Required, the group of the builder
+      string group = 1;
+      // Required, the name of the builder
+      string builder = 2;
+  }
+  repeated BuilderGroupAndName mirroring_builder_group_and_names = 4;
+
+  // Whether the builder should skip running tests and just compile
+  bool is_compile_only = 5;
+
+  // Additional names to add when analyzing the change to determine affected
+  // targets
+  repeated string analyze_names = 6;
+
+  // Whether or not failed shards of tests should be retried
+  bool retry_failed_shards = 7;
+  // Whether or not failed test suites should be retried without patch
+  bool retry_without_patch = 8;
+
+  // Configuration for RTS execution, see http://bit.ly/chromium-rts
+  //
+  // Next ID: 3
+  message RtsConfig {
+    // When RTS should be used
+    enum Condition {
+      CONDITION_UNSPECIFIED = 0;
+      // RTS will never be used for the builder.
+      NEVER = 1;
+      // RTS will be used if the build is for a CQ Quick Run.
+      QUICK_RUN_ONLY = 2;
+      // RTS will always be used for the builder.
+      ALWAYS = 3;
+    }
+    Condition condition = 1;
+
+    // A value indicating how likely the RTS run's success result should match a
+    // non-RTS run
+    float recall = 2;
+  }
+  RtsConfig rts_config = 9;
+}
+
+// Module properties
+//
+// Next ID: 2
+message InputProperties {
+  // The builder config for the current build
+  BuilderConfig builder_config = 1;
+}

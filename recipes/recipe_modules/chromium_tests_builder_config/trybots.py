@@ -2224,11 +2224,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.infra': {
-        'linux-bootstrap': try_spec.TrySpec.create_for_single_mirror(
-            builder_group='infra',
-            buildername='linux-bootstrap',
-            tester='linux-bootstrap-tests',
-        ),
         'win-bootstrap': try_spec.TrySpec.create_for_single_mirror(
             builder_group='infra',
             buildername='win-bootstrap',

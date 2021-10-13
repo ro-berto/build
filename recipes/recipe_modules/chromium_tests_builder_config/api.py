@@ -4,13 +4,14 @@
 
 from recipe_engine import recipe_api
 
-from . import builders, trybots, BuilderConfig
+from . import (builders, proto, trybots, BuilderConfig)
 
 
 class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
 
-  def __init__(self, **kwargs):
+  def __init__(self, properties, **kwargs):
     super(ChromiumTestsBuilderConfigApi, self).__init__(**kwargs)
+    self._properties = properties
     self._builder_db = builders.BUILDERS
     self._try_db = trybots.TRYBOTS
     if self._test_data.enabled:
@@ -27,6 +28,28 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
   def try_db(self):
     return self._try_db
 
+  def _get_builder_config_from_properties(self):
+    if not self._properties.HasField('builder_config'):
+      return None
+
+    errors = proto.validate(self._properties,
+                            '$build/chromium_tests_builder_config')
+    if errors:
+      result = self.m.step('invalid chromium_tests_builder_config properties',
+                           [])
+      result.presentation.step_text = '\n'.join(
+          [''] + ['* {}'.format(e) for e in errors])
+      # TODO(gbeaty) Should this be failure if the properties file is affected?
+      result.presentation.status = self.m.step.EXCEPTION
+      self.m.step.raise_on_failure(result)
+
+    return proto.convert(self._properties.builder_config)
+
+  # TODO(gbeaty) Remove the builder ID argument when it is possible. The builder
+  # ID argument is only used for Findit and the compilator. Once those use cases
+  # are switched to always use the module properties, the builder ID argument
+  # will not be necessary. Until then, if the module properties are set, the
+  # builder ID will be ignored.
   def lookup_builder(self,
                      builder_id=None,
                      builder_db=None,
@@ -59,10 +82,17 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
         should be used for creating an infra failing step if creation of
         the builder config fails.
 
-    Returns: A 2-tuple: * The BuilderId of the builder the BuilderConfig
-      is for. * The BuilderConfig for the builder.
+    Returns:
+      A 2-tuple:
+        * The BuilderId of the builder the BuilderConfig is for.
+        * The BuilderConfig for the builder.
     """
     builder_id = builder_id or self.m.chromium.get_builder_id()
+
+    builder_config = self._get_builder_config_from_properties()
+
+    if builder_config is not None:
+      return builder_id, builder_config
 
     if builder_db is None:
       assert try_db is None
