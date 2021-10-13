@@ -160,9 +160,12 @@ class SymuploadApi(recipe_api.RecipeApi):
           config_file_path,
           test_data=[{
               'artifacts': ['some_artifact.txt'],
-              'url': 'https://some.url.com',
-              'base64_api_key': base64.b64encode(b'encrypted_api_key'),
-              'kms_key_path': 'some/key/path'
+              'url':
+                  'https://some.url.com',
+              'base64_api_key':
+                  base64.b64encode(b'encrypted_api_key').decode('ascii'),
+              'kms_key_path':
+                  'some/key/path'
           }])
       self._properties = symupload_properties.InputProperties(
           symupload_datas=config)
