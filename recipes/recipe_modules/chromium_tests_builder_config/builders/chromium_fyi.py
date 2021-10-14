@@ -1421,20 +1421,6 @@ SPEC = {
             execution_mode=builder_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
-    'android-annotator-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
 }
 
 SPEC.update([
