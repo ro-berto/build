@@ -470,7 +470,8 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None,
            task_to_retry=None,
            trigger_script=None,
-           relative_cwd=None):
+           relative_cwd=None,
+           collect_json_output_override=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -535,6 +536,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       * relative_cwd: An optional string indicating the working directory
         relative to the task root where `raw_cmd` (or the command specified
         in the isolate, if raw_cmd is empty) will run.
+      * collect_json_output_override: Overrides the output json placeholder
+          passed to the collect script.
     """
 
     if not collect_step:
@@ -611,7 +614,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_to_retry=task_to_retry,
         build_properties=build_properties,
         merge=merge,
-        trigger_script=trigger_script)
+        trigger_script=trigger_script,
+        collect_json_output_override=collect_json_output_override)
 
   def gtest_task(self,
                  raw_cmd,
@@ -1373,6 +1377,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     merge = task.merge or chromium_swarming.MergeScript(
         script=self.resource('noop_merge.py'))
 
+    if task.collect_json_output_override:
+      output_placeholder = task.collect_json_output_override
+
     collect_task_args = self.get_collect_task_args(
         merge_script=merge.script,
         merge_arguments=merge.args,
@@ -1913,7 +1920,8 @@ class SwarmingTask(object):
                named_caches=None,
                optional_dimensions=None,
                task_to_retry=None,
-               trigger_script=None):
+               trigger_script=None,
+               collect_json_output_override=None):
 
     """Configuration of a swarming task.
 
@@ -1946,6 +1954,8 @@ class SwarmingTask(object):
           (potentially partial) retry of another task. When collecting, should
           re-use some shards from the retried task.
       * trigger_script: An optional `chromium_swarming.TriggerScript`.
+      * collect_json_output_override: Overrides the output json placeholder
+          passed to the collect script.
     """
     self._server = server
     self._trigger_output = None
@@ -1968,6 +1978,7 @@ class SwarmingTask(object):
     self.task_to_retry = task_to_retry
     self.trigger_script = trigger_script or {}
     self.wait_for_capacity = False
+    self.collect_json_output_override = collect_json_output_override
 
   @property
   def task_name(self):

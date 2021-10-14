@@ -2636,6 +2636,9 @@ class SwarmingGTestTest(SwarmingTest):
     return self.spec.override_compile_targets or [self.spec.target_name]
 
   def create_task(self, api, suffix, cas_input_root):
+    json_override = None
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      json_override = api.path.mkstemp()
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
@@ -2645,7 +2648,8 @@ class SwarmingGTestTest(SwarmingTest):
         # depending on JSON results in the RDB experiment.
         use_default_collect_step=(
             self.spec.resultdb.use_rdb_results_for_all_decisions),
-        failure_as_exception=False)
+        failure_as_exception=False,
+        collect_json_output_override=json_override)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
     return task
 
@@ -2671,9 +2675,9 @@ class SwarmingGTestTest(SwarmingTest):
       gtest_results = step_result.test_utils.gtest_results
       self._gtest_results[suffix] = gtest_results
       if gtest_results and gtest_results.raw:
-        raw_json_data = gtest_results.raw
+        raw_json_data = api.json.input(gtest_results.raw)
     else:
-      raw_json_data = step_result.json.output
+      raw_json_data = self._tasks[suffix].collect_json_output_override
 
     if raw_json_data:
       chrome_revision_cp = api.bot_update.last_returned_properties.get(
@@ -2681,9 +2685,7 @@ class SwarmingGTestTest(SwarmingTest):
       _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
       chrome_revision = str(chrome_revision)
       api.test_results.upload(
-          api.json.input(raw_json_data),
-          chrome_revision=chrome_revision,
-          test_type=step_name)
+          raw_json_data, chrome_revision=chrome_revision, test_type=step_name)
 
     return step_result
 

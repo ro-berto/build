@@ -11,6 +11,7 @@ DEPS = [
     'isolate',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -119,9 +120,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=True, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
@@ -138,9 +137,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=False, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
@@ -155,9 +152,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=True, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(
@@ -178,9 +173,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=False, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(
@@ -196,9 +189,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=True, use_passthrough_placeholder=True),
-              failure=True)),
+              api.json.output({}), failure=True)),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
       api.post_process(post_process.DropExpectation),
@@ -211,9 +202,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=True, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
       api.post_process(post_process.DropExpectation),
@@ -225,9 +214,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=True, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.post_process(post_process.MustRun,
                        'Upload to test-results [swarming_gtest (with patch)]'),
       api.post_process(
@@ -246,9 +233,7 @@ def GenTests(api):
       api.override_step_data(
           'swarming_gtest (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=False, use_passthrough_placeholder=True),
-              failure=False)),
+              api.json.output({}), failure=False)),
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(
