@@ -562,7 +562,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if skylab_isolates:
         self._prepare_artifact_for_skylab(
-            builder_config.builder_db[builder_id],
+            builder_config,
             [t for t in tests if t.target_name in skylab_isolates])
       return raw_result
 
@@ -2223,13 +2223,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           gcs_bucket, '/experimental' if self.m.runtime.is_experimental else '',
           gcs_path, target)
 
-  def _prepare_artifact_for_skylab(self, builder_spec, tests):
-    if not (builder_spec.skylab_gs_bucket and tests):
+  def _prepare_artifact_for_skylab(self, builder_config, tests):
+    if not (builder_config.skylab_gs_bucket and tests):
       return
-    gcs_path = '{}/{}'.format(self.m.buildbucket.builder_name,
-                              self.m.buildbucket.build.number)
-    if builder_spec.skylab_gs_extra:
-      gcs_path = '{}/{}'.format(builder_spec.skylab_gs_extra, gcs_path)
+    gcs_path = ''
+    if builder_config.skylab_gs_extra:
+      gcs_path += '%s/' % builder_config.skylab_gs_extra
+    gcs_path += '%d' % self.m.buildbucket.build.id
     with self.m.step.nest('prepare skylab tests'):
       tests_by_target = collections.defaultdict(list)
       for t in tests:
@@ -2239,8 +2239,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for t in sorted(tests_by_target.keys())
       }
       gcs_path_by_target = {
-          t: self._upload_runtime_deps_for_skylab(builder_spec.skylab_gs_bucket,
-                                                  gcs_path, t, r)
+          t:
+          self._upload_runtime_deps_for_skylab(builder_config.skylab_gs_bucket,
+                                               gcs_path, t, r)
           for t, r in runtime_dict_by_target.items()
       }
       for target, tests in tests_by_target.items():

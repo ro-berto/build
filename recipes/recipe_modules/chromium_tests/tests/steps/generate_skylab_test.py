@@ -70,6 +70,7 @@ def GenTests(api):
   """
 
   def boilerplate(skylab_gcs,
+                  build_id=8945511751514863184,
                   builder_group='chromium.chromiumos',
                   builder='lacros-amd64-generic-rel',
                   tast_expr='',
@@ -92,6 +93,7 @@ def GenTests(api):
     })
     if is_ci_build:
       build_gen = api.chromium_tests_builder_config.ci_build(
+          build_id=build_id,
           builder_group=builder_group,
           builder=builder,
           parent_buildername='Linux Builder',
@@ -99,6 +101,7 @@ def GenTests(api):
       )
     else:
       build_gen = api.chromium_tests_builder_config.try_build(
+          build_id=build_id,
           builder_group=builder_group,
           builder=builder,
           builder_db=builder_db,
@@ -162,12 +165,16 @@ def GenTests(api):
     return api.skylab.step_logs_to_ctp_by_tag(
         steps['test_pre_run.schedule skylab tests.buildbucket.schedule'].logs)
 
-  def archive_gsuri_should_match_skylab_req(check, steps, target=TAST_TARGET):
+  def archive_gsuri_should_match_skylab_req(check,
+                                            steps,
+                                            build_id=8945511751514863184,
+                                            target=TAST_TARGET):
     archive_step = ('prepare skylab tests.'
                     'upload skylab runtime deps for {target}.'
                     'Generic Archiving Steps.gsutil upload '
-                    'lacros/lacros-amd64-generic-rel/571/{target}/'
-                    'lacros_compressed.squash').format(target=target)
+                    'lacros/{build_id}/{target}/'
+                    'lacros_compressed.squash').format(
+                        build_id=build_id, target=target)
     archive_link = steps[archive_step].links['gsutil.upload']
     gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
     for req in _extract_skylab_req(steps).values():
