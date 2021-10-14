@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 import attr
 
+from recipe_engine.config_types import Path
 from recipe_engine.util import Placeholder
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
                                              sequence)
@@ -57,7 +58,8 @@ class ResultDB(object):
   coerce_negative_duration = attrib(bool, default=True)
   test_id_prefix = attrib(str, default='')
   result_file = attrib(str, default='${ISOLATED_OUTDIR}/output.json')
-  artifact_directory = attrib((str, Placeholder), default='${ISOLATED_OUTDIR}')
+  artifact_directory = attrib((str, Placeholder, Path),
+                              default='${ISOLATED_OUTDIR}')
   location_tags_file = attrib(str, default=None)
   exonerate_unexpected_pass = attrib(bool, default=True)
   include = attrib(bool, default=False)

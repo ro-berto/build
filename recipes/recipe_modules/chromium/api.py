@@ -667,7 +667,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       # needed.
       if self.c.TARGET_PLATFORM == 'win':
         ninja_env['PATH'] = self.m.path.pathsep.join(
-            ('%(PATH)s', self.m.path.dirname(self.m.depot_tools.ninja_path)))
+            ('%(PATH)s',
+             str(self.m.path.dirname(self.m.depot_tools.ninja_path))))
 
     if out_dir is None:
       out_dir = 'out'
