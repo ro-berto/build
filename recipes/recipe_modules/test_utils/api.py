@@ -183,7 +183,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # require some refactoring in util.py to store each individual run's
         # logs, which we don't do currently.
         log_name = '%s: %s (status %s)' % (prefix, f, ','.join(
-            set(r.raw_results[f])))
+            r.raw_results[f]))
         p.logs[log_name] = [
             "Test '%s' completed with the following status(es): '%s'" %
             (f, '\',\''.join(r.raw_results[f])),

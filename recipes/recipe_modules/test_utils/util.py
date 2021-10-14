@@ -184,7 +184,7 @@ class TestResults(object):
         return True
       return actual_result in local_expected
 
-    for (test, result) in self.tests.iteritems():
+    for (test, result) in six.iteritems(self.tests):
       key = 'unexpected_' if result.get('is_unexpected') else ''
       actual_results = result['actual'].split()
       last_result = actual_results[-1]
@@ -286,7 +286,7 @@ class GTestResults(object):
     self.valid = True
 
     for cur_iteration_data in self.raw.get('per_iteration_data', []):
-      for test_fullname, results in cur_iteration_data.iteritems():
+      for test_fullname, results in six.iteritems(cur_iteration_data):
         # TODO (robertocn): Consider a failure in any iteration a failure of
         # the whole test, but allow for an override that makes a test pass if
         # it passes at least once.
@@ -308,7 +308,7 @@ class GTestResults(object):
               self._compress_list(ascii_log.splitlines()))
 
 
-    for test_fullname, results in self.raw_results.iteritems():
+    for test_fullname, results in six.iteritems(self.raw_results):
       # These strings are defined by base/test/launcher/test_result.cc.
       # https://cs.chromium.org/chromium/src/base/test/launcher/test_result.cc
       unique_results = set(results)
@@ -323,7 +323,7 @@ class GTestResults(object):
   def unique_failures(self):
     """Returns the set of tests that failed at least once."""
     failures = set()
-    for test_name, results_dict in self.pass_fail_counts.iteritems():
+    for test_name, results_dict in six.iteritems(self.pass_fail_counts):
       if results_dict['fail_count'] >= 1:
         failures.add(test_name)
     return failures
@@ -334,7 +334,7 @@ class GTestResults(object):
 
   def _compress_list(self, lines):
     if len(lines) > self.MAX_LOG_LINES:
-      remove_from_start = self.MAX_LOG_LINES / 2
+      remove_from_start = self.MAX_LOG_LINES // 2
       return (lines[:remove_from_start] +
               ['<truncated>'] +
               lines[len(lines) - (self.MAX_LOG_LINES - remove_from_start):])

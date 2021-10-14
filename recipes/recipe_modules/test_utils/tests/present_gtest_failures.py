@@ -6,7 +6,7 @@ import json
 
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'test_utils',
@@ -120,6 +120,10 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  def check_step_has_logs(check, steps, step, expected_logs):
+    logs = list(steps[step].logs.keys())
+    check(logs == expected_logs)
+
   yield api.test(
       'flake_skipped',
       api.override_step_data(
@@ -142,11 +146,6 @@ def GenTests(api):
                   }],
               })),
           retcode=1),
-      api.post_check(
-          # Line is too long, but yapf won't break it, so backslash continuation
-          # https://github.com/google/yapf/issues/763
-          lambda check, steps: \
-          check(steps['test'].logs.keys() == success_log_keys)
-      ),
+      api.post_check(check_step_has_logs, 'test', success_log_keys),
       api.post_process(post_process.DropExpectation),
   )
