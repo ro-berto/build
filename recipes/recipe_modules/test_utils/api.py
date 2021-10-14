@@ -465,9 +465,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # of any issue.
         ok_ret=('any'))
 
-    result.presentation.logs['input'] = json.dumps(flakes_input, indent=4)
+    result.presentation.logs['input'] = json.dumps(flakes_input, indent=2)
     result.presentation.logs['output'] = json.dumps(
-        result.json.output, indent=4)
+        result.json.output, indent=2)
 
     if result.exc_result.retcode != 0:
       result.presentation.step_text = 'Failed to get known flakes'
