@@ -229,7 +229,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         break
 
-    return sorted(binaries)
+    return sorted(binaries, key=str)
 
 
   def _filter_source_file(self, file_paths, extensions):
