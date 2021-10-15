@@ -902,9 +902,11 @@ class ArchiveApi(recipe_api.RecipeApi):
                        self.m.path.join(base_path, filename), tmp_file_path)
 
     for directory in archive_data.dirs:
-      self.m.file.copytree("Copy folder %s" % directory,
-                           self.m.path.join(base_path, directory),
-                           self.m.path.join(temp_dir, directory))
+      self.m.file.copytree(
+          "Copy folder %s" % directory,
+          self.m.path.join(base_path, directory),
+          self.m.path.join(temp_dir, directory),
+          symlinks=True)
 
     # Starting here, we will only need to care about the temporary folder
     # which holds the files. So reset the base_path to temp_dir.
