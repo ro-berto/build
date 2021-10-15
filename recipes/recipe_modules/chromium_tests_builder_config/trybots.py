@@ -623,13 +623,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 retry_failed_shards=False,
             ),
-        'win-angle-x86-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='win-angle-x86-builder',
-                tester='win7-angle-x86-amd',
-                retry_failed_shards=False,
-            ),
         'fuchsia-angle-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',

@@ -221,8 +221,4 @@ SPEC = {
         CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win10-angle-x64-nvidia':
         CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
-    'win-angle-x86-builder':
-        CreateBuilderConfig('win', 32, internal=True),
-    'win7-angle-x86-amd':
-        CreateTesterConfig('win', 32, 'win-angle-x86-builder', internal=True),
 }
