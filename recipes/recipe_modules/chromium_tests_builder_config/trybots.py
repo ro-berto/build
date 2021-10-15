@@ -1559,6 +1559,26 @@ TRYBOTS = try_spec.TryDatabase.create({
             ],
             regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
+        'mac-rel-orchestrator':
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.mac',
+                    buildername='Mac Builder',
+                    tester='Mac10.15 Tests',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Mac Builder',
+                    tester='Mac Release (Intel)',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu',
+                    buildername='GPU Mac Builder',
+                    tester='Mac Retina Release (AMD)',
+                ),
+            ],
+            regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
         'mac-rel-rts':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
