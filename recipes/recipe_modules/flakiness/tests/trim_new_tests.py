@@ -45,7 +45,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.flakiness(
-          identify_new_tests=True,
+          check_for_flakiness=True,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,

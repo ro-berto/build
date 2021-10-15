@@ -96,7 +96,7 @@ def GenTests(api):
       'basic',
       api.buildbucket.build(basic_build),
       api.flakiness(
-          identify_new_tests=True,
+          check_for_flakiness=True,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,
@@ -142,7 +142,7 @@ def GenTests(api):
           change_number=91827,
           patch_set=1),
       api.flakiness(
-          identify_new_tests=False,
+          check_for_flakiness=False,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,

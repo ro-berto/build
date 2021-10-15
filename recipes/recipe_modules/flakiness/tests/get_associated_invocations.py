@@ -41,7 +41,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'basic', api.flakiness(identify_new_tests=True),
+      'basic', api.flakiness(check_for_flakiness=True),
       api.buildbucket.build(basic_build),
       api.buildbucket.simulated_search_results(
           builds=[basic_build],

@@ -8,7 +8,7 @@ from recipe_engine import recipe_test_api
 class FlakinessTestApi(recipe_test_api.RecipeTestApi):
 
   def __call__(self,
-               identify_new_tests=False,
+               check_for_flakiness=False,
                build_count=100,
                historical_query_count=1000,
                current_query_count=10000,
@@ -16,7 +16,7 @@ class FlakinessTestApi(recipe_test_api.RecipeTestApi):
     return self.m.properties(
         **{
             '$build/flakiness': {
-                'identify_new_tests': identify_new_tests,
+                'check_for_flakiness': check_for_flakiness,
                 'build_count': build_count,
                 'historical_query_count': historical_query_count,
                 'current_query_count': current_query_count,

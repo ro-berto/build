@@ -45,7 +45,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
-    self._using_test_identifier = properties.identify_new_tests
+    self._check_for_flakiness = properties.check_for_flakiness
     self._max_test_targets = properties.max_test_targets or 40
     self._repeat_count = properties.repeat_count or 20
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
@@ -54,8 +54,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     self.current_query_count = properties.current_query_count or 10000
 
   @property
-  def using_test_identifier(self):
-    """Whether the build is identifying and logging new tests introduced.
+  def check_for_flakiness(self):
+    """Boolean to determine whether flakiness logic should be run for trybots.
 
     This needs to be enabled in order for the coordinating function of
     this module to execute.
@@ -63,10 +63,10 @@ class FlakinessApi(recipe_api.RecipeApi):
     Returns:
         A boolean of whether the build is identifying new tests.
     """
-    return self._using_test_identifier
+    return self._check_for_flakiness
 
-  def should_identify_new_tests(self):
-    """Returns whether the module should identify new tests.
+  def should_check_for_flakiness(self):
+    """Returns whether the module should run checks for new test flakiness.
 
     At this time, it checks the list of affected file to see if any file is
     possible to add a new test.
@@ -280,7 +280,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           for test_result in test_set
       ])
 
-    if not self.using_test_identifier:
+    if not self.check_for_flakiness:
       return set([])
 
     with self.m.step.nest('searching_for_new_tests'):
@@ -330,7 +330,7 @@ class FlakinessApi(recipe_api.RecipeApi):
         val.lower()
         for val in self.m.tryserver.get_footer(self.COMMIT_FOOTER_KEY)
     ]
-    if not self.should_identify_new_tests() or 'skip' in commit_footer_values:
+    if not self.should_check_for_flakiness() or 'skip' in commit_footer_values:
       # No action for endorsing logic
       return []
 

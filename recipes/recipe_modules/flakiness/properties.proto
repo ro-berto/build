@@ -7,31 +7,30 @@ syntax = "proto3";
 package recipe_modules.build.flakiness;
 
 message InputProperties {
-    // Determines whether to run new test identifier for current build.
-    // This needs to be set to True in order for overall coordination
-    // to execute.
-    bool identify_new_tests = 1;
+  // Flag to determine whether to check tests for flakiness. This needs to be
+  // set to True in order for overall coordination to execute.
+  bool check_for_flakiness = 1;
 
-    // The number of builds to query from buildbucket when determining
-    // historical tests. This is optional and will default to 100 if not
-    // specified.
-    int32 build_count = 2;
+  // The number of builds to query from buildbucket when determining
+  // historical tests. This is optional and will default to 100 if not
+  // specified.
+  int32 build_count = 2;
 
-    // The number of test variant results to query from ResultDB per build
-    // when determining historical tests. This is optional and will default to
-    // 1,000 if not specified.
-    int32 historical_query_count = 3;
+  // The number of test variant results to query from ResultDB per build
+  // when determining historical tests. This is optional and will default to
+  // 1,000 if not specified.
+  int32 historical_query_count = 3;
 
-    // The number of test variant results to query from ResultDB when
-    // determining current build tests. This is optional and will default to
-    // 10,000 if not specified.
-    int32 current_query_count = 4;
+  // The number of test variant results to query from ResultDB when
+  // determining current build tests. This is optional and will default to
+  // 10,000 if not specified.
+  int32 current_query_count = 4;
 
-    /// The max number of tests to rerun. Defaults to 40, and if more tests are
-    /// found than this value, a random subset will be selected for testing.
-    int32 max_test_targets = 5;
+  /// The max number of tests to rerun. Defaults to 40, and if more tests are
+  /// found than this value, a random subset will be selected for testing.
+  int32 max_test_targets = 5;
 
-    /// The number of times to repeat a test when verifying for flakiness.
-    /// Defaults to 20.
-    int32 repeat_count = 6;
+  /// The number of times to repeat a test when verifying for flakiness.
+  /// Defaults to 20.
+  int32 repeat_count = 6;
 }

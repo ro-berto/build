@@ -13,7 +13,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  id_tests = api.flakiness.using_test_identifier
+  id_tests = api.flakiness.check_for_flakiness
   api.assertions.assertEqual(id_tests, True)
 
 
@@ -21,6 +21,6 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.flakiness(identify_new_tests=True),
+      api.flakiness(check_for_flakiness=True),
       api.post_process(post_process.DropExpectation),
   )

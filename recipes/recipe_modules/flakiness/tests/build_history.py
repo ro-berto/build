@@ -39,7 +39,7 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.flakiness(identify_new_tests=True, build_count=5),
+      api.flakiness(check_for_flakiness=True, build_count=5),
       api.buildbucket.build(build_database[0]),
       api.properties(excluded_invs={'invocations/1', 'invocations/5'}),
       api.buildbucket.simulated_search_results(
@@ -49,7 +49,7 @@ def GenTests(api):
 
   yield api.test(
       'no excluded invocations',
-      api.flakiness(identify_new_tests=True, build_count=3),
+      api.flakiness(check_for_flakiness=True, build_count=3),
       api.buildbucket.build(build_database[0]),
       api.properties(excluded_invs=None),
       api.buildbucket.simulated_search_results(

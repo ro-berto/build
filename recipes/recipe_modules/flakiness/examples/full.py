@@ -180,7 +180,7 @@ def GenTests(api):
           }),
       api.filter.suppress_analyze(),
       api.flakiness(
-          identify_new_tests=True,
+          check_for_flakiness=True,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,
@@ -247,7 +247,7 @@ def GenTests(api):
       ),
       api.properties(xcode_build_version='13a233'),
       api.flakiness(
-          identify_new_tests=True,
+          check_for_flakiness=True,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,
@@ -264,7 +264,7 @@ def GenTests(api):
       ),
       api.properties(xcode_build_version='13a233'),
       api.flakiness(
-          identify_new_tests=True,
+          check_for_flakiness=True,
           build_count=10,
           historical_query_count=2,
           current_query_count=2,
