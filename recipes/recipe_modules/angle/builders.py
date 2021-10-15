@@ -72,12 +72,19 @@ def _create_android_tester_config(target_bits, parent_builder):
   )
 
 
+# TODO(jmadill): De-duplicate. http://anglebug.com/6496
 _SPEC = {
+    'android-arm-compile':
+        _create_android_builder_config('Release', 32),
     'android-arm-dbg':
+        _create_android_builder_config('Debug', 32),
+    'android-arm-dbg-compile':
         _create_android_builder_config('Debug', 32),
     'android-arm-rel':
         _create_android_builder_config('Release', 32),
     'android-arm64-dbg':
+        _create_android_builder_config('Debug', 64),
+    'android-arm64-dbg-compile':
         _create_android_builder_config('Debug', 64),
     'android-arm64-pixel4':
         _create_android_tester_config(64, 'android-arm64-rel'),
@@ -85,12 +92,16 @@ _SPEC = {
         _create_android_tester_config(64, 'android-perf'),
     'android-arm64-rel':
         _create_android_builder_config('Release', 64),
+    'android-arm64-test':
+        _create_android_builder_config('Release', 64),
     'android-perf':
         _create_android_builder_config('Release', 64, perf_isolate_upload=True),
     'linux-clang-dbg':
         _create_builder_config('linux', 'Debug', 64),
     'linux-clang-rel':
         _create_builder_config('linux', 'Release', 64),
+    'linux-dbg-compile':
+        _create_builder_config('linux', 'Debug', 64),
     'linux-gcc-dbg':
         _create_builder_config('linux', 'Debug', 64, is_clang=False),
     'linux-gcc-rel':
@@ -108,17 +119,25 @@ _SPEC = {
             'linux', 'Release', 64, perf_isolate_upload=True),
     'linux-swiftshader':
         _create_tester_config('linux', 64, 'linux-clang-rel'),
+    'linux-test':
+        _create_builder_config('linux', 'Release', 64),
+    'linux-trace':
+        _create_builder_config('linux', 'Release', 64),
     'linux-trace-rel':
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
         _create_tester_config('mac', 64, 'mac-rel'),
     'mac-dbg':
         _create_builder_config('mac', 'Debug', 64),
+    'mac-dbg-compile':
+        _create_builder_config('mac', 'Debug', 64),
     'mac-intel':
         _create_tester_config('mac', 64, 'mac-rel'),
     'mac-nvidia':
         _create_tester_config('mac', 64, 'mac-rel'),
     'mac-rel':
+        _create_builder_config('mac', 'Release', 64),
+    'mac-test':
         _create_builder_config('mac', 'Release', 64),
     'win-clang-x64-dbg':
         _create_builder_config('win', 'Debug', 64),
@@ -128,18 +147,40 @@ _SPEC = {
         _create_builder_config('win', 'Debug', 32),
     'win-clang-x86-rel':
         _create_builder_config('win', 'Release', 32),
+    'win-dbg-compile':
+        _create_builder_config('win', 'Debug', 64),
+    'win-msvc-compile':
+        _create_builder_config('win', 'Release', 64, is_clang=False),
+    'win-msvc-dbg-compile':
+        _create_builder_config('win', 'Debug', 64, is_clang=False),
     'win-msvc-x64-dbg':
         _create_builder_config('win', 'Debug', 64, is_clang=False),
     'win-msvc-x64-rel':
         _create_builder_config('win', 'Release', 64, is_clang=False),
+    'win-msvc-x86-compile':
+        _create_builder_config('win', 'Release', 32, is_clang=False),
     'win-msvc-x86-dbg':
+        _create_builder_config('win', 'Debug', 32, is_clang=False),
+    'win-msvc-x86-dbg-compile':
         _create_builder_config('win', 'Debug', 32, is_clang=False),
     'win-msvc-x86-rel':
         _create_builder_config('win', 'Release', 32, is_clang=False),
     'win-perf':
         _create_builder_config('win', 'Release', 64, perf_isolate_upload=True),
+    'win-test':
+        _create_builder_config('win', 'Release', 64),
+    'win-trace':
+        _create_builder_config('win', 'Release', 64),
     'win-trace-rel':
         _create_builder_config('win', 'Release', 64),
+    'win-x86-dbg-compile':
+        _create_builder_config('win', 'Debug', 32),
+    'win-x86-test':
+        _create_builder_config('win', 'Release', 32),
+    'winuwp-compile':
+        _create_builder_config('win', 'Release', 64, is_clang=False),
+    'winuwp-dbg-compile':
+        _create_builder_config('win', 'Debug', 64, is_clang=False),
     'winuwp-x64-dbg':
         _create_builder_config('win', 'Debug', 64, is_clang=False),
     'winuwp-x64-rel':
