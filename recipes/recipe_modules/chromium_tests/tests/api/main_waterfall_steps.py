@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
@@ -25,6 +23,7 @@ DEPS = [
     'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
+    'recipe_engine/json',
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -438,7 +437,7 @@ def GenTests(api):
         '"trigger" step did not run expected command.',
         'scheduler.Scheduler.EmitTriggers' in trigger_step.cmd and
         trigger_step.stdin)
-    trigger_json = json.loads(trigger_step.stdin)
+    trigger_json = api.json.loads(trigger_step.stdin)
 
     for batch in trigger_json.get('batches', []):
       if any(builder == j.get('job') for j in batch.get('jobs', [])):
@@ -706,7 +705,7 @@ def GenTests(api):
           'target1',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(results_with_failure), retcode=1),
+                  api.json.dumps(results_with_failure), retcode=1),
               failure=True),
           # The above failure is for dispatched task, the collect step
           # itself succeeds.
@@ -715,7 +714,7 @@ def GenTests(api):
           'target2',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(results_with_failure), retcode=1),
+                  api.json.dumps(results_with_failure), retcode=1),
               failure=True),
           # The above failure is for dispatched task, the collect step
           # itself succeeds.
@@ -724,7 +723,7 @@ def GenTests(api):
           'target3',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(results_with_failure), retcode=1),
+                  api.json.dumps(results_with_failure), retcode=1),
               failure=True),
           # The above failure is for dispatched task, the collect step
           # itself succeeds.

@@ -2,10 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from collections import defaultdict
 import itertools
-import json
-import six.moves.urllib_parse as urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -465,8 +462,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # of any issue.
         ok_ret=('any'))
 
-    result.presentation.logs['input'] = json.dumps(flakes_input, indent=2)
-    result.presentation.logs['output'] = json.dumps(
+    result.presentation.logs['input'] = self.m.json.dumps(
+        flakes_input, indent=2)
+    result.presentation.logs['output'] = self.m.json.dumps(
         result.json.output, indent=2)
 
     if result.exc_result.retcode != 0:
@@ -1098,7 +1096,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       }
       step = caller_api.python.succeeding_step(
           'FindIt Flakiness', 'Metadata for FindIt post processing.')
-      step.presentation.logs['step_metadata'] = (json.dumps(
+      step.presentation.logs['step_metadata'] = (self.m.json.dumps(
           output, sort_keys=True, indent=2)).splitlines()
 
   def _archive_test_results_summary(self, test_results_summary, dest_filename):

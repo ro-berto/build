@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from collections import defaultdict
-import json
 import six
 
 from recipe_engine.config import Dict
@@ -295,7 +294,7 @@ def RunSteps(api, target_testername, good_revision, bad_revision, tests,
 
     # Give the full report including test results and metadata.
     api.python.succeeding_step(
-        'report', [json.dumps(report, indent=2)], as_log='report')
+        'report', [api.json.dumps(report, indent=2)], as_log='report')
 
 
 def GenTests(api):
@@ -330,7 +329,7 @@ def GenTests(api):
   def verify_report_fields(check, step_odict, expected_report_fields):
     """Verifies fields in report are with expected values."""
     step = step_odict['report']
-    report_dict = json.loads(step.logs['report'])
+    report_dict = api.json.loads(step.logs['report'])
 
     def check_fields(expected_fields, actual_fields):
       for key, value in expected_fields.iteritems():

@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import hashlib
-import json
 from recipe_engine import recipe_api
 
 
@@ -123,7 +122,7 @@ class PgoApi(recipe_api.RecipeApi):
       if failed_benchmarks or missing_files:
         step_result.presentation.logs['failed_benchmarks'] = failed_benchmarks
         step_result.presentation.logs['missing_files'] = (
-            json.dumps(missing_files, indent=2))
+            self.m.json.dumps(missing_files, indent=2))
 
         step_result.presentation.status = self.m.step.FAILURE
         raise self.m.step.StepFailure('benchmark failures or invalid '

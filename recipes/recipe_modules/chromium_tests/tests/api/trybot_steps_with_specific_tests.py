@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 from six.moves import range  # pylint: disable=redefined-builtin
 
 from google.protobuf import json_format
@@ -12,11 +11,6 @@ from recipe_engine.recipe_api import Property
 
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-
-from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
-                                                       invocation_pb2)
-from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
-                                                       test_result_pb2)
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -109,7 +103,8 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   result = api.chromium_tests.trybot_steps(builder_id, builder_config)
   if expected_jsonish_result is not None:
     api.assertions.assertDictEqual(
-        expected_jsonish_result, json.loads(json_format.MessageToJson(result)))
+        expected_jsonish_result,
+        api.json.loads(json_format.MessageToJson(result)))
 
   return result
 
@@ -445,9 +440,9 @@ def GenTests(api):
           'base_unittests (retry shards with patch) on Windows-10',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -480,9 +475,9 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -536,17 +531,18 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(with_patch_gtest_results), retcode=1),
+                  api.json.dumps(with_patch_gtest_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+                  api.json.dumps(retry_shards_with_patch_gtest_results),
+                  retcode=1),
               failure=True)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -575,9 +571,9 @@ def GenTests(api):
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -594,7 +590,7 @@ def GenTests(api):
     all_iteration_data = {
       'per_iteration_data': [cur_iteration_data]
     }
-    return json.dumps(all_iteration_data)
+    return api.json.dumps(all_iteration_data)
 
   # A test that fails in 'with patch', and subsequently succeeds in 'retry with
   # patch' should have a FindIt metadata emission. However, if the test fails
@@ -660,9 +656,9 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -695,7 +691,7 @@ def GenTests(api):
     canned_jsonish = {
       'per_iteration_data': [all_results]
     }
-    return json.dumps(canned_jsonish)
+    return api.json.dumps(canned_jsonish)
 
   yield api.test(
       'failure_many_shards',
@@ -798,7 +794,7 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps({'per_iteration_data': []}), retcode=1),
+                  api.json.dumps({'per_iteration_data': []}), retcode=1),
               failure=True)),
   )
 
@@ -844,13 +840,13 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(gtest_results), retcode=1),
+                  api.json.dumps(gtest_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(gtest_results), retcode=1),
+                  api.json.dumps(gtest_results), retcode=1),
               failure=True)),
       api.post_check(
           api.swarming.check_triggered_request,
@@ -940,19 +936,20 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(with_patch_gtest_results), retcode=1),
+                  api.json.dumps(with_patch_gtest_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+                  api.json.dumps(retry_shards_with_patch_gtest_results),
+                  retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(without_patch_gtest_results), retcode=1),
+                  api.json.dumps(without_patch_gtest_results), retcode=1),
               failure=True)),
       api.post_process(post_process.DropExpectation),
   )
@@ -1006,9 +1003,9 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1052,9 +1049,9 @@ def GenTests(api):
               'Tests failed with patch, and caused build to fail:<br/>'
               'Test.Two<br/>'
           ]),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1121,13 +1118,14 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(with_patch_gtest_results), retcode=1),
+                  api.json.dumps(with_patch_gtest_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+                  api.json.dumps(retry_shards_with_patch_gtest_results),
+                  retcode=1),
               failure=True)),
       api.step_data(
           'query known flaky failures on CQ',
@@ -1152,9 +1150,9 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1220,13 +1218,14 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(with_patch_gtest_results), retcode=1),
+                  api.json.dumps(with_patch_gtest_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+                  api.json.dumps(retry_shards_with_patch_gtest_results),
+                  retcode=1),
               failure=True)),
       api.step_data(
           'query known flaky failures on CQ',
@@ -1257,9 +1256,9 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(
-          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
-          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
+                       'step_metadata',
+                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1325,19 +1324,20 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(base_unittests_results), retcode=1),
+                  api.json.dumps(base_unittests_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'url_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(url_unittests_results), retcode=1),
+                  api.json.dumps(url_unittests_results), retcode=1),
               failure=True)),
       api.override_step_data(
           'url_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
-                  json.dumps(url_unittests_retry_shards_results), retcode=1),
+                  api.json.dumps(url_unittests_retry_shards_results),
+                  retcode=1),
               failure=True)),
       api.step_data(
           'query known flaky failures on CQ',

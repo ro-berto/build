@@ -29,10 +29,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
           'This build was bootstrapped, '
           'see properties log for actual properties')
       result.presentation.logs['properties'] = self.m.json.dumps(
-          dict(self.m.properties),
-          indent=2,
-          sort_keys=True,
-          separators=(',', ': '))
+          dict(self.m.properties), indent=2)
 
   @property
   def skip_analysis_reasons(self):

@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import itertools
-import json
 
 from recipe_engine import post_process
 
@@ -11,6 +10,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'test_utils',
+    'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
@@ -27,7 +27,7 @@ def GenTests(api):
       api.override_step_data(
           'fake_test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'SpammyTest': [{
                           'elapsed_time_ms':

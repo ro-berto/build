@@ -1891,8 +1891,13 @@
     "name": "report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@report@{@@@",
+      "@@@STEP_LOG_LINE@report@  \"isolated_tests\": {@@@",
+      "@@@STEP_LOG_LINE@report@    \"browser_tests\": \"[dummy hash for browser_tests/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"last_checked_out_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"metadata\": {}, @@@",
       "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
+      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r0\": {@@@",
       "@@@STEP_LOG_LINE@report@      \"browser_tests\": {@@@",
@@ -1900,12 +1905,7 @@
       "@@@STEP_LOG_LINE@report@        \"valid\": true@@@",
       "@@@STEP_LOG_LINE@report@      }@@@",
       "@@@STEP_LOG_LINE@report@    }@@@",
-      "@@@STEP_LOG_LINE@report@  }, @@@",
-      "@@@STEP_LOG_LINE@report@  \"isolated_tests\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"browser_tests\": \"[dummy hash for browser_tests/dummy size]\"@@@",
-      "@@@STEP_LOG_LINE@report@  }, @@@",
-      "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
-      "@@@STEP_LOG_LINE@report@  \"metadata\": {}@@@",
+      "@@@STEP_LOG_LINE@report@  }@@@",
       "@@@STEP_LOG_LINE@report@}@@@",
       "@@@STEP_LOG_END@report@@@"
     ]

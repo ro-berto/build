@@ -5,7 +5,6 @@
 
 import attr
 import collections
-import json
 
 from recipe_engine import engine_types, post_process
 
@@ -16,12 +15,13 @@ PYTHON_VERSION_COMPATIBILITY = "PY2"
 DEPS = [
     'chromium_tests_builder_config',
     'depot_tools/gsutil',
+    'recipe_engine/json',
     'recipe_engine/raw_io',
     'recipe_engine/properties',
 ]
 
 
-def _bot_db_to_json(bot_db):
+def _bot_db_to_json(api, bot_db):
 
   def encode(obj):
     if isinstance(obj, engine_types.FrozenDict):
@@ -30,13 +30,14 @@ def _bot_db_to_json(bot_db):
       return attr.asdict(obj, dict_factory=collections.OrderedDict)
     return None  # pragma: no cover
 
-  return json.dumps(bot_db.builders_by_group, default=encode)
+  return api.json.dumps(bot_db.builders_by_group, default=encode)
 
 
 def RunSteps(api):
   bucket = api.properties['gs_bucket']
   object_path = api.properties['gs_object']
-  builders_json = _bot_db_to_json(api.chromium_tests_builder_config.builder_db)
+  builders_json = _bot_db_to_json(api,
+                                  api.chromium_tests_builder_config.builder_db)
   api.gsutil.upload(api.raw_io.input(builders_json), bucket, object_path)
 
 

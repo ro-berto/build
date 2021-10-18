@@ -4,7 +4,6 @@
 
 import attr
 import collections
-import json
 import string
 import textwrap
 
@@ -113,7 +112,8 @@ def get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step):
           'Invalid conditional',
           'Test spec has invalid conditional: {}\n{}'.format(
               error_message,
-              json.dumps(engine_types.thaw(raw_test_spec), indent=2),
+              chromium_tests_api.m.json.dumps(
+                  engine_types.thaw(raw_test_spec), indent=2),
           ))
 
     variable = get_variable()

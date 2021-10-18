@@ -4,11 +4,8 @@
 
 import collections
 import contextlib
-import difflib
 import itertools
-import json
 import re
-import traceback
 
 from six.moves.urllib.parse import urlencode
 
@@ -744,7 +741,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     property_args = []
     for k, v in properties.iteritems():
       property_args.append('-p')
-      property_args.append('{}={}'.format(k, json.dumps(v)))
+      property_args.append('{}={}'.format(k, self.m.json.dumps(v)))
 
     with self.m.step.nest('trigger') as trigger_presentation:
       # Clear out SWARMING_TASK_ID in the environment so that the created tasks

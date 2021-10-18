@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import textwrap
-
 from recipe_engine import post_process
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
@@ -11,6 +9,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'chromium_bootstrap',
     'recipe_engine/assertions',
+    'recipe_engine/json',
     'recipe_engine/properties',
 ]
 
@@ -36,12 +35,13 @@ def GenTests(api):
           post_process.LogEquals,
           'bootstrapped properties',
           'properties',
-          textwrap.dedent("""\
+          api.json.dumps(
               {
-                "$build/chromium_bootstrap": {},
-                "foo": "bar",
-                "recipe": "chromium_bootstrap:tests/initialize"
-              }"""),
+                  "$build/chromium_bootstrap": {},
+                  "foo": "bar",
+                  "recipe": "chromium_bootstrap:tests/initialize"
+              },
+              indent=2),
       ),
       api.post_process(post_process.DropExpectation),
   )

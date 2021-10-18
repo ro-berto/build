@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import six
 
 from recipe_engine import recipe_test_api
@@ -13,7 +12,6 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        rdb_test_result)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
 
-from .api import TestUtilsApi
 from .util import GTestResults, TestResults
 
 class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
@@ -60,7 +58,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     t.add_result('bad/totally-bad-probably.html', 'PASS', if_failing('FAIL'))
     t.add_result('good/totally-awesome.html', 'PASS')
     retcode = t.raw['num_regressions']
-    return self.test_results(json.dumps(t.as_jsonish()), retcode)
+    return self.test_results(self.m.json.dumps(t.as_jsonish()), retcode)
 
   @recipe_test_api.placeholder_step_data
   def gtest_results(self, test_results_json, retcode=None, name=None):
@@ -131,7 +129,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     canned_jsonish.update(extra_json or {})
 
     retcode = None if passing else 1
-    ret = self.gtest_results(json.dumps(canned_jsonish), retcode)
+    ret = self.gtest_results(self.m.json.dumps(canned_jsonish), retcode)
     if legacy_annotation:
       ret += self.m.legacy_annotation.success_step if passing else (
           self.m.legacy_annotation.failure_step)
@@ -369,22 +367,27 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         chartjson_output_empty = i in empty_shards and output_chartjson
 
         if not output_missing:
-          files_dict[swarming_path] = \
-            '' if output_empty else json.dumps(per_shard_results[index])
+          if output_empty:
+            files_dict[swarming_path] = ''
+          else:
+            files_dict[swarming_path] = self.m.json.dumps(
+                per_shard_results[index])
         if not chartjson_output_missing and output_chartjson:
-          files_dict[chartjson_swarming_path] = \
-            '' if chartjson_output_empty \
-              else json.dumps(per_shard_chartjson_results[index])
+          if chartjson_output_empty:
+            files_dict[chartjson_swarming_path] = ''
+          else:
+            files_dict[chartjson_swarming_path] = self.m.json.dumps(
+                per_shard_chartjson_results[index])
 
       jsonish_summary = {'shards': jsonish_shards}
       step_test_data = recipe_test_api.StepTestData()
       key = ('chromium_swarming', 'summary', None)
       placeholder = recipe_test_api.PlaceholderTestData(
-          json.dumps(jsonish_summary))
+          self.m.json.dumps(jsonish_summary))
       step_test_data.placeholder_data[key] = placeholder
       step_test_data += self.m.json.output(per_shard_results[0])
 
-      files_dict['summary.json'] = json.dumps(jsonish_summary)
+      files_dict['summary.json'] = self.m.json.dumps(jsonish_summary)
       files_dict = {k: v.encode('utf-8') for k, v in six.iteritems(files_dict)}
       step_test_data += self.m.raw_io.output_dir(files_dict)
 
@@ -426,8 +429,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         'per_iteration_data': [cur_iteration_data]
     }
 
-    return self.gtest_results(json.dumps(canned_jsonish),
-                              retcode=1 if failed_test_names else 0)
+    return self.gtest_results(
+        self.m.json.dumps(canned_jsonish),
+        retcode=1 if failed_test_names else 0)
 
   def simulated_isolated_script_output(
       self, failed_test_names=(), passed_test_names=(),
@@ -479,7 +483,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         'internal_failure': False,
         'exit_code': 1 if failed_test_names else 0,
     }
-    files_dict = {'summary.json': json.dumps(jsonish_summary).encode('utf-8')}
+    files_dict = {
+        'summary.json': self.m.json.dumps(jsonish_summary).encode('utf-8')
+    }
     retcode = 1 if failed_test_names else 0
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))

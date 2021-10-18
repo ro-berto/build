@@ -6,7 +6,6 @@
 import contextlib
 import gzip
 import io
-import json
 import os
 import re
 import socket
@@ -380,18 +379,15 @@ class ReclientApi(recipe_api.RecipeApi):
     # `bqupload`'s expected JSON proto format is different from that of the
     # protobuf's native MessageToJson, so we have to dump this json to string on
     # our own.
-    # TODO(gbeaty) Once support for python2 is dropped, the json.dumps calls
-    # don't need sort_keys or separators arguments
     step_result = self.m.step(
         'upload RBE metrics to BigQuery', [
             bqupload_cipd_path,
             BQ_TABLE_NAME,
         ],
-        stdin=self.m.raw_io.input(
-            data=json.dumps(bq_json_dict, sort_keys=True)),
+        stdin=self.m.raw_io.input(data=self.m.json.dumps(bq_json_dict)),
         infra_step=True)
-    step_result.presentation.logs['rbe_metrics'] = json.dumps(
-        bq_json_dict, sort_keys=True, indent=2, separators=(',', ': '))
+    step_result.presentation.logs['rbe_metrics'] = self.m.json.dumps(
+        bq_json_dict, indent=2)
 
   def _check_mismatch(self, stats):
     """Update self._mismatch if there is mismatches."""
@@ -481,7 +477,7 @@ class ReclientApi(recipe_api.RecipeApi):
         'read ninja log',
         self.m.path.join(ninja_log_outdir, '.ninja_log'),
         include_log=False)
-    data_txt += '\n# end of ninja log\n' + json.dumps(metadata)
+    data_txt += '\n# end of ninja log\n' + self.m.json.dumps(metadata)
     with io.BytesIO() as f_out:
       # |gzip_out| is created at the inner `with` clause intentionally, so that
       # its content is all flushed to |f_out| before writing the stream.

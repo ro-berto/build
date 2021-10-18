@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import six
 
 from recipe_engine.config import List
@@ -352,7 +351,7 @@ def RunSteps(api, target_buildername, good_revision, bad_revision,
 
     # Report the result.
     step_result = api.python.succeeding_step(
-        'report', [json.dumps(report, indent=2)], as_log='report')
+        'report', [api.json.dumps(report, indent=2)], as_log='report')
 
     if found:
       step_result.presentation.step_text = (

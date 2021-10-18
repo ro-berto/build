@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 from six.moves.urllib.parse import urlencode
 
 from recipe_engine import recipe_api
@@ -68,16 +67,16 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
   def add_point(self, data, halt_on_failure=False, name=None, **kwargs):
     return self.post(name or 'perf dashboard post', '%s/add_point' % _BASE_URL,
-                     {'data': json.dumps(data, sort_keys=True)},
-                     halt_on_failure, **kwargs)
+                     {'data': self.m.json.dumps(data)}, halt_on_failure,
+                     **kwargs)
 
   def upload_isolate(self, builder_name, change, isolate_server,
                      isolate_map, halt_on_failure=False, **kwargs):
     data = {
         'builder_name': builder_name,
-        'change': json.dumps(change),
+        'change': self.m.json.dumps(change),
         'isolate_server': isolate_server,
-        'isolate_map': json.dumps(isolate_map),
+        'isolate_map': self.m.json.dumps(isolate_map),
     }
     return self.post('pinpoint isolate upload',
                      '%s/api/isolate' % _PINPOINT_BASE_URL,

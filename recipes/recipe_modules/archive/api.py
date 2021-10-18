@@ -3,9 +3,7 @@
 # found in the LICENSE file.
 
 import base64
-import json
 import re
-import sys
 import os
 
 from . import manual_bisect_files
@@ -873,7 +871,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         temp_dir = self.m.path.mkdtemp('tmp')
         manifest_path = self.m.path.join(temp_dir, 'manifest.json')
         self.m.file.write_text('Provenance manifest', manifest_path,
-                               json.dumps(provenance_manifest))
+                               self.m.json.dumps(provenance_manifest))
         self.m.provenance.generate(archive_data.verifiable_key_path,
                                    manifest_path,
                                    base_path.join(f + '.attestation'))

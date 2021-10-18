@@ -34,9 +34,7 @@ import attr
 import collections
 import contextlib
 import copy
-import datetime
 import hashlib
-import json
 import re
 import string
 import struct
@@ -2577,8 +2575,8 @@ class SwarmingTest(Test):
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     metadata = self.step_metadata(suffix)
-    step_result.presentation.logs['step_metadata'] = (json.dumps(
-        metadata, sort_keys=True, indent=2)).splitlines()
+    step_result.presentation.logs['step_metadata'] = (api.json.dumps(
+        metadata, indent=2, sort_keys=True)).splitlines()
 
     # TODO(martiniss): Consider moving this into some sort of base
     # validate_task_results implementation.

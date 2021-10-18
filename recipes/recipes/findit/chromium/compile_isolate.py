@@ -8,8 +8,6 @@ If multiple test targets match the same isolated targets, we default to the
 first one after ordering test target names alphabetically.
 """
 
-import json
-
 from recipe_engine import post_process
 from recipe_engine.config import List
 from recipe_engine.recipe_api import Property
@@ -110,7 +108,7 @@ def RunSteps(api, target_testername, revision, isolated_targets):
     report['last_checked_out_revision'] = api.properties.get('got_revision')
     # Give the full report including isolated sha and metadata.
     api.python.succeeding_step(
-        'report', [json.dumps(report, indent=2)], as_log='report')
+        'report', [api.json.dumps(report, indent=2)], as_log='report')
 
   return raw_result
 
@@ -178,10 +176,11 @@ def GenTests(api):
 
   def verify_report(check, step_odict, expected_isolated_tests):
     step = step_odict['report']
-    report_dict = json.loads(step.logs['report'])
+    report_dict = api.json.loads(step.logs['report'])
 
-    check(json.dumps(report_dict.get('isolated_tests'), sort_keys=True)
-          == json.dumps(expected_isolated_tests, sort_keys=True))
+    check(
+        api.json.dumps(report_dict.get('isolated_tests'), sort_keys=True) ==
+        api.json.dumps(expected_isolated_tests, sort_keys=True))
     return step_odict
 
 

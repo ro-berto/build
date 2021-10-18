@@ -2,14 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from recipe_engine import post_process
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'test_utils',
+    'recipe_engine/json',
     'recipe_engine/step',
 ]
 
@@ -33,7 +32,7 @@ def GenTests(api):
       api.override_step_data(
           'test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'Test.One': [{
                           'elapsed_time_ms': 0,
@@ -52,7 +51,7 @@ def GenTests(api):
       api.override_step_data(
           'test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'Test.One': [{
                           'elapsed_time_ms': 0,
@@ -68,8 +67,8 @@ def GenTests(api):
               })),
           retcode=1),
       api.post_check(lambda check, steps: check(log in steps['test'].logs)),
-      api.post_check(
-          lambda check, steps: check(notrun_log not in steps['test'].logs)),
+      api.post_check(lambda check, steps: check(notrun_log not in steps['test'].
+                                                logs)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -78,7 +77,7 @@ def GenTests(api):
       api.override_step_data(
           'test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'Test.Two': [{
                           'elapsed_time_ms': 0,
@@ -88,8 +87,8 @@ def GenTests(api):
                   }],
               })),
           retcode=1),
-      api.post_check(
-          lambda check, steps: check(notrun_log in steps['test'].logs)),
+      api.post_check(lambda check, steps: check(notrun_log in steps['test'].logs
+                                               )),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -98,7 +97,7 @@ def GenTests(api):
       api.override_step_data(
           'test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'Test.One': [
                           {
@@ -115,8 +114,8 @@ def GenTests(api):
                   }],
               })),
           retcode=1),
-      api.post_check(
-          lambda check, steps: check(flaky_log in steps['test'].logs)),
+      api.post_check(lambda check, steps: check(flaky_log in steps['test'].logs)
+                    ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -129,7 +128,7 @@ def GenTests(api):
       api.override_step_data(
           'test',
           api.test_utils.gtest_results(
-              json.dumps({
+              api.json.dumps({
                   'per_iteration_data': [{
                       'Test.One': [
                           {

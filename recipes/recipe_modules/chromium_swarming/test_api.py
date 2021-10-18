@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from recipe_engine import recipe_test_api
 
 class SwarmingTestApi(recipe_test_api.RecipeTestApi):
@@ -79,7 +77,7 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
     # Generate step test data for the swarming step.
     step_test_data = recipe_test_api.StepTestData()
     key = ('chromium_swarming', 'summary', None)
-    placeholder = recipe_test_api.PlaceholderTestData(json.dumps(data))
+    placeholder = recipe_test_api.PlaceholderTestData(self.m.json.dumps(data))
     step_test_data.placeholder_data[key] = placeholder
 
     # Add the test data for the dispatched step.

@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from recipe_engine.config import Dict
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
@@ -89,7 +87,7 @@ def RunSteps(api, target_testername, test_revision, tests, test_repeat_count,
     report['isolated_tests'] = api.isolate.isolated_tests
     # Give the full report including test results and metadata.
     api.python.succeeding_step(
-        'report', [json.dumps(report, indent=2)], as_log='report')
+        'report', [api.json.dumps(report, indent=2)], as_log='report')
 
 
 def GenTests(api):

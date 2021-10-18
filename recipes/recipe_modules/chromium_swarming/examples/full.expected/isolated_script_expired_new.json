@@ -849,7 +849,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"outputs\\\": [], \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"user\\\": \\\"unknown\\\", \\\"duration\\\": 60, \\\"try_number\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"completed_ts\\\": null, \\\"state\\\": \\\"EXPIRED\\\", \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"bot_id\\\": \\\"vm30\\\", \\\"completed_ts\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"duration\\\": 60, \\\"failure\\\": false, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"internal_failure\\\": false, \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"outputs\\\": [], \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"state\\\": \\\"EXPIRED\\\", \\\"try_number\\\": null, \\\"user\\\": \\\"unknown\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/task?id=0@@@"

@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from copy import deepcopy
 from recipe_engine import recipe_test_api
 
@@ -44,4 +42,4 @@ class iOSTestApi(recipe_test_api.RecipeTestApi):
 
     summary_path = str(swarming_number) + '/summary.json'
     return self.m.raw_io.output_dir(
-        {summary_path: json.dumps(summary_contents).encode('utf-8')})
+        {summary_path: self.m.json.dumps(summary_contents).encode('utf-8')})

@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -17,6 +15,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/step',
@@ -78,7 +77,7 @@ def GenTests(api):
   )
 
   def verify_revision_resolver_in_log(check, steps, expected):
-    gclient_config = json.loads(steps["gclient config"].logs["config"])
+    gclient_config = api.json.loads(steps["gclient config"].logs["config"])
     check(gclient_config["revisions"]["src-internal"] == expected)
 
   yield api.test(
