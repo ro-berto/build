@@ -1462,11 +1462,6 @@ SPEC.update([
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config('linux-blink-heap-verification'),
     stock_config('linux-blink-v8-oilpan'),
-    stock_config('linux-chromium-tests-staging-builder'),
-    stock_config(
-        'linux-chromium-tests-staging-tests',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
     stock_config(
