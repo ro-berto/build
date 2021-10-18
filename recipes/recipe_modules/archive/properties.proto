@@ -17,10 +17,18 @@ message LatestFile {
 // Next id: 3
 message ArchiveFileRename {
   string from_file = 1;
+  // to_file supports the same string substitutions as |ArchiveData.gcs_path|.
   string to_file = 2;
 }
 
-// Next id: 13
+// Next id: 3
+message ArchiveDirRename {
+  string from_dir = 1;
+  // to_dir supports the same string substitutions as |ArchiveData.gcs_path|.
+  string to_dir = 2;
+}
+
+// Next id: 14
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -43,6 +51,49 @@ message ArchiveData {
   // Note: The |files| and |dirs| fields don't interact. Both are relative to
   // the build directory.
   repeated string dirs = 2;
+  // Rename dirs. Internally renaming happens after copying all files to a
+  // temporary folder and before archiving. e.g. If the build output
+  // has a path named "foo", and you want it to be "bar" in the zip file,
+  // then you can have:
+  //   dirs= ["foo"]
+  //   rename_dirs = [{ "from_dir":"foo", "to_dir":"bar" }]
+  // NOTE: If 'to_dir' already exists, 'from_dir' will become a subdir of
+  // 'to_dir', instead of replacing 'to_dir'. If you want the contents of
+  // 'from_dir' to move under 'to_dir', you will need to specify the contents in
+  // the archive config. In the example above, you might need something like:
+  //   dirs= ["foo/a", "foo/b"]
+  //   rename_dirs = [
+  //     { "from_dir":"foo/a", "to_dir":"bar/a" }
+  //     { "from_dir":"foo/b", "to_dir":"bar/b" }
+  //   ]
+  // You can also completely rearrange the directory layout, so that something
+  // like this in the build output:
+  //   build_out/
+  //   |-- bar/
+  //   |   `-- resources/
+  //   `-- foo/
+  //      `-- resources/
+  // becomes this layout in the archive:
+  //   archive/
+  //   `-- resources/
+  //       |-- bar/
+  //       `-- foo/
+  // with:
+  //   dirs= ["bar/resources", 'foo/resources']
+  //   rename_dirs = [
+  //     { "from_dir":"bar/resources", "to_dir":"resources/bar" }
+  //     { "from_dir":"foo/resources", "to_dir":"resources/foo" }
+  //   ]
+  // This may also be used to prefix paths to the entire archive, by renaming
+  // the special '.' dir, like:
+  //   rename_dirs = [{ "from_dir":".", "to_dir":"new_archive_root" }]
+  // NOTE: The '.' dir is the only supported case of 'overlapping' renames.
+  // Trying to do something like the following will produce undefined results:
+  //   rename_dirs = [
+  //     { "from_dir":"bar/do_not_do_this", "to_dir":"do_not_do_this/bar" }
+  //     { "from_dir":"do_not_do_this", "to_dir":"really_do_not" }
+  //   ]
+  repeated ArchiveDirRename rename_dirs = 13;
   // The name of the google cloud storage bucket to upload to.
   string gcs_bucket = 3;
   // The destination path in the bucket to upload to. The following string

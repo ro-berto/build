@@ -201,6 +201,7 @@ def GenTests(api):
       (properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES, '', False),
       (properties.ArchiveData.ARCHIVE_TYPE_TAR_GZ, 'any-path.tar.gz', True),
       (properties.ArchiveData.ARCHIVE_TYPE_SQUASHFS, 'any-path.squash', True),
+      (properties.ArchiveData.ARCHIVE_TYPE_RECURSIVE, '', True),
   ):
     input_properties = properties.InputProperties()
     archive_data = properties.ArchiveData()
@@ -213,11 +214,30 @@ def GenTests(api):
       archive_data.dirs.extend([
           'directory1',
           'directory2',
+          'path/to/directory3',
       ])
+      rename_dir = properties.ArchiveDirRename()
+      rename_dir.from_dir = "directory1"
+      rename_dir.to_dir = "dir/one"
+      archive_data.rename_dirs.extend([rename_dir])
+      rename_partial_dir = properties.ArchiveDirRename()
+      rename_partial_dir.from_dir = "path/to"
+      rename_partial_dir.to_dir = "path_to"
+      archive_data.rename_dirs.extend([rename_partial_dir])
+      rename_root = properties.ArchiveDirRename()
+      rename_root.from_dir = "."
+      rename_root.to_dir = "archive_root"
+      archive_data.rename_dirs.extend([rename_root])
     rename_file = properties.ArchiveFileRename()
     rename_file.from_file = "before_rename_file"
     rename_file.to_file = "after_rename_file_{%timestamp%}"
     archive_data.rename_files.extend([rename_file])
+    # archive_data.rename_dirs should be able to modify any dir, not just those
+    # added by archive_data.dirs.
+    rename_file_dir = properties.ArchiveDirRename()
+    rename_file_dir.from_dir = "folder1"
+    rename_file_dir.to_dir = "folder_one"
+    archive_data.rename_dirs.extend([rename_file_dir])
     archive_data.file_globs.append('glob*.txt')
     if include_dirs:
       archive_data.dirs.extend(['locales', 'swiftshader'])
@@ -227,6 +247,118 @@ def GenTests(api):
     archive_data.archive_type = archive_type
     archive_data.root_permission_override = "755"
     input_properties.archive_datas.extend([archive_data])
+
+    def add_directory_checks():
+      post_tests = []
+      if include_dirs:
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Copy folder directory1", [
+                    "copytree", "--symlinks", "[CLEANUP]/tmp_tmp_1/directory1",
+                    "[CLEANUP]/tmp_tmp_2/directory1"
+                ]))
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Copy folder directory2", [
+                    "copytree", "--symlinks", "[CLEANUP]/tmp_tmp_1/directory2",
+                    "[CLEANUP]/tmp_tmp_2/directory2"
+                ]))
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Copy folder path/to/directory3", [
+                    "copytree", "--symlinks",
+                    "[CLEANUP]/tmp_tmp_1/path/to/directory3",
+                    "[CLEANUP]/tmp_tmp_2/path/to/directory3"
+                ]))
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Move dir: 'directory1'->'dir/one'", [
+                    "move", "[CLEANUP]/tmp_tmp_2/directory1",
+                    "[CLEANUP]/tmp_tmp_2/dir/one"
+                ]))
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Move dir: 'path/to'->'path_to'", [
+                    "move", "[CLEANUP]/tmp_tmp_2/path/to",
+                    "[CLEANUP]/tmp_tmp_2/path_to"
+                ]))
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.Move dir: '.'->'archive_root'",
+                [
+                    # NOTE: A "root move" involves moving the original archive
+                    # dir to a temp dir before the final move, thus the new
+                    # 'tmp_tmp_3' in the path.
+                    "move",
+                    "[CLEANUP]/tmp_tmp_3/tmp_tmp_2",
+                    "[CLEANUP]/tmp_tmp_2/archive_root"
+                ]))
+      return sum(post_tests, api.empty_test_data())
+
+    def check_stdin(check, step_odict, step, argument_sequence):
+      for arg in argument_sequence:
+        check('stdin for step %s contained %s' % (step, arg),
+              arg in step_odict[step].stdin)
+
+    def add_naming_checks(archive_type):
+      post_tests = []
+      # Verify that renamed files/dirs are referenced by their new names in
+      # relevant archiving steps.
+      if archive_type in [
+          properties.ArchiveData.ARCHIVE_TYPE_UNSPECIFIED,
+          properties.ArchiveData.ARCHIVE_TYPE_ZIP,
+      ]:
+        post_tests.append(
+            api.post_process(
+                check_stdin, "Generic Archiving Steps.Create generic archive", [
+                    "archive_root/after_rename_file_20120514125323",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/folder_one/chrome",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/dir/one",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/path_to/directory3",
+                ]))
+      if archive_type in [
+          properties.ArchiveData.ARCHIVE_TYPE_FILES,
+          properties.ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES,
+      ]:
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.gsutil upload 123456/5e3250aadda2b17"
+                "0692f8e762d43b7e8deadbeef/20120514125321/51.0.2704.0/"
+                "after_rename_file_20120514125323", [
+                    "cp",
+                    "[CLEANUP]/tmp_tmp_2/after_rename_file_20120514125323",
+                ]))
+      if archive_type in [
+          properties.ArchiveData.ARCHIVE_TYPE_TAR_GZ,
+      ]:
+        post_tests.append(
+            api.post_process(
+                check_stdin, "Generic Archiving Steps.Create tar.gz archive", [
+                    "archive_root/after_rename_file_20120514125323",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/folder_one/chrome",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/dir/one",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/path_to/directory3",
+                ]))
+      if archive_type in [
+          properties.ArchiveData.ARCHIVE_TYPE_RECURSIVE,
+      ]:
+        post_tests.append(
+            api.post_process(
+                post_process.StepCommandContains,
+                "Generic Archiving Steps.gsutil upload 123456/5e3250aadda2b"
+                "170692f8e762d43b7e8deadbeef/20120514125321/51.0.2704.0", [
+                    "cp",
+                    "-R",
+                    "[CLEANUP]/tmp_tmp_2/archive_root/dir/one",
+                ]))
+      return sum(post_tests, api.empty_test_data())
 
     yield api.test(
         'generic_archive_{}'.format(archive_type),
@@ -248,6 +380,14 @@ def GenTests(api):
             post_process.StepCommandContains,
             "Generic Archiving Steps.Update temporary folder permissions",
             ["chmod", "755", "[CLEANUP]/tmp_tmp_2"]),
+        api.post_process(
+            post_process.StepCommandContains,
+            "Generic Archiving Steps.Move dir: 'folder1'->'folder_one'", [
+                "move", "[CLEANUP]/tmp_tmp_2/folder1",
+                "[CLEANUP]/tmp_tmp_2/folder_one"
+            ]),
+        add_directory_checks(),
+        add_naming_checks(archive_type),
         api.post_process(post_process.DropExpectation),
     )
 

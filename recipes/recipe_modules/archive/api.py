@@ -899,6 +899,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       self.m.file.copy("Copy file %s" % filename,
                        self.m.path.join(base_path, filename), tmp_file_path)
 
+    updated_dirs = list(archive_data.dirs)
     for directory in archive_data.dirs:
       self.m.file.copytree(
           "Copy folder %s" % directory,
@@ -920,6 +921,55 @@ class ArchiveApi(recipe_api.RecipeApi):
       self.m.file.move("Move file",
                        self.m.path.join(base_path, rename_file.from_file),
                        self.m.path.join(base_path, new_filename))
+
+    root_rename = None
+    for rename_dir in archive_data.rename_dirs:
+      # Renaming the archive root is a special case which would affect other
+      # renames, so save it until all the other renames are finished.
+      if rename_dir.from_dir == '.':
+        root_rename = rename_dir
+        continue
+
+      # Support placeholder replacement for renames.
+      new_dirname = self._replace_placeholders(update_properties, custom_vars,
+                                               rename_dir.to_dir)
+
+      move_from_path = self.m.path.join(base_path, rename_dir.from_dir)
+      for idx, dirname in enumerate(updated_dirs):
+        if (dirname == rename_dir.from_dir or
+            dirname.startswith(rename_dir.from_dir + self.m.path.sep)):
+          updated_dirs[idx] = dirname.replace(rename_dir.from_dir,
+                                              rename_dir.to_dir, 1)
+
+      moved_files = {}
+      for fn in expanded_files:
+        if fn.startswith(rename_dir.from_dir + self.m.path.sep):
+          moved_files[fn] = fn.replace(rename_dir.from_dir, rename_dir.to_dir,
+                                       1)
+      expanded_files = expanded_files.difference(moved_files.keys())
+      expanded_files = expanded_files.union(moved_files.values())
+
+      self.m.file.move(
+          "Move dir: '%s'->'%s'" % (rename_dir.from_dir, new_dirname),
+          move_from_path, self.m.path.join(base_path, new_dirname))
+
+    if root_rename:
+      # Handle special case of adding a prefix path to the archive dir (i.e.
+      # moving the archive to a subdir of itself).
+      # The archive dir is temporarily moved to a new path because you can't
+      # actually move a dir into a subdir of itself.
+      new_dirname = self._replace_placeholders(update_properties, custom_vars,
+                                               root_rename.to_dir)
+      move_from_path = self.m.path.mkdtemp().join(
+          self.m.path.basename(base_path))
+      self.m.file.move("Prep archive root move", base_path, move_from_path)
+      self.m.file.move(
+          "Move dir: '%s'->'%s'" % (root_rename.from_dir, new_dirname),
+          move_from_path, self.m.path.join(base_path, new_dirname))
+      # All files and need to be prefixed with the new root.
+      expanded_files = set(
+          self.m.path.join(new_dirname, fn) for fn in expanded_files)
+      updated_dirs = [self.m.path.join(new_dirname, d) for d in updated_dirs]
 
     # Get map of local file path to upload -> destination file path in GCS
     # bucket.
@@ -946,7 +996,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       }
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_TAR_GZ:
       archive_file = self._create_targz_archive_for_upload(
-          base_path, expanded_files, archive_data.dirs)
+          base_path, expanded_files, updated_dirs)
       uploads = {archive_file: gcs_path}
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
       if not archive_data.dirs:
@@ -955,7 +1005,7 @@ class ArchiveApi(recipe_api.RecipeApi):
             'empty dirs', 'archive_data properties with '
             '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
             'specify |dirs|')
-      uploads = {base_path.join(d): gcs_path for d in archive_data.dirs}
+      uploads = {base_path.join(d): gcs_path for d in updated_dirs}
       gcs_args += ['-R']
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
       archive_file = self.m.path.mkdtemp().join('image.squash')
@@ -963,10 +1013,10 @@ class ArchiveApi(recipe_api.RecipeApi):
       uploads = {archive_file: gcs_path}
     else:
       archive_file = self._create_zip_archive_for_upload(
-          base_path, expanded_files, archive_data.dirs)
+          base_path, expanded_files, updated_dirs)
       uploads = {archive_file: gcs_path}
 
-    for file_path in uploads:
+    for file_path in sorted(uploads.keys(), key=str):
       self.m.gsutil.upload(
           file_path,
           bucket=gcs_bucket,
