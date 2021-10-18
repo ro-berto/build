@@ -17,25 +17,14 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  # If timeout, 'collect skylab results' step should raise an EXCEPTION.
+  # If timeout, 'collect skylab results' step should raise an EXCEPTION and
+  # not block the following steps.
   yield api.test(
       'collect_results_failure_by_timeout',
       api.step_data(
           'collect skylab results.buildbucket.collect.wait',
           times_out_after=12),
       api.post_process(post_process.StepException, 'collect skylab results'),
-      api.post_process(post_process.StatusException),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # If not timeout, raise an EXCEPTION for whatever failure the collect_build()
-  # returned.
-  yield api.test(
-      'collect_results_exception_by_infra_failure',
-      api.step_data(
-          'collect skylab results.buildbucket.collect.wait',
-          retcode=1),
-      api.post_process(post_process.StepException, 'collect skylab results'),
-      api.post_process(post_process.StatusException),
+      api.post_process(post_process.MustRun, 'find test runner build'),
       api.post_process(post_process.DropExpectation),
   )

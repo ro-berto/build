@@ -171,9 +171,15 @@ class SkylabApi(recipe_api.RecipeApi):
       A dict of test runner builds with the key of request tag.
     """
     with self.m.step.nest('collect skylab results'):
-      self.m.buildbucket.collect_builds(
-          list(ctp_by_tag.values()), timeout=timeout_seconds)
-
+      # collect_builds() may hit timeout, but it does not mean
+      # all tests are aborted. Some tests may still have exported
+      # results to RDB. So an exception or failure here should not
+      # block following steps.
+      try:
+        self.m.buildbucket.collect_builds(
+            list(ctp_by_tag.values()), timeout=timeout_seconds)
+      except self.m.step.StepFailure:
+        pass
     # TODO(crbug.com/1245438): Remove below once the test runner's invocation
     # is included into its parent build's invocation.
     with self.m.step.nest('find test runner build'):
