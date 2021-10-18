@@ -2228,7 +2228,8 @@ class SwarmingTestSpec(TestSpec):
     vendor_ids = {
         '8086': 'Intel',
         '10de': 'NVIDIA',
-        '1002': 'ATI',
+        '1002': 'AMD',
+        'none': 'SwiftShader',  # explicit 'none' means requesting SwS
     }
     gpu_vendor = vendor_ids.get(gpu_vendor_id) or '(%s)' % gpu_vendor_id
 
