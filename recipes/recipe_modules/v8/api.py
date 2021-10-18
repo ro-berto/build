@@ -1199,7 +1199,7 @@ class V8Api(recipe_api.RecipeApi):
     flake_log = {}
     failures = []
     flakes = []
-    for label in sorted(unique_results.keys())[:MAX_FAILURE_LOGS]:
+    for label in sorted(unique_results)[:MAX_FAILURE_LOGS]:
       failure_lines = []
       flake_lines = []
 

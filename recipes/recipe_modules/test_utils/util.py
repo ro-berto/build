@@ -109,11 +109,11 @@ class TestResults(object):
     self.valid = self.raw.get('valid', False)
     self.passes = {x: {} for x in self.raw.get('successes', [])}
     self.unexpected_failures = {x: {} for x in self.raw.get('failures', [])}
-    for passing_test in self.passes.keys():
+    for passing_test in self.passes:
       self.pass_fail_counts.setdefault(
           passing_test, {'pass_count': 0, 'fail_count': 0})
       self.pass_fail_counts[passing_test]['pass_count'] += 1
-    for failing_test in self.unexpected_failures.keys():
+    for failing_test in self.unexpected_failures:
       self.pass_fail_counts.setdefault(
           failing_test, {'pass_count': 0, 'fail_count': 0})
       self.pass_fail_counts[failing_test]['fail_count'] += 1

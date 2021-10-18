@@ -5,7 +5,7 @@
 import contextlib
 import itertools
 import json
-import re
+import six
 import urllib
 
 from RECIPE_MODULES.build import chromium_swarming
@@ -798,7 +798,7 @@ class Failure(object):
     return self.test.api
 
   def _format_swarming_dimensions(self, dims):
-    return ['%s:%s' % (k, dims[k]) for k in sorted(dims.keys())]
+    return ['%s:%s' % (k, v) for k, v in sorted(six.iteritems(dims))]
 
   def _flako_cmd_line(self):
     """Returns the command line for bisecting this failure with flako."""

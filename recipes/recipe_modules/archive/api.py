@@ -642,7 +642,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     if custom_vars:
       for placeholder, key in re.findall('({%(.*?)%})', input_str):
-        if key in custom_vars.keys():
+        if key in custom_vars:
           input_str = input_str.replace(placeholder, custom_vars[key])
         else:
           self.m.python.failing_step('Unresolved placeholder',

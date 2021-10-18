@@ -283,7 +283,7 @@ class FinditApi(recipe_api.RecipeApi):
               x: {
                   'status': self.TestResult.SKIPPED,
                   'valid': True
-              } for x in requested_tests.keys()
+              } for x in requested_tests
           }, defaultdict(list), None
 
         _, failed_tests = self.m.test_utils.run_tests(
@@ -324,7 +324,7 @@ class FinditApi(recipe_api.RecipeApi):
       # 1. Skipped by "analyze": tests are not affected by the given revision.
       # 2. Skipped because the requested tests don't exist at the given
       #    revision.
-      for test_name in requested_tests.keys():
+      for test_name in requested_tests:
         if test_name not in results:
           results[test_name] = {
               'status': self.TestResult.SKIPPED,

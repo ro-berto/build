@@ -390,8 +390,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     swarming_digest = swarming_props['swarming_command_lines_digest']
     swarming_cwd = swarming_props['swarming_command_lines_cwd']
 
-    swarm_hashes = swarming_props['swarm_hashes']
-    swarm_hashes = dict(zip(swarm_hashes.keys(), swarm_hashes.values()))
+    swarm_hashes = dict(swarming_props['swarm_hashes'])
     self.m.isolate.set_isolated_tests(swarm_hashes)
 
     if not tests:

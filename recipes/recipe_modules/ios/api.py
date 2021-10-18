@@ -1028,7 +1028,7 @@ class iOSApi(recipe_api.RecipeApi):
         step_result = self.m.step('[trigger] %s' % task['step name'], [])
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.logs['supported devices'] = sorted(
-            steps.IOS_PRODUCT_TYPES.keys())
+            steps.IOS_PRODUCT_TYPES)
         step_result.presentation.step_text = (
           'Requested unsupported device type.')
         return None

@@ -313,7 +313,7 @@ class MathUtilsApi(recipe_api.RecipeApi):
       assert lesser_equal, 'No number in number list <= target.'
       return max(lesser_equal)
 
-    df_key = greatest_smaller(MathUtilsApi.TABLE.keys(), df)
+    df_key = greatest_smaller(MathUtilsApi.TABLE, df)
     t_table_row = MathUtilsApi.TABLE[df_key]
     approximate_t_value = greatest_smaller(t_table_row, t)
     t_value_index = t_table_row.index(approximate_t_value)

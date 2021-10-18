@@ -2236,7 +2236,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests_by_target[t.target_name].append(t)
       runtime_dict_by_target = {
           t: self._gen_runtime_dict_for_skylab(t)
-          for t in sorted(tests_by_target.keys())
+          for t in sorted(tests_by_target)
       }
       gcs_path_by_target = {
           t:

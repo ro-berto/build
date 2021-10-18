@@ -49,7 +49,7 @@ def RunSteps(api):
     if api.properties.get('swarm_hashes'):
       swarm_hashes = api.properties['swarm_hashes']
       assert len(swarm_hashes) == 1
-      test_name = list(swarm_hashes.keys())[0]
+      test_name = list(swarm_hashes)[0]
     else:
       # Needed for a test
       test_name = 'base_unittests'

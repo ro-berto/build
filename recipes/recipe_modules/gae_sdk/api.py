@@ -57,12 +57,12 @@ class GaeSdkApi(recipe_api.RecipeApi):
 
   @property
   def platforms(self):
-    return sorted(self._PKG_MAP.keys())
+    return sorted(self._PKG_MAP)
 
   @property
   def all_packages(self):
     for plat, arch_dict in sorted(self._PKG_MAP.items()):
-      for arch in sorted(arch_dict.keys()):
+      for arch in sorted(arch_dict):
         yield plat, arch
 
   def fetch(self, plat, dst):

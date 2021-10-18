@@ -593,7 +593,7 @@ class Test(object):
   @property
   def known_flaky_failures(self):
     """Return a set of tests that failed but known to be flaky at ToT."""
-    return set(self._known_flaky_failures_map.keys())
+    return set(self._known_flaky_failures_map)
 
   def get_summary_of_known_flaky_failures(self):
     """Returns a set of text to use to display in the test results summary."""
@@ -1878,8 +1878,8 @@ class JSONResultsHandler(ResultsHandler):
 
       step_text += [
           ('%s passed, %s failed (%s total)' %
-           (len(results.passes.keys()), len(
-               results.unexpected_failures.keys()), len(results.tests)),),
+           (len(results.passes), len(
+               results.unexpected_failures), len(results.tests)),),
       ]
 
     else:
@@ -1891,19 +1891,19 @@ class JSONResultsHandler(ResultsHandler):
 
       step_text += [
           ('Total tests: %s' % len(results.tests), [
-              self._format_counts('Passed', len(results.passes.keys()),
-                                  len(results.unexpected_passes.keys())),
-              self._format_counts('Skipped', len(results.skipped.keys()),
-                                  len(results.unexpected_skipped.keys())),
+              self._format_counts('Passed', len(results.passes),
+                                  len(results.unexpected_passes)),
+              self._format_counts('Skipped', len(results.skipped),
+                                  len(results.unexpected_skipped)),
               self._format_counts(
                   'Failed',
-                  len(results.failures.keys()),
-                  len(results.unexpected_failures.keys()),
+                  len(results.failures),
+                  len(results.unexpected_failures),
                   highlight=True),
               self._format_counts(
                   'Flaky',
-                  len(results.flakes.keys()),
-                  len(results.unexpected_flakes.keys()),
+                  len(results.flakes),
+                  len(results.unexpected_flakes),
                   highlight=True),
           ]),
       ]

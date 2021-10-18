@@ -121,7 +121,7 @@ def GenTests(api):
   )
 
   def check_step_has_logs(check, steps, step, expected_logs):
-    logs = list(steps[step].logs.keys())
+    logs = list(steps[step].logs)
     check(logs == expected_logs)
 
   yield api.test(
