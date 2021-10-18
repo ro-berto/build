@@ -1392,6 +1392,22 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'Mac Builder (reclient compare)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+                'reclient_gomaip_exp',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='mac',
+        ),
     # TODO(crbug.com/1252626): remove after the migration.
     'mac-arm64-on-arm64-rel-reclient':
         builder_spec.BuilderSpec.create(
