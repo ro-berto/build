@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
+
 from recipe_engine import post_process, recipe_api
 from recipe_engine.config import Dict
 
@@ -13,7 +15,7 @@ from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                   )
 from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -56,7 +58,7 @@ def RunSteps(api, expected_attrs, use_static_dbs):
     lookup_kwargs = {'builder_db': BUILDER_DB, 'try_db': TRY_DB}
   _, builder_config = api.chromium_tests_builder_config.lookup_builder(
       **lookup_kwargs)
-  for k, v in expected_attrs.iteritems():
+  for k, v in six.iteritems(expected_attrs):
     value = getattr(builder_config, k)
     api.assertions.assertEqual(
         value, v,

@@ -51,8 +51,8 @@ class _BuilderSpecProperty(object):
     values = list(set(per_builder_values.values()))
     if len(values) != 1:
       message = ['Inconsistent value for {!r}:'.format(self._attr)]
-      message.extend(
-          '{!r}: {!r}'.format(k, v) for k, v in per_builder_values.iteritems())
+      message.extend('{!r}: {!r}'.format(k, v)
+                     for k, v in six.iteritems(per_builder_values))
       raise ValueError('\n  '.join(message))
     return values[0]
 

@@ -6,7 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests_builder_config import builder_spec
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'recipe_engine/assertions',
@@ -54,11 +54,11 @@ def RunSteps(api):
   message = 'Test-only builder must specify a parent builder'
   with api.assertions.assertRaises(AssertionError) as caught:
     builder_spec.BuilderSpec.create(execution_mode=builder_spec.TEST)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   with api.assertions.assertRaises(AssertionError) as caught:
     tester_spec.evolve(parent_buildername=None)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # Invalid fields for TEST execution_mode
   message = (
@@ -70,7 +70,7 @@ def RunSteps(api):
         parent_buildername='fake-builder',
         compile_targets=['foo', 'bar'],
     )
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # archive_build validations **************************************************
   archive_build_spec = builder_spec.BuilderSpec.create(
@@ -84,11 +84,11 @@ def RunSteps(api):
   message = "'gs_bucket' must be provided when 'archive_build' is True"
   with api.assertions.assertRaises(AssertionError) as caught:
     builder_spec.BuilderSpec.create(archive_build=True)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   with api.assertions.assertRaises(AssertionError) as caught:
     archive_build_spec.evolve(gs_bucket=None)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # Invalid fields when archive_build is falsey
   message = ('The following fields are ignored unless '
@@ -100,7 +100,7 @@ def RunSteps(api):
         gs_acl='acl',
         gs_build_name='build-name',
     )
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # cf_archive_build validations ***********************************************
   cf_archive_build_spec = builder_spec.BuilderSpec.create(
@@ -115,11 +115,11 @@ def RunSteps(api):
   message = "'cf_gs_bucket' must be provided when 'cf_archive_build' is True"
   with api.assertions.assertRaises(AssertionError) as caught:
     builder_spec.BuilderSpec.create(cf_archive_build=True)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   with api.assertions.assertRaises(AssertionError) as caught:
     cf_archive_build_spec.evolve(cf_gs_bucket=None)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # Invalid fields when cf_archive_build is falsey
   message = ('The following fields are ignored unless '
@@ -134,7 +134,7 @@ def RunSteps(api):
         cf_archive_name='archive-name',
         cf_archive_subdir_suffix='archive-subdir-suffix',
     )
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # bisect_archive_build validations *******************************************
   bisect_archive_build_spec = builder_spec.BuilderSpec.create(
@@ -148,11 +148,11 @@ def RunSteps(api):
       "'bisect_gs_bucket' must be provided when 'bisect_archive_build' is True")
   with api.assertions.assertRaises(AssertionError) as caught:
     builder_spec.BuilderSpec.create(bisect_archive_build=True)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   with api.assertions.assertRaises(AssertionError) as caught:
     bisect_archive_build_spec.evolve(bisect_gs_bucket=None)
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
   # Invalid fields when bisect_archive_build is falsey
   message = ('The following fields are ignored unless '
@@ -163,7 +163,7 @@ def RunSteps(api):
         bisect_gs_bucket='bucket',
         bisect_gs_extra='extra',
     )
-  api.assertions.assertEqual(caught.exception.message, message)
+  api.assertions.assertEqual(str(caught.exception), message)
 
 
 def GenTests(api):

@@ -9,7 +9,7 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests_builder_config import (
     builders, trybots, BuilderDatabase, BuilderSpec, TryDatabase, TrySpec)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',

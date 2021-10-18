@@ -8,7 +8,7 @@ from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build.chromium_tests_builder_config import (
     builder_config as builder_config_module, builder_db, builder_spec, try_spec)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'recipe_engine/assertions',
@@ -118,7 +118,7 @@ def RunSteps(api):
   with api.assertions.assertRaises(ValueError) as caught:
     # pylint: disable=pointless-statement
     builder_config_with_mismatched_values.execution_mode
-  api.assertions.assertIn('Inconsistent value', caught.exception.message)
+  api.assertions.assertIn('Inconsistent value', str(caught.exception))
 
 
 def GenTests(api):
