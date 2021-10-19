@@ -391,6 +391,6 @@ class FlakinessApi(recipe_api.RecipeApi):
     with self.m.chromium_tests.wrap_chromium_tests(None, new_test_objects):
       # Run the test. The isolates have already been created.
       rdb_results, invalid_test_suites, failed_test_suites = (
-          self.m.test_utils._run_tests_once(self.m, new_test_objects, suffix))
+          self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
 
     return rdb_results, invalid_test_suites, failed_test_suites

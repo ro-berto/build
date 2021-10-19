@@ -245,11 +245,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         failed_test_suites.append(t)
     return invalid_results, failed_test_suites
 
-  def _run_tests_once(self,
-                      caller_api,
-                      test_suites,
-                      suffix,
-                      sort_by_shard=False):
+  def run_tests_once(self, caller_api, test_suites, suffix,
+                     sort_by_shard=False):
     """Runs a set of tests once. Used as a helper function by run_tests.
 
     Args:
@@ -753,7 +750,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
     rdb_results, invalid_test_suites, failed_test_suites = (
-        self._run_tests_once(
+        self.run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
 
     if self.m.tryserver.is_tryserver and self._should_abort_tryjob(rdb_results):
@@ -786,7 +783,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retry_suffix = 'retry shards'
     if suffix:
       retry_suffix += ' ' + suffix
-    _, new_swarming_invalid_suites, _ = self._run_tests_once(
+    _, new_swarming_invalid_suites, _ = self.run_tests_once(
         caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
 
     invalid_test_suites = self._still_invalid_suites(
