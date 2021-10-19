@@ -3,15 +3,9 @@
 # found in the LICENSE file.
 
 import contextlib
-import datetime
-import glob
-import json
 import os
-import pipes
-import re
-import sys
+from six.moves import urllib
 import textwrap
-import urllib
 
 from recipe_engine.engine_types import freeze
 from recipe_engine import recipe_api
@@ -582,16 +576,16 @@ class AndroidApi(recipe_api.RecipeApi):
       result.presentation.step_text = 'Online devices: %s' % len(self._devices)
       return result
     except self.m.step.InfraFailure as f:
-      params = {
-          'summary':
-              ('Device Offline on %s %s' %
-               (self.m.builder_group.for_current, self.m.properties['bot_id'])),
-          'comment': ('Buildbot: %s\n(Please do not change any labels)' %
-                      self.m.buildbucket.builder_name),
-          'labels': 'Restrict-View-Google,OS-Android,Infra,Infra-Labs',
-      }
+      params = [
+          ('summary',
+           ('Device Offline on %s %s' %
+            (self.m.builder_group.for_current, self.m.properties['bot_id']))),
+          ('comment', ('Buildbot: %s\n(Please do not change any labels)' %
+                       self.m.buildbucket.builder_name)),
+          ('labels', 'Restrict-View-Google,OS-Android,Infra,Infra-Labs'),
+      ]
       link = ('https://code.google.com/p/chromium/issues/entry?%s' %
-              urllib.urlencode(params))
+              urllib.parse.urlencode(params))
       f.result.presentation.links.update({'report a bug': link})
       raise
 
@@ -720,7 +714,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                               'test_results_presentation.py'),
           args=presentation_args,
           stdout=self.m.raw_io.output_text(),
-          step_test_data=(lambda: self.m.raw_io.test_api.stream_output(
+          step_test_data=(lambda: self.m.raw_io.test_api.stream_output_text(
               'Result Details: https://storage.cloud.google.com/'
               'chromium-result-details')))
       # Stdout is in the format of 'Result Details: <link>'.
@@ -1147,7 +1141,7 @@ class AndroidApi(recipe_api.RecipeApi):
             changed_file,
             stdout=self.m.raw_io.output_text(),
             name='Finding lines changed in modified file %s' % changed_file,
-            step_test_data=(lambda: self.m.raw_io.test_api.stream_output(
+            step_test_data=(lambda: self.m.raw_io.test_api.stream_output_text(
                 'int n = 0;\nn++;\nfor (int i = 0; i < n; i++) {')))
       blame_lines = blame.stdout.splitlines()
       file_changes[changed_file] = [
@@ -1178,7 +1172,7 @@ class AndroidApi(recipe_api.RecipeApi):
           diff_filter,
           stdout=self.m.raw_io.output_text(),
           name='Finding changed files matching diff filter: %s' % diff_filter,
-          step_test_data=(lambda: self.m.raw_io.test_api.stream_output(
+          step_test_data=(lambda: self.m.raw_io.test_api.stream_output_text(
               'fake/file1.java\nfake/file2.java;\nfake/file3.java')))
     return diff.stdout.splitlines()
 

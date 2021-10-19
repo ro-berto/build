@@ -128,8 +128,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def get_env(self):
     ret = {}
     if self.c.env.PATH:
-      ret['PATH'] = self.m.path.pathsep.join(
-          map(str, self.c.env.PATH) + ['%(PATH)s'])
+      ret['PATH'] = self.m.path.pathsep.join([str(p) for p in self.c.env.PATH] +
+                                             ['%(PATH)s'])
     if self.c.env.GOMA_STORE_ONLY:
       ret['GOMA_STORE_ONLY'] = self.c.env.GOMA_STORE_ONLY
     if self.c.env.FORCE_MAC_TOOLCHAIN:
