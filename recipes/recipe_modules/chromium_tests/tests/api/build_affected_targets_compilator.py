@@ -41,7 +41,9 @@ def RunSteps(api, properties):
   api.chromium_tests.configure_build(orch_builder_config)
 
   api.chromium_tests.build_affected_targets(
-      orch_builder_id, orch_builder_config, isolate_test_binaries_together=True)
+      orch_builder_id,
+      orch_builder_config,
+      isolate_output_files_for_coverage=True)
 
 
 def GenTests(api):

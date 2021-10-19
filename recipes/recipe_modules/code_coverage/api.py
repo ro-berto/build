@@ -128,10 +128,41 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return (self.use_clang_coverage or self.use_java_coverage or
             self.use_javascript_coverage)
 
+  def get_required_build_output_files(self, tests):
+    """Get required build output files necessary to run code coverage
+
+    Args:
+      tests (list(Test)): List of Test objects
+
+    Returns:
+      List of Paths to build output files
+    """
+    binary_paths = self.get_binaries(tests)
+    files = [
+        binary_path for binary_path in binary_paths
+        if self.m.path.exists(binary_path)
+    ]
+
+    if self.platform == 'android':
+      sources_json_files = self.m.file.glob_paths(
+          name='Find jacoco files for java coverage',
+          source=self.m.chromium.output_dir,
+          pattern='**/*{}'.format(constants.SOURCES_JSON_FILES_SUFFIX),
+      )
+      files.extend(sources_json_files)
+
+    return files
+
   def get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.
 
     By default, use the name of the target as the binary.
+
+    Args:
+      tests (list(Test)): List of Test objects
+
+    Returns:
+      List of Paths to test binaries
     """
     # TODO(crbug.com/899974): Implement a sturdier approach that also works in
     # separate builder-tester setup.
@@ -206,13 +237,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           for unstripped_path in unstripped_paths:
             if unstripped_path.endswith(binary) or unstripped_path.endswith(
                 so_library_name):
-              binaries.add(unstripped_path)
+              binaries.add(self.m.path.abs_to_path(unstripped_path))
               break
         elif self.platform == 'fuchsia':
           exec_name = binary + '__exec'
           for unstripped_path in unstripped_paths:
             if unstripped_path.endswith(exec_name):
-              binaries.add(unstripped_path)
+              binaries.add(self.m.path.abs_to_path(unstripped_path))
               break
         elif self.platform == 'ios':
           if binary == 'ios_web_view_inttests':

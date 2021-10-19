@@ -420,7 +420,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                use_rts=False,
                                rts_recall=None,
                                use_st=False,
-                               isolate_test_binaries_together=False):
+                               isolate_output_files_for_coverage=False):
     """Runs compile and related steps for given builder.
 
     Allows finer-grained control about exact compile targets used.
@@ -452,8 +452,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       rts_recall - A float from (0 to 1] indicating what change recall rts
         should aim for, 0 being the fastest and 1 being the safest, and
         typically between .9 and 1
-      isolate_test_binaries_together: Whether to also upload all test
-        binaries to one hash.
+      isolate_output_files_for_coverage: Whether to also upload all test
+        binaries and other required code coverage output files to one hash.
       use_st - A boolean indicating whether to filter out stable tests
 
     Returns:
@@ -521,16 +521,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                   '(at)'),
               'with' if has_patch else 'without')
 
-        if isolate_test_binaries_together:
-          binaries_to_isolate = self.m.code_coverage.get_binaries(
+        if isolate_output_files_for_coverage:
+          file_paths = self.m.code_coverage.get_required_build_output_files(
               [t for t in tests if t.uses_isolate])
-          binaries_to_isolate = [
-              binary_path for binary_path in binaries_to_isolate
-              if self.m.path.exists(binary_path)
-          ]
 
           self.m.isolate.write_isolate_files_for_binary_file_paths(
-              binaries_to_isolate, ALL_TEST_BINARIES_ISOLATE_NAME,
+              file_paths, ALL_TEST_BINARIES_ISOLATE_NAME,
               self.m.chromium.output_dir)
 
           isolated_targets.append(ALL_TEST_BINARIES_ISOLATE_NAME)
@@ -1897,7 +1893,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              builder_config,
                              tests_to_run=None,
                              root_solution_revision=None,
-                             isolate_test_binaries_together=False):
+                             isolate_output_files_for_coverage=False):
     """Builds targets affected by change.
 
     Args:
@@ -1908,8 +1904,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                      trybot to configurations of the mirrored CI bot. Defaults
                      are in ChromiumTestsApi.
       tests_to_run: A list of test suites to run.
-      isolate_test_binaries_together: Whether to also upload all test
-                                      binaries to one hash.
+      isolate_output_files_for_coverage: Whether to also upload all test
+        binaries and other required code coverage output files to one hash.
 
     Returns:
       A Tuple of
@@ -1982,7 +1978,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           use_rts=use_rts,
           rts_recall=builder_config.regression_test_selection_recall,
           use_st=use_st,
-          isolate_test_binaries_together=isolate_test_binaries_together)
+          isolate_output_files_for_coverage=isolate_output_files_for_coverage)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on

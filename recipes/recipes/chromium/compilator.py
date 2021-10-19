@@ -93,7 +93,7 @@ def RunSteps(api, properties):
       raw_result, task = api.chromium_tests.build_affected_targets(
           orch_builder_id,
           orch_builder_config,
-          isolate_test_binaries_together=True)
+          isolate_output_files_for_coverage=True)
       test_suites = task.test_suites
 
     if raw_result and raw_result.status != common_pb.SUCCESS:
