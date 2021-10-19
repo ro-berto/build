@@ -89,10 +89,6 @@
       "foounit",
       "--variants=more,dev",
       "--rerun-failures-count=2",
-      "--mastername",
-      "somewhere.v8",
-      "--buildername",
-      "V8 Foobar",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

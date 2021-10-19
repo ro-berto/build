@@ -403,10 +403,6 @@
       "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
-      "--mastername",
-      "client.v8",
-      "--buildername",
-      "V8 Foobar",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -502,10 +498,6 @@
       "--variants=more,dev",
       "--extra-flags=--flag",
       "--rerun-failures-count=2",
-      "--mastername",
-      "client.v8",
-      "--buildername",
-      "V8 Foobar",
       "--json-test-results",
       "/path/to/tmp/json"
     ],
@@ -900,10 +892,6 @@
       "123",
       "--variants=default",
       "--rerun-failures-count=0",
-      "--mastername",
-      "client.v8",
-      "--buildername",
-      "V8 Foobar",
       "--json-test-results",
       "/path/to/tmp/json"
     ],

@@ -1326,17 +1326,6 @@ class V8Api(recipe_api.RecipeApi):
       '--rerun-failures-count=%d' % self.rerun_failures_count,
     ]
 
-    # TODO(machenbach): This is temporary code for rolling out the new test
-    # runner. It should be removed after the roll-out. We skip the branches
-    # waterfall, as it runs older versions of the V8 side.
-    if self.m.builder_group.for_current != 'client.v8.branches':
-      full_args += [
-          '--mastername',
-          self.m.builder_group.for_current,
-          '--buildername',
-          self.m.buildbucket.builder_name,
-      ]
-
     return full_args, env
 
   @staticmethod
