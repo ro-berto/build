@@ -305,6 +305,7 @@ def GenTests(api):
         parent_buildername='v8_foobar_rel_ng',
         parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
+        disable_auto_bisect=True,
     ) +
     api.override_step_data(
         'Check', api.v8.output_json(has_failures=True))

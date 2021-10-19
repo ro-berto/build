@@ -1047,11 +1047,8 @@ class V8Api(recipe_api.RecipeApi):
 
   def maybe_bisect(self, test_results, test_spec):
     """Build-local bisection for one failure."""
-    # Don't activate for branch or fyi bots.
-    if self.m.builder_group.for_current not in ['client.v8', 'client.v8.ports']:
-      return
-
-    if self.bot_config.get('disable_auto_bisect'):  # pragma: no cover
+    if (self.bot_config.get('disable_auto_bisect') or
+        self.m.properties.get('disable_auto_bisect')):
       return
 
     # Only bisect over failures not flakes. Rerun only the fastest test.
@@ -1356,6 +1353,7 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       properties.update(
         category=self.m.properties.get('category', 'manual_ts'),
+        disable_auto_bisect=True,
         reason=str(self.m.properties.get('reason', 'ManualTS')),
         # On tryservers, set revision to the same as on the current bot, as it
         # is used to generate buildset tag in buildbucket_trigger below.
