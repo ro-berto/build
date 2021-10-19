@@ -4,7 +4,7 @@
 
 from six.moves import range  # pylint: disable=redefined-builtin
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -46,7 +46,6 @@ PROPERTIES = {
     'realm': Property(default=None),
     'resultdb_spec': Property(default={}),
 }
-
 
 def RunSteps(api, platforms, custom_trigger_script,
              show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
@@ -649,7 +648,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -670,7 +670,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_win/size hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
@@ -753,7 +754,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -770,7 +772,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -787,7 +790,8 @@ def GenTests(api):
       ), api.m.code_coverage(use_clang_coverage=True),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -825,7 +829,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
@@ -847,7 +852,8 @@ def GenTests(api):
       ),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux/size hello_world.isolated')),
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(

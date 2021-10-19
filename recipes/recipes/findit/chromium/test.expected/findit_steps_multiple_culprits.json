@@ -2592,7 +2592,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"1\"], [\"0\"]]",
+      "[[\"0\"], [\"1\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -2620,87 +2620,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r5.collect tasks (r5).browser_tests stats",
-    "stdin": "{\"invocations\": [\"invocations/1\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "1"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r5.collect tasks (r5).browser_tests results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
@@ -2778,6 +2705,79 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r5.collect tasks (r5).browser_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/1\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r5.collect tasks (r5).browser_tests results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -2791,162 +2791,6 @@
       "/path/to/tmp/json",
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
-      "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_gtest_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--build-properties",
-      "{\"bad_revision\": \"r6\", \"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.mac\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"r5\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"findit/chromium/test\", \"suspected_revisions\": [\"r3\", \"r6\"], \"target_builder_group\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"browser_tests\": [\"Test.browser_One\"], \"gl_tests\": [\"Test.gl_One\"]}, \"use_analyze\": false}",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r5.browser_tests (r5)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test r5.browser_tests (r5)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"browser_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Mac10.13 Tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.browser_One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--builder-group",
-      "tryserver.chromium.mac",
-      "--builder-name",
-      "findit_variable",
-      "--build-number",
-      "0",
-      "--test-type",
-      "test r5.browser_tests (r5)",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r5.Upload to test-results [test r5.browser_tests (r5)]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_2",
       "--merge-script",
       "[CACHE]/builder/src/testing/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",
@@ -3095,6 +2939,162 @@
       }
     },
     "name": "test r5.Upload to test-results [test r5.gl_tests (r5)]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_2",
+      "--merge-script",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_gtest_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--build-properties",
+      "{\"bad_revision\": \"r6\", \"bot_id\": \"build1-a1\", \"builder_group\": \"tryserver.chromium.mac\", \"good_revision\": \"r0\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"r5\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"findit/chromium/test\", \"suspected_revisions\": [\"r3\", \"r6\"], \"target_builder_group\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_on_good_revision\": true, \"test_repeat_count\": 20, \"tests\": {\"browser_tests\": [\"Test.browser_One\"], \"gl_tests\": [\"Test.gl_One\"]}, \"use_analyze\": false}",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"1\"}]}"
+    ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r5.browser_tests (r5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test r5.browser_tests (r5)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"browser_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Mac10.13 Tests\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.browser_One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--builder-group",
+      "tryserver.chromium.mac",
+      "--builder-name",
+      "findit_variable",
+      "--build-number",
+      "0",
+      "--test-type",
+      "test r5.browser_tests (r5)",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r5.Upload to test-results [test r5.browser_tests (r5)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

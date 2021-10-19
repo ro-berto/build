@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import itertools
+import six
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -694,7 +695,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Fetching names from protobufs gets unicode strings, so coerce to unicode
     # in order to make the sets compare like with like
-    old_retriable_names = set(unicode(suite.name) for suite in old_retriables)
+    old_retriable_names = set(
+        six.text_type(suite.name) for suite in old_retriables)
 
     if old_retriable_names.symmetric_difference(new_retriable_names):
       mismatch = self.m.python.succeeding_step(

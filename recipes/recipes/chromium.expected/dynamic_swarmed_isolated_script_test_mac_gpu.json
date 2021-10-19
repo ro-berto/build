@@ -1375,7 +1375,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"1\"], [\"0\"]]",
+      "[[\"0\"], [\"1\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -1404,89 +1404,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Mac Retina stats",
-    "stdin": "{\"invocations\": [\"invocations/1\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "1"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Mac Retina results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
@@ -1566,6 +1491,81 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Mac Retina stats",
+    "stdin": "{\"invocations\": [\"invocations/1\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Mac Retina results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -1579,183 +1579,6 @@
       "/path/to/tmp/json",
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
-      "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.mac\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"parent_builder_group\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size\"}}",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"interrupted\\\": false, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2, \\\"SKIP\\\": 1}, \\\"path_delimiter\\\": \\\".\\\", \\\"seconds_since_epoch\\\": 14000000, \\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"actual\\\": \\\"TIMEOUT\\\", \\\"expected\\\": \\\"PASS TIMEOUT\\\"}, \\\"Test3\\\": {\\\"actual\\\": \\\"SKIP\\\", \\\"expected\\\": \\\"SKIP\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"FAIL FAIL PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}, \\\"version\\\": 3}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"exit_code\\\": \\\"0\\\", \\\"failure\\\": false, \\\"internal_failure\\\": false}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"10de:0fe9\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"hidpi\": \"1\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Mac Retina\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Mac10.13 Tests\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
-      "--builder-group",
-      "chromium.mac",
-      "--builder-name",
-      "Mac10.13 Tests",
-      "--build-number",
-      "571",
-      "--test-type",
-      "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Mac Retina]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_2",
       "--merge-script",
       "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
@@ -1917,6 +1740,183 @@
       }
     },
     "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_2",
+      "--merge-script",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.mac\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"parent_builder_group\": \"chromium.mac\", \"parent_buildername\": \"Mac Builder\", \"recipe\": \"chromium\", \"swarm_hashes\": {\"telemetry_gpu_unittests\": \"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size\"}}",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"1\"}]}"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"interrupted\\\": false, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2, \\\"SKIP\\\": 1}, \\\"path_delimiter\\\": \\\".\\\", \\\"seconds_since_epoch\\\": 14000000, \\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"actual\\\": \\\"TIMEOUT\\\", \\\"expected\\\": \\\"PASS TIMEOUT\\\"}, \\\"Test3\\\": {\\\"actual\\\": \\\"SKIP\\\", \\\"expected\\\": \\\"SKIP\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"FAIL FAIL PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}, \\\"version\\\": 3}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"exit_code\\\": \\\"0\\\", \\\"failure\\\": false, \\\"internal_failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"10de:0fe9\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"hidpi\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Mac Retina\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Mac10.13 Tests\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
+      "--builder-group",
+      "chromium.mac",
+      "--builder-name",
+      "Mac10.13 Tests",
+      "--build-number",
+      "571",
+      "--test-type",
+      "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Mac Retina]"
   },
   {
     "cmd": [],

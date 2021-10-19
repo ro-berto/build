@@ -617,7 +617,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"1\"], [\"0\"]]",
+      "[[\"0\"], [\"1\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -641,79 +641,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.base_unittests_failed_results_2 stats",
-    "stdin": "{\"invocations\": [\"invocations/1\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "1"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.base_unittests_failed_results_2 results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
@@ -785,6 +720,71 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.base_unittests_failed_results_2 stats",
+    "stdin": "{\"invocations\": [\"invocations/1\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "1"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.base_unittests_failed_results_2 results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -798,170 +798,6 @@
       "/path/to/tmp/json",
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
-      "--merge-script",
-      "[CACHE]/merge_scripts/standard_isolated_script_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "base_unittests_failed_results_2",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"interrupted\\\": false, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2, \\\"SKIP\\\": 1}, \\\"path_delimiter\\\": \\\".\\\", \\\"seconds_since_epoch\\\": 14000000, \\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"actual\\\": \\\"TIMEOUT\\\", \\\"expected\\\": \\\"PASS TIMEOUT\\\"}, \\\"Test3\\\": {\\\"actual\\\": \\\"SKIP\\\", \\\"expected\\\": \\\"SKIP\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"FAIL FAIL PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}, \\\"version\\\": 3}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"exit_code\\\": \\\"0\\\", \\\"failure\\\": false, \\\"internal_failure\\\": false}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests_failed_results_2\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"foo\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests_failed_results_2\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests_failed_results_2\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
-      "--builder-group",
-      "chromium.linux",
-      "--builder-name",
-      "test_builder",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests_failed_results_2",
-      "--chrome-revision",
-      "0",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [base_unittests_failed_results_2]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_2",
       "--merge-script",
       "[CACHE]/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
@@ -1110,6 +946,170 @@
       }
     },
     "name": "Upload to test-results [base_unittests_failed_results]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_2",
+      "--merge-script",
+      "[CACHE]/merge_scripts/standard_isolated_script_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"1\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_unittests_failed_results_2",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"interrupted\\\": false, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2, \\\"SKIP\\\": 1}, \\\"path_delimiter\\\": \\\".\\\", \\\"seconds_since_epoch\\\": 14000000, \\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"actual\\\": \\\"TIMEOUT\\\", \\\"expected\\\": \\\"PASS TIMEOUT\\\"}, \\\"Test3\\\": {\\\"actual\\\": \\\"SKIP\\\", \\\"expected\\\": \\\"SKIP\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"FAIL FAIL PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}, \\\"version\\\": 3}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"exit_code\\\": \\\"0\\\", \\\"failure\\\": false, \\\"internal_failure\\\": false}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests_failed_results_2\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"foo\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests_failed_results_2\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests_failed_results_2\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
+      "--builder-group",
+      "chromium.linux",
+      "--builder-name",
+      "test_builder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "base_unittests_failed_results_2",
+      "--chrome-revision",
+      "0",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [base_unittests_failed_results_2]"
   },
   {
     "cmd": [],

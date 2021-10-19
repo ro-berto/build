@@ -2633,7 +2633,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"3\"], [\"1\"], [\"2\"], [\"0\"]]",
+      "[[\"0\"], [\"1\"], [\"2\"], [\"3\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -2658,7 +2658,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
@@ -2667,7 +2667,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"2\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -2695,15 +2695,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/3\"]}",
+    "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 stats",
+    "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/3\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -2719,7 +2719,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "3"
+      "0"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -2735,7 +2735,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) results",
+    "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -2896,15 +2896,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 stats",
-    "stdin": "{\"invocations\": [\"invocations/0\"]}",
+    "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/3\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/3\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -2920,7 +2920,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "0"
+      "3"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -2936,7 +2936,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 results",
+    "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -2956,7 +2956,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/1_tmp_1",
+      "[CLEANUP]/0_0_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -2977,7 +2977,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"3\"}]}"
+      "{\"tasks\": [{\"task_id\": \"0\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -2996,7 +2996,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "EG1_test2 (Real device iOS 13.1) (with patch)",
+    "name": "EG2_test (Real device iOS 13.1.2) shard 0 (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -3030,7 +3030,7 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -3229,7 +3229,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0_0_tmp_1",
+      "[CLEANUP]/1_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -3250,7 +3250,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"0\"}]}"
+      "{\"tasks\": [{\"task_id\": \"3\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -3269,7 +3269,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "EG2_test (Real device iOS 13.1.2) shard 0 (with patch)",
+    "name": "EG1_test2 (Real device iOS 13.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -3303,7 +3303,7 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
     ]
   },
   {

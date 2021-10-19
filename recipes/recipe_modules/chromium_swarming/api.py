@@ -5,9 +5,11 @@
 import collections
 import copy
 import datetime
+import decimal
 import functools
 import hashlib
 import os.path
+import six
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -47,43 +49,55 @@ BUILDER_GROUP_SWARMING_PRIORITIES.update({
 LOCATION_TAGS_FILE = '../../testing/location_tags.json'
 
 
-def safe(f, *args, **kw):
-  try:
-    f(*args, **kw)
-    return True
-  except Exception:
-    return False
+_TEXT_EXTENSIONS = ('.txt', '.json', '')
+_MAX_FILE_CONTENT_SIZE = 1024
 
 
-def filter_outdir(dumps, output_dir, text_files=('.txt', '.json', ''),
-                msize=1024):
-  """Create a summary of contents of a raw_io.output_dir."""
+def _summarize_outdir(output_dir):
+  """Create a summary of contents of a raw_io.output_dir.
+
+  Returns:
+    A json-encodable object that summarizes the contents of the output
+    directory for user-informational purposes.
+  """
   outdir_json = {}
   for filename in sorted(output_dir):
     _, ext = os.path.splitext(filename)
 
-    contents = output_dir[filename]
+    contents_bytes = output_dir[filename]
+    contents = None
+    content_type = 'binary'
 
-    # If a text file is small enough, just dump it
-    if ext in text_files and len(contents) < msize and safe(dumps, contents):
-      output = contents
+    if ext in _TEXT_EXTENSIONS:
+      content_type = 'text'
+      try:
+        contents = contents_bytes.decode('utf-8')
+      except UnicodeDecodeError:
+        pass
 
-    # Otherwise, just output some details
-    else:
+    if contents is None:
       output = {
-          'sha1': hashlib.sha1(contents).hexdigest(),
-          'size': len(contents),
+          'sha1': hashlib.sha1(contents_bytes).hexdigest(),
+          'size': len(contents_bytes),
+          'type': content_type,
       }
-      if ext in text_files:
-        hsize = int(msize/2)
-        output['type'] = 'text'
-        if safe(dumps, contents[:hsize]):
+    elif len(contents) < _MAX_FILE_CONTENT_SIZE:
+      output = contents
+    else:
+      hsize = _MAX_FILE_CONTENT_SIZE // 2
+      output = {
+          'sha1':
+              hashlib.sha1(contents_bytes).hexdigest(),
+          'size':
+              len(contents_bytes),
+          'type':
+              content_type,
           # Space in the name so it sorts a[ :x],a[-x:]
-          output['contents[ :%s]' % hsize] = contents[:hsize]
-        if safe(dumps, contents[-hsize:]):
-          output['contents[-%s:]' % hsize] = contents[-hsize:]
-      else:
-        output['type'] = 'binary'
+          'contents[ :%s]' % hsize:
+              contents[:hsize],
+          'contents[-%s:]' % hsize:
+              contents[-hsize:],
+      }
 
     outdir_json[filename] = output
 
@@ -117,7 +131,8 @@ def parse_time(value):
 def fmt_time(seconds):
   """Formats some number of seconds into a string. If this is < 60, it will
   render as `NNs`. If it's >= 60 seconds, it will render as 'Xm Xs'."""
-  seconds = round(seconds)
+  seconds = decimal.Decimal.from_float(seconds).to_integral_value(
+      decimal.ROUND_HALF_UP)
   mins, seconds = divmod(seconds, 60)
 
   out = ''
@@ -315,7 +330,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   @default_user.setter
   def default_user(self, value):
-    assert value is None or isinstance(value, basestring), value
+    assert value is None or isinstance(value, six.string_types), value
     self._default_user = value
 
   @property
@@ -334,8 +349,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     return ReadOnlyDict(self._default_dimensions)
 
   def set_default_dimension(self, key, value):
-    assert isinstance(key, basestring), key
-    assert isinstance(value, basestring) or value is None, value
+    assert isinstance(key, six.string_types), key
+    assert isinstance(value, six.string_types) or value is None, value
     if value is None:
       self._default_dimensions.pop(key, None)
     else:
@@ -353,8 +368,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     return ReadOnlyDict(self._default_env)
 
   def set_default_env(self, key, value):
-    assert isinstance(key, basestring), key
-    assert isinstance(value, basestring), value
+    assert isinstance(key, six.string_types), key
+    assert isinstance(value, six.string_types), value
     self._default_env[key] = value
 
   @property
@@ -758,7 +773,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             self._trigger_task_with_custom_script(task, shard_index, resultdb,
                                                   **kwargs))
 
-        for key, value in json_output['tasks'].iteritems():
+        for key, value in six.iteritems(json_output['tasks']):
           tasks[key] = value
 
       if len(tasks) != len(task.shard_indices):  # pragma: no cover
@@ -929,17 +944,17 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--hard-timeout', str(task_slice.execution_timeout_secs),
     ]
 
-    for name, value in sorted(task_slice.dimensions.iteritems()):
-      assert isinstance(value, basestring), \
+    for name, value in sorted(six.iteritems(task_slice.dimensions)):
+      assert isinstance(value, six.string_types), \
         'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
 
-    for name, value in sorted(task_slice.env_vars.iteritems()):
-      assert isinstance(value, basestring), \
+    for name, value in sorted(six.iteritems(task_slice.env_vars)):
+      assert isinstance(value, six.string_types), \
         'env var %s is not a string: %s' % (name, value)
       args.extend(['-env', '%s=%s' % (name, value)])
 
-    for name, relpath in sorted(task_slice.named_caches.iteritems()):
+    for name, relpath in sorted(six.iteritems(task_slice.named_caches)):
       args.extend(['-named-cache',
                    "%s=%s" % (name, relpath)])  # pragma: no cover
 
@@ -967,7 +982,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['-enable-resultdb'])  # pragma: no cover
 
     for path, package_list in sorted(
-        task_slice.cipd_ensure_file.packages.iteritems()):
+        six.iteritems(task_slice.cipd_ensure_file.packages)):
       for package_name, package_version in package_list:
         args.extend([
             '-cipd-package',
@@ -1130,7 +1145,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     slices = [req_slice]
     if task.optional_dimensions:
-      for exp, dimensions in sorted(task.optional_dimensions.iteritems()):
+      for exp, dimensions in sorted(six.iteritems(task.optional_dimensions)):
         current_slice = slices[0]
         current_slice = current_slice.with_dimensions(**dimensions)
         current_slice = current_slice.with_expiration_secs(exp)
@@ -1225,7 +1240,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         duration_sum += duration
         overhead_sum += overhead
         runtime_sum += runtime
-        if duration > max_duration.duration:
+        if max_duration.duration is None or duration > max_duration.duration:
           max_duration = ShardStats(
               duration=duration, index=i, runtime=runtime, overhead=overhead)
         if min_duration.index is None or duration < min_duration.duration:
@@ -1239,7 +1254,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_presentation.step_text += ('<br>%sending time: %s%s' % (
           prefix, fmt_time(max_pending[0]), suffix))
 
-    if max_duration.duration > 0:
+    if max_duration.duration is not None and max_duration.duration > 0:
       prefix = 'S' if len(shards) <= 1 else 'Max s'
       suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_duration.index
       step_presentation.step_text += (
@@ -1361,9 +1376,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.build_properties:
       build_properties = dict(task.build_properties)
       # exclude any recipe-engine-controlling properties (starting with $)
-      build_properties.update((k, v)
-                              for k, v in self.m.properties.thaw().iteritems()
-                              if not k.startswith('$'))
+      build_properties.update(
+          (k, v)
+          for k, v in six.iteritems(self.m.properties.thaw())
+          if not k.startswith('$'))
 
     allow_missing_json = False
     if kwargs.get('allow_missing_json', False):
@@ -1421,7 +1437,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     elif (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
       links = step_result.test_utils.gtest_results.raw.get('links', {})
-    for k, v in links.iteritems():
+    for k, v in six.iteritems(links):
       step_result.presentation.links[k] = v
 
     exception, has_valid_results = self._handle_summary_json(task, step_result)
@@ -1528,12 +1544,19 @@ class SwarmingApi(recipe_api.RecipeApi):
         2. How many attempts we've now made to get task data.
 
     Uses the 'get_states' endpoint on the swarming server."""
+    # TODO(gbeaty) Sorting can be removed when python2 support is removed
+    task_sets = sorted(task_sets)
     args = [
-        '--swarming-server', self.swarming_server,
-        '--swarming-py-path', self.m.swarming_client.path.join('swarming.py'),
-        '--output-json', self.m.json.output(),
-        '--input-json', self.m.json.input(data=task_sets),
-        '--attempts', attempts,
+        '--swarming-server',
+        self.swarming_server,
+        '--swarming-py-path',
+        self.m.swarming_client.path.join('swarming.py'),
+        '--output-json',
+        self.m.json.output(),
+        '--input-json',
+        self.m.json.input(task_sets),
+        '--attempts',
+        attempts,
         '--verbose',
     ]
 
@@ -1578,8 +1601,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Note that try-except block below will not mask the
     # recipe_api.StepFailure exception from the collect step above. Instead
     # it is being allowed to propagate after the results have been parsed.
-    outdir = filter_outdir(
-        self.m.json.dumps, step_result.raw_io.output_dir)
+    outdir = _summarize_outdir(step_result.raw_io.output_dir)
     outdir_json = self.m.json.dumps(outdir, indent=2)
     step_result.presentation.logs['outdir_json'] = (
         outdir_json.splitlines())
@@ -1743,7 +1765,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and task.task_to_retry:
         task_id = shard.get('task_id')
         dispatched_task_ids = set()
-        for task_dict in task._trigger_output['tasks'].itervalues():
+        for task_dict in six.itervalues(task._trigger_output['tasks']):
           dispatched_task_ids.add(task_dict['task_id'])
         should_show_shard = task_id in dispatched_task_ids
 
@@ -1856,7 +1878,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     target_platform = self.m.chromium.c.TARGET_PLATFORM
     swarming_dims = PER_TARGET_SWARMING_DIMS[target_platform]
 
-    for k, v in swarming_dims.iteritems():
+    for k, v in six.iteritems(swarming_dims):
       self.set_default_dimension(k, v)
 
     self.set_default_dimension('pool', 'chromium.tests')
@@ -2048,7 +2070,7 @@ class SwarmingTask(object):
     if trigger_output is None:
       trigger_output = self.trigger_output
     if trigger_output and trigger_output.get('tasks'):
-      for shard_dict in trigger_output['tasks'].itervalues():
+      for shard_dict in six.itervalues(trigger_output['tasks']):
         if shard_dict['shard_index'] == index:
           return "%s/task?id=%s" % (self._server, shard_dict['task_id'])
 
@@ -2059,7 +2081,7 @@ class SwarmingTask(object):
     """
     task_ids = []
     if self.trigger_output and self.trigger_output.get('tasks'):
-      for shard_dict in self.trigger_output['tasks'].itervalues():
+      for shard_dict in six.itervalues(self.trigger_output['tasks']):
         task_ids.append(shard_dict['task_id'])
     return task_ids
 
@@ -2070,7 +2092,7 @@ class SwarmingTask(object):
     """
     invocation_names = []
     if self.trigger_output and 'tasks' in self.trigger_output:
-      for shard_dict in self.trigger_output['tasks'].itervalues():
+      for shard_dict in six.itervalues(self.trigger_output['tasks']):
         inv_name = shard_dict.get('invocation')
         if inv_name:
           invocation_names.append(inv_name)

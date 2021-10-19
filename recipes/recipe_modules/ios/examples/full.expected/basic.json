@@ -6001,7 +6001,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"4\"], [\"7\"], [\"6\"], [\"1\"], [\"0\"], [\"3\"], [\"9\"], [\"2\"], [\"8\"], [\"5\"]]",
+      "[[\"0\"], [\"1\"], [\"2\"], [\"3\"], [\"4\"], [\"5\"], [\"6\"], [\"7\"], [\"8\"], [\"9\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -6026,34 +6026,34 @@
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"6\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"2\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"3\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"4\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"6\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"7\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"8\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ], @@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"9\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -6081,15 +6081,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 8.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/4\"]}",
+    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 0 stats",
+    "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/4\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -6105,7 +6105,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "4"
+      "0"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -6121,141 +6121,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 8.1) results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 7.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/7\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/7\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "7"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 7.1) results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (with patch).fake included test 2 (fake device 1 iOS 8.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/6\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/6\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "1000",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
-      "6"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks (with patch).fake included test 2 (fake device 1 iOS 8.1) results",
+    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 0 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -6349,15 +6215,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 0 stats",
-    "stdin": "{\"invocations\": [\"invocations/0\"]}",
+    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 2 stats",
+    "stdin": "{\"invocations\": [\"invocations/2\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/2\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -6373,7 +6239,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "0"
+      "2"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -6389,7 +6255,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 0 results",
+    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 2 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -6483,15 +6349,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake included test 2 (fake device 2 iOS 7.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/9\"]}",
+    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 8.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/4\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/9\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/4\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -6507,7 +6373,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "9"
+      "4"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -6523,7 +6389,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake included test 2 (fake device 2 iOS 7.1) results",
+    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 8.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -6550,15 +6416,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 2 stats",
-    "stdin": "{\"invocations\": [\"invocations/2\"]}",
+    "name": "collect tasks (with patch).fake included test 1 (fake device 1 iOS 8.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/5\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/2\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/5\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -6574,7 +6440,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "2"
+      "5"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -6590,7 +6456,141 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test 0 (fake device 0 iOS 11.0) shard 2 results",
+    "name": "collect tasks (with patch).fake included test 1 (fake device 1 iOS 8.1) results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks (with patch).fake included test 2 (fake device 1 iOS 8.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/6\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/6\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "6"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks (with patch).fake included test 2 (fake device 1 iOS 8.1) results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 7.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/7\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/7\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "7"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks (with patch).fake test 2 (fake device 2 iOS 7.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
@@ -6684,15 +6684,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake included test 1 (fake device 1 iOS 8.1) stats",
-    "stdin": "{\"invocations\": [\"invocations/5\"]}",
+    "name": "collect tasks (with patch).fake included test 2 (fake device 2 iOS 7.1) stats",
+    "stdin": "{\"invocations\": [\"invocations/9\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/5\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/9\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
@@ -6708,7 +6708,7 @@
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
-      "5"
+      "9"
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
@@ -6724,418 +6724,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake included test 1 (fake device 1 iOS 8.1) results",
+    "name": "collect tasks (with patch).fake included test 2 (fake device 2 iOS 7.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/2_tmp_1",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"4\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "fake test 2 (fake device 2 iOS 8.1) (with patch) on Mac-10.12",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.12'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
-      "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=4@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/5_tmp_1",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"7\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "fake test 2 (fake device 2 iOS 7.1) (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
-      "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=7@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/4_tmp_1",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"6\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "fake included test 2 (fake device 1 iOS 8.1) (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
-      "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=6@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/0_1_tmp_1",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
-      "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -7254,7 +6846,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/1_tmp_1",
+      "[CLEANUP]/0_1_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -7275,7 +6867,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"3\"}]}"
+      "{\"tasks\": [{\"task_id\": \"1\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -7294,7 +6886,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "fake test 1 (fake device 1 iOS 8.1) (with patch)",
+    "name": "fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -7339,109 +6931,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/7_tmp_1",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"9\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "fake included test 2 (fake device 2 iOS 7.1) (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
-      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
-      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
-      "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -7560,7 +7050,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/6_tmp_1",
+      "[CLEANUP]/1_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -7581,7 +7071,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"8\"}]}"
+      "{\"tasks\": [{\"task_id\": \"3\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -7600,7 +7090,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "fake included test 1 (fake device 2 iOS 7.1) (with patch)",
+    "name": "fake test 1 (fake device 1 iOS 8.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -7645,7 +7135,109 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/2_tmp_1",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"4\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "fake test 2 (fake device 2 iOS 8.1) (with patch) on Mac-10.12",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.12'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -7748,6 +7340,414 @@
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=5@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/4_tmp_1",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"6\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "fake included test 2 (fake device 1 iOS 8.1) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/5_tmp_1",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"7\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "fake test 2 (fake device 2 iOS 7.1) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=7@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/6_tmp_1",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"8\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "fake included test 1 (fake device 2 iOS 7.1) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=8@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/7_tmp_1",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"9\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "fake included test 2 (fake device 2 iOS 7.1) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=9@@@"
     ]
   },
   {
