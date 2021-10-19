@@ -7,7 +7,7 @@ from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
                                         StatusSuccess, StepCommandContains,
                                         StepTextContains)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'build',

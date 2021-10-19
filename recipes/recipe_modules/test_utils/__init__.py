@@ -9,6 +9,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'build',
     'chromium',
+    'py3_migration',
     'traceback',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
