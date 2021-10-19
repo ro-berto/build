@@ -10,6 +10,11 @@ details on the presubmit API built into git cl.
 
 PRESUBMIT_VERSION = '2.0.0'
 
+# A list of files that are _only_ compatible with python3. Tests for these are
+# only run under vpython3, and lints are performed with pylint 2.7. The
+# expectation is that these will become the defaults over time.
+PYTHON3_ONLY_FILES = ()
+
 
 def GetFilesToSkip(input_api):
   return list(input_api.DEFAULT_FILES_TO_SKIP) + [
@@ -36,31 +41,49 @@ def join(input_api, *args):
 
 def CheckPylintOnCommit(input_api, output_api):
   vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
-  infra_path = input_api.subprocess.check_output(
-      [vpython, 'scripts/common/env.py', 'print']).split()
+  infra_path = input_api.subprocess.check_output([
+      vpython, 'scripts/common/env.py', 'print'
+  ]).split()
   disabled_warnings = [
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
       'W0403',  # Relative import. TODO(crbug.com/1095510): remove this
   ]
-  return input_api.canned_checks.RunPylint(
+  extra_paths_list = infra_path + [
+      # Initially, a separate run was done for unit tests but now that
+      # pylint is fetched in memory with setuptools, it seems it caches
+      # sys.path so modifications to sys.path aren't kept.
+      join(input_api, 'recipes', 'unittests'),
+      join(input_api, 'tests'),
+  ]
+  lints = input_api.canned_checks.RunPylint(
       input_api,
       output_api,
-      files_to_skip=GetFilesToSkip(input_api),
+      files_to_skip=GetFilesToSkip(input_api) + list(PYTHON3_ONLY_FILES),
       disabled_warnings=disabled_warnings,
-      extra_paths_list=infra_path + [
-          # Initially, a separate run was done for unit tests but now that
-          # pylint is fetched in memory with setuptools, it seems it caches
-          # sys.path so modifications to sys.path aren't kept.
-          join(input_api, 'recipes', 'unittests'),
-          join(input_api, 'tests'),
-      ]
+      extra_paths_list=extra_paths_list,
   )
+  if PYTHON3_ONLY_FILES:
+    lints.extend(
+        input_api.canned_checks.RunPylint(
+            input_api,
+            output_api,
+            files_to_check=PYTHON3_ONLY_FILES,
+            disabled_warnings=disabled_warnings,
+            extra_paths_list=extra_paths_list,
+            version='2.7',
+        )
+    )
+  return lints
 
 
 def CheckTestsOnCommit(input_api, output_api):
   tests = []
 
+  test_suffix = '_test.py'
+  python3_only_tests = set(
+      join(input_api, f) for f in PYTHON3_ONLY_FILES if f.endswith(test_suffix)
+  )
   for dir_glob in (
       ('recipes', 'unittests'),
       ('scripts', 'common', 'unittests'),
@@ -69,10 +92,25 @@ def CheckTestsOnCommit(input_api, output_api):
       ('recipes', 'recipes', '*.resources'),
       ('recipes', 'recipes', '*', '*.resources'),
   ):
-    glob = dir_glob + ('*_test.py',)
-    test_files = input_api.glob(join(input_api, *glob))
+    glob = dir_glob + ('*' + test_suffix,)
+    test_files = [
+        x for x in input_api.glob(join(input_api, *glob))
+        if x not in python3_only_tests
+    ]
     tests.extend(
         input_api.canned_checks.GetUnitTests(input_api, output_api, test_files)
+    )
+
+  if python3_only_tests:
+    tests.extend(
+        input_api.canned_checks.GetUnitTests(
+            input_api,
+            output_api,
+            sorted(python3_only_tests),
+            run_on_python2=False,
+            run_on_python3=True,
+            skip_shebang_check=True,
+        )
     )
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
