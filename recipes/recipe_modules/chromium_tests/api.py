@@ -6,12 +6,11 @@ import collections
 import contextlib
 import itertools
 import re
+import six
 
 from six.moves.urllib.parse import urlencode
 
 from recipe_engine import recipe_api
-from recipe_engine.config_types import Path
-from recipe_engine.engine_types import FrozenDict
 
 from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as arch_prop
@@ -193,8 +192,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return memo[0]
 
     source_side_specs = {
-        group: self.read_source_side_spec(spec_file) for group, spec_file in
-        sorted(builder_config.source_side_spec_files.iteritems())
+        group: self.read_source_side_spec(spec_file)
+        for group, spec_file in sorted(
+            six.iteritems(builder_config.source_side_spec_files))
     }
     tests = {}
 
@@ -388,7 +388,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     android_version_code = '%d%03d%d0' % (int(
         version['BUILD']), int(version['PATCH']), arch_digit)
     if log_details:
-      self.log('version:%s' % version)
+      self.log('version:%s' % self.m.py3_migration.consistent_dict_str(version))
       self.log('android_version_name:%s' % android_version_name)
       self.log('android_version_code:%s' % android_version_code)
     return android_version_name, android_version_code
@@ -723,7 +723,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       to_trigger[luci_project].add(child_id.builder)
     return {
         luci_project: sorted(builders)
-        for luci_project, builders in to_trigger.iteritems()
+        for luci_project, builders in six.iteritems(to_trigger)
     }
 
   def _trigger_led_builds(self, to_trigger, properties):
@@ -735,7 +735,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         trigger.
     """
     property_args = []
-    for k, v in properties.iteritems():
+    for k, v in self.m.py3_migration.consistent_ordering(
+        six.iteritems(properties)):
       property_args.append('-p')
       property_args.append('{}={}'.format(k, self.m.json.dumps(v)))
 
@@ -747,7 +748,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # TODO(https://crbug.com/1140621) Use command-line option instead of
       # changing environment.
       with self.m.context(env={'SWARMING_TASK_ID': None}):
-        for child_project, builders in to_trigger.iteritems():
+        for child_project, builders in six.iteritems(to_trigger):
           for child_builder in builders:
             # We don't actually know the bucket for child builders because our
             # config objects don't store anything about the bucket, but we
@@ -840,7 +841,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       )
 
       scheduler_triggers = []
-      for project, builders in to_trigger.iteritems():
+      for project, builders in six.iteritems(to_trigger):
         scheduler_triggers.append((trigger, project, builders))
       self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
@@ -877,7 +878,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'parent_builder_group': builder_id.group,
         'parent_buildername': builder_id.builder,
     }
-    for name, value in update_step.presentation.properties.iteritems():
+    for name, value in six.iteritems(update_step.presentation.properties):
       if name.startswith('got_'):
         properties['parent_' + name] = value
     # Work around https://crbug.com/785462 in LUCI UI that ignores
@@ -1135,7 +1136,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             '/', self.m.path.sep) for f in affected_files)
     absolute_spec_files = set(
         str(self.m.chromium.c.source_side_spec_dir.join(f))
-        for f in builder_config.source_side_spec_files.itervalues())
+        for f in six.itervalues(builder_config.source_side_spec_files))
     affected_spec_files = absolute_spec_files & absolute_affected_files
     if affected_spec_files:
       reasons.append('test specs that are consumed by the builder '
@@ -1738,6 +1739,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure_limit = size_limit / 100
 
     current_size = 0
+    unrecoverable_test_suites = self.m.py3_migration.consistent_ordering(
+        unrecoverable_test_suites, key=lambda suite: suite.name)
     for index, suite in enumerate(unrecoverable_test_suites):
       test_suite_header = '**%s** failed.' % suite.name
 
@@ -1775,7 +1778,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       test_summary_lines.append(test_suite_header)
 
-      for index, failure in enumerate(deterministic_failures):
+      for index, failure in enumerate(
+          self.m.py3_migration.consistent_ordering(deterministic_failures)):
         if index >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
           hint = '- ...%d more failure(s) (%d total)...' % (failure_size -
@@ -1808,7 +1812,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               '/', self.m.path.sep) for f in affected_files)
       absolute_spec_files = set(
           str(self.m.chromium.c.source_side_spec_dir.join(f))
-          for f in builder_config.source_side_spec_files.itervalues())
+          for f in six.itervalues(builder_config.source_side_spec_files))
       affected_spec_files = absolute_spec_files & absolute_affected_files
       # If any of the spec files that we used for determining the targets/tests
       # is affected, skip doing analysis, just build/test all of them
@@ -1822,7 +1826,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_result = self.m.step('analyze', [])
         text = ['skipping analyze'] + skip_analysis_reasons
         step_result.presentation.step_text = '\n* '.join(text)
-        for log, contents in sorted(skip_analysis_logs.iteritems()):
+        for log, contents in sorted(six.iteritems(skip_analysis_logs)):
           step_result.presentation.logs[log] = contents
         return test_targets, compile_targets
 

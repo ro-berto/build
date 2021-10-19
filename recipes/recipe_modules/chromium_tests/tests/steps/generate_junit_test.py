@@ -6,7 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium_tests',
@@ -130,18 +130,16 @@ def GenTests(api):
 
   yield api.test(
       'junit-with-rdb-by-default',
-      ci_build(
-          test_spec={
-              'foo': 'bar',
-              'test': 'junit_test',
-              'args': ['--foo=bar'],
-          },
-      ),
+      ci_build(test_spec={
+          'foo': 'bar',
+          'test': 'junit_test',
+          'args': ['--foo=bar'],
+      }),
       api.post_process(post_process.MustRun, 'junit_test'),
       api.override_step_data(
           'junit_test',
           api.test_utils.canned_gtest_output(True),
-          stderr=api.raw_io.output(
+          stderr=api.raw_io.output_text(
               'rdb-stream: included "invocations/test-invocation"'
               ' in "build-invocation"')),
       api.post_process(post_process.StepCommandContains, 'junit_test', [

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -199,7 +199,7 @@ def GenTests(api):
       ),
       api.override_step_data(
           'compile confirm no-op',
-          stdout=api.raw_io.output("ninja explain: chrome is dirty\n")),
+          stdout=api.raw_io.output_text("ninja explain: chrome is dirty\n")),
   )
 
   yield api.test(

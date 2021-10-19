@@ -90,7 +90,7 @@ class TestResults(object):
 
     return canonical.result_format(
         valid=valid,
-        failures=self.unexpected_failures.keys(),
+        failures=list(self.unexpected_failures),
         total_tests_ran=self.total_test_runs,
         pass_fail_counts=self.pass_fail_counts,
         findit_notrun=self.findit_notrun)

@@ -6,7 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'build',
@@ -86,7 +86,7 @@ def GenTests(api):
               'valid': True,
               'failures': ['']
           }),
-          stderr=api.raw_io.output(
+          stderr=api.raw_io.output_text(
               'rdb-stream: included "test-invocation" in "build-invocation"')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

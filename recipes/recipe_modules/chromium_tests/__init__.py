@@ -4,7 +4,7 @@
 
 from PB.recipe_modules.build.chromium_tests import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'adb',
@@ -29,6 +29,7 @@ DEPS = [
     'perf_dashboard',
     'pgo',
     'puppet_service_account',
+    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/cas',
     'recipe_engine/commit_position',

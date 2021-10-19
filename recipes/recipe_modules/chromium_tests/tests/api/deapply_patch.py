@@ -3,8 +3,9 @@
 # found in the LICENSE file.
 
 import collections
+import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -33,7 +34,7 @@ def GenTests(api):
     def step_filter(check, steps):
       del check
       return collections.OrderedDict([(k, v)
-                                      for k, v in steps.iteritems()
+                                      for k, v in six.iteritems(steps)
                                       if not k.startswith('setup steps')])
 
     return api.post_process(step_filter)

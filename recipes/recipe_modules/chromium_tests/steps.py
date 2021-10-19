@@ -36,15 +36,14 @@ import contextlib
 import copy
 import hashlib
 import re
+import six
 import string
 import struct
-import urllib
-import six.moves.urllib_parse as urlparse
+from six.moves import urllib
 
 from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
 from recipe_engine.engine_types import freeze
-from recipe_engine.engine_types import FrozenDict
 
 from .resultdb import ResultDB
 
@@ -597,7 +596,7 @@ class Test(object):
     """Returns a set of text to use to display in the test results summary."""
     return {
         '%s: crbug.com/%s' % (test_name, issue_id)
-        for test_name, issue_id in self._known_flaky_failures_map.iteritems()
+        for test_name, issue_id in six.iteritems(self._known_flaky_failures_map)
     }
 
   def add_known_flaky_failure(self, test_name, monorail_issue):
@@ -909,7 +908,7 @@ class Test(object):
 
     pass_fail_counts = self.pass_fail_counts('without patch')
     ignored_failures = set()
-    for test_name, results in pass_fail_counts.iteritems():
+    for test_name, results in six.iteritems(pass_fail_counts):
       # If a test fails at least once, then it's flaky on tip of tree and we
       # should ignore it.
       if results['fail_count'] > 0:
@@ -933,7 +932,7 @@ class Test(object):
 
     passing_tests = set()
     failing_tests = set()
-    for test_name, result in (self.pass_fail_counts(suffix).iteritems()):
+    for test_name, result in six.iteritems(self.pass_fail_counts(suffix)):
       if result['pass_count'] > 0:
         passing_tests.add(test_name)
       else:
@@ -1241,7 +1240,8 @@ class ExperimentalTestSpec(TestWrapperSpec):
         test_spec.name,
     ]
 
-    digest = hashlib.sha1(''.join(str(c) for c in criteria)).digest()
+    digest = hashlib.sha1(''.join(
+        str(c) for c in criteria).encode('utf-8')).digest()
     short = struct.unpack_from('<H', digest)[0]
     return experiment_percentage * 0xffff >= short * 100
 
@@ -1468,7 +1468,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
               ['run', '--output', api.json.output()] + run_args),
         raise_on_failure=False,
         resultdb=resultdb if resultdb else None,
-        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         venv=True,  # Runs the test through vpython.
         step_test_data=lambda: api.json.test_api.output({
             'valid': True,
@@ -1666,7 +1666,7 @@ class LocalGTestTest(LocalTest):
 
     step_test_data = lambda: (
         api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
-        stream_output(
+        stream_output_text(
             'rdb-stream: included "invocations/some-inv-name" in '
             '"invocations/parent-inv-name"', 'stderr'))
 
@@ -1692,7 +1692,7 @@ class LocalGTestTest(LocalTest):
         self.target_name,
         revision=self.spec.revision,
         webkit_revision=self.spec.webkit_revision,
-        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         raise_on_failure=False,
         **kwargs)
 
@@ -1989,7 +1989,7 @@ class JSONResultsHandler(ResultsHandler):
       url_artifacts = {}
       for artifact_type, artifact_paths in sub_results['artifacts'].items():
         for artifact_path in artifact_paths:
-          parse_result = urlparse.urlparse(artifact_path)
+          parse_result = urllib.parse.urlparse(artifact_path)
           if parse_result.scheme == 'https' and parse_result.netloc:
             url_artifacts.setdefault(artifact_type, []).append(artifact_path)
       return {name_so_far: url_artifacts} if url_artifacts else {}
@@ -2086,7 +2086,7 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   sanitized_buildername = re.sub('[ .()]', '_', buildername)
   base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
           (sanitized_buildername, buildnumber))
-  base += '/' + urllib.quote(step_name)
+  base += '/' + urllib.parse.quote(step_name)
 
   archive_result.presentation.links['layout_test_results'] = (
       base + '/layout-test-results/results.html')
@@ -2839,7 +2839,7 @@ class LocalIsolatedScriptTest(LocalTest):
           },
           # The results of the script will be isolated, and the .isolate will be
           # dumped to stdout.
-          'stdout': api.raw_io.output(),
+          'stdout': api.raw_io.output_text(),
       })
 
     resultdb = self.prep_local_rdb(api, temp=temp)
@@ -2852,7 +2852,7 @@ class LocalIsolatedScriptTest(LocalTest):
         step_test_data=step_test_data,
         raise_on_failure=False,
         resultdb=resultdb if resultdb else None,
-        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         **kwargs)
 
     status = step_result.presentation.status
@@ -3044,7 +3044,7 @@ class AndroidJunitTest(LocalTest):
         json_results_file=json_results_file,
         step_test_data=(
             lambda: api.test_utils.test_api.canned_gtest_output(False)),
-        stderr=api.raw_io.output(add_output_log=True, name='stderr'),
+        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         resultdb=self.prep_local_rdb(api))
 
   @recipe_api.composite_step

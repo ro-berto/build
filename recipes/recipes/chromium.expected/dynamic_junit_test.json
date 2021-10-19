@@ -1291,7 +1291,7 @@
     },
     "name": "base_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output[stderr]@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

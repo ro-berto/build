@@ -11,7 +11,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',

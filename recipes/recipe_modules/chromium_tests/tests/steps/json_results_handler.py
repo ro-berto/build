@@ -2,9 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
+    'py3_migration',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -29,7 +30,8 @@ def RunSteps(api):
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
       'valid: %r' % validated_results['valid'],
-      'unexpected_failures: %r' % validated_results['failures'],
+      'unexpected_failures: %r' %
+      api.py3_migration.consistent_ordering(validated_results['failures']),
   ]
 
 

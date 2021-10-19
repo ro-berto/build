@@ -4,6 +4,7 @@
 
 import attr
 import collections
+import six
 import string
 import textwrap
 
@@ -129,7 +130,7 @@ def _normalize_optional_dimensions(optional_dimensions):
     return optional_dimensions
 
   normalized = {}
-  for expiration, dimensions_sequence in optional_dimensions.iteritems():
+  for expiration, dimensions_sequence in six.iteritems(optional_dimensions):
     if isinstance(dimensions_sequence, collections.Mapping):
       dimensions = dimensions_sequence
     else:
@@ -362,7 +363,7 @@ def generate_gtests(chromium_tests_api,
   del scripts_compile_targets_fn
 
   def canonicalize_test(test):
-    if isinstance(test, basestring):
+    if isinstance(test, six.string_types):
       canonical_test = {'test': test}
     else:
       canonical_test = dict(test)

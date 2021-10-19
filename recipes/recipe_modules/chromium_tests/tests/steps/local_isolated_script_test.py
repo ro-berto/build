@@ -2,11 +2,18 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+import six
+
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
+
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
     'isolate',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -18,10 +25,6 @@ DEPS = [
     'recipe_engine/step',
     'test_utils',
 ]
-
-from recipe_engine import post_process
-
-from RECIPE_MODULES.build.chromium_tests import steps
 
 
 def RunSteps(api):
@@ -70,20 +73,13 @@ def RunSteps(api):
         'uses_isolate: %r' % test.uses_isolate,
     ]
 
-    if api.properties.get('log_pass_fail_counts'):
-      api.step.active_result.presentation.logs['details'] = [
-        'pass_fail_counts: %r' % test.pass_fail_counts('')
-      ]
+    if 'expected_pass_fail_counts' in api.properties:
+      api.assertions.assertEqual(
+          test.pass_fail_counts(''),
+          api.properties['expected_pass_fail_counts'])
 
 
 def GenTests(api):
-  def verify_log_fields(check, step_odict, expected_fields):
-    """Verifies fields in details log are with expected values."""
-    step = step_odict['details']
-    for field in expected_fields.iteritems():
-      expected_log = '%s: %r' % field
-      check(expected_log in step.logs['details'])
-
   def verify_isolate_flag(check, step_odict):
     step = step_odict[
         'base_unittests']
@@ -135,7 +131,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'log_pass_fail_counts',
+      'pass_fail_counts',
       api.chromium.ci_build(
           builder_group='test_group',
           builder='test_buildername',
@@ -144,13 +140,13 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          log_pass_fail_counts=True),
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
+          expected_pass_fail_counts={},
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'log_pass_fail_counts_invalid_results',
+      'pass_fail_counts_invalid_results',
       api.chromium.ci_build(
           builder_group='test_group',
           builder='test_buildername',
@@ -159,11 +155,11 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          log_pass_fail_counts=True),
+          expected_pass_fail_counts={},
+      ),
       api.override_step_data(
           'base_unittests',
           api.test_utils.m.json.output({'interrupted': True}, 255)),
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
       api.post_process(post_process.DropExpectation),
   )
 

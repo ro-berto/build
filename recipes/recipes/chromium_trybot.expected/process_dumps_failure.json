@@ -1605,7 +1605,7 @@
     },
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@"
     ]
   },
   {

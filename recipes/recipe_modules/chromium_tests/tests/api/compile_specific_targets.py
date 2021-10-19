@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import six
 
 from recipe_engine import post_process
 from recipe_engine.post_process import Filter
@@ -10,7 +11,7 @@ from recipe_engine.post_process import Filter
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -68,7 +69,7 @@ def GenTests(api):
     def step_filter(check, step_odict):
       del check
       return collections.OrderedDict([(k, v)
-                                      for k, v in step_odict.iteritems()
+                                      for k, v in six.iteritems(step_odict)
                                       if not k.startswith('setup steps')])
 
     return api.post_process(step_filter)
@@ -88,7 +89,7 @@ def GenTests(api):
           builder='Linux Builder (j-500) (reclient)'),
       api.properties(swarming_gtest=True),
       api.step_data('lookup GN args',
-                    api.raw_io.stream_output('use_remoteexec = true\n')),
+                    api.raw_io.stream_output_text('use_remoteexec = true\n')),
       # Check that we do use reclient as the distributed compiler
       api.post_process(post_process.MustRun,
                        'preprocess for reclient.start reproxy via bootstrap'),

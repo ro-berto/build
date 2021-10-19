@@ -1767,7 +1767,7 @@
     "name": "test r0.gl_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output[stderr]@@@"
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@"
     ]
   },
   {

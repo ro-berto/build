@@ -371,11 +371,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self._validate_test_types()
     except Exception as e:
       if self._is_per_cl_coverage:
-        self.m.python.succeeding_step('skip processing because of an exception '
-            'when validating test types to process: %s' % e.message, '')
+        self.m.python.succeeding_step(
+            'skip processing because of an exception '
+            'when validating test types to process: %s' % e, '')
       else:
-        self.m.python.failing_step('Exception when validating test types to '
-            'process: %s' % e.message, '')
+        self.m.python.failing_step(
+            'Exception when validating test types to '
+            'process: %s' % e, '')
       return
 
     if self._is_per_cl_coverage:

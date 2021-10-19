@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'build',
@@ -51,8 +51,9 @@ def RunSteps(api):
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: %r' % test.compile_targets(),
-        'step_metadata: %r' % test.step_metadata('with patch'),
-        'pass_fail_counts: %r' % test.pass_fail_counts('with patch'),
+        'step_metadata: %s' % api.json.dumps(test.step_metadata('with patch')),
+        'pass_fail_counts: %s' %
+        api.json.dumps(test.pass_fail_counts('with patch')),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 

@@ -2,7 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+import six
+
+from six.moves import range  # pylint: disable=redefined-builtin
+
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
+
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -21,13 +29,6 @@ DEPS = [
     'test_results',
     'test_utils',
 ]
-
-from six.moves import range  # pylint: disable=redefined-builtin
-
-from recipe_engine import post_process
-
-from RECIPE_MODULES.build.chromium_tests import steps
-
 
 def RunSteps(api):
   api.chromium.set_config(
@@ -53,14 +54,14 @@ def RunSteps(api):
 def GenTests(api):
   def verify_log_fields(check, step_odict, expected_logs):
     step = step_odict['base_unittests']
-    for log_title, expected_lines in expected_logs.iteritems():
+    for log_title, expected_lines in six.iteritems(expected_logs):
       check(log_title in step.logs)
       for line in expected_lines:
         check(line in step.logs[log_title])
 
   def verify_link_fields(check, step_odict, expected_fields):
     step = step_odict['base_unittests']
-    for link_title, url in expected_fields.iteritems():
+    for link_title, url in six.iteritems(expected_fields):
       check(link_title in step.links)
       check(url == step.links[link_title])
 

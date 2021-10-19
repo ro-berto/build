@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -11,6 +11,8 @@ DEPS = [
     'depot_tools/bot_update',
     'isolate',
     'profiles',
+    'py3_migration',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
@@ -58,22 +60,20 @@ def RunSteps(api):
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-      'compile_targets: %r' % test.compile_targets(),
-      'uses_local_devices: %r' % test.uses_local_devices,
-      'uses_isolate: %r' % test.uses_isolate,
-      'pass_fail_counts: %r' % test.pass_fail_counts(suffix=''),
+        'compile_targets: %r' % test.compile_targets(),
+        'uses_local_devices: %r' % test.uses_local_devices,
+        'uses_isolate: %r' % test.uses_isolate,
+        'pass_fail_counts: %s' %
+        api.py3_migration.consistent_dict_str(test.pass_fail_counts(suffix='')),
     ]
 
+    if 'expected_pass_fail_counts' in api.properties:
+      api.assertions.assertEqual(
+          test.pass_fail_counts(suffix=''),
+          api.properties['expected_pass_fail_counts'])
 
 
 def GenTests(api):
-
-  def verify_log_fields(check, step_odict, expected_fields):
-    """Verifies fields in details log are with expected values."""
-    step = step_odict['details']
-    for field in expected_fields.iteritems():
-      expected_log = '%s: %r' % field
-      check(expected_log in step.logs['details'])
 
   yield api.test(
       'basic',
@@ -152,14 +152,16 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-      }),
+      api.properties(
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
+          },
+          expected_pass_fail_counts={},
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(None, 255))),
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
       api.post_process(post_process.DropExpectation),
   )
 

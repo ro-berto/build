@@ -3,11 +3,13 @@
 # found in the LICENSE file.
 
 import collections
+import six
+
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -17,6 +19,7 @@ DEPS = [
     'depot_tools/bot_update',
     'isolate',
     'profiles',
+    'recipe_engine/assertions',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -102,6 +105,15 @@ def RunSteps(api):
       result.presentation.logs['details'].append(
           'has_valid_results: %r' % test.has_valid_results('with patch'))
 
+    if 'expected_has_valid_results' in api.properties:
+      api.assertions.assertEqual(
+          test.has_valid_results('with patch'),
+          api.properties['expected_has_valid_results'])
+    if 'expected_pass_fail_counts' in api.properties:
+      api.assertions.assertEqual(
+          test.pass_fail_counts(suffix='with patch'),
+          api.properties['expected_pass_fail_counts'])
+
 
 def GenTests(api):
 
@@ -110,17 +122,10 @@ def GenTests(api):
     def step_filter(check, step_odict):
       del check
       return collections.OrderedDict([(k, v)
-                                      for k, v in step_odict.iteritems()
+                                      for k, v in six.iteritems(step_odict)
                                       if not k.startswith('setup steps')])
 
     return api.post_process(step_filter)
-
-  def verify_log_fields(check, step_odict, expected_fields):
-    """Verifies fields in details log are with expected values."""
-    step = step_odict['details']
-    for field in expected_fields.iteritems():
-      expected_log = '%s: %r' % field
-      check(expected_log in step.logs['details'])
 
   yield api.test(
       'basic',
@@ -144,7 +149,9 @@ def GenTests(api):
           swarm_hashes={
               'blink_web_tests':
                   'ffffffffffffffffffffffffffffffffffffffff/size',
-          },),
+          },
+          expected_has_valid_results=False,
+      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -152,7 +159,6 @@ def GenTests(api):
                   'missing_shards': [0],
               }, 0),
               shards=1)),
-      api.post_process(verify_log_fields, {'has_valid_results': False}),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -302,32 +308,30 @@ def GenTests(api):
                   'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
-          repeat_count=20),
+          repeat_count=20,
+          expected_pass_fail_counts={
+              'test1.Test1': {
+                  'pass_count': 0,
+                  'fail_count': 1
+              },
+              'test1.Test2': {
+                  'pass_count': 1,
+                  'fail_count': 0
+              },
+              'test1.Test3': {
+                  'pass_count': 1,
+                  'fail_count': 0
+              },
+              'test1.Test4': {
+                  'pass_count': 1,
+                  'fail_count': 0
+              }
+          },
+      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               isolated_script_output, failure=True)),
-      api.post_process(
-          verify_log_fields, {
-              'pass_fail_counts': {
-                  'test1.Test1': {
-                      'pass_count': 0,
-                      'fail_count': 1
-                  },
-                  'test1.Test2': {
-                      'pass_count': 1,
-                      'fail_count': 0
-                  },
-                  'test1.Test3': {
-                      'pass_count': 1,
-                      'fail_count': 0
-                  },
-                  'test1.Test4': {
-                      'pass_count': 1,
-                      'fail_count': 0
-                  }
-              }
-          }),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -343,28 +347,26 @@ def GenTests(api):
                   'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
-          repeat_count=20),
-      api.post_process(
-          verify_log_fields, {
-              'pass_fail_counts': {
-                  'test_common.Test1': {
-                      'pass_count': 1,
-                      'fail_count': 2
-                  },
-                  'test1.Test1': {
-                      'pass_count': 1,
-                      'fail_count': 0
-                  },
-                  'test1.Test2': {
-                      'pass_count': 1,
-                      'fail_count': 0
-                  },
-                  'test1.Test3': {
-                      'pass_count': 0,
-                      'fail_count': 0
-                  }
+          repeat_count=20,
+          expected_pass_fail_counts={
+              'test_common.Test1': {
+                  'pass_count': 1,
+                  'fail_count': 2
+              },
+              'test1.Test1': {
+                  'pass_count': 1,
+                  'fail_count': 0
+              },
+              'test1.Test2': {
+                  'pass_count': 1,
+                  'fail_count': 0
+              },
+              'test1.Test3': {
+                  'pass_count': 0,
+                  'fail_count': 0
               }
-          }),
+          },
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -827,12 +829,13 @@ def GenTests(api):
                   'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           test_filter=['test1', 'test2'],
-          repeat_count=20),
+          repeat_count=20,
+          expected_pass_fail_counts={},
+      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(None, 255), shards=2)),
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
       api.post_process(post_process.DropExpectation),
   )
 
