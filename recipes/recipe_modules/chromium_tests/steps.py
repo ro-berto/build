@@ -2636,7 +2636,10 @@ class SwarmingGTestTest(SwarmingTest):
 
   def create_task(self, api, suffix, cas_input_root):
     json_override = None
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+    # TODO(crbug.com/1255217): Remove this android exception when logcats and
+    # tombstones are in resultdb.
+    if (self.spec.resultdb.use_rdb_results_for_all_decisions and
+        api.chromium.c.TARGET_PLATFORM != 'android'):
       json_override = api.path.mkstemp()
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
@@ -2676,7 +2679,12 @@ class SwarmingGTestTest(SwarmingTest):
       if gtest_results and gtest_results.raw:
         raw_json_data = api.json.input(gtest_results.raw)
     else:
-      raw_json_data = self._tasks[suffix].collect_json_output_override
+      # TODO(crbug.com/1255217): Remove this android exception when logcats and
+      # tombstones are in resultdb.
+      if api.chromium.c.TARGET_PLATFORM == 'android':
+        raw_json_data = api.json.input(step_result.json.output)
+      else:
+        raw_json_data = self._tasks[suffix].collect_json_output_override
 
     if raw_json_data:
       chrome_revision_cp = api.bot_update.last_returned_properties.get(

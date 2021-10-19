@@ -28,7 +28,10 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 # TODO(crbug.com/1135718): Can remove this property and its associated test
 # after RDB query logic is re-ordered.
-PROPERTIES = {'test_with_new_exit_code': Property(default=None, kind=str)}
+PROPERTIES = {
+    'target_platform': Property(default=None, kind=str),
+    'test_with_new_exit_code': Property(default=None, kind=str),
+}
 
 
 def RunSteps(api, test_with_new_exit_code):
@@ -240,5 +243,23 @@ def GenTests(api):
               api.test_utils.rdb_results(skipped_suites=['swarming_gtest']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'android_for_crbug_1255217',
+      common_test_data(),
+      api.properties(target_platform='android'),
+      api.override_step_data(
+          'swarming_gtest (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.json.output({'links': {
+                  'result_details': 'some.link.com'
+              }}),
+              failure=False)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: check(steps[
+          'swarming_gtest (with patch)'].links['result_details'] ==
+                                                'some.link.com')),
       api.post_process(post_process.DropExpectation),
   )
