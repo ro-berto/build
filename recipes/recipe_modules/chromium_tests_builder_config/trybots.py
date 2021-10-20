@@ -368,11 +368,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='Cast Android (dbg)',
             ),
-        'linux_android_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Lollipop Phone Tester',
-            ),
         'android_unswarmed_pixel_aosp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',

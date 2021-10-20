@@ -803,14 +803,14 @@ def GenTests(api):
       'dimensions_android',
       api.chromium.ci_build(
           builder_group='chromium.android',
-          builder='Lollipop Phone Tester',
+          builder='Android arm64 Builder (dbg)',
       ),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           },
           dimensions={
-              'device_type': 'hammerhead',
+              'device_type': 'bullhead',
               'device_os': 'LOL123',
               'os': 'Android',
           }),

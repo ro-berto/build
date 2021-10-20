@@ -121,43 +121,6 @@ SPEC = {
             android_config='main_builder_mb',
             simulation_platform='linux',
         ),
-    'Lollipop Phone Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Lollipop Tablet Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
     'Marshmallow Phone Tester (rel)':
         _chromium_android_spec(
             chromium_config='android',
