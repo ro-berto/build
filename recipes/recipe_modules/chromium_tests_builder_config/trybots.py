@@ -958,6 +958,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Linux ASan LSan Tests (1)',
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
+        'linux_chromium_asan_rel_ng-orchestrator':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux ASan LSan Builder',
+                tester='Linux ASan LSan Tests (1)',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
         'linux_chromium_asan_rel_ng_rts':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -1017,6 +1024,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Linux MSan Tests',
             ),
         'linux_chromium_tsan_rel_ng':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux TSan Builder',
+                tester='Linux TSan Tests',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
+        'linux_chromium_tsan_rel_ng-orchestrator':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='Linux TSan Builder',
