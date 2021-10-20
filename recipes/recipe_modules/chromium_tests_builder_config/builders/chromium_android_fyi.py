@@ -263,7 +263,7 @@ SPEC = {
             simulation_platform='linux',
         ),
     'android-annotator-rel':
-        builder_spec.BuilderSpec.create(
+        _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
