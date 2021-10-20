@@ -35,7 +35,7 @@ PLATFORMS = [
     'mac-amd64',
     'windows-amd64',
 ]
-REJECTION_DATA_WINDOW = datetime.timedelta(weeks=12)
+REJECTION_DATA_WINDOW = datetime.timedelta(weeks=10)
 TEST_DURATION_DATA_WINDOW = datetime.timedelta(weeks=1)
 # Processing 10% of 1w-worth test durations takes 7h on a 32-core bot.
 TEST_DURATION_DATA_PERCENTAGE = 1
