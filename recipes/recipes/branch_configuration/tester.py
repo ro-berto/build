@@ -26,6 +26,8 @@ branch types with the change under test. See tester.proto for details on
 the scripts.
 """
 
+import six
+
 from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -34,7 +36,7 @@ from PB.recipes.build.branch_configuration import tester as tester_pb
 
 PROPERTIES = tester_pb.InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'depot_tools/bot_update',
@@ -60,7 +62,7 @@ def _validate_properties(properties):
       else:
         element_map.setdefault(element, []).append(i)
 
-    for element, indices in element_map.iteritems():
+    for element, indices in six.iteritems(element_map):
       if len(indices) > 1:
         errors.append("multiple occurrences of '{}' in {}: {!r}".format(
             element, field_name, indices))
@@ -84,7 +86,7 @@ def _validate_properties(properties):
         validate_repeated_field('branch_configs[{}].branch_types'.format(i),
                                 config.branch_types)
 
-    for config, indices in config_map.iteritems():
+    for config, indices in six.iteritems(config_map):
       if len(indices) > 1:
         errors.append(
             "multiple configs named '{}' in branch_configs: {!r}".format(
