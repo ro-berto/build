@@ -279,6 +279,9 @@ SPEC = {
             chromium_config='chromium_linux_ubsan',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -296,6 +299,9 @@ SPEC = {
             chromium_config='chromium_linux_ubsan_vptr',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
