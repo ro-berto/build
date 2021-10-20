@@ -243,6 +243,9 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -258,6 +261,9 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
