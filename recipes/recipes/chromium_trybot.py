@@ -142,15 +142,20 @@ def GenTests(api):
   )
 
   yield api.test(
-      'invalid_results',
+      'local_gtest_with_invalid_results',
       api.chromium_tests_builder_config.try_build(),
       base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(),
-      api.override_step_data('base_unittests (with patch)',
-                             canned_test(passing=False,
-                                         legacy_annotation=True)),
-      api.override_step_data('base_unittests (without patch)',
-                             api.legacy_annotation.failure_step),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          canned_test(passing=False, legacy_annotation=True),
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.legacy_annotation.failure_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
 
   yield api.test(
@@ -432,9 +437,11 @@ def GenTests(api):
           },
       }),
       api.filter.suppress_analyze(),
-      api.override_step_data('base_unittests (with patch)',
-                             canned_test(passing=False,
-                                         legacy_annotation=True)),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          canned_test(passing=False, legacy_annotation=True),
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
       api.step_data('compile (without patch)',
                     api.legacy_annotation.infra_failure_step),
   )

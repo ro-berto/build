@@ -14,6 +14,7 @@ DEPS = [
     'recipe_engine/legacy_annotation',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'test_results',
 ]
 
@@ -40,8 +41,11 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername', bot_id='test_bot_id',
           buildnumber=123),
-      api.override_step_data('base_unittests',
-                             api.legacy_annotation.failure_step),
+      api.override_step_data(
+          'base_unittests',
+          api.legacy_annotation.failure_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
 
   yield api.test(
@@ -56,8 +60,11 @@ def GenTests(api):
           bot_id='test_bot_id',
           buildnumber=123,
           serialize_tests=True),
-      api.override_step_data('base_unittests',
-                             api.legacy_annotation.failure_step),
+      api.override_step_data(
+          'base_unittests',
+          api.legacy_annotation.failure_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
   yield api.test(
       'retry_failed_shards',
@@ -71,6 +78,9 @@ def GenTests(api):
           bot_id='test_bot_id',
           buildnumber=123,
           retry_failed_shards=True),
-      api.override_step_data('base_unittests',
-                             api.legacy_annotation.failure_step),
+      api.override_step_data(
+          'base_unittests',
+          api.legacy_annotation.failure_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )

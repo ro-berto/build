@@ -711,8 +711,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       extra_new_retriable_names = new_retriable_names - old_retriable_names
       discrepancy = self.m.python.succeeding_step(
           'Migration mismatch (retriable suites, informational)',
-          set_diff_string_unformatted.format(extra_old_retriable_names,
-                                             extra_new_retriable_names))
+          set_diff_string_unformatted.format(list(extra_old_retriable_names),
+                                             list(extra_new_retriable_names)))
       discrepancy.presentation.status = self.m.step.WARNING
     return old_retriables
 
@@ -1216,9 +1216,8 @@ class TestGroup(object):
 
     invocation_names = test.get_invocation_names(suffix)
     if not invocation_names:
-      # TODO(crbug.com/1135718): Make failure to fetch RDB results fatal.
       res = RDBPerSuiteResults.create({},
-                                      failure_on_exit=False,
+                                      failure_on_exit=True,
                                       total_tests_ran=0,
                                       suite_name=test.canonical_name)
     else:

@@ -24,6 +24,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -161,9 +162,7 @@ def GenTests(api):
   )
   yield api.test(
       'flakiness_non-swarming_tests',
-      base({
-          'gl_tests': ['Test.One']
-      }, 'mac', 'Mac10.13 Tests'),
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -181,7 +180,9 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One'])),
-          api.legacy_annotation.success_step),
+          api.legacy_annotation.success_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
   yield api.test(
       'record_infra_failure',

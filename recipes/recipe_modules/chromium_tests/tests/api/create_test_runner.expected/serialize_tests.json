@@ -62,6 +62,7 @@
     },
     "name": "base_unittests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/test-inv\" in \"build-inv\"@@@",
       "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
       "@@@STEP_FAILURE@@@"
     ]
@@ -103,13 +104,76 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_unittests stats",
+    "stdin": "{\"invocations\": [\"invocations/test-inv\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-inv\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "test-inv"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_unittests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
@@ -119,7 +183,9 @@
       "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ]@@@",
       "@@@STEP_LOG_LINE@serialzed results@}@@@",
       "@@@STEP_LOG_END@serialzed results@@@"
     ]

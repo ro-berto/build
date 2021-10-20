@@ -198,7 +198,9 @@ def GenTests(api):
       api.override_step_data(
           'basic_isolate_tests',
           api.chromium_swarming.canned_summary_output(
-              api.json.output({'version': 2}))),
+              api.json.output({'version': 2})),
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
   yield api.test(
       'failed_json_test',
@@ -220,5 +222,7 @@ def GenTests(api):
               swarming=False,
               isolated_script_passing=False,
               use_json_test_format=True),
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"'),
           retcode=0),
   )

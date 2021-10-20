@@ -1379,8 +1379,72 @@
       "@@@STEP_LOG_LINE@json.output@  \"version\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/test-inv\" in \"build-inv\"@@@",
       "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
       "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "angle:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "basic_isolate_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/test-inv\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-inv\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "test-inv"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "angle:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "basic_isolate_tests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

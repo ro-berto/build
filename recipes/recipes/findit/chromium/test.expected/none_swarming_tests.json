@@ -1715,6 +1715,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.One<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/test-inv\" in \"build-inv\"@@@",
       "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.One (status FAILURE)@Test 'Test.One' completed with the following status(es): 'FAILURE'@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.One (status FAILURE)@@@@",
@@ -1776,6 +1777,73 @@
     "name": "test r1.Upload to test-results [gl_tests]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r1.gl_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/test-inv\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-inv\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "test-inv"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test r1.gl_tests results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

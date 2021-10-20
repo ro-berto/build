@@ -1655,7 +1655,7 @@
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
@@ -1665,7 +1665,9 @@
       "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ]@@@",
       "@@@STEP_LOG_LINE@serialzed results@}@@@",
       "@@@STEP_LOG_END@serialzed results@@@"
     ]
@@ -1770,6 +1772,62 @@
     "name": "proceed with retry",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Migration mismatch (informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy decision for retries had length 0<br/>New decision for retries had length 1@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Migration mismatch (retriable suites, informational)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Legacy retries calculation contained extra elements []<br/>New retries calculation contained extra elements ['base_unittests']@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

@@ -553,9 +553,7 @@ def GenTests(api):
 
   yield api.test(
       'none_swarming_tests',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      },
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
            'win',
            'Win7 Tests (1)',
            test_on_good_revision=False),
@@ -577,7 +575,10 @@ def GenTests(api):
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-              failure=True), api.legacy_annotation.success_step),
+              failure=True),
+          api.legacy_annotation.success_step,
+          stderr=api.raw_io.output_text(
+              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
   )
 
   yield api.test(
