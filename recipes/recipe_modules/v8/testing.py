@@ -870,13 +870,12 @@ class Failure(object):
     lines.append('Command: %s' % self.failure_dict['command'])
     lines.append('Variant: %s' % self.failure_dict['variant'])
     lines.append('')
-    lines.append('Build environment:')
-    if self.api.v8.build_environment is None:
+    lines.append('GN arguments:')
+    if self.api.v8.gn_args is None:
       lines.append(
           'Not available. Please look up the builder\'s configuration.')
     else:
-      for key in sorted(self.api.v8.build_environment):
-        lines.append(' %s: %s' % (key, self.api.v8.build_environment[key]))
+      lines.extend(self.api.v8.gn_args)
     lines.append('')
 
     # Print the command line for flake bisect. Only supports tests run on

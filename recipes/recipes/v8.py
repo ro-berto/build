@@ -410,7 +410,7 @@ def GenTests(api):
         parent_test_spec=test_spec,
     ) +
     api.override_step_data('Check', api.v8.one_failure()) +
-    api.properties(parent_build_environment=None)
+    api.properties(parent_gn_args=None)
   )
 
   yield (

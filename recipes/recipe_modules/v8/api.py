@@ -110,7 +110,10 @@ class V8Api(recipe_api.RecipeApi):
     self.rerun_failures_count = None
     self.test_duration_sec = None
     self.isolated_tests = None
+    # TODO(machenbach): Remove build_environment after a grace period to not
+    # break bots.
     self.build_environment = None
+    self.gn_args = None
     self.checkout_root = None
     self.revision = None
     self.revision_cp = None
@@ -339,6 +342,8 @@ class V8Api(recipe_api.RecipeApi):
     # run multiple times, it is overwritten. It contains gn arguments.
     self.build_environment = self.m.properties.get(
         'parent_build_environment', {})
+    self.gn_args = self.m.properties.get(
+        'parent_gn_args', [])
 
   def set_gclient_custom_vars(self, gclient_vars):
     """Sets additional gclient custom variables."""
@@ -617,6 +622,7 @@ class V8Api(recipe_api.RecipeApi):
       if self.isolated_tests:
         self.upload_isolated_json()
 
+  # TODO(machenbach): Rename function and drop build_environment.
   def _update_build_environment(self, gn_args):
     """Sets the build_environment property based on gn arguments."""
     self.build_environment = {}
@@ -624,13 +630,18 @@ class V8Api(recipe_api.RecipeApi):
     self.build_environment['gn_args'] = ' '.join(
         l for l in gn_args.splitlines()
         if not l.startswith('goma_dir'))
+    self.gn_args = [
+      l for l in gn_args.splitlines()
+      if not l.startswith('goma_dir')
+    ]
 
   @property
   def target_bits(self):
     """Returns target bits (as int) inferred from gn arguments from MB."""
-    match = TARGET_CPU_RE.match(self.build_environment.get('gn_args', ''))
-    if match:
-      return 64 if '64' in match.group(1) else 32
+    for arg in self.gn_args:
+      match = TARGET_CPU_RE.match(arg)
+      if match:
+        return 64 if '64' in match.group(1) else 32
     # If target_cpu is not set, gn defaults to 64 bits.
     return 64  # pragma: no cover
 
@@ -766,9 +777,7 @@ class V8Api(recipe_api.RecipeApi):
 
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
-        if 'gn_args' in self.build_environment:
-          self.m.step.active_result.presentation.logs['gn_args'] = (
-              self.build_environment['gn_args'].splitlines())
+        self.m.step.active_result.presentation.logs['gn_args'] = self.gn_args
       elif self.m.chromium.c.project_generator.tool == 'gn':
         self.m.chromium.run_gn(
             use_goma=use_goma, build_dir=build_dir, use_reclient=use_reclient)
@@ -1378,6 +1387,7 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): Remove the check in the after-buildbot age.
     if len(self.m.json.dumps(self.build_environment)) < 1024:
       properties['parent_build_environment'] = self.build_environment
+    properties['parent_gn_args'] = self.gn_args
 
     swarm_hashes = self.isolated_tests
     if swarm_hashes:

@@ -535,8 +535,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(
           parent_got_revision='deafbeef'*5,
           parent_got_revision_cp='refs/heads/master@{#20123}',
-          parent_build_environment={
-            'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
+          parent_gn_args=[
+            'use_goma = true', 'also_interesting = "absolutely"'],
           parent_build='https://someinfrasite.com/build/123',
       )
       test += self.m.scheduler(triggers=[
