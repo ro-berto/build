@@ -63,6 +63,16 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
+    'mac-arm-rel-swarming':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+            },
+            simulation_platform='mac',
+        ),
     'win-rel-swarming':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
