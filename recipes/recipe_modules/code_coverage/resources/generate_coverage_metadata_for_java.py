@@ -39,8 +39,8 @@ import repository_util
 SOURCES_JSON_FILES_SUFFIX = '__jacoco_sources.json'
 
 # These should match the jar class files generated in internal_rules.gni
-_DEVICE_CLASS_EXCLUDE_SUFFIX = 'host_filter.jar'
-_HOST_CLASS_EXCLUDE_SUFFIX = 'device_filter.jar'
+DEVICE_CLASS_EXCLUDE_SUFFIX = 'host_filter.jar'
+HOST_CLASS_EXCLUDE_SUFFIX = 'device_filter.jar'
 
 
 def get_files_with_suffix(root_dir, suffix):
@@ -402,9 +402,9 @@ def main():
 
     device_cmd = (
         cmd + device_coverage_files +
-        _create_classfile_args(class_files, _DEVICE_CLASS_EXCLUDE_SUFFIX))
+        _create_classfile_args(class_files, DEVICE_CLASS_EXCLUDE_SUFFIX))
     host_cmd = cmd + host_coverage_files + _create_classfile_args(
-        class_files, _HOST_CLASS_EXCLUDE_SUFFIX)
+        class_files, HOST_CLASS_EXCLUDE_SUFFIX)
 
     # JaCoCo XML report will be generated temporarily
     # then parsed to json metadata to --output-file.
