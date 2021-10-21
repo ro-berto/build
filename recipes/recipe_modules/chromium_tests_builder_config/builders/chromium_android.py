@@ -210,24 +210,6 @@ SPEC = {
             android_config='main_builder_mb',
             simulation_platform='linux',
         ),
-    'Android WebView L (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Android WebView M (dbg)':
         _chromium_android_spec(
             chromium_config='android',
