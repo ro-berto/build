@@ -11,7 +11,7 @@ pull requests.
 See: //docs/testing/web_platform_tests.md (https://goo.gl/rSRGmZ)
 """
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -23,6 +23,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/runtime',
+    'recipe_engine/step',
 ]
 
 # See wpt_import.py for details.
@@ -45,7 +46,8 @@ def RunSteps(api):
   script = api.path['checkout'].join('third_party', 'blink', 'tools',
                                      'wpt_export.py')
   args = ['--credentials-json', creds, '--surface-failures-to-gerrit']
-  api.python('Export Chromium commits and in-flight CLs to WPT', script, args)
+  cmd = ['vpython3', script] + args
+  api.step('Export Chromium commits and in-flight CLs to WPT', cmd)
 
 
 # Run `./recipes.py test train` to update wpt-export.json file.
