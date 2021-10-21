@@ -77,7 +77,7 @@ def RunSteps(api, test_with_new_exit_code):
   invalid_suites, failed_suites = api.test_utils.run_tests_with_patch(
       api.chromium_tests.m, tests)
   for t in tests:
-    rdb_results = t.rdb_results['with patch']
+    rdb_results = t.get_rdb_results('with patch')
     if t.name == test_with_new_exit_code:
       t.update_failure_on_exit('with patch', True)
     failures = t.deterministic_failures('with patch')

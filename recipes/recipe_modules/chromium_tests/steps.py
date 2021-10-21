@@ -580,9 +580,8 @@ class Test(object):
     """Returns the invocation names tracking the test's results in RDB."""
     raise NotImplementedError()  # pragma: no cover
 
-  @property
-  def rdb_results(self):
-    return self._rdb_results
+  def get_rdb_results(self, suffix):
+    return self._rdb_results.get(suffix)
 
   def update_rdb_results(self, suffix, results):
     self._rdb_results[suffix] = results
@@ -1160,9 +1159,8 @@ class TestWrapper(Test):  # pragma: no cover
   def get_invocation_names(self, suffix):
     return self._test.get_invocation_names(suffix)
 
-  @property
-  def rdb_results(self):
-    return self._test.rdb_results
+  def get_rdb_results(self, suffix):
+    return self._test.get_rdb_results(suffix)
 
   def update_rdb_results(self, suffix, results):
     return self._test.update_rdb_results(suffix, results)
@@ -1344,6 +1342,10 @@ class ExperimentalTest(TestWrapper):
   def get_invocation_names(self, suffix):
     return super(ExperimentalTest,
                  self).get_invocation_names(self._experimental_suffix(suffix))
+
+  def get_rdb_results(self, suffix):
+    return super(ExperimentalTest,
+                 self).get_rdb_results(self._experimental_suffix(suffix))
 
   def update_rdb_results(self, suffix, results):
     return super(ExperimentalTest, self).update_rdb_results(

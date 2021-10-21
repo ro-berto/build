@@ -304,8 +304,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     all_rdb_results = []
     for t in test_suites:
-      if t.rdb_results.get(suffix):
-        all_rdb_results.append(t.rdb_results.get(suffix))
+      if t.get_rdb_results(suffix):
+        all_rdb_results.append(t.get_rdb_results(suffix))
 
     rdb_results = RDBResults.create(all_rdb_results)
     # Serialize the recipe's internal representation of its test results to a
@@ -342,7 +342,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     step_name = 'exonerate unrelated test failures'
     exonerations = []
     for suite in test_suites:
-      results = suite.rdb_results.get(suffix)
+      results = suite.get_rdb_results(suffix)
       if not results:
         continue  # e.g. Experimental suites not in the experiment.
       if suffix == 'without patch':
@@ -620,7 +620,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
     if retry_invalid_shards:
       for suite in test_suites:
-        results = suite.rdb_results.get(suffix)
+        results = suite.get_rdb_results(suffix)
         if results and results.invalid:
           retriable_suites.add(suite.name)
     if not retry_failed_shards:
@@ -633,9 +633,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # "step_ui_name" and "test_name".
       find_it_input_test_list = []
       for suite in test_suites:
-        if not suite.rdb_results.get(suffix):
+        if not suite.get_rdb_results(suffix):
           continue
-        for test in suite.rdb_results[suffix].unexpected_failing_tests:
+        for test in suite.get_rdb_results(suffix).unexpected_failing_tests:
           # RDB reports test IDs in a different format than FindIt accepts. So
           # convert from one to the other by removing the "ninja://..." prefix.
           find_it_input_test_name = test.split(suite.test_id_prefix)[-1]
@@ -656,15 +656,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # Filter out suites whose failing tests are all known to be flaky, and
     # only retry what's remaining.
     for suite in test_suites:
-      if (not suite.rdb_results.get(suffix) or
-          not suite.rdb_results[suffix].unexpected_failing_tests):
+      if (not suite.get_rdb_results(suffix) or
+          not suite.get_rdb_results(suffix).unexpected_failing_tests):
         continue
       # Convert the names of all failing tests in RDB's results to FindIt's
       # format, and if every test name in that set was reported by FindIt to
       # be flaky, then we can skip the retry.
       failing_test_names = set(
           t.split(suite.test_id_prefix)[-1]
-          for t in suite.rdb_results[suffix].unexpected_failing_tests)
+          for t in suite.get_rdb_results(suffix).unexpected_failing_tests)
       if not failing_test_names.issubset(suite.known_flaky_failures):
         retriable_suites.add(suite.name)
 
