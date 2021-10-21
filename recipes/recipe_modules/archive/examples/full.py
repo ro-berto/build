@@ -436,7 +436,7 @@ def GenTests(api):
   input_properties.archive_datas.extend([archive_data])
 
   yield api.test(
-      'generic_archive_{}_with_update_latest',
+      'generic_archive_with_update_latest',
       api.properties(
           gcs_archive=True,
           update_properties={
@@ -444,6 +444,11 @@ def GenTests(api):
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
           },
           **{'$build/archive': input_properties}),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps After Tests.Write latest file',
+          ['123456_5e3250aadda2b170692f8e762d43b7e8deadbeef_'
+           '20120514125323']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -459,7 +464,7 @@ def GenTests(api):
   input_properties.archive_datas.extend([archive_data])
 
   yield api.test(
-      'generic_archive_{}_no_latest_gcs_content',
+      'generic_archive_no_latest_gcs_content',
       api.properties(
           gcs_archive=True,
           update_properties={
@@ -468,6 +473,34 @@ def GenTests(api):
           },
           **{'$build/archive': input_properties}),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%position%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.revisions_file.gcs_path = 'x86/{%position%}/REVISIONS'
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_with_revisions_file',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.Write REVISIONS file', [
+              '{\"got_revision\": \"5e3250aadda2b170692f8e762d43b7e8dead'
+              'beef\", \"got_revision_cp\": \"refs/heads/B1@{#123456}\"}'
+          ]),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -14,6 +14,12 @@ message LatestFile {
   string gcs_file_content = 2;
 }
 
+// Next id: 2
+message RevisionsFile {
+  // The file for the revisions file. Format is the same as |ArchiveData.gcs_path|.
+  string gcs_path = 1;
+}
+
 // Next id: 3
 message ArchiveFileRename {
   string from_file = 1;
@@ -28,7 +34,7 @@ message ArchiveDirRename {
   string to_dir = 2;
 }
 
-// Next id: 14
+// Next id: 15
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -143,6 +149,7 @@ message ArchiveData {
     ARCHIVE_TYPE_SQUASHFS = 6;
   }
   ArchiveType archive_type = 5;
+
   // When set, system will update the latest file.
   // Example:
   //   gcs_path = "x86/{%position%}/chrome.zip"
@@ -151,6 +158,15 @@ message ArchiveData {
   // In this way, the "x86/latest/chrome.txt" will include the latest
   // version info.
   LatestFile latest_upload = 7;
+
+  // Generates a REVISIONS file that inludes the commit hashes from the current
+  // revisions.
+  // Example:
+  //   gcs_path = "x86/{%position%}/chrome.zip"
+  //   revisions_file = {
+  //     "gcs_path" = "x86/{%position%}/REVISIONS"
+  //   }
+  RevisionsFile revisions_file = 14;
 
   // A string path to the key used to verify bits. Setting this parameter will
   // generated a .sig signed version for the files listed in this ArchiveData

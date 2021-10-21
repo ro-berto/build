@@ -1043,6 +1043,24 @@ class ArchiveApi(recipe_api.RecipeApi):
           bucket=gcs_bucket,
           dest=archive_data.latest_upload.gcs_path,
           name="upload {}".format(archive_data.latest_upload.gcs_path))
+
+    # Generates a REVISIONS file
+    if archive_data.HasField('revisions_file'):
+      pattern = re.compile('^got_.*revision(_cp)?$')
+      content = {}
+      for key, val in update_properties.items():
+        if re.search(pattern, key):
+          content[key] = val
+      content_json = self.m.json.dumps(content)
+
+      temp_dir = self.m.path.mkdtemp()
+      output_file = temp_dir.join('revisions.txt')
+      self.m.file.write_text('Write REVISIONS file', output_file, content_json)
+      self.m.gsutil.upload(
+          output_file,
+          bucket=gcs_bucket,
+          dest=archive_data.revisions_file.gcs_path,
+          name="upload {}".format(archive_data.revisions_file.gcs_path))
     return uploads
 
   def cipd_archive(self, build_dir, update_properties, custom_vars,
