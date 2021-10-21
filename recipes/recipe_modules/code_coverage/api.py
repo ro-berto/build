@@ -144,12 +144,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     ]
 
     if self.platform == 'android':
-      sources_json_files = self.m.file.glob_paths(
-          name='Find jacoco files for java coverage',
-          source=self.m.chromium.output_dir,
-          pattern='**/*{}'.format(constants.SOURCES_JSON_FILES_SUFFIX),
-      )
-      files.extend(sources_json_files)
+      step_result = self.m.python(
+          'Get jacoco and jar files for java coverage',
+          self.resource('get_jacoco_and_jar_files_for_java.py'),
+          args=[
+              '--sources-json-dir', self.m.chromium.output_dir, '--output-json',
+              self.m.json.output()
+          ])
+      paths = step_result.json.output
+
+      files.extend([self.m.path.abs_to_path(f) for f in paths])
 
     return files
 

@@ -78,15 +78,20 @@ def GenTests(api):
           expected_paths=[
               api.path['checkout'].join(android_test_path),
               api.path['checkout'].join('out/Release/{}'.format(jacoco_file)),
+              api.path['checkout'].join('out/Release/{}'.format(
+                  'chrome/browser/java__process_device.filter.jar'))
           ],
           target_platform='android'),
       api.path.exists(api.path['checkout'].join(android_test_path)),
       api.override_step_data(
           'Get all unstripped artifacts paths',
           api.json.output(['None/{}'.format(android_test_path)])),
-      api.step_data(
-          'Find jacoco files for java coverage',
-          api.file.glob_paths([jacoco_file]),
+      api.override_step_data(
+          'Get jacoco and jar files for java coverage',
+          api.json.output([
+              'None/out/Release/{}'.format(jacoco_file),
+              'None/out/Release/chrome/browser/java__process_device.filter.jar',
+          ]),
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
