@@ -456,31 +456,6 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
-    'GPU FYI Linux dEQP Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
-                'no_kaleidoscope',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-            # When trybots are set up which mirror this configuration,
-            # compiling might induce a clobber build if the pinned
-            # buildtools version is different from Chromium's default. This
-            # is a risk we're willing to take because checkouts take a lot
-            # of disk space, and this is expected to be a corner case rather
-            # than the common case.
-        ),
     'Lacros FYI x64 Release (AMD)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -556,22 +531,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Linux Builder (dbg)',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
-    'Linux FYI dEQP Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Linux dEQP Builder',
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -652,22 +611,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Linux Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
-    'Linux FYI dEQP Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Linux dEQP Builder',
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -1168,21 +1111,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            simulation_platform='linux',
-        ),
-    'Android FYI dEQP Release (Nexus 5X)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
         ),
     'Android FYI SkiaRenderer GL (Nexus 5X)':

@@ -384,11 +384,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='Android FYI Release (Nexus 5X)',
             ),
-        'gpu-fyi-try-android-m-nexus-5x-deqp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI dEQP Release (Nexus 5X)',
-            ),
         'gpu-fyi-try-android-m-nexus-5x-skgl-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -479,12 +474,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='ANGLE GPU Android Release (Nexus 5X)',
                 retry_failed_shards=False,
             ),
-        'android_angle_deqp_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Android FYI dEQP Release (Nexus 5X)',
-                retry_failed_shards=False,
-            ),
         'fuchsia-angle-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
@@ -543,22 +532,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.angle',
                         buildername='linux-angle-builder',
                         tester='linux-angle-nvidia',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'linux_angle_deqp_rel_ng':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux dEQP Builder',
-                        tester='Linux FYI dEQP Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux dEQP Builder',
-                        tester='Linux FYI dEQP Release (Intel HD 630)',
                     ),
                 ],
                 retry_failed_shards=False,
@@ -1162,12 +1135,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Linux Builder',
                 tester='Linux FYI Release (AMD RX 5500 XT)',
             ),
-        'gpu-fyi-try-linux-intel-dqp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux dEQP Builder',
-                tester='Linux FYI dEQP Release (Intel HD 630)',
-            ),
         'gpu-fyi-try-linux-intel-exp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1197,12 +1164,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Linux Builder (dbg)',
                 tester='Linux FYI Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-linux-nvidia-dqp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux dEQP Builder',
-                tester='Linux FYI dEQP Release (NVIDIA)',
             ),
         'gpu-fyi-try-linux-nvidia-exp':
             try_spec.TrySpec.create_for_single_mirror(
