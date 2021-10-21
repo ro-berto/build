@@ -14,7 +14,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -22,8 +22,8 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'ios-simulator-full-configs' on group 'chromium.mac'@@@",
-      "@@@STEP_LINK@ios-simulator-full-configs@https://ci.chromium.org/p/chromium/builders/ci/ios-simulator-full-configs@@@"
+      "@@@STEP_TEXT@<br/>running builder 'fake-builder' on group 'fake-group'@@@",
+      "@@@STEP_LINK@fake-builder@https://ci.chromium.org/p/chromium/builders/ci/fake-builder@@@"
     ]
   },
   {
@@ -54,7 +54,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -157,7 +157,6 @@
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
       "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_clang_coverage_tools\": \"True\", @@@",
       "@@@STEP_LOG_LINE@config@        \"checkout_telemetry_dependencies\": \"True\"@@@",
       "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \".DEPS.git\", @@@",
@@ -171,9 +170,7 @@
       "@@@STEP_LOG_LINE@config@  \"src_root\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu_only\": false, @@@",
-      "@@@STEP_LOG_LINE@config@  \"target_os\": [@@@",
-      "@@@STEP_LOG_LINE@config@    \"ios\"@@@",
-      "@@@STEP_LOG_LINE@config@  ], @@@",
+      "@@@STEP_LOG_LINE@config@  \"target_os\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_os_only\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_branch_heads\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_tags\": false@@@",
@@ -194,7 +191,7 @@
       "--limit",
       "1",
       "-p",
-      "change=10",
+      "change=456789",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -212,7 +209,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -229,8 +226,8 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/10/10/3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -244,7 +241,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['ios']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -256,7 +253,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/10/10/3",
+      "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
       "src@refs/heads/main",
       "--refs",
@@ -266,7 +263,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_COLLECT_METRICS": "0",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -285,7 +282,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -463,7 +460,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -508,7 +505,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -531,218 +528,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure xcode",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 13a233 in [CACHE]/xcode_ios_13a233.app@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CACHE]/builder/src/build/ios_files"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure xcode.delete deprecated Xcode cache",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure xcode.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "13a233",
-      "-output-dir",
-      "[CACHE]/xcode_ios_13a233.app"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure xcode.install xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "-switch",
-      "[CACHE]/xcode_ios_13a233.app"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure xcode.select xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "xcrun",
-      "simctl",
-      "list"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure xcode.reload simctl",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -752,8 +537,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -766,7 +550,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -779,7 +563,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -792,17 +576,17 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.mac.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ios-simulator-full-configs\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-builder\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"ios_chrome_bookmarks_eg2tests_module\", @@@",
@@ -843,7 +627,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -873,7 +657,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -902,16 +686,15 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
-      "tryserver.chromium.mac",
+      "fake-try-group",
       "-b",
-      "ios-simulator-full-configs",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "-v",
-      "//out/Debug",
+      "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"ios_chrome_bookmarks_eg2tests_module\"]}",
       "/path/to/tmp/json",
       "--json-output",
@@ -928,7 +711,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -961,7 +744,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1000,7 +783,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/src/out/Debug"
+      "[CACHE]/builder/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1012,7 +795,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1029,7 +812,7 @@
       "/path/to/tmp/json",
       "copy",
       "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
-      "[CACHE]/builder/src/out/Debug/CR_COMPILE_GUARD.txt"
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1041,7 +824,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1064,14 +847,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.chromium.mac",
+      "fake-try-group",
       "-b",
-      "ios-simulator-full-configs",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1085,7 +867,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1103,19 +885,18 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.chromium.mac",
+      "fake-try-group",
       "-b",
-      "ios-simulator-full-configs",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "ios_chrome_bookmarks_eg2tests_module\n",
-      "//out/Debug"
+      "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1128,7 +909,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1150,7 +931,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/Debug/gn_logs.txt",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
       "/path/to/tmp/"
     ],
     "env": {
@@ -1163,7 +944,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1172,45 +953,6 @@
     "name": "read gn_logs.txt",
     "~followup_annotations": [
       "@@@STEP_LOG_END@gn_logs.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
-      "--src-dir",
-      "[CACHE]/builder/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/4",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
     ]
   },
   {
@@ -1227,7 +969,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/ios_simulator_full_configs"
+      "[CACHE]/goma/data/fake_try_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1240,7 +982,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1261,7 +1003,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios_simulator_full_configs",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -1277,7 +1019,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1325,7 +1067,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1351,7 +1093,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "ios_chrome_bookmarks_eg2tests_module"
@@ -1367,7 +1109,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1381,7 +1123,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "ios_chrome_bookmarks_eg2tests_module",
@@ -1400,7 +1142,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1435,7 +1177,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1479,7 +1221,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1512,7 +1254,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1544,25 +1286,27 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 80, \"ios_chrome_bookmarks_eg2tests_module\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"ios_chrome_bookmarks_eg2tests_module\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
       "compile (with patch)",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "ios-simulator-full-configs"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1574,7 +1318,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1618,7 +1362,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1637,7 +1381,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CACHE]/builder/src/out/Debug/CR_COMPILE_GUARD.txt"
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1649,7 +1393,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1678,7 +1422,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1716,7 +1460,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1750,7 +1494,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1783,7 +1527,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]/builder/src/out/Debug/ios_chrome_bookmarks_eg2tests_module.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/ios_chrome_bookmarks_eg2tests_module.isolated.gen.json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1794,7 +1538,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1815,7 +1559,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -1828,7 +1572,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1855,7 +1599,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1897,7 +1641,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1932,7 +1676,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1961,7 +1705,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/ios-simulator-full-configs/-1\", \"priority\": \"30\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:ios-simulator-full-configs\", \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", \"gerrit:https://chromium-review.googlesource.com/c/10/3\", \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:ios-simulator-full-configs\", \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11\", \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for ios_chrome_bookmarks_eg2tests_module\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-test-id-prefix\", \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"-var\", \"builder:ios-simulator-full-configs\", \"-var\", \"os:Mac-11\", \"-var\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\", \"-tag\", \"step_name:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-11\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/fake-try-builder/571\", \"priority\": \"30\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:fake-try-group\", \"buildername:fake-try-builder\", \"buildnumber:571\", \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:fake-try-builder\", \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11\", \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for ios_chrome_bookmarks_eg2tests_module\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-test-id-prefix\", \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"-var\", \"builder:fake-try-builder\", \"-var\", \"os:Mac-11\", \"-var\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\", \"-tag\", \"step_name:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-11\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1976,7 +1720,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1989,7 +1733,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/ios-simulator-full-configs/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/fake-try-builder/571\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -2004,7 +1748,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/ios-simulator-full-configs/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/fake-try-builder/571\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -2014,10 +1758,11 @@
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-try-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-try-builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/10/3\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"patch_project:chromium/src\", @@@",
@@ -2025,7 +1770,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"@@@",
@@ -2047,7 +1792,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"-test-id-prefix\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Mac-11\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -2110,7 +1855,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/ios-simulator-full-configs/-1@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch)/Mac-11/[dummy has/fake-try-builder/571@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -2132,14 +1877,14 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
     "name": "test_pre_run (with patch).include swarming task invocations",
-    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/4\"}",
+    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -2148,7 +1893,7 @@
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
-      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/4\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
     ]
@@ -2177,7 +1922,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2207,7 +1952,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2236,7 +1981,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2264,7 +2009,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2295,7 +2040,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2323,7 +2068,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2353,7 +2098,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2391,7 +2136,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2429,7 +2174,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2472,7 +2217,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2506,7 +2251,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"assert_tests\": true, \"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.mac\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"flakiness:examples/full\", \"xcode_build_version\": \"13a233\"}",
+      "{\"assert_tests\": true, \"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"flakiness:examples/full\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -2537,7 +2282,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2589,8 +2334,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"ios-simulator-full-configs\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=0@@@"
@@ -2631,7 +2376,7 @@
       "--limit",
       "1",
       "-p",
-      "change=10",
+      "change=456789",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -2649,7 +2394,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2660,7 +2405,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"10\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
@@ -2668,7 +2413,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
@@ -2699,7 +2444,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2741,7 +2486,7 @@
       "--limit",
       "1",
       "-p",
-      "change=10",
+      "change=456789",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -2758,7 +2503,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2769,7 +2514,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"10\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
@@ -2777,7 +2522,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
@@ -2807,7 +2552,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2841,7 +2586,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2871,11 +2616,29 @@
       "-fields",
       "infra.resultdb.invocation",
       "-predicate",
-      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"chromium/src\"}]}",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"chromium/src\"}]}",
       "-predicate",
-      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"2\", \"project\": \"chromium/src\"}]}",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"2\", \"project\": \"chromium/src\"}]}",
       "-predicate",
-      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"3\", \"project\": \"chromium/src\"}]}"
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"3\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"4\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"5\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"6\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"7\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"8\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"9\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"10\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"11\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"12\", \"project\": \"chromium/src\"}]}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -2887,7 +2650,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2896,9 +2659,9 @@
     "name": "searching_for_new_tests.fetching associated builds with current gerrit patchset",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/4\"}}, \"input\": {\"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"3\", \"project\": \"chromium/src\"}]}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/3\"}}, \"input\": {\"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"3\", \"project\": \"chromium/src\"}]}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@",
-      "@@@STEP_LOG_LINE@excluded_invocation_list@invocations/4@@@",
+      "@@@STEP_LOG_LINE@excluded_invocation_list@invocations/3@@@",
       "@@@STEP_LOG_END@excluded_invocation_list@@@"
     ]
   },
@@ -2915,7 +2678,7 @@
       "-fields",
       "infra.resultdb.invocation",
       "-predicate",
-      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}}"
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -2927,7 +2690,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2936,8 +2699,9 @@
     "name": "searching_for_new_tests.fetch previously run invocations",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/1\"}}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"ios-simulator-full-configs\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/2\"}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/1\"}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/2\"}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/3\"}}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -2948,7 +2712,7 @@
       "-json",
       "-n",
       "2",
-      "4"
+      "build:8945511751514863184"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -2960,7 +2724,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -2974,6 +2738,7 @@
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/3\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
@@ -3002,7 +2767,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3038,14 +2803,14 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
     "name": "searching_for_new_tests.cross reference newly identified tests against ResultDB",
-    "stdin": "{\"pageSize\": \"10000\", \"realm\": \"chromium:try\", \"testIdRegexp\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"timeRange\": {\"earliest\": \"2012-05-13T12:53:21Z\", \"latest\": \"2012-05-14T12:53:21Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"builder\": \"ios-simulator-full-configs\"}}}}",
+    "stdin": "{\"pageSize\": \"10000\", \"realm\": \"chromium:try\", \"testIdRegexp\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"timeRange\": {\"earliest\": \"2012-05-13T12:53:21Z\", \"latest\": \"2012-05-14T12:53:21Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"builder\": \"fake-try-builder\"}}}}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3077,7 +2842,7 @@
       "@@@STEP_LOG_LINE@json.input@  \"variantPredicate\": {@@@",
       "@@@STEP_LOG_LINE@json.input@    \"contains\": {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"def\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder\": \"ios-simulator-full-configs\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder\": \"fake-try-builder\"@@@",
       "@@@STEP_LOG_LINE@json.input@      }@@@",
       "@@@STEP_LOG_LINE@json.input@    }@@@",
       "@@@STEP_LOG_LINE@json.input@  }@@@",
@@ -3096,7 +2861,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/ios-simulator-full-configs/-1\", \"priority\": \"30\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:ios-simulator-full-configs\", \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", \"gerrit:https://chromium-review.googlesource.com/c/10/3\", \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:ios-simulator-full-configs\", \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for ios_chrome_bookmarks_eg2tests_module\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-test-id-prefix\", \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"-var\", \"builder:ios-simulator-full-configs\", \"-var\", \"os:Mac-11\", \"-var\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\", \"-tag\", \"step_name:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--gtest_filter=TestSuite.test_a\", \"--gtest_repeat=20\", \"--test-launcher-retry-limit=0\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-11\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/fake-try-builder/571\", \"priority\": \"30\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:fake-try-group\", \"buildername:fake-try-builder\", \"buildnumber:571\", \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:fake-try-builder\", \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for ios_chrome_bookmarks_eg2tests_module\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-test-id-prefix\", \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", \"-var\", \"builder:fake-try-builder\", \"-var\", \"os:Mac-11\", \"-var\", \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\", \"-tag\", \"step_name:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-11\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3111,7 +2876,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3124,7 +2889,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/ios-simulator-full-configs/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/fake-try-builder/571\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -3139,7 +2904,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/ios-simulator-full-configs/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/fake-try-builder/571\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -3149,10 +2914,11 @@
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-try-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-try-builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for ios_chrome_bookmarks_eg2tests_module/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/10/3\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:ios_chrome_bookmarks_eg2tests_module_iPad\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"patch_project:chromium/src\", @@@",
@@ -3160,7 +2926,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.try:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"@@@",
@@ -3182,7 +2948,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"-test-id-prefix\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Mac-11\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -3202,10 +2968,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--gtest_filter=TestSuite.test_a\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--gtest_repeat=20\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--test-launcher-retry-limit=0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\", @@@",
@@ -3248,7 +3011,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/ios-simulator-full-configs/-1@https://chromium-swarm.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness)/Mac-11/[dummy has/fake-try-builder/571@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -3270,14 +3033,14 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
     "name": "test_pre_run (check flakiness).include swarming task invocations",
-    "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/4\"}",
+    "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -3286,7 +3049,7 @@
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
-      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/4\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
     ]
@@ -3322,7 +3085,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3360,7 +3123,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3403,7 +3166,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3437,7 +3200,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"assert_tests\": true, \"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.mac\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"flakiness:examples/full\", \"xcode_build_version\": \"13a233\"}",
+      "{\"assert_tests\": true, \"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"flakiness:examples/full\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -3468,7 +3231,7 @@
       },
       "resultdb": {
         "current_invocation": {
-          "name": "invocations/4",
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -3520,8 +3283,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.mac\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"ios-simulator-full-configs\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=1@@@"

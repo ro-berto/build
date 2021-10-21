@@ -6,6 +6,8 @@ import base64
 
 from recipe_engine import post_process
 from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
@@ -62,7 +64,7 @@ def RunSteps(api):
 
 def GenTests(api):
   builder = builder_pb2.BuilderID(
-      builder='ios-simulator-full-configs', project='chromium', bucket='try')
+      builder='fake-try-builder', project='chromium', bucket='try')
 
   def _generate_variant(**kwargs):
     variant = resultdb_common.Variant()
@@ -112,7 +114,7 @@ def GenTests(api):
     )
 
   build_database, current_patchset_invocations = [], {}
-  for i in range(2):
+  for i in range(3):
     inv = "invocations/{}".format(i + 1)
     build = _generate_build(builder, inv)
     build_database.append(build)
@@ -138,10 +140,9 @@ def GenTests(api):
           result=_generate_test_result(test_id, all_mismatched)),
   ])
 
-  # This is for the current build
-  current_build = _generate_build(
+  excluded_build = _generate_build(
       builder,
-      'invocations/4',
+      'invocations/3',
       build_input=build_pb2.Build.Input(gerrit_changes=[
           common_pb2.GerritChange(
               host='chromium-review.googlesource.com',
@@ -151,16 +152,35 @@ def GenTests(api):
           )
       ]))
 
-  data = api.chromium._common_test_data(
-      bot_id='test_bot', default_builder_group='tryserver.chromium.mac')
+  builder_db = ctbc.BuilderDatabase.create({
+      'fake-group': {
+          'fake-builder':
+              ctbc.BuilderSpec.create(
+                  chromium_config='chromium',
+                  gclient_config='chromium',
+              ),
+      },
+  })
 
   yield api.test(
       'basic_ios',
-      data + api.buildbucket.build(current_build),
-      api.properties(xcode_build_version='13a233', assert_tests=True),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
       api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'ios-simulator-full-configs': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       "isolate_name":
                           "ios_chrome_bookmarks_eg2tests_module",
@@ -202,7 +222,7 @@ def GenTests(api):
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       # This is the related build that'll be excluded, which includes itself.
       api.buildbucket.simulated_search_results(
-          builds=[current_build],
+          builds=[excluded_build],
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
@@ -241,11 +261,19 @@ def GenTests(api):
 
   yield api.test(
       'skip identifying when no test file change',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.mac',
-          builder='ios-simulator-full-configs',
-      ),
-      api.properties(xcode_build_version='13a233'),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -258,11 +286,19 @@ def GenTests(api):
 
   yield api.test(
       'skip footer',
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.mac',
-          builder='ios-simulator-full-configs',
-      ),
-      api.properties(xcode_build_version='13a233'),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
