@@ -17,8 +17,7 @@ DEPS = [
 
 
 def RunSteps(api):
-
-  invocations = api.flakiness.get_associated_invocations()
+  invocations = api.flakiness.fetch_all_related_invocations()
   for inv in invocations:
     api.assertions.assertEqual(type(inv), str)
 
@@ -61,10 +60,4 @@ def GenTests(api):
               "\"host\": \"chromium-review.googlesource.com\", \"patchset\": "
               "\"3\", \"project\": \"chromium/src\"}]}"
           ],
-      ),
-      api.post_process(
-          post_process.LogEquals,
-          'fetching associated builds with current gerrit patchset',
-          'excluded_invocation_list',
-          'invocations/1',
       ), api.post_process(post_process.DropExpectation))

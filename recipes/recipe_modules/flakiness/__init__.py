@@ -12,6 +12,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'depot_tools/bot_update',
+    'depot_tools/gerrit',
     'depot_tools/tryserver',
     'isolate',
     'recipe_engine/buildbucket',

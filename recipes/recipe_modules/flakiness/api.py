@@ -75,8 +75,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     pattern = re.compile(_FILE_PATH_ADDING_TESTS_PATTERN)
     return any(pattern.match(file_path) for file_path in affected_files)
 
-  def get_associated_invocations(self):
-    """Gets ResultDB Invocation names from the same CL as the current build.
+  def get_invocations_from_change(self, change=None, step_name=None):
+    """Gets ResultDB Invocation names from the same CL as the given change.
 
     An invocation represents a container of results, in this case from a
     buildbucket build. Invocation names can be used to map the buildbucket build
@@ -87,12 +87,19 @@ class FlakinessApi(recipe_api.RecipeApi):
     gathers a list of the builds associated, and extracts the Invocation names
     from each build.
 
-    Note: This does NOT get Invocation names associated with chained CLs.
+    Args:
+      change (common_pb2.GerritChange): The gerrit change associated with the
+        CL we want to find all invocations for. Every patch set up until and
+        including the current patch set of the given change will be used to
+        search buildbucket.
+      step_name (string): use to override default step name.
 
     Returns:
         A set of ResultDB Invocation names as strings.
     """
-    change = self.m.buildbucket.build.input.gerrit_changes[0]
+    change = change or self.m.buildbucket.build.input.gerrit_changes[0]
+    step_name = (
+        step_name or 'fetching associated builds with current gerrit patchset')
 
     # Creating BuildPredicate object for each patch set within a CL and
     # compiling them into a list. This is to search for builds from the
@@ -114,7 +121,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     search_results = self.m.buildbucket.search(
         predicate=predicates,
         report_build=False,
-        step_name='fetching associated builds with current gerrit patchset',
+        step_name=step_name,
         fields=['infra.resultdb.invocation'],
     )
 
@@ -122,10 +129,50 @@ class FlakinessApi(recipe_api.RecipeApi):
         # These invocation names will later be used to query ResultDB, which
         # explicitly requires strings
         str(build.infra.resultdb.invocation) for build in search_results)
-    self.m.step.active_result.presentation.logs[
-        "excluded_invocation_list"] = sorted(inv_set)
 
     return inv_set
+
+  def fetch_all_related_invocations(self):
+    """Gets all builds associated with the current CL, or chained CLs.
+
+    This method searches buildbucket for all builds associated with the CL of
+    the current build, or any CLs chained to the CL of the current build. Gerrit
+    is used to find all chained CLs, and then each patch set of those CLs is
+    used to query buildbucket for any associated builds. It then returns the
+    invocation names of all of these builds.
+
+    An invocation represents a container of results, in this case from a
+    buildbucket build. Invocation names can be used to map the buildbucket build
+    to the ResultDB test results.
+
+    Returns:
+        A set of invocation names as strings.
+    """
+    gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
+    related = self.m.gerrit.get_related_changes('https://' + gerrit_change.host,
+                                                gerrit_change.change)
+
+    change_set = {gerrit_change.change}
+    excluded_invs = self.get_invocations_from_change()
+
+    for rel_change in related["changes"]:
+      change_number = int(rel_change['_change_number'])
+      if change_number not in change_set:
+        current_change = common_pb2.GerritChange(
+            host=gerrit_change.host,
+            project=gerrit_change.project,
+            change=change_number,
+            patchset=int(rel_change['_current_revision_number']))
+        step = ('fetching associated builds related with change %s' %
+                str(change_number))
+        excluded_invs.update(
+            self.get_invocations_from_change(
+                change=current_change, step_name=step))
+
+    self.m.step.active_result.presentation.logs[
+        "excluded_invocation_list"] = sorted(excluded_invs)
+
+    return excluded_invs
 
   def get_builder_invocation_history(self, builder_id, excluded_invs=None):
     """Gets a list of Invocation names for the most recent builds on a builder.
@@ -286,7 +333,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     with self.m.step.nest('searching_for_new_tests'):
       current_builder = self.m.buildbucket.build.builder
       current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
-      excluded_invs = self.get_associated_invocations()
+      excluded_invs = self.fetch_all_related_invocations()
 
       inv_list = self.get_builder_invocation_history(
           builder_id=current_builder, excluded_invs=excluded_invs)

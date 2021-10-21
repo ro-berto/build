@@ -2605,6 +2605,71 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "relatedchanges",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--change",
+      "456789",
+      "--revision",
+      "current",
+      "--json_file",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "searching_for_new_tests.gerrit relatedchanges",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"changes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"_change_number\": 58478, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"_current_revision_number\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"_revision_number\": 2, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"change_id\": \"Ic62ae3103fca2214904dbf2faf4c861b5f0ae9b5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"author\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"date\": \"2014-07-12 15:04:24.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"email\": \"example@example.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Example Name\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"tz\": 120@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": \"78847477532e386f5a2185a4e8c90b2509e354e3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"parents\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          {@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"commit\": \"bb499510bbcdbc9164d96b0dbabb4aa45f59a87e\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          }@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"subject\": \"Remove Solr\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"project\": \"gerrit\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"status\": \"NEW\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "bb",
       "ls",
       "-host",
@@ -2660,6 +2725,45 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/3\"}}, \"input\": {\"gerritChanges\": [{\"change\": \"10\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"3\", \"project\": \"chromium/src\"}]}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "bb",
+      "ls",
+      "-host",
+      "cr-buildbucket.appspot.com",
+      "-json",
+      "-nopage",
+      "-n",
+      "1000",
+      "-fields",
+      "infra.resultdb.invocation",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"58478\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"chromium/src\"}]}",
+      "-predicate",
+      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"gerritChanges\": [{\"change\": \"58478\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"2\", \"project\": \"chromium/src\"}]}"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "searching_for_new_tests.fetching associated builds related with change 58478",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@",
       "@@@STEP_LOG_LINE@excluded_invocation_list@invocations/3@@@",
       "@@@STEP_LOG_END@excluded_invocation_list@@@"
