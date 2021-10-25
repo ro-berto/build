@@ -916,14 +916,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
             ),
-        # crbug.com/1149606: Experimental builder to test pre-warming
-        'linux-warmed':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
