@@ -39,7 +39,7 @@ DEPS = [
     'v8',
 ]
 
-REPO = 'https://chromium.googlesource.com/v8/v8'
+REPO = 'https://chromium.googlesource.com/v8/v8.git'
 RELEASE_BRANCH_REF_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 MAX_COMMIT_WAIT_RETRIES = 5
 

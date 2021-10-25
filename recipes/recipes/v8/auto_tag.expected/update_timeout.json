@@ -497,7 +497,7 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/branch-heads/*:refs/remotes/branch-heads/*"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -566,7 +566,7 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/branch-heads/*:refs/remotes/branch-heads/*"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -635,7 +635,7 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/branch-heads/*:refs/remotes/branch-heads/*"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -704,7 +704,7 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/branch-heads/*:refs/remotes/branch-heads/*"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -773,7 +773,7 @@
     "cmd": [
       "git",
       "fetch",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/branch-heads/*:refs/remotes/branch-heads/*"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -894,7 +894,7 @@
     "cmd": [
       "git",
       "ls-remote",
-      "https://chromium.googlesource.com/v8/v8",
+      "https://chromium.googlesource.com/v8/v8.git",
       "refs/heads/3.4-lkgr"
     ],
     "cwd": "[CACHE]/builder/v8",
