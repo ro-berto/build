@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import copy
+import inspect
 import random
 import re
 
@@ -446,7 +447,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       for new_test in new_tests:
         if (test.spec.test_id_prefix in new_test.test_id and
             _do_variants_match(test, new_test)):
-          test_copy = test
+          test_copy = copy.copy(test)
           # test_id = test_id_prefix + {A full test_suite + test_name
           # representation}, so we use the test_id_prefix to split out
           # the test_suite and test_name
@@ -456,6 +457,11 @@ class FlakinessApi(recipe_api.RecipeApi):
               repeat_count=self._repeat_count,
               retry_limit=0)
           test_copy._test_options = options
+
+          # we only need one shard of the test spec to run a test instance
+          # multiple times, we override whatever shard value was set prior to 1
+          if isinstance(test.spec, steps.SwarmingTestSpec):
+            test_copy.spec = test.spec.with_shards(1)
           new_test_objects.append(test_copy)
 
     return new_test_objects

@@ -64,12 +64,15 @@ def RunSteps(api):
         io_timeout=120,
         hard_timeout=360,
         expiration=7200,
-        shards=int(api.properties.get('shards', '1')) or 1,
+        shards=1,
         dimensions=api.properties.get('dimensions', {
             'gpu': '8086',
         }),
         isolate_coverage_data=isolate_coverage_data,
         resultdb=steps.ResultDB.create(enable=True))
+    override_shards = api.properties.get('shards')
+    if override_shards:
+      test_spec = test_spec.with_shards(override_shards)
     test = test_spec.get_test()
     api.chromium_swarming.set_default_dimension('pool', 'foo')
     assert test.runs_on_swarming

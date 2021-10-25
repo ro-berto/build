@@ -2222,6 +2222,9 @@ class SwarmingTestSpec(TestSpec):
     else:
       return self._name
 
+  def with_shards(self, shards):
+    return attr.evolve(self, shards=int(shards))
+
   @staticmethod
   def _get_gpu_suffix(dimensions):
     gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()

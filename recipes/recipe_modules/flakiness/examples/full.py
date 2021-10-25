@@ -104,9 +104,9 @@ def GenTests(api):
 
   def _generate_test_result(test_id, test_variant):
     vd = getattr(test_variant, 'def')
-    vh = str(
-        base64.b64encode('\n'.join(
-            '{}:{}'.format(k, v) for k, v in vd.items())))
+    vh = base64.b64encode(
+        ('\n'.join('{}:{}'.format(k, v)
+                   for k, v in vd.items())).encode('utf-8')).decode('utf-8')
     return test_result_pb2.TestResult(
         test_id=test_id,
         variant=test_variant,
@@ -193,6 +193,7 @@ def GenTests(api):
                           "dimension_sets": [{
                               "os": "Mac-11"
                           }],
+                          "shards": 2,
                       },
                       "test_id_prefix":
                           ("ninja://ios/chrome/test/earl_grey2:"
