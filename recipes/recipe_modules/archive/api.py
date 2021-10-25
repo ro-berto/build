@@ -1047,9 +1047,18 @@ class ArchiveApi(recipe_api.RecipeApi):
     # Generates a REVISIONS file
     if archive_data.HasField('revisions_file'):
       pattern = re.compile('^got_.*revision(_cp)?$')
+      cp_pattern = re.compile('{#(\d*)}')
       content = {}
       for key, val in update_properties.items():
         if re.search(pattern, key):
+          if key == 'got_v8_revision':
+            content['v8_revision_git'] = val
+          elif key == 'got_revision_cp':
+            cp = re.search(cp_pattern, update_properties[key])
+            content['chromium_revision'] = cp.group(1)
+          elif key == 'got_v8_revision_cp':
+            cp = re.search(cp_pattern, update_properties[key])
+            content["v8_revision"] = cp.group(1)
           content[key] = val
       content_json = self.m.json.dumps(content)
 

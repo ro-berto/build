@@ -492,13 +492,19 @@ def GenTests(api):
           update_properties={
               'got_revision': TEST_HASH_MAIN,
               'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+              'got_v8_revision': '466dd2d77f6dd56a9174d7389e788cb7367d818d',
+              'got_v8_revision_cp': 'refs/heads/9.7.48@{#1}'
           },
           **{'$build/archive': input_properties}),
       api.post_process(
           post_process.StepCommandContains,
           'Generic Archiving Steps.Write REVISIONS file', [
-              '{\"got_revision\": \"5e3250aadda2b170692f8e762d43b7e8dead'
-              'beef\", \"got_revision_cp\": \"refs/heads/B1@{#123456}\"}'
+              '{\"chromium_revision\": \"123456\", \"got_revision\": \"5e3250a'
+              'adda2b170692f8e762d43b7e8deadbeef\", \"got_revision_cp\": '
+              '\"refs/heads/B1@{#123456}\", \"got_v8_revision\": \"466dd2d77f6'
+              'dd56a9174d7389e788cb7367d818d\", \"got_v8_revision_cp\": \"refs'
+              '/heads/9.7.48@{#1}\", \"v8_revision\": \"1\", \"v8_revision_'
+              'git\": \"466dd2d77f6dd56a9174d7389e788cb7367d818d\"}'
           ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
