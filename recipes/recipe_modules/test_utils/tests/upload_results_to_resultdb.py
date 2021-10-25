@@ -261,26 +261,7 @@ def GenTests(api):
                   bucket='try',
                   builder='linux-rel',
               ))),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
-              shards=2,
-              failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=True)),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=True)),
-      api.post_process(post_process.DoesNotRun,
-                       'collect tasks (with patch).base_unittests results'),
+      api.post_process(post_process.MustRun, 'resultdb not enabled'),
       api.post_process(post_process.DropExpectation),
   )
 

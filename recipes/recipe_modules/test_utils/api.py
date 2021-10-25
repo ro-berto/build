@@ -343,8 +343,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     exonerations = []
     for suite in test_suites:
       results = suite.get_rdb_results(suffix)
-      if not results:
-        continue  # e.g. Experimental suites not in the experiment.
       if suffix == 'without patch':
         # Any unexpected failure in the "without patch" phase should be
         # exonerated. Unexpected passes should be already exonerated in tasks.
@@ -633,8 +631,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # "step_ui_name" and "test_name".
       find_it_input_test_list = []
       for suite in test_suites:
-        if not suite.get_rdb_results(suffix):
-          continue
         for test in suite.get_rdb_results(suffix).unexpected_failing_tests:
           # RDB reports test IDs in a different format than FindIt accepts. So
           # convert from one to the other by removing the "ninja://..." prefix.
@@ -756,6 +752,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.failing_step(
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
+    if not self.m.resultdb.enabled:
+      self.m.python.failing_step(
+          'resultdb not enabled',
+          'every build supported by chromium recipe code must have resultdb '
+          'enabled')
     rdb_results, invalid_test_suites, failed_test_suites = (
         self.run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
@@ -1211,9 +1212,6 @@ class TestGroup(object):
       test: steps.Test object for the given test.
       suffix: Test name suffix.
     """
-    if not self.resultdb_api or not self.resultdb_api.enabled:
-      return
-
     invocation_names = test.get_invocation_names(suffix)
     if not invocation_names:
       res = RDBPerSuiteResults.create({},
