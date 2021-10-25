@@ -4,13 +4,12 @@
 
 from PB.recipe_modules.build.flakiness import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
     'chromium_checkout',
     'chromium_swarming',
-    'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gerrit',
     'depot_tools/tryserver',
@@ -24,7 +23,6 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_results',
-    'test_utils',
 ]
 
 PROPERTIES = properties.InputProperties

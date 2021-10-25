@@ -2,11 +2,23 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
+
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
+
+from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import common as resultdb_common
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import test_result as test_result_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import resultdb as resultdb_pb2
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -18,8 +30,10 @@ DEPS = [
     'code_coverage',
     'depot_tools/tryserver',
     'filter',
+    'flakiness',
     'pgo',
     'profiles',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
@@ -27,7 +41,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/buildbucket',
+    'recipe_engine/resultdb',
     'test_utils',
 ]
 
@@ -906,5 +920,302 @@ def GenTests(api):
                      'read test spec (fake-tester-group.json)'),
       api.post_check(post_process.MustRun,
                      'read test spec (fake-unmirrored-tester-group.json)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def _generate_build(builder, invocation, build_input=None):
+    return build_pb2.Build(
+        builder=builder,
+        infra=build_pb2.BuildInfra(
+            resultdb=build_pb2.BuildInfra.ResultDB(invocation=invocation)),
+        input=build_input)
+
+  def _generate_test_result(test_id, test_variant):
+    vd = getattr(test_variant, 'def')
+    vh = base64.b64encode(
+        ('\n'.join('{}:{}'.format(k, v)
+                   for k, v in vd.items())).encode('utf-8')).decode('utf-8')
+    return test_result_pb2.TestResult(
+        test_id=test_id,
+        variant=test_variant,
+        variant_hash=vh,
+        expected=False,
+        status=test_result_pb2.FAIL,
+    )
+
+  correct_variant = resultdb_common.Variant()
+  variant_def = getattr(correct_variant, 'def')
+  variant_def['os'] = 'Mac-11'
+  variant_def['test_suite'] = ('ios_chrome_bookmarks_eg2tests_module_iPad '
+                               'Air 2 14.4')
+
+  test_id = (
+      'ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/'
+      'TestSuite.test_a')
+
+  builder = builder_pb2.BuilderID(
+      builder='fake-try-builder', project='chromium', bucket='try')
+  inv = 'invocations/1'
+  build_database = [_generate_build(builder, inv)]
+  current_patchset_invocations = {
+      inv:
+          api.resultdb.Invocation(
+              test_results=[_generate_test_result(test_id, correct_variant)])
+  }
+
+  recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
+
+  yield api.test(
+      'basic_flakiness',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                          include_all_triggered_testers=True,
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(with patch) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.filter.suppress_analyze(),
+      # Search for all past invocations for builder
+      api.buildbucket.simulated_search_results(
+          builds=build_database,
+          step_name='searching_for_new_tests.fetch previously run invocations'),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants for current patchset')),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_test',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(with patch) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.filter.suppress_analyze(),
+      # Search for all past invocations for builder
+      api.buildbucket.simulated_search_results(
+          builds=build_database,
+          step_name='searching_for_new_tests.fetch previously run invocations'),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants for current patchset')),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=False,
+                  is_win=False,
+                  swarming=True,
+                  isolated_script_passing=False,
+              ),
+              failure=True)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'invalid_test',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(with patch) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.filter.suppress_analyze(),
+      # Search for all past invocations for builder
+      api.buildbucket.simulated_search_results(
+          builds=build_database,
+          step_name='searching_for_new_tests.fetch previously run invocations'),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants for current patchset')),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=False,
+                  is_win=False,
+                  swarming=True,
+                  swarming_internal_failure=True,
+              ),
+              internal_failure=True)),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

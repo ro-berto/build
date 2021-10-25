@@ -1694,16 +1694,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
 
-      # This means the tests passed
-      if not unrecoverable_test_suites:
-        return None
+      if unrecoverable_test_suites:
+        self.handle_invalid_test_suites(unrecoverable_test_suites)
+        return result_pb2.RawResult(
+            summary_markdown=self._format_unrecoverable_failures(
+                unrecoverable_test_suites, 'with patch'),
+            status=common_pb.FAILURE)
 
-      self.handle_invalid_test_suites(unrecoverable_test_suites)
+      # This means the tests passed, and we'll check for new flaky tests if
+      # enabled for the builder.
+      if (raw_result and raw_result.status == common_pb.SUCCESS and
+          self.m.flakiness.check_for_flakiness):
+        new_tests = self.m.flakiness.find_tests_for_flakiness(task.test_suites)
+        if new_tests:
+          # Executing for flakiness checks is done in chromium_tests so that we
+          # avoid a circular dependency between chromium_tests and flakiness.
+          return self.run_tests_for_flakiness(builder_config, new_tests)
 
-      return result_pb2.RawResult(
-          summary_markdown=self._format_unrecoverable_failures(
-              unrecoverable_test_suites, 'with patch'),
-          status=common_pb.FAILURE)
+    return None
 
   def handle_invalid_test_suites(self, test_suites):
     # This means there was a failure of some sort
@@ -1793,6 +1801,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         current_size += len(failure_line)
 
     return '\n\n'.join(test_summary_lines)
+
+  def run_tests_for_flakiness(self, builder_config, new_test_objects):
+    suffix = 'check flakiness'
+
+    with self.wrap_chromium_tests(builder_config, new_test_objects):
+      _, invalid_test_suites, failed_test_suites = (
+          self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
+
+      if invalid_test_suites:
+        # TODO: Check if we need to summarize the test failures
+        return result_pb2.RawResult(
+            summary_markdown=self._format_unrecoverable_failures(
+                invalid_test_suites, suffix),
+            status=common_pb.FAILURE)
+
+      if failed_test_suites:
+        # TODO: Check if we need to summarize the test failures
+        return result_pb2.RawResult(
+            summary_markdown=self._format_unrecoverable_failures(
+                failed_test_suites, suffix),
+            status=common_pb.FAILURE)
+    return None
 
   def determine_compilation_targets(self, builder_id, builder_config,
                                     affected_files, targets_config):

@@ -366,11 +366,35 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return new_tests
 
-  def check_tests_for_flakiness(self, test_objects):
-    """Coordinating method for verifying whether tests are flaky.
+  def find_tests_for_flakiness(self, test_objects):
+    """Searches for new tests in a given change
 
-    (crbug/1204163) - Ensures that tests identified as new are not flaky.
-    Note: This is WIP and should not be invoked.
+    This method coordinates the workflow for searching and identifying new 
+    tests. Buildbucket is queried for a historial set of runs, cross-references
+    the invocations against ResultDB, excludes certain runs and determines a
+    unique set of test_id + test_variant_hash. This set is compared to the tests
+    run for the current try run (both with and without patch) to determine which
+    tests are new.
+
+    There are a few restrictions in place that will skip this (and thus) the
+    flakiness checks:
+    1) Only new tests in new test files are checked. Thus, a new test file
+       must be included as part of the change.
+    2) This logic will not be triggered if "check_for_flakiness" recipe_module
+       property is not enabled.
+    3) If 'Validate-Test-Flakiness:skip' commit footer is set, this logic will
+       be skipped.
+
+    For test variants (variant in the definition in testing/buildbot), only the
+    test name is altered. In other words, these device/variant dimensions are
+    not necessarily reflected in ResultDB, so we compare a tests' canonical name
+    with the 'test_suite' key from ResultDB test variant definition.
+
+    Args:
+      * test_objects = list of step.Test objects
+
+    Returns:
+      A list of step.Test objects
     """
     # Check if there are endorser footers to parse
     commit_footer_values = [
@@ -417,7 +441,6 @@ class FlakinessApi(recipe_api.RecipeApi):
     # iterations here. We loop the test objects and check all new tests to see
     # if the test_id start similarly.
     new_test_objects = []
-    suffix = 'check flakiness'
     for test in test_objects:
       # find whether there exists a Test object that has a matching test_id.
       for new_test in new_tests:
@@ -435,9 +458,4 @@ class FlakinessApi(recipe_api.RecipeApi):
           test_copy._test_options = options
           new_test_objects.append(test_copy)
 
-    with self.m.chromium_tests.wrap_chromium_tests(None, new_test_objects):
-      # Run the test. The isolates have already been created.
-      rdb_results, invalid_test_suites, failed_test_suites = (
-          self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
-
-    return rdb_results, invalid_test_suites, failed_test_suites
+    return new_test_objects

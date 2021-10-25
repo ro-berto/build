@@ -22,6 +22,7 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'filter',
+    'flakiness',
     'gn',
     'goma',
     'infra/zip',
