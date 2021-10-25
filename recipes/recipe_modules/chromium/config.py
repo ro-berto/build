@@ -16,8 +16,8 @@ from recipe_engine.config_types import Path
 HOST_PLATFORMS = ('linux', 'win', 'mac')
 TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos', 'fuchsia')
 HOST_TARGET_BITS = (32, 64)
-HOST_ARCHS = ('intel',)
-TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips', 'mipsel')
+HOST_ARCHS = ('intel', 'arm')
+TARGET_ARCHS = HOST_ARCHS + ('mips', 'mipsel')
 BUILD_CONFIGS = ('Release', 'Debug')
 PROJECT_GENERATORS = ('gn', 'mb')
 
