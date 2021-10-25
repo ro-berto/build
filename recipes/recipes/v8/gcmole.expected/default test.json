@@ -1,0 +1,60 @@
+[
+  {
+    "cmd": [
+      "[CACHE]/builder/v8/tools/gcmole/bootstrap.sh"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "name": "Build gcmole"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/v8/tools/gcmole/package.sh"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "name": "Package gcmole"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/upload_to_google_storage.py",
+      "-b",
+      "chrome-v8-gcmole",
+      "[CACHE]/builder/v8/tools/gcmole/gcmole-tools.tar.gz"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "name": "upload_to_google_storage"
+  },
+  {
+    "cmd": [
+      "git",
+      "cl",
+      "upload",
+      "-f",
+      "--use-commit-queue",
+      "--bypass-hooks",
+      "--send-mail",
+      "--r-owners"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git cl"
+  }
+]
