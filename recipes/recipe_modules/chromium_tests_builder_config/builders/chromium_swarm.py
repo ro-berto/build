@@ -67,7 +67,7 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
-            gclient_config='chromium',
+            gclient_config='chromium_no_telemetry_dependencies',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
             },
