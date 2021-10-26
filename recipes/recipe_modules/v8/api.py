@@ -110,9 +110,6 @@ class V8Api(recipe_api.RecipeApi):
     self.rerun_failures_count = None
     self.test_duration_sec = None
     self.isolated_tests = None
-    # TODO(machenbach): Remove build_environment after a grace period to not
-    # break bots.
-    self.build_environment = None
     self.gn_args = None
     self.checkout_root = None
     self.revision = None
@@ -339,9 +336,7 @@ class V8Api(recipe_api.RecipeApi):
     self.isolated_tests = self.m.isolate.isolated_tests
 
     # This is inferred from the run_mb step or from the parent bot. If mb is
-    # run multiple times, it is overwritten. It contains gn arguments.
-    self.build_environment = self.m.properties.get(
-        'parent_build_environment', {})
+    # run multiple times, it is overwritten.
     self.gn_args = self.m.properties.get(
         'parent_gn_args', [])
 
@@ -622,15 +617,8 @@ class V8Api(recipe_api.RecipeApi):
       if self.isolated_tests:
         self.upload_isolated_json()
 
-  # TODO(machenbach): Rename function and drop build_environment.
-  def _update_build_environment(self, gn_args):
-    """Sets the build_environment property based on gn arguments."""
-    self.build_environment = {}
-    # Space-join all gn args, except goma_dir.
-    self.build_environment['gn_args'] = ' '.join(
-        l for l in gn_args.splitlines()
-        if not l.startswith('goma_dir'))
-    self.gn_args = [
+  def _filtered_gn_args(self, gn_args):
+    return [
       l for l in gn_args.splitlines()
       if not l.startswith('goma_dir')
     ]
@@ -767,9 +755,9 @@ class V8Api(recipe_api.RecipeApi):
             build_dir=build_dir,
             gn_args_location=self.m.gn.LOGS)
 
-        # Update the build environment dictionary, which is printed to the
-        # user on test failures for easier build reproduction.
-        self._update_build_environment(gn_args)
+        # Update the gn args, which are printed to the user on test failures
+        # for easier build reproduction.
+        self.gn_args = self._filtered_gn_args(gn_args)
 
         use_reclient = self._use_reclient(gn_args)
         if use_reclient:
@@ -1350,6 +1338,7 @@ class V8Api(recipe_api.RecipeApi):
       'parent_got_revision': self.revision,
       'parent_buildername': self.m.buildbucket.builder_name,
       'parent_build': self.m.buildbucket.build_url(),
+      'parent_gn_args': self.gn_args,
     }
     if self.m.scheduler.triggers:
       sched_trs = self.m.scheduler.triggers
@@ -1381,13 +1370,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.properties.get('testfilter'):
       properties.update(testfilter=list(self.m.properties['testfilter']))
     self._copy_property(self.m.properties, properties, 'extra_flags')
-
-    # Pass build environment to testers if it doesn't exceed buildbot's
-    # limits.
-    # TODO(machenbach): Remove the check in the after-buildbot age.
-    if len(self.m.json.dumps(self.build_environment)) < 1024:
-      properties['parent_build_environment'] = self.build_environment
-    properties['parent_gn_args'] = self.gn_args
 
     swarm_hashes = self.isolated_tests
     if swarm_hashes:
