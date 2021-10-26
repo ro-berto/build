@@ -7,7 +7,7 @@ import socket
 
 from recipe_engine import recipe_api
 
-_BQUPLOAD_VERSION = 'git_revision:643892f957c8e106dff793468101f2ecfc31abb7'
+_BQUPLOAD_VERSION = 'git_revision:e25c11e5d82ac110d33075ac863733688025c687'
 
 
 class GomaApi(recipe_api.RecipeApi):
