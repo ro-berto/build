@@ -13,7 +13,11 @@ PRESUBMIT_VERSION = '2.0.0'
 # A list of files that are _only_ compatible with python3. Tests for these are
 # only run under vpython3, and lints are performed with pylint 2.7. The
 # expectation is that these will become the defaults over time.
-PYTHON3_ONLY_FILES = ()
+PYTHON3_ONLY_FILES = (
+    'recipes/recipe_modules/tricium_clang_tidy/resources/tricium_clang_tidy.py',
+    'recipes/recipe_modules/tricium_clang_tidy/resources/'
+    'tricium_clang_tidy_test.py',
+)
 
 
 def GetFilesToSkip(input_api):

@@ -199,7 +199,9 @@ class TriciumClangTidyApi(RecipeApi):
 
     warnings_file = self.m.path['cleanup'].join('clang_tidy_complaints.yaml')
 
-    tricium_clang_tidy_args = [
+    tricium_clang_tidy_command = [
+        'vpython3',
+        self.resource('tricium_clang_tidy.py'),
         '--out_dir=%s' % output_dir,
         '--findings_file=%s' % warnings_file,
         '--clang_tidy_binary=%s' % clang_tidy_location,
@@ -208,14 +210,11 @@ class TriciumClangTidyApi(RecipeApi):
         '--verbose',
         '--',
     ]
-    tricium_clang_tidy_args += file_paths
+    tricium_clang_tidy_command += file_paths
 
     ninja_path = {'PATH': [self.m.path.dirname(self.m.depot_tools.ninja_path)]}
     with self.m.context(env_suffixes=ninja_path):
-      self.m.python(
-          name='tricium_clang_tidy.py',
-          script=self.resource('tricium_clang_tidy.py'),
-          args=tricium_clang_tidy_args)
+      self.m.step('tricium_clang_tidy.py', tricium_clang_tidy_command)
 
     # Please see tricium_clang_tidy.py for full docs on what this contains.
     clang_tidy_output = self.m.file.read_json('read tidy output', warnings_file)

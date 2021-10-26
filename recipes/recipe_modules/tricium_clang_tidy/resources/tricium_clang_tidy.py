@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -12,8 +12,8 @@ please see the nicely commented blob near the end of the script. :)
 
 # [VPYTHON:BEGIN]
 # wheel: <
-#    name: "infra/python/wheels/pyyaml/${vpython_platform}"
-#    version: "version:3.12"
+#    name: "infra/python/wheels/pyyaml-py3"
+#    version: "version:5.3.1"
 # >
 # [VPYTHON:END]
 
@@ -21,7 +21,6 @@ import argparse
 import bisect
 import collections
 import contextlib
-import errno
 import io
 import json
 import logging
@@ -110,9 +109,7 @@ def _run_ninja(out_dir,
       target = os.path.join(out_dir, target)
       try:
         os.unlink(target)
-      except OSError as e:
-        if e.errno != errno.ENOENT:
-          raise
+      except FileNotFoundError:
         logging.info('Removed existing target at %s', target)
 
   # 500 targets per invocation is arbitrary, but we start hitting OS argv size
@@ -227,7 +224,7 @@ class _ParseError(Exception):
     self.err_msg = err_msg
 
 
-class _LineOffsetMap(object):
+class _LineOffsetMap:
   """Convenient API to turn offsets in a file into line numbers."""
 
   def __init__(self, newline_locations):
@@ -257,7 +254,7 @@ class _LineOffsetMap(object):
     return _LineOffsetMap([m.start() for m in re.finditer(r'\n', data)])
 
 
-class _DiagnosticNoteBuilder(object):
+class _DiagnosticNoteBuilder:
   """Converts a flat series of notes from YAML into a 'tree' of notes.
 
   Each note can have "expanded from" notes associated with it. There may also
@@ -308,7 +305,7 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
   try:
     findings = yaml.load(stream)
   except (yaml.parser.ParserError, yaml.reader.ReaderError) as v:
-    raise _ParseError('Broken yaml: %s' % v)
+    raise _ParseError('Broken yaml: %s' % v) from v
 
   if findings is None:
     return
@@ -406,7 +403,7 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
       )
   except KeyError as k:
     key_name = k.args[0]
-    raise _ParseError('Broken yaml: missing key %r' % key_name)
+    raise _ParseError('Broken yaml: missing key %r' % key_name) from k
 
 
 def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
@@ -429,49 +426,33 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
                   ' '.join(pipes.quote(c) for c in command))
 
     try:
-      tidy = subprocess.Popen(
-          command, cwd=in_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    except OSError as e:
-      if e.errno == errno.ENOENT:
-        logging.error('Failed to spawn clang-tidy -- is it installed?')
+      tidy = subprocess.run(
+          command,
+          check=False,
+          cwd=in_dir,
+          stdin=subprocess.DEVNULL,
+          stdout=subprocess.PIPE,
+          stderr=subprocess.STDOUT,
+          encoding='utf-8',
+          errors='replace',
+          # When run on everything built for an Android out/ directory,
+          # clang-tidy takes 27s on average per TU with
+          # checks='*,-clang-analyzer*'. The worst 3 times were 251s, 264s,
+          # and 1220s (~20 mins). The last time was clang-tidy running over a
+          # 57KLOC cc file that boils down to a few massive arrays.
+          #
+          # In any case, 30mins seems like plenty.
+          timeout=30 * 60,
+      )
+
+      return_code = tidy.returncode
+      stdout = tidy.stdout
+    except FileNotFoundError:
+      logging.error('Failed to spawn clang-tidy -- is it installed?')
       raise
-
-    clang_tidy_is_finished = threading.Event()
-
-    def timeout_tidy():
-      # When run on everything built for an Android out/ directory,
-      # clang-tidy takes 27s on average per TU with
-      # checks='*,-clang-analyzer*'. The worst 3 times were 251s, 264s,
-      # and 1220s (~20 mins). The last time was clang-tidy running over a
-      # 57KLOC cc file that boils down to a few massive arrays.
-      #
-      # In any case, 30mins seems like plenty.
-      if not clang_tidy_is_finished.wait(timeout=30 * 60):
-        os.kill(tidy.pid, signal.SIGTERM)
-        if not clang_tidy_is_finished.wait(timeout=5):
-          os.kill(tidy.pid, signal.SIGKILL)
-        return True
-      return False
-
-    # FIXME(gbiv): When we're fully on py3 (locally, vpython3 still invokes
-    # py2 for me), make timeouts not require an entire thread.
-    timeout_thread = threading.Thread(target=timeout_tidy)
-    timeout_thread.setDaemon(True)
-    timeout_thread.start()
-    try:
-      stdout, _ = tidy.communicate()
-    except:
-      tidy.kill()
-      raise
-    finally:
-      # We really _shouldn't_ see an exception from here unless it's
-      # something like KeyboardInterrupt. Ensure clang-tidy dies anyway.
-      clang_tidy_is_finished.set()
-      was_killed = timeout_thread.join()
-
-    return_code = tidy.wait()
-    if was_killed:
+    except subprocess.TimeoutExpired as e:
       return_code = None
+      stdout = e.stdout
 
     def read_line_offsets(file_path):
       with open(file_path) as f:
@@ -479,11 +460,11 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
 
     tidy_exited_regularly = return_code == 0
     try:
-      with io.open(findings_file, encoding='utf-8', errors='replace') as f:
+      with open(findings_file, encoding='utf-8') as f:
         findings = list(_parse_tidy_fixes_file(read_line_offsets, f, in_dir))
-    except IOError as e:
+    except FileNotFoundError:
       # If tidy died (crashed), it might not have created a file for us.
-      if e.errno != errno.ENOENT or tidy_exited_regularly:
+      if tidy_exited_regularly:
         raise
       findings = []
     except _ParseError:
@@ -651,7 +632,8 @@ def _parse_ninja_deps(out_dir):
   absolute.
   """
   command = ['ninja', '-t', 'deps']
-  ninja = subprocess.Popen(command, cwd=out_dir, stdout=subprocess.PIPE)
+  ninja = subprocess.Popen(
+      command, cwd=out_dir, stdout=subprocess.PIPE, encoding='utf-8')
   try:
     for val in _parse_ninja_deps_output(ninja.stdout, out_dir):
       yield val
@@ -675,7 +657,7 @@ def _parse_ninja_deps(out_dir):
 # files that said build targets contain. This lets us make accurate guesses
 # about relationships between source files (for example, which cc_files are
 # likely to include a particular header file).
-class _GnDesc(object):
+class _GnDesc:
   """Represents the output of `gn desc` in an efficiently-usable manner."""
 
   def __init__(self, per_target_srcs):
@@ -714,7 +696,8 @@ def _parse_gn_desc(out_dir, chromium_root):
   logging.info('Parsing gn desc...')
 
   command = ['gn', 'desc', '.', '//*:*', '--format=json']
-  gn_desc = subprocess.Popen(command, stdout=subprocess.PIPE, cwd=out_dir)
+  gn_desc = subprocess.Popen(
+      command, stdout=subprocess.PIPE, cwd=out_dir, encoding='utf-8')
   full_desc = json.load(gn_desc.stdout)
   return_code = gn_desc.wait()
   if return_code:
