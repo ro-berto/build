@@ -1035,14 +1035,16 @@ class ArchiveApi(recipe_api.RecipeApi):
           update_properties, custom_vars,
           archive_data.latest_upload.gcs_file_content)
       content_ascii = content.encode('ascii', 'ignore')
+      latest_path = self._replace_placeholders(
+          update_properties, custom_vars, archive_data.latest_upload.gcs_path)
       temp_dir = self.m.path.mkdtemp()
       output_file = temp_dir.join('latest.txt')
       self.m.file.write_text('Write latest file', output_file, content_ascii)
       self.m.gsutil.upload(
           output_file,
           bucket=gcs_bucket,
-          dest=archive_data.latest_upload.gcs_path,
-          name="upload {}".format(archive_data.latest_upload.gcs_path))
+          dest=latest_path,
+          name="upload {}".format(latest_path))
 
     # Generates a REVISIONS file
     if archive_data.HasField('revisions_file'):
@@ -1065,11 +1067,13 @@ class ArchiveApi(recipe_api.RecipeApi):
       temp_dir = self.m.path.mkdtemp()
       output_file = temp_dir.join('revisions.txt')
       self.m.file.write_text('Write REVISIONS file', output_file, content_json)
+      revisions_path = self._replace_placeholders(
+          update_properties, custom_vars, archive_data.revisions_file.gcs_path)
       self.m.gsutil.upload(
           output_file,
           bucket=gcs_bucket,
-          dest=archive_data.revisions_file.gcs_path,
-          name="upload {}".format(archive_data.revisions_file.gcs_path))
+          dest=revisions_path,
+          name="upload {}".format(revisions_path))
     return uploads
 
   def cipd_archive(self, build_dir, update_properties, custom_vars,
