@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -24,12 +24,12 @@ def main(argv):
   update_script = os.path.join(os.path.abspath(options.src_dir),
       'tools', 'clang', 'scripts', 'update.py')
 
-  args = ['python', update_script, '--print-revision']
+  args = [sys.executable, update_script, '--print-revision']
   if options.use_tot_clang:
     args.append('--llvm-force-head-revision')
 
-  revision = subprocess.check_output(args).rstrip()
-  print 'Got revision: %s' % revision
+  revision = subprocess.check_output(args).rstrip().decode()
+  print('Got revision: %s' % revision)
 
   if options.output_json:
     with open(options.output_json, 'w') as f:

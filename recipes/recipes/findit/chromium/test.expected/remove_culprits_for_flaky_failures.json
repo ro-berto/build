@@ -1232,13 +1232,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
       "[CACHE]/builder/src",
@@ -3416,13 +3410,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
       "[CACHE]/builder/src",

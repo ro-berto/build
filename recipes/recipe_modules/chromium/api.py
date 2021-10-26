@@ -999,10 +999,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       ]
       if self.c.use_tot_clang:
         args.append('--use-tot-clang')
-      step_result = self.m.build.python(
-          'clang_revision',
-          self.resource('clang_revision.py'),
-          args=args,
+      step_result = self.m.step(
+          name='clang_revision',
+          cmd=['python3', self.resource('clang_revision.py')] + args,
           step_test_data=lambda: self.m.json.test_api.output(
               {'clang_revision': '123456-7'}),
           **kwargs)
