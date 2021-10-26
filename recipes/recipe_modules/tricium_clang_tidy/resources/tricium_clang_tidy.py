@@ -35,7 +35,6 @@ import signal
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 
 import yaml
@@ -58,7 +57,7 @@ def _generate_compile_commands(out_dir):
   compile_commands = os.path.join(out_dir, 'compile_commands.json')
   # Regenerate compile_commands every time, since the user might've patched
   # files (etc.) since our previous run.
-  with open(os.path.join(out_dir, 'args.gn')) as f:
+  with open(os.path.join(out_dir, 'args.gn'), encoding='utf-8') as f:
     args_gn = f.read()
 
   logging.info('Generating gn\'s compile_commands')
@@ -455,12 +454,12 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
       stdout = e.stdout
 
     def read_line_offsets(file_path):
-      with open(file_path) as f:
+      with open(file_path, encoding='utf-8') as f:
         return _LineOffsetMap.for_text(f.read())
 
     tidy_exited_regularly = return_code == 0
     try:
-      with open(findings_file, encoding='utf-8') as f:
+      with open(findings_file, encoding='utf-8', errors='replace') as f:
         findings = list(_parse_tidy_fixes_file(read_line_offsets, f, in_dir))
     except FileNotFoundError:
       # If tidy died (crashed), it might not have created a file for us.
@@ -961,6 +960,12 @@ def _generate_tidy_actions(out_dir,
   return actions, sorted(x for x in actions if x.target in failed_targets)
 
 
+def _run_one_tidy_action(args):
+  """Runs a single tidy action in a thread or process pool."""
+  run_tidy_action, clang_tidy_binary, clang_tidy_checks, action = args
+  return action, run_tidy_action(clang_tidy_binary, clang_tidy_checks, action)
+
+
 def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
                           clang_tidy_binary, clang_tidy_checks, use_threads):
   """Runs a series of tidy actions, returning the status of all of that.
@@ -986,8 +991,8 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
     - A set of all diags emitted by tidy throughout the run.
   """
   # Threads make sharing for testing _way_ easier. Unfortunately, YAML parsing
-  # is apparently expensive, and the GIL makes it so we genuinely can't spawn
-  # processes fast enough above a parallelism level of ~25.
+  # is expensive, and the GIL starts blocking us from spawning new clang-tidies
+  # once parallelism is high enough (-j25-ish).
   if use_threads:
     pool_kind = multiprocessing.pool.ThreadPool
   else:
@@ -995,22 +1000,17 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
 
   pool = pool_kind(processes=tidy_jobs)
 
-  # Can't use pool.imap variants here due to the timeout workaround below.
-  results = []
-  for action in tidy_actions:
-    results.append(
-        (action,
-         pool.apply_async(run_tidy_action,
-                          (clang_tidy_binary, clang_tidy_checks, action))))
+  results = pool.imap_unordered(
+      _run_one_tidy_action,
+      ((run_tidy_action, clang_tidy_binary, clang_tidy_checks, action)
+       for action in tidy_actions))
   pool.close()
 
   all_findings = set()
   timed_out_actions = set()
   failed_actions = set()
-  for action, result in results:
+  for action, invocation_result in results:
     src_file, flags = action.cc_file, action.flags
-
-    invocation_result = result.get(2**30)
     if not invocation_result:
       # Assume that we logged the exception from another thread.
       logging.error(
@@ -1019,9 +1019,6 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
       failed_actions.add(action)
       continue
 
-    # Without a timeout here, signals like KeyboardInterrupt won't be
-    # promptly raised. Doesn't matter what the timeout is.
-    # https://bugs.python.org/issue21913
     exit_code, stdout, findings = invocation_result
     if exit_code is None:
       logging.error('Clang-tidy timed out on %r with flags %r', src_file, flags)
@@ -1329,7 +1326,7 @@ def main():
         jobs=args.ninja_jobs,
         force_clean=args.clean)
 
-  with open(compile_commands_location) as f:
+  with open(compile_commands_location, encoding='utf-8') as f:
     tidy_actions, failed_actions = _generate_tidy_actions(
         out_dir,
         only_src_files,
@@ -1365,7 +1362,7 @@ def main():
 
   # Do a two-step write, so the user can't see partial results.
   tempfile_name = findings_file + '.new'
-  with open(tempfile_name, 'w') as f:
+  with open(tempfile_name, 'w', encoding='utf-8') as f:
     json.dump(results, f)
   os.rename(tempfile_name, findings_file)
 
