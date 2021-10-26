@@ -246,8 +246,11 @@ class GomaApi(recipe_api.RecipeApi):
           for platform in self._additional_platforms:
             Download(platform, self._extra_package_path.join(platform))
         # Download bqupload.
+        bqupload_version = _BQUPLOAD_VERSION
+        if self._test_data.enabled:
+          bqupload_version = 'bqupload_pin'
         ensure_file = self.m.cipd.EnsureFile().add_package(
-            'infra/tools/bqupload/${platform}', _BQUPLOAD_VERSION)
+            'infra/tools/bqupload/${platform}', bqupload_version)
         self.m.cipd.ensure(self._default_bqupload_dir, ensure_file)
         return self._goma_dir
 
