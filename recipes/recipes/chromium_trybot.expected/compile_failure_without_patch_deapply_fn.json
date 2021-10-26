@@ -1734,6 +1734,45 @@
     ]
   },
   {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "include local test invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/test-inv\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-inv\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "$debug - all results (with patch)",
     "~followup_annotations": [

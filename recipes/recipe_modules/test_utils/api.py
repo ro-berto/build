@@ -1251,6 +1251,9 @@ class LocalGroup(TestGroup):
       self._run_func(t, t.run, caller_api, suffix, True)
       self.fetch_rdb_results(t, suffix)
 
+    self.include_rdb_invocation(
+        suffix, step_name='include local test invocations')
+
 
 class SwarmingGroup(TestGroup):
 
