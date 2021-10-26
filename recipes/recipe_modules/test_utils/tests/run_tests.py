@@ -45,14 +45,15 @@ PROPERTIES = {
     'abort_on_failure': Property(default=False),
     'test_swarming': Property(default=False),
     'test_skylab': Property(default=False),
+    'test_experimental': Property(default=False),
     'test_name': Property(default='MockTest'),
     'retry_failed_shards': Property(default=False),
     'retry_invalid_shards': Property(default=False),
 }
 
 
-def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
-             retry_failed_shards, retry_invalid_shards):
+def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
+             abort_on_failure, retry_failed_shards, retry_invalid_shards):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
   api.chromium_swarming.path_to_merge_scripts = (
@@ -84,9 +85,9 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
         MockSwarmingTestSpec.create(name=test_name + '_2'),
         steps.MockTestSpec.create(name='test3'),
         steps.ExperimentalTestSpec.create(
-            steps.MockTestSpec.create(name='experimental_test'),
+            MockSwarmingTestSpec.create(name='disabled_experimental_test'),
             experiment_percentage=0,
-            api=api)
+            api=api),
     ]
   elif test_skylab:
     test_specs = []
@@ -99,6 +100,17 @@ def RunSteps(api, test_swarming, test_skylab, test_name, abort_on_failure,
       common_skylab_kwargs['target_name'] = spec.get('test')
       test_specs.append(
           steps.SkylabTestSpec.create(spec.get('name'), **common_skylab_kwargs))
+  elif test_experimental:
+    test_specs = [
+        steps.ExperimentalTestSpec.create(
+            MockSwarmingTestSpec.create(name='disabled_experimental_test'),
+            experiment_percentage=0,
+            api=api),
+        steps.ExperimentalTestSpec.create(
+            MockSwarmingTestSpec.create(name='enabled_experimental_test'),
+            experiment_percentage=100,
+            api=api)
+    ]
   else:
     test_specs = [
         steps.MockTestSpec.create(
@@ -386,5 +398,29 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(failing_suites=['base_unittests']))),
       api.post_check(post_process.MustRun, 'abort retry'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'experimental_test_failure',
+      api.chromium.ci_build(builder='test_builder'),
+      api.properties(
+          test_experimental=True,
+          swarm_hashes={
+              'enabled_experimental_test':
+                  '[dummy hash for enabled_experimental_test/size]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+      ),
+      api.override_step_data(
+          'enabled_experimental_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  failing_suites=['enabled_experimental_test']))),
+      api.post_check(lambda check, steps: check(
+          'enabled_experimental_test' in steps[
+              'exonerate unrelated test failures'].stdin)),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

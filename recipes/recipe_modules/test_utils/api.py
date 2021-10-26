@@ -343,7 +343,21 @@ class TestUtilsApi(recipe_api.RecipeApi):
     exonerations = []
     for suite in test_suites:
       results = suite.get_rdb_results(suffix)
-      if suffix == 'without patch':
+      # Any failures in experimental suites should be exonerated.
+      if isinstance(suite, steps.ExperimentalTest):
+        explanation_html = (
+            'The test is marked as experimental, meaning any failures will '
+            'not fail the build.')
+        for test_name in results.unexpected_failing_tests:
+          test_id = results.test_name_to_test_id_mapping.get(
+              test_name, test_name)
+          exonerations.append(
+              test_result_pb2.TestExoneration(
+                  test_id=test_id,
+                  variant_hash=results.variant_hash,
+                  explanation_html=explanation_html,
+              ))
+      elif suffix == 'without patch':
         # Any unexpected failure in the "without patch" phase should be
         # exonerated. Unexpected passes should be already exonerated in tasks.
         # Keep this logic in-sync with
