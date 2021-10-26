@@ -553,68 +553,6 @@ def RemoveJumpListFiles():
     LogAndRemoveFiles(custom_destination_path, '.+')
 
 
-def RemoveTempDirContents():
-  """Obliterate the entire contents of the temporary directory, excluding
-  paths in sys.argv.
-  """
-  temp_dir = os.path.abspath(tempfile.gettempdir())
-  print 'Removing contents of %s' % temp_dir
-
-  print '  Inspecting args for files to skip'
-  whitelist = set()
-  whitelist_parents = set()
-  for i in sys.argv:
-    try:
-      if '=' in i:
-        i = i.split('=')[1]
-      low = os.path.abspath(i.lower())
-      whitelist.add(low)
-      while low.startswith(temp_dir.lower()):
-        whitelist_parents.add(low)
-        low = os.path.dirname(low)
-    except TypeError:
-      # If the argument is too long, windows will freak out and pop a TypeError.
-      pass
-  if whitelist:
-    print '  Whitelisting:'
-    for w in whitelist:
-      print '    %r' % w
-
-  start_time = time.time()
-  for root, dirs, files in os.walk(temp_dir):
-    for f in files:
-      p = os.path.join(root, f)
-      if p.lower() not in whitelist:
-        try:
-          os.remove(p)
-        except OSError:
-          pass
-      else:
-        print '  Keeping file %r (whitelisted)' % p
-    for d in dirs[:]:
-      p = os.path.join(root, d)
-      if p.lower() in whitelist:
-        print '  Keeping dir %r (whitelisted)' % p
-        # This dir was whitelisted, so we shouldn't recurse into it.
-        dirs.remove(d)
-      elif p.lower() in whitelist_parents:
-        print '  Keeping dir %r (parent of a whitelisted dir/file)' % p
-      else:
-        try:
-          # TODO(iannucci): Make this deal with whitelisted items which are
-          # inside of |d|
-
-          # chromium_utils.RemoveDirectory gives access denied error when called
-          # in this loop.
-          shutil.rmtree(p, ignore_errors=True)
-          # Remove it so that os.walk() doesn't try to recurse into
-          # a non-existing directory.
-          dirs.remove(d)
-        except OSError:
-          pass
-  print '   Removing temp contents took %.1f s' % (time.time() - start_time)
-
-
 def RemoveChromeTemporaryFiles():
   """A large hammer to nuke what could be leaked files from unittests or
   files left from a unittest that crashed, was killed, etc."""
@@ -624,7 +562,6 @@ def RemoveChromeTemporaryFiles():
   # At some point a leading dot got added, support with and without it.
   kLogRegex = r'^\.?(com\.google\.Chrome|org\.chromium)\.'
   if chromium_utils.IsWindows():
-    RemoveTempDirContents()
     RemoveChromeDesktopFiles()
     RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
