@@ -396,7 +396,7 @@ def enable_reclient(c):
 @CONFIG_CTX()
 def reclient_staging(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.42.0.eaa4fb6-gomaip'
+  cv['reclient_version'] = 're_client_version:0.44.0.17d680c-gomaip'
 
 
 # This configuration overrides the default reclient version
