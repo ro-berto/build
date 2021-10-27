@@ -82,17 +82,9 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
       if platform_name == 'linux':
         tests.append(baremetal_test('isac_fix_test'))
 
-      is_win_clang = (
-          platform_name == 'win' and
-          'clang' in bot.recipe_config['chromium_config'])
-
-      # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
-      # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
-      if platform_name == 'linux' or is_win_clang:
-        tests.append(baremetal_test('webrtc_perf_tests', args=[
-            '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
-            '--nologs',
-        ]))
+      tests.append(baremetal_test('webrtc_perf_tests',
+          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
+                '--nologs']))
 
   if test_suite == 'desktop_perf_swarming':
     tests += [
