@@ -234,7 +234,8 @@ class AndroidApi(recipe_api.RecipeApi):
     supersize_path = self.m.path['checkout'].join('tools', 'binary_size',
                                                   'supersize')
     with self.m.context(env=self.m.chromium.get_env()):
-      self.m.python('download objdump', update_path, ['--package=objdump'])
+      self.m.step('download objdump', cmd=['python3', update_path,
+                                           '--package=objdump'])
       return self.m.step(
           step_name,
           [supersize_path, 'archive', size_path, '-f', apk_path, '-v'])

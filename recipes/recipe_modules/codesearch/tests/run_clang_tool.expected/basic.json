@@ -1,8 +1,7 @@
 [
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "None/tools/clang/scripts/update.py",
       "--package=translation_unit"
     ],

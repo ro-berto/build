@@ -1177,8 +1177,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/builder/src/tools/clang/scripts/update.py",
       "--package=translation_unit"
     ],
