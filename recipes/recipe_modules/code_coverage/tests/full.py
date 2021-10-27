@@ -7,6 +7,8 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
 
+from PB.recipe_modules.recipe_engine.led.properties import InputProperties
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
@@ -20,6 +22,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'recipe_engine/swarming',
 ]
 
 # Number of tests. Needed by the tests.
@@ -913,6 +916,23 @@ def GenTests(api):
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
           'upload coverage metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_led',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+      api.properties(**{
+          '$recipe_engine/led': InputProperties(led_run_id='some-led-run'),
+      }),
+      api.swarming.properties(task_id='some-task-id'),
+      api.code_coverage(use_clang_coverage=True),
+      api.post_check(lambda check, steps: check('some-task-id' in steps[
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'
+      ].cmd[-1])),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -840,6 +840,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _compose_gs_path_for_coverage_data(self, data_type, mimic_builder_name):
     build = self.m.buildbucket.build
+    build_id = build.id
+    if self.m.led.launched_by_led:
+      build_id = self.m.swarming.task_id
     if build.input.gerrit_changes:
       # Assume that there is only one gerrit patchset which is true for
       # Chromium CQ in practice.
@@ -850,7 +853,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           gerrit_change.patchset,
           build.builder.bucket,
           mimic_builder_name,
-          build.id,
+          build_id,
           data_type,
       )
     else:
@@ -862,7 +865,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
           build.builder.bucket,
           mimic_builder_name,
-          build.id,
+          build_id,
           data_type,
       )
 
