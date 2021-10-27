@@ -661,14 +661,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     builder_spec = builder_config.builder_db[builder_id]
 
-    if builder_spec.archive_build and not self.m.tryserver.is_tryserver:
-      self.m.chromium.archive_build(
-          'archive_build',
-          builder_spec.gs_bucket,
-          builder_spec.gs_acl,
-          mode='dev',
-          build_name=builder_spec.gs_build_name,
-      )
     if builder_spec.cf_archive_build and not self.m.tryserver.is_tryserver:
       self.m.archive.clusterfuzz_archive(
           build_dir=self.m.chromium.c.build_dir.join(

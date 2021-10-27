@@ -59,10 +59,3 @@ def GenTests(api):
           })),
       filter_out_setup_steps(),
   )
-
-  yield api.test(
-      'archive_build',
-      api.chromium.ci_build(
-          builder_group='chromium', builder='linux-archive-rel'),
-      filter_out_setup_steps(),
-  )

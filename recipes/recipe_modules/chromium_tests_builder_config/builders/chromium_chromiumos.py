@@ -22,9 +22,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'chromeos',
             },
-            archive_build=True,
-            gs_bucket='chromium-browser-snapshots',
-            gs_acl='public-read',
             simulation_platform='linux',
         ),
 }
