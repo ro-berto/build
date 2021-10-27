@@ -89,6 +89,10 @@ def RunSteps(api):
     api.chromium_swarming.set_default_dimension('gpu', None)
     api.chromium_swarming.set_default_dimension('cpu', None)
 
+  # mac-arm-rel-swarming takes long time because there is only 1 tester bot.
+  if api.platform.is_mac and api.platform.arch == 'arm':
+    api.chromium_swarming.default_expiration = 60 * 60 * 2
+
   test_runner = api.chromium_tests.create_test_runner(targets_config.all_tests)
   with api.chromium_tests.wrap_chromium_tests(builder_config,
                                               targets_config.all_tests):
@@ -164,6 +168,13 @@ def GenTests(api):
         },],
       }),
       api.platform('win', 64),
+  )
+
+  yield api.test(
+      'mac-arm',
+      builder_with_config('mac-arm-rel-swarming'),
+      api.platform('mac', 64),
+      api.platform.arch('arm'),
   )
 
   yield api.test(
