@@ -54,7 +54,6 @@ def RunSteps(api):
           'upload',
           '-f',
           '-d',
-          '--use-commit-queue',
           '--bypass-hooks',
           '--send-mail',
           '--r-owners',
