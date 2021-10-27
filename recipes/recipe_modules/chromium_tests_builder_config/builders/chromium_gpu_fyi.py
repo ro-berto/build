@@ -1037,24 +1037,6 @@ SPEC = {
             android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
         ),
-    'Android FYI Release (Nexus 6)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
     'Android FYI Release (Nexus 9)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
