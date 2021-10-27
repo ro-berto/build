@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import six
 import types
 
 from recipe_engine.config import config_item_context, ConfigGroup
@@ -49,14 +50,14 @@ def BaseConfig(CHECKOUT_PATH,
     compile_commands_json_file = Single(Path),
     gn_targets_json_file = Single(Path),
     javac_extractor_output_dir = Single(Path),
-    bucket_name = Single(basestring, required=False),
-    chromium_git_url = Single(basestring, required=False,
+    bucket_name = Single(six.string_types, required=False),
+    chromium_git_url = Single(six.string_types, required=False,
                               empty_val='https://chromium.googlesource.com'),
-    generated_repo = Single(basestring, required=False),
+    generated_repo = Single(six.string_types, required=False),
     generated_author_email = Single(
-        basestring, required=False,
+        six.string_types, required=False,
         empty_val='git-generated-files-sync@chromium.org'),
-    generated_author_name = Single(basestring, required=False,
+    generated_author_name = Single(six.string_types, required=False,
                                    empty_val='Automatic Generated Files Sync'),
   )
 
