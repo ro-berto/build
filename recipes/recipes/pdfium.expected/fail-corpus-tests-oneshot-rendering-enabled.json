@@ -735,10 +735,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "pixel tests",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "pixel tests"
   },
   {
     "cmd": [
@@ -869,7 +866,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "corpus tests (oneshot rendering enabled)"
+    "name": "corpus tests (oneshot rendering enabled)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -907,7 +907,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('pixel tests') (retcode: 1)"
+      "humanReason": "Step('corpus tests (oneshot rendering enabled)') (retcode: 1)"
     },
     "name": "$result"
   }
