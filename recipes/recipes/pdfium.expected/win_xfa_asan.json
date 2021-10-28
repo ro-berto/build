@@ -807,42 +807,6 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa true xfa_runtime enabled",
-      "--render-oneshot"
-    ],
-    "cwd": "[CACHE]\\builder\\pdfium",
-    "env": {
-      "ASAN_OPTIONS": "allocator_may_return_null=1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "pixel tests (oneshot rendering enabled)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\builder\\pdfium\\testing\\tools\\run_pixel_tests.py",
-      "--build-dir",
-      "out\\release_xfa_v8_clang_asan",
-      "--gold_output_dir",
-      "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8_clang_asan\\gold_output",
-      "--run-skia-gold",
-      "--git-revision",
-      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--buildbucket-id",
-      "8945511751514863184",
-      "--gold_key",
       "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa true xfa_runtime disabled",
       "--disable-javascript"
     ],
@@ -934,42 +898,6 @@
       }
     },
     "name": "corpus tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\builder\\pdfium\\testing\\tools\\run_corpus_tests.py",
-      "--build-dir",
-      "out\\release_xfa_v8_clang_asan",
-      "--gold_output_dir",
-      "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8_clang_asan\\gold_output",
-      "--run-skia-gold",
-      "--git-revision",
-      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--buildbucket-id",
-      "8945511751514863184",
-      "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa true xfa_runtime enabled",
-      "--render-oneshot"
-    ],
-    "cwd": "[CACHE]\\builder\\pdfium",
-    "env": {
-      "ASAN_OPTIONS": "allocator_may_return_null=1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "corpus tests (oneshot rendering enabled)"
   },
   {
     "cmd": [

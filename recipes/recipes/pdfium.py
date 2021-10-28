@@ -296,15 +296,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     except api.step.StepFailure as e:
       test_exception = e
 
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(
-        api, build_config) + ['--render-oneshot']
-    try:
-      api.python('pixel tests (oneshot rendering enabled)', pixel_tests_path,
-                 script_args + additional_args)
-    except api.step.StepFailure as e:
-      test_exception = e
-
   if v8:
     with api.context(cwd=api.path['checkout'], env=env):
       additional_args = _get_modifiable_script_args(
@@ -331,15 +322,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     additional_args = _get_modifiable_script_args(api, build_config)
     try:
       api.python('corpus tests', corpus_tests_path,
-                 script_args + additional_args)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(
-        api, build_config) + ['--render-oneshot']
-    try:
-      api.python('corpus tests (oneshot rendering enabled)', corpus_tests_path,
                  script_args + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
@@ -846,15 +828,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'fail-pixel-tests-oneshot-rendering-enabled',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('pixel tests (oneshot rendering enabled)', retcode=1),
-  )
-
-  yield api.test(
       'fail-pixel-tests-javascript-disabled',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
@@ -879,15 +852,6 @@ def GenTests(api):
       api.properties(bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests', retcode=1),
-  )
-
-  yield api.test(
-      'fail-corpus-tests-oneshot-rendering-enabled',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('corpus tests (oneshot rendering enabled)', retcode=1),
   )
 
   yield api.test(
