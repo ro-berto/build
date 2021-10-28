@@ -1136,9 +1136,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
-                # TODO(crbug.com/1254850): Remove the old amd64-generic target
-                # once the GN args have swapped over to the VM one.
-                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic-vm',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
