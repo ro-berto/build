@@ -52,11 +52,18 @@ class BinarySizeApi(recipe_api.RecipeApi):
       return None
     return int(self.m.commit_position.parse(cp_footer[0])[1])
 
-  def android_binary_size(self,
-                          chromium_config,
-                          gclient_config,
-                          chromium_apply_configs=None,
-                          gclient_apply_configs=None):
+  def android_binary_size(self, *args, **kwargs):
+    return self.binary_size(is_fuchsia=False, *args, **kwargs)
+
+  def fuchsia_binary_size(self, *args, **kwargs):
+    return self.binary_size(is_fuchsia=True, *args, **kwargs)
+
+  def binary_size(self,
+                  chromium_config,
+                  gclient_config,
+                  chromium_apply_configs=None,
+                  gclient_apply_configs=None,
+                  is_fuchsia=False):
     """Determines the increase in binary size caused by the patch under test.
 
     To do so, this function:
@@ -84,6 +91,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
         of additional chromium recipe_module configs to apply.
       gclient_apply_configs: An optional list of strings containing the names
         of additional gclient recipe_module configs to apply.
+      is_fuchsia: Optional flag indicating this is a WebEngine size check.
+        This will skip using GS for analysis, and modify the binary size
+        measurement scripts.
     """
     assert self.m.tryserver.is_tryserver
 
@@ -95,7 +105,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     is_trunk_builder = (
         self.m.buildbucket.build.builder.project == 'chromium' and
         self.m.buildbucket.build.builder.bucket == 'try')
-    use_gs_analysis = gclient_config == 'chromium' and is_trunk_builder
+    use_gs_analysis = (gclient_config == 'chromium' and is_trunk_builder and
+                       not is_fuchsia)
 
     with self.m.chromium.chromium_layout():
       self.m.gclient.set_config(gclient_config)
@@ -179,7 +190,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       # case use_gs_analysis == False.
       expectations_without_patch_json = None
       with_results_dir, raw_result = self._build_and_measure(
-          True, staging_dir, use_m87_flow)
+          True, staging_dir, use_m87_flow, is_fuchsia)
 
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result
@@ -201,7 +212,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
           self.m.chromium.runhooks(name='runhooks' + suffix)
           without_results_dir, raw_result = self._build_and_measure(
-              False, staging_dir, use_m87_flow)
+              False, staging_dir, use_m87_flow, is_fuchsia)
 
           if raw_result and raw_result.status != common_pb.SUCCESS:
             self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
@@ -223,8 +234,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
       with self.m.context(cwd=self.m.path['checkout']):
         size_results_path = staging_dir.join('size_results.json')
-        self._create_diffs(author, without_results_dir, with_results_dir,
-                           size_results_path, staging_dir, use_m87_flow)
+        self._create_diffs(
+            author, without_results_dir, with_results_dir,
+                           size_results_path, staging_dir, use_m87_flow,
+                           is_fuchsia=is_fuchsia)
         expectation_success = self._maybe_fail_for_expectation_files(
             expectations_with_patch_json, expectations_without_patch_json)
         binary_size_success = self._check_for_undocumented_increase(
@@ -233,13 +246,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
           raise self.m.step.StepFailure(
               'Failed Checks. See Failing steps for details')
 
-  def get_size_analysis_command(self, staging_dir, use_m87_flow=False):
-    """Returns the command to compute size analysis files.
-
-    Args:
-      staging_dir: Staging directory to pass input files and and retrieve output
-        size analysis files (e.g., .size and size JSON files).
-    """
+  def _get_android_size_analysis_command(self, staging_dir, use_m87_flow=False):
     generator_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'generate_commit_size_analysis.py')
     cmd = [generator_script]
@@ -254,6 +261,37 @@ class BinarySizeApi(recipe_api.RecipeApi):
     cmd += ['--staging-dir', staging_dir]
     cmd += ['--chromium-output-directory', self.m.chromium.output_dir]
     return cmd
+
+  def _get_fuchsia_size_analysis_command(self, staging_dir):
+    generator_script = self.m.path['checkout'].join(
+        'build', 'fuchsia', 'binary_sizes.py')
+    cmd = [generator_script]
+    cmd += ['--build-out-dir', self.m.chromium.output_dir]
+
+
+    size_path = self.m.path['checkout'].join('fuchsia', 'release', 'size_tests',
+                                 'fyi_sizes.json')
+    cmd += ['--sizes-path', size_path]
+
+    output_file = self.m.chromium.output_dir.join('plugin.json')
+    cmd += ['--size-plugin-json-path', output_file]
+    cmd += ['--isolated-script-test-output',
+            self.m.chromium.output_dir.join('size_results.json')]
+    return cmd
+
+  def get_size_analysis_command(self, staging_dir, use_m87_flow=False,
+                                is_fuchsia=False):
+    """Returns the command to compute size analysis files.
+
+    Args:
+      staging_dir: Staging directory to pass input files and and retrieve output
+        size analysis files (e.g., .size and size JSON files).
+    """
+    if is_fuchsia:
+      return self._get_fuchsia_size_analysis_command(staging_dir)
+    else:
+      return self._get_android_size_analysis_command(staging_dir,
+                                                     use_m87_flow=use_m87_flow)
 
   def _parse_gs_zip_path(self, gs_zip_path):
     # Returns (timestamp, revision sha)
@@ -305,7 +343,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     self.m.zip.unzip('Unzipping tot analysis', local_zip, results_dir)
     return results_dir
 
-  def _build_and_measure(self, with_patch, staging_dir, use_m87_flow):
+  def _build_and_measure(self, with_patch, staging_dir, use_m87_flow,
+                         is_fuchsia):
     suffix = ' (with patch)' if with_patch else ' (without patch)'
     results_basename = 'with_patch' if with_patch else 'without_patch'
 
@@ -320,7 +359,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
     self.m.step(
         name='Generate commit size analysis files',
-        cmd=self.get_size_analysis_command(results_dir, use_m87_flow))
+        cmd=self.get_size_analysis_command(results_dir, use_m87_flow,
+                                           is_fuchsia))
 
     return results_dir, None
 
@@ -424,6 +464,14 @@ class BinarySizeApi(recipe_api.RecipeApi):
     return url
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,
+                    staging_dir, use_m87_flow, is_fuchsia=False):
+    if is_fuchsia:
+      return self._create_diffs_fuchsia(before_dir, after_dir, results_path)
+    else:
+      return self._create_diffs_android(author, before_dir, after_dir,
+                                        results_path, staging_dir, use_m87_flow)
+
+  def _create_diffs_android(self, author, before_dir, after_dir, results_path,
                     staging_dir, use_m87_flow):
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
@@ -442,6 +490,16 @@ class BinarySizeApi(recipe_api.RecipeApi):
       cmd += ['--after-dir', after_dir]
       cmd += ['--results-path', results_path]
       cmd += ['--staging-dir', staging_dir]
+      self.m.step(name='Generate diffs', cmd=cmd)
+
+  def _create_diffs_fuchsia(self, before_dir, after_dir, results_path):
+    checker_script = self.m.path['checkout'].join(
+        'build', 'fuchsia', 'binary_size_differ.py')
+    with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
+      cmd = [checker_script]
+      cmd += ['--before-dir', before_dir]
+      cmd += ['--after-dir', after_dir]
+      cmd += ['--results-path', results_path]
       self.m.step(name='Generate diffs', cmd=cmd)
 
   def _archive_artifact(self, staging_dir, filename):
