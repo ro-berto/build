@@ -108,23 +108,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'chromeos-amd64-generic-rel-dchecks':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'TARGET_BITS':
-                    64,
-                'CROS_BOARDS_WITH_QEMU_IMAGES':
-                    'amd64-generic:amd64-generic-vm',
-                'TARGET_PLATFORM':
-                    'chromeos',
-            },
-            simulation_platform='linux',
-            test_results_config='staging_server',
-        ),
     'fuchsia-fyi-arm64-dbg':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
