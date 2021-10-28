@@ -6,8 +6,17 @@
 from recipe_engine.post_process import DropExpectation
 from recipe_engine.recipe_api import Property
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
+from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
+
 DEPS = [
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
     'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/runtime',
     'recipe_engine/step',
@@ -18,21 +27,33 @@ PROPERTIES = {
     'repository':
         Property(
             kind=str,
-            default='https://chromium.googlesource.com/experimental/chromium_website'
+            default='https://chromium.googlesource.com/experimental/website'
         ),
 }
 # pylint: enable=line-too-long
 
-
 def RunSteps(api, repository):
-  # TODO(dpranke): Fill this in once the builders are alive.
-  del api
-  del repository
+  api.gclient.set_config('chromium_website')
+  api.bot_update.ensure_checkout()
+  api.gclient.runhooks()
 
+  with api.context(cwd=api.m.path['checkout']):
+    npmw_path = api.m.path['checkout'].join('npmw')
+    api.step('build', [npmw_path, 'build'])
+
+  return result_pb2.RawResult(
+      status=common_pb.SUCCESS,
+      summary_markdown="Built chromium website",
+  )
 
 def GenTests(api):
   yield api.test(
-      'ci',
-      api.buildbucket.ci_build(),
+      'runs',
       api.post_process(DropExpectation),
   )
+
+@CONFIG_CTX()
+def chromium_website(c):
+  s = c.solutions.add()
+  s.name = 'chromium_website'
+  s.url = 'https://chromium.googlesource.com/experimental/website.git'
